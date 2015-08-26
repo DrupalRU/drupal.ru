@@ -7,10 +7,10 @@
   <title><?php print $head_title ?></title>
   <?php print $styles ?>
 <?php  
-  if($left == "" && $right == "") print  "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"" . base_path() . path_to_theme() . "/1column.css\" />";
-  else if($left != "" && $right == "") print  "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"" . base_path() . path_to_theme() . "/leftcenter.css\" />";
-  else if($left == "" && $right != "") print  "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"" . base_path() . path_to_theme() . "/centerright.css\" />";
-  else print  "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"" . base_path() . path_to_theme() . "/3column.css\" />";
+  if($left == "" && $right == "") {print "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"" . base_path() . path_to_theme() . "/1column.css\" />";}
+  elseif($left != "" && $right == "") {print "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"" . base_path() . path_to_theme() . "/leftcenter.css\" />";}
+  elseif($left == "" && $right != "") {print "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"" . base_path() . path_to_theme() . "/centerright.css\" />";}
+  else {print "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"" . base_path() . path_to_theme() . "/3column.css\" />";}
 ?>
 
 <?php print $scripts ?>
@@ -33,7 +33,7 @@ img, div { behavior: url(<?php print base_path() . path_to_theme(); ?>/iepngfix.
 </style><![endif]-->
 <?php 
   global $user;
-  if($user->uid ==1) {
+  if($user->uid == 1) {
 ?>
   
 <?php
@@ -54,7 +54,7 @@ img, div { behavior: url(<?php print base_path() . path_to_theme(); ?>/iepngfix.
     <p id="logo-name"><a href="<?php print base_path(); ?>" title="Drupal Россия"><strong>Drupal</strong> Россия</a></p>
     <div id="sub-header">
 
-          <?php 
+          <?php
                                     if (isset($secondary_links)) print theme('links', $secondary_links, array('class' =>'links', 'id' => 'sub-topmenu'))
           /* foreach($secondary_links as $k => $v) {
           #  $lnk = strstr($secondary_links[$k]["href"], "http://") ? $secondary_links[$k]["href"] : base_path() . $secondary_links[$k]["href"];
@@ -65,7 +65,7 @@ img, div { behavior: url(<?php print base_path() . path_to_theme(); ?>/iepngfix.
       <?php print $top_block; ?>      
     </div>
     <div id="topmenu">
-      <?php 
+      <?php
         foreach($primary_links as $k => $v) {
     
           if ($v['href'] == $_GET['q'] || ($v['href'] == '<front>' && drupal_is_front_page())) {
@@ -74,15 +74,15 @@ img, div { behavior: url(<?php print base_path() . path_to_theme(); ?>/iepngfix.
               $class = '';
           }
           $lnk = strstr($primary_links[$k]["href"], "http://") ? $primary_links[$k]["href"] : base_path() . $primary_links[$k]["href"];
-          print  "<a href=\"" . $lnk . "\" $class  title=\"" . $primary_links[$k]["title"] . "\">" . $primary_links[$k]["title"] . "</a>"; 
-        }  
+          print "<a href=\"" . $lnk . "\" $class  title=\"" . $primary_links[$k]["title"] . "\">" . $primary_links[$k]["title"] . "</a>";
+        }
         ?>
       </div>
   </div>
 
   <div class="outer">
     <div class="wrap-cl">
-      <div class="center"><?php if ($tabs != "") print  "<div class=\"tabs\">" . $tabs . "</div>"; ?><div class="incenter">
+      <div class="center"><?php if ($tabs != "") {print "<div class=\"tabs\">" . $tabs . "</div>";} ?><div class="incenter">
 
          <!-- новости -->
 <?php 
@@ -94,9 +94,9 @@ img, div { behavior: url(<?php print base_path() . path_to_theme(); ?>/iepngfix.
 ?>   
         
 
-<?php   
-  if ($title != "") print $breadcrumb;
-  if ($messages != "") print $messages;  
+<?php
+  if ($title != "") {print $breadcrumb;}
+  if ($messages != "") {print $messages;}
 ?>
 
         <div class="post">

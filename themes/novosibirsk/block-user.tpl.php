@@ -30,17 +30,17 @@ global $user;
 if($user->uid == 0) {
 ?>
 <div id="login-<?php print $block->delta ?>" class="login-block">                                                                          
-	<h2><?php print $block->subject ?></h2>
-		<div id="login-block-wrapper">
-			<?php print $block->content ?>
-		</div>
+  <h2><?php print $block->subject ?></h2>
+    <div id="login-block-wrapper">
+      <?php print $block->content ?>
+    </div>
 </div>
 <?php
 } else {
-?>	
+?>  
 <div id="login-<?php print $block->delta ?>" class="login-block">
-	<h2><?php print $block->subject ?></h2>
-	<div class="content"><?php print $block->content ?></div>
+  <h2><?php print $block->subject ?></h2>
+  <div class="content"><?php print $block->content ?></div>
 </div>
 <?php
 }

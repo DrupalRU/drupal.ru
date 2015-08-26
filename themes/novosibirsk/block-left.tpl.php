@@ -26,8 +26,8 @@
  * @see template_preprocess_block()
  */
  ?>
-	
+  
 <div id="<?php print $block->module .'-'. $block->delta ?>"<?php if ($block->delta == 5) print ' class="login-block"'; else print ' class="just-block"' ?>>
-	<h2><?php print $block->subject ?></h2>
-	<div class="content"><?php print $block->content ?></div>
+  <h2><?php print $block->subject ?></h2>
+  <div class="content"><?php print $block->content ?></div>
 </div>

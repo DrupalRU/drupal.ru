@@ -93,11 +93,11 @@ function novosibirsk_preprocess_page(&$variables) {
 
 /*
 function novosibirsk_preprocess_block(&$variables) {
-  if($variables['block']->module != "user" && $variables['block']->module != "block")  {
-    //Внешний вид юзерского блока у меня задается файлом шаблоном user-login.tpl.php и еще несколькими фиями в этом файле (их названия есть в user-login.tpl.php)
-    // этим куском кода я настрааиваю аутпут остальных блоков
-    drupal_set_message("novosibirsk_preprocess_block: " . $variables['block']->module);
-  }
+if($variables['block']->module != "user" && $variables['block']->module != "block")  {
+// Внешний вид юзерского блока у меня задается файлом шаблоном user-login.tpl.php и еще несколькими фиями в этом файле (их названия есть в user-login.tpl.php)
+// этим куском кода я настрааиваю аутпут остальных блоков
+drupal_set_message("novosibirsk_preprocess_block: " . $variables['block']->module);
+}
 }
 */
 
@@ -109,14 +109,18 @@ function novosibirsk_item_list($items = array(), $title = NULL, $type = 'ul', $a
     $output .= '<h3>'. $title .'</h3>';
   }
 
-  
+
   if (!empty($items)) {
     $output .= "<$type". drupal_attributes($attributes) .'>';
     $num_items = count($items);
     $zebra = " even";
     foreach ($items as $i => $item) {
-      if($zebra == " even")$zebra = " odd";
-      else $zebra = " even";
+      if ($zebra == " even") {
+        $zebra = " odd";
+      }
+      else {
+        $zebra = " even";
+      }
       
       $attributes = array();
       $children = array();
@@ -195,7 +199,10 @@ function novosibirsk_user_login_form_pass_field($field) {
   return $output;
 }
 
-function novosibirsk_user_login_form_submit_field($field) {  
+/**
+ *
+ */
+function novosibirsk_user_login_form_submit_field($field) {
   $output = "<input id=\"edit-submit\" class=\"form-submit\" type=\"submit\" value=\"Вход\" name=\"op\"/></fieldset>";
   return $output;
 }
@@ -210,7 +217,10 @@ function novosibirsk_search_form_block_submit($field) {
   return $output;
 }
 
-function novosibirsk_links($links, $attributes = array('class' => 'links')) {  
+/**
+ *
+ */
+function novosibirsk_links($links, $attributes = array('class' => 'links')) {
   $output = '';
 
   if (count($links) > 0) {
@@ -220,20 +230,19 @@ function novosibirsk_links($links, $attributes = array('class' => 'links')) {
     $i = 1;
 
 
-    //foreach($links["fasttoggle_sticky"] as $k => $v) drupal_set_message($k . " = " . $v);
+    // foreach($links["fasttoggle_sticky"] as $k => $v) drupal_set_message($k . " = " . $v);
     foreach ($links as $key => $link) {
-      //drupal_set_message($key . " = " . $link['title']);
-      
+      // drupal_set_message($key . " = " . $link['title']);
       /*
       # comment_delete = удалить
 # comment_edit = изменить
 # comment_reply = ответить
-      */
-      
+       */
+
       $class = $key;      
       //drupal_set_message($key);
       // Ссылка "Читать далее" выводится в отдельном параграфе в файле node.tpl.php
-      if($key != "node_read_more") {
+      if ($key != "node_read_more") {
         // Add first, last and active classes to the list of links to help out themers.
         if ($i == 1) {
           $class .= ' first';
@@ -244,83 +253,97 @@ function novosibirsk_links($links, $attributes = array('class' => 'links')) {
         if (isset($link['href']) && ($link['href'] == $_GET['q'] || ($link['href'] == '<front>' && drupal_is_front_page()))) {
           $class .= ' active';
         }
-        $output .= '<li'. drupal_attributes(array('class' => $class)) .'>';
-    
+        $output .= '<li' . drupal_attributes(array('class' => $class)) . '>';
+
         if (isset($link['href'])) {
           // Обрабатываю "особые" ссылки, например от модуля Fast toggle — promoted, published, sticky и т.п.
-          if($key == "fasttoggle_status") {
-            $link['html'] = TRUE;            
-            if($link['title'] == "опубликовано"){              
+          if ($key == "fasttoggle_status") {
+            $link['html'] = TRUE;
+            if ($link['title'] == "опубликовано") {
               $link['attributes']['title'] = "Опубликовано, снять с публикации?";
               $output .= l("<img src=\"" . base_path() . path_to_theme() . "/img/icons/card.gif\">", $link['href'], $link);
-            }  else {
+            }
+            else {
               $link['attributes']['title'] = "Не опубликовано, опубликовать?";
               $output .= l("<img src=\"" . base_path() . path_to_theme() . "/img/icons/card__minus.gif\">", $link['href'], $link);
             }
-          } else if($key == "fasttoggle_sticky") {            
-            $link['html'] = TRUE;            
-            if($link['title'] == "закреплено вверху списков") {
-              //drupal_set_message("st");
+          }
+          elseif ($key == "fasttoggle_sticky") {
+            $link['html'] = TRUE;
+            if ($link['title'] == "закреплено вверху списков") {
+              // drupal_set_message("st");
               $link['attributes']['title'] = "Закреплено вверху списков, открепить?";
               $output .= l("<img src=\"" . base_path() . path_to_theme() . "/img/icons/flag.gif\">", $link['href'], $link);
-            }  else {
-              //drupal_set_message("not st");
+            }
+            else {
+              // drupal_set_message("not st");
               $link['attributes']['title'] = "Не закреплено вверху списков, закрепить?";
               $output .= l("<img src=\"" . base_path() . path_to_theme() . "/img/icons/flag_minus.gif\">", $link['href'], $link);
             }
-          } else if($key == "fasttoggle_promote") {
-            $link['html'] = TRUE;            
-            if($link['title'] == "на главной") {
+          }
+          elseif ($key == "fasttoggle_promote") {
+            $link['html'] = TRUE;
+            if ($link['title'] == "на главной") {
               $link['attributes']['title'] = "Пост размещен на главной странице, убрать?";
               $output .= l("<img src=\"" . base_path() . path_to_theme() . "/img/icons/home.gif\">", $link['href'], $link);
-            }  else {
+            }
+            else {
               $link['attributes']['title'] = "Пост не размещен на главной странице, разместить?";
               $output .= l("<img src=\"" . base_path() . path_to_theme() . "/img/icons/home_minus.gif\">", $link['href'], $link);
             }
-          } else if($key == "quote") {
+          }
+          elseif ($key == "quote") {
             $link['html'] = TRUE;
-            $link['attributes']['title'] = "Ответить с цитированием на отдельной странице";            
+            $link['attributes']['title'] = "Ответить с цитированием на отдельной странице";
             $output .= l("<img src=\"" . base_path() . path_to_theme() . "/img/icons/script__arrow.gif\">", $link['href'], $link);
-          } else if($key == "click2bookmark_add_bookmark") {
+          }
+          elseif ($key == "click2bookmark_add_bookmark") {
             $link['html'] = TRUE;
             $link['attributes']['title'] = "Добавить сообщение в закладки?";
             $output .= l("<img src=\"" . base_path() . path_to_theme() . "/img/icons/bookmark__plus.gif\">", $link['href'], $link);
-          } else if($key == "click2bookmark_del_bookmark") {
+          }
+          elseif ($key == "click2bookmark_del_bookmark") {
             $link['html'] = TRUE;
             $link['attributes']['title'] = "Сообщение в ваших закладках, удалить?";
             $output .= l("<img src=\"" . base_path() . path_to_theme() . "/img/icons/bookmark__minus.gif\">", $link['href'], $link);
-          } else if($key == "book_printer") {
+          }
+          elseif ($key == "book_printer") {
             $link['html'] = TRUE;
             $link['attributes']['title'] = "Версия для печати";
             $output .= l("<img src=\"" . base_path() . path_to_theme() . "/img/icons/printer.gif\">", $link['href'], $link);
-          } else if($key == "book_add_child") {
+          }
+          elseif ($key == "book_add_child") {
             $link['html'] = TRUE;
             $link['attributes']['title'] = "Добавить дочернюю страницу";
             $output .= l("<img src=\"" . base_path() . path_to_theme() . "/img/icons/receipts_plus.gif\">", $link['href'], $link);
-          } else if($key == "comment_delete") {
+          }
+          elseif ($key == "comment_delete") {
             $link['html'] = TRUE;
             $link['attributes']['title'] = "Удалить комментарий";
             $output .= l("<img src=\"" . base_path() . path_to_theme() . "/img/icons/screwdriver_minus.gif\">", $link['href'], $link);
-          } else if($key == "comment_edit") {
+          }
+          elseif ($key == "comment_edit") {
             $link['html'] = TRUE;
             $link['attributes']['title'] = "Редактировать комментарий";
             $output .= l("<img src=\"" . base_path() . path_to_theme() . "/img/icons/screwdriver_pencil.gif\">", $link['href'], $link);
-          } else if($key == "comment_reply") {
+          }
+          elseif ($key == "comment_reply") {
             $link['html'] = TRUE;
             $link['attributes']['title'] = "Ответить на этот комментарий на отдельной странице";
             $output .= l("<img src=\"" . base_path() . path_to_theme() . "/img/icons/script__plus.gif\">", $link['href'], $link);
-          } else {
+          }
+          else {
 
 
             // Pass in $link as $options, they share the same keys.
             $output .= l($link['title'], $link['href'], $link);
           }
-          
+
           // Добавляю кнопку "Цитата", которая вставляет выделенный текст в поле комментария внизу страницы
           // решил добавить эту кнопку в шаблоне node.tpl.php, ибо кнопка нужна только в полном представлении ноды, а здесь отличить полную версию от тизера я не могу.
         }
-        else if (!empty($link['title'])) {
-          // Some links are actually not links, but we wrap these in <span> for adding title and class attributes
+        elseif (!empty($link['title'])) {
+          // Some links are actually not links, but we wrap these in <span> for adding title and class attributes.
           if (empty($link['html'])) {
             $link['title'] = check_plain($link['title']);
           }
@@ -328,9 +351,9 @@ function novosibirsk_links($links, $attributes = array('class' => 'links')) {
           if (isset($link['attributes'])) {
             $span_attributes = drupal_attributes($link['attributes']);
           }
-          $output .= '<span'. $span_attributes .'>'. $link['title'] .'</span>';
+          $output .= '<span' . $span_attributes . '>' . $link['title'] . '</span>';
         }
-  
+
         $i++;
         $output .= "</li>\n";
       }

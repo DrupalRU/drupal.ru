@@ -26,7 +26,7 @@ if($teaser) {
         <?php print $links ?>
       <p class="next"><a href="<?php print base_path() . drupal_get_path_alias("node/" . $node->nid); ?>" title='Полная версия сообщения " <?php print $title; ?>"'>Читать весь текст &raquo;</a></p>
     </div>
-  <?php 
+  <?php
     } else {
   ?>
     <p class="next"><a href="<?php print base_path() . drupal_get_path_alias("node/" . $node->nid); ?>" title='Полная версия сообщения " <?php print $title; ?>"'>Читать весь текст &raquo;</a></p>    
@@ -62,4 +62,3 @@ if($teaser) {
 
 <?php
 }
-?>

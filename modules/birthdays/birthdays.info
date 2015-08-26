@@ -1,0 +1,5 @@
+; $Id$
+name = Birthdays
+description = Displays and reminds of upcoming users birthdays.
+dependencies[] = profile
+core = 6.x

@@ -1,0 +1,65 @@
+<?php
+// $Id: birthdays.install,v 1.2.2.9 2008/04/09 11:47:56 maartenvg Exp $
+
+/**
+ * Implementation of hook_schema().
+ */
+function birthdays_schema() {
+  $schema = array();
+  $schema['dob'] = array(
+    'fields' => array(
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'birthday' => array(
+        'type' => 'datetime',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('uid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function birthdays_install() {
+  drupal_install_schema('birthdays');
+}
+
+function birthdays_update_6000() {
+  //Just for check
+  $ret = array();
+
+  $weight = intval(db_result(db_query("SELECT weight FROM {system} WHERE name = 'profile'")) - 1);
+  $ret[] = update_sql("UPDATE {system} SET weight = ". $weight ." WHERE name = 'birthdays'");
+
+  return $ret;
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function birthdays_uninstall() {
+  drupal_uninstall_schema('birthdays');
+
+  variable_del('birthdays_show_starsign');
+  variable_del('birthdays_field_name');
+  variable_del('birthdays_field_id');
+  variable_del('birthdays_send_user');
+  variable_del('birthdays_send_user_subject');
+  variable_del('birthdays_send_user_message');
+  variable_del('birthdays_remind');
+  variable_del('birthdays_hide_year');
+  variable_del('birthdays_block_number_by_days');
+  variable_del('birthdays_block_number_by_birthdays');
+  variable_del('birthdays_page_show_filters');
+  variable_del('birthdays_page_settings');
+  variable_del('birthdays_page_list_number');
+}

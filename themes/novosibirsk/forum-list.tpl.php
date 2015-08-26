@@ -47,41 +47,41 @@
   if($forum->is_container) {
 ?>
   <td colspan="4" class="container">
-<?php    
+<?php
   } else {
 
     if(!$forum->is_container) {
       $class = "-standart";
-      if($forum->name == "Разработка и установка")$class = "-1";
-      if($forum->name == "Разработка модулей")$class = "-2";
-      if($forum->name == "Поиск специалистов и работы")$class = "-3";
-      if($forum->name == "Обзоры и сравнения CMS")$class = "-4";
-      if($forum->name == "Свободные программы")$class = "-5";
-      if($forum->name == "Хостинг")$class = "-6";
-      if($forum->name == "SEO")$class = "-7";
-      if($forum->name == "Разное непонятное")$class = "-8";
-      if($forum->name == "FAQ ")$class = "-9";
-      if($forum->name == "Системное окружение")$class = "-10";
-      if($forum->name == "Установка и настройка")$class = "-11";
-      if($forum->name == "Решение проблем")$class = "-12";
-      if($forum->name == "Безопасность")$class = "-13";
-      if($forum->name == "Масштабируемость, нагрузка и быстродействие")$class = "-14";
-      if($forum->name == "Выставка сайтов")$class = "-15";
-      if($forum->name == "Программирование")$class = "-16";
-      if($forum->name == "Дизайн и вёрстка")$class = "-17";
-      if($forum->name == "Модераторский")$class = "-18";
-      if($forum->name == "Сайт и проект Drupal.ru")$class = "-19";
-      if($forum->name == "Создание документации WIKI.DRUPAL.RU")$class = "-20";
-      if($forum->name == "Проекту нужна помощь")$class = "-21";
-      if($forum->name == "Работа по переводам UI и документации")$class = "-22";
-      if($forum->name == "Терминология")$class = "-23";
-      if($forum->name == "Курилка")$class = "-24";
-      if($forum->name == "Мусор")$class = "-25";
+      if($forum->name == "Разработка и установка") {$class = "-1";}
+      if($forum->name == "Разработка модулей") {$class = "-2";}
+      if($forum->name == "Поиск специалистов и работы") {$class = "-3";}
+      if($forum->name == "Обзоры и сравнения CMS") {$class = "-4";}
+      if($forum->name == "Свободные программы") {$class = "-5";}
+      if($forum->name == "Хостинг") {$class = "-6";}
+      if($forum->name == "SEO") {$class = "-7";}
+      if($forum->name == "Разное непонятное") {$class = "-8";}
+      if($forum->name == "FAQ ") {$class = "-9";}
+      if($forum->name == "Системное окружение") {$class = "-10";}
+      if($forum->name == "Установка и настройка") {$class = "-11";}
+      if($forum->name == "Решение проблем") {$class = "-12";}
+      if($forum->name == "Безопасность") {$class = "-13";}
+      if($forum->name == "Масштабируемость, нагрузка и быстродействие") {$class = "-14";}
+      if($forum->name == "Выставка сайтов") {$class = "-15";}
+      if($forum->name == "Программирование") {$class = "-16";}
+      if($forum->name == "Дизайн и вёрстка") {$class = "-17";}
+      if($forum->name == "Модераторский") {$class = "-18";}
+      if($forum->name == "Сайт и проект Drupal.ru") {$class = "-19";}
+      if($forum->name == "Создание документации WIKI.DRUPAL.RU") {$class = "-20";}
+      if($forum->name == "Проекту нужна помощь") {$class = "-21";}
+      if($forum->name == "Работа по переводам UI и документации") {$class = "-22";}
+      if($forum->name == "Терминология") {$class = "-23";}
+      if($forum->name == "Курилка") {$class = "-24";}
+      if($forum->name == "Мусор") {$class = "-25";}
     }
 ?>
 
   <td class="forum<?php print $class; ?>">
-<?php    
+<?php
   }
 ?>      
         <?php /* Enclose the contents of this cell with X divs, where X is the
@@ -89,7 +89,7 @@
                * left-margin for indenting.
                */ 
           $d = $forum->depth;
-          if(!$forum->is_container && $d == 0) $d = 1;
+          if(!$forum->is_container && $d == 0) {$d = 1;}
         ?>
         <?php print str_repeat('<div class="indent">', $d); ?>
           <div class="name">

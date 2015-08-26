@@ -57,7 +57,7 @@ if($teaser) {
   ?>
   <p><?php print $content; ?></p>  
   <?php if ($links) {?>
-    <div class="links-bottom"><?php print $links ?><?php if(user_access('post comments without approval', $user)) { ?><img src="<?php print base_path() . path_to_theme(); ?>/img/icons/blog_pencil.gif" id="img_quote" title="Выделите текст и нажмите эту кнопку, чтобы вставить цитату" onmouseover="getText('<?php print $node->name; ?>');" onclick="insertQuote();"><?php } ?></div>
+    <div class="links-bottom"><?php print $links ?><?php if(user_access('post comments without approval', $user)) {?><img src="<?php print base_path() . path_to_theme(); ?>/img/icons/blog_pencil.gif" id="img_quote" title="Выделите текст и нажмите эту кнопку, чтобы вставить цитату" onmouseover="getText('<?php print $node->name; ?>');" onclick="insertQuote();"><?php } ?></div>
   <?php } ?>
 
 <?php

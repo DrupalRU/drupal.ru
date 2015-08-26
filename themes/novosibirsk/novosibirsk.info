@@ -1,0 +1,15 @@
+name = Novosibirsk
+description = Dark theme for drupal.ru, based on Omsk theme.
+version = VERSION
+core = 6.x
+engine = phptemplate
+stylesheets[all][] = novosibirsk.css
+stylesheets[all][] = tabs.css
+stylesheets[all][] = bueditor.css
+
+regions[top_block] = Top block for search form and secondary menu
+regions[left] = Left sidebar
+regions[right] = Right banner
+regions[content] = Content banner
+regions[header_info] = Header information
+regions[footer] = Footer

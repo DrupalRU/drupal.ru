@@ -1,10 +1,7 @@
 <?php
-  //foreach($form as $k => $v)drupal_set_message($k . " = " . $v);
-  //drupal_set_message("===  ===");
-  //foreach($form["form_id"] as $k => $v)drupal_set_message($k . " = " . $v);
-  //drupal_set_message("===  ===");
-  //foreach($form["form_token"] as $k => $v)drupal_set_message($k . " = " . $v);
-  //return;
+/**
+ * @file search-form.tpl.php
+ */
 
   $form['#action'] = url('search/node');
   $form["search_block_form"]["#theme"] = "search_form_block_field";
@@ -36,5 +33,3 @@
   print drupal_render($form["hidden"]);
   print drupal_render($form);  
   print  "</fieldset>";
-  //drupal_set_message(" ========= ");
-  //foreach($form as $k => $v)drupal_set_message($k . " = " . $v);

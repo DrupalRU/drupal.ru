@@ -1,6 +1,4 @@
 <?php
-// $Id: forum-topic-list.tpl.php,v 1.4 2007/08/30 18:58:12 goba Exp $
-
 /**
  * @file forum-topic-list.tpl.php
  * Theme implementation to display a list of forum topics.

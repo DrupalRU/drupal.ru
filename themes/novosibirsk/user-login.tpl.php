@@ -1,8 +1,8 @@
 <?php
-  /**
-   * @file
-   * User login form.
-   */
+/**
+ * @file
+ * User login form.
+ */
   $form["links"] = array();
   $form["name"]["#theme"] = "user_login_form_name_field";
   $form["pass"]["#theme"] = "user_login_form_pass_field";

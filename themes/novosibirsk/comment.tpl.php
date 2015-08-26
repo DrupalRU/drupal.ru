@@ -1,5 +1,7 @@
 <?php
-// $Id$
+/**
+ * @file comment.tpl.php
+ */
 ?>
 <div class="comment">
   <div class="autor">

@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "INIT DEVEL DRupal.ru Version"
+echo "INIT DEVEL Drupal.ru Version"
 
 CORE='drupal-6'
 SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"

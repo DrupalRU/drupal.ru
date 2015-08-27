@@ -49,12 +49,6 @@
 		
 		$acc = user_load($uid);
 	}
-    $uid = arg(1);
-    $r = db_fetch_object(db_query("SELECT v.value FROM {profile_values} v INNER JOIN {profile_fields} f ON f.fid = v.fid WHERE v.uid = %d AND f.name = 'profile_drupal_association_id'", $uid));
-    if($r->value != "") {$dru_assoc = "<div class=\"drupal_assoc\"><a href=\"http://association.drupal.org/user/" . $r->value . "\"><img src=\"" . base_path() . path_to_theme() . "/img/DA-individual-80.png\"></a></div>";}
-
-    $acc = user_load($uid);
-  }
  
 ?>
 

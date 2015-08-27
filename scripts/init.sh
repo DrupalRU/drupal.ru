@@ -3,7 +3,7 @@ echo "INIT DEVEL Drupal.ru Version"
 
 CORE='drupal-6'
 SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
-CONTRIB="acl ascii_art_captcha bbcode bueditor cacherouter captcha captcha_pack comment_notify comment_upload diff fasttoggle flag flag_abuse geshifilter google_plusone gravatar imageapi imagecache imagecache_profiles live_translation noindex_external_links pathauto pearwiki_filter privatemsg quote simplenews smtp spambot tagadelic taxonomy_manager token transliteration  views xmlsitemap "
+CONTRIB="acl bbcode bueditor cacherouter captcha  comment_notify comment_upload diff fasttoggle flag flag_abuse geshifilter google_plusone gravatar imageapi imagecache imagecache_profiles live_translation noindex_external_links pathauto pearwiki_filter privatemsg quote simplenews smtp spambot tagadelic taxonomy_manager token transliteration  views xmlsitemap "
 
 echo "Full site path: $SITEPATH"
 echo "Site core: $CORE"
@@ -27,13 +27,17 @@ mkdir -p $SITEPATH/sites/all/modules/contrib
 drush dl $CONTRIB
 drush -y en $CONTRIB
 
+echo "Install captcha_pack"
+drush dl captcha_pack
+drush -y en ascii_art_captcha css_captcha
+
 echo "Install drupal.ru modules"
-mkdir $SITEPATH/sites/all/modules/local
+mkdir -p $SITEPATH/sites/all/modules/local
 
 ln -s $GITLC_DEPLOY_DIR/modules/* $SITEPATH/sites/all/modules/local/
 
 echo "Install drupal.ru themes"
-mkdir $SITEPATH/sites/all/themes/local
+mkdir -p $SITEPATH/sites/all/themes/local
 
 ln -s $GITLC_DEPLOY_DIR/themes/* $SITEPATH/sites/all/themes/local/
 
@@ -52,7 +56,7 @@ drush -y en $modules_enable
 echo "Set drupal.ru theme as default"
 drush vset theme_default novosibirsk
 
-if [-n "SETTINGS_DEVEL" ]; then
+if [ -n "SETTINGS_DEVEL" ]; then
   drush dl devel
   drush en devel -y
   drush en devel_generate -y

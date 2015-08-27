@@ -1,0 +1,6 @@
+name = Usability Improvements
+description = User interface usability improvements for Samurai Engine
+package = SamEngine
+core = 6.x
+version = 6.x-0.9.14-dev
+depends[] = "comment"

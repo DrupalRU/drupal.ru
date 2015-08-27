@@ -1,0 +1,420 @@
+<?php
+// -*- coding: UTF-8 -*-
+
+/**
+ * @file
+ * User interface improvements for Samurai Engine.
+ * Some elements of Raskin' Human Interface ideas being implemented.
+ *
+ * @author Axel <axel@drupal.ru>
+ * @copyright 2008, Axel <axel@drupal.ru>, Romka <romka@drupal.ru>
+ * @li GNU GPL v2
+ */
+
+define('ANONYMOUS_CACHE_TIME', 3600);
+define('USER_CACHE_TIME', 1800);
+
+
+/**
+ * Права доступа hook_perm()
+ */
+function samui_perm() {
+	return array('moderate site', 'publish and unpublish', 'ban users', 'admin log access', 'protected role');
+}
+
+
+/**
+ * Реализация hook_menu()
+ *
+ * @return array
+ */
+function samui_menu() {
+
+  $items = array();
+
+  $items['default'] = array( /// замена дефолтному выводу node
+    'title' => 'Новости',
+    'page callback' => 'samui_page_default',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['news'] = $items['default'];
+
+  $items['node/%node/publish'] = array( /// публикация новости
+    'title' => t('Publish'),
+    'page callback' => 'samui_node_publish',
+    'page arguments' => array(1),
+    'access callback' => 'samui_node_access',
+    'access arguments' => array('publish', 1),
+    'weight' => 1,
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['node/%node/unpublish'] = array( /// депубликация новости
+    'title' => t('Unpublish'),
+    'page callback' => 'samui_node_unpublish',
+    'page arguments' => array(1, 2),
+    'access callback' => 'samui_node_access',
+    'access arguments' => array('unpublish', 1),
+    'weight' => 1,
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['node/%node/spam'] = array( /// депубликация новости
+    'title' => t('Stop spam'),
+    'page callback' => 'samui_node_unpublish',
+    'page arguments' => array(1, 2),
+    'access callback' => 'samui_node_access',
+    'access arguments' => array('unpublish', 1),
+    'weight' => 1,
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['adminlog/user/%user_uid_optional'] = array(
+    'title' => 'Moderated user account',
+    'page callback' => 'samui_admin_user_view',
+    'page arguments' => array(2),
+    'access callback' => 'samui_user_access',
+    'access arguments' => array('view', 2),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['adminlog/node/%node'] = array(
+    'title' => 'Moderated node view',
+    'page callback' => 'samui_admin_node_view',
+    'page arguments' => array(2),
+    'access callback' => 'samui_node_access',
+    'access arguments' => array('view', 2),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['user/%user/ban'] = array( /// бан пользователя
+    'title' => t('Ban!'),
+    'page callback' => 'samui_user_ban',
+    'page arguments' => array(1),
+    'access callback' => 'samui_user_access',
+    'access arguments' => array('ban', 1),
+    'weight' => 1,
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['user/%user/unban'] = array( /// бан пользователя
+    'title' => t('Unban'),
+    'page callback' => 'samui_user_unban',
+    'page arguments' => array(1),
+    'access callback' => 'samui_user_access',
+    'access arguments' => array('unban', 1),
+    'weight' => 1,
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['node/%node/delete'] = array( /// запрещено удаление нодов человеком, используется только депубликация
+    'access callback' => FALSE,
+  );
+
+  $items['adminlog'] = array(
+    'title' => 'Лог модерации',
+    //'page callback' => 'drupal_get_form',
+    //'page arguments' => array('druid_admin_log'),
+    'page callback' => 'druid_admin_log',
+    'access arguments' => array('admin log access'),
+    'weight' => 0,
+    'file' => 'samui.adminlog.inc',
+  );
+
+  $items['node'] = array( /// доступ только через news
+    'access callback' => FALSE,
+  );
+
+  return $items;
+
+}
+
+
+/**
+ * Realization of the hook_node_access()
+ *
+ * @param string $action
+ * @param obj $node
+ * @return boolean
+ */
+function samui_node_access($action, $node) {
+  switch ($action) {
+    case 'view':
+        return ($node->status && (node_access('view', $node)) || user_access('publish and unpublish'));
+    case 'publish': // node_access('update', $node) убрано из условий ниже, иначе всем немодерам разрешена депубликация book - bugreported by Ветер
+	      return !$node->status && user_access('publish and unpublish');
+    case 'unpublish':
+        return $node->status && user_access('publish and unpublish');
+  }
+}
+
+
+/**
+ * Realization of the hook_user_access()
+ *
+ * @param string $action
+ * @param obj $user
+ * @return boolean
+ */
+function samui_user_access($action, $user) {
+  switch ($action) {
+    case 'view':
+        return $user->status || user_access('ban users');
+    case 'unban':
+	      return !$user->status && user_access('ban users');
+    case 'ban':
+      return $user->status && user_access('ban users');
+  }
+}
+
+
+/**
+ * Realization of hook_nodeapi()
+ */
+function samui_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+	global $user;
+	if ($user->uid == $node->uid || !$node->uid || !$node->nid) {
+		return; // skip действия по отношению к себе и публикацию новых нодов
+	}
+
+	switch ($op) {
+		case 'presave':
+			$status = db_result(db_query('SELECT status FROM {node} WHERE nid = %d', $node->nid));
+			if ($status > $node->status) {
+				samui_log('unp', $node->uid, $node->nid);
+			}
+			else if ($status < $node->status) {
+				samui_log('pub', $node->uid, $node->nid);
+			}
+			break;
+		case 'delete':
+			samui_log('del', $node->uid, $node->nid);
+			break;
+	}
+}
+
+
+/**
+ * Realization of hook_user()
+ */
+function samui_user($op, &$edit, &$account, $category = NULL) {
+	switch ($op) {
+		case 'delete':
+			samui_log('del', $account->uid);
+		break;
+	}
+}
+
+
+/**
+ * Menu callback; Generate a listing of promoted nodes.
+ */
+function samui_page_default() {
+  global $user;
+  /* на какой странице пейджера находимся? */
+  $page = check_plain($_REQUEST['page'] ? $_REQUEST['page'] : 0);
+  $cache_id = "samui:page_default:uid-$user->uid:page-$page";
+  $cache_time = $user->uid ? time() + USER_CACHE_TIME : time() + ANONYMOUS_CACHE_TIME; /// получасовой кеш главной страницы для каждого юзера и часовой для анонима
+  if ($cached = cache_get($cache_id, 'cache_page')) {
+    $feed_url = url('rss.xml', array('absolute' => TRUE));
+    drupal_add_feed($feed_url, variable_get('site_name', 'Samurai') .' '. t('RSS'));
+    drupal_set_title('');
+    return $cached->data;
+  }
+
+  $result = pager_query(db_rewrite_sql('SELECT n.nid, n.sticky, n.created FROM {node} n WHERE n.promote = 1 AND n.status = 1 ORDER BY n.sticky DESC, n.created DESC'), variable_get('default_nodes_main', 10));
+
+  $output = '';
+  $num_rows = FALSE;
+  $prevdate = '';
+  while ($node = db_fetch_object($result)) {
+    $date = date('DMY', $node->created);
+    if ($date != $prevdate) {
+      if (!$node->sticky) {
+        $output .= '<span class="page-date"><h2>'. date('j', $node->created). ' '. _druid_rumonth(date('n', $node->created)). '</h2></span>';
+      }
+      $prevdate = $date;
+    }
+    $node = node_load($node->nid);
+    if ($node->nid) {
+      $output .= node_view($node, 1);
+    }
+    $num_rows = TRUE;
+  }
+
+  if ($num_rows) {
+    $feed_url = url('rss.xml', array('absolute' => TRUE));
+    drupal_add_feed($feed_url, variable_get('site_name', 'Drupal') .' '. t('RSS'));
+    $output .= theme('pager', NULL, variable_get('default_nodes_main', 10));
+  }
+  else {
+    $default_message = t('<h1 class="title">Welcome to your new Drupal website!</h1><p>Please follow these steps to set up and start using your website:</p>');
+    $default_message .= '<ol>';
+
+    $default_message .= '<li>'. t('<strong>Configure your website</strong> Once logged in, visit the <a href="@admin">administration section</a>, where you can <a href="@config">customize and configure</a> all aspects of your website.', array('@admin' => url('admin'), '@config' => url('admin/settings'))) .'</li>';
+    $default_message .= '<li>'. t('<strong>Enable additional functionality</strong> Next, visit the <a href="@modules">module list</a> and enable features which suit your specific needs. You can find additional modules in the <a href="@download_modules">Drupal modules download section</a>.', array('@modules' => url('admin/build/modules'), '@download_modules' => 'http://drupal.org/project/modules')) .'</li>';
+    $default_message .= '<li>'. t('<strong>Customize your website design</strong> To change the "look and feel" of your website, visit the <a href="@themes">themes section</a>. You may choose from one of the included themes or download additional themes from the <a href="@download_themes">Drupal themes download section</a>.', array('@themes' => url('admin/build/themes'), '@download_themes' => 'http://drupal.org/project/themes')) .'</li>';
+    $default_message .= '<li>'. t('<strong>Start posting content</strong> Finally, you can <a href="@content">create content</a> for your website. This message will disappear once you have promoted a post to the front page.', array('@content' => url('node/add'))) .'</li>';
+    $default_message .= '</ol>';
+    $default_message .= '<p>'. t('For more information, please refer to the <a href="@help">help section</a>, or the <a href="@handbook">online Drupal handbooks</a>. You may also post at the <a href="@forum">Drupal forum</a>, or view the wide range of <a href="@support">other support options</a> available.', array('@help' => url('admin/help'), '@handbook' => 'http://drupal.org/handbooks', '@forum' => 'http://drupal.org/forum', '@support' => 'http://drupal.org/support')) .'</p>';
+
+    $output = '<div id="first-time">'. $default_message .'</div>';
+  }
+  drupal_set_title('');
+
+  cache_set($cache_id, $output, 'cache_page', $cache_time);
+
+  return $output;
+}
+
+
+/**
+ * Switch node status to 'published'
+ *
+ * @param object $node
+ */
+function samui_node_publish($node) {
+  drupal_set_message("Документ \"$node->title\" (№$node->nid) опубликован. ". l("Отменить", "node/$node->nid/unpublish"). " публикацию?");
+  db_query('UPDATE {node} SET status = 1 WHERE nid = %d AND status = 0', $node->nid);
+  samui_log('pub', $node->uid, $node->nid);
+  drupal_goto(referer_uri());
+}
+
+
+/**
+ * Switch node status to 'unpublished'
+ *
+ * @param object $node
+ */
+function samui_node_unpublish($node, $reason='unpublish') {
+	global $user;
+	if ($user->uid == $node->uid && $reason == 'spam') {
+		drupal_set_message("Спам? Самокритично. Это признание облегчит вашу участь.");
+	}
+	if ($reason == 'unpublish') {
+		$reason = 'Нарушение правил сайта или дубль';
+	}
+	else if ($reason == 'spam') {
+		$reason = 'Спам';
+	}
+  drupal_set_message("Документ \"$node->title\" (№$node->nid) снят с публикации (причина: \"" . $reason . "\")! ". l("Заново опубликовать", "node/$node->nid/publish"). " документ?");
+  db_query('UPDATE {node} SET status = 0 WHERE nid = %d AND status = 1', $node->nid);
+  samui_log('unp', $node->uid, $node->nid, 0, $reason . '.'); // лучше добавить, чем отрезать. это я про "."
+  drupal_goto(referer_uri());
+}
+
+
+/**
+ * Switch user status to 'active'
+ *
+ * @param object $account
+ */
+function samui_user_unban($account) {
+	global $user;
+	if ($user->uid == $account->uid) {
+		drupal_set_message("Вас может разблокировать только другой пользователь.");
+	}
+  else {
+  	drupal_set_message("Профиль пользователя \"$account->name\" (№$account->uid) активирован, снятые с публикации ноды и комментарии возвращены. ". l("Заблокировать", "user/$account->uid/ban"). " опять?");
+  	db_query('UPDATE {users} SET status = 1 WHERE uid = %d AND status = 0', $account->uid);
+  	db_query('UPDATE {node} SET status = 1, moderate = 0 WHERE status = 0 AND moderate = -1 AND uid = %d', $account->uid);
+  	db_query('UPDATE {comments} SET status = %d WHERE status = %d AND uid = %d', COMMENT_PUBLISHED, COMMENT_NOT_PUBLISHED, $account->uid);
+  	samui_log('unb', $account->uid);
+  }
+  drupal_goto(referer_uri());
+}
+
+
+/**
+ * Switch user status to 'blocked'
+ *
+ * @param object $account
+ */
+function samui_user_ban($account) {
+	global $user;
+	if ($user->uid == $account->uid) {
+		drupal_set_message("Самоубийство - один из грехов в христианстве.");
+	}
+	else if (user_access('protected role', $account)) {
+		drupal_set_message("А этот юзер сам кого хочешь забанит.");
+	}
+  else {
+  	$nodecount = db_result(db_query('SELECT COUNT(*) FROM {node} WHERE status = 1 AND moderate = 0 AND uid = %d', $account->uid));
+  	$commentcount = db_result(db_query('SELECT COUNT(*) FROM {comments} WHERE status = %d AND uid = %d', COMMENT_PUBLISHED, $account->uid));
+  	drupal_set_message("Профиль пользователя \"$account->name\" (№$account->uid) заблокирован, ноды ($nodecount шт.) и комментарии ($commentcount шт.) депубликованы! ". l("Разблокировать", "user/$account->uid/unban"). " заново?");
+  	sess_destroy_uid($account->uid);
+  	db_query('UPDATE {users} SET status = 0 WHERE uid = %d AND status = 1', $account->uid);
+  	db_query('UPDATE {node} SET status = 0, moderate = -1 WHERE status = 1 AND moderate = 0 AND uid = %d', $account->uid);
+  	db_query('UPDATE {comments} SET status = %d WHERE status = %d AND uid = %d', COMMENT_NOT_PUBLISHED, COMMENT_PUBLISHED, $account->uid);
+  	// все материалам присваивается статус модерации по причине бана (для этого выбрано значение -1)
+  	// XXX депубликацию материалов, конечно надо бы ставить в очередь по крону
+  	samui_log('ban', $account->uid, 0, 0, "Спамер. Депубликовано нодов $nodecount шт., комментариев $commentcount шт.");
+  }
+  drupal_goto(referer_uri()); // XXX переход на страницу блокированного аккаунта выдаёт access denied, если у модератора нет прав администрирования юзеров (а их может не быть)
+}
+
+
+/**
+ * Implementation of hook_comment()
+ */
+function samui_comment($a1, $op) {
+	global $user;
+	if ($user->uid == $a1->uid || !$a1->uid) {
+		return; // skip действия по отношению к себе
+	}
+	switch ($op) {
+		case 'publish':
+			$logop = 'pub';
+			break;
+		case 'unpublish':
+			$logop = 'unp';
+			break;
+		case 'delete':
+			$logop = 'del';
+			break;
+		case 'update':
+			$oldcomment = _comment_load($a1->cid);
+			if ($oldcomment->status == $a1->status) {
+				return; // no status update
+			}
+			else if ($oldcomment->status > $a1->status) {
+				$logop = 'pub'; // 1->0 - it means comment published
+			}
+			else if ($oldcomment->status < $a1->status) {
+				$logop = 'unp'; // 0->1 - it means comment depublished
+			}
+			break;
+		default:
+			return;
+	}
+	samui_log($logop, $a1->uid, $a1->nid, $a1->cid);
+}
+
+
+/**
+ * Menu callback; Displays a user or user profile page.
+ */
+function samui_admin_user_view($account) {
+  drupal_set_title(check_plain($account->name));
+
+  $content[] = 'Статус: ' . ($account->status ? 'активен' : 'забанен');
+  $content[] = 'Логин: ' . $account->name;
+  $content[] = 'Email: ' . $account->mail;
+  $content[] = 'Учётная запись создана: ' . format_date($account->created, 'large');
+  $content[] = 'Дата последнего входа: ' . format_date($account->access, 'large');
+  return implode('<br />', $content);
+}
+
+
+function samui_admin_node_view($node) {
+	return node_view($node, FALSE, TRUE, FALSE);
+}
+
+
+function samui_log($action, $uid, $nid=0, $cid=0, $reason='Все вопросы - к админу.') {
+	global $user;
+	if ($user->uid == $uid) return; // skip действия сделанные по отношению к себе
+	db_query("INSERT INTO {admin_log} (auid, uid, nid, cid, action, stamp, reason) VALUES (%d, %d, %d, %d, '%s', %d, '%s')", $user->uid, $uid, $nid, $cid, $action, time(), $reason);
+}

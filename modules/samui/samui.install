@@ -1,0 +1,73 @@
+<?php
+// -*- coding: UTF-8 -*-
+
+/**
+ * @file
+ * Installation procedures for samui module
+ *
+ * @author axel
+ * @copyright 2008, axel
+ * @li GNU GPL v2
+ */
+
+/**
+ * Realization of the hook_install()
+ *
+ */
+function samui_install() {
+  menu_cache_clear_all();
+  drupal_install_schema('samui');
+}
+
+
+/**
+ * Realization of the hook_uninstall()
+ */
+function samui_uninstall() {
+  drupal_uninstall_schema('samui');
+}
+
+
+/**
+ * Реализация hook_schema(). Описания таблиц см. ниже.
+ * @return ассоциативный массив с описанием таблиц
+ */
+function samui_schema() {
+	/**
+	 * Values of the action field below mean:
+	 * pub - publish node/comment
+	 * unp - unpublish node/comment
+	 * ban - ban user
+	 * unb - unban user
+	 * For nodes:
+	 * pro - promote
+	 * dem - demote
+	 * del - delete
+	 * sti - sticky
+	 * uns - unsticky
+	 */
+  $schema['admin_log'] = array( // was docks
+    'fields' => array(
+    	'id'      => array('type' => 'serial', 'size' => 'big'),
+      'auid'    => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0), // admin uid
+      'uid'     => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'nid'     => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'cid'     => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'action'  => array('type' => 'char', 'length' => 3, 'not null' => TRUE, 'default' => ''),
+      'stamp' 	=> array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'reason'  => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => 'Все вопросы - к админу.'),
+      ),
+    'primary key' => array('id'),
+    'indexes' => array('admin_log_stamp' => array('stamp')),
+    'description' => 'Лог всех административных действий над контентом.'
+		);
+
+	return $schema;
+}
+
+
+function samui_update_6000() {
+  $ret = array();
+	db_add_field($ret, 'admin_log', 'reason', array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => 'Все вопросы - к админу.'));
+	return $ret;
+}

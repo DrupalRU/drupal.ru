@@ -1,0 +1,34 @@
+acl
+ascii_art_captcha
+bbcode
+bueditor
+cacherouter
+captcha         6.x-2.4 доступна 6.x-2.6
+captcha_pack
+comment_notify
+comment_upload  6.x-1.x-dev доступна 6.x-1.0-alpha6
+diff
+fasttoggle      6.x-1.3 доступна 6.x-1.6
+flag            6.x-2.0-beta6 - 6.x-2.2
+flag_abuse
+geshifilter     6.x-1.2 - 6.x-1.5
+google_plusone
+gravatar
+imageapi
+imagecache      6.x-2.0-beta12 - 6.x-2.0-rc1
+imagecache_profiles
+live_translation  6.x-1.x-dev - 6.x-1.03
+noindex_external_links 6.x-1.2 - 6.x-1.3
+pathauto
+pearwiki_filter
+privatemsg
+quote           6.x-1.x-dev - 6.x-1.2
+simplenews      6.x-1.4 - 6.x-2.0-alpha6 (6.x-1.5)
+smtp            6.x-1.0-beta5 - 6.x-1.1
+spambot         6.x-3.2 - 6.x-3.4
+tagadelic       6.x-1.3 - 6.x-1.5
+taxonomy_manager  6.x-2.2 - 6.x-2.3
+token           6.x-1.11 - 6.x-1.19
+transliteration 6.x-3.0 - 6.x-3.1
+views           6.x-2.16 - 6.x-2.18
+xmlsitemap      6.x-2.0-beta3 - 6.x-2.1

@@ -1,0 +1,179 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from file: inner_poll.module: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2008-09-18 14:36+0400\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: inner_poll.module:47
+msgid "Attach poll"
+msgstr ""
+
+#: inner_poll.module:50
+msgid "Create poll attached to this node."
+msgstr ""
+
+#: inner_poll.module:57
+msgid "quiestion"
+msgstr ""
+
+#: inner_poll.module:77
+msgid "choice"
+msgstr ""
+
+#: inner_poll.module:90
+msgid "Add field"
+msgstr ""
+
+#: inner_poll.module:97
+msgid "multiply select?"
+msgstr ""
+
+#: inner_poll.module:104
+msgid "Users can cancel own votes?"
+msgstr ""
+
+#: inner_poll.module:108
+msgid "Closed"
+msgstr ""
+
+#: inner_poll.module:108
+msgid "Active"
+msgstr ""
+
+#: inner_poll.module:109
+msgid "Unlimited"
+msgstr ""
+
+#: inner_poll.module:113
+msgid "Poll status"
+msgstr ""
+
+#: inner_poll.module:117
+msgid "When a poll is closed, visitors can no longer vote for it."
+msgstr ""
+
+#: inner_poll.module:122
+msgid "Poll duration"
+msgstr ""
+
+#: inner_poll.module:126
+msgid "After this period, the poll will be closed automatically."
+msgstr ""
+
+#: inner_poll.module:225
+msgid "Vote!"
+msgstr ""
+
+#: inner_poll.module:231
+msgid "Abstain"
+msgstr ""
+
+#: inner_poll.module:253
+msgid "inner_poll_vote_js"
+msgstr ""
+
+#: inner_poll.module:260
+msgid "inner_poll_cancel_vote"
+msgstr ""
+
+#: inner_poll.module:313
+msgid "Your vote accepted"
+msgstr ""
+
+#: inner_poll.module:321
+msgid "You alredy vote on this poll"
+msgstr ""
+
+#: inner_poll.module:339
+msgid "Select node types"
+msgstr ""
+
+#: inner_poll.module:346
+msgid "div width"
+msgstr ""
+
+#: inner_poll.module:354
+msgid "Minimum question length"
+msgstr ""
+
+#: inner_poll.module:362
+msgid "Show polls in teasers"
+msgstr ""
+
+#: inner_poll.module:415
+msgid "The post is queued for approval. The editors will decide whether it should be published."
+msgstr ""
+
+#: inner_poll.module:529;582
+msgid "Attached poll"
+msgstr ""
+
+#: inner_poll.module:575
+msgid "Cancel vote"
+msgstr ""
+
+#: inner_poll.module:578
+msgid "You are alredy vote on this poll, your answer is: "
+msgstr ""
+
+#: inner_poll.module:579
+msgid "This poll is closed"
+msgstr ""
+
+#: inner_poll.module:582
+msgid "Results"
+msgstr ""
+
+#: inner_poll.module:582
+msgid "All votes"
+msgstr ""
+
+#: inner_poll.module:627
+msgid "Your vote was deleted"
+msgstr ""
+
+#: inner_poll.module:137
+msgid "create inner polls"
+msgstr ""
+
+#: inner_poll.module:137
+msgid "edit inner polls"
+msgstr ""
+
+#: inner_poll.module:137
+msgid "edit own inner poll"
+msgstr ""
+
+#: inner_poll.module:137
+msgid "vote on inner polls"
+msgstr ""
+
+#: inner_poll.module:137
+msgid "cancel own inner poll vote"
+msgstr ""
+
+#: inner_poll.module:137
+msgid "inspect all inner poll votes"
+msgstr ""
+
+#: inner_poll.module:267
+msgid "Inner poll settings"
+msgstr ""
+
+#: inner_poll.module:0
+msgid "inner_poll"
+msgstr ""
+

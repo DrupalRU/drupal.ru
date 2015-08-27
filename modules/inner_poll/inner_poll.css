@@ -1,0 +1,58 @@
+.inner_poll_container, .inner_poll_block_container {
+  width: 100%;
+}
+
+.inner_poll_question {
+  float: left; 
+  width: 150px;
+} 
+
+.inner_poll_result, .inner_poll_block_result {
+  float: left; 
+  border: 0;
+  width: 50px;
+}
+
+.inner_poll_answer_wrapper {
+  float: left;
+}
+
+.inner_poll_result .percent {
+  text-align: center;
+  font-weight: bold;
+}
+
+.inner_poll_block_result .percent {
+  text-align: center;
+  font-weight: bold;
+  float: left;
+}
+
+.inner_poll_result .points {
+  text-align: center;
+  color: #ccc;
+}
+
+.inner_poll_block_result .points  {
+  text-align: center;
+  color: #ccc;
+  float: left;
+}
+
+.inner_poll_grafic {
+  height: 5px;
+  background-color: #ddd;
+}
+
+.inner_poll_block_result .inner_poll_grafic {
+  float: left;
+}
+
+.inner_poll_max_result {
+  background-color: #aaa;
+}
+
+.question {
+  font-size: 1.3em;
+  font-weight: bold;
+}

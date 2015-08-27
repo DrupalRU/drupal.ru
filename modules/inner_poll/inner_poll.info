@@ -1,0 +1,6 @@
+; $Id$
+name = Inner Poll
+description = Add poll to the any node
+package = SamEngine
+version = 1.2
+core = 6.x

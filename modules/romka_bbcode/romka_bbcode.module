@@ -1,0 +1,150 @@
+<?php
+// $Id: romka_bbcode.module
+
+/**
+ * Implementation of hook_filter_tips().
+ *
+ */
+function romka_bbcode_filter_tips($delta, $format, $long = FALSE) {
+  switch ($delta) {
+    case 0:
+      if ($long) {
+        return t('Replace tag [man]somebody[/man] as link to manual on php.net and tag [module]sombody[/module] as link to module page on drupal.org');
+      }
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_filter().
+ *
+ */
+function romka_bbcode_filter($op, $delta = 0, $format = -1, $text = '') {
+  if ($op == 'list') {
+    return array(
+      0 => t('BBCode addition filter (drupal.ru version, add tags [man] and [module])'));
+  }
+
+  switch ($delta) {
+    case 0:
+      switch ($op) {
+        case 'description':
+          return t('Allow use additional BBCodes in users posts: [man], [module], [theme], [wiki].<br>All this tags have 5 variations, like: [man]AAA[/man], [man:AAA], [man:AAA]BBB[/man], [man=AAA], [man=AAA]BBB[/man]');
+        case 'prepare':
+          return $text;
+        case 'no cache':
+          return TRUE;
+        case 'process':
+          return romka_bbcode($text);
+      }
+      break;
+  }
+}
+
+function romka_bbcode($text){
+	$bbcode = array(
+		'/\[man(?::|=)(.+?)\](.+?)\[\/man\]/i',
+		'/\[man\](.+?)\[\/man\]/i',
+		'/\[man(?::|=)(.+?)\]/i',
+		'/\[module(?::|=)(.+?)\](.+?)\[\/module\]/i',
+		'/\[module\](.+?)\[\/module\]/i',		
+		'/\[module(?::|=)(.+?)\]/i',
+		'/\[theme(?::|=)(.+?)\](.+?)\[\/theme\]/i',
+		'/\[theme\](.+?)\[\/theme\]/i',
+		'/\[theme(?::|=)(.+?)\]/i',
+		'/\[wiki(?::|=)(.+?)\](.+?)\[\/wiki\]/i',
+		'/\[wiki\](.+?)\[\/wiki\]/i',
+		'/\[wiki(?::|=)(.+?)\]/i',
+		'/\[api(?::|=)(.+?),ver(?::|=)(.+?)\](.+?)\[\/api\]/i',
+		'/\[api(?::|=)(.+?)\](.+?)\[\/api\]/i',
+		'/\[api\](.+?)\[\/api\]/i',
+		'/\[api(?::|=)(.+?)\]/i',		
+		'/\[ru-api(?::|=)(.+?),ver(?::|=)(.+?)\](.+?)\[\/ru-api\]/i',
+		'/\[ru-api(?::|=)(.+?)\](.+?)\[\/ru-api\]/i',
+		'/\[ru-api\](.+?)\[\/ru-api\]/i',
+		'/\[ru-api(?::|=)(.+?)\]/i',		
+		'/\[user(?::|=)(.+?)\](.+?)\[\/user\]/i',		
+		'/\[user\](.+?)\[\/user\]/i',
+		'/\[user(?::|=)(.+?)\]/i',
+		'/\[#(\d+?)\](.+?)\[\/#\]/i',
+		'/\[##(\d+?)\](.+?)\[\/##\]/i',	
+		'/(\w+?)\^api/i',	
+		'/\s(\d+?)#dc/i',	
+		'/\s(\d+?)#ub/i',	
+		'/\s(\d+?)##/i',	
+		'/\s(\d+?)#/i',	
+		'/\s(\d+?)@/i',	
+	);
+	
+	$path = base_path() . drupal_get_path("module", "romka_bbcode") . "/icons";
+		
+	$replace = array(
+		'<img src="' . $path . '/book_blue.gif" class="bbcode_image">&nbsp;<a href=http://php.net/$1 target=_blank>$2</a>',
+		'<img src="' . $path . '/book_blue.gif" class="bbcode_image">&nbsp;<a href=http://php.net/$1 target=_blank>$1</a>',
+		'<img src="' . $path . '/book_blue.gif" class="bbcode_image">&nbsp;<a href=http://php.net/$1 target=_blank>$1</a>',
+		'<img src="' . $path . '/astrologer.gif" class="bbcode_image">&nbsp;<a href=http://drupal.org/project/$1 target=_blank>$2</a>',
+		'<img src="' . $path . '/astrologer.gif" class="bbcode_image">&nbsp;<a href=http://drupal.org/project/$1 target=_blank>$1</a>',
+		'<img src="' . $path . '/astrologer.gif" class="bbcode_image">&nbsp;<a href=http://drupal.org/project/$1 target=_blank>$1</a>',
+		'<img src="' . $path . '/colors.gif" class="bbcode_image">&nbsp;<a href=http://drupal.org/project/$1 target=_blank>$2</a>',
+		'<img src="' . $path . '/colors.gif" class="bbcode_image">&nbsp;<a href=http://drupal.org/project/$1 target=_blank>$1</a>',
+		'<img src="' . $path . '/colors.gif" class="bbcode_image">&nbsp;<a href=http://drupal.org/project/$1 target=_blank>$1</a>',
+		'<a href=http://wiki.drupal.ru/doc/$1 target=_blank>$2</a>',
+		'<a href=http://wiki.drupal.ru/doc/$1 target=_blank>$1</a>',
+		'<a href=http://wiki.drupal.ru/doc/$1 target=_blank>$1</a>',
+		'<img src="' . $path . '/cubes_green.gif" class="bbcode_image">&nbsp;<a href=http://api.drupal.org/api/function/$1/$2 target=_blank>$3</a>',
+		'<img src="' . $path . '/cubes_green.gif" class="bbcode_image">&nbsp;<a href=http://api.drupal.org/api/function/$1/6 target=_blank>$2</a>',
+		'<img src="' . $path . '/cubes_green.gif" class="bbcode_image">&nbsp;<a href=http://api.drupal.org/api/function/$1/6 target=_blank>$1</a>',
+		'<img src="' . $path . '/cubes_green.gif" class="bbcode_image">&nbsp;<a href=http://api.drupal.org/api/function/$1/6 target=_blank>$1</a>',		
+		'<img src="' . $path . '/cubes_green.gif" class="bbcode_image">&nbsp;<a href=http://api.drupal.ru/api/function/$1/$2 target=_blank>$3</a>',
+		'<img src="' . $path . '/cubes_green.gif" class="bbcode_image">&nbsp;<a href=http://api.drupal.ru/api/function/$1/6 target=_blank>$2</a>',
+		'<img src="' . $path . '/cubes_green.gif" class="bbcode_image">&nbsp;<a href=http://api.drupal.ru/api/function/$1/6 target=_blank>$1</a>',
+		'<img src="' . $path . '/cubes_green.gif" class="bbcode_image">&nbsp;<a href=http://api.drupal.ru/api/function/$1/6 target=_blank>$1</a>',		
+		'<img src="' . $path . '/user1.gif" class="bbcode_image">&nbsp;<a href=/username/$1 target=_top>$2</a>',		
+		'<img src="' . $path . '/user1.gif" class="bbcode_image">&nbsp;<a href=/username/$1 target=_top>$1</a>',
+		'<img src="' . $path . '/user1.gif" class="bbcode_image">&nbsp;<a href=/username/$1 target=_top>$1</a>',		
+		'<a href="http://drupal.ru/node/$1">$2</a>',
+		'<a href="http://drupal.org/node/$1">$2</a>',	
+		'<a href="http://api.drupal.ru/api/function/$1/6">$1</a>',	
+		' <a href="http://drupalcon.ru/node/$1">http://drupalcon.ru/node/$1</a>',	
+		' <a href="http://ubercart.ru/node/$1">http://ubercart.ru/node/$1</a>',	
+		' <a href="http://drupal.org/node/$1">http://drupal.org/node/$1</a>',
+		' <a href="http://drupal.ru/node/$1">http://drupal.ru/node/$1</a>',
+		' <img src="' . $path . '/user1.gif" class="bbcode_image">&nbsp;<a href="http://drupal.ru/user/$1">$1</a>',
+	);
+
+return preg_replace($bbcode, $replace, $text); 
+}
+
+
+	/*
+	$bbcode = array(
+		'/\[man:(.+?)\](.+?)\[\/man\]/i',
+		'/\[man=(.+?)\](.+?)\[\/man\]/i',
+		'/\[man\](.+?)\[\/man\]/i',
+		'/\[man:(.+?)\]/i',
+		'/\[man=(.+?)\]/i',
+		'/\[module=(.+?)\](.+?)\[\/module\]/i',
+		'/\[module:(.+?)\](.+?)\[\/module\]/i',
+		'/\[module\](.+?)\[\/module\]/i',		
+		'/\[module:(.+?)\]/i',
+		'/\[module=(.+?)\]/i',
+		'/\[theme=(.+?)\](.+?)\[\/theme\]/i',
+		'/\[theme:(.+?)\](.+?)\[\/theme\]/i',
+		'/\[theme\](.+?)\[\/theme\]/i',
+		'/\[theme:(.+?)\]/i',
+		'/\[theme=(.+?)\]/i',
+		'/\[wiki=(.+?)\](.+?)\[\/wiki\]/i',
+		'/\[wiki:(.+?)\](.+?)\[\/wiki\]/i',
+		'/\[wiki\](.+?)\[\/wiki\]/i',
+		'/\[wiki:(.+?)\]/i',
+		'/\[wiki=(.+?)\]/i',
+		'/\[api(?::|=)(.+?),ver(?::|=)(.+?)\](.+?)\[\/api\]/i',
+		'/\[api:(.+?)\](.+?)\[\/api\]/i',
+		'/\[api=(.+?),ver=(.+?)\](.+?)\[\/api\]/i',
+		'/\[api=(.+?)\](.+?)\[\/api\]/i',		
+		'/\[api\](.+?)\[\/api\]/i',
+		'/\[api:(.+?)\]/i',
+		'/\[api=(.+?)\]/i',
+		
+	);
+	*/

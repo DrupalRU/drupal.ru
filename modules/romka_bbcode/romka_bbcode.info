@@ -1,0 +1,3 @@
+name = Romka bbcode
+description = "Add bbcodes [man], [module], [api], [ru-api]"
+core = 6.x

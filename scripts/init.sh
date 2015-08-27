@@ -59,3 +59,5 @@ if [-n "SETTINGS_DEVEL" ]; then
   drush generate-content 200
   drush generate-users 100
 fi  
+
+echo "Please check http://$SETTINGS_DOMAIN"

@@ -2,7 +2,7 @@
 /**
  * @file node.tpl.php
  */
-<?php if ($teaser): ?>
+ if ($teaser): ?>
   <h2><a href="<?php print base_path() . drupal_get_path_alias("node/" . $node->nid); ?>" title='Полная версия сообщения <?php print $title; ?><?php print $title; ?></a></h2>
   <div class="ret">
   <?php if (module_exists('vote_up_down')): ?>

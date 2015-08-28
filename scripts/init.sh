@@ -32,9 +32,7 @@ drush dl captcha_pack
 drush -y en ascii_art_captcha css_captcha
 
 echo "Install other modules"
-drush -y en imageapi_imagemagick flag_actions geshinode imagecache_ui pm_block_user pm_email_notify privatemsg_filter token_actions views_ui
-
-geshinode
+drush -y en imageapi_imagemagick flag_actions geshinode imagecache_ui pm_block_user pm_email_notify privatemsg_filter token_actions views_ui book forum geshinode
 
 echo "Install drupal.ru modules"
 mkdir -p $SITEPATH/sites/all/modules/local
@@ -70,8 +68,17 @@ if [ -n "SETTINGS_DEVEL" ]; then
 fi  
 
 echo "Migrating Menu structure"
-mysql -u$SETTINGS_DATABASE_USER -p$SETTINGS_DATABASE_PASS $SETTINGS_DATABASE_NAME < $GITLC_DEPLOY_DIR/db/primary-links.sql
 
-mysql -u$SETTINGS_DATABASE_USER -p$SETTINGS_DATABASE_PASS $SETTINGS_DATABASE_NAME < $GITLC_DEPLOY_DIR/db/secondary-links.sql
+mkdir -p $SITEPATH/sites/all/modules/github
+cd  $SITEPATH/sites/all/modules/github
+
+git clone https://github.com/itpatrol/drupal_deploy.git
+cd drupal_deploy
+git checkout 6.x
+
+cd  $SITEPATH
+drush -y en drupal_deploy
+
+drush ddi menu $GITLC_DEPLOY_DIR/data/menu_links.export
 
 echo "Please check http://$SETTINGS_DOMAIN"

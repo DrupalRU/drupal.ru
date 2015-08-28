@@ -69,4 +69,9 @@ if [ -n "SETTINGS_DEVEL" ]; then
   drush generate-users 100
 fi  
 
+echo "Migrating Menu structure"
+mysql -u$SETTINGS_DATABASE_USER -p$SETTINGS_DATABASE_PASS $SETTINGS_DATABASE_NAME < $GITLC_DEPLOY_DIR/db/primary-links.sql
+
+mysql -u$SETTINGS_DATABASE_USER -p$SETTINGS_DATABASE_PASS $SETTINGS_DATABASE_NAME < $GITLC_DEPLOY_DIR/db/secondary-links.sql
+
 echo "Please check http://$SETTINGS_DOMAIN"

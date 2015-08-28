@@ -3,7 +3,7 @@
  * @file node.tpl.php
  */
  if ($teaser): ?>
-  <h2><a href="<?php print base_path() . drupal_get_path_alias("node/" . $node->nid); ?>" title='Полная версия сообщения <?php print $title; ?><?php print $title; ?></a></h2>
+  <h2><a href="<?php print base_path() . drupal_get_path_alias("node/" . $node->nid); ?>" title='Полная версия сообщения <?php print $title; ?>'><?php print $title; ?></a></h2>
   <div class="ret">
   <?php if (module_exists('vote_up_down')): ?>
     <p><a href="." title=""><img src="<?php print base_path() . path_to_theme(); ?>/img/ar_gn_up.gif" alt="полезно" /></a><a href="." title=""><img src="<?php print base_path() . path_to_theme(); ?>/img/ar_gr_dn.gif" alt="глупость" /></a><strong class="green"> 12 </strong><strong> балов</strong></p>

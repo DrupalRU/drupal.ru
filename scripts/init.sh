@@ -81,6 +81,9 @@ git checkout 6.x
 cd  $SITEPATH
 drush -y en drupal_deploy
 
+echo "Import roles"
+drush ddi filters --file=$GITLC_DEPLOY_DIR/data/roles.export
+
 echo "Import filters"
 drush ddi filters --file=$GITLC_DEPLOY_DIR/data/filters.export
 

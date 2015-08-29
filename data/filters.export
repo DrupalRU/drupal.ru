@@ -1,0 +1,203 @@
+[
+  {
+    "name":"BBCode + HTML",
+    "roles":[
+      "anonymous user",
+      "authenticated user"
+    ],
+    "filters":[
+      {
+        "module":"filter",
+        "weight":"-10",
+        "delta":"2"
+      },
+      {
+        "module":"filter",
+        "weight":"-9",
+        "delta":"3"
+      },
+      {
+        "module":"quote",
+        "weight":"-8",
+        "delta":"0"
+      },
+      {
+        "module":"filter",
+        "weight":"-7",
+        "delta":"1"
+      },
+      {
+        "module":"filter",
+        "weight":"-6",
+        "delta":"0"
+      },
+      {
+        "module":"bbcode",
+        "weight":"-5",
+        "delta":"0"
+      },
+      {
+        "module":"geshifilter",
+        "weight":"-4",
+        "delta":"0"
+      },
+      {
+        "module":"noindex_external_links",
+        "weight":"-3",
+        "delta":"0"
+      }
+    ]
+  },
+  {
+    "name":"\u0418\u0441\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u0435 PHP (admins only!)",
+    "filters":[
+      {
+        "module":"php",
+        "weight":"0",
+        "delta":"0"
+      }
+    ]
+  },
+  {
+    "name":"\u041f\u043e\u043b\u043d\u044b\u0439 HTML, \u0431\u0435\u0437 \u043f\u0435\u0440\u0435\u0432\u043e\u0434\u043e\u0432 \u0441\u0442\u0440\u043e\u043a, \u0441 \u0444\u0438\u043b\u044c\u0442\u0440\u043e\u043c \u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u043e\u0441\u0442\u0438",
+    "roles":[
+      "\u0440\u0435\u0434\u0430\u043a\u0442\u043e\u0440 \u0441\u0430\u0439\u0442\u0430",
+      "\u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0440\u0435\u043a\u043b\u0430\u043c\u043e\u0439"
+    ],
+    "filters":[
+      {
+        "module":"filter",
+        "weight":"10",
+        "delta":"3"
+      }
+    ]
+  },
+  {
+    "name":"\u041e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u043d\u044b\u0439 HTML",
+    "roles":[
+      "administrator",
+      "anonymous user",
+      "authenticated user",
+      "\u0432\u043c\u0435\u043d\u044f\u0435\u043c\u044b\u0439 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c",
+      "\u043f\u0440\u043e\u0434\u0432\u0438\u0436\u0435\u043d\u0438\u0435 \u0441\u0442\u0430\u0442\u0435\u0439",
+      "\u0440\u0435\u0434\u0430\u043a\u0442\u043e\u0440 \u0441\u0430\u0439\u0442\u0430",
+      "\u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0440\u0435\u043a\u043b\u0430\u043c\u043e\u0439"
+    ],
+    "filters":[
+      {
+        "module":"filter",
+        "weight":"-10",
+        "delta":"0"
+      },
+      {
+        "module":"quote",
+        "weight":"-9",
+        "delta":"0"
+      },
+      {
+        "module":"filter",
+        "weight":"-8",
+        "delta":"1"
+      },
+      {
+        "module":"geshifilter",
+        "weight":"-7",
+        "delta":"0"
+      },
+      {
+        "module":"filter",
+        "weight":"-6",
+        "delta":"3"
+      },
+      {
+        "module":"filter",
+        "weight":"-5",
+        "delta":"2"
+      },
+      {
+        "module":"romka_bbcode",
+        "weight":"-4",
+        "delta":"0"
+      },
+      {
+        "module":"noindex_external_links",
+        "weight":"10",
+        "delta":"0"
+      }
+    ]
+  },
+  {
+    "name":"MediaWiki",
+    "roles":[
+      "anonymous user",
+      "authenticated user"
+    ],
+    "filters":[
+      {
+        "module":"filter",
+        "weight":"-9",
+        "delta":"0"
+      },
+      {
+        "module":"pearwiki_filter",
+        "weight":"-7",
+        "delta":"0"
+      },
+      {
+        "module":"geshifilter",
+        "weight":"-5",
+        "delta":"0"
+      },
+      {
+        "module":"quote",
+        "weight":"9",
+        "delta":"0"
+      },
+      {
+        "module":"filter",
+        "weight":"10",
+        "delta":"3"
+      }
+    ]
+  },
+  {
+    "name":"PHP code",
+    "filters":[
+      {
+        "module":"php",
+        "weight":"0",
+        "delta":"0"
+      }
+    ]
+  },
+  {
+    "name":"HTML \u0431\u0435\u0437 \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u0438\u0439 \u0438 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438 \u0432\u0430\u043b\u0438\u0434\u043d\u043e\u0441\u0442\u0438",
+    "roles":[
+      "\u0440\u0435\u0434\u0430\u043a\u0442\u043e\u0440 \u0441\u0430\u0439\u0442\u0430",
+      "\u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0440\u0435\u043a\u043b\u0430\u043c\u043e\u0439"
+    ]
+  },
+  {
+    "name":"profile_fields",
+    "roles":[
+      "administrator"
+    ],
+    "filters":[
+      {
+        "module":"filter",
+        "weight":"-10",
+        "delta":"0"
+      },
+      {
+        "module":"noindex_external_links",
+        "weight":"-9",
+        "delta":"0"
+      },
+      {
+        "module":"filter",
+        "weight":"-8",
+        "delta":"3"
+      }
+    ]
+  }
+]

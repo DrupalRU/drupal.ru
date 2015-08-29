@@ -56,8 +56,10 @@ done
 echo "Enable modules and themes: $modules_enable"
 drush -y en $modules_enable
 
-echo "Set drupal.ru theme as default"
+echo "Set novosibirsk theme as default"
 drush vset theme_default novosibirsk
+echo "Set garland theme as admin theme"
+drush vset admin_theme garland
 
 if [ -n "SETTINGS_DEVEL" ]; then
   drush dl devel

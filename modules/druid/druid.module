@@ -297,7 +297,11 @@ function druid_lastposts($limit, $extended = FALSE) {
 }
 
 function druid_sape_front() {
+  if(!is_file($_SERVER['DOCUMENT_ROOT'].'/'._SAPE_USER.'/sape.php')){
+    return ''; 
+  }
   $output = '<div style="padding-left:10px;padding-bottom:10px;">';
+  
   require_once($_SERVER['DOCUMENT_ROOT'].'/'._SAPE_USER.'/sape.php');
   $o['charset'] = 'UTF-8';
   $o['host'] = 'www.drupal.ru';

@@ -320,6 +320,9 @@ function druid_sape_front() {
 }
 
 function druid_sape_inner() {
+  if(!is_file($_SERVER['DOCUMENT_ROOT'].'/'._SAPE_USER.'/sape.php')){
+    return ''; 
+  }  
   $output = '<div style="padding-left:10px;padding-bottom:10px;">';
   require_once($_SERVER['DOCUMENT_ROOT'].'/'._SAPE_USER.'/sape.php');
   $o['charset'] = 'UTF-8';

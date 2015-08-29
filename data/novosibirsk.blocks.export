@@ -11,8 +11,8 @@
     "visibility":"1",
     "pages":"<front>",
     "title":"",
-    "rid":[
-      "2"
+    "roles":[
+      "authenticated user"
     ]
   },
   {
@@ -27,8 +27,8 @@
     "visibility":"1",
     "pages":"<front>",
     "title":"\u041d\u043e\u0432\u044b\u0435 \u043c\u043e\u0434\u0443\u043b\u0438",
-    "rid":[
-      "2"
+    "roles":[
+      "authenticated user"
     ]
   },
   {
@@ -69,8 +69,8 @@
     "visibility":"1",
     "pages":"user*",
     "title":"\u0413\u0440\u044f\u0434\u0443\u0449\u0438\u0435 \u0414\u0420",
-    "rid":[
-      "2"
+    "roles":[
+      "authenticated user"
     ]
   },
   {
@@ -88,11 +88,11 @@
     "body":"<div id=\"stats\">\r\n<?php\r\n\r\n $nodes = db_fetch_object(db_query(\"SELECT COUNT(*) AS num FROM {node} n WHERE n.status=1 \"));\r\n $comments = db_fetch_object(db_query(\"SELECT COUNT(*) AS num FROM {comments} c WHERE c.status=0\"));\r\n $users = db_fetch_object(db_query(\"SELECT COUNT(*) AS num FROM {users} u WHERE u.status = 1\"));\r\n $terms = db_fetch_object(db_query(\"SELECT COUNT(*) AS num FROM {term_data}\"));\r\n\r\n echo '\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u043e\u0432:'. \" <strong>$nodes->num<\/strong> &nbsp; \";\r\n echo '\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0435\u0432:'. \" <strong>$comments->num<\/strong> &nbsp;  \";\r\n echo '\u0420\u0443\u0431\u0440\u0438\u043a \u0438 \u0442\u0435\u0433\u043e\u0432:'. \" <strong>$terms->num<\/strong> &nbsp; \";\r\n echo '\u0423\u0447\u0451\u0442\u043d\u044b\u0445 \u0437\u0430\u043f\u0438\u0441\u0435\u0439:'. \" <strong>$users->num<\/strong>\";\r\n\r\n?>\r\n\r\n<\/div>",
     "info":"\u0421\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043a\u0430 \u0441\u0430\u0439\u0442\u0430",
     "format":"2",
-    "rid":[
-      "2",
-      "3",
-      "14",
-      "15"
+    "roles":[
+      "authenticated user",
+      null,
+      "\u0440\u0435\u0434\u0430\u043a\u0442\u043e\u0440 \u0441\u0430\u0439\u0442\u0430",
+      "\u0432\u043c\u0435\u043d\u044f\u0435\u043c\u044b\u0439 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c"
     ]
   },
   {
@@ -254,8 +254,8 @@
     "body":"\u041f\u043e\u0441\u043b\u0435 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0438 \u0432\u044b \u043d\u0435 \u0443\u0432\u0438\u0434\u0438\u0442\u0435 \u0431\u043e\u043b\u044c\u0448\u0435 \u043f\u043e\u0441\u0442\u043e\u0440\u043e\u043d\u043d\u0438\u0445 \u0440\u0435\u043a\u043b\u0430\u043c\u043d\u044b\u0445 \u0441\u0441\u044b\u043b\u043e\u043a :)",
     "info":"\u0411\u043b\u043e\u043a \u0441 \u0438\u043d\u0444\u043e\u0439 \u043e \u0440\u0435\u043a\u043b\u0430\u043c\u0435 \u0434\u043b\u044f user\/register",
     "format":"4",
-    "rid":[
-      "1"
+    "roles":[
+      "anonymous user"
     ]
   },
   {
@@ -321,8 +321,8 @@
     "body":"\u041c\u043e\u0436\u043d\u043e \u043e\u0442\u043f\u0440\u0430\u0432\u0438\u0442\u044c \u0436\u0430\u043b\u043e\u0431\u044b \u0438 \u043f\u043e\u0436\u0435\u043b\u0430\u043d\u0438\u044f \u043d\u0430 \u043f\u043e\u0447\u0442\u0443 \u0430\u0434\u043c\u0438\u043d\u0430\u043c \u0441\u0430\u0439\u0442\u0430 \u043f\u0440\u0438 \u043f\u043e\u043c\u043e\u0449\u0438 <a href=\/contacts>\u0444\u043e\u0440\u043c\u044b \u043a\u043e\u043d\u0442\u0430\u043a\u0442\u043e\u0432<\/a>. \u0422\u0430\u043c \u0436\u0435 \u043c\u043e\u0436\u043d\u043e \u043f\u043e\u0434\u0430\u0442\u044c \u0437\u0430\u044f\u0432\u043a\u0443 \u043d\u0430 \u043f\u0440\u0438\u043d\u044f\u0442\u0438\u0435 \u0432 \u043c\u043e\u0434\u0435\u0440\u0430\u0442\u043e\u0440\u044b \u0441\u0430\u0439\u0442\u0430.",
     "info":"\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u0432 \u0444\u043e\u0440\u0443\u043c\u0435 \"\u0423\u043b\u0443\u0447\u0448\u0438\u0442\u044c drupal.ru\"",
     "format":"4",
-    "rid":[
-      "2"
+    "roles":[
+      "authenticated user"
     ]
   },
   {
@@ -430,8 +430,8 @@
     "visibility":"0",
     "pages":"node\/*\/edit\r\nnode\/add*\r\nuser\/*\/edit\r\ntracker\/bookmark*\r\nlicense\r\nadmin_log\r\nadminlog\r\nplanet*\r\naggregator*",
     "title":"",
-    "rid":[
-      "2"
+    "roles":[
+      "authenticated user"
     ]
   },
   {
@@ -472,8 +472,8 @@
     "visibility":"0",
     "pages":"<front>\r\nadmin*\r\nnode\/*\/edit\r\nnode\/add*\r\nuser\/*\/edit\r\nuser\/*\/edit",
     "title":"",
-    "rid":[
-      "1"
+    "roles":[
+      "anonymous user"
     ]
   },
   {
@@ -501,11 +501,11 @@
     "visibility":"0",
     "pages":"admin_log\r\nadmin\/user\/permissions\r\nnode\/add*\r\nnode\/*\/edit\r\ndoc\r\ndoc\/*\r\nsearch*",
     "title":"",
-    "rid":[
-      "1",
-      "2",
-      "14",
-      "15"
+    "roles":[
+      "anonymous user",
+      "authenticated user",
+      "\u0440\u0435\u0434\u0430\u043a\u0442\u043e\u0440 \u0441\u0430\u0439\u0442\u0430",
+      "\u0432\u043c\u0435\u043d\u044f\u0435\u043c\u044b\u0439 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c"
     ]
   },
   {
@@ -533,8 +533,8 @@
     "visibility":"0",
     "pages":"",
     "title":"",
-    "rid":[
-      "3"
+    "roles":[
+      null
     ]
   },
   {
@@ -562,8 +562,8 @@
     "visibility":"1",
     "pages":"<front>",
     "title":" ",
-    "rid":[
-      "1"
+    "roles":[
+      "anonymous user"
     ]
   },
   {
@@ -591,8 +591,8 @@
     "visibility":"0",
     "pages":"admin_log\r\nadmin\/user\/permissions",
     "title":"",
-    "rid":[
-      "2"
+    "roles":[
+      "authenticated user"
     ]
   },
   {
@@ -607,10 +607,10 @@
     "visibility":"1",
     "pages":"admin\r\nadmin\/build*\r\nadmin\/content*\r\nadmin\/reports*\r\nadmin\/user",
     "title":"",
-    "rid":[
-      "2",
-      "14",
-      "15"
+    "roles":[
+      "authenticated user",
+      "\u0440\u0435\u0434\u0430\u043a\u0442\u043e\u0440 \u0441\u0430\u0439\u0442\u0430",
+      "\u0432\u043c\u0435\u043d\u044f\u0435\u043c\u044b\u0439 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c"
     ]
   }
 ]

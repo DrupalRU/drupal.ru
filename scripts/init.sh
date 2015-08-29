@@ -79,6 +79,7 @@ git checkout 6.x
 cd  $SITEPATH
 drush -y en drupal_deploy
 
+drush ddi filters --file=$GITLC_DEPLOY_DIR/data/filters.export
 drush ddi menu --file=$GITLC_DEPLOY_DIR/data/menu_links.export
 drush ddi blocks --file=$GITLC_DEPLOY_DIR/data/novosibirsk.blocks.export
 

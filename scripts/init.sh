@@ -90,8 +90,12 @@ drush ddi filters --file=$GITLC_DEPLOY_DIR/data/filters.export
 echo "Import menu structure"
 drush ddi menu --file=$GITLC_DEPLOY_DIR/data/menu_links.export
 
-echo "Import menu block"
+echo "Import blocks"
 drush ddi blocks --file=$GITLC_DEPLOY_DIR/data/novosibirsk.blocks.export
+
+echo "Import nodetypes"
+drush ddi node_types --file=$GITLC_DEPLOY_DIR/data/node_types.export
+
 
 
 echo "Please check http://$SETTINGS_DOMAIN"

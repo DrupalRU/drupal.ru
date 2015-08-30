@@ -13,33 +13,31 @@
     "custom":"0",
     "modified":"1",
     "locked":"1",
-    "variables":{
-      "workflow":{
-        "node_options":[
-          "Published",
-          "Create new revision"
-        ],
-        "language_content_type":"Disabled",
-        "upload":"Enabled",
-        "diff":{
-          "show_preview_changes":1,
-          "show_diff_inline":false,
-          "enable_revisions_page":true
-        }
-      },
-      "comment":{
-        "comment":"Read\/Write",
-        "comment_default_mode":"Flat list - expanded",
-        "comment_default_order":"Date - oldest first",
-        "comment_default_per_page":50,
-        "comment_controls":"Display above the comments",
-        "comment_anonymous":"Anonymous posters must leave their contact information",
-        "comment_subject_field":"Disabled",
-        "comment_preview":"Optional",
-        "comment_form_location":"Display below post or comments",
-        "comment_upload":"Enabled",
-        "comment_upload_images":"Display as attachment"
+    "workflow":{
+      "node_options":[
+        "Published",
+        "Create new revision"
+      ],
+      "language_content_type":"Disabled",
+      "upload":"Enabled",
+      "diff":{
+        "show_preview_changes":1,
+        "show_diff_inline":false,
+        "enable_revisions_page":true
       }
+    },
+    "comment":{
+      "comment":"Read\/Write",
+      "comment_default_mode":"Flat list - expanded",
+      "comment_default_order":"Date - oldest first",
+      "comment_default_per_page":50,
+      "comment_controls":"Display above the comments",
+      "comment_anonymous":"Anonymous posters must leave their contact information",
+      "comment_subject_field":"Disabled",
+      "comment_preview":"Optional",
+      "comment_form_location":"Display below post or comments",
+      "comment_upload":"Enabled",
+      "comment_upload_images":"Display as attachment"
     }
   },
   {
@@ -56,32 +54,30 @@
     "custom":"1",
     "modified":"1",
     "locked":"0",
-    "variables":{
-      "workflow":{
-        "node_options":[
-          "Published"
-        ],
-        "language_content_type":"Disabled",
-        "upload":"Enabled",
-        "diff":{
-          "show_preview_changes":1,
-          "show_diff_inline":false,
-          "enable_revisions_page":true
-        }
-      },
-      "comment":{
-        "comment":"Read\/Write",
-        "comment_default_mode":"Flat list - expanded",
-        "comment_default_order":"Date - oldest first",
-        "comment_default_per_page":50,
-        "comment_controls":"Display above the comments",
-        "comment_anonymous":"Anonymous posters must leave their contact information",
-        "comment_subject_field":"Disabled",
-        "comment_preview":"Optional",
-        "comment_form_location":"Display on separate page",
-        "comment_upload":"Enabled",
-        "comment_upload_images":"Display as attachment"
+    "workflow":{
+      "node_options":[
+        "Published"
+      ],
+      "language_content_type":"Disabled",
+      "upload":"Enabled",
+      "diff":{
+        "show_preview_changes":1,
+        "show_diff_inline":false,
+        "enable_revisions_page":true
       }
+    },
+    "comment":{
+      "comment":"Read\/Write",
+      "comment_default_mode":"Flat list - expanded",
+      "comment_default_order":"Date - oldest first",
+      "comment_default_per_page":50,
+      "comment_controls":"Display above the comments",
+      "comment_anonymous":"Anonymous posters must leave their contact information",
+      "comment_subject_field":"Disabled",
+      "comment_preview":"Optional",
+      "comment_form_location":"Display on separate page",
+      "comment_upload":"Enabled",
+      "comment_upload_images":"Display as attachment"
     }
   },
   {
@@ -98,32 +94,30 @@
     "custom":"0",
     "modified":"0",
     "locked":"1",
-    "variables":{
-      "workflow":{
-        "node_options":[
-          "Published"
-        ],
-        "language_content_type":"Disabled",
-        "upload":"Disabled",
-        "diff":{
-          "show_preview_changes":0,
-          "show_diff_inline":false,
-          "enable_revisions_page":true
-        }
-      },
-      "comment":{
-        "comment":"Read\/Write",
-        "comment_default_mode":"Threaded list - expanded",
-        "comment_default_order":"Date - newest first",
-        "comment_default_per_page":50,
-        "comment_controls":"Do not display",
-        "comment_anonymous":"Anonymous posters may not enter their contact information",
-        "comment_subject_field":"Enabled",
-        "comment_preview":"Required",
-        "comment_form_location":"Display on separate page",
-        "comment_upload":"Disabled",
-        "comment_upload_images":"Display as attachment"
+    "workflow":{
+      "node_options":[
+        "Published"
+      ],
+      "language_content_type":"Disabled",
+      "upload":"Disabled",
+      "diff":{
+        "show_preview_changes":0,
+        "show_diff_inline":false,
+        "enable_revisions_page":true
       }
+    },
+    "comment":{
+      "comment":"Read\/Write",
+      "comment_default_mode":"Threaded list - expanded",
+      "comment_default_order":"Date - newest first",
+      "comment_default_per_page":50,
+      "comment_controls":"Do not display",
+      "comment_anonymous":"Anonymous posters may not enter their contact information",
+      "comment_subject_field":"Enabled",
+      "comment_preview":"Required",
+      "comment_form_location":"Display on separate page",
+      "comment_upload":"Disabled",
+      "comment_upload_images":"Display as attachment"
     }
   },
   {
@@ -140,32 +134,30 @@
     "custom":"0",
     "modified":"1",
     "locked":"1",
-    "variables":{
-      "workflow":{
-        "node_options":[
-          
-        ],
-        "language_content_type":"Disabled",
-        "upload":"Enabled",
-        "diff":{
-          "show_preview_changes":true,
-          "show_diff_inline":false,
-          "enable_revisions_page":true
-        }
-      },
-      "comment":{
-        "comment":"Read only",
-        "comment_default_mode":"Flat list - expanded",
-        "comment_default_order":"Date - oldest first",
-        "comment_default_per_page":50,
-        "comment_controls":"Display above the comments",
-        "comment_anonymous":"Anonymous posters must leave their contact information",
-        "comment_subject_field":"Disabled",
-        "comment_preview":"Optional",
-        "comment_form_location":"Display below post or comments",
-        "comment_upload":"Enabled",
-        "comment_upload_images":"Display as attachment"
+    "workflow":{
+      "node_options":[
+        
+      ],
+      "language_content_type":"Disabled",
+      "upload":"Enabled",
+      "diff":{
+        "show_preview_changes":true,
+        "show_diff_inline":false,
+        "enable_revisions_page":true
       }
+    },
+    "comment":{
+      "comment":"Read only",
+      "comment_default_mode":"Flat list - expanded",
+      "comment_default_order":"Date - oldest first",
+      "comment_default_per_page":50,
+      "comment_controls":"Display above the comments",
+      "comment_anonymous":"Anonymous posters must leave their contact information",
+      "comment_subject_field":"Disabled",
+      "comment_preview":"Optional",
+      "comment_form_location":"Display below post or comments",
+      "comment_upload":"Enabled",
+      "comment_upload_images":"Display as attachment"
     }
   },
   {
@@ -182,33 +174,31 @@
     "custom":"0",
     "modified":"0",
     "locked":"1",
-    "variables":{
-      "workflow":{
-        "node_options":[
-          "Published",
-          "Promoted to front page"
-        ],
-        "language_content_type":"Disabled",
-        "upload":"Enabled",
-        "diff":{
-          "show_preview_changes":true,
-          "show_diff_inline":false,
-          "enable_revisions_page":true
-        }
-      },
-      "comment":{
-        "comment":"Read\/Write",
-        "comment_default_mode":"Threaded list - expanded",
-        "comment_default_order":"Date - newest first",
-        "comment_default_per_page":50,
-        "comment_controls":"Do not display",
-        "comment_anonymous":"Anonymous posters may not enter their contact information",
-        "comment_subject_field":"Enabled",
-        "comment_preview":"Required",
-        "comment_form_location":"Display on separate page",
-        "comment_upload":"Disabled",
-        "comment_upload_images":"Display as attachment"
+    "workflow":{
+      "node_options":[
+        "Published",
+        "Promoted to front page"
+      ],
+      "language_content_type":"Disabled",
+      "upload":"Enabled",
+      "diff":{
+        "show_preview_changes":true,
+        "show_diff_inline":false,
+        "enable_revisions_page":true
       }
+    },
+    "comment":{
+      "comment":"Read\/Write",
+      "comment_default_mode":"Threaded list - expanded",
+      "comment_default_order":"Date - newest first",
+      "comment_default_per_page":50,
+      "comment_controls":"Do not display",
+      "comment_anonymous":"Anonymous posters may not enter their contact information",
+      "comment_subject_field":"Enabled",
+      "comment_preview":"Required",
+      "comment_form_location":"Display on separate page",
+      "comment_upload":"Disabled",
+      "comment_upload_images":"Display as attachment"
     }
   },
   {
@@ -225,33 +215,31 @@
     "custom":"1",
     "modified":"1",
     "locked":"0",
-    "variables":{
-      "workflow":{
-        "node_options":[
-          "Published",
-          "Create new revision"
-        ],
-        "language_content_type":"Disabled",
-        "upload":"Enabled",
-        "diff":{
-          "show_preview_changes":true,
-          "show_diff_inline":false,
-          "enable_revisions_page":true
-        }
-      },
-      "comment":{
-        "comment":"Disabled",
-        "comment_default_mode":"Flat list - expanded",
-        "comment_default_order":"Date - oldest first",
-        "comment_default_per_page":50,
-        "comment_controls":"Display above the comments",
-        "comment_anonymous":"Anonymous posters must leave their contact information",
-        "comment_subject_field":"Disabled",
-        "comment_preview":"Optional",
-        "comment_form_location":"Display below post or comments",
-        "comment_upload":"Enabled",
-        "comment_upload_images":"Display as attachment"
+    "workflow":{
+      "node_options":[
+        "Published",
+        "Create new revision"
+      ],
+      "language_content_type":"Disabled",
+      "upload":"Enabled",
+      "diff":{
+        "show_preview_changes":true,
+        "show_diff_inline":false,
+        "enable_revisions_page":true
       }
+    },
+    "comment":{
+      "comment":"Disabled",
+      "comment_default_mode":"Flat list - expanded",
+      "comment_default_order":"Date - oldest first",
+      "comment_default_per_page":50,
+      "comment_controls":"Display above the comments",
+      "comment_anonymous":"Anonymous posters must leave their contact information",
+      "comment_subject_field":"Disabled",
+      "comment_preview":"Optional",
+      "comment_form_location":"Display below post or comments",
+      "comment_upload":"Enabled",
+      "comment_upload_images":"Display as attachment"
     }
   },
   {
@@ -268,33 +256,31 @@
     "custom":"0",
     "modified":"1",
     "locked":"1",
-    "variables":{
-      "workflow":{
-        "node_options":[
-          "Published",
-          "Create new revision"
-        ],
-        "language_content_type":"Disabled",
-        "upload":"Enabled",
-        "diff":{
-          "show_preview_changes":1,
-          "show_diff_inline":false,
-          "enable_revisions_page":true
-        }
-      },
-      "comment":{
-        "comment":"Read\/Write",
-        "comment_default_mode":"Flat list - expanded",
-        "comment_default_order":"Date - oldest first",
-        "comment_default_per_page":50,
-        "comment_controls":"Display above the comments",
-        "comment_anonymous":"Anonymous posters must leave their contact information",
-        "comment_subject_field":"Disabled",
-        "comment_preview":"Optional",
-        "comment_form_location":"Display below post or comments",
-        "comment_upload":"Enabled",
-        "comment_upload_images":"Display as attachment"
+    "workflow":{
+      "node_options":[
+        "Published",
+        "Create new revision"
+      ],
+      "language_content_type":"Disabled",
+      "upload":"Enabled",
+      "diff":{
+        "show_preview_changes":1,
+        "show_diff_inline":false,
+        "enable_revisions_page":true
       }
+    },
+    "comment":{
+      "comment":"Read\/Write",
+      "comment_default_mode":"Flat list - expanded",
+      "comment_default_order":"Date - oldest first",
+      "comment_default_per_page":50,
+      "comment_controls":"Display above the comments",
+      "comment_anonymous":"Anonymous posters must leave their contact information",
+      "comment_subject_field":"Disabled",
+      "comment_preview":"Optional",
+      "comment_form_location":"Display below post or comments",
+      "comment_upload":"Enabled",
+      "comment_upload_images":"Display as attachment"
     }
   },
   {
@@ -311,33 +297,31 @@
     "custom":"1",
     "modified":"0",
     "locked":"0",
-    "variables":{
-      "workflow":{
-        "node_options":[
-          "Published",
-          "Promoted to front page"
-        ],
-        "language_content_type":"Disabled",
-        "upload":"Enabled",
-        "diff":{
-          "show_preview_changes":true,
-          "show_diff_inline":false,
-          "enable_revisions_page":true
-        }
-      },
-      "comment":{
-        "comment":"Read\/Write",
-        "comment_default_mode":"Threaded list - expanded",
-        "comment_default_order":"Date - newest first",
-        "comment_default_per_page":50,
-        "comment_controls":"Do not display",
-        "comment_anonymous":"Anonymous posters may not enter their contact information",
-        "comment_subject_field":"Enabled",
-        "comment_preview":"Required",
-        "comment_form_location":"Display on separate page",
-        "comment_upload":"Disabled",
-        "comment_upload_images":"Display as attachment"
+    "workflow":{
+      "node_options":[
+        "Published",
+        "Promoted to front page"
+      ],
+      "language_content_type":"Disabled",
+      "upload":"Enabled",
+      "diff":{
+        "show_preview_changes":true,
+        "show_diff_inline":false,
+        "enable_revisions_page":true
       }
+    },
+    "comment":{
+      "comment":"Read\/Write",
+      "comment_default_mode":"Threaded list - expanded",
+      "comment_default_order":"Date - newest first",
+      "comment_default_per_page":50,
+      "comment_controls":"Do not display",
+      "comment_anonymous":"Anonymous posters may not enter their contact information",
+      "comment_subject_field":"Enabled",
+      "comment_preview":"Required",
+      "comment_form_location":"Display on separate page",
+      "comment_upload":"Disabled",
+      "comment_upload_images":"Display as attachment"
     }
   }
 ]

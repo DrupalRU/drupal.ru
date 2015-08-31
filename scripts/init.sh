@@ -96,6 +96,9 @@ drush ddi blocks --file=$GITLC_DEPLOY_DIR/data/novosibirsk.blocks.export
 echo "Import nodetypes"
 drush ddi node_types --file=$GITLC_DEPLOY_DIR/data/node_types.export
 
+echo "Import taxonomy"
+drush ddi taxonomy --file=$GITLC_DEPLOY_DIR/data/taxonomy.export
+
 
 
 echo "Please check http://$SETTINGS_DOMAIN"

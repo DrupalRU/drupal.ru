@@ -32,7 +32,7 @@ drush dl captcha_pack
 drush -y en ascii_art_captcha css_captcha
 
 echo "Install other modules"
-drush -y en imageapi_imagemagick flag_actions geshinode pm_block_user pm_email_notify privatemsg_filter token_actions views_ui book forum geshinode php
+drush -y en imageapi_imagemagick flag_actions pm_block_user pm_email_notify privatemsg_filter token_actions views_ui book forum geshinode php
 
 echo "Install drupal.ru modules"
 mkdir -p $SITEPATH/sites/all/modules/local

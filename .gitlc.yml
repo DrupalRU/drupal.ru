@@ -40,7 +40,7 @@ deploy:
         database-name: "d7_d7"
         database-pass: "dev678yh"
         devel: TRUE
-    dir: '{home}/github'
+    dir: '{home}/github/{branch}'
     init: '{deploy_dir}/scripts/init.sh'
     before: '{deploy_dir}/scripts/before.sh'
     after: '{deploy_dir}/scripts/after.sh'

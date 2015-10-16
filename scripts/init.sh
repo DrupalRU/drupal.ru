@@ -3,7 +3,7 @@ echo "INIT DEVEL Drupal.ru Version"
 
 CORE='drupal-7'
 SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
-CONTRIB="acl bbcode bueditor captcha  comment_notify diff fasttoggle flag flag_abuse geshifilter google_plusone gravatar imageapi imagecache imagecache_profiles live_translation noindex_external_links pathauto pearwiki_filter privatemsg quote simplenews smtp spambot tagadelic taxonomy_manager token transliteration  views xmlsitemap "
+CONTRIB="acl bbcode bueditor captcha  comment_notify diff fasttoggle flag flag_abuse geshifilter google_plusone gravatar imageapi live_translation noindex_external_links pathauto pearwiki_filter privatemsg quote simplenews smtp spambot tagadelic taxonomy_manager token transliteration  views xmlsitemap "
 
 echo "Full site path: $SITEPATH"
 echo "Site core: $CORE"
@@ -32,7 +32,7 @@ drush dl captcha_pack
 drush -y en ascii_art_captcha css_captcha
 
 echo "Install other modules"
-drush -y en imageapi_imagemagick flag_actions geshinode imagecache_ui pm_block_user pm_email_notify privatemsg_filter token_actions views_ui book forum geshinode php
+drush -y en imageapi_imagemagick flag_actions geshinode pm_block_user pm_email_notify privatemsg_filter token_actions views_ui book forum geshinode php
 
 echo "Install drupal.ru modules"
 mkdir -p $SITEPATH/sites/all/modules/local

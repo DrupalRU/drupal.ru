@@ -44,5 +44,4 @@ mkdir -p $SITEPATH/sites/all/themes/local
 
 #ln -s $GITLC_DEPLOY_DIR/themes/* $SITEPATH/sites/all/themes/local/
 
-
 echo "Please check http://$SETTINGS_DOMAIN"

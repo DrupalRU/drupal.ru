@@ -3,7 +3,7 @@ echo "INIT DEVEL Drupal.ru Version"
 
 CORE='drupal-7'
 SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
-CONTRIB="acl bbcode bueditor captcha  comment_notify comment_upload diff fasttoggle flag flag_abuse geshifilter google_plusone gravatar imageapi imagecache imagecache_profiles live_translation noindex_external_links pathauto pearwiki_filter privatemsg quote simplenews smtp spambot tagadelic taxonomy_manager token transliteration  views xmlsitemap "
+CONTRIB="acl bbcode bueditor captcha  comment_notify diff fasttoggle flag flag_abuse geshifilter google_plusone gravatar imageapi imagecache imagecache_profiles live_translation noindex_external_links pathauto pearwiki_filter privatemsg quote simplenews smtp spambot tagadelic taxonomy_manager token transliteration  views xmlsitemap "
 
 echo "Full site path: $SITEPATH"
 echo "Site core: $CORE"
@@ -15,11 +15,11 @@ echo "Download DRUPAL."
 drush dl $CORE --drupal-project-rename="drupal"
 
 rsync -a $SITEPATH/drupal/ $SITEPATH
-rm -rf tmp
+rm -rf drupal
 
 echo "Install DRUPAL"
 
-/usr/bin/drush site-install default -y --root=$SITEPATH --account-name=$SETTINGS_ACCOUNT_NAME --account-mail=$SETTINGS_ACCOUNT_MAIL --account-pass=$SETTINGS_ACCOUNT_PASS --uri=http://$SETTINGS_DOMAIN --site-name="$SETTINGS_SITE_NAME" --site-mail=$SETTINGS_SITE_MAIL --db-url=mysql://$SETTINGS_DATABASE_USER:$SETTINGS_DATABASE_PASS@localhost/$SETTINGS_DATABASE_NAME
+/usr/bin/drush site-install standard -y --root=$SITEPATH --account-name=$SETTINGS_ACCOUNT_NAME --account-mail=$SETTINGS_ACCOUNT_MAIL --account-pass=$SETTINGS_ACCOUNT_PASS --uri=http://$SETTINGS_DOMAIN --site-name="$SETTINGS_SITE_NAME" --site-mail=$SETTINGS_SITE_MAIL --db-url=mysql://$SETTINGS_DATABASE_USER:$SETTINGS_DATABASE_PASS@localhost/$SETTINGS_DATABASE_NAME
 
 echo "Install contrib modules"
 

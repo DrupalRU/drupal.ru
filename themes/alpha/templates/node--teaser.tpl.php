@@ -82,7 +82,7 @@
 ?>
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <?php if ($display_submitted): ?>
-    <span class="name pull-right"><?php print $name; ?></span>
+    <span class="name pull-right">@<?php print $name; ?></span>
     <span class="text-muted"> <i class="fa fa-calendar-o"></i> <?php print $date; ?></span>
   <?php endif; ?>
   <?php print render($title_prefix); ?>

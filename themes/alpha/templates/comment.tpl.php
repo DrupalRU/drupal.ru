@@ -59,7 +59,7 @@
  * @ingroup themeable
  */
 ?>
-<article class="media <?php if ($new) print "bg-info" ?> <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+<article class="media panel panel-default <?php if ($new) print "bg-info" ?> <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <?php if($picture): ?>
   <div class="pull-left">
     <?php print $picture; ?>

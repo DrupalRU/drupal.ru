@@ -40,3 +40,7 @@
 .comment .content {
   min-height: 50px;
 }
+
+.comment .pull-left {
+  margin-right: 15px;
+}

@@ -107,8 +107,12 @@
       <div class="content"<?php print $content_attributes; ?>>
         <?php
           hide($content['comments']);
+          hide($content['links']);
           print render($content);
         ?>
+        <div class="pull-right">
+          <?php print render($content['links']); ?>
+        </div>
       </div>
       <?php print render($content['comments']); ?>
 

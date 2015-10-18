@@ -90,9 +90,13 @@
         </div>
       <?php endif; ?>
       <div class="node-taxonomy">
-        <?php print render($content['taxonomy_forums']); ?>
-        <?php print render($content['taxonomy_vocabulary_10']); ?>
-        <?php print render($content['taxonomy_vocabulary_2']); ?>
+        <?php
+          foreach($content as $type => $value){
+            if(0 == strncmp($type, 'taxonomy', 8)){
+              print render($content[$type]);
+            }
+          }
+        ?>
       </div>
     </div>
     <div class="col-xs-12 col-sm-9">

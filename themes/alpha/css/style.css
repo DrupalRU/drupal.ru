@@ -119,6 +119,11 @@
   margin-bottom: 5px;
 }
 
+.comment .media-body {
+  border-left: 1px solid #ddd;
+  padding-left: 15px;
+}
+
 .comment .pull-left {
   margin-right: 15px;
 }

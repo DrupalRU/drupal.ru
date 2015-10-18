@@ -3,6 +3,18 @@ body {
   background: white url(../images/background.png) repeat;  
 }
 
+body.navbar-is-fixed-top {
+  padding-top: 50px;
+}
+
+/* Content. */
+div.main-container.container {
+  background-color: white;
+  padding: 15px;
+  border-radius: 4px;
+  border: 1px solid #f6f6f6;
+}
+
 /* Logo */
 .logo {
   padding: 0px 15px;

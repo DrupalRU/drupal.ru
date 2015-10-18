@@ -6,6 +6,16 @@
   height: 33px;
 }
 
+/* Common elements*/
+
+a {
+  color: #00789B;
+}
+
+a:hover {
+    color: #36a0bf;
+}
+
 /* Navbar style. */
 .navbar-default {
   background-color: #000;
@@ -101,6 +111,7 @@
 .comment {
   padding: 15px 10px 10px;
   margin: 0px;
+  border-bottom: 1px solid #ddd;
 }
 
 .media.odd.comment,
@@ -126,4 +137,8 @@
 
 .comment .pull-left {
   margin-right: 15px;
+}
+
+blockquote {
+  border-left-color: #b45645;
 }

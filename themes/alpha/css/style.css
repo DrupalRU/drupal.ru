@@ -28,6 +28,11 @@
   border-radius: 0px;
 }
 
+.comment:hover,
+.comment:focus {
+  background-color: #f9f9f9;
+}
+
 .comment ul.links.list-inline {
   margin-bottom: 0px;
 }

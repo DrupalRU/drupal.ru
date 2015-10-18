@@ -69,6 +69,37 @@ function alpha_preprocess_comment(&$variables){
  * Implements hook_preprocess_node().
  */
 function alpha_preprocess_node(&$variables){
+  $comment = $variables['elements']['#node'];
+  $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $comment->changed)));
+
+  $account = $variables['account'];
+  if (!empty($account->picture)) {
+    if (is_numeric($account->picture)) {
+      $account->picture = file_load($account->picture);
+    }
+    if (!empty($account->picture->uri)) {
+      $filepath = $account->picture->uri;
+    }
+  }
+  elseif (variable_get('user_picture_default', '')) {
+    $filepath = variable_get('user_picture_default', '');
+  }
+  if (isset($filepath)) {
+    $alt = t("@user's picture", array('@user' => format_username($account)));
+    // If the image does not have a valid Drupal scheme (for eg. HTTP),
+    // don't load image styles.
+    if (module_exists('image') && file_valid_uri($filepath) && $style = variable_get('user_picture_style_node', '')) {
+      $variables['user_picture'] = theme('image_style', array('style_name' => $style, 'path' => $filepath, 'alt' => $alt, 'title' => $alt, 'attributes' => array('class' => array('img-circle'))));
+    }
+    else {
+      $variables['user_picture'] = theme('image', array('path' => $filepath, 'alt' => $alt, 'title' => $alt, 'attributes' => array('class' => array('img-circle'))));
+    }
+    if (!empty($account->uid) && user_access('access user profiles')) {
+      $attributes = array('attributes' => array('title' => t('View user profile.')), 'html' => TRUE);
+      $variables['user_picture'] = l($variables['user_picture'], "user/$account->uid", $attributes);
+    }
+  }
+
   drupal_add_js('(function($){ $(".field-name-body img").addClass("img-responsive");})(jQuery);', array('type' => 'inline', 'scope' => 'footer'));
   drupal_add_js('(function($){ $(".comment .content img").addClass("img-responsive");})(jQuery);', array('type' => 'inline', 'scope' => 'footer'));
 }

@@ -85,7 +85,7 @@ function alpha_preprocess_node(&$variables){
     $filepath = variable_get('user_picture_default', '');
   }
   if (isset($filepath)) {
-    $alt = $variables['name'];
+    $alt = $node->name;
     if (module_exists('image') && file_valid_uri($filepath) && $style = variable_get('user_picture_style_node', '')) {
       $variables['user_picture'] = theme('image_style', array('style_name' => $style, 'path' => $filepath, 'alt' => $alt, 'title' => $alt, 'attributes' => array('class' => array('img-circle'))));
     }

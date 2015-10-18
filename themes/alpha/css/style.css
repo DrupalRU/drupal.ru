@@ -11,3 +11,13 @@
   border: 1px solid #e5e7e8;
   padding: 1px; 
 }
+
+/* Comments style*/
+
+.indented {
+  padding-left: 25px;  
+}
+
+.comment {
+  padding: 15px;
+}

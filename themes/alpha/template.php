@@ -104,7 +104,7 @@ function alpha_preprocess_node(&$variables){
     }
   }
   
-  print_r($variables['title']);
+  print_r($variables['title_attributes']);
 //   $variables['title']['attributes'][][] = 'title';
 
   drupal_add_js('(function($){ $(".field-name-body img").addClass("img-responsive");})(jQuery);', array('type' => 'inline', 'scope' => 'footer'));

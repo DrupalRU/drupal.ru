@@ -137,6 +137,11 @@ a:hover {
   text-align: right;
 }
 
+.node-teaser .title {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
 /* Comments style*/
 
 .indented {

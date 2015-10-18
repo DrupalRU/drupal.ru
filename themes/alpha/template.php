@@ -75,7 +75,6 @@ function alpha_preprocess_node(&$variables){
     // Add a new item into the theme_hook_suggestions array.
     $variables['theme_hook_suggestions'][] = 'node__teaser';
   }
-  print_r($variables['theme_hook_suggestions']);
   
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $node->changed)));
 

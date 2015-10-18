@@ -145,6 +145,10 @@ a:hover {
 .node-teaser .name {
   font-size: 16px;
 }
+
+.node .title i.fa {
+  color: orange;
+}
 /* Comments style*/
 
 .indented {

@@ -70,6 +70,12 @@ function alpha_preprocess_comment(&$variables){
  */
 function alpha_preprocess_node(&$variables){
   $node = $variables['elements']['#node'];
+  
+  if ($variables['teaser']) {
+    // Add a new item into the theme_hook_suggestions array.
+    $variables['theme_hook_suggestions'][] = 'node__teaser';
+  }
+  
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $node->changed)));
 
   $picture = $node->picture;

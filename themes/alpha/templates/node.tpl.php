@@ -88,8 +88,9 @@
           <?php print $submitted; ?>
         </div>
       <?php endif; ?>
-
-    <?php print $user_picture; ?>
+    <div class="user-picture">
+      <?php print $user_picture; ?>
+    </div>
     </div>
     <div class="col-xs-12 col-sm-9">
       <?php print render($title_prefix); ?>

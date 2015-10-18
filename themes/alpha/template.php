@@ -92,7 +92,7 @@ function alpha_preprocess_node(&$variables){
     else {
       $variables['user_picture'] = theme('image', array('path' => $filepath, 'alt' => $alt, 'title' => $alt, 'attributes' => array('class' => array('img-circle'))));
     }
-    if (!empty($account->uid) && user_access('access user profiles')) {
+    if (!empty($node->uid) && user_access('access user profiles')) {
       $attributes = array('attributes' => array('title' => t('View user profile.')), 'html' => TRUE);
       $variables['user_picture'] = l($variables['user_picture'], "user/$node->uid", $attributes);
     }

@@ -119,6 +119,11 @@ a:hover {
   padding: 1px; 
 }
 
+/* Node styles.*/
+.node .user-picture {
+  text-align: center;
+}
+
 /* Comments style*/
 
 .indented {

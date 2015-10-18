@@ -1,6 +1,13 @@
+/* Logo */
 .logo {
   padding: 0px 15px;
 }
 .logo img {
   height: 33px;
+}
+
+/* Style user pic. */
+.user-picture img {
+  border: 1px solid #e5e7e8;
+  padding: 1px; 
 }

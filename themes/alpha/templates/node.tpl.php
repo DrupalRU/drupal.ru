@@ -92,7 +92,6 @@
         <?php print $user_picture; ?>
       </div>
       <div>
-      <?php print render($content['links']); ?>
       <?php print render($content['taxonomy_forums']); ?>
       <?php print render($content['taxonomy_vocabulary_10']); ?>
       <?php print render($content['taxonomy_vocabulary_2']); ?>

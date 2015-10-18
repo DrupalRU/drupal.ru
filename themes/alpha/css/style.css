@@ -142,6 +142,10 @@ blockquote {
   color:#888;
 }
 
+.bb-quote {
+  padding-top: 10px;
+}
+
 /* File attachment*/
 ul.file-links {
   padding-left: 0px;

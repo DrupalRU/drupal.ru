@@ -15,11 +15,15 @@
 /* Comments style*/
 
 .indented {
-  padding-left: 25px;  
+  padding-left: 15px;
+  background-color: #ddd; 
 }
 
 .comment {
-  padding: 15px;
+  padding: 25px 15px;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  margin-bottom: -1px;
 }
 
 .comment ul.links.list-inline {

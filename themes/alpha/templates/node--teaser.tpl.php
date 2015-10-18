@@ -97,10 +97,9 @@
       hide($content['links']);
       print render($content);
     ?>
-    <div class="pull-right">
+    <div class="links">
       <?php print render($content['links']); ?>
     </div>
   </div>
   <hr>
-  <div class="clearfix"></div>
 </div>

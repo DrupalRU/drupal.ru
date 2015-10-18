@@ -20,12 +20,18 @@
 }
 
 .comment {
-  padding: 25px 15px;
+  padding: 15px 15px 10px;
   box-shadow: none;
   -webkit-box-shadow: none;
+  margin: 0px;
   margin-bottom: -1px;
+  border-radius: 0px;
 }
 
 .comment ul.links.list-inline {
   margin-bottom: 0px;
+}
+
+.comment .content {
+  min-height: 50px;
 }

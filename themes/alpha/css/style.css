@@ -125,7 +125,8 @@ a:hover {
 }
 
 .node .user-picture .name {
-  font-size: 35px;
+  font-size: 27px;
+  word-break: break-all;
 }
 
 .node-taxonomy .field-label {

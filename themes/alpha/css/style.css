@@ -9,7 +9,7 @@
 /* Navbar style. */
 .navbar-default {
   background-color: #000;
-  border-color: #ffffff;
+  border-color: #000;
 }
 .navbar-default .navbar-brand {
   color: #ffffff;
@@ -23,8 +23,10 @@
 .navbar-default .navbar-nav > li > a {
   color: #ffffff;
 }
-.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
   color: #000;
+  background-color: #ffffff;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu {
   background-color: #000;

@@ -140,5 +140,6 @@ a:hover {
 }
 
 blockquote {
-  border-left-color: #b45645;
+  border-left-color: #d34a32;
+  color:#888;
 }

@@ -114,9 +114,7 @@ a:hover {
   border-bottom: 1px solid #ddd;
 }
 
-.media.odd.comment,
-.comment:hover,
-.comment:focus {
+.media.odd.comment {
   background-color: #f9f9f9;
 }
 

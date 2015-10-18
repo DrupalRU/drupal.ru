@@ -97,7 +97,7 @@
     </div>
     <div class="col-xs-12 col-sm-9">
       <?php if ($display_submitted): ?>
-        <span class="text-muted"> <?php print $date; ?></span>
+        <span class="text-muted"> <i class="fa fa-calendar-o"></i> <?php print $date; ?></span>
       <?php endif; ?>
       <?php print render($title_prefix); ?>
       <?php if (!$page): ?>

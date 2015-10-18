@@ -72,7 +72,7 @@ function alpha_preprocess_node(&$variables){
   $node = $variables['elements']['#node'];
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $node->changed)));
 
-  $picture = $variables['#node']->picture;
+  $picture = $node->picture;
   print_r($picture);
   if (!empty($picture)) {
     if (is_numeric($picture)) {

@@ -64,3 +64,15 @@ function alpha_preprocess_comment(&$variables){
   $uri = entity_uri('comment', $comment);
   $variables['permalink'] = l('#', $uri['path'], $uri['options']);
 }
+
+/**
+ * Implements hook_file_formatter_table().
+ */
+function alpha_file_formatter_table($variables) {
+  $links = '';
+  foreach ($variables['items'] as $delta => $item) {
+    $links .= '<li>' . theme('file_link', array('file' => (object) $item)) . '<span class="size">' . format_size($item['filesize']) . '</span>' . '</li>';
+  }
+  
+  return empty($links) ? '' : '<ul class="flie-links" >' . $links . '</ul>';
+}

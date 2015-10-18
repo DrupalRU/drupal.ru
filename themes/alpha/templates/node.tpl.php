@@ -82,7 +82,7 @@
 ?>
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <div class="row">
-    <div  class="col-xs-12 col-sm-3" >
+    <div  class="col-xs-12 col-sm-3 pull-right" >
       <?php if ($display_submitted): ?>
         <div class="submitted">
           <?php print $submitted; ?>

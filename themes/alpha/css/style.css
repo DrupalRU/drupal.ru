@@ -137,6 +137,10 @@ a:hover {
   text-align: right;
 }
 
+.node .details {
+  position: fixed;
+}
+
 .node-teaser .title {
   border-bottom: 1px solid #eee;
   padding-bottom: 10px;

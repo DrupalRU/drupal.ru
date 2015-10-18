@@ -83,20 +83,22 @@
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <div class="row">
     <div  class="col-xs-12 col-sm-3 pull-right" >
-      <?php if ($user_picture): ?>
-        <div class="user-picture">
-          <?php print $user_picture; ?>
-          <div class="name"><?php print $name; ?></div>
-        </div>
-      <?php endif; ?>
-      <div class="node-taxonomy">
-        <?php
-          foreach($content as $type => $value){
-            if(0 == strncmp($type, 'taxonomy', 8)){
-              print render($content[$type]);
+      <div class="details">
+        <?php if ($user_picture): ?>
+          <div class="user-picture">
+            <?php print $user_picture; ?>
+            <div class="name"><?php print $name; ?></div>
+          </div>
+        <?php endif; ?>
+        <div class="node-taxonomy">
+          <?php
+            foreach($content as $type => $value){
+              if(0 == strncmp($type, 'taxonomy', 8)){
+                print render($content[$type]);
+              }
             }
-          }
-        ?>
+          ?>
+        </div>
       </div>
     </div>
     <div class="col-xs-12 col-sm-9">

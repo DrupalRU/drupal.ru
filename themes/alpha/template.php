@@ -58,7 +58,9 @@ function alpha_preprocess_user_picture(&$variables) {
  * Implements hook_preprocess_comment().
  */
 function alpha_preprocess_comment(&$variables){
-  print_r($variables);
   $comment = $variables['elements']['#comment'];
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $comment->changed)));
+  
+  $uri = entity_uri('comment', $comment);
+  $variables['permalink'] = l('#', $uri['path'], $uri['options']);
 }

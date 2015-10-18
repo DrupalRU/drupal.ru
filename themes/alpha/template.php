@@ -71,7 +71,7 @@ function alpha_preprocess_comment(&$variables){
 function alpha_preprocess_node(&$variables){
   $comment = $variables['elements']['#node'];
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $comment->changed)));
-
+  print_r($variables);
   $account = $variables['account'];
   if (!empty($account->picture)) {
     if (is_numeric($account->picture)) {

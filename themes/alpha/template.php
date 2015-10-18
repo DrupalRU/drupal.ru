@@ -74,5 +74,5 @@ function alpha_file_formatter_table($variables) {
     $links .= '<li>' . theme('file_link', array('file' => (object) $item)) . '<span class="size">' . format_size($item['filesize']) . '</span>' . '</li>';
   }
   
-  return empty($links) ? '' : '<ul class="flie-links" >' . $links . '</ul>';
+  return empty($links) ? '' : '<ul class="file-links" >' . $links . '</ul>';
 }

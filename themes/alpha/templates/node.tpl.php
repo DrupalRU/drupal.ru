@@ -84,7 +84,7 @@
   <div class="row">
     <div  class="col-xs-12 col-sm-3 pull-right" >
       <?php if ($display_submitted): ?>
-        <span class="text-muted"> <?php print $date; ?></span>
+        <span class="text-muted pull-right"> <?php print $date; ?></span>
       <?php endif; ?>
       <?php if ($user_picture): ?>
         <div class="user-picture">

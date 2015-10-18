@@ -81,45 +81,25 @@
  */
 ?>
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-  <div class="row">
-    <div  class="col-xs-12 col-sm-3 pull-right" >
-      <?php if ($user_picture): ?>
-        <div class="user-picture">
-          <?php print $user_picture; ?>
-          <div class="name"><?php print $name; ?></div>
-        </div>
-      <?php endif; ?>
-      <div class="node-taxonomy">
-        <?php
-          foreach($content as $type => $value){
-            if(0 == strncmp($type, 'taxonomy', 8)){
-              print render($content[$type]);
-            }
-          }
-        ?>
-      </div>
-    </div>
-    <div class="col-xs-12 col-sm-9">
-      <?php if ($display_submitted): ?>
-        <span class="text-muted"> <i class="fa fa-calendar-o"></i> <?php print $date; ?></span>
-      <?php endif; ?>
-      <?php print render($title_prefix); ?>
-      <?php if (!$page): ?>
-        <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
-      <?php endif; ?>
-      <?php print render($title_suffix); ?>
-    
-      <div class="content"<?php print $content_attributes; ?>>
-        <?php
-          hide($content['comments']);
-          hide($content['links']);
-          print render($content);
-        ?>
-        <div class="pull-right">
-          <?php print render($content['links']); ?>
-        </div>
-      </div>
-      <?php print render($content['comments']); ?>
+  <?php if ($display_submitted): ?>
+    <span class="text-muted"> <i class="fa fa-calendar-o"></i> <?php print $date; ?></span>
+    <span class="name"><?php print $name; ?></span>
+  <?php endif; ?>
+  <?php print render($title_prefix); ?>
+  <?php if (!$page): ?>
+    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
+  <?php endif; ?>
+  <?php print render($title_suffix); ?>
 
+  <div class="content"<?php print $content_attributes; ?>>
+    <?php
+      hide($content['comments']);
+      hide($content['links']);
+      print render($content);
+    ?>
+    <div class="pull-right">
+      <?php print render($content['links']); ?>
     </div>
+  </div>
+
 </div>

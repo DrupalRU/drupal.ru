@@ -103,6 +103,8 @@ function alpha_preprocess_node(&$variables){
       $variables['user_picture'] = l($variables['user_picture'], "user/$node->uid", $attributes);
     }
   }
+  
+   $variables['title']['attributes'][] = 'title';
 
   drupal_add_js('(function($){ $(".field-name-body img").addClass("img-responsive");})(jQuery);', array('type' => 'inline', 'scope' => 'footer'));
   drupal_add_js('(function($){ $(".comment .content img").addClass("img-responsive");})(jQuery);', array('type' => 'inline', 'scope' => 'footer'));

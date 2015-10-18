@@ -107,7 +107,18 @@
       <?php endif; ?>
       <?php print render($title_prefix); ?>
       <?php if (!$page): ?>
-        <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
+        <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>">
+          <?php
+            $flag = '<i class="fa fa-h-square"></i>'; //<i class="fa fa-fire"></i>
+            if($sticky){
+              $flag = '<i class="fa fa-flag"></i>';
+            }
+            if($promote){
+              $flag = '<i class="fa fa-fire"></i>';
+            }
+            print $flag . ' ';
+          ?>
+          <?php print $title; ?></a></h2>
       <?php endif; ?>
       <?php print render($title_suffix); ?>
     

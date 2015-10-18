@@ -63,14 +63,16 @@
   <?php if($picture): ?>
   <div class="pull-left">
     <?php print $picture; ?>
+    <strong class="text-success"><?php print $author; ?></strong>
+    <?php print $permalink; ?>
+    <small class="text-muted"><?php isset($timeago) ? print $timeago : print $changed; ?></small>
   </div>
   <?php endif; ?>  
   <div class="media-body">
     <span class="text-muted pull-right">
-        <small class="text-muted"><?php isset($timeago) ? print $timeago : print $changed; ?></small>
+        
     </span>
-    <strong class="text-success"><?php print $author; ?></strong>
-    <?php print $permalink; ?>
+    
     <div class="content panel panel-default" <?php print $content_attributes; ?>>
       <?php
         // We hide the links now so that we can render them later.

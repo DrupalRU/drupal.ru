@@ -101,5 +101,5 @@
       <?php print render($content['links']); ?>
     </div>
   </div>
-
+  <hr>
 </div>

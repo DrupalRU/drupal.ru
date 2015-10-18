@@ -8,14 +8,14 @@
 
 /* Navbar style. */
 .navbar-default {
-  background-color: #3497cc;
+  background-color: #000;
   border-color: #ffffff;
 }
 .navbar-default .navbar-brand {
   color: #ffffff;
 }
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
-  color: #3497cc;
+  color: #000;
 }
 .navbar-default .navbar-text {
   color: #ffffff;
@@ -24,28 +24,28 @@
   color: #ffffff;
 }
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
-  color: #3497cc;
+  color: #000;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu {
-  background-color: #3497cc;
+  background-color: #000;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a {
   color: #ffffff;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
-  color: #3497cc;
+  color: #000;
   background-color: #ffffff;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
-  background-color: #3497cc;
+  background-color: #000;
 }
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
-  color: #3497cc;
+  color: #000;
   background-color: #ffffff;
 }
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
-  color: #3497cc;
+  color: #000;
   background-color: #ffffff;
 }
 .navbar-default .navbar-toggle {
@@ -65,7 +65,7 @@
   color: #ffffff;
 }
 .navbar-default .navbar-link:hover {
-  color: #3497cc;
+  color: #000;
 }
 
 @media (max-width: 767px) {
@@ -73,10 +73,10 @@
     color: #ffffff;
   }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-    color: #3497cc;
+    color: #000;
   }
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-    color: #3497cc;
+    color: #000;
     background-color: #ffffff;
   }
 }

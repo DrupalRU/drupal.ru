@@ -87,7 +87,7 @@
   <?php endif; ?>
   <?php print render($title_prefix); ?>
   <?php if (!$page): ?>
-    <h2 class="title"><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
+    <h2 class="title"><a href="<?php print $node_url; ?>"><?php if($sticky) print '<i class="fa fa-flag"></i> ';?><?php print $title; ?></a></h2>
   <?php endif; ?>
   <?php print render($title_suffix); ?>
 

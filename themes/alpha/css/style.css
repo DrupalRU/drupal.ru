@@ -120,6 +120,13 @@ a:hover {
 }
 
 /* Node styles.*/
+.node .user-picture {
+  text-align: center;
+}
+
+.node .user-picture .name {
+  font-size: large;
+}
 
 /* Comments style*/
 

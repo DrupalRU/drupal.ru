@@ -66,6 +66,13 @@ function alpha_preprocess_comment(&$variables){
 }
 
 /**
+ * Implements hook_preprocess_node().
+ */
+function alpha_preprocess_node(&$variables){
+  drupal_add_js('(function($){ $(".node img").addClass("img-responsive");})(jQuery);', array('type' => 'inline', 'scope' => 'footer'));
+}
+
+/**
  * Implements hook_file_formatter_table().
  */
 function alpha_file_formatter_table($variables) {

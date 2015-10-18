@@ -70,7 +70,7 @@
         <small class="text-muted"><?php isset($timeago) ? print $timeago : print $changed; ?></small>
     </span>
     <strong class="text-success"><?php print $author; ?></strong>
-    <div class="content"<?php print print $content_attributes; ?>>
+    <div class="content" <?php print $content_attributes; ?>>
       <?php
         // We hide the links now so that we can render them later.
         hide($content['links']);

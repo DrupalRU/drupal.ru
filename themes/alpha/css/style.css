@@ -128,6 +128,14 @@ a:hover {
   font-size: 35px;
 }
 
+.node-taxonomy .field-label {
+  float: left;
+}
+
+.node-taxonomy .field-items {
+  text-align: right;
+}
+
 /* Comments style*/
 
 .indented {

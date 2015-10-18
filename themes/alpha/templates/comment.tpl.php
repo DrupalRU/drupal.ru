@@ -59,7 +59,7 @@
  * @ingroup themeable
  */
 ?>
-<article class="media panel panel-default <?php if ($new) print "bg-info" ?> <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+<article class="media <?php if ($new) print "bg-info" ?> <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <?php if($picture): ?>
   <div class="pull-left">
     <?php print $picture; ?>
@@ -70,7 +70,7 @@
         <small class="text-muted"><?php isset($timeago) ? print $timeago : print $changed; ?></small>
     </span>
     <strong class="text-success"><?php print $author; ?></strong>
-    <div class="content" <?php print $content_attributes; ?>>
+    <div class="content panel panel-default" <?php print $content_attributes; ?>>
       <?php
         // We hide the links now so that we can render them later.
         hide($content['links']);

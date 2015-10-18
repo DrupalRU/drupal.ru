@@ -143,6 +143,10 @@ blockquote {
 }
 
 /* File attachment*/
+ul.file-links {
+  padding-left: 0px;
+}
+
 ul.file-links li {
   list-style: none;
 }

@@ -63,7 +63,6 @@
   <?php if($picture): ?>
   <div class="pull-left">
     <?php print $picture; ?>
-    <?php print $permalink; ?>
   </div>
   <?php endif; ?>  
   <div class="media-body">

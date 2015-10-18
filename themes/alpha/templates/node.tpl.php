@@ -82,16 +82,16 @@
 ?>
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <div class="row">
-    <div  class="col-xs-12 col-sm-2" >
+    <div  class="col-xs-12 col-sm-3" >
       <?php if ($display_submitted): ?>
         <div class="submitted">
           <?php print $submitted; ?>
         </div>
       <?php endif; ?>
 
-  <?php print $user_picture; ?>
+    <?php print $user_picture; ?>
     </div>
-    <div class="col-xs-12 col-sm-10">
+    <div class="col-xs-12 col-sm-9">
       <?php print render($title_prefix); ?>
       <?php if (!$page): ?>
         <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>

@@ -23,6 +23,7 @@
   margin: 0px;
 }
 
+.media.odd.comment,
 .comment:hover,
 .comment:focus {
   background-color: #f9f9f9;

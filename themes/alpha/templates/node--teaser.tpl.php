@@ -82,12 +82,12 @@
 ?>
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <?php if ($display_submitted): ?>
+    <span class="name pull-right"><?php print $name; ?></span>
     <span class="text-muted"> <i class="fa fa-calendar-o"></i> <?php print $date; ?></span>
-    <span class="name"><?php print $name; ?></span>
   <?php endif; ?>
   <?php print render($title_prefix); ?>
   <?php if (!$page): ?>
-    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
+    <h2 class="title"><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
   <?php endif; ?>
   <?php print render($title_suffix); ?>
 

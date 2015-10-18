@@ -90,6 +90,18 @@
             <div class="name"><?php print $name; ?></div>
           </div>
         <?php endif; ?>
+        <div class="flag">
+        <?php
+          $flag = '<i class="fa fa-h-square"></i>'; //<i class="fa fa-fire"></i>
+          if($sticky){
+            $flag = '<i class="fa fa-flag"></i>';
+          }
+          if($promote){
+            $flag = '<i class="fa fa-fire"></i>';
+          }
+          print $flag . ' ';
+        ?>
+        </div>
         <div class="node-taxonomy">
           <?php
             foreach($content as $type => $value){

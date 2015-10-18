@@ -21,3 +21,7 @@
 .comment {
   padding: 15px;
 }
+
+.comment ul.links.list-inline {
+  margin-bottom: 0px;
+}

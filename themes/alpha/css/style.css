@@ -20,12 +20,8 @@
 }
 
 .comment {
-  padding: 15px 15px 10px;
-  box-shadow: none;
-  -webkit-box-shadow: none;
+  padding: 15px 10px 10px;
   margin: 0px;
-  margin-bottom: -1px;
-  border-radius: 0px;
 }
 
 .comment:hover,
@@ -39,6 +35,9 @@
 
 .comment .content {
   min-height: 50px;
+  padding: 15px;
+  margin-top: 5px;
+  background-color: rgba(51, 151, 204, 0.4);
 }
 
 .comment .pull-left {

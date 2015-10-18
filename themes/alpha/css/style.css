@@ -141,3 +141,17 @@ blockquote {
   border-left-color: #d34a32;
   color:#888;
 }
+
+/* File attachment*/
+ul.file-links li {
+  list-style: none;
+}
+
+ul.file-links li span.size {
+  text-decoration: none;
+  font-size: 7pt;
+  padding-left: 10px;
+  color: #ccc;
+}
+
+

@@ -86,7 +86,7 @@
       <?php if ($user_picture): ?>
         <div class="user-picture">
           <?php print $user_picture; ?>
-          <?php print $name; ?>
+          <div class="name"><?php print $name; ?></div>
         </div>
       <?php endif; ?>
       <div class="node-taxonomy">

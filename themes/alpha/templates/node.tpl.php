@@ -84,17 +84,17 @@
   <div class="row">
     <div  class="col-xs-12 col-sm-3 pull-right" >
       <?php if ($display_submitted): ?>
-        <div class="submitted">
-          <?php print $submitted; ?>
+        <span class="text-muted> <?php print $date; ?> </span>
+      <?php endif; ?>
+      <?php if ($user_picture): ?>
+        <div class="user-picture">
+          <?php print $user_picture; ?>
         </div>
       <?php endif; ?>
-      <div class="user-picture">
-        <?php print $user_picture; ?>
-      </div>
-      <div>
-      <?php print render($content['taxonomy_forums']); ?>
-      <?php print render($content['taxonomy_vocabulary_10']); ?>
-      <?php print render($content['taxonomy_vocabulary_2']); ?>
+      <div class="node-taxonomy">
+        <?php print render($content['taxonomy_forums']); ?>
+        <?php print render($content['taxonomy_vocabulary_10']); ?>
+        <?php print render($content['taxonomy_vocabulary_2']); ?>
       </div>
     </div>
     <div class="col-xs-12 col-sm-9">

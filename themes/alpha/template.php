@@ -69,7 +69,8 @@ function alpha_preprocess_comment(&$variables){
  * Implements hook_preprocess_node().
  */
 function alpha_preprocess_node(&$variables){
-  drupal_add_js('(function($){ $(".node img").addClass("img-responsive");})(jQuery);', array('type' => 'inline', 'scope' => 'footer'));
+  drupal_add_js('(function($){ $(".field-name-body img").addClass("img-responsive");})(jQuery);', array('type' => 'inline', 'scope' => 'footer'));
+  drupal_add_js('(function($){ $(".comment.content img").addClass("img-responsive");})(jQuery);', array('type' => 'inline', 'scope' => 'footer'));
 }
 
 /**

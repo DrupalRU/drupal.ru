@@ -88,9 +88,10 @@
           <?php print $submitted; ?>
         </div>
       <?php endif; ?>
-    <div class="user-picture">
-      <?php print $user_picture; ?>
-    </div>
+      <div class="user-picture">
+        <?php print $user_picture; ?>
+      </div>
+      <?php render($content['links']); ?>
     </div>
     <div class="col-xs-12 col-sm-9">
       <?php print render($title_prefix); ?>
@@ -101,6 +102,7 @@
     
       <div class="content"<?php print $content_attributes; ?>>
         <?php
+          print_r($content);
           // We hide the comments and links now so that we can render them later.
           hide($content['comments']);
     //      hide($content['links']);

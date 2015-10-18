@@ -53,3 +53,11 @@ function alpha_preprocess_user_picture(&$variables) {
     }
   }
 }
+
+/**
+ * Implements hook_preprocess_comment().
+ */
+function alpha_preprocess_comment(&$variables){
+  $comment = $variables['elements']['#comment'];
+  $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $comment->changed)));
+}

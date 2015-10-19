@@ -16,6 +16,12 @@ div.region.region-fluid-top {
   font-size: 20px;
   min-height: 300px;
 }
+
+.btn-outline-inverse {
+  color: #fff;
+  background-color: transparent;
+  border-color: white;
+}
 /* Content. */
 div.main-container.container {
   background-color: white;

@@ -111,6 +111,7 @@
             }
           ?>
         </div>
+        <?php print render($content['rrssb']); ?>
       </div>
     </div>
     <div class="col-xs-12 col-sm-9">

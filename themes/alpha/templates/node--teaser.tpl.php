@@ -106,6 +106,7 @@
     <?php
       hide($content['comments']);
       hide($content['links']);
+      hide($content['rrssb']);
       print render($content);
     ?>
     <div class="links">

@@ -6,7 +6,16 @@ body {
 body.navbar-is-fixed-top {
   padding-top: 50px;
 }
-
+/* header */
+div.region.region-fluid-top {
+  text-align: center;
+  background-color: #5bc3ff;
+  margin-top: -60px;
+  padding-top: 60px;
+  color: white;
+  font-size: 20px;
+  min-height: 300px;
+}
 /* Content. */
 div.main-container.container {
   background-color: white;

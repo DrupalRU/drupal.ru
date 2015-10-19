@@ -113,6 +113,11 @@
   </div>
 </header>
 
+<?php if (!empty($page['fluid-top'])): ?>
+<div class="container-fluid">
+  <div><?php print render($page['fluid-top']); ?></div>
+</div>
+<?php endif; ?>
 <div class="main-container container">
 
   <header role="banner" id="page-header">

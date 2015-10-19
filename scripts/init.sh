@@ -34,6 +34,15 @@ drush -y en ascii_art_captcha css_captcha
 echo "Install other modules"
 drush -y en imageapi_imagemagick pm_block_user pm_email_notify privatemsg_filter  views_ui book forum php
 
+echo "Install innder poll"
+mkdir -p $SITEPATH/sites/all/modules/github
+cd $SITEPATH/sites/all/modules/github
+git clone --branch master http://git.drupal.org/sandbox/andypost/1413472.git inner_poll
+git checkout 7.x-1.x
+
+cd $SITEPATH
+drusn -y en inner_poll
+
 echo "Install drupal.ru modules"
 mkdir -p $SITEPATH/sites/all/modules/local
 

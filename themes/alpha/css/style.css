@@ -22,6 +22,12 @@ div.region.region-fluid-top {
   background-color: transparent;
   border-color: white;
 }
+
+.btn-outline-inverse:hover,
+.btn-outline-inverse:focus {
+  background-color: #fff;
+  color: #5bc3ff;
+}
 /* Content. */
 div.main-container.container {
   background-color: white;

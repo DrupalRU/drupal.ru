@@ -15,6 +15,7 @@ div.region.region-fluid-top {
   color: white;
   font-size: 20px;
   min-height: 300px;
+  padding: 60px 15px 15px;
 }
 
 .btn-outline-inverse {

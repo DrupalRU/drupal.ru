@@ -188,14 +188,14 @@ a:hover {
 @media (min-width: 979px) {
   #node-details.affix-top {
     position: static;
-  	margin-top:25px;
-  	width:228px;
+  	margin-top:50px;
+  	width:262px;
   }
   
   #node-details.affix {
     position: fixed;
     top:25px;
-    width:228px;
+    width:262px;
   }
 }
 

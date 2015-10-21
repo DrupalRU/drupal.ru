@@ -6,14 +6,13 @@
    */
   Drupal.behaviors.AlphaNodeAffix = {
     attach: function (context) {
-      var $context = $(context);
-      var $node_details = $context.find('#node-details');
+
+      $("#node-details").width($("#node-details").parent().width());
       
       $("#node-details").affix({
-        offset: {top: 100}
+        offset: {top: 100 }
       });
       
-      $("#node-details").width($("#node-details").parent().width());
     }
   };
 

@@ -179,6 +179,28 @@ a:hover {
   color: orange;
 }
 
+
+@media (min-width: 979px) {
+  #node-details.affix-top {
+    position: static;
+  	margin-top:25px;
+  	width:228px;
+  }
+  
+  #node-details.affix {
+    position: fixed;
+    top:25px;
+    width:228px;
+  }
+}
+
+#node-details.affix,
+#node-details.affix-top {
+   position:static;
+}
+
+
+
 /* Comments style*/
 
 .indented {

@@ -82,7 +82,7 @@
 ?>
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <div class="row">
-    <div  class="col-xs-12 col-sm-3 pull-right" >
+    <div  class="col-xs-12 col-sm-12 col-md-3 pull-right" >
       <div id="node-details" class="details">
         <?php if ($user_picture): ?>
           <div class="user-picture">
@@ -114,7 +114,7 @@
         <?php print render($content['rrssb']); ?>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-9">
+    <div class="col-xs-12 col-sm-12 col-md-9">
       <?php if ($display_submitted): ?>
         <span class="text-muted"> <i class="fa fa-calendar-o"></i> <?php print $date; ?></span>
       <?php endif; ?>

@@ -194,7 +194,7 @@ a:hover {
   
   #node-details.affix {
     position: fixed;
-    top:25px;
+    top:70px;
     width:262px;
   }
 }

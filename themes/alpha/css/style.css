@@ -180,6 +180,11 @@ a:hover {
 }
 
 
+#node-details.affix,
+#node-details.affix-top {
+   position:static;
+}
+
 @media (min-width: 979px) {
   #node-details.affix-top {
     position: static;
@@ -193,12 +198,6 @@ a:hover {
     width:228px;
   }
 }
-
-#node-details.affix,
-#node-details.affix-top {
-   position:static;
-}
-
 
 
 /* Comments style*/

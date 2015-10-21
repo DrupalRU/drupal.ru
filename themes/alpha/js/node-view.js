@@ -13,6 +13,9 @@
         offset: {top: 300 }
       });
       
+      $(window).on('resize', function(){
+        $("#node-details").width($("#node-details").parent().width());
+      });  
     }
   };
 

@@ -83,7 +83,7 @@
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <div class="row">
     <div  class="col-xs-12 col-sm-3 pull-right" >
-      <div class="details affix-top">
+      <div id="node-details" class="details">
         <?php if ($user_picture): ?>
           <div class="user-picture">
             <?php print $user_picture; ?>
@@ -139,3 +139,10 @@
 
     </div>
 </div>
+ <script type='text/javascript'>
+$('#node-details').affix({
+      offset: {
+        top: 10;
+      }
+});	
+ </script>

@@ -10,7 +10,7 @@
       $("#node-details").width($("#node-details").parent().width());
       
       $("#node-details").affix({
-        offset: {top: 300 }
+        offset: {top: 250 }
       });
       
       $(window).on('resize', function(){

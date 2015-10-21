@@ -109,7 +109,7 @@ function alpha_preprocess_node(&$variables){
   drupal_add_js('(function($){ $(".field-name-body img").addClass("img-responsive");})(jQuery);', array('type' => 'inline', 'scope' => 'footer'));
   drupal_add_js('(function($){ $(".comment .content img").addClass("img-responsive");})(jQuery);', array('type' => 'inline', 'scope' => 'footer'));
   if(!$variables['teaser']){
-    drupal_add_js('(function($){ $("#node-details").affix({offset: {top: function (){ $("#node-details").width($("#node-details").parent().width()); return: 100;}}}); })(jQuery);', array('type' => 'inline', 'scope' => 'footer'));
+    drupal_add_js(drupal_get_path('theme', 'alpha') . '/css/' . 'node-view.js');
   }
 }
 

@@ -178,6 +178,10 @@ a:hover {
 .node .title i.fa {
   color: orange;
 }
+
+.node .details.affix{
+  
+}
 /* Comments style*/
 
 .indented {

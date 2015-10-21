@@ -83,7 +83,7 @@
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <div class="row">
     <div  class="col-xs-12 col-sm-3 pull-right" >
-      <div class="details">
+      <div class="details affix-top">
         <?php if ($user_picture): ?>
           <div class="user-picture">
             <?php print $user_picture; ?>

@@ -142,7 +142,7 @@
  <script type='text/javascript'>
 $('#node-details').affix({
       offset: {
-        top: 10;
+        top: 10,
       }
 });	
  </script>

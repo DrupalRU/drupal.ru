@@ -7,8 +7,8 @@
   Drupal.behaviors.AlphaResponsive = {
     attach: function (context) {
 
-      $(".field-name-body img").addClass("img-responsive").addClass("img-thumbnail");
-      $(".comment .content img").addClass("img-responsive").addClass("img-thumbnail");
+      $(".field-name-body img").addClass("img-responsive");
+      $(".comment .content img").addClass("img-responsive");
     }
   };
 

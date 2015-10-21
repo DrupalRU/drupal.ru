@@ -189,13 +189,11 @@ a:hover {
   #node-details.affix-top {
     position: static;
   	margin-top:50px;
-  	width:262px;
   }
   
   #node-details.affix {
     position: fixed;
     top:70px;
-    width:262px;
   }
 }
 

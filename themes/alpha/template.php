@@ -11,6 +11,7 @@
  */
 function alpha_js_alter(&$javascript) {
   drupal_add_js('var themeTableHeaderOffset = function() { var offsetheight = jQuery("#navbar").height(); return offsetheight; }', 'inline');
+  drupal_add_js(array('tableHeaderOffset' => 'themeTableHeaderOffset'), 'setting'); 
 }
 
 /**

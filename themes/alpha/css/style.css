@@ -289,6 +289,11 @@ ul.file-links li span.size {
   height: 30px;
   border-bottom: 2px solid #ddd;
 }
+
+/* Forms */
+#node-admin-content .form-horizontal .form-group {
+  margin: inherit;
+}
 /* Footer. */
 
 .footer {

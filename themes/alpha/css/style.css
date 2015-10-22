@@ -280,7 +280,7 @@ ul.file-links li span.size {
 #privatemsg-list-form  span.input-group-addon {
   width: auto;
 }
-#privatemsg-list-form .input-group {
+#privatemsg-list-form .container-inline  div.input-group {
   display: table;
 }
 

@@ -287,7 +287,7 @@ ul.file-links li span.size {
 /* Table */
 .sticky-header th {
   height: 30px;
-  border-bottom: 1px solid black;
+  border-bottom: 2px solid #ddd;
 }
 /* Footer. */
 

@@ -268,9 +268,14 @@ ul.file-links li span.size {
 }
 
 /* PM messages */
-.container-inline .form-control {
+#privatemsg-list-form .container-inline .form-control {
   width: auto;
   display: inline-block;
+}
+
+#privatemsg-list-form .container-inline div, .container-inline label{
+  width: auto;
+  display: inline-block;  
 }
 
 /* Footer. */

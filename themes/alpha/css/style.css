@@ -267,6 +267,12 @@ ul.file-links li span.size {
   color: #ccc;
 }
 
+/* PM messages */
+.container-inline .form-control {
+  width: auto;
+  display: inline-block;
+}
+
 /* Footer. */
 
 .footer {

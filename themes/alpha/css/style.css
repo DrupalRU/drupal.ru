@@ -277,6 +277,9 @@ ul.file-links li span.size {
   width: auto;
   display: inline-block;  
 }
+#privatemsg-list-form  span.input-group-addon {
+  width: auto;
+}
 
 /* Footer. */
 

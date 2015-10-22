@@ -284,6 +284,11 @@ ul.file-links li span.size {
   display: table;
 }
 
+/* Table */
+.sticky-header th {
+  height: 30px;
+  border-bottom: 1px solid black;
+}
 /* Footer. */
 
 .footer {

@@ -5,6 +5,14 @@
  * template.php
  */
 
+ 
+/**
+ * Implements hook_js_alter().
+ */
+function alpha_js_alter(&$javascript) {
+  drupal_add_js('var themeTableHeaderOffset = function() { var offsetheight = jQuery("#navbar").height(); return offsetheight; }', 'inline');
+}
+
 /**
  * Process variables for user-picture.tpl.php.
  *
@@ -13,7 +21,7 @@
  *   fields.
  *
  * @see user-picture.tpl.php
- */
+ */ 
 function alpha_preprocess_user_picture(&$variables) {
   $variables['user_picture'] = '';
   if (variable_get('user_pictures', 0)) {

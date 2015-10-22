@@ -140,7 +140,9 @@ a:hover {
 .navbar-default .navbar-nav>.open>a .caret, .navbar-default .navbar-nav>.open>a:hover .caret, .navbar-default .navbar-nav>.open>a:focus .caret,
 .nav .open>a .caret, .nav .open>a:hover .caret, .nav .open>a:focus .caret,
 .nav .caret {
-  color: white;
+  color: #fff;
+  border-top-color: #fff;
+  border-bottom-color: #777;
 }
 
 /* Style user pic. */

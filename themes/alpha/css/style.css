@@ -136,6 +136,13 @@ a:hover {
   }
 }
 
+.navbar-default .navbar-nav>.dropdown>a .caret,
+.navbar-default .navbar-nav>.open>a .caret, .navbar-default .navbar-nav>.open>a:hover .caret, .navbar-default .navbar-nav>.open>a:focus .caret,
+.nav .open>a .caret, .nav .open>a:hover .caret, .nav .open>a:focus .caret,
+.nav .caret {
+  color: white;
+}
+
 /* Style user pic. */
 .user-picture img {
   border: 1px solid #e5e7e8;

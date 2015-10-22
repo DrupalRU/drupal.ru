@@ -280,6 +280,9 @@ ul.file-links li span.size {
 #privatemsg-list-form  span.input-group-addon {
   width: auto;
 }
+#privatemsg-list-form .input-group {
+  display: table;
+}
 
 /* Footer. */
 

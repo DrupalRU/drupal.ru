@@ -49,6 +49,7 @@
         <?php hide($user_profile['user_picture']); ?>
         <?php print render($user_profile); ?>
       </div>
+      <?php print render($blog); ?>
     </section>
   </div>
 </div>

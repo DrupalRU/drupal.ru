@@ -73,6 +73,10 @@
  * @ingroup themeable
  */
 ?>
+      <?php print $messages; ?>
+      <?php if (!empty($tabs)): ?>
+        <?php print render($tabs); ?>
+      <?php endif; ?>
 
 <?php print render($page['content']); ?>
 

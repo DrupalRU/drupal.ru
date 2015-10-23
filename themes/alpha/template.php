@@ -32,10 +32,10 @@ function alpha_js_alter(&$javascript) {
  * @see page.tpl.php
  */
 function alpha_preprocess_page(&$variables){
-  print_r($variables['theme_hook_suggestions']);
   if($variables['theme_hook_suggestions'][0] == 'page__user' && count($variables['theme_hook_suggestions']) == 3){
     $variables['theme_hook_suggestions'] = 'page-blog-user';
   }
+  print_r($variables['theme_hook_suggestions']);
 }
 
 /**

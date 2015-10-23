@@ -97,7 +97,7 @@
   <div class="navbar-collapse collapse">
     <nav role="navigation">      
       <?php if (!empty($tabs)): ?>
-        <?php print_r($tabs); print render($tabs); ?>
+        <?php print_r($primary_nav);print_r($tabs); print render($tabs); ?>
       <?php endif; ?>
       <?php if (!empty($secondary_nav)): ?>
         <?php print render($secondary_nav); ?>

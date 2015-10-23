@@ -44,9 +44,10 @@
 </header>
 <div class="main-container container">
   <div class="row">
-
-    <div class="profile"<?php print $attributes; ?>>
-      <?php print render($user_profile); ?>
-    </div>
+    <section class="col-sm-12">
+      <div class="profile"<?php print $attributes; ?>>
+        <?php print render($user_profile); ?>
+      </div>
+    </section>
   </div>
 </div>

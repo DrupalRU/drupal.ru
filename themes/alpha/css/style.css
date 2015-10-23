@@ -377,10 +377,7 @@ ul.file-links li span.size {
 }
 
 @media (max-width: 767px) {
-  #profile .profile {
-    height: auto;
-  }
-  #profile .dl-horizontal dt {
+  .page-user .dl-horizontal dt {
       float: left;
       width: 49%;
       overflow: hidden;

@@ -15,6 +15,26 @@ function alpha_js_alter(&$javascript) {
 }
 
 /**
+ * Preprocess variables for page.tpl.php
+ *
+ * Most themes utilize their own copy of page.tpl.php. The default is located
+ * inside "modules/system/page.tpl.php". Look in there for the full list of
+ * variables.
+ *
+ * Uses the arg() function to generate a series of page template suggestions
+ * based on the current path.
+ *
+ * Any changes to variables in this preprocessor should also be changed inside
+ * template_preprocess_maintenance_page() to keep all of them consistent.
+ *
+ * @see drupal_render_page()
+ * @see template_process_page()
+ * @see page.tpl.php
+ */
+function alpha_preprocess_page(&$variables){
+  print_r($variables);
+}
+/**
  * Process variables for user-picture.tpl.php.
  *
  * The $variables array contains the following arguments:

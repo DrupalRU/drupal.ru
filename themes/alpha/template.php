@@ -189,7 +189,7 @@ function alpha_preprocess_user_profile(&$variables) {
     $variables['name'] = $account->realname;
   }
   
-  module_load_include('inc', 'blog', 'blog.pages.inc');
+  module_load_include('inc', 'blog', 'blog.pages');
   $variables['blog'] = blog_page_user($account);
   
 //  print_r($variables);

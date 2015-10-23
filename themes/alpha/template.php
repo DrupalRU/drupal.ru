@@ -157,10 +157,18 @@ function alpha_preprocess_user_profile(&$variables) {
 
   $account = $variables['elements']['#account'];
 
-  // Helpful $user_profile variable for templates.
-  print_r($variables['elements']);
   foreach (element_children($variables['elements']) as $key) {
     $variables['user_profile'][$key] = $variables['elements'][$key];
+    if(isset($variables['elements'][$key]['#type']) && $variables['elements'][$key]['#type'] == 'user_profile_category'){
+      foreach($variables['elements'][$key] as $item_key => $item_value){
+        if(is_array($item_value) && isset($item_value['#type']) && $item_value['#type'] == 'user_profile_item'){
+          if(empty($item_value['#title'])){
+            $variables['elements'][$key][$item_key]['#title'] = $variables['elements'][$key]['#title'];
+            continue;
+          }
+        }
+      }
+    }
   }
 
   // Preprocess fields.

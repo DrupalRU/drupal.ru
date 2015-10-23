@@ -183,6 +183,8 @@ function alpha_preprocess_user_profile(&$variables) {
       $variables['user_picture'] = theme('image', array('path' => $filepath, 'alt' => $alt, 'title' => $alt, 'attributes' => array('class' => array('img-circle'))));
     }
   }
+  
+  $variables['name'] = $account->name;
 //  print_r($variables);
 }
 

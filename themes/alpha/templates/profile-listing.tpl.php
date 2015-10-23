@@ -45,13 +45,11 @@
     </div>
   </center>
 
+  <dl class="dl-horizontal">
   <?php foreach ($profile as $field): ?>
-    <div class="field">
-      <dl class="dl-horizontal">
-        <dt><?php print $field->title; ?></dt>
-        <dd><?php print $field->value; ?></dd>
-      </dl>
-    </div>
+    <dt><?php print $field->title; ?></dt>
+    <dd><?php print $field->value; ?></dd>
   <?php endforeach; ?>
+  </dl>
 
 </div>

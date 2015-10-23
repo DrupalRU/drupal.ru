@@ -294,6 +294,7 @@ ul.file-links li span.size {
 #profile .profile {
   min-height: 400px;
   border-bottom: 1px solid #ddd;
+  padding-top: 25px;
 }
 
 @media (max-width: 767px) {

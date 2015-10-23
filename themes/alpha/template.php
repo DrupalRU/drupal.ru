@@ -33,7 +33,7 @@ function alpha_js_alter(&$javascript) {
  */
 function alpha_preprocess_page(&$variables){
   if($variables['theme_hook_suggestions'][0] == 'page__user' && count($variables['theme_hook_suggestions']) == 3){
-    $variables['theme_hook_suggestions'] = array('page-blog-user');
+    $variables['theme_hook_suggestions'] = array('page_blog_user');
   }
   print_r($variables['theme_hook_suggestions']);
 }

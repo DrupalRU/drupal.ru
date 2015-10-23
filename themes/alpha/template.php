@@ -32,7 +32,7 @@ function alpha_js_alter(&$javascript) {
  * @see page.tpl.php
  */
 function alpha_preprocess_page(&$variables){
-//  print_r($variables);
+  print_r($variables['theme_hook_suggestions']);
 }
 
 /**
@@ -154,9 +154,15 @@ function alpha_preprocess_node(&$variables){
  * @see user-profile.tpl.php
  */
 function alpha_preprocess_user_profile(&$variables) {
-
+  global $user;
   $account = $variables['elements']['#account'];
-  print_r($account);
+  if($account->data['contact']){
+    //add contact form link
+  }
+  if(!$account->privatemsg_disabled && $user->uid > 0){
+    //add private message link
+  }
+  
   foreach (element_children($variables['elements']) as $key) {
     
     if(isset($variables['elements'][$key]['#type']) && $variables['elements'][$key]['#type'] == 'user_profile_category'){
@@ -199,6 +205,10 @@ function alpha_preprocess_user_profile(&$variables) {
   $variables['name'] = $account->name;
   if(!empty($account->realname)){
     $variables['name'] = $account->realname;
+  }
+  
+  if($account->signature){
+    $variables['signature'] = check_markup($account->signature, $account->signature_format, '', TRUE);
   }
   
   module_load_include('inc', 'blog', 'blog.pages');

@@ -73,10 +73,26 @@
  * @ingroup themeable
  */
 ?>
-      <?php print $messages; ?>
+
+<header id="navbar" role="banner" class="<?php print $navbar_classes; ?>">
+  <div class="navbar-header">
+    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+  </div>
+  <div class="navbar-collapse collapse">
+    <nav role="navigation">      
       <?php if (!empty($tabs)): ?>
         <?php print render($tabs); ?>
       <?php endif; ?>
+    </nav>
+  </div>
+</header>
+<?php print $messages; ?>
 
 <?php print render($page['content']); ?>
 

@@ -34,7 +34,19 @@
  * @ingroup themeable
  */
 ?>
-<div class="profile"<?php print $attributes; ?>>
-  <?php print $user_picture; ?>
-  <?php print render($user_profile); ?>
+<header id="user-profile" role="banner" class="navbar navbar-default ">
+  <div class="container">
+    <div class="user-picture">
+      <?php print $user_picture; ?>
+      <div class="name"><?php print $name; ?></div>
+    </div>
+  </div>
+</header>
+<div class="main-container container">
+  <div class="row">
+
+    <div class="profile"<?php print $attributes; ?>>
+      <?php print render($user_profile); ?>
+    </div>
+  </div>
 </div>

@@ -361,10 +361,12 @@ ul.file-links li span.size {
 }
 
 .page-user .profile {
-  text-align: center;
   padding-top: 55px;
 }
 
+.page-user h1.name {
+  text-align: center;
+}
 
 .page-user  .dl-horizontal dt {
   width: 49%;

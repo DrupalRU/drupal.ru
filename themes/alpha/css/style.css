@@ -293,6 +293,13 @@ ul.file-links li span.size {
 /* Profile */
 #profile .profile {
   min-height: 400px;
+  border-bottom: 1px solid #ddd;
+}
+
+@media (max-width: 767px) {
+  #profile .profile {
+    min-height: 100px;
+  }
 }
 
 /* Forms */

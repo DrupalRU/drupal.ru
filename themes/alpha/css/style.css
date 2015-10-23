@@ -353,7 +353,9 @@ ul.file-links li span.size {
   margin-bottom: -75px;
 }
 #user-profile .user-picture img {
-  background-color: #fff;
+  border: 3px solid #fff;
+  border-radius: 100%;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 /* Forms */

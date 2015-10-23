@@ -35,6 +35,5 @@
  */
 ?>
 <div class="profile"<?php print $attributes; ?>>
-  <?php print_r($user_profile); ?>
   <?php print render($user_profile); ?>
 </div>

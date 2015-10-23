@@ -34,6 +34,7 @@ function alpha_js_alter(&$javascript) {
 function alpha_preprocess_page(&$variables){
 
 }
+
 /**
  * Process variables for user-picture.tpl.php.
  *
@@ -140,6 +141,33 @@ function alpha_preprocess_node(&$variables){
   
   drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/' . 'node-img-responsive.js');
 }
+
+
+/**
+ * Process variables for user-profile.tpl.php.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the user information and any
+ *     fields attached to the user. Properties used:
+ *     - #account: The user account of the profile being viewed.
+ *
+ * @see user-profile.tpl.php
+ */
+function alpha_preprocess_user_profile(&$variables) {
+
+  $account = $variables['elements']['#account'];
+
+  // Helpful $user_profile variable for templates.
+  foreach (element_children($variables['elements']) as $key) {
+    $variables['user_profile'][$key] = $variables['elements'][$key];
+  }
+
+  // Preprocess fields.
+  field_attach_preprocess('user', $account, $variables['elements'], $variables);
+  print_r($variables);
+}
+
 
 /**
  * Implements hook_file_formatter_table().

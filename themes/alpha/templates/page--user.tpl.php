@@ -112,7 +112,7 @@
     <?php endif; ?>
   </div>
 </header>
-<header id="navbar" role="banner" class="navbar navbar-default">
+<header id="user-profile" role="banner" class="navbar navbar-default ">
   <div class="container">
   <?php print render($page['content']); ?>
   </div>

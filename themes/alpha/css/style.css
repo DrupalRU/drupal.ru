@@ -343,6 +343,11 @@ ul.file-links li span.size {
   }
 }
 
+#user-profile {
+  margin-top: -64px;
+  padding-top: 64px;
+}
+
 /* Forms */
 #node-admin-content .form-horizontal .form-group {
   margin: inherit;

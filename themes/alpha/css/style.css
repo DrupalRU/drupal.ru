@@ -298,11 +298,19 @@ ul.file-links li span.size {
   overflow-y: auto;
 }
 
+#profile .dl-horizontal dt {
+  width: 49%;
+}
+
+#profile .dl-horizontal dd {
+  margin-left: 51%;
+}
+  
 @media (max-width: 767px) {
   #profile .profile {
     height: auto;
   }
-  .dl-horizontal dt {
+  #profile .dl-horizontal dt {
       float: left;
       width: 49%;
       overflow: hidden;
@@ -312,25 +320,25 @@ ul.file-links li span.size {
       white-space: nowrap
   }
 
-  .dl-horizontal dd {
+  #profile .dl-horizontal dd {
       margin-left: 51%;
   }
 
-  .dl-horizontal dd:before, .dl-horizontal dd:after {
+  #profile .dl-horizontal dd:before, #profile .dl-horizontal dd:after {
       display: table;
       content: " "
   }
 
-  .dl-horizontal dd:after {
+  #profile .dl-horizontal dd:after {
       clear: both
   }
 
-  .dl-horizontal dd:before, .dl-horizontal dd:after {
+  .dl-horizontal dd:before, #profile .dl-horizontal dd:after {
       display: table;
       content: " "
   }
 
-  .dl-horizontal dd:after {
+  #profile .dl-horizontal dd:after {
       clear: both
   }
 }

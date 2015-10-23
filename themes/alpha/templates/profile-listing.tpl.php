@@ -37,11 +37,13 @@
  */
 ?>
 <div class="profile col-xs-1 col-sm-2 col-md-4">
-  <?php print $user_picture; ?>
-
-  <div class="name">
-    <?php print $name; ?>
-  </div>
+  <center>
+    <?php print $user_picture; ?>
+  
+    <div class="name">
+      <?php print $name; ?>
+    </div>
+  </center>
 
   <?php foreach ($profile as $field): ?>
     <div class="field">

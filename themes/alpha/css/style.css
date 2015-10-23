@@ -290,6 +290,11 @@ ul.file-links li span.size {
   border-bottom: 2px solid #ddd;
 }
 
+/* Profile */
+#profile .profile {
+  min-height: 400px;
+}
+
 /* Forms */
 #node-admin-content .form-horizontal .form-group {
   margin: inherit;

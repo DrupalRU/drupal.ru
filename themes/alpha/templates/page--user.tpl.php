@@ -73,9 +73,6 @@
  * @ingroup themeable
  */
 ?>
-<header id="navbar" role="banner" class="navbar navbar-default">
-  <?php print render($page['content']); ?>
-</header>
 <header id="navbar" role="banner" class="<?php print $navbar_classes; ?>">
   <div class="container">
     <div class="navbar-header">
@@ -115,6 +112,12 @@
     <?php endif; ?>
   </div>
 </header>
+<header id="navbar" role="banner" class="navbar navbar-default">
+  <div class="container">
+  <?php print render($page['content']); ?>
+  </div>
+</header>
+
 
 <?php if (!empty($page['fluid-top'])): ?>
 <div class="container-fluid">

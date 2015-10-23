@@ -347,6 +347,10 @@ ul.file-links li span.size {
   margin-top: -64px;
   padding-top: 64px;
 }
+#user-profile .user-picture {
+  text-align: center;
+  margin-bottom: -75px;
+}
 
 /* Forms */
 #node-admin-content .form-horizontal .form-group {

@@ -351,6 +351,9 @@ ul.file-links li span.size {
   text-align: center;
   margin-bottom: -75px;
 }
+#user-profile .user-picture img {
+  background-color: #fff;
+}
 
 /* Forms */
 #node-admin-content .form-horizontal .form-group {

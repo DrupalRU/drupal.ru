@@ -46,7 +46,7 @@
   <div class="row">
     <section class="col-sm-12">
       <div class="profile"<?php print $attributes; ?>>
-        <?php print_r($user_profile); print render($user_profile); ?>
+        <?php print render($user_profile); ?>
       </div>
     </section>
   </div>

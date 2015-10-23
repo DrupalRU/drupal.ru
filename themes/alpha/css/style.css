@@ -347,6 +347,7 @@ ul.file-links li span.size {
   margin-top: -64px;
   padding-top: 64px;
   margin-bottom: 0px;
+  border-radius: 0px;
 }
 #user-profile .user-picture {
   text-align: center;
@@ -356,6 +357,7 @@ ul.file-links li span.size {
   border: 3px solid #fff;
   border-radius: 100%;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
 }
 
 /* Forms */

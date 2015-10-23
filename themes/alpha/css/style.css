@@ -333,7 +333,7 @@ ul.file-links li span.size {
       clear: both
   }
 
-  .dl-horizontal dd:before, #profile .dl-horizontal dd:after {
+  #profile .dl-horizontal dd:before, #profile .dl-horizontal dd:after {
       display: table;
       content: " "
   }
@@ -363,6 +363,52 @@ ul.file-links li span.size {
 .page-user .profile {
   text-align: center;
   padding-top: 55px;
+}
+
+
+.page-user  .dl-horizontal dt {
+  width: 49%;
+}
+
+.page-user .dl-horizontal dd {
+  margin-left: 51%;
+}
+
+@media (max-width: 767px) {
+  #profile .profile {
+    height: auto;
+  }
+  #profile .dl-horizontal dt {
+      float: left;
+      width: 49%;
+      overflow: hidden;
+      clear: left;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap
+  }
+
+  .page-user .dl-horizontal dd {
+      margin-left: 51%;
+  }
+
+  .page-user .dl-horizontal dd:before, .page-user .dl-horizontal dd:after {
+      display: table;
+      content: " "
+  }
+
+  .page-user .dl-horizontal dd:after {
+      clear: both
+  }
+
+  .page-user .dl-horizontal dd:before, .page-user .dl-horizontal dd:after {
+      display: table;
+      content: " "
+  }
+
+  .page-user .dl-horizontal dd:after {
+      clear: both
+  }
 }
 
 /* Forms */

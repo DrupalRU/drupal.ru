@@ -36,7 +36,7 @@
  * @see template_preprocess_profile_listing()
  */
 ?>
-<div class="profile col-xs-1 col-sm-2 col-md-4">
+<div class="profile col-xs-12 col-sm-6 col-md-4">
   <center>
     <?php print $user_picture; ?>
   

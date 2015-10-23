@@ -158,6 +158,7 @@ function alpha_preprocess_user_profile(&$variables) {
   $account = $variables['elements']['#account'];
 
   // Helpful $user_profile variable for templates.
+  print_r($variables['elements']);
   foreach (element_children($variables['elements']) as $key) {
     $variables['user_profile'][$key] = $variables['elements'][$key];
   }

@@ -45,7 +45,7 @@
   <div class="row">
     <section class="col-sm-12">
       <div class="profile"<?php print $attributes; ?>>
-        <div class="name"><?php print $name; ?></div>
+        <h1 class="name"><?php print $name; ?></h1>
         <?php hide($user_profile['user_picture']); ?>
         <?php print render($user_profile); ?>
       </div>

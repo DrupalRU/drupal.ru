@@ -360,6 +360,13 @@ ul.file-links li span.size {
   background-color: #fff;
 }
 
+#user-profile .profile {
+  text-align: center;
+  padding-top: 75px;
+}
+#user-profile .profile .name {
+  color: #1e3948;   
+}
 /* Forms */
 #node-admin-content .form-horizontal .form-group {
   margin: inherit;

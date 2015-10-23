@@ -292,14 +292,15 @@ ul.file-links li span.size {
 
 /* Profile */
 #profile .profile {
-  min-height: 400px;
+  height: 270px;
   border-bottom: 1px solid #ddd;
   padding-top: 25px;
+  overflow-y: auto;
 }
 
 @media (max-width: 767px) {
   #profile .profile {
-    min-height: 100px;
+    height: auto;
   }
 }
 

@@ -156,7 +156,7 @@ function alpha_preprocess_node(&$variables){
 function alpha_preprocess_user_profile(&$variables) {
 
   $account = $variables['elements']['#account'];
-
+  print_r($account);
   foreach (element_children($variables['elements']) as $key) {
     
     if(isset($variables['elements'][$key]['#type']) && $variables['elements'][$key]['#type'] == 'user_profile_category'){

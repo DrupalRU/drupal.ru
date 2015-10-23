@@ -100,7 +100,7 @@ function alpha_preprocess_comment(&$variables){
  */
 function alpha_preprocess_node(&$variables){
   $node = $variables['elements']['#node'];
-  
+  print_r($variables['theme_hook_suggestions']);
   if ($variables['teaser']) {
     // Add a new item into the theme_hook_suggestions array.
     $variables['theme_hook_suggestions'][] = 'node__teaser';

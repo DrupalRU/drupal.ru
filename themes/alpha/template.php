@@ -184,7 +184,10 @@ function alpha_preprocess_user_profile(&$variables) {
     }
   }
 //  print_r($variables);
-  $variables['name'] = $account->realname;
+  $variables['name'] = $account->name;
+  if(!empty($account->realname)){
+    $variables['name'] = $account->realname;
+  }
 //  print_r($variables);
 }
 

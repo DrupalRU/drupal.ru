@@ -346,6 +346,7 @@ ul.file-links li span.size {
 #user-profile {
   margin-top: -64px;
   padding-top: 64px;
+  margin-bottom: 0px;
 }
 #user-profile .user-picture {
   text-align: center;

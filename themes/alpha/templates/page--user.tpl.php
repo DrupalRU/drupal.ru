@@ -73,7 +73,7 @@
  * @ingroup themeable
  */
 ?>
-<header id="navbar" role="banner" class="<?php print $navbar_classes; ?>">
+<header id="navbar" role="banner" class="navbar navbar-default">
   <?php print render($page['content']); ?>
 </header>
 <header id="navbar" role="banner" class="<?php print $navbar_classes; ?>">

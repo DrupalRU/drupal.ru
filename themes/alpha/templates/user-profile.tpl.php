@@ -38,7 +38,6 @@
   <div class="container">
     <div class="user-picture">
       <?php print $user_picture; ?>
-      <div class="name"><?php print $name; ?></div>
     </div>
   </div>
 </header>
@@ -46,6 +45,8 @@
   <div class="row">
     <section class="col-sm-12">
       <div class="profile"<?php print $attributes; ?>>
+        <div class="name"><?php print $name; ?></div>
+        <?php hide($user_profile['user_picture']); ?>
         <?php print render($user_profile); ?>
       </div>
     </section>

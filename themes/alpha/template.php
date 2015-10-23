@@ -171,10 +171,12 @@ function alpha_preprocess_user_profile(&$variables) {
     }
   }
   
-  print_r($variables['elements']);
+
 
   // Preprocess fields.
   field_attach_preprocess('user', $account, $variables['elements'], $variables);
+
+  print_r($variables);
   
   $picture = $account->picture;
   if (!empty($picture)) {

@@ -114,7 +114,7 @@
 </header>
 <header id="user-profile" role="banner" class="navbar navbar-default ">
   <div class="container">
-  <?php print render($page['content']); ?>
+  <?php print render($page['content']['user_picture']); ?>
   </div>
 </header>
 

@@ -32,7 +32,7 @@ function alpha_js_alter(&$javascript) {
  * @see page.tpl.php
  */
 function alpha_preprocess_page(&$variables){
-  print_r($variables);
+//  print_r($variables);
 }
 
 /**

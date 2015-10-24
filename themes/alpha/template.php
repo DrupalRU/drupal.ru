@@ -79,6 +79,7 @@ function alpha_preprocess_page(&$variables){
     global $user;
     if(!$account->privatemsg_disabled && $user->uid > 0){
       //add private message link
+      print_r($tabs['#primary']);
     /*  $tabs['#primary'][] = array(
         '#theme' => 'menu_local_task',
         '#link' => array(

@@ -5,6 +5,16 @@
  * template.php
  */
 
+/**
+ * Implements hook_theme().
+ */
+function alpha_theme($existing, $type, $theme, $path) {
+  return array(
+    'menu_user_blog_links' => array(
+      'variables' => array('primary' => array(), 'secondary' => array()),
+    ),
+  );
+}
  
 /**
  * Implements hook_js_alter().

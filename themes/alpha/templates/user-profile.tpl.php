@@ -34,23 +34,11 @@
  * @ingroup themeable
  */
 ?>
-<header id="user-profile" role="banner" class="navbar navbar-default ">
-  <div class="container">
-    <div class="user-picture">
-      <?php print $user_picture; ?>
-    </div>
-  </div>
-</header>
-<div class="main-container container">
-  <div class="row">
-    <section class="col-sm-12">
-      <div class="profile"<?php print $attributes; ?>>
-        <h1 class="name"><?php print $name; ?></h1>
-        <?php hide($user_profile['user_picture']); ?>
-        <?php print render($user_profile); ?>
-      </div>
-      <hr>
-      <?php print render($blog); ?>
-    </section>
-  </div>
+
+<div class="profile"<?php print $attributes; ?>>
+  <h1 class="name"><?php print $name; ?></h1>
+  <?php hide($user_profile['user_picture']); ?>
+  <?php print render($user_profile); ?>
 </div>
+<hr>
+<?php print render($blog); ?>

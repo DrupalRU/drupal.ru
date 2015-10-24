@@ -43,7 +43,7 @@
     </tr>
   </thead>
   <tbody>
-  <?php print_r($forums); foreach ($forums as $child_id => $forum): ?>
+  <?php foreach ($forums as $child_id => $forum): ?>
     <tr id="forum-list-<?php print $child_id; ?>" class="<?php print $forum->zebra; ?>">
       <td <?php print $forum->is_container ? 'colspan="4" class="container"' : 'class="forum"'; ?>>
         <?php /* Enclose the contents of this cell with X divs, where X is the

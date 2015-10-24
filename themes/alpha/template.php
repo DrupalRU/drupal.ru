@@ -275,3 +275,22 @@ function alpha_menu_user_blog_links($variables){
 
   return $output;
 }
+
+/**
+ * Preprocesses variables for forum-list.tpl.php.
+ *
+ * @param $variables
+ *   An array containing the following elements:
+ *   - forums: An array of all forum objects to display for the given taxonomy
+ *     term ID. If tid = 0 then all the top-level forums are displayed.
+ *   - parents: An array of taxonomy term objects that are ancestors of the
+ *     current term ID.
+ *   - tid: Taxonomy term ID of the current forum.
+ *
+ * @see forum-list.tpl.php
+ * @see theme_forum_list()
+ */
+function alpha_preprocess_forum_list(&$variables){
+  print_r($variables['forums']);
+//  field_attach_preprocess
+}

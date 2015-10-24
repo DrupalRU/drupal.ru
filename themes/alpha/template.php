@@ -62,6 +62,10 @@ function alpha_preprocess_page(&$variables){
         $variables['user_picture'] = theme('image', array('path' => $filepath, 'alt' => $alt, 'title' => $alt, 'attributes' => array('class' => array('img-circle'))));
       }
     }
+    $tabs = $variables['tabs'];
+    unset($variables['tabs']);
+    $tabs['#theme'] = 'menu_user_blog_links';
+    $variables['primary_nav'] = $tabs;
   }
 }
 

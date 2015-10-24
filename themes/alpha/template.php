@@ -42,7 +42,8 @@ function alpha_js_alter(&$javascript) {
  * @see page.tpl.php
  */
 function alpha_preprocess_page(&$variables){
-  if($variables['theme_hook_suggestions'][0] == 'page__user' && count($variables['theme_hook_suggestions']) == 3){
+  if($variables['theme_hook_suggestions'][0] == 'page__user'){
+    print_r($variables);
 //    $variables['theme_hook_suggestions'] = array('page__blog__user');
   }
 }

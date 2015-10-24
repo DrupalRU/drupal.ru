@@ -112,7 +112,13 @@
     <?php endif; ?>
   </div>
 </header>
-
+<header id="user-profile" role="banner" class="navbar navbar-default ">
+  <div class="container">
+    <div class="user-picture">
+      <?php print $user_picture; ?>
+    </div>
+  </div>
+</header>
 <?php if (!empty($page['fluid-top'])): ?>
 <div class="container-fluid">
   <div><?php print render($page['fluid-top']); ?></div>

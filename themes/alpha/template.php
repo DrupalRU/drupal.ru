@@ -43,7 +43,7 @@ function alpha_js_alter(&$javascript) {
  */
 function alpha_preprocess_page(&$variables){
   if($variables['theme_hook_suggestions'][0] == 'page__user'){
-    $account = $variables['page']['content']['#account']
+    $account = $variables['page']['content']['#account'];
     
     $picture = $account->picture;
     if (!empty($picture)) {

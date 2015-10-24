@@ -296,7 +296,7 @@ function alpha_preprocess_forum_list(&$variables){
   foreach($variables['forums'] as $key => $term){
     $term_data = taxonomy_term_load($term->tid);
     if($icon = field_get_items('taxonomy_term', $term_data, 'field_icon')){
-      $variables['forums'][$key]['awesome_icon'] = $icon[0]['safe_value'];
+      $variables['forums'][$key]->awesome_icon = $icon[0]['safe_value'];
     } 
     
   }

@@ -294,7 +294,8 @@ function alpha_preprocess_forum_list(&$variables){
 //  print_r($variables['forums']);
    
   foreach($variables['forums'] as $key => $term){
-    $my_field_items = field_get_items('taxonomy_term', $term, 'field_icon'); 
+    $term_data = taxonomy_term_load($term->tid);
+    $my_field_items = field_get_items('taxonomy_term', $term_data, 'field_icon'); 
     print_r($my_field_items);
   }
 //  field_attach_preprocess

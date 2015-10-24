@@ -63,6 +63,7 @@ function alpha_preprocess_page(&$variables){
     }
     $tabs = $variables['tabs'];
     unset($variables['tabs']);
+    print_r($tabs);
     $tabs['#theme'] = 'menu_user_blog_links';
     $variables['primary_nav'] = $tabs;
   }

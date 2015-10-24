@@ -210,6 +210,15 @@ a:hover {
   white-space: normal;
 }
 
+/* Forums style. */
+
+div.awesome_icon {
+  float: left;
+  font-size: 32px;
+  color: orange;
+  padding-right: 15px;
+}
+
 /* Comments style*/
 
 .indented {

@@ -75,72 +75,7 @@ function alpha_preprocess_page(&$variables){
     $tabs = $variables['tabs'];
     $secondary = $tabs['#secondary'];
     unset($tabs['#secondary']);
-    
-    global $user;
-    if(!$account->privatemsg_disabled && $user->uid > 0){
-      //add private message link
-      print_r($tabs['#primary']);
-    /*  $tabs['#primary'][] = array(
-        '#theme' => 'menu_local_task',
-        '#link' => array(
-          'href' => 'messages/new/' . $account->uid,
-          'title' => t('Send message'),
-          'access' => 1,
-        ),
-        '#active' => 0,
-      );
-      /*
-                           [#theme] => menu_local_task
-                    [#link] => Array
-                        (
-                            [path] => user/%/view
-                            [load_functions] => Array
-                                (
-                                    [1] => user_load
-                                )
-
-                            [to_arg_functions] => 
-                            [access_callback] => user_view_access
-                            [access_arguments] => a:1:{i:0;i:1;}
-                            [page_callback] => user_view_page
-                            [page_arguments] => a:1:{i:0;i:1;}
-                            [fit] => 5
-                            [number_parts] => 3
-                            [tab_parent] => user/%
-                            [tab_root] => user/%
-                            [title] => Просмотр
-                            [title_callback] => t
-                            [title_arguments] => 
-                            [type] => 140
-                            [description] => 
-                            [position] => 
-                            [weight] => -10
-                            [include_file] => 
-                            [delivery_callback] => 
-                            [context] => 1
-                            [theme_callback] => 
-                            [theme_arguments] => a:0:{}
-                            [href] => user/18342
-                            [tab_root_href] => user/18342
-                            [tab_parent_href] => user/18342
-                            [options] => Array
-                                (
-                                )
-
-                            [access] => 1
-                            [localized_options] => Array
-                                (
-                                )
-
-                        )
-
-                    [#active] => 1
         
-      */
-    }
-
-
-    
     $tabs['#theme'] = 'menu_user_blog_links';
     $variables['primary_nav'] = $tabs;
     

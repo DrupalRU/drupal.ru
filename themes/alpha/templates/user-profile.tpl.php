@@ -36,7 +36,14 @@
 ?>
 
 <div class="profile"<?php print $attributes; ?>>
-  <h1 class="name"><?php print $name; ?></h1>
+  <h1 class="name"><?php 
+    if(isset($realname)){
+      print $realname;
+      print "(" . $name . ")";
+    }else{
+      print $name;
+    }?>
+  </h1>
   <?php hide($user_profile['user_picture']); ?>
   <?php print render($user_profile); ?>
 </div>

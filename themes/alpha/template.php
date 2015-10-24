@@ -233,9 +233,7 @@ function alpha_preprocess_user_profile(&$variables) {
   
 //  print_r($variables);
   $variables['name'] = $account->name;
-  if(!empty($account->realname)){
-    $variables['name'] = $account->realname;
-  }
+  $variables['realname'] = $account->realname;
   
   if($account->signature){
     $variables['signature'] = check_markup($account->signature, $account->signature_format, '', TRUE);

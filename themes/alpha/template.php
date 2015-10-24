@@ -291,6 +291,11 @@ function alpha_menu_user_blog_links($variables){
  * @see theme_forum_list()
  */
 function alpha_preprocess_forum_list(&$variables){
-  print_r($variables['forums']);
+//  print_r($variables['forums']);
+   
+  foreach($variables['forums'] as $key => $term){
+    $my_field_items = field_get_items('taxonomy_term', $term, 'field_icon'); 
+    print_r($my_field_items);
+  }
 //  field_attach_preprocess
 }

@@ -295,8 +295,10 @@ function alpha_preprocess_forum_list(&$variables){
    
   foreach($variables['forums'] as $key => $term){
     $term_data = taxonomy_term_load($term->tid);
-    $my_field_items = field_get_items('taxonomy_term', $term_data, 'field_icon'); 
-    print_r($my_field_items);
+    if($icon = field_get_items('taxonomy_term', $term_data, 'field_icon')){
+      $variables['forums'][$key]['awesome_icon'] = $icon[0]['safe_value'];
+    } 
+    
   }
 //  field_attach_preprocess
 }

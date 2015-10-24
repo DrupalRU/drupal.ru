@@ -206,6 +206,9 @@ a:hover {
   }
 }
 
+.node code {
+  white-space: normal;
+}
 
 /* Comments style*/
 

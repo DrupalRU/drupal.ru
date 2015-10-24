@@ -243,5 +243,18 @@ function alpha_file_formatter_table($variables) {
 }
 
 function alpha_menu_user_blog_links($variables){
-  print_r($variables);
+  $output = '';
+
+  if (!empty($variables['primary'])) {
+    $variables['primary']['#prefix'] = '<ul class="menu nav navbar-nav">';
+    $variables['primary']['#suffix'] = '</ul>';
+    $output .= drupal_render($variables['primary']);
+  }
+  if (!empty($variables['secondary'])) {
+    $variables['secondary']['#prefix'] = '<ul class="menu nav navbar-nav">';
+    $variables['secondary']['#suffix'] = '</ul>';
+    $output .= drupal_render($variables['secondary']);
+  }
+
+  return $output;
 }

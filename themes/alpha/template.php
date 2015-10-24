@@ -82,12 +82,11 @@ function alpha_preprocess_page(&$variables){
       $tabs['#primary'][] = array(
         '#theme' => 'menu_local_task',
         '#link' => array(
-          'path' => 'messages/new/' . $account->uid,
-          'tab_parent' => 'user/%',
-          'tab_root' => 'user/%',
+          'href' => 'messages/new/' . $account->uid,
           'title' => t('Send message'),
           'access' => 1,
         ),
+        '#active' => 0,
       );
       /*
                            [#theme] => menu_local_task

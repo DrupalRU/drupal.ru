@@ -62,10 +62,15 @@ function alpha_preprocess_page(&$variables){
       }
     }
     $tabs = $variables['tabs'];
-    unset($variables['tabs']);
-    print_r($tabs);
+    $secondary = $tabs['#secondary'];
+    unset($tabs['#secondary']);
+    
     $tabs['#theme'] = 'menu_user_blog_links';
     $variables['primary_nav'] = $tabs;
+    $variables['tabs'] = array(
+      '#theme' => 'menu_local_tasks',
+      '#primary' => $secondary,
+    );
   }
 }
 

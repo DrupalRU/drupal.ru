@@ -231,3 +231,7 @@ function alpha_file_formatter_table($variables) {
   
   return empty($links) ? '' : '<ul class="file-links" >' . $links . '</ul>';
 }
+
+function alpha_menu_user_blog_links($variables){
+  print_r($variables);
+}

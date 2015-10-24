@@ -76,8 +76,17 @@ function alpha_preprocess_page(&$variables){
     $secondary = $tabs['#secondary'];
     unset($tabs['#secondary']);
     
+    global $user;
+    if(!$account->privatemsg_disabled && $user->uid > 0){
+      //add private message link
+      print_r($tabs);
+    }
+
+
+    
     $tabs['#theme'] = 'menu_user_blog_links';
     $variables['primary_nav'] = $tabs;
+    
     $variables['tabs'] = array(
       '#theme' => 'menu_local_tasks',
       '#primary' => $secondary,
@@ -204,13 +213,9 @@ function alpha_preprocess_node(&$variables){
  * @see user-profile.tpl.php
  */
 function alpha_preprocess_user_profile(&$variables) {
-  global $user;
   $account = $variables['elements']['#account'];
   if($account->data['contact']){
     //add contact form link
-  }
-  if(!$account->privatemsg_disabled && $user->uid > 0){
-    //add private message link
   }
   
   foreach (element_children($variables['elements']) as $key) {

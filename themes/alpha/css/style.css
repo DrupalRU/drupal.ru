@@ -219,6 +219,9 @@ div.awesome_icon {
   padding-right: 15px;
 }
 
+#forum .indent {
+  padding-left: 25px;
+}
 /* Comments style*/
 
 .indented {

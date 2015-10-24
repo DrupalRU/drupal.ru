@@ -360,7 +360,7 @@ ul.file-links li span.size {
   background-color: #fff;
 }
 
-.page-user .main-container {
+.page-user div.main-container.container {
   padding-top: 55px;
 }
 

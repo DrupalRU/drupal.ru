@@ -224,7 +224,7 @@ div.awesome_icon {
 }
 
 #forum .row {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
   padding-bottom: 10px;
   padding-top: 10px;
   margin: 0px;
@@ -252,7 +252,7 @@ div.awesome_icon {
 .comment {
   padding: 15px 10px 10px;
   margin: 0px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
 
 .media.odd.comment {
@@ -270,7 +270,7 @@ div.awesome_icon {
 }
 
 .comment .media-body {
-  border-left: 1px solid #ddd;
+  border-left: 1px solid #eee;
   padding-left: 15px;
 }
 
@@ -323,13 +323,13 @@ ul.file-links li span.size {
 /* Table */
 .sticky-header th {
   height: 30px;
-  border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid #eee;
 }
 
 /* Profile */
 #profile .profile {
   height: 270px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
   padding-top: 25px;
   overflow-y: auto;
 }

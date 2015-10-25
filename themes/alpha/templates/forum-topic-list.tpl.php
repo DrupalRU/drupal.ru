@@ -41,7 +41,7 @@
   <?php foreach ($topics as $topic): ?>
     <div class="row <?php print $topic->zebra;?>">
       <div class="title col-xs-12 col-sm-8">
-        <div class="icon col-xs-1"><?php print $topic->icon; ?></span>
+        <div class="icon col-xs-1"><?php print $topic->icon; ?></div>
         <div class="col-xs-11">
           <div>
             <?php print $topic->title; ?>

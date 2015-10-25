@@ -94,7 +94,7 @@
           $flag = '<i class="fa fa-flag"></i>';
         }
         if($promote){
-          $flag = '<i class="fa fa-fire"></i>';
+          $flag = '<i class="fa fa-star"></i>';
         }
         print $flag . ' ';
       ?>

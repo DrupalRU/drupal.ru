@@ -41,12 +41,14 @@
   <?php foreach ($topics as $topic): ?>
     <div class="row <?php print $topic->zebra;?>">
       <div class="title col-xs-12 col-sm-8">
-        <span class="icon"><?php print $topic->icon; ?></span>
-        <span>
-          <?php print $topic->title; ?>
-        </span>
-        <div>
-          <?php print $topic->created; ?>
+        <div class="icon col-xs-1"><?php print $topic->icon; ?></span>
+        <div class="col-xs-11">
+          <div>
+            <?php print $topic->title; ?>
+          </div>
+          <div>
+            <?php print $topic->created; ?>
+          </div>
         </div>
       </div>
     <?php if ($topic->moved): ?>

@@ -49,9 +49,6 @@
           <div>
             <?php print $topic->author; ?>
           </div>
-          <div>
-            <?php print $topic->time; ?>
-          </div>
         </div>
       </div>
     <?php if ($topic->moved): ?>
@@ -64,7 +61,7 @@
           <a href="<?php print $topic->new_url; ?>"><?php print $topic->new_text; ?></a>
         <?php endif; ?>
       </div>
-      <div class="col-xs-6 col-sm-3 last-reply"><?php print $topic->last_reply; ?></div>
+      <div class="col-xs-6 col-sm-3 last-reply"><i class="fa fa-history"></i> <?php print $topic->time; ?></div>
     <?php endif; ?>
     </div>
   <?php endforeach; ?>

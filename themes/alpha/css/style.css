@@ -245,6 +245,13 @@ div.awesome_icon {
 .forum .description {
   margin-left: 43px;
 }
+
+#forum .fa {
+  color: orange;
+  padding-right: 5px;
+  font-size: 25px;
+}
+
 /* Comments style*/
 
 .indented {

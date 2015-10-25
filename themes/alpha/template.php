@@ -312,5 +312,12 @@ function alpha_preprocess_forum_list(&$variables){
  * @see theme_forum_topic_list()
  */
 function alpha_preprocess_forum_topic_list(&$variables) {
+  foreach ($variables['topics'] as $id => $topic) {
+    $variables['topics'][$id]->author = isset($topic->uid) ? theme('username', array('account' => $topic)) : '';
+//    $variables['topics'][$id]->time = isset($topic->created) ? format_interval(REQUEST_TIME - $topic->created) : '';
+  }
+}
+
+function alpha_forum_topic_list($variables){
   print_r($variables);
 }

@@ -16,33 +16,28 @@
  * @ingroup themeable
  */
 ?>
-<div class="topic-status-<?php print $icon_class ?>" title="<?php print $icon_title ?>">
 <?php if ($first_new): ?>
   <a id="new"></a>
 <?php endif; ?>
-  <?php
-    switch($icon_class){
-      case 'new':
-          print '<i class="fa fa-envelope-o"></i>';
-        break;  
-      case 'hot-new':
-          print '<i class="fa fa-envelope-o"></i><i class="fa fa-fire"></i>';
-        break;
-      case 'hot':
-          print '<i class="fa fa-fire"></i>';
-        break;
-      case 'closed':
-          print '<i class="fa fa-lock"></i>';
-        break;
-      case 'sticky':
-          print '<i class="fa fa-flag"></i>';
-        break;
-      default:
-        print '<i class="fa fa-sticky-note-o"></i>';
-        
-    }
-  ?>  
-
-  <span class="element-invisible"><?php print $icon_title ?></span>
-
-</div>
+<?php
+  switch($icon_class){
+    case 'new':
+        print '<i class="fa fa-envelope-o"></i>';
+      break;  
+    case 'hot-new':
+        print '<i class="fa fa-envelope-o"></i><i class="fa fa-fire"></i>';
+      break;
+    case 'hot':
+        print '<i class="fa fa-fire"></i>';
+      break;
+    case 'closed':
+        print '<i class="fa fa-lock"></i>';
+      break;
+    case 'sticky':
+        print '<i class="fa fa-flag"></i>';
+      break;
+    default:
+      print '<i class="fa fa-sticky-note-o"></i>';
+      
+  }
+?>

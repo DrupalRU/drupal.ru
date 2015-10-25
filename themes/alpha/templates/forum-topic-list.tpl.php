@@ -47,7 +47,10 @@
             <?php print $topic->title; ?>
           </div>
           <div>
-            <?php print $topic->created; ?>
+            <?php print $topic->author; ?>
+          </div>
+          <div>
+            <?php print $topic->time; ?>
           </div>
         </div>
       </div>

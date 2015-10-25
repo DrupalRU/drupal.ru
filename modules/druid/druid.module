@@ -361,15 +361,9 @@ function _druid_rumonth($num) {
  */
 function _druid_partner_link() {
   $links = array(
-     array('http://ubercart.ru', 'Электронные магазины на Übercart'),
-     array('http://drupalcon.ru', 'Семинары по CMS Drupal в Москве'),
-     array('http://drupalapi.ru', 'API Drupal для программистов'),
      array('http://drupaler.ru', 'Переводы интерфейса Drupal на русском'),
      array('http://drupalcookbook.ru', 'Книга рецептов Drupal'),
-     array('http://drupalsearch.ru', 'Поиск по русским сайтам о Drupal'),
      array('http://setegnom.com', 'Уроки по CMS Drupal'),
-     array('http://drupalcamp.ru', 'Конференция по Drupal'),
-     array('http://moscow.drupalcamp.ru', 'Конференция по Drupal в Москве!'),
      );
   $link = $links[mt_rand(0, count($links)-1)];
   return l($link[1], $link[0]);

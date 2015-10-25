@@ -230,6 +230,12 @@ div.awesome_icon {
   margin: 0px;
 }
 
+@media (max-width: 979px) {
+  #forum .icon .fa {
+    margin-left: -10px;
+  }
+}
+
 @media (max-width: 767px) {
   #forum .row {
     margin-left: -15px;
@@ -256,11 +262,6 @@ div.awesome_icon {
   margin-top: 10px;  
 }
 
-@media (max-width: 979px) {
-  #forum .icon .fa {
-    margin-left: -10px;
-  }
-}
 
 /* Comments style*/
 

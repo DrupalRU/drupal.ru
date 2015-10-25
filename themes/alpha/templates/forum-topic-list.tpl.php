@@ -43,25 +43,23 @@
       <div class="title col-xs-12 col-sm-8">
         <div class="icon col-xs-1"><?php print $topic->icon; ?></div>
         <div class="col-xs-11">
-          <div>
-            <?php print $topic->title; ?>
-          </div>
-          <div>
-            <?php print $topic->author; ?>
-          </div>
+          <?php print $topic->title; ?>
         </div>
       </div>
     <?php if ($topic->moved): ?>
       <div class="moved col-xs-12 col-sm-4"><?php print $topic->message; ?></div>
     <?php else: ?>
-      <div class="replies col-xs-4 col-sm-1">
+      <div class="replies col-xs-1 col-sm-1">
+        <?php print $topic->author; ?>
+      </div>
+      <div class="replies col-xs-3 col-sm-1">
         <?php print $topic->comment_count; ?>
         <?php if ($topic->new_replies): ?>
           <br />
           <a href="<?php print $topic->new_url; ?>"><?php print $topic->new_text; ?></a>
         <?php endif; ?>
       </div>
-      <div class="col-xs-6 col-sm-3 last-reply"><i class="fa fa-history"></i> <?php print $topic->time; ?></div>
+      <div class="col-xs-6 col-sm-2 last-reply"><i class="fa fa-history" style="color:#ddd;"></i> <?php print $topic->time; ?></div>
     <?php endif; ?>
     </div>
   <?php endforeach; ?>

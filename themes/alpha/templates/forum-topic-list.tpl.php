@@ -41,10 +41,10 @@
   <?php foreach ($topics as $topic): ?>
     <div class="row <?php print $topic->zebra;?>">
       <div class="title col-xs-12 col-sm-8">
-        <div class="icon"><?php print $topic->icon; ?></div>
-        <div>
+        <span class="icon"><?php print $topic->icon; ?></span>
+        <span>
           <?php print $topic->title; ?>
-        </div>
+        </span>
         <div>
           <?php print $topic->created; ?>
         </div>

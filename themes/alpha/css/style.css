@@ -236,7 +236,7 @@ div.awesome_icon {
     margin-right: -15px;
   }
   #forum .icon .fa {
-    margin-left: 10px;
+    margin-left: 0px;
   }
 }
 
@@ -256,7 +256,7 @@ div.awesome_icon {
   margin-top: 10px;  
 }
 
-@media (min-width: 979px) {
+@media (max-width: 979px) {
   #forum .icon .fa {
     margin-left: -10px;
   }

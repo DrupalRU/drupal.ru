@@ -246,9 +246,17 @@ div.awesome_icon {
   margin-left: 43px;
 }
 
-#forum .fa {
+#forum .icon .fa {
   color: orange;
   padding-right: 5px;
+  font-size: 20px;
+  margin-top: 10px;  
+}
+
+@media (max-width: 767px) {
+  #forum .icon .fa {
+    margin-left: -10px;
+  }
 }
 
 /* Comments style*/

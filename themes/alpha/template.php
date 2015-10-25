@@ -291,14 +291,26 @@ function alpha_menu_user_blog_links($variables){
  * @see theme_forum_list()
  */
 function alpha_preprocess_forum_list(&$variables){
-//  print_r($variables['forums']);
-   
   foreach($variables['forums'] as $key => $term){
     $term_data = taxonomy_term_load($term->tid);
     if($icon = field_get_items('taxonomy_term', $term_data, 'field_icon')){
       $variables['forums'][$key]->awesome_icon = $icon[0]['safe_value'];
-    } 
-    
+    }  
   }
-//  field_attach_preprocess
+}
+
+/**
+ * Preprocesses variables for forum-topic-list.tpl.php.
+ *
+ * @param $variables
+ *   An array containing the following elements:
+ *   - tid: Taxonomy term ID of the current forum.
+ *   - topics: An array of all the topics in the current forum.
+ *   - forum_per_page: The maximum number of topics to display per page.
+ *
+ * @see forum-topic-list.tpl.php
+ * @see theme_forum_topic_list()
+ */
+function alpha_preprocess_forum_topic_list(&$variables) {
+  print_r($variables);
 }

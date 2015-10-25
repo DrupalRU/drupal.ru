@@ -38,7 +38,11 @@ echo "Install innder poll"
 mkdir -p $SITEPATH/sites/all/modules/github
 cd $SITEPATH/sites/all/modules/github
 git clone --branch master http://git.drupal.org/sandbox/andypost/1413472.git inner_poll
+cd  $SITEPATH/sites/all/modules/github/inner_poll
 git checkout 7.x-1.x
+
+cd  $SITEPATH/sites/all/modules/github
+git clone https://github.com/FortAwesome/Font-Awesome.git fontawesome
 
 cd $SITEPATH
 drusn -y en inner_poll

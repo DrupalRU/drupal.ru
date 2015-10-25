@@ -312,10 +312,10 @@ function alpha_preprocess_forum_list(&$variables){
  * @see theme_forum_topic_list()
  */
 function alpha_preprocess_forum_topic_list(&$variables) {
-  foreach ($variables['topics'] as $id => $topic) {
+/*  foreach ($variables['topics'] as $id => $topic) {
     $variables['topics'][$id]->author = isset($topic->uid) ? theme('username', array('account' => $topic)) : '';
 //    $variables['topics'][$id]->time = isset($topic->created) ? format_interval(REQUEST_TIME - $topic->created) : '';
-  }
+  }*/
 }
 
 /**
@@ -332,7 +332,9 @@ function alpha_preprocess_forum_topic_list(&$variables) {
  * @see theme_forum_submitted()
  */
 function alpha_preprocess_forum_submitted(&$variables) {
-  print_r($variables);
+// print_r($variables);
+  $variables['topic']->time = $variables['time'];
+  $variables['topic']->author = $variables['author'];
 //  $variables['author'] = isset($variables['topic']->uid) ? theme('username', array('account' => $variables['topic'])) : '';
 //  $variables['time'] = isset($variables['topic']->created) ? format_interval(REQUEST_TIME - $variables['topic']->created) : '';
 }

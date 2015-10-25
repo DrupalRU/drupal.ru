@@ -67,6 +67,6 @@
         <div class="posts  col-xs-3 col-sm-1 "><?php print $forum->num_posts ?></div>
         <div class="last-reply col-xs-6 col-sm-2"><?php print $forum->last_reply ?></div>
       <?php endif; ?>
-    </tr>
+    </div>
   <?php endforeach; ?>
 </div>

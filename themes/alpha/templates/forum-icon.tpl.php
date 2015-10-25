@@ -22,10 +22,10 @@
 <?php
   switch($icon_class){
     case 'new':
-        print '<i class="fa fa-envelope-o"></i>';
+        print '<i class="fa fa-envelope"></i>';
       break;  
     case 'hot-new':
-        print '<i class="fa fa-envelope-o"></i><i class="fa fa-fire"></i>';
+        print '<i class="fa fa-envelope"></i><i class="fa fa-fire"></i>';
       break;
     case 'hot':
         print '<i class="fa fa-fire"></i>';
@@ -37,7 +37,7 @@
         print '<i class="fa fa-flag"></i>';
       break;
     default:
-      print '<i class="fa fa-sticky-note-o"></i>';
+      print '<i class="fa fa-envelope-o"></i>';
       
   }
 ?>

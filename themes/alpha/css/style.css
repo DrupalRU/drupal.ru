@@ -227,10 +227,16 @@ div.awesome_icon {
   border-bottom: 1px solid #ddd;
   padding-bottom: 10px;
   padding-top: 10px;
+  margin: 0px;
+}
+
+@media (max-width: 767px) {
+  margin-left: -15px;
+  margin-right: -15px;
 }
 
 #forum .row.even {
-  background-color: rgba(92, 196, 255, 0.45);
+  background-color: rgba(92, 196, 255, 0.1);
 }
 /* Comments style*/
 

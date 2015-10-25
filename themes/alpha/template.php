@@ -319,5 +319,25 @@ function alpha_preprocess_forum_topic_list(&$variables) {
 }
 
 function alpha_forum_topic_list($variables){
-  print_r($variables);
+//  print_r($variables);
 }
+
+/**
+ * Preprocesses variables for forum-submitted.tpl.php.
+ *
+ * The submission information will be displayed in the forum list and topic
+ * list.
+ *
+ * @param $variables
+ *   An array containing the following elements:
+ *   - topic: The topic object.
+ *
+ * @see forum-submitted.tpl.php
+ * @see theme_forum_submitted()
+ */
+function alpha_preprocess_forum_submitted(&$variables) {
+  print_r($variables);
+//  $variables['author'] = isset($variables['topic']->uid) ? theme('username', array('account' => $variables['topic'])) : '';
+//  $variables['time'] = isset($variables['topic']->created) ? format_interval(REQUEST_TIME - $variables['topic']->created) : '';
+}
+

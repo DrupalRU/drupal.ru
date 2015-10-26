@@ -278,6 +278,9 @@ div.awesome_icon {
   #forum  .title {  
     min-height: 40px;
   }
+  #forum  .details {
+    padding-top: 10px;
+  }
   #forum  .details .posts,
   #forum  .details .topics {
     display: inline-block;

@@ -53,6 +53,7 @@
         <?php print $topic->author; ?>
       </div>
       <div class="replies col-xs-3 col-sm-1">
+        <i class="fa fa-comments-o"></i>
         <?php print $topic->comment_count; ?>
         <?php if ($topic->new_replies): ?>
           <br />

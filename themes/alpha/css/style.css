@@ -262,7 +262,8 @@ div.awesome_icon {
   margin-top: 10px;  
 }
 
-#forum .last-reply .fa {
+#forum .last-reply .fa,
+#forum .replies .fa {
   color: #ddd;
 }
 

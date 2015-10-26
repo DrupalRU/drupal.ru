@@ -39,16 +39,11 @@
 ?>
 <div id="forum-topic-<?php print $topic_id; ?>">
   <?php foreach ($topics as $topic): ?>
-    <div class="row <?php print $topic->zebra;?>">
+    <div class="row <?php print $topic->zebra;?> <?php if ($topic->new) print "new";?>">
       <div class="title col-xs-12 col-sm-6">
         <div class="icon col-xs-1"><?php print $topic->icon; ?></div>
         <div class="col-xs-10 title">
           <?php print $topic->title; ?>
-          <?php if ($topic->new): ?>
-            <span class="new">
-              <?php print t('new'); ?>
-            </span>
-          <?php endif; ?>
         </div>
       </div>
     <?php if ($topic->moved): ?>

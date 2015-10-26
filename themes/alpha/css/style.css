@@ -282,7 +282,7 @@ div.awesome_icon {
   #forum  .details .topics,
   #forum  .details .last-reply {
     display: inline-block;
-    width: 33%;
+    width: 30%;
   }
   #forum  .details .last-reply {
     text-align: right;

@@ -286,6 +286,9 @@ div.awesome_icon {
     display: inline-block;
     width: 30%;
   }
+  #forum  .details .posts {
+    text-align: center;
+  }
   #forum  .details .last-reply {
     text-align: right;
     width: auto;

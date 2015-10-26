@@ -42,7 +42,7 @@ function alpha_js_alter(&$javascript) {
  * @see page.tpl.php
  */
 function alpha_preprocess_page(&$variables){
-  if($variables['theme_hook_suggestions'][0] == 'page__user'){
+/*  if($variables['theme_hook_suggestions'][0] == 'page__user'){
     //print_r($variables);
     if(isset($variables['page']['content']['system_main']['#account'])){
       $account = $variables['page']['content']['system_main']['#account'];  
@@ -83,7 +83,7 @@ function alpha_preprocess_page(&$variables){
       '#theme' => 'menu_local_tasks',
       '#primary' => $secondary,
     );
-  }
+  }*/
 }
 
 /**

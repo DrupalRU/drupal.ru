@@ -278,6 +278,15 @@ div.awesome_icon {
   #forum  .title {  
     min-height: 40px;
   }
+  #forum  .details .posts,
+  #forum  .details .topics,
+  #forum  .details .last-reply {
+    display: inline-block;
+    width: 33%;
+  }
+  #forum  .details .last-reply {
+    text-align: right;
+  }
 }
 
 #forum .new_replies {

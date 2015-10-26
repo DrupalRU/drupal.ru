@@ -57,8 +57,7 @@
         <i class="fa fa-comments-o"></i>
         <?php print $topic->comment_count; ?>
         <?php if ($topic->new_replies): ?>
-          <br />
-          <a href="<?php print $topic->new_url; ?>"><?php print $topic->new_text; ?></a>
+          <a href="<?php print $topic->new_url; ?>"><i class="fa fa-comment"></i><?php print $topic->new_replies; ?></a>
         <?php endif; ?>
       </div>
       <div class="col-xs-6 col-sm-2 last-reply"><i class="fa fa-history"></i> <?php print $topic->time; ?></div>

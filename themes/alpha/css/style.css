@@ -282,6 +282,9 @@ div.awesome_icon {
   padding-left: 5px;
 }
 
+#forum .new {
+  color: red;
+}
 
 /* Comments style*/
 

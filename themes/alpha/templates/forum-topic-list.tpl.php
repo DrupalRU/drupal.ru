@@ -44,6 +44,11 @@
         <div class="icon col-xs-1"><?php print $topic->icon; ?></div>
         <div class="col-xs-10 title">
           <?php print $topic->title; ?>
+          <?php if ($topic->new): ?>
+            <span class="new">
+              <?php print t('new'); ?>
+            </span>
+          <?php endif; ?>
         </div>
       </div>
     <?php if ($topic->moved): ?>

@@ -262,6 +262,10 @@ div.awesome_icon {
   margin-top: 10px;  
 }
 
+#forum .last-reply .fa {
+  color: #ddd;
+}
+
 
 /* Comments style*/
 

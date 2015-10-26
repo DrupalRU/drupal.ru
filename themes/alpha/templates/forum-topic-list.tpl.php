@@ -59,7 +59,7 @@
           <a href="<?php print $topic->new_url; ?>"><?php print $topic->new_text; ?></a>
         <?php endif; ?>
       </div>
-      <div class="col-xs-6 col-sm-2 last-reply"><i class="fa fa-history" style="color:#ddd;"></i> <?php print $topic->time; ?></div>
+      <div class="col-xs-6 col-sm-2 last-reply"><i class="fa fa-history"></i> <?php print $topic->time; ?></div>
     <?php endif; ?>
     </div>
   <?php endforeach; ?>

@@ -295,7 +295,8 @@ function alpha_preprocess_forum_list(&$variables){
     $term_data = taxonomy_term_load($term->tid);
     if($icon = field_get_items('taxonomy_term', $term_data, 'field_icon')){
       $variables['forums'][$key]->awesome_icon = $icon[0]['safe_value'];
-    }  
+    } 
+    $variables['forums'][$key]->time = isset($variables['forums'][$key]->last_post->created) ? format_interval(REQUEST_TIME - $variables['forums'][$key]->last_post->created) : '';
   }
 }
 

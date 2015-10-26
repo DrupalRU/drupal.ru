@@ -49,7 +49,7 @@
     <?php if ($topic->moved): ?>
       <div class="moved col-xs-12 col-sm-6"><?php print $topic->message; ?></div>
     <?php else: ?>
-      <div class="author col-xs-3 col-sm-2">
+      <div class="author col-xs-3 col-sm-2 col-xs-offset-1">
         <i class="fa fa-user"></i>
         <?php print $topic->author; ?>
       </div>
@@ -62,7 +62,7 @@
           </span>
         <?php endif; ?>
       </div>
-      <div class="col-xs-6 col-sm-2 last-reply"><i class="fa fa-history"></i> <?php print $topic->time; ?></div>
+      <div class="col-xs-5 col-sm-2 last-reply"><i class="fa fa-history"></i> <?php print $topic->time; ?></div>
     <?php endif; ?>
     </div>
   <?php endforeach; ?>

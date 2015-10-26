@@ -58,13 +58,15 @@
       </div>
       <?php if (!$forum->is_container): ?>
         <div class="topics col-xs-3 col-sm-1">
+          <i class="fa fa-envelope-o"></i>
           <?php print $forum->num_topics ?>
           <?php if ($forum->new_topics): ?>
-            <br />
-            <a href="<?php print $forum->new_url; ?>"><?php print $forum->new_text; ?></a>
+            <span class="new_replies">
+            <i class="fa fa-envelope-o"></i>&nbsp;<a href="<?php print $forum->new_url; ?>"><?php print $forum->new_topics; ?></a>
+            </span>
           <?php endif; ?>
         </div>
-        <div class="posts  col-xs-3 col-sm-1 "><?php print $forum->num_posts ?></div>
+        <div class="posts  col-xs-3 col-sm-1 "><i class="fa fa-comments-o"></i>&nbsp;<?php print $forum->num_posts ?></div>
         <div class="last-reply col-xs-6 col-sm-2"><?php print $forum->last_reply ?></div>
       <?php endif; ?>
     </div>

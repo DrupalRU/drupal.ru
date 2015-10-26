@@ -70,7 +70,7 @@
             <?php endif; ?>
           <?php print str_repeat('</div>', $forum->depth); ?>
         </div>
-        <div class="details col-xs-12 col-sm-3 col-md-2 col-xs-offset-1 col-sm-offset-0">
+        <div class="details col-xs-11 col-sm-3 col-md-2 col-xs-offset-1 col-sm-offset-0">
           <div class="topics">
             <i class="fa fa-envelope-o"></i>
             <?php print $forum->num_topics ?>

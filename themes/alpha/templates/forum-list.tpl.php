@@ -54,7 +54,7 @@
           <?php print str_repeat('</div>', $forum->depth); ?>
         </div>
       <?php else: ?>        
-        <div class="forum col-xs-12 col-sm-9">
+        <div class="forum col-xs-12 col-sm-9 col-md-10">
           <?php print str_repeat('<div class="indent">', $forum->depth); ?>
             <?php if($forum->awesome_icon): ?> 
               <div class="awesome_icon">
@@ -70,7 +70,7 @@
             <?php endif; ?>
           <?php print str_repeat('</div>', $forum->depth); ?>
         </div>
-        <div class="details col-xs-12 col-sm-3 col-xs-offset-1 col-sm-offset-0">
+        <div class="details col-xs-12 col-sm-3 col-md-2 col-xs-offset-1 col-sm-offset-0">
           <div class="topics">
             <i class="fa fa-envelope-o"></i>
             <?php print $forum->num_topics ?>

@@ -40,25 +40,26 @@
 <div id="forum-topic-<?php print $topic_id; ?>">
   <?php foreach ($topics as $topic): ?>
     <div class="row <?php print $topic->zebra;?>">
-      <div class="title col-xs-12 col-sm-7">
+      <div class="title col-xs-12 col-sm-6">
         <div class="icon col-xs-1"><?php print $topic->icon; ?></div>
         <div class="col-xs-11">
           <?php print $topic->title; ?>
         </div>
       </div>
     <?php if ($topic->moved): ?>
-      <div class="moved col-xs-12 col-sm-5"><?php print $topic->message; ?></div>
+      <div class="moved col-xs-12 col-sm-6"><?php print $topic->message; ?></div>
     <?php else: ?>
       <div class="author col-xs-3 col-sm-2">
         <i class="fa fa-user"></i>
         <?php print $topic->author; ?>
       </div>
-      <div class="replies col-xs-3 col-sm-1">
+      <div class="replies col-xs-3 col-sm-2">
         <i class="fa fa-comments-o"></i>
         <?php print $topic->comment_count; ?>
         <?php if ($topic->new_replies): ?>
-        <hr>
-          <a href="<?php print $topic->new_url; ?>"><i class="fa fa-comment"></i><?php print $topic->new_replies; ?></a>
+          <span class="new_replies">
+            <a href="<?php print $topic->new_url; ?>"><i class="fa fa-comment"></i><?php print $topic->new_replies; ?></a>
+          </span>
         <?php endif; ?>
       </div>
       <div class="col-xs-6 col-sm-2 last-reply"><i class="fa fa-history"></i> <?php print $topic->time; ?></div>

@@ -262,6 +262,8 @@ div.awesome_icon {
   margin-top: 10px;  
 }
 
+#forum .posts .fa,
+#forum .topics .fa,
 #forum .last-reply .fa,
 #forum .replies .fa,
 #forum .author .fa

@@ -40,16 +40,16 @@
 <div id="forum-topic-<?php print $topic_id; ?>">
   <?php foreach ($topics as $topic): ?>
     <div class="row <?php print $topic->zebra;?>">
-      <div class="title col-xs-12 col-sm-8">
+      <div class="title col-xs-12 col-sm-7">
         <div class="icon col-xs-1"><?php print $topic->icon; ?></div>
         <div class="col-xs-11">
           <?php print $topic->title; ?>
         </div>
       </div>
     <?php if ($topic->moved): ?>
-      <div class="moved col-xs-12 col-sm-4"><?php print $topic->message; ?></div>
+      <div class="moved col-xs-12 col-sm-5"><?php print $topic->message; ?></div>
     <?php else: ?>
-      <div class="replies col-xs-1 col-sm-1">
+      <div class="replies col-xs-1 col-sm-2">
         <?php print $topic->author; ?>
       </div>
       <div class="replies col-xs-3 col-sm-1">

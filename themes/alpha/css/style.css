@@ -299,6 +299,9 @@ div.awesome_icon {
 #forum .new_replies {
   padding-left: 5px;
 }
+#forum .new_replies .fa {
+  color: #d34a32;
+}
 
 /* Comments style*/
 

@@ -42,7 +42,7 @@
     <div class="row <?php print $topic->zebra;?>">
       <div class="title col-xs-12 col-sm-6">
         <div class="icon col-xs-1"><?php print $topic->icon; ?></div>
-        <div class="col-xs-11">
+        <div class="col-xs-11 title">
           <?php print $topic->title; ?>
         </div>
       </div>

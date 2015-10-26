@@ -273,6 +273,9 @@ div.awesome_icon {
   #forum  .last-reply {
     text-align: right;
   }
+  #forum  .title {  
+    min-height: 40px;
+  }
 }
 
 #forum .new_replies {

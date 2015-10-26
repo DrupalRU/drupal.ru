@@ -25,8 +25,6 @@
         print '<i class="fa fa-envelope"></i>';
       break;  
     case 'hot-new':
-        print '<i class="fa fa-envelope"></i><i class="fa fa-fire"></i>';
-      break;
     case 'hot':
         print '<i class="fa fa-fire"></i>';
       break;

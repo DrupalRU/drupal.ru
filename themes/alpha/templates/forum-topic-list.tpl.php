@@ -58,7 +58,7 @@
         <?php print $topic->comment_count; ?>
         <?php if ($topic->new_replies): ?>
           <span class="new_replies">
-            <a href="<?php print $topic->new_url; ?>"><i class="fa fa-comment"></i><?php print $topic->new_replies; ?></a>
+            <a href="<?php print $topic->new_url; ?>"><i class="fa fa-comment"></i>&nbsp;<?php print $topic->new_replies; ?></a>
           </span>
         <?php endif; ?>
       </div>

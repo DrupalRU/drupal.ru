@@ -279,13 +279,14 @@ div.awesome_icon {
     min-height: 40px;
   }
   #forum  .details .posts,
-  #forum  .details .topics,
-  #forum  .details .last-reply {
+  #forum  .details .topics {
     display: inline-block;
     width: 30%;
   }
   #forum  .details .last-reply {
     text-align: right;
+    width: auto;
+    float: right;
   }
 }
 

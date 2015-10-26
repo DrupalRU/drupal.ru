@@ -42,14 +42,14 @@
     <div class="row <?php print $topic->zebra;?>">
       <div class="title col-xs-12 col-sm-6">
         <div class="icon col-xs-1"><?php print $topic->icon; ?></div>
-        <div class="col-xs-11 title">
+        <div class="col-xs-10 title">
           <?php print $topic->title; ?>
         </div>
       </div>
     <?php if ($topic->moved): ?>
       <div class="moved col-xs-12 col-sm-6"><?php print $topic->message; ?></div>
     <?php else: ?>
-      <div class="author col-xs-3 col-sm-2 col-xs-offset-1 col-sm-offset-0">
+      <div class="author col-xs-4 col-sm-2 col-xs-offset-1 col-sm-offset-0">
         <i class="fa fa-user"></i>
         <?php print $topic->author; ?>
       </div>
@@ -62,7 +62,7 @@
           </span>
         <?php endif; ?>
       </div>
-      <div class="col-xs-5 col-sm-2 last-reply"><i class="fa fa-history"></i> <?php print $topic->time; ?></div>
+      <div class="col-xs-4 col-sm-2 last-reply"><i class="fa fa-history"></i> <?php print $topic->time; ?></div>
     <?php endif; ?>
     </div>
   <?php endforeach; ?>

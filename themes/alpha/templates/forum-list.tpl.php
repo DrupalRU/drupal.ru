@@ -36,38 +36,53 @@
 <div id="forum-<?php print $forum_id; ?>">
   <?php foreach ($forums as $child_id => $forum): ?>
     <div id="forum-list-<?php print $child_id; ?>" class="row <?php print $forum->zebra; ?>">
-      <div <?php print $forum->is_container ? 'colspan="4" class="container col-xs-12"' : 'class="forum col-xs-12 col-sm-8"'; ?>>
-        <?php /* Enclose the contents of this cell with X divs, where X is the
-               * depth this forum resides at. This will allow us to use CSS
-               * left-margin for indenting.
-               */ ?>
-        <?php print str_repeat('<div class="indent">', $forum->depth); ?>
-          <?php if($forum->awesome_icon): ?> 
-          <div class="awesome_icon">
-            <?php print $forum->awesome_icon; ?>
-          </div>
+      <?php if ($forum->is_container) : ?>
+        <div class="container col-xs-12">
+          <?php print str_repeat('<div class="indent">', $forum->depth); ?>
+            <?php if($forum->awesome_icon): ?> 
+              <div class="awesome_icon">
+                <?php print $forum->awesome_icon; ?>
+              </div>
             <?php endif; ?> 
-          <div class="icon forum-status-<?php print $forum->icon_class; ?>" title="<?php print $forum->icon_title; ?>">
-            <span class="element-invisible"><?php print $forum->icon_title; ?></span>
-          </div>
-          <div class="name"><a href="<?php print $forum->link; ?>"><?php print $forum->name; ?></a></div>
-          <?php if ($forum->description): ?>
-            <div class="description"><?php print $forum->description; ?></div>
-          <?php endif; ?>
-        <?php print str_repeat('</div>', $forum->depth); ?>
-      </div>
-      <?php if (!$forum->is_container): ?>
-        <div class="topics col-xs-3 col-sm-1">
-          <i class="fa fa-envelope-o"></i>
-          <?php print $forum->num_topics ?>
-          <?php if ($forum->new_topics): ?>
-            <span class="new_replies">
-            <i class="fa fa-envelope"></i>&nbsp;<a href="<?php print $forum->new_url; ?>"><?php print $forum->new_topics; ?></a>
-            </span>
-          <?php endif; ?>
+            <div class="icon forum-status-<?php print $forum->icon_class; ?>" title="<?php print $forum->icon_title; ?>">
+              <span class="element-invisible"><?php print $forum->icon_title; ?></span>
+            </div>
+            <div class="name"><a href="<?php print $forum->link; ?>"><?php print $forum->name; ?></a></div>
+            <?php if ($forum->description): ?>
+              <div class="description"><?php print $forum->description; ?></div>
+            <?php endif; ?>
+          <?php print str_repeat('</div>', $forum->depth); ?>
         </div>
-        <div class="posts  col-xs-3 col-sm-1 "><i class="fa fa-comments-o"></i>&nbsp;<?php print $forum->num_posts ?></div>
-        <div class="last-reply col-xs-6 col-sm-2"><i class="fa fa-history"></i> <?php print $forum->time ?></div>
+      <?php else: ?>        
+        <div class="forum col-xs-12 col-sm-10">
+          <?php print str_repeat('<div class="indent">', $forum->depth); ?>
+            <?php if($forum->awesome_icon): ?> 
+              <div class="awesome_icon">
+                <?php print $forum->awesome_icon; ?>
+              </div>
+            <?php endif; ?> 
+            <div class="icon forum-status-<?php print $forum->icon_class; ?>" title="<?php print $forum->icon_title; ?>">
+              <span class="element-invisible"><?php print $forum->icon_title; ?></span>
+            </div>
+            <div class="name"><a href="<?php print $forum->link; ?>"><?php print $forum->name; ?></a></div>
+            <?php if ($forum->description): ?>
+              <div class="description"><?php print $forum->description; ?></div>
+            <?php endif; ?>
+          <?php print str_repeat('</div>', $forum->depth); ?>
+        </div>
+        <div class=" posts last-reply col-xs-12 col-sm-2">
+          <div class="topics">
+            <i class="fa fa-envelope-o"></i>
+            <?php print $forum->num_topics ?>
+            <?php if ($forum->new_topics): ?>
+              <span class="new_replies">
+              <i class="fa fa-envelope"></i>&nbsp;<a href="<?php print $forum->new_url; ?>"><?php print $forum->new_topics; ?></a>
+              </span>
+            <?php endif; ?>
+          </div>
+          <div class="posts"><i class="fa fa-comments-o"></i>&nbsp;<?php print $forum->num_posts ?></div>
+          <div class="last-reply"><i class="fa fa-history"></i> <?php print $forum->time ?></div>
+        </div>
       <?php endif; ?>
     </div>
   <?php endforeach; ?>

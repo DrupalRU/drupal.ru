@@ -328,6 +328,7 @@ function alpha_preprocess_forum_topic_list(&$variables) {
  * @see theme_forum_submitted()
  */
 function alpha_preprocess_forum_submitted(&$variables) {
+  print_r($variables);
   $variables['topic']->time = $variables['time'];
   $variables['topic']->author = $variables['author'];
 }

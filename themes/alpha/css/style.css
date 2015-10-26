@@ -263,7 +263,9 @@ div.awesome_icon {
 }
 
 #forum .last-reply .fa,
-#forum .replies .fa {
+#forum .replies .fa,
+#forum .author .fa
+ {
   color: #ddd;
 }
 

@@ -49,7 +49,8 @@
     <?php if ($topic->moved): ?>
       <div class="moved col-xs-12 col-sm-5"><?php print $topic->message; ?></div>
     <?php else: ?>
-      <div class="replies col-xs-3 col-sm-2">
+      <div class="author col-xs-3 col-sm-2">
+        <i class="fa fa-user"></i>
         <?php print $topic->author; ?>
       </div>
       <div class="replies col-xs-3 col-sm-1">

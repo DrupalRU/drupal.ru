@@ -269,6 +269,12 @@ div.awesome_icon {
   color: #ddd;
 }
 
+@media (max-width: 767px) {
+  #forum  .last-reply {
+    text-align: right;
+  }
+}
+
 #forum .new_replies {
   padding-left: 5px;
 }

@@ -156,7 +156,9 @@ function alpha_preprocess_node(&$variables){
     $variables['theme_hook_suggestions'][] = 'node__teaser';
   }
   
-  print_r($variables);
+  if($variables['view_mode'] == 'alttracker') {
+    $variables['theme_hook_suggestions'][] = 'node__alttracker';
+  }
   
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $node->changed)));
 

@@ -56,10 +56,7 @@ function alpha_preprocess_page(&$variables){
     if($node->promote){
       $flag = '<i class="fa fa-star"></i>';
     }
-    $variables['title_prefix'] = array(
-      '#type' => 'markup',
-      '#markup' => '<div class="flag">' . $flag . '</div>',
-    );
+    $variables['title'] = '<div class="flag">' . $flag . '</div>' . $variables['title'];
   }
   if($variables['theme_hook_suggestions'][0] == 'page__user'){
     print_r($variables);

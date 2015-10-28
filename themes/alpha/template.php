@@ -343,11 +343,11 @@ function alpha_preprocess_forum_submitted(&$variables) {
 
 
 function alpha_alttracker($variables){
-  $output = '';
+  $output = '<div class="alttracker">';
   foreach($variables['nodes'] as $node){
     $output .= theme('alttracker_node', array('node' => $node));
   }
-  $hooks = theme_get_registry(FALSE);
+  $output .= '</div>';
   return $output;
 }
 /**

@@ -188,6 +188,11 @@ a:hover {
   color: orange;
 }
 
+.page-header .flag {
+  display: inline-block;
+  padding-right: 15px;
+  color: orange;
+}
 
 #node-details.affix,
 #node-details.affix-top {

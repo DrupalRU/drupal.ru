@@ -7,6 +7,7 @@
       <a href="<?php print $node->url; ?>"><?php print $title; ?></a>
       <?php if($term): ?>
       <div class="terms">
+        <i class="fa fa-tags"></i> 
         <?php print $term; ?>
       </div>
       <?php endif; ?>

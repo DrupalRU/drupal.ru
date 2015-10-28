@@ -382,6 +382,8 @@ function alpha_preprocess_alttracker_node(&$variables) {
     $variables['term'] = theme('links', array('links' => $terms_links));
   }
   
+  $variable['icon'] = theme('alttracker_icon', array('node' => $node));
+  
   // Gather node classes.
   $variables['classes_array'][] = drupal_html_class('node-' . $node->type);
   if ($variables['promote']) {

@@ -57,7 +57,7 @@ function alpha_preprocess_page(&$variables){
     $variables['title'] = '<div class="flag">' . $flag . '</div>' . drupal_get_title();
   }
   if($variables['theme_hook_suggestions'][0] == 'page__user'){
-    print_r($variables);
+    print_r($GLOBALS);
     if(isset($variables['page']['content']['system_main']['#account'])){
       $account = $variables['page']['content']['system_main']['#account'];  
     }

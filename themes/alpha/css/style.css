@@ -303,6 +303,20 @@ div.awesome_icon {
   color: #d34a32;
 }
 
+/* Alt tracker style */
+
+.alttracker .icon .fa {
+  color: orange;
+  padding-right: 5px;
+  font-size: 20px;
+  margin-top: 10px;  
+}
+
+
+.alttracker .new_replies .fa {
+  color: #d34a32;
+}
+
 /* Comments style*/
 
 .indented {

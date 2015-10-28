@@ -348,6 +348,8 @@ function alpha_alttracker($variables){
     $output .= theme('alttracker_node', array('node' => $node));
   }
   $output .= "test";
+  $hooks = theme_get_registry(FALSE);
+  print_r($hooks);
   return $output;
 }
 /**

@@ -370,6 +370,18 @@ function alpha_preprocess_alttracker_node(&$variables) {
   $variables['date']    = format_date($node->created);
   $variables['name']    = theme('username', array('account' => $node));
   
+  if(!empty($node->terms)){
+    $terms_links = array();
+      foreach($node->terms as $term){
+        $terms_links[] = array(
+          'title' => check_plain($term->name),
+          'href' => url("taxonomy/term/" . $term->tid),
+          'html' => true,
+        );
+      }
+    $variables['term'] = theme('links', array('links' => $terms_links));
+  }
+  
   // Gather node classes.
   $variables['classes_array'][] = drupal_html_class('node-' . $node->type);
   if ($variables['promote']) {

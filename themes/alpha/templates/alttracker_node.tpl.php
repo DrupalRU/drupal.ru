@@ -18,6 +18,7 @@
     </div>
     <div class="col-xs-10 title">
       <a href="<?php print $node->url; ?>"><?php print $title; ?></a>
+      <?php if($term) print $term; ?>
     </div>
   </div>
   <div class="author col-xs-4 col-sm-2 col-md-2 col-xs-offset-1 col-sm-offset-0">

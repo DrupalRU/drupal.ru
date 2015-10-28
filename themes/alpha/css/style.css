@@ -318,7 +318,10 @@ div.awesome_icon {
 }
 
 .alttracker .row {
-  padding: 5px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin: 0px;
 }
 
 .alttracker .row.even {

@@ -317,6 +317,14 @@ div.awesome_icon {
   color: #d34a32;
 }
 
+.alttracker .row {
+  padding: 5px;
+}
+
+.alttracker .row.even {
+  background-color: rgba(92, 196, 255, 0.1);
+}
+
 /* Comments style*/
 
 .indented {

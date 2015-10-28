@@ -13,9 +13,13 @@ function alpha_theme($existing, $type, $theme, $path) {
     'menu_user_blog_links' => array(
       'variables' => array('primary' => array(), 'secondary' => array()),
     ),
+    'alttracker_node' => array(
+      'variables' => array( 'node' => NULL ),
+      'template' => 'alttracker_node',
+    ),
   );
 }
- 
+
 /**
  * Implements hook_js_alter().
  */
@@ -336,4 +340,38 @@ function alpha_preprocess_forum_submitted(&$variables) {
   $variables['topic']->time = $variables['time'];
   $variables['topic']->author = $variables['author'];
 }
+
+
+/**
+ * Process variables for alttracker_node.tpl.php.
+ *
+ * The $variables array contains the following arguments:
+ * - $node: Node data.
+ *
+ * @see alttracker_node.tpl.php
+ */
+function alpha_preprocess_alttracker_node(&$variables) {
+  $node = $variables['node'];
+  $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $node->changed)));
+  $variables['url']     = $node->url;
+  $variables['title']   = check_plain($node->title);
+  $variables['sticky']  = $node->sticky;
+  $variables['promote'] = $node->promote;
+  $variables['status']  = $node->status;  
+  $variables['date']    = format_date($node->created);
+  $variables['name']    = theme('username', array('account' => $node));
+  
+  // Gather node classes.
+  $variables['classes_array'][] = drupal_html_class('node-' . $node->type);
+  if ($variables['promote']) {
+    $variables['classes_array'][] = 'node-promoted';
+  }
+  if ($variables['sticky']) {
+    $variables['classes_array'][] = 'node-sticky';
+  }
+  if (!$variables['status']) {
+    $variables['classes_array'][] = 'node-unpublished';
+  }
+}
+
 

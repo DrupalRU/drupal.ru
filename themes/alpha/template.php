@@ -57,7 +57,6 @@ function alpha_preprocess_page(&$variables){
     $variables['title'] = '<div class="flag">' . $flag . '</div>' . drupal_get_title();
   }
   if($variables['theme_hook_suggestions'][0] == 'page__user'){
-    print_r($GLOBALS);
     if(isset($variables['page']['content']['system_main']['#account'])){
       $account = $variables['page']['content']['system_main']['#account'];  
     }
@@ -67,6 +66,12 @@ function alpha_preprocess_page(&$variables){
 
     if(isset($variables['page']['content']['system_main']['recipient']['#value'])){
       $account = $variables['page']['content']['system_main']['recipient']['#value'];  
+    }
+    
+    if(empty($account)){
+       $path_elements = explode("/",$_SERVER['REDIRECT_URL']);
+       $uid = $path_elements[1];
+       $account = user_load($uid);
     }
     
     $picture = $account->picture;

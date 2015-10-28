@@ -359,7 +359,6 @@ function alpha_alttracker($variables){
  * @see alttracker_node.tpl.php
  */
 function alpha_preprocess_alttracker_node(&$variables) {
-  print_r($variables);
   $node = $variables['node'];
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $node->changed)));
   $variables['url']     = $node->url;

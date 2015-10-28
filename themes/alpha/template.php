@@ -345,9 +345,9 @@ function alpha_preprocess_forum_submitted(&$variables) {
 function alpha_alttracker($variables){
   $output = '';
   foreach($variables['nodes'] as $node){
-    $output = theme('alttracker_node', array('node' => $node));
+    $output .= theme('alttracker_node', array('node' => $node));
   }
-  
+  $output .= "test";
   return $output;
 }
 /**

@@ -71,6 +71,7 @@ function alpha_preprocess_page(&$variables){
     if(empty($account)){
        $path_elements = explode("/",$_SERVER['REDIRECT_URL']);
        $uid = $path_elements[1];
+       echo $uid;
        $account = user_load($uid);
     }
     

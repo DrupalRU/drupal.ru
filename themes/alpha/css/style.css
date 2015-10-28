@@ -328,6 +328,16 @@ div.awesome_icon {
   background-color: #f9f9f9;
 }
 
+@media (max-width: 767px) {
+  .alttracker  .last-reply {
+    text-align: right;
+  }
+  .alttracker  .title {  
+    min-height: 40px;
+  }
+}
+
+
 /* Comments style*/
 
 .indented {

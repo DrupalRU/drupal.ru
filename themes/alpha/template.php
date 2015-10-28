@@ -15,7 +15,7 @@ function alpha_theme($existing, $type, $theme, $path) {
     ),
     'alttracker_node' => array(
       'variables' => array( 'node' => NULL ),
-      'template' => 'alttracker_node',
+      'template' => 'alttracker-node',
     ),
   );
 }

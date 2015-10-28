@@ -46,6 +46,20 @@ function alpha_js_alter(&$javascript) {
  * @see page.tpl.php
  */
 function alpha_preprocess_page(&$variables){
+  if (isset($variables['node'])){
+    $node = $variables['node'];
+    $flag = '<i class="fa fa-envelope-o"></i>';
+    if($node->sticky){
+      $flag = '<i class="fa fa-flag"></i>';
+    }
+    if($node->promote){
+      $flag = '<i class="fa fa-star"></i>';
+    }
+    $variables['title_prefix'] = array(
+      '#type' => 'markup',
+      '#markup' => '<div class="flag">' . $flag . '</div>',
+    );
+  }
   if($variables['theme_hook_suggestions'][0] == 'page__user'){
     print_r($variables);
     if(isset($variables['page']['content']['system_main']['#account'])){
@@ -154,10 +168,6 @@ function alpha_preprocess_comment(&$variables){
  * Implements hook_preprocess_node().
  */
 function alpha_preprocess_node(&$variables){
-  $variables['title_prefix'] = array(
-    '#type' => 'markup',
-    '#markup' => 'TEST',
-  );
   $node = $variables['elements']['#node'];
   if ($variables['teaser']) {
     // Add a new item into the theme_hook_suggestions array.

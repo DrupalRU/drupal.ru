@@ -343,6 +343,8 @@ function alpha_preprocess_forum_submitted(&$variables) {
 
 
 function alpha_alttracker($variables){
+  drupal_add_css(drupal_get_path('module', 'alttracker') . '/alttracker.css');
+  
   $output = '<div class="alttracker">';
   foreach($variables['nodes'] as $node){
     $output .= theme('alttracker_node', array('node' => $node));

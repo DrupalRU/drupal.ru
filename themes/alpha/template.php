@@ -15,7 +15,7 @@ function alpha_theme($existing, $type, $theme, $path) {
     ),
     'alttracker_node' => array(
       'variables' => array( 'node' => NULL ),
-      'template' => 'alttrackerrow',
+      'template' => 'templates/alttracker_node',
     ),
   );
 }
@@ -349,7 +349,6 @@ function alpha_alttracker($variables){
   }
   $output .= "test";
   $hooks = theme_get_registry(FALSE);
-  print_r($hooks);
   return $output;
 }
 /**

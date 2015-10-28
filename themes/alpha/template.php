@@ -154,7 +154,10 @@ function alpha_preprocess_comment(&$variables){
  * Implements hook_preprocess_node().
  */
 function alpha_preprocess_node(&$variables){
-  $variables['title_prefix'] = 'test';
+  $variables['title_prefix'] = array(
+    '#type' => 'markup',
+    '#markup' => 'TEST',
+  );
   $node = $variables['elements']['#node'];
   if ($variables['teaser']) {
     // Add a new item into the theme_hook_suggestions array.

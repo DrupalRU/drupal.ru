@@ -331,6 +331,7 @@ function alpha_preprocess_forum_list(&$variables){
  * @see theme_forum_topic_list()
  */
 function alpha_preprocess_forum_topic_list(&$variables) {
+  print_r($variables);
 }
 
 /**

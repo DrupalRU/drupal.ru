@@ -48,6 +48,7 @@ function alpha_js_alter(&$javascript) {
 function alpha_preprocess_page(&$variables){
   if (isset($variables['node'])){
     $node = $variables['node'];
+    print_r($variables['title']);
     $flag = '<i class="fa fa-envelope-o"></i>';
     if($node->sticky){
       $flag = '<i class="fa fa-flag"></i>';

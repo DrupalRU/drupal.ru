@@ -49,12 +49,8 @@ function alpha_preprocess_page(&$variables){
   if (isset($variables['node'])){
     $node = $variables['node'];
     
+    $flag = theme('forum_icon', array('new_posts' =>FALSE, 'num_posts' => $node->comment_count, 'comment_mode' => $node->comment, 'sticky' => $node->sticky, 'first_new' => FALSE));
     
-    print_r($node);
-    $flag = '<i class="fa fa-envelope-o"></i>';
-    if($node->sticky){
-      $flag = '<i class="fa fa-flag"></i>';
-    }
     if($node->promote){
       $flag = '<i class="fa fa-star"></i>';
     }

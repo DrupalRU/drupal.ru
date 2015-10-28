@@ -347,7 +347,6 @@ function alpha_alttracker($variables){
   foreach($variables['nodes'] as $node){
     $output .= theme('alttracker_node', array('node' => $node));
   }
-  $output .= "test";
   $hooks = theme_get_registry(FALSE);
   return $output;
 }

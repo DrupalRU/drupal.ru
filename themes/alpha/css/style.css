@@ -390,6 +390,12 @@ blockquote {
 /* Bueditr style*/
 .bue-button {
   width: 32px;
+  border: 0px;
+  border-bottom: 1px solid #fff;
+}
+
+.bue-button:hover {
+  border-bottom: 1px solid #000;
 }
 
 .button-table img {
@@ -400,6 +406,10 @@ blockquote {
 }
 .button-table .input-key {
   width: 3em;
+}
+
+.bue-ui {
+  padding: 5px;
 }
 
 /* File attachment*/

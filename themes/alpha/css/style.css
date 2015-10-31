@@ -392,6 +392,10 @@ blockquote {
   width: 32px;
 }
 
+.button-table img {
+  width: 32px;
+}
+
 /* File attachment*/
 ul.file-links {
   padding-left: 0px;

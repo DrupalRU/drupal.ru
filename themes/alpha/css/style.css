@@ -412,6 +412,10 @@ blockquote {
   padding: 5px;
 }
 
+.bue-ui .separator {
+  color: #ddd;
+}
+
 /* File attachment*/
 ul.file-links {
   padding-left: 0px;

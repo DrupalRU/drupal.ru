@@ -387,6 +387,11 @@ blockquote {
   padding-top: 10px;
 }
 
+/* Bueditr style*/
+.bue-button {
+  width: 32px;
+}
+
 /* File attachment*/
 ul.file-links {
   padding-left: 0px;

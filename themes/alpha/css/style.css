@@ -398,6 +398,9 @@ blockquote {
 .button-table img.icon-selector-opener {
   width: auto;
 }
+.button-table .input-key {
+  width: 3em;
+}
 
 /* File attachment*/
 ul.file-links {

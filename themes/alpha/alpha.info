@@ -1,7 +1,7 @@
 name = Bootstrap Alpha for Drupal.ru
 description = A Bootstrap Sub-theme.
 core = 7.x
-base theme = bootstrap
+base theme = bootstrap_lite
 
 
 ;;;;;;;;;;;;;;;;;;;;;

@@ -155,7 +155,7 @@
         <?php print render($page['help']); ?>
       <?php endif; ?>
       <?php if (!empty($action_links)): ?>
-        <ul class="action-links"><?php print render($action_links); ?></ul>
+        <ul class="nav nav-pills action-links"><?php print render($action_links); ?></ul>
       <?php endif; ?>
       <?php print render($page['content']); ?>
     </section>

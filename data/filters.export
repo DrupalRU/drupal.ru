@@ -1,5 +1,6 @@
 [
     {
+        "format": 3,
         "name": "Редакторский формат",
         "status": 1,
         "weight": 0,
@@ -138,6 +139,7 @@
         ]
     },
     {
+        "format": 4,
         "name": "BBCode + HTML",
         "status": 1,
         "weight": -1,

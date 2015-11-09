@@ -1,0 +1,29 @@
+[
+    {
+        "name": "Картинки",
+        "machine_name": "vocabulary_5",
+        "description": "Иллюстрации к материалам сайта.",
+        "hierarchy": 1,
+        "module": "taxonomy",
+        "weight": -6,
+        "fields": [
+
+        ],
+        "instances": [
+
+        ],
+        "terms": [
+            {
+                "name": "Скриншоты интерфейса Drupal",
+                "description": "Drupal в действии. Примеры пользовательских и административных экранов.",
+                "weight": 1
+            },
+            {
+                "name": "Скриншоты сайтов на Drupal",
+                "description": "Дизайн и интерфейс сайтов на Drupal, пользовательские и административные страницы. ",
+                "weight": 2,
+                "path_alias": "screens"
+            }
+        ]
+    }
+]

@@ -2,19 +2,130 @@
     "vocabulary": "Форумы",
     "terms": [
         {
-            "name": "Разработка для Drupal"
+            "name": "Разработка для Drupal",
+            "path_alias": "forum\/devel",
+            "terms": [
+                {
+                    "name": "Программирование",
+                    "path_alias": "forum\/modules"
+                },
+                {
+                    "name": "Выставка сайтов",
+                    "path_alias": "forum\/showcase"
+                },
+                {
+                    "name": "Дизайн и вёрстка",
+                    "path_alias": "forum\/themes"
+                }
+            ]
         },
         {
-            "name": "Общие"
+            "name": "Общие",
+            "path_alias": "forum\/genenal",
+            "terms": [
+                {
+                    "name": "Обзоры и сравнения CMS",
+                    "path_alias": "forum\/talk"
+                },
+                {
+                    "name": "Свободные программы",
+                    "path_alias": "forum\/opensource"
+                },
+                {
+                    "name": "Хостинг",
+                    "path_alias": "forum\/hosting"
+                },
+                {
+                    "name": "Разное непонятное",
+                    "path_alias": "forum\/unknown"
+                },
+                {
+                    "name": "SEO",
+                    "path_alias": "forum\/SEO"
+                }
+            ]
         },
         {
-            "name": "Техподдержка Drupal"
+            "name": "Техподдержка Drupal",
+            "path_alias": "forum\/support",
+            "terms": [
+                {
+                    "name": "Системное окружение",
+                    "path_alias": "forum\/environment"
+                },
+                {
+                    "name": "Установка и настройка",
+                    "path_alias": "forum\/install"
+                },
+                {
+                    "name": "Безопасность",
+                    "path_alias": "forum\/security"
+                },
+                {
+                    "name": "Масштабируемость, нагрузка и быстродействие",
+                    "path_alias": "forum\/optimize"
+                },
+                {
+                    "name": "FAQ",
+                    "path_alias": "forum\/faq"
+                },
+                {
+                    "name": "Решение проблем"
+                }
+            ]
         },
         {
-            "name": "Drupal.ru"
+            "name": "Drupal.ru",
+            "path_alias": "forum\/ru",
+            "terms": [
+                {
+                    "name": "Сайт и проект Drupal.ru",
+                    "path_alias": "forum\/site"
+                },
+                {
+                    "name": "Работа по переводам UI и документации",
+                    "path_alias": "forum\/russian",
+                    "terms": [
+                        {
+                            "name": "Терминология",
+                            "path_alias": "forum\/russian\/glossary"
+                        }
+                    ]
+                },
+                {
+                    "name": "Создание документации WIKI.DRUPAL.RU",
+                    "path_alias": "forum\/wiki"
+                },
+                {
+                    "name": "Модераторский",
+                    "path_alias": "forum\/admin"
+                },
+                {
+                    "name": "Проекту нужна помощь"
+                },
+                {
+                    "name": "Сертификация на Drupal.ru",
+                    "path_alias": "forum\/certification"
+                }
+            ]
         },
         {
-            "name": "Размещение заказов"
+            "name": "Размещение заказов",
+            "path_alias": "forum\/commerce",
+            "terms": [
+                {
+                    "name": "Разработка и установка",
+                    "path_alias": "forum\/commerce\/install"
+                },
+                {
+                    "name": "Разработка модулей",
+                    "path_alias": "forum\/commerce\/devel"
+                },
+                {
+                    "name": "Поиск специалистов и работы",
+                    "path_alias": "forum\/commerce\/job"
+                }
+            ]
         }
     ]
 }

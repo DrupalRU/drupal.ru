@@ -1,0 +1,696 @@
+[
+    {
+        "name": "Форумы",
+        "machine_name": "vocabulary_1",
+        "description": "Обсуждения материалов сайта и вопросов по Drupal",
+        "hierarchy": 1,
+        "module": "forum",
+        "weight": -9,
+        "fields": {
+            "field_icon": {
+                "translatable": 0,
+                "entity_types": [
+
+                ],
+                "settings": {
+                    "max_length": 255
+                },
+                "storage": {
+                    "type": "field_sql_storage",
+                    "settings": [
+
+                    ],
+                    "module": "field_sql_storage",
+                    "active": 1,
+                    "details": {
+                        "sql": {
+                            "FIELD_LOAD_CURRENT": {
+                                "field_data_field_icon": {
+                                    "value": "field_icon_value",
+                                    "format": "field_icon_format"
+                                }
+                            },
+                            "FIELD_LOAD_REVISION": {
+                                "field_revision_field_icon": {
+                                    "value": "field_icon_value",
+                                    "format": "field_icon_format"
+                                }
+                            }
+                        }
+                    }
+                },
+                "foreign keys": {
+                    "format": {
+                        "table": "filter_format",
+                        "columns": {
+                            "format": "format"
+                        }
+                    }
+                },
+                "indexes": {
+                    "format": [
+                        "format"
+                    ]
+                },
+                "id": 15,
+                "field_name": "field_icon",
+                "type": "text",
+                "module": "text",
+                "active": 1,
+                "locked": 0,
+                "cardinality": 1,
+                "deleted": 0,
+                "columns": {
+                    "value": {
+                        "type": "varchar",
+                        "length": 255,
+                        "not null": false
+                    },
+                    "format": {
+                        "type": "varchar",
+                        "length": 255,
+                        "not null": false
+                    }
+                },
+                "bundles": {
+                    "taxonomy_term": [
+                        "vocabulary_1"
+                    ]
+                }
+            }
+        },
+        "instances": {
+            "field_icon": {
+                "label": "icon",
+                "widget": {
+                    "weight": 31,
+                    "type": "text_textfield",
+                    "module": "text",
+                    "active": 1,
+                    "settings": {
+                        "size": 60
+                    }
+                },
+                "settings": {
+                    "text_processing": 1,
+                    "user_register_form": false
+                },
+                "display": {
+                    "default": {
+                        "label": "inline",
+                        "type": "text_default",
+                        "weight": 0,
+                        "settings": [
+
+                        ],
+                        "module": "text"
+                    }
+                },
+                "required": 0,
+                "description": "",
+                "default_value": null,
+                "field_name": "field_icon",
+                "deleted": 0
+            }
+        },
+        "terms": [
+            {
+                "name": "Drupal User Groups (DrUGs)",
+                "description": "Региональные сообщества пользователей Drupal.",
+                "weight": 6,
+                "fields": {
+                    "field_icon": {
+                        "und": [
+                            {
+                                "value": "<i class=\"fa fa-users\"><\/i>",
+                                "format": 3,
+                                "safe_value": "<p><i class=\"fa fa-users\"><\/i><\/p>\n"
+                            }
+                        ]
+                    }
+                },
+                "terms": [
+                    {
+                        "name": "Drupal Юг",
+                        "description": "Южное сообщество друпалеров. <a href=http:\/\/drupalyug.ru>drupalyug.ru<\/a>. Контакты: <a href=\/username\/rxb>RxB<\/a>",
+                        "weight": 1,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-hand-peace-o\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-hand-peace-o\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "DrupalMsk",
+                        "description": "Moscow User Group. Мероприятия в Москве.",
+                        "weight": 0,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-hand-peace-o\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-hand-peace-o\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "DrupalSib",
+                        "description": "Drupal Siberia User Group — <a href=\"http:\/\/www.drupalsib.ru\/\">drupalsib.ru<\/a>.",
+                        "weight": 2,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-hand-peace-o\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-hand-peace-o\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Drupal.ru",
+                "description": "Все о сайте Drupal.ru, его проектах и проектах российского коммюнити Drupal ",
+                "weight": 4,
+                "fields": {
+                    "field_icon": {
+                        "und": [
+                            {
+                                "value": "<i class=\"fa fa-coffee\"><\/i>",
+                                "format": 3,
+                                "safe_value": "<p><i class=\"fa fa-coffee\"><\/i><\/p>\n"
+                            }
+                        ]
+                    }
+                },
+                "terms": [
+                    {
+                        "name": "Модераторский",
+                        "description": "Форум только для модераторов и работающих над проектом drupal.ru",
+                        "weight": 0,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-university\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-university\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Проекту нужна помощь",
+                        "description": "Только для <strong>некоммерческих<\/strong> проектов. Нередко бывает так, есть красивая идея и есть Drupal, на котором хочется её реализовать, но нет сил это сделать. Если это некоммерческий сервис, имеющий социальную направленность, например сайт opensource проекта - обратитесь на этот форум, постараемся помочь. Коммерческим проектам: обращайтесь <a href=\"\/forum\/commerce\/\">сюда<\/a>.",
+                        "weight": 4,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-beer\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-beer\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Работа по переводам UI и документации",
+                        "description": "Координация работ по локализации Drupal  и документации на русском.<br \/>\r\nСм. также: <a href=translation_rules>Регламенты по переводам<\/a>, <a href=glossary>Словарь терминов<\/a>, <a href=translators>Команда переводчиков<\/a>",
+                        "weight": 5,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-language\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-language\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        },
+                        "terms": [
+                            {
+                                "name": "Терминология",
+                                "description": "Обсуждение спорных терминов, задействованных в переводе интерфейса, составление глоссария. Начинайте отдельный топик для обсуждения каждого англоязычного термина, перевод которого вызывает сомнения. Словарь устоявшихся терминов: <a href=http:\/\/docs.drupal.ru\/glossary>docs.drupal.ru\/glossary<\/a>",
+                                "weight": 0,
+                                "fields": {
+                                    "field_icon": {
+                                        "und": [
+                                            {
+                                                "value": "<i class=\"fa fa-comments\"><\/i>",
+                                                "format": 3,
+                                                "safe_value": "<p><i class=\"fa fa-comments\"><\/i><\/p>\n"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Сайт и проект Drupal.ru",
+                        "description": "Для общения разработчиков *.drupal.ru. Организация встреч, пожелания и жалобы по работе сайта (хотя жаловаться лучше в <a href=\"http:\/\/dev.roleplay.ru\/tracker\/set_project.php?project_id=6\">багтрекер<\/a>).<br \/>См. также: <a href=\"http:\/\/dev.roleplay.ru\/tracker\/set_project.php?project_id=6\">багтрекер drupal.ru<\/a>, <a href=http:\/\/drupal.ru\/blog>дневники участников drupal.ru<\/a>.",
+                        "weight": 2,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-heart\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-heart\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Сертификация на Drupal.ru",
+                        "description": "Обсуждения связанные с созданием системы сертификации специалистов Друпал.",
+                        "weight": 1,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-graduation-cap\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-graduation-cap\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Создание документации WIKI.DRUPAL.RU",
+                        "description": "Работа сайта документации <a href=http:\/\/docs.drupal.ru>docs.drupal.ru (он же wiki.drupal.ru)<\/a>. Обсуждение структуры и содержания.",
+                        "weight": 3,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-archive\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-archive\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Курилка",
+                "description": "Разговоры не о Drupal. Темы о Drupal сюда лучше не постить, т.к. сообщения этого форума не попадают в трекер. <a href=\"\/rules\">Правила сайта<\/a> здесь действуют!",
+                "weight": 5,
+                "fields": {
+                    "field_icon": {
+                        "und": [
+                            {
+                                "value": "<i class=\"fa fa-hand-spock-o\"><\/i>",
+                                "format": 3,
+                                "safe_value": "<p><i class=\"fa fa-hand-spock-o\"><\/i><\/p>\n"
+                            }
+                        ]
+                    }
+                },
+                "terms": [
+                    {
+                        "name": "Мусор",
+                        "description": "Здесь живут тролли. Сообщения этого форума не попадают в трекер сайта и на страницу блогов.\r\nСюда попадают нарушающие правила материалы и всякий бред, который забыли удалить. ",
+                        "weight": 0,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-trash\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-trash\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Общие",
+                "description": "Обсуждения на общие темы, новости Drupal и других CMS, о строительство сайтов и новости свободного п\/о.",
+                "weight": 2,
+                "fields": {
+                    "field_icon": {
+                        "und": [
+                            {
+                                "value": "<i class=\"fa fa-comments-o\"><\/i>",
+                                "format": 3,
+                                "safe_value": "<p><i class=\"fa fa-comments-o\"><\/i><\/p>\n"
+                            }
+                        ]
+                    }
+                },
+                "terms": [
+                    {
+                        "name": "SEO",
+                        "description": "Раскрутка, оптимизация, банеры и инструментарии оптимизатора. Спам удаляется без предупреждения",
+                        "weight": 1,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-google\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-google\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Обзоры и сравнения CMS",
+                        "description": "Какую CMS выбрать для сайта? Подойдёт ли для моих задач Drupal? Не технические беседы о CMS, WEBпрограммировании, создании сайтов и пр. Примеры сайтов на Drupal<br>\r\nСм. также: <a href=http:\/\/drupal.org>drupal.org<\/a>, <a href=http:\/\/cmsinfo.org>cmsinfo.org<\/a>, <a href=http:\/\/www.cmsmatrix.org>cmsmatrix.org<\/a>, <a href=http:\/\/cmsmagazine.ru>cmsmagazine.ru<\/a>, <a href=WhyDrupal>обсуждение 'Почему вы выбрали Drupal?'<\/a>.",
+                        "weight": 2,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-cubes\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-cubes\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Разное непонятное",
+                        "description": "<b>Если непонятно, какому форуму соответствует новая тема, то помещаем её сюда.<\/b> Для офтопиков используйте свой дневник. Это не курилка! ",
+                        "weight": 4,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-smile-o\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-smile-o\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Свободные программы",
+                        "description": "Новинки, обсуждение проектов, вопросы лицензирования и любые другие темы о свободном программном обеспечении.<br \/>См. также: <a href=http:\/\/gnu.org>Проект GNU<\/a>.",
+                        "weight": 3,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-file-code-o\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-file-code-o\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Хостинг",
+                        "description": "О хостерах и хостинге, применительно к размещению Drupal и не только. <br \/>\r\nСм. также: <a href=http:\/\/hostobzor.ru>hostobzor.ru<\/a>.",
+                        "weight": 0,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-cloud\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-cloud\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Размещение заказов",
+                "description": "На разработку дизайна, вёрстку, установку, настройку сайтов на Drupal и программирование модулей.\r\nСлишком откровенная реклама не приветствуется\r\n",
+                "weight": 3,
+                "fields": {
+                    "field_icon": {
+                        "und": [
+                            {
+                                "value": "<i class=\"fa fa-rub\"><\/i>",
+                                "format": 3,
+                                "safe_value": "<p><i class=\"fa fa-rub\"><\/i><\/p>\n"
+                            }
+                        ]
+                    }
+                },
+                "terms": [
+                    {
+                        "name": "Поиск специалистов и работы",
+                        "description": "Объявления о поиске специалистов и предложении своих услуг.",
+                        "weight": 2,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-bullhorn\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-bullhorn\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Разработка и установка",
+                        "description": "Разработка сайтов, и их установка. Перед публикацией прочтите <a href=rules#commerce>правила<\/a>.",
+                        "weight": 0,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-tasks\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-tasks\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Разработка модулей",
+                        "description": "Здесь же оставляйте запросы на разработку модулей, тем и пр.",
+                        "weight": 1,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-plug\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-plug\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Разработка для Drupal",
+                "description": "Обсуждение разработок для Drupal, собственные разработки команды drupal.ru.<br \/>\r\nСм. также: <a href=http:\/\/devel.drupal.ru>devel.drupal.ru<\/a>, <a href=http:\/\/drupal.org\/forum\/19>форумы разработки на drupal.org<\/a>.\r\n",
+                "weight": 1,
+                "fields": {
+                    "field_icon": {
+                        "und": [
+                            {
+                                "value": "<i class=\"fa fa-drupal\"><\/i>",
+                                "format": 3,
+                                "safe_value": "<p><i class=\"fa fa-drupal\"><\/i><\/p>\n"
+                            }
+                        ]
+                    }
+                },
+                "terms": [
+                    {
+                        "name": "Выставка сайтов",
+                        "description": "Обзоры сайтов, использующих Drupal. Рунетовских и не только.<br \/>\r\n<strong>Сообщения без ссылки на сайт из этого форума удаляются!<\/strong><br \/>\r\nСм. также форум аналогичной тематики на drupal.org: <a href=\"http:\/\/drupal.org\/forum\/25\">Drupal showcase<\/a>",
+                        "weight": 0,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-briefcase\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-briefcase\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Дизайн и вёрстка",
+                        "description": "Программирование и вёрстка, в том числе тем оформления для Drupal.<br \/>\r\nВопросы установки и настройки готовых тем пишите  в <a href=\"\/forum\/support\">форумы поддержки<\/a>.",
+                        "weight": 2,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-picture-o\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-picture-o\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Программирование",
+                        "description": "Разработка модулей, сниппеты и др. вопросы программирования под Drupal, а также создание собственных шаблонов. Присылайте свои разработки. Вопросы по установке и настройке готовых модулей задавайте в <a href=forum\/install>Установка и настройка<\/a>.<br \/>Все по темам: <a href=taxonomy\/term\/151>примеры кода<\/a>, <a href=taxonomy\/term\/71>патчи и утилиты<\/a>, <a href=taxonomy\/term\/57>темы оформления<\/a>.",
+                        "weight": 1,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-code\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-code\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Техподдержка Drupal",
+                "description": "Техническая поддержка Drupal для русскоговорящих пользователей.<br \/>\r\nСм. также: <a href=http:\/\/drupal.org\/forum\/18>форумы техподдержки drupal.org<\/a>.",
+                "weight": 0,
+                "fields": {
+                    "field_icon": {
+                        "und": [
+                            {
+                                "value": "<i class=\"fa fa-life-ring\"><\/i>",
+                                "format": 3,
+                                "safe_value": "<p><i class=\"fa fa-life-ring\"><\/i><\/p>\n"
+                            }
+                        ]
+                    }
+                },
+                "terms": [
+                    {
+                        "name": "FAQ",
+                        "description": "Вопросы начинающих. Где найти документацию. Как сделать основные вещи и т.д.\r\n",
+                        "weight": 0,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-question-circle\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-question-circle\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Безопасность",
+                        "description": "Вопросы защиты скриптов и системного окружения, объявления о найденных уязвимостях и security-релизах Drupal.<br \/>\r\nНовости команды безопасности Drupal: <a href=http:\/\/drupal.org\/security>drupal.org\/security<\/a><br \/>\r\nСм. также: <a href=http:\/\/bugtrack.ru>bugtrack.ru<\/a>, <a href=http:\/\/securitylab.ru>securitylab.ru<\/a>.",
+                        "weight": 4,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-user-secret\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-user-secret\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Масштабируемость, нагрузка и быстродействие",
+                        "description": "Рецепты по увеличению быстродействия, масштабируемость движка, работа на сайтах с высоким трафиком.<br \/>\r\nСм. также <a href=\"http:\/\/groups.drupal.org\/high-performance\">новостную группу<\/a> и <a href=\"http:\/\/drupal.org\/forum\/49\">международный форум<\/a>.",
+                        "weight": 5,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-cogs\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-cogs\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Решение проблем",
+                        "description": "Все вопросы, связанные с ошибками, доработками (сниппеты, программирование, хаки и т.д.).\r\nКроме FAQ и проблем, которые можно решить стандартными(дополнительными модулями) и средствами Drupal.",
+                        "weight": 3,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-lightbulb-o\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-lightbulb-o\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        },
+                        "path_alias": "forum\/problem_solving"
+                    },
+                    {
+                        "name": "Системное окружение",
+                        "description": "Общие вопросы по Unix, Apache, MySQL, PostgreSQL, PHP, а также crontab, ssh и пр. - в общем о среде, в которой работает Drupal.<br>См. также: <a href=http:\/\/opennet.ru>opennet.ru<\/a>.<br>Все по темам: <a href=taxonomy\/term\/48>вопросы ОС<\/a>, <a href=taxonomy\/term\/45>вебсервер<\/a>, <a href=taxonomy\/term\/47>СУБД<\/a>.",
+                        "weight": 1,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-hdd-o\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-hdd-o\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Установка и настройка",
+                        "description": "Установка и настройка Drupal, дополнительных модулей к нему, вопросы русификации и дизайна.<br \/>См. также: <a href=http:\/\/drupal.ru\/node\/73>руководство администратора<\/a>, <a href=http:\/\/drupal.ru\/node\/69>FAQ по установке<\/a>, <a href=http:\/\/drupal.ru\/node\/29>FAQ по администрированию<\/a>, <a href=taxonomy\/term\/56>стандартные модули<\/a>, <a href=taxonomy\/term\/46>contrib-модули<\/a>.",
+                        "weight": 2,
+                        "fields": {
+                            "field_icon": {
+                                "und": [
+                                    {
+                                        "value": "<i class=\"fa fa-download\"><\/i>",
+                                        "format": 3,
+                                        "safe_value": "<p><i class=\"fa fa-download\"><\/i><\/p>\n"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]

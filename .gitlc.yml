@@ -3,3 +3,24 @@ code_style:
   rules:
     media: ignore
     scripts: ignore
+deploy:
+  master:
+    server: "karma.vps-private.net"
+    user: "drupal"
+    type:
+      name: "custom"
+      settings:
+        domain: "production.drupal.ru"
+        account-name: "root"
+        account-mail: "gor.martsen@gmail.com"
+        account-pass: "d6testing"
+        site-name: "Drupal.ru dev site"
+        site-mail: "noreply@production.drupal.ru"
+        database-user: "drupal_drupal"
+        database-name: "drupal_production"
+        database-pass: "Jrbn43t45t"
+        devel: TRUE
+    dir: '{home}/github'
+    init: '{deploy_dir}/scripts/init.sh'
+    before: '{deploy_dir}/scripts/before.sh'
+    after: '{deploy_dir}/scripts/after.sh'

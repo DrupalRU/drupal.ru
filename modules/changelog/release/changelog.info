@@ -1,6 +1,0 @@
-name = Changelog
-description = Simple changelog page for your site.
-package = DrupalRU
-version = "6.x-1.2"
-core = "6.x"
-project = "changelog"

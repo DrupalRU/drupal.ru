@@ -1,7 +1,0 @@
-2009-04-06 andypost
-- fixed drupal code-style
-- fixed russian titles in menu, translation done
-- added filter and check_markup for theme
-- added Edit link if user has right to edit record
-
-

@@ -95,3 +95,4 @@ drush vset admin_theme alpha
 
 
 echo "Please check http://$SETTINGS_DOMAIN"
+

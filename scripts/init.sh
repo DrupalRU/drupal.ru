@@ -89,4 +89,37 @@ drush vset theme_default alpha
 drush vset filestore_tmp_dir /tmp
 drush vset admin_theme alpha
 
+echo "Import META structure"
+
+echo "Import roles"
+drush ddi roles --file=$GITLC_DEPLOY_DIR/data/roles.export
+
+echo "Import filters"
+drush ddi filters --file=$GITLC_DEPLOY_DIR/data/filters.export
+
+echo "Import nodetypes"
+drush ddi node_types --file=$GITLC_DEPLOY_DIR/data/blog.node_types.export
+
+echo "Import taxonomy"
+drush ddi taxonomy --file=$GITLC_DEPLOY_DIR/data/vocabulary_1.taxonomy.export
+drush ddi taxonomy --file=$GITLC_DEPLOY_DIR/data/vocabulary_2.taxonomy.export
+drush ddi taxonomy --file=$GITLC_DEPLOY_DIR/data/vocabulary_3.taxonomy.export
+drush ddi taxonomy --file=$GITLC_DEPLOY_DIR/data/vocabulary_4.taxonomy.export
+drush ddi taxonomy --file=$GITLC_DEPLOY_DIR/data/vocabulary_5.taxonomy.export
+drush ddi taxonomy --file=$GITLC_DEPLOY_DIR/data/vocabulary_7.taxonomy.export
+drush ddi taxonomy --file=$GITLC_DEPLOY_DIR/data/vocabulary_8.taxonomy.export
+drush ddi taxonomy --file=$GITLC_DEPLOY_DIR/data/vocabulary_10.taxonomy.export
+
+echo "Import forum"
+drush ddi forum --file=$GITLC_DEPLOY_DIR/data/forum.export
+
+echo "Import menu structure"
+drush ddi menu --file=$GITLC_DEPLOY_DIR/data/main-menu.menu_links.export
+drush ddi menu --file=$GITLC_DEPLOY_DIR/data/user-menu.menu_links.export
+
+echo "Import theme settings"
+
+drush ddi variables --file=$GITLC_DEPLOY_DIR/data/theme_bootstrap_lite_settings.variables.export
+
+
 echo "Please check http://$SETTINGS_DOMAIN"

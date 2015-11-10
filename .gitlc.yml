@@ -24,7 +24,7 @@ deploy:
     init: '{deploy_dir}/scripts/init.sh'
     before: '{deploy_dir}/scripts/before.sh'
     after: '{deploy_dir}/scripts/after.sh'
-  master:
+  stage:
     server: "karma.vps-private.net"
     user: "stage"
     type:

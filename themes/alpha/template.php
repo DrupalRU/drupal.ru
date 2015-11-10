@@ -29,6 +29,22 @@ function alpha_js_alter(&$javascript) {
 }
 
 /**
+ * Implements hook_preprocess_html().
+ */
+function alpha_preprocess_html(&$vars) {
+  $html_tag = array(
+    '#type' => 'html_tag',
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'name' => 'viewport',
+      'content' => 'width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no',
+    ),
+  );
+  drupal_add_html_head($html_tag, 'viewport');
+}
+
+
+/**
  * Preprocess variables for page.tpl.php
  *
  * Most themes utilize their own copy of page.tpl.php. The default is located

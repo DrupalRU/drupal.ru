@@ -154,6 +154,9 @@ a:hover {
 }
 
 /* Node styles.*/
+.node p img {
+  margin: 10px;
+}
 .node .user-picture {
   text-align: center;
 }

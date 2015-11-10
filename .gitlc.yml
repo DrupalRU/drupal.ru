@@ -16,11 +16,11 @@ deploy:
         account-pass: "d6testing"
         site-name: "Drupal.ru dev site"
         site-mail: "noreply@production.drupal.ru"
-        database-user: "drupal_drupal"
+        database-user: "drupal_prod"
         database-name: "drupal_production"
         database-pass: "Jrbn43t45t"
         devel: TRUE
-    dir: '{home}/github'
+    dir: '{home}/github/{branch}'
     init: '{deploy_dir}/scripts/init.sh'
     before: '{deploy_dir}/scripts/before.sh'
     after: '{deploy_dir}/scripts/after.sh'

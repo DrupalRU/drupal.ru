@@ -254,8 +254,6 @@ function alpha_preprocess_user_profile(&$variables) {
   // Preprocess fields.
   field_attach_preprocess('user', $account, $variables['elements'], $variables);
 
-  
-//  print_r($variables);
   $variables['name'] = $account->name;
   $variables['realname'] = $account->realname;
   

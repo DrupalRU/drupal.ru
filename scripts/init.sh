@@ -44,7 +44,6 @@ git clone --branch master http://git.drupal.org/sandbox/andypost/1413472.git inn
 cd  inner_poll
 git checkout 7.x-1.x
 
-
 echo "Deploy module"
 
 cd  $SITEPATH/sites/all/modules/github

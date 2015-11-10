@@ -121,5 +121,4 @@ echo "Import theme settings"
 
 drush ddi variables --file=$GITLC_DEPLOY_DIR/data/theme_bootstrap_lite_settings.variables.export
 
-
 echo "Please check http://$SETTINGS_DOMAIN"

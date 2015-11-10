@@ -92,5 +92,4 @@ drush vset theme_default alpha
 drush vset filestore_tmp_dir /tmp
 drush vset admin_theme alpha
 
-
 echo "Please check http://$SETTINGS_DOMAIN"

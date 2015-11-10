@@ -4,6 +4,7 @@ code_style:
     media: ignore
     scripts: ignore
     data: ignore
+    README.md: ignore
 deploy:
   master:
     server: "karma.vps-private.net"

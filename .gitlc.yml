@@ -3,6 +3,7 @@ code_style:
   rules:
     media: ignore
     scripts: ignore
+    data: ignore
 deploy:
   master:
     server: "karma.vps-private.net"

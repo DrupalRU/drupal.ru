@@ -1,0 +1,375 @@
+<?php
+
+/**
+ * @file
+ * The quote module provides a filter and appropriate links that allow users to
+ * quote nodes and other comments in their own comments.
+ */
+
+/**
+ * Implements hook_help().
+ */
+function quote_help($path, $arg) {
+  if ($path == 'admin/config/content/quote') {
+    return t('<p>The quote filter allows users to quote other posts in their
+comments. Besides the following settings, the quote filter will need to be
+enabled for each <a href="!input-format">input format</a> (as required). Please
+make sure that the quote filter is arranged <em>after</em> any HTML filters and
+<em>before</em> the line break filter. For more information, please visit the
+<a href="!project-page">project page</a>.</p>', array('!input-format' => url('admin/config/content/formats'), '!project-page' => url('http://drupal.org/project/quote')));
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function quote_menu() {
+  $items = array();
+
+  $items['admin/config/content/quote'] = array(
+    'title' => 'Quote',
+    'description' => 'Configure the behaviour of the Quote module.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('quote_settings_form'),
+    'access arguments' => array('administer filters'),
+    'file' => 'quote.admin.inc'
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function quote_theme() {
+  return array(
+    'quote' => array(
+      'variables' => array(
+        'quote_content' => NULL,
+        'quote_author' => NULL,
+        'nest' => 0
+      )
+    )
+  );
+}
+
+/**
+ * Implements hook_init().
+ */
+function quote_init() {
+  $path = drupal_get_path('module', 'quote');
+
+  drupal_add_css($path . '/quote.css');
+
+  drupal_add_js(array('quote_nest' => _quote_variable_get('nest')), 'setting');
+  drupal_add_js($path . '/quote.js');
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function quote_node_view($node, $view_mode) {
+  if (user_access('post comments') && in_array($node->type, _quote_variable_get('node_types')) && $node->comment == COMMENT_NODE_OPEN && _quote_variable_get('node_link_display')) {
+    $links['quote'] = array(
+      'title' => t('Quote'),
+      'href' => "comment/reply/$node->nid",
+      'attributes' => array('title' => t('Quote this post in your reply.')),
+      'query' => array('quote' => 1),
+      'fragment' => 'comment-form'
+    );
+
+    $node->content['links']['comment']['#links']['quote'] = $links['quote'];
+    if (empty($node->content['links']['comment']['#attributes']['class'])) {
+      $node->content['links']['comment']['#attributes']['class'] = array('links', 'inline');
+    }
+    else {
+      $node->content['links']['comment']['#attributes']['class'] += array('links', 'inline');
+    }
+  }
+}
+
+/**
+ * Implements hook_comment_view().
+ */
+function quote_comment_view($comment) {
+  if (user_access('post comments')) {
+    $node = node_load($comment->nid);
+    if (in_array($node->type, _quote_variable_get('node_types')) && $node->comment == COMMENT_NODE_OPEN) {
+      $links['quote'] = array(
+        'title' => t('quote'),
+        'href' => "comment/reply/$node->nid/$comment->cid",
+        'attributes' => array('title' => t('Quote this post in your reply.')),
+        'query' => array('quote' => 1),
+        'fragment' => 'comment-form'
+      );
+
+      $comment->content['links']['comment']['#links']['quote'] = $links['quote'];
+      if (empty($comment->content['links']['comment']['#attributes']['class'])) {
+        $comment->content['links']['comment']['#attributes']['class'] = array('links', 'inline');
+      }
+      else {
+        $comment->content['links']['comment']['#attributes']['class'] += array('links', 'inline');
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function quote_form_alter(&$form, &$form_state, $form_id) {
+  // The explanation for the $_POST check is further below.
+  if ($form['#id'] == 'comment-form' && (isset($_POST['quote']) || isset($_GET['quote']) && $_GET['quote'])) {
+    $nid = arg(2);
+    $cid = arg(3);
+
+    if ($cid || _quote_variable_get('node_link_display')) {
+      extract(_quote_get_quoted_data($nid, $cid));
+      $quote = "[quote=$author]" . trim($content) . "[/quote]\n";
+
+      $language = $form['comment_body']['#language'];
+      if (array_key_exists('#default_value', $form['comment_body'][$language][0])) {
+        // Add quoted text and preserve existing content (signature etc.).
+        $form['comment_body'][$language][0]['#default_value'] = $quote . $form['comment_body'][$language][0]['#default_value'];
+      }
+      else {
+        $form['comment_body'][$language][0]['value']['#default_value'] = $quote . $form['comment_body'][$language][0]['value']['#default_value'];
+      }
+
+      // The Form API, by default, drops name-value pairs from the form's action
+      // URL (besides ?q=). Manually adding it back in as a hidden element.
+      $form['quote'] = array(
+        '#type' => 'hidden',
+        '#value' => 1
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_filter_info().
+ */
+function quote_filter_info() {
+  $filters['quote'] = array(
+    'title' => t('Converts [quote] tags into &lt;div&gt; tags. Must usually apply after HTML filters unless an exception is made for &lt;div&gt; tags.'),
+    'process callback' => '_quote_filter_process',
+    'tips callback' => 'quote_filter_tips'
+  );
+
+  return $filters;
+}
+
+/**
+ * Implements hook_filter_tips().
+ */
+function quote_filter_tips($delta, $format, $long = FALSE) {
+  if ($long) {
+    // These string are wrapped in <pre> tags.
+    $simple_quote = '[quote]This is a simple quote.[/quote]';
+    $attributed_quote = '[quote=Mr. Drupal]This is a quote with an attribution line.[/quote]';
+    $nested_quote = '[quote]I think she says it best...
+[quote=Ms. Quotation]This is a quote nested within another quote.[/quote]
+but you can\'t argue with
+[quote=Ms. Reply]The more quotes, the merrier.
+Just don\'t get too carried away.[/quote]
+And I have nothing more to say.[/quote]';
+    return t('<p>Quoted content can be placed between [quote] tags in order to
+      be displayed as an indented quote. Every [quote] tag <em>must</em> have a
+      corresponding [/quote] tag. For example:
+      <pre>!simple-quote</pre> is displayed as:</p>
+      !simple-quote-processed
+      <p>Additionally, there is an optional attribute which allows quotes to
+      specify the original author.
+      <pre>!attributed-quote</pre> is displayed as:</p>
+      !attributed-quote-processed
+      <p>Finally, multiple [quote] tags can be nested within one another. Just
+      remember that every [quote] tag <strong>must</strong> have a corresponding
+      [/quote] tag.
+      <pre>!nested-quote</pre> is displayed as:</p>
+      !nested-quote-processed', array(
+        '!simple-quote' => $simple_quote,
+        '!simple-quote-processed' => _quote_filter_process($simple_quote),
+        '!attributed-quote' => $attributed_quote,
+        '!attributed-quote-processed' => _quote_filter_process($attributed_quote),
+        '!nested-quote' => $nested_quote,
+        '!nested-quote-processed' => _quote_filter_process($nested_quote)
+      )
+    );
+  }
+  else {
+    return t('You may quote other posts using [quote] tags.');
+  }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function quote_views_api() {
+  return array(
+    'api' => 2,
+    'path' => drupal_get_path('module', 'quote') . '/views'
+  );
+}
+
+/**
+ * Implements hook_wysiwyg_include_directory(). Registers the wysiwyg directory
+ * as the one containing the plugin implementation.
+ *
+ * @param $type
+ *   The type of objects being collected: either 'plugins' or 'editors'.
+ * @return
+ *   A sub-directory of the implementing module that contains the corresponding
+ *   plugin files. This directory must only contain integration files for
+ *   Wysiwyg module.
+ */
+function quote_wysiwyg_include_directory($type) {
+  return 'wysiwyg';
+}
+
+/**
+ * Return a quote module variable.
+ *
+ * @param $name
+ *   The name of the variable to retrieve.
+ * @return
+ *   The value of the variable requested.
+ */
+function _quote_variable_get($name = NULL) {
+  static $variables = array();
+
+  if (empty($variables)) {
+    $defaults = array(
+      'node_types' => array('blog', 'story'),
+      'node_link_display' => 1,
+      'format' => 0,
+      'nest' => 2
+    );
+    $variables = variable_get('quote', array());
+    $variables = array_merge($defaults, $variables);
+  }
+
+  return $name ? $variables[$name] : $variables;
+}
+
+/**
+ * Helper function that returns node types.
+ */
+function _quote_get_node_types($keys = FALSE) {
+  if ($keys) {
+    return node_type_get_types();
+  }
+  else {
+    return node_type_get_names();
+  }
+}
+
+/**
+ * Replace [quote] tags with markup for display.
+ *
+ * @param $text
+ *   The text with the [quote] tags that need to be replaced with HTML tags.
+ *
+ * @return $text
+ *   Filtered text.
+ */
+function _quote_filter_process($text) {
+  if (stristr($text, '[quote')) {
+    // Single regexp with callback allowing for theme calls and quote
+    // nesting/recursion with regexp code from
+    // http://de.php.net/manual/en/function.preg-replace-callback.php#85836
+    $text = preg_replace_callback('#\[(quote.*?)]((?>\[(?!/?quote[^[]*?])|[^[]+|(?R))*)\[/quote]#is', '_quote_filter_process_callback', $text);
+  }
+
+  return $text;
+}
+
+/**
+ * Generate and return the quote theming for a quote occurence found by
+ * _quote_filter_process().
+ *
+ * @param $matches
+ *   The RegExp matches (for author and quote) found in _quote_filter_process().
+ *
+ * @return $output_quote
+ *   Themed quote.
+ */
+function _quote_filter_process_callback($matches) {
+  static $index = 0;
+
+  $nest = ++$index;
+
+  if (!stristr($matches[2], '[quote')) {
+    $index = 0;
+  }
+
+  $quote_author = trim(drupal_substr($matches[1], 6));
+  $quote_content = _quote_filter_process($matches[2]);
+
+  $quote_output = theme('quote', array('quote_content' => $quote_content, 'quote_author' => $quote_author, 'nest' => $nest));
+
+  return $quote_output;
+}
+
+/**
+ * Retrieve the content to be quoted.
+ *
+ * @param $nid
+ *   The referring node's ID.
+ * @param $cid
+ *   The referring comment's ID (if applying).
+ *
+ * @return array
+ *   The referring object's data as:
+ *   - content: Node body or comment content
+ *   - author : Display name of the object's author
+ */
+function _quote_get_quoted_data($nid, $cid = NULL) {
+  if ($cid) {
+    $quoted_comment = comment_load($cid);
+    $language = field_language('comment', $quoted_comment, 'comment_body', $quoted_comment->language);
+    $quoted_user_name = check_plain(format_username(user_load($quoted_comment->uid)));
+    $quoted_content = $quoted_comment->comment_body[$language][0]['value'];
+  }
+  else {
+    $quoted_node = node_load($nid);
+    $language = field_language('node', $quoted_node, 'body', $quoted_node->language);
+    $quoted_user_name = check_plain(format_username(user_load($quoted_node->uid)));
+    $quoted_content = $quoted_node->body[$language][0]['value'];
+  }
+
+  if (_quote_variable_get('format')) {
+    $quoted_content = check_markup($quoted_content, _quote_variable_get('format'), $language);
+  }
+
+  $ret = array('content' => $quoted_content, 'author' => $quoted_user_name);
+
+  return $ret;
+}
+
+/**
+ * Theme a quote with its content and author - default theme function.
+ *
+ * @param $vars
+ *   An associative array with the following structure:
+ *   'quote_content' - The quote's string content.
+ *   'quote_author'  - The name of the author of the quote.
+ *
+ * @return $quote_output
+ *   Themed quote.
+ */
+function theme_quote($vars) {
+  extract($vars);
+
+  $zebra = $nest & 1 ? 'odd' : 'even';
+  $quote_output = '<blockquote class="quote-msg quote-nest-' . $nest . ' ' . $zebra . '">';
+  if ($quote_author != '') {
+    $quote_author = t('%author wrote: ', array('%author' => $quote_author));
+  }
+  else {
+    $quote_author = t('Quote: ');
+  }
+  $quote_author = '<div class="quote-author">' . $quote_author . '</div>';
+  $quote_output .= $quote_author . $quote_content . '</blockquote>';
+
+  return $quote_output;
+}

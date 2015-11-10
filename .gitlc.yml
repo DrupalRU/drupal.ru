@@ -3,6 +3,8 @@ code_style:
   rules:
     media: ignore
     scripts: ignore
+    data: ignore
+    README.md: ignore
 deploy:
   master:
     server: "karma.vps-private.net"
@@ -24,7 +26,7 @@ deploy:
     init: '{deploy_dir}/scripts/init.sh'
     before: '{deploy_dir}/scripts/before.sh'
     after: '{deploy_dir}/scripts/after.sh'
-  master:
+  stage:
     server: "karma.vps-private.net"
     user: "stage"
     type:
@@ -44,3 +46,23 @@ deploy:
     init: '{deploy_dir}/scripts/init.sh'
     before: '{deploy_dir}/scripts/before.sh'
     after: '{deploy_dir}/scripts/after.sh'
+  pull_request:
+    robin:
+      domain: "{pr_number}.pr.drupal.ru"
+      server: "karma.vps-private.net"
+      user: "pr"
+      password: "NJRk4355d"
+    type:
+      name: "custom"
+      settings:
+        domain: "{domainname}"
+        account-name: "devel"
+        account-mail: "devel@drupal.ru"
+        account-pass: "drupalrutesting"
+        site-name: "PR {pr_number}"
+        site-mail: "noreply@{domainname}"
+    dir: '{home}/github/pr/{pr_number}'
+    init: '{deploy_dir}/scripts/init.sh'
+    before: '{deploy_dir}/scripts/before.sh'
+    after: '{deploy_dir}/scripts/after.sh'
+

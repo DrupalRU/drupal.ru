@@ -3,7 +3,7 @@ echo "INIT Drupal.ru"
 
 CORE='drupal-7'
 SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
-CONTRIB="acl bbcode bueditor captcha  comment_notify diff fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg quote simplenews smtp spambot tagadelic taxonomy_manager jquery_ui jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user"
+CONTRIB="acl bbcode bueditor captcha  comment_notify diff fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot tagadelic taxonomy_manager jquery_ui jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user"
 
 echo "Full site path: $SITEPATH"
 echo "Site core: $CORE"
@@ -70,6 +70,8 @@ mkdir -p $SITEPATH/sites/all/modules/local
 
 ln -s $GITLC_DEPLOY_DIR/modules/* $SITEPATH/sites/all/modules/local/
 
+echo "Enable quote"
+drush en -y quote
 
 echo "Install Font awesome"
 cd  $SITEPATH/sites/all/libraries
@@ -89,7 +91,7 @@ drush vset theme_default alpha
 drush vset filestore_tmp_dir /tmp
 drush vset admin_theme alpha
 
-echo "Import META structure"
+echo "Import META structure via module http://github.com/itpatrol/drupal_deploy."
 
 echo "Import roles"
 drush ddi roles --file=$GITLC_DEPLOY_DIR/data/roles.export
@@ -121,4 +123,13 @@ echo "Import theme settings"
 
 drush ddi variables --file=$GITLC_DEPLOY_DIR/data/theme_bootstrap_lite_settings.variables.export
 
+echo "Set default tmp"
+drush vset filestore_tmp_dir /tmp
+
+if [ "$SETTINGS_DEVEL" != "" ]; then
+  cd $SITEPATH
+  drudh dl devel
+  drusn -y en devel
+  drush generate-content 100
+  drush generate-users 100
 echo "Please check http://$SETTINGS_DOMAIN"

@@ -72,7 +72,7 @@ ln -s $GITLC_DEPLOY_DIR/modules/* $SITEPATH/sites/all/modules/local/
 
 
 echo "Install Font awesome"
-cd  $SITEPATH/sites/all/modules/libraries
+cd  $SITEPATH/sites/all/libraries
 git clone https://github.com/FortAwesome/Font-Awesome.git fontawesome
 
 

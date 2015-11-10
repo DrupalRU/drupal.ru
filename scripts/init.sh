@@ -89,7 +89,7 @@ drush vset theme_default alpha
 drush vset filestore_tmp_dir /tmp
 drush vset admin_theme alpha
 
-echo "Import META structure"
+echo "Import META structure via module http://github.com/itpatrol/drupal_deploy."
 
 echo "Import roles"
 drush ddi roles --file=$GITLC_DEPLOY_DIR/data/roles.export

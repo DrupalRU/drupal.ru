@@ -88,6 +88,7 @@ ln -s $GITLC_DEPLOY_DIR/themes/* $SITEPATH/sites/all/themes/local/
 echo "Set default theme"
 cd $SITEPATH
 
+echo "Set default variables"
 drush vset theme_default alpha
 drush vset filestore_tmp_dir /tmp
 drush vset admin_theme alpha

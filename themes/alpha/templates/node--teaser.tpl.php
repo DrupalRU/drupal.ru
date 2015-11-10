@@ -118,5 +118,6 @@
       <?php print render($content['links']); ?>
     </div>
   </div>
+  <div class="clearfix"></div>
   <hr>
 </div>

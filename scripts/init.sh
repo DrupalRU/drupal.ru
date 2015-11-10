@@ -3,7 +3,7 @@ echo "INIT Drupal.ru"
 
 CORE='drupal-7'
 SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
-CONTRIB="acl bbcode bueditor captcha  comment_notify diff fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot tagadelic taxonomy_manager jquery_ui jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user"
+CONTRIB="acl bbcode bueditor captcha  comment_notify diff fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg quote-7.x-1.x-dev simplenews smtp spambot tagadelic taxonomy_manager jquery_ui jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user"
 
 echo "Full site path: $SITEPATH"
 echo "Site core: $CORE"

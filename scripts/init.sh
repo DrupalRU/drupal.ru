@@ -3,7 +3,7 @@ echo "INIT Drupal.ru"
 
 CORE='drupal-7'
 SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
-CONTRIB="acl bbcode bueditor captcha  comment_notify diff fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg quote simplenews smtp spambot tagadelic taxonomy_manager token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user"
+CONTRIB="acl bbcode bueditor captcha  comment_notify diff fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg quote simplenews smtp spambot tagadelic taxonomy_manager jquery_ui jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user"
 
 echo "Full site path: $SITEPATH"
 echo "Site core: $CORE"
@@ -20,6 +20,9 @@ rm -rf drupal
 echo "Install DRUPAL"
 
 /usr/bin/drush site-install standard -y --root=$SITEPATH --account-name=$SETTINGS_ACCOUNT_NAME --account-mail=$SETTINGS_ACCOUNT_MAIL --account-pass=$SETTINGS_ACCOUNT_PASS --uri=http://$SETTINGS_DOMAIN --site-name="$SETTINGS_SITE_NAME" --site-mail=$SETTINGS_SITE_MAIL --db-url=mysql://$SETTINGS_DATABASE_USER:$SETTINGS_DATABASE_PASS@localhost/$SETTINGS_DATABASE_NAME
+
+echo "make libraries dir"
+mkdir $SITEPATH/sites/all/libraries
 
 echo "Install contrib modules"
 
@@ -67,13 +70,6 @@ mkdir -p $SITEPATH/sites/all/modules/local
 
 ln -s $GITLC_DEPLOY_DIR/modules/* $SITEPATH/sites/all/modules/local/
 
-echo "Install Jquery"
-cd $SITEPATH
-drush dl jquery_ui jquery_update
-mkdir $SITEPATH/sites/all/libraries
-
-cd $SITEPATH
-drush -y en jquery_ui jquery_update
 
 echo "Install Font awesome"
 cd  $SITEPATH/sites/all/modules/libraries

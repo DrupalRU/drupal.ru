@@ -1,0 +1,34 @@
+[
+    {
+        "name": "theme_bootstrap_lite_settings",
+        "value": {
+            "toggle_logo": 1,
+            "toggle_name": 1,
+            "toggle_slogan": 0,
+            "toggle_node_user_picture": 1,
+            "toggle_comment_user_picture": 1,
+            "toggle_comment_user_verification": 1,
+            "toggle_favicon": 1,
+            "toggle_main_menu": 1,
+            "toggle_secondary_menu": 1,
+            "default_logo": 0,
+            "logo_path": "files\/logo_6.png",
+            "logo_upload": "",
+            "default_favicon": 1,
+            "favicon_path": "",
+            "favicon_upload": "",
+            "bootstrap__active_tab": "edit-navbar",
+            "bootstrap_lite_container": "container",
+            "bootstrap_lite_datetime": 0,
+            "bootstrap_lite_breadcrumb_home": 1,
+            "bootstrap_lite_breadcrumb_title": 1,
+            "bootstrap_lite_navbar_position": "fixed-top",
+            "bootstrap_lite_navbar_menu_position": "navbar-right",
+            "bootstrap_lite_navbar_inverse": 0,
+            "bootstrap_lite_cdn": "3.3.5",
+            "bootstrap_lite_font_awesome": "4.4.0",
+            "bootstrap_lite_bootswatch": "",
+            "jquery_update_jquery_version": ""
+        }
+    }
+]

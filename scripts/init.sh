@@ -121,4 +121,13 @@ echo "Import theme settings"
 
 drush ddi variables --file=$GITLC_DEPLOY_DIR/data/theme_bootstrap_lite_settings.variables.export
 
+echo "Set default tmp"
+drush vset filestore_tmp_dir /tmp
+
+if [ "$SETTINGS_DEVEL" != "" ]; then
+  cd $SITEPATH
+  drudh dl devel
+  drusn -y en devel
+  drush generate-content 100
+  drush generate-users 100
 echo "Please check http://$SETTINGS_DOMAIN"

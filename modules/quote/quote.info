@@ -1,0 +1,16 @@
+name = Quote
+description = Allows users to quote posts or comments.
+core = 7.x
+configure = admin/config/content/quote
+
+dependencies[] = comment
+
+files[] = views/quote_handler_field_comment_link_quote.inc
+files[] = tests/quote.test
+
+; Information added by Drupal.org packaging script on 2015-10-23
+version = "7.x-1.1-beta3+1-dev"
+core = "7.x"
+project = "quote"
+datestamp = "1445628243"
+

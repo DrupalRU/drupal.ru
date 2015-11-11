@@ -10,7 +10,7 @@ drush dis quote -y
 rm -f $SITEPATH/sites/all/modules/local/quote
  
 drush dl quote-7.x-1.x-dev -y
-drush en quote
+drush en -y quote
 
 echo "Clean cache"
 drush cc all

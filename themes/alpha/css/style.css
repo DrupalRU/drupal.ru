@@ -389,7 +389,8 @@ blockquote {
   padding: 0 10px;
   margin: 0px;
   border-left: 2px solid #eee;
-  font-style: italic
+  font-style: italic;
+  font-size: inherit;
 }
 
 .bb-quote {

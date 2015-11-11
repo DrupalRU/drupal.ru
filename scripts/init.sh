@@ -132,4 +132,5 @@ if [ "$SETTINGS_DEVEL" != "" ]; then
   drusn -y en devel
   drush generate-content 100
   drush generate-users 100
+fi
 echo "Please check http://$SETTINGS_DOMAIN"

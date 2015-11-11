@@ -386,6 +386,10 @@ div.awesome_icon {
 blockquote {
   border-left-color: #d34a32;
   color:#888;
+  padding: 0 10px;
+  margin: 0px;
+  border-left: 2px solid #eee;
+  font-style: italic
 }
 
 .bb-quote {

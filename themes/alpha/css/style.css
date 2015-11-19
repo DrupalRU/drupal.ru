@@ -354,6 +354,11 @@ div.awesome_icon {
   padding-left: 25px;
 }
 
+.indented > .indented > .indented .indented {
+  padding-left: 0;
+  margin-left: 0;
+}
+
 .comment {
   padding: 15px 10px 10px;
   margin: 0px;

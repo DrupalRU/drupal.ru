@@ -129,7 +129,7 @@ drush vset filestore_tmp_dir /tmp
 if [ "$SETTINGS_DEVEL" != "" ]; then
   cd $SITEPATH
   drudh dl devel
-  drusn -y en devel
+  drusn -y en devel devel_generate
   drush generate-content 100
   drush generate-users 100
 fi

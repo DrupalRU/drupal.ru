@@ -127,6 +127,41 @@ exec('drush vset theme_default alpha');
 exec('drush vset filestore_tmp_dir /tmp');
 exec('drush vset admin_theme alpha');
 
+echo "Import META structure via module http://github.com/itpatrol/drupal_deploy.\n";
+
+echo "Import roles\n";
+
+exec('drush ddi roles --file=' . $data['github_path'] . '/data/roles.export');
+
+echo "Import filters\n";
+exec('drush ddi filters --file=' . $data['github_path'] . '/data/filters.export');
+
+echo "Import nodetypes\n";
+exec('drush ddi node_types --file=' . $data['github_path'] . '/data/blog.node_types.export');
+
+echo "Import taxonomy\n";
+exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_1.taxonomy.export');
+exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_2.taxonomy.export');
+exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_3.taxonomy.export');
+exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_4.taxonomy.export');
+exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_5.taxonomy.export');
+exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_7.taxonomy.export');
+exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_8.taxonomy.export');
+exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_10.taxonomy.export');
+
+echo "Import forum\n";
+exec('drush ddi forum --file=' . $data['github_path'] . '/data/forum.export');
+
+echo "Import menu structure\n";
+exec('drush ddi menu --file=' . $data['github_path'] . '/data/main-menu.menu_links.export');
+exec('drush ddi menu --file=' . $data['github_path'] . '/data/user-menu.menu_links.export');
+
+echo "Import theme settings\n";
+
+exec('drush ddi variables --file=' . $data['github_path'] . '/data/theme_bootstrap_lite_settings.variables.export');
+
+
+
 
 function get_promt_answer($promt){
   if (PHP_OS == 'WINNT' or !function_exists('readline')) {

@@ -51,6 +51,16 @@ if(!is_dir($data['site_path'] . '/sites/all/modules/contrib')){
 exec('drush dl ' . $data['contrib']);
 exec('drush en -y ' . $data['contrib']);
 
+
+echo "Install captcha_pack\n";
+exec('drush dl captcha_pack');
+exec('drush -y en ascii_art_captcha css_captcha');
+
+
+echo "Install other modules\n";
+exec('drush -y en imageapi_imagemagick pm_block_user pm_email_notify privatemsg_filter  views_ui book forum');
+
+
 function get_promt_answer($promt){
   if (PHP_OS == 'WINNT' or !function_exists('readline')) {
     echo $promt .': ';

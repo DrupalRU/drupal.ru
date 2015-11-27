@@ -39,10 +39,15 @@ echo "Install DRUPAL\n";
 exec('drush site-install standard -y --root=' . $data['site_path'] . ' --account-name=' . $data['account_name'] . ' --account-mail=' . $data['account_email'] . ' --account-pass=' . $data['account_pass'] . ' --uri=http://' . $data['domain'] . ' --site-name="' . $data['site_name'] . '" --site-mail=' . $data['account_email'] . ' --db-url=mysql://' . $data['mysql_user'] . ':' . $data['mysql_pass'] . '@localhost/' . $data['mysql_db']);
 
 echo "make libraries dir\n";
-mkdir($data['site_path'] . '/sites/all/libraries', 0755, TRUE);
+if(!is_dir($data['site_path'] . '/sites/all/libraries')){
+  mkdir($data['site_path'] . '/sites/all/libraries', 0755, TRUE);
+}
 
 echo "Install contrib modules\n";
-mkdir($data['site_path'] . '/sites/all/modules/contrib', 0755, TRUE);
+if(!is_dir($data['site_path'] . '/sites/all/modules/contrib')){
+  mkdir($data['site_path'] . '/sites/all/modules/contrib', 0755, TRUE);
+}
+
 exec('drush dl ' . $data['contrib']);
 exec('drush en -y ' . $data['contrib']);
 

@@ -61,6 +61,39 @@ echo "Install other modules\n";
 exec('drush -y en imageapi_imagemagick pm_block_user pm_email_notify privatemsg_filter  views_ui book forum');
 
 
+echo "Prepare github based modules dir\n";
+
+if(!is_dir($data['site_path'] . '/sites/all/modules/github')){
+  mkdir($data['site_path'] . '/sites/all/modules/github', 0755, TRUE);
+}
+
+echo "Install inner poll \n";
+
+chdir($data['site_path'] . '/sites/all/modules/github');
+exec('git clone --branch master http://git.drupal.org/sandbox/andypost/1413472.git inner_poll');
+
+chdir($data['site_path'] . '/sites/all/modules/github/inner_poll');
+exec('git checkout 7.x-1.x');
+
+echo "Deploy module \n";
+
+chdir($data['site_path'] . '/sites/all/modules/github');
+exec('git clone https://github.com/itpatrol/drupal_deploy.git');
+
+chdir($data['site_path'] . '/sites/all/modules/github/drupal_deploy');
+exec('git checkout 7.x');
+
+echo "Altpager\n";
+chdir($data['site_path'] . '/sites/all/modules/github');
+exec('git clone https://github.com/itpatrol/altpager');
+
+echo "Alttracker\n";
+chdir($data['site_path'] . '/sites/all/modules/github');
+exec('git clone https://github.com/itpatrol/alttracker');
+
+chdir($data['site_path']);
+exec('drush -y en inner_poll altpager alttracker drupal_deploy');
+
 function get_promt_answer($promt){
   if (PHP_OS == 'WINNT' or !function_exists('readline')) {
     echo $promt .': ';

@@ -103,6 +103,29 @@ exec('ln -s ' . $data['github_path'] . '/modules/* ' . $data['site_path'] . '/si
 
 
 
+echo "Install Latest Font awesome\n";
+chdir($data['site_path'] . '/sites/all/libraries');
+exec('git clone https://github.com/FortAwesome/Font-Awesome.git fontawesome');
+
+echo "Install drupal.ru themes\n";
+if(!is_dir($data['site_path'] . '/sites/all/themes/local')){
+  mkdir($data['site_path'] . '/sites/all/themes/local', 0755, TRUE);
+}
+
+exec('ln -s ' . $data['github_path'] . '/themes/* ' . $data['site_path'] . '/sites/all/themes/local/');
+
+echo "Set default theme\n";
+
+chdir($data['site_path']);
+exec('drush -y en alpha');
+
+echo "Set default variables\n";
+
+exec('drush vset theme_default alpha');
+exec('drush vset filestore_tmp_dir /tmp');
+exec('drush vset admin_theme alpha');
+
+
 function get_promt_answer($promt){
   if (PHP_OS == 'WINNT' or !function_exists('readline')) {
     echo $promt .': ';

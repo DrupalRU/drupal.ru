@@ -27,7 +27,7 @@ chdir($data['site_path']);
 echo "Download DRUPAL.\n";
 exec('drush dl ' . $data['core'] . ' --drupal-project-rename="drupal"');
 exec('rsync -a ' . $data['site_path'] . '/drupal/ ' . $data['site_path']);
-exec('rm -rf' . $data['site_path'] . '/drupal');
+exec('rm -rf ' . $data['site_path'] . '/drupal');
 
 echo "Install DRUPAL\n";
 

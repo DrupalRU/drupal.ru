@@ -168,7 +168,7 @@ exec('drush ddi variables --file=' . $data['github_path'] . '/data/theme_bootstr
 
 echo "Generate content and users\n";
 exec('drush dl devel');
-exec('drusn -y en devel devel_generate');
+exec('drush -y en devel devel_generate');
 exec('drush generate-content 100');
 exec('drush generate-users 100');
 

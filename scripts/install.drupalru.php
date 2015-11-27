@@ -18,7 +18,7 @@ $data['core'] = 'drupal-7';
 $data['site_name'] = 'Drupal.ru Dev version';
 
 // Contrib modules list.
-$data['contrib'] = 'acl bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot tagadelic taxonomy_manager jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user';
+$data['contrib'] = 'acl bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot tagadelic taxonomy_manager jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user quote-7.x-1.x-dev';
 
 
 echo "Full site path: " . $data['site_path'] . "\n";
@@ -93,6 +93,15 @@ exec('git clone https://github.com/itpatrol/alttracker');
 
 chdir($data['site_path']);
 exec('drush -y en inner_poll altpager alttracker drupal_deploy');
+
+echo "Install drupal.ru modules\n";
+if(!is_dir($data['site_path'] . '/sites/all/modules/local')){
+  mkdir($data['site_path'] . '/sites/all/modules/local', 0755, TRUE);
+}
+
+exec('ln -s ' . $data['github_path'] . '/modules/* ' . $data['site_path'] . '/sites/all/modules/local/');
+
+
 
 function get_promt_answer($promt){
   if (PHP_OS == 'WINNT' or !function_exists('readline')) {

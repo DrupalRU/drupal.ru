@@ -166,6 +166,11 @@ echo "Import theme settings\n";
 exec('drush ddi variables --file=' . $data['github_path'] . '/data/theme_bootstrap_lite_settings.variables.export');
 
 
+echo "Generate content and users\n";
+exec('drush dl devel');
+exec('drusn -y en devel devel_generate');
+exec('drush generate-content 100');
+exec('drush generate-users 100');
 
 
 function get_promt_answer($promt){

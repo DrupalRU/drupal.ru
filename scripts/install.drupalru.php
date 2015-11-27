@@ -105,6 +105,8 @@ exec('ln -s ' . $data['github_path'] . '/modules/* ' . $data['site_path'] . '/si
 
 echo "Install Latest Font awesome\n";
 chdir($data['site_path'] . '/sites/all/libraries');
+// Remove predownloaded fontawesome by installation process
+exec('rm -rf ' . $data['site_path'] . '/sites/all/libraries/fontawesome');
 exec('git clone https://github.com/FortAwesome/Font-Awesome.git fontawesome');
 
 echo "Install drupal.ru themes\n";

@@ -51,6 +51,11 @@ if(!is_dir($data['site_path'] . '/sites/all/modules/contrib')){
 exec('drush dl ' . $data['contrib']);
 exec('drush en -y ' . $data['contrib']);
 
+echo "Download geshi library\n";
+chdir($data['site_path'] . '/sites/all/libraries');
+exec('wget \'http://sourceforge.net/projects/geshi/files/geshi/GeSHi%201.0.8.10/GeSHi-1.0.8.10.tar.gz/download\' -O geshfilter.tar.gz');
+exec('tar -xzpf geshfilter.tar.gz');
+exec('rm -f geshfilter.tar.gz');
 
 echo "Install captcha_pack\n";
 exec('drush dl captcha_pack');

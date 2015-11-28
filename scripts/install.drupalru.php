@@ -165,11 +165,13 @@ echo "Import theme settings\n";
 
 exec('drush ddi variables --file=' . $data['github_path'] . '/data/theme_bootstrap_lite_settings.variables.export');
 
+echo "Disable drupal_deploy\n";
+exec('drush dis -y drupal_deploy');
 
 echo "Generate content and users\n";
 exec('drush dl devel');
 exec('drush -y en devel devel_generate');
-exec('drush generate-content 100');
+exec('drush generate-content 100 100');
 exec('drush generate-users 100');
 
 

@@ -25,8 +25,6 @@ echo "Full site path: " . $data['site_path'] . "\n";
 echo "Site core: " . $data['core'] . "\n";
 echo "Github DIR: " . $data['github_path'] . "\n";
 
-print_r($data);
-
 chdir($data['site_path']);
 
 echo "Download DRUPAL.\n";
@@ -163,7 +161,7 @@ exec('drush ddi menu --file=' . $data['github_path'] . '/data/user-menu.menu_lin
 
 echo "Import theme settings\n";
 
-exec('drush ddi variables --file=' . $data['github_path'] . '/data/theme_bootstrap_lite_settings.variables.export');
+exec('drush ddi variables --file=' . $data['github_path'] . '/data/theme_alpha_settings.variables.export');
 
 echo "Disable drupal_deploy\n";
 exec('drush dis -y drupal_deploy');

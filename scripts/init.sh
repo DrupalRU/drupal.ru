@@ -121,7 +121,7 @@ drush ddi menu --file=$GITLC_DEPLOY_DIR/data/user-menu.menu_links.export
 
 echo "Import theme settings"
 
-drush ddi variables --file=$GITLC_DEPLOY_DIR/data/theme_bootstrap_lite_settings.variables.export
+drush ddi variables --file=$GITLC_DEPLOY_DIR/data/theme_alpha_settings.variables.export
 
 echo "Set default tmp"
 drush vset filestore_tmp_dir /tmp

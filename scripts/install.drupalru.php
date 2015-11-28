@@ -173,6 +173,11 @@ exec('drush generate-content 100');
 exec('drush generate-users 100');
 
 
+echo "Disable toolbar, overlay modules\n";
+
+exec('drush dis -y overlay, toolbar');
+
+
 function get_promt_answer($promt){
   if (PHP_OS == 'WINNT' or !function_exists('readline')) {
     echo $promt .': ';

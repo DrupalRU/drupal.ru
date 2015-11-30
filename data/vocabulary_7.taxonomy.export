@@ -47,12 +47,17 @@
                 "weight": 1
             },
             {
-                "name": "Drupal HEAD (разработка ветки 8.x)",
+                "name": "Drupal 8.*",
                 "description": "",
                 "weight": 0,
                 "synonyms": [
                     "Drupal 4.3.*"
                 ]
+            },
+            {
+                "name": "Drupal HEAD (разработка ветки 9.x)",
+                "description": "",
+                "weight": -1
             }
         ]
     }

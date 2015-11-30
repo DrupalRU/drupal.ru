@@ -1,12 +1,59 @@
 [
     {
         "menu_name": "user-menu",
-        "weight": 9,
+        "weight": 0,
+        "link_title": "Create new account",
+        "link_path": "user\/register",
+        "hidden": -1,
+        "has_children": 0,
+        "expanded": 0,
+        "options": [
+
+        ],
+        "module": "system",
+        "customized": 0,
+        "updated": 0
+    },
+    {
+        "menu_name": "user-menu",
+        "weight": -47,
+        "link_title": "Log in",
+        "link_path": "user\/login",
+        "hidden": 0,
+        "has_children": 0,
+        "expanded": 0,
+        "options": {
+            "attributes": {
+                "title": ""
+            }
+        },
+        "module": "menu",
+        "customized": 1,
+        "updated": 0
+    },
+    {
+        "menu_name": "user-menu",
+        "weight": 0,
+        "link_title": "Request new password",
+        "link_path": "user\/password",
+        "hidden": -1,
+        "has_children": 0,
+        "expanded": 0,
+        "options": [
+
+        ],
+        "module": "system",
+        "customized": 0,
+        "updated": 0
+    },
+    {
+        "menu_name": "user-menu",
+        "weight": -46,
         "link_title": "Administration",
         "link_path": "admin",
         "hidden": 0,
         "has_children": 1,
-        "expanded": 0,
+        "expanded": 1,
         "options": {
             "attributes": {
                 "title": ""
@@ -278,59 +325,6 @@
                         ],
                         "module": "system",
                         "customized": 0,
-                        "updated": 0
-                    }
-                ]
-            },
-            {
-                "menu_name": "user-menu",
-                "weight": -39,
-                "link_title": "Content",
-                "link_path": "admin\/content",
-                "hidden": 0,
-                "has_children": 1,
-                "expanded": 0,
-                "options": {
-                    "attributes": {
-                        "title": "Administer content and comments."
-                    }
-                },
-                "module": "system",
-                "customized": 1,
-                "updated": 0,
-                "children": [
-                    {
-                        "menu_name": "user-menu",
-                        "weight": -50,
-                        "link_title": "Content management",
-                        "link_path": "admin\/content",
-                        "hidden": 0,
-                        "has_children": 0,
-                        "expanded": 0,
-                        "options": {
-                            "attributes": {
-                                "title": "Manage your site's content."
-                            }
-                        },
-                        "module": "system",
-                        "customized": 1,
-                        "updated": 0
-                    },
-                    {
-                        "menu_name": "user-menu",
-                        "weight": -49,
-                        "link_title": "Comments",
-                        "link_path": "admin\/content\/comment",
-                        "hidden": 0,
-                        "has_children": 0,
-                        "expanded": 0,
-                        "options": {
-                            "attributes": {
-                                "title": "List and edit site comments and the comment moderation queue."
-                            }
-                        },
-                        "module": "system",
-                        "customized": 1,
                         "updated": 0
                     }
                 ]
@@ -679,23 +673,6 @@
                             {
                                 "menu_name": "user-menu",
                                 "weight": 0,
-                                "link_title": "Quote",
-                                "link_path": "admin\/config\/content\/quote",
-                                "hidden": 0,
-                                "has_children": 0,
-                                "expanded": 0,
-                                "options": {
-                                    "attributes": {
-                                        "title": "Configure the behaviour of the Quote module."
-                                    }
-                                },
-                                "module": "system",
-                                "customized": 0,
-                                "updated": 0
-                            },
-                            {
-                                "menu_name": "user-menu",
-                                "weight": 0,
                                 "link_title": "Text formats",
                                 "link_path": "admin\/config\/content\/formats",
                                 "hidden": 0,
@@ -771,129 +748,6 @@
                                         "module": "system",
                                         "customized": 0,
                                         "updated": 0
-                                    },
-                                    {
-                                        "menu_name": "user-menu",
-                                        "weight": 0,
-                                        "link_title": "GeSHi Filter",
-                                        "link_path": "admin\/config\/content\/formats\/geshifilter",
-                                        "hidden": 0,
-                                        "has_children": 0,
-                                        "expanded": 0,
-                                        "options": {
-                                            "attributes": {
-                                                "title": "Configure the GeSHi filter."
-                                            }
-                                        },
-                                        "module": "system",
-                                        "customized": 0,
-                                        "updated": 0,
-                                        "children": [
-                                            {
-                                                "menu_name": "user-menu",
-                                                "weight": 10,
-                                                "link_title": "Filter conflicts",
-                                                "link_path": "admin\/config\/content\/formats\/geshifilter\/filterconflicts",
-                                                "hidden": -1,
-                                                "has_children": 0,
-                                                "expanded": 0,
-                                                "options": {
-                                                    "attributes": {
-                                                        "title": "Information on possible conflicts with other filters."
-                                                    }
-                                                },
-                                                "module": "system",
-                                                "customized": 0,
-                                                "updated": 0
-                                            },
-                                            {
-                                                "menu_name": "user-menu",
-                                                "weight": 0,
-                                                "link_title": "General settings",
-                                                "link_path": "admin\/config\/content\/formats\/geshifilter\/general",
-                                                "hidden": -1,
-                                                "has_children": 0,
-                                                "expanded": 0,
-                                                "options": {
-                                                    "attributes": {
-                                                        "title": "General GeSHi filter settings."
-                                                    }
-                                                },
-                                                "module": "system",
-                                                "customized": 0,
-                                                "updated": 0
-                                            },
-                                            {
-                                                "menu_name": "user-menu",
-                                                "weight": 0,
-                                                "link_title": "Languages",
-                                                "link_path": "admin\/config\/content\/formats\/geshifilter\/languages",
-                                                "hidden": -1,
-                                                "has_children": 0,
-                                                "expanded": 0,
-                                                "options": {
-                                                    "attributes": {
-                                                        "title": "Enable the desired languages and configure their settings."
-                                                    }
-                                                },
-                                                "module": "system",
-                                                "customized": 0,
-                                                "updated": 0,
-                                                "children": [
-                                                    {
-                                                        "menu_name": "user-menu",
-                                                        "weight": 1,
-                                                        "link_title": "All",
-                                                        "link_path": "admin\/config\/content\/formats\/geshifilter\/languages\/all",
-                                                        "hidden": -1,
-                                                        "has_children": 0,
-                                                        "expanded": 0,
-                                                        "options": {
-                                                            "attributes": {
-                                                                "title": "Show all the available languages"
-                                                            }
-                                                        },
-                                                        "module": "system",
-                                                        "customized": 0,
-                                                        "updated": 0
-                                                    },
-                                                    {
-                                                        "menu_name": "user-menu",
-                                                        "weight": 6,
-                                                        "link_title": "Disabled",
-                                                        "link_path": "admin\/config\/content\/formats\/geshifilter\/languages\/disabled",
-                                                        "hidden": -1,
-                                                        "has_children": 0,
-                                                        "expanded": 0,
-                                                        "options": {
-                                                            "attributes": {
-                                                                "title": "Show the disabled languages"
-                                                            }
-                                                        },
-                                                        "module": "system",
-                                                        "customized": 0,
-                                                        "updated": 0
-                                                    },
-                                                    {
-                                                        "menu_name": "user-menu",
-                                                        "weight": 3,
-                                                        "link_title": "Enabled",
-                                                        "link_path": "admin\/config\/content\/formats\/geshifilter\/languages\/enabled",
-                                                        "hidden": -1,
-                                                        "has_children": 0,
-                                                        "expanded": 0,
-                                                        "options": {
-                                                            "attributes": {
-                                                                "title": "Show the enabled languages"
-                                                            }
-                                                        },
-                                                        "module": "system",
-                                                        "customized": 0,
-                                                        "updated": 0
-                                                    }
-                                                ]
-                                            }
-                                        ]
                                     }
                                 ]
                             },
@@ -908,40 +762,6 @@
                                 "options": {
                                     "attributes": {
                                         "title": "AJAXifies comments on site."
-                                    }
-                                },
-                                "module": "system",
-                                "customized": 0,
-                                "updated": 0
-                            },
-                            {
-                                "menu_name": "user-menu",
-                                "weight": 0,
-                                "link_title": "Ridiculously Responsive Social Sharing Buttons",
-                                "link_path": "admin\/config\/content\/rrssb",
-                                "hidden": 0,
-                                "has_children": 0,
-                                "expanded": 0,
-                                "options": {
-                                    "attributes": {
-                                        "title": "Configure the Ridiculously Responsive Social Sharing Buttons to select which social buttons you would like to enable."
-                                    }
-                                },
-                                "module": "system",
-                                "customized": 0,
-                                "updated": 0
-                            },
-                            {
-                                "menu_name": "user-menu",
-                                "weight": 0,
-                                "link_title": "Alternative tracker Settings",
-                                "link_path": "admin\/config\/content\/alttracker",
-                                "hidden": 0,
-                                "has_children": 0,
-                                "expanded": 0,
-                                "options": {
-                                    "attributes": {
-                                        "title": "Configure alternative tracker behaviour."
                                     }
                                 },
                                 "module": "system",
@@ -4186,24 +4006,7 @@
                                 ],
                                 "module": "system",
                                 "customized": 0,
-                                "updated": 0,
-                                "children": [
-                                    {
-                                        "menu_name": "user-menu",
-                                        "weight": 0,
-                                        "link_title": "Add block",
-                                        "link_path": "admin\/structure\/block\/list\/bootstrap_lite\/add",
-                                        "hidden": -1,
-                                        "has_children": 0,
-                                        "expanded": 0,
-                                        "options": [
-
-                                        ],
-                                        "module": "system",
-                                        "customized": 0,
-                                        "updated": 0
-                                    }
-                                ]
+                                "updated": 0
                             }
                         ]
                     },
@@ -5681,7 +5484,7 @@
         "children": [
             {
                 "menu_name": "user-menu",
-                "weight": -45,
+                "weight": -46,
                 "link_title": "Выйти",
                 "link_path": "user\/logout",
                 "hidden": 0,
@@ -5698,7 +5501,7 @@
             },
             {
                 "menu_name": "user-menu",
-                "weight": -49,
+                "weight": -48,
                 "link_title": "My blog",
                 "link_path": "blog\/%",
                 "hidden": 0,
@@ -5715,7 +5518,7 @@
             },
             {
                 "menu_name": "user-menu",
-                "weight": -46,
+                "weight": -47,
                 "link_title": "Messages",
                 "link_path": "messages",
                 "hidden": 0,
@@ -5728,21 +5531,115 @@
                 },
                 "module": "system",
                 "customized": 1,
-                "updated": 0
+                "updated": 0,
+                "children": [
+                    {
+                        "menu_name": "user-menu",
+                        "weight": -10,
+                        "link_title": "All messages",
+                        "link_path": "messages\/list",
+                        "hidden": -1,
+                        "has_children": 0,
+                        "expanded": 0,
+                        "options": [
+
+                        ],
+                        "module": "system",
+                        "customized": 0,
+                        "updated": 0
+                    },
+                    {
+                        "menu_name": "user-menu",
+                        "weight": 10,
+                        "link_title": "Blocked users",
+                        "link_path": "messages\/blocked",
+                        "hidden": -1,
+                        "has_children": 0,
+                        "expanded": 0,
+                        "options": [
+
+                        ],
+                        "module": "system",
+                        "customized": 0,
+                        "updated": 0
+                    },
+                    {
+                        "menu_name": "user-menu",
+                        "weight": -15,
+                        "link_title": "Inbox",
+                        "link_path": "messages\/inbox",
+                        "hidden": -1,
+                        "has_children": 0,
+                        "expanded": 0,
+                        "options": [
+
+                        ],
+                        "module": "system",
+                        "customized": 0,
+                        "updated": 0
+                    },
+                    {
+                        "menu_name": "user-menu",
+                        "weight": -12,
+                        "link_title": "Sent Messages",
+                        "link_path": "messages\/sent",
+                        "hidden": -1,
+                        "has_children": 0,
+                        "expanded": 0,
+                        "options": [
+
+                        ],
+                        "module": "system",
+                        "customized": 0,
+                        "updated": 0
+                    },
+                    {
+                        "menu_name": "user-menu",
+                        "weight": -3,
+                        "link_title": "Write new message",
+                        "link_path": "messages\/new",
+                        "hidden": -1,
+                        "has_children": 0,
+                        "expanded": 0,
+                        "options": [
+
+                        ],
+                        "module": "system",
+                        "customized": 0,
+                        "updated": 0
+                    },
+                    {
+                        "menu_name": "user-menu",
+                        "weight": -5,
+                        "link_title": "Read message",
+                        "link_path": "messages\/view\/%",
+                        "hidden": -1,
+                        "has_children": 0,
+                        "expanded": 0,
+                        "options": [
+
+                        ],
+                        "module": "system",
+                        "customized": 0,
+                        "updated": 0
+                    }
+                ]
             },
             {
                 "menu_name": "user-menu",
-                "weight": 0,
-                "link_title": "Create new account",
-                "link_path": "user\/register",
-                "hidden": -1,
+                "weight": -49,
+                "link_title": "Мой трекер",
+                "link_path": "alttracker\/my",
+                "hidden": 0,
                 "has_children": 0,
                 "expanded": 0,
-                "options": [
-
-                ],
+                "options": {
+                    "attributes": {
+                        "title": ""
+                    }
+                },
                 "module": "system",
-                "customized": 0,
+                "customized": 1,
                 "updated": 0
             },
             {
@@ -5762,23 +5659,8 @@
             },
             {
                 "menu_name": "user-menu",
-                "weight": 0,
-                "link_title": "Request new password",
-                "link_path": "user\/password",
-                "hidden": -1,
-                "has_children": 0,
-                "expanded": 0,
-                "options": [
-
-                ],
-                "module": "system",
-                "customized": 0,
-                "updated": 0
-            },
-            {
-                "menu_name": "user-menu",
-                "weight": -47,
-                "link_title": "Мой аккаунт",
+                "weight": -50,
+                "link_title": "Мой профиль",
                 "link_path": "user",
                 "hidden": 0,
                 "has_children": 0,
@@ -5791,131 +5673,7 @@
                 "module": "menu",
                 "customized": 1,
                 "updated": 0
-            },
-            {
-                "menu_name": "user-menu",
-                "weight": -50,
-                "link_title": "Мой трекер",
-                "link_path": "alttracker\/my",
-                "hidden": 0,
-                "has_children": 0,
-                "expanded": 0,
-                "options": {
-                    "attributes": {
-                        "title": ""
-                    }
-                },
-                "module": "system",
-                "customized": 1,
-                "updated": 0
             }
         ]
-    },
-    {
-        "menu_name": "user-menu",
-        "weight": -10,
-        "link_title": "All messages",
-        "link_path": "messages\/list",
-        "hidden": -1,
-        "has_children": 0,
-        "expanded": 0,
-        "options": [
-
-        ],
-        "module": "system",
-        "customized": 0,
-        "updated": 0
-    },
-    {
-        "menu_name": "user-menu",
-        "weight": 10,
-        "link_title": "Blocked users",
-        "link_path": "messages\/blocked",
-        "hidden": -1,
-        "has_children": 0,
-        "expanded": 0,
-        "options": [
-
-        ],
-        "module": "system",
-        "customized": 0,
-        "updated": 0
-    },
-    {
-        "menu_name": "user-menu",
-        "weight": -15,
-        "link_title": "Inbox",
-        "link_path": "messages\/inbox",
-        "hidden": -1,
-        "has_children": 0,
-        "expanded": 0,
-        "options": [
-
-        ],
-        "module": "system",
-        "customized": 0,
-        "updated": 0
-    },
-    {
-        "menu_name": "user-menu",
-        "weight": -12,
-        "link_title": "Sent Messages",
-        "link_path": "messages\/sent",
-        "hidden": -1,
-        "has_children": 0,
-        "expanded": 0,
-        "options": [
-
-        ],
-        "module": "system",
-        "customized": 0,
-        "updated": 0
-    },
-    {
-        "menu_name": "user-menu",
-        "weight": -3,
-        "link_title": "Write new message",
-        "link_path": "messages\/new",
-        "hidden": -1,
-        "has_children": 0,
-        "expanded": 0,
-        "options": [
-
-        ],
-        "module": "system",
-        "customized": 0,
-        "updated": 0
-    },
-    {
-        "menu_name": "user-menu",
-        "weight": -5,
-        "link_title": "Read message",
-        "link_path": "messages\/view\/%",
-        "hidden": -1,
-        "has_children": 0,
-        "expanded": 0,
-        "options": [
-
-        ],
-        "module": "system",
-        "customized": 0,
-        "updated": 0
-    },
-    {
-        "menu_name": "user-menu",
-        "weight": -48,
-        "link_title": "Log in",
-        "link_path": "user\/login",
-        "hidden": 0,
-        "has_children": 0,
-        "expanded": 0,
-        "options": {
-            "attributes": {
-                "title": ""
-            }
-        },
-        "module": "menu",
-        "customized": 1,
-        "updated": 0
     }
 ]

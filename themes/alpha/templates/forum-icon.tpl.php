@@ -23,19 +23,23 @@
   switch($icon_class){
     case 'new':
         print '<i class="fa fa-envelope"></i>';
-      break;  
+      break;
+
     case 'hot-new':
     case 'hot':
         print '<i class="fa fa-fire"></i>';
       break;
+
     case 'closed':
         print '<i class="fa fa-lock"></i>';
       break;
+
     case 'sticky':
         print '<i class="fa fa-flag"></i>';
       break;
+
     default:
       print '<i class="fa fa-envelope-o"></i>';
-      
+
   }
 ?>

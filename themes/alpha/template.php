@@ -101,10 +101,10 @@ function alpha_preprocess_page(&$variables){
     }
     if (isset($filepath)) {
       if (module_exists('image') && file_valid_uri($filepath) && $style = variable_get('user_picture_style_node', '')) {
-        $variables['user_picture'] = theme('image_style', array('style_name' => $style, 'path' => $filepath, 'alt' => $alt, 'title' => $alt, 'attributes' => array('class' => array('img-circle'))));
+        $variables['user_picture'] = theme('image_style', array('style_name' => $style, 'path' => $filepath, 'alt' => $account->name, 'title' => $account->name, 'attributes' => array('class' => array('img-circle'))));
       }
       else {
-        $variables['user_picture'] = theme('image', array('path' => $filepath, 'alt' => $alt, 'title' => $alt, 'attributes' => array('class' => array('img-circle'))));
+        $variables['user_picture'] = theme('image', array('path' => $filepath, 'alt' => $account->name, 'title' => $account->name, 'attributes' => array('class' => array('img-circle'))));
       }
     }
     $tabs = $variables['tabs'];
@@ -271,7 +271,7 @@ function alpha_preprocess_user_profile(&$variables) {
   field_attach_preprocess('user', $account, $variables['elements'], $variables);
 
   $variables['name'] = $account->name;
-  $variables['realname'] = $account->realname;
+  $variables['realname'] = isset($account->realname) ? $account->realname : '';
   
   if($account->signature){
     $variables['signature'] = check_markup($account->signature, $account->signature_format, '', TRUE);

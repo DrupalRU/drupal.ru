@@ -1,11 +1,11 @@
-<div id="node-<?php print $node->nid; ?>"  class="row <?php  print $classes;?> <?php print $zebra;?> "<?php print $attributes; ?>>
+<div id="node-<?php print $node->nid; ?>"  class="row <?php if(isset($classes)): print $classes; endif;?> <?php print $zebra;?> "<?php if(isset($attributes)): print $attributes; endif;?>>
   <div class="title col-xs-12 col-sm-6 col-md-6">
     <div class="icon col-xs-1">
       <?php print $icon; ?>
     </div>
     <div class="col-xs-10 title">
       <a href="<?php print $node->url; ?>"><?php print $title; ?></a>
-      <?php if($term): ?>
+      <?php if(isset($term)): ?>
       <div class="terms">
         <i class="fa fa-tags"></i> 
         <?php print $term; ?>

@@ -52,7 +52,7 @@
                         "format"
                     ]
                 },
-                "id": 15,
+                "id": 16,
                 "field_name": "field_icon",
                 "type": "text",
                 "module": "text",
@@ -654,8 +654,7 @@
                                     }
                                 ]
                             }
-                        },
-                        "path_alias": "forum\/problem_solving"
+                        }
                     },
                     {
                         "name": "Системное окружение",

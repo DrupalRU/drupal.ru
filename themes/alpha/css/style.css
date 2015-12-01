@@ -362,6 +362,10 @@ div.awesome_icon {
 }
 
 @media (max-width: 979px) {
+  .indented {
+    border-left: 10px dashed #f8f8f8;
+  }
+
   .indented > .indented > .indented > .indented > .indented .indented {
     border-left: none;
   }
@@ -370,6 +374,7 @@ div.awesome_icon {
 
 @media (max-width: 767px) {
   .indented > .indented > .indented .indented {
+    border-left: 5px dashed #f8f8f8;
     border-left: none;
   }
 }

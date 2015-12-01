@@ -14,7 +14,7 @@ function alpha_theme($existing, $type, $theme, $path) {
       'variables' => array('primary' => array(), 'secondary' => array()),
     ),
     'alttracker_node' => array(
-      'variables' => array( 'node' => NULL ),
+      'variables' => array('node' => NULL),
       'template' => 'templates/alttracker_node',
     ),
   );
@@ -25,7 +25,7 @@ function alpha_theme($existing, $type, $theme, $path) {
  */
 function alpha_js_alter(&$javascript) {
   drupal_add_js('var themeTableHeaderOffset = function() { var offsetheight = jQuery("#navbar").height(); return offsetheight; }', 'inline');
-  drupal_add_js(array('tableHeaderOffset' => 'themeTableHeaderOffset'), 'setting'); 
+  drupal_add_js(array('tableHeaderOffset' => 'themeTableHeaderOffset'), 'setting');
 }
 
 /**
@@ -45,7 +45,7 @@ function alpha_preprocess_html(&$vars) {
 
 
 /**
- * Preprocess variables for page.tpl.php
+ * Preprocess variables for page.tpl.php.
  *
  * Most themes utilize their own copy of page.tpl.php. The default is located
  * inside "modules/system/page.tpl.php". Look in there for the full list of
@@ -61,35 +61,35 @@ function alpha_preprocess_html(&$vars) {
  * @see template_process_page()
  * @see page.tpl.php
  */
-function alpha_preprocess_page(&$variables){
-  if (isset($variables['node'])){
+function alpha_preprocess_page(&$variables) {
+  if (isset($variables['node'])) {
     $node = $variables['node'];
-    
-    $flag = theme('forum_icon', array('new_posts' =>FALSE, 'num_posts' => $node->comment_count, 'comment_mode' => $node->comment, 'sticky' => $node->sticky, 'first_new' => FALSE));
-    
-    if($node->promote){
+
+    $flag = theme('forum_icon', array('new_posts' => FALSE, 'num_posts' => $node->comment_count, 'comment_mode' => $node->comment, 'sticky' => $node->sticky, 'first_new' => FALSE));
+
+    if ($node->promote) {
       $flag = '<i class="fa fa-star"></i>';
     }
     $variables['title'] = '<div class="flag">' . $flag . '</div>' . drupal_get_title();
   }
-  if($variables['theme_hook_suggestions'][0] == 'page__user'){
-    if(isset($variables['page']['content']['system_main']['#account'])){
-      $account = $variables['page']['content']['system_main']['#account'];  
+  if ($variables['theme_hook_suggestions'][0] == 'page__user') {
+    if (isset($variables['page']['content']['system_main']['#account'])) {
+      $account = $variables['page']['content']['system_main']['#account'];
     }
-    if(isset($variables['page']['content']['system_main']['#user'])){
-      $account = $variables['page']['content']['system_main']['#user'];  
+    if (isset($variables['page']['content']['system_main']['#user'])) {
+      $account = $variables['page']['content']['system_main']['#user'];
     }
 
-    if(isset($variables['page']['content']['system_main']['recipient']['#value'])){
-      $account = $variables['page']['content']['system_main']['recipient']['#value'];  
+    if (isset($variables['page']['content']['system_main']['recipient']['#value'])) {
+      $account = $variables['page']['content']['system_main']['recipient']['#value'];
     }
-    
-    if(empty($account)){
-       $path_elements = explode("/",$_SERVER['REDIRECT_URL']);
-       $uid = $path_elements[2];
-       $account = user_load($uid);
+
+    if (empty($account)) {
+      $path_elements = explode("/", $_SERVER['REDIRECT_URL']);
+      $uid = $path_elements[2];
+      $account = user_load($uid);
     }
-    
+
     $picture = $account->picture;
     if (!empty($picture)) {
       if (!empty($picture->uri)) {
@@ -110,10 +110,10 @@ function alpha_preprocess_page(&$variables){
     $tabs = $variables['tabs'];
     $secondary = $tabs['#secondary'];
     unset($tabs['#secondary']);
-        
+
     $tabs['#theme'] = 'menu_user_blog_links';
     $variables['primary_nav'] = $tabs;
-    
+
     $variables['tabs'] = array(
       '#theme' => 'menu_local_tasks',
       '#primary' => $secondary,
@@ -129,7 +129,7 @@ function alpha_preprocess_page(&$variables){
  *   fields.
  *
  * @see user-picture.tpl.php
- */ 
+ */
 function alpha_preprocess_user_picture(&$variables) {
   $variables['user_picture'] = '';
   if (variable_get('user_pictures', 0)) {
@@ -173,10 +173,10 @@ function alpha_preprocess_user_picture(&$variables) {
 /**
  * Implements hook_preprocess_comment().
  */
-function alpha_preprocess_comment(&$variables){
+function alpha_preprocess_comment(&$variables) {
   $comment = $variables['elements']['#comment'];
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $comment->changed)));
-  
+
   $uri = entity_uri('comment', $comment);
   $variables['permalink'] = l('#', $uri['path'], $uri['options']);
 }
@@ -184,17 +184,17 @@ function alpha_preprocess_comment(&$variables){
 /**
  * Implements hook_preprocess_node().
  */
-function alpha_preprocess_node(&$variables){
+function alpha_preprocess_node(&$variables) {
   $node = $variables['elements']['#node'];
   if ($variables['teaser']) {
     // Add a new item into the theme_hook_suggestions array.
     $variables['theme_hook_suggestions'][] = 'node__teaser';
   }
-  
-  if($variables['view_mode'] == 'alttracker') {
+
+  if ($variables['view_mode'] == 'alttracker') {
     $variables['theme_hook_suggestions'][] = 'node__alttracker';
   }
-  
+
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $node->changed)));
 
   $picture = $node->picture;
@@ -222,12 +222,12 @@ function alpha_preprocess_node(&$variables){
       $variables['user_picture'] = l($variables['user_picture'], "user/$node->uid", $attributes);
     }
   }
-  
+
   $variables['title_attributes'] = 'title';
-  if(!$variables['teaser']){
+  if (!$variables['teaser']) {
     drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/' . 'node-view.js');
   }
-  
+
   drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/' . 'node-img-responsive.js');
 }
 
@@ -245,16 +245,16 @@ function alpha_preprocess_node(&$variables){
  */
 function alpha_preprocess_user_profile(&$variables) {
   $account = $variables['elements']['#account'];
-  if($account->data['contact']){
-    //add contact form link
+  if ($account->data['contact']) {
+    // Add contact form link.
   }
-  
+
   foreach (element_children($variables['elements']) as $key) {
-    
-    if(isset($variables['elements'][$key]['#type']) && $variables['elements'][$key]['#type'] == 'user_profile_category'){
-      foreach($variables['elements'][$key] as $item_key => $item_value){
-        if(is_array($item_value) && isset($item_value['#type']) && $item_value['#type'] == 'user_profile_item'){
-          if(empty($item_value['#title'])){
+
+    if (isset($variables['elements'][$key]['#type']) && $variables['elements'][$key]['#type'] == 'user_profile_category') {
+      foreach ($variables['elements'][$key] as $item_key => $item_value) {
+        if (is_array($item_value) && isset($item_value['#type']) && $item_value['#type'] == 'user_profile_item') {
+          if (empty($item_value['#title'])) {
             $variables['elements'][$key][$item_key]['#title'] = $variables['elements'][$key]['#title'];
             // We add title only for first item in the group.
             break;
@@ -264,23 +264,21 @@ function alpha_preprocess_user_profile(&$variables) {
     }
     $variables['user_profile'][$key] = $variables['elements'][$key];
   }
-  
-
 
   // Preprocess fields.
   field_attach_preprocess('user', $account, $variables['elements'], $variables);
 
   $variables['name'] = $account->name;
   $variables['realname'] = isset($account->realname) ? $account->realname : '';
-  
-  if($account->signature){
+
+  if ($account->signature) {
     $variables['signature'] = check_markup($account->signature, $account->signature_format, '', TRUE);
   }
-  
+
   module_load_include('inc', 'blog', 'blog.pages');
   $variables['blog'] = blog_page_user($account);
-  
-//  print_r($variables);
+
+  //  print_r($variables);
 }
 
 
@@ -292,11 +290,14 @@ function alpha_file_formatter_table($variables) {
   foreach ($variables['items'] as $delta => $item) {
     $links .= '<li>' . theme('file_link', array('file' => (object) $item)) . '<span class="size">' . format_size($item['filesize']) . '</span>' . '</li>';
   }
-  
+
   return empty($links) ? '' : '<ul class="file-links" >' . $links . '</ul>';
 }
 
-function alpha_menu_user_blog_links($variables){
+/**
+ *
+ */
+function alpha_menu_user_blog_links($variables) {
   $output = '';
 
   if (!empty($variables['primary'])) {
@@ -327,12 +328,12 @@ function alpha_menu_user_blog_links($variables){
  * @see forum-list.tpl.php
  * @see theme_forum_list()
  */
-function alpha_preprocess_forum_list(&$variables){
-  foreach($variables['forums'] as $key => $term){
+function alpha_preprocess_forum_list(&$variables) {
+  foreach ($variables['forums'] as $key => $term) {
     $term_data = taxonomy_term_load($term->tid);
-    if($icon = field_get_items('taxonomy_term', $term_data, 'field_icon')){
+    if ($icon = field_get_items('taxonomy_term', $term_data, 'field_icon')) {
       $variables['forums'][$key]->awesome_icon = $icon[0]['safe_value'];
-    } 
+    }
     $variables['forums'][$key]->time = isset($variables['forums'][$key]->last_post->created) ? format_interval(REQUEST_TIME - $variables['forums'][$key]->last_post->created) : '';
   }
 }
@@ -372,11 +373,14 @@ function alpha_preprocess_forum_submitted(&$variables) {
 }
 
 
-function alpha_alttracker($variables){
+/**
+ *
+ */
+function alpha_alttracker($variables) {
   drupal_add_css(drupal_get_path('module', 'alttracker') . '/alttracker.css');
-  
+
   $output = '<div class="alttracker">';
-  foreach($variables['nodes'] as $node){
+  foreach ($variables['nodes'] as $node) {
     $output .= theme('alttracker_node', array('node' => $node));
   }
   $output .= '</div>';
@@ -397,24 +401,24 @@ function alpha_preprocess_alttracker_node(&$variables) {
   $variables['title']   = check_plain($node->title);
   $variables['sticky']  = $node->sticky;
   $variables['promote'] = $node->promote;
-  $variables['status']  = $node->status;  
+  $variables['status']  = $node->status;
   $variables['date']    = format_date($node->created);
   $variables['name']    = theme('username', array('account' => $node));
-  
-  if(!empty($node->terms)){
+
+  if (!empty($node->terms)) {
     $terms_links = array();
-      foreach($node->terms as $term){
-        $terms_links[] = array(
-          'title' => check_plain($term->name),
-          'href' => url("taxonomy/term/" . $term->tid),
-          'html' => true,
-        );
-      }
+    foreach ($node->terms as $term) {
+      $terms_links[] = array(
+        'title' => check_plain($term->name),
+        'href' => url("taxonomy/term/" . $term->tid),
+        'html' => TRUE,
+      );
+    }
     $variables['term'] = theme('links', array('links' => $terms_links));
   }
-  
+
   $variables['icon'] = theme('alttracker_icon', array('node' => $node));
-  
+
   // Gather node classes.
   $variables['classes_array'][] = drupal_html_class('node-' . $node->type);
   if ($variables['promote']) {
@@ -427,5 +431,3 @@ function alpha_preprocess_alttracker_node(&$variables) {
     $variables['classes_array'][] = 'node-unpublished';
   }
 }
-
-

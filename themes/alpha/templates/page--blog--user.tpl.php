@@ -98,7 +98,7 @@
     <div class="navbar-collapse collapse">
       <nav role="navigation">      
         <?php if (!empty($tabs)): ?>
-          <?php 
+          <?php
             $tabs['#theme'] = 'menu_user_blog_links';
             print render($tabs);
           ?>

@@ -36,7 +36,7 @@
 ?>
 
 <div class="profile"<?php print $attributes; ?>>
-  <h1 class="name"><?php 
+  <h1 class="name"><?php
     if(isset($realname)){
       print $realname;
       print "(" . $name . ")";

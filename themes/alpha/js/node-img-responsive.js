@@ -1,6 +1,9 @@
+/**
+ * @file
+ */
 (function ($, Drupal) {
   "use strict";
-  
+
   /**
    * Provide node details affix feature.
    */

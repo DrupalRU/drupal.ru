@@ -90,7 +90,7 @@
     <h2 class="title"><a href="<?php print $node_url; ?>">
       <?php
         $flag = '<i class="fa fa-envelope-o"></i>';
-        $history = _forum_user_last_visit($node->nid); 
+        $history = _forum_user_last_visit($node->nid);
         if($node->last_comment_timestamp > $history){
           $flag = '<i class="fa fa-envelope"></i>';
         }
@@ -100,7 +100,7 @@
         if($promote){
           $flag = '<i class="fa fa-star"></i>';
         }
-        
+
         print $flag . ' ';
       ?>
       <?php print $title; ?></a></h2>

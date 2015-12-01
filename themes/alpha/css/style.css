@@ -351,7 +351,32 @@ div.awesome_icon {
 /* Comments style*/
 
 .indented {
-  padding-left: 25px;
+  padding-left: 0px;
+  margin-left: 0px;
+  border-left: 15px dashed #f8f8f8;
+  margin-left: 0px;
+}
+
+.indented > .indented > .indented > .indented > .indented  > .indented .indented {
+  border-left: none;
+}
+
+@media (max-width: 979px) {
+  .indented {
+    border-left: 10px dashed #f8f8f8;
+  }
+
+  .indented > .indented > .indented > .indented > .indented .indented {
+    border-left: none;
+  }
+
+}
+
+@media (max-width: 767px) {
+  .indented > .indented > .indented .indented {
+    border-left: 5px dashed #f8f8f8;
+    border-left: none;
+  }
 }
 
 .comment {

@@ -613,6 +613,12 @@ ul.file-links li span.size {
 #node-admin-content .form-horizontal .form-group {
   margin: inherit;
 }
+
+@media (min-width: 768px) {
+  .comment-form textarea.form-control {
+    height: 200px;
+  }
+}
 /* Footer. */
 
 .footer {

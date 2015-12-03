@@ -625,3 +625,46 @@ ul.file-links li span.size {
 .username {
   color: #d34a32;
 }
+
+/* Geshifilter overwrite. */
+div.geshifilter {
+  border: none;
+  background-color: #f9f9f9;
+  border-left: 2px solid #d34a32;
+  padding-left: 10px;
+  padding-left: 15px;
+}
+
+div.geshifilter code {
+  background-color: #f9f9f9;
+}
+
+div.geshifilter:before {
+  content: "\f121";
+  font: normal normal normal 25px/1 FontAwesome;
+  display: block;
+  float: right;
+  color: #333;
+}
+
+span.geshifilter {
+  border: none;
+  background-color: #f9f9f9;
+  border-left: 2px solid #d34a32;
+  display: block;
+  padding: 5px 5px 5px 15px;
+}
+
+span.geshifilter code {
+  background-color: #f9f9f9;
+}
+
+span.geshifilter:before {
+  content: "\f121";
+  font: normal normal normal 25px/1 FontAwesome;
+  display: block;
+  float: right;
+  color: #333;
+}
+
+

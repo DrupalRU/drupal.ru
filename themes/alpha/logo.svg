@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="300"
+   height="360"
+   viewBox="0 0 300 360.00001"
+   id="svg3463"
+   version="1.1">
+  <defs
+     id="defs3465" />
+  <metadata
+     id="metadata3468">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     id="path24-8"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 150,-1e-5 C 121.52773,56.52597 0,103.46927 0,210.147 c 0,79.10319 67.1625,149.85304 150,149.85304 82.83744,0 150,-70.74985 150,-149.85304 C 300,103.46927 178.47153,56.52597 150,-10e-6" />
+  <g
+     id="g3349-4"
+     transform="matrix(1.33119,0,0,1.33119,-132.05164,-235.40103)"
+     style="fill:#39b5f2;fill-opacity:1">
+    <path
+       d="m 287.15033,294.3595 -21.889,0 0.036,40.955 c 0,11.969 -5.131,21.652 -17.1,21.652 -11.974,0 -17.152,-9.683 -17.152,-21.652 l 0,-40.915 -21.832,0 -0.006,40.915 c 0,23.651 15.203,42.82 38.858,42.82 23.648,0 39.078,-19.169 39.078,-42.82 l 0.007,-40.955 z"
+       id="path5-7"
+       style="fill:#39b5f2;fill-opacity:1" />
+    <path
+       d="m 191.40833,293.4685 c -18.775,-4.333 -30.619,14.319 -31.111,15.319 -0.242,0.491 -0.251,0.777 -1.083,0.755 -0.687,-0.014 -0.766,-0.755 -0.766,-0.755 l -2.33,-14.268 -19.51,0 0,81.43 21.871,0 0,-44.076 c 0,-3.602 9.7,-20.872 28.492,-16.426 9.504,2.248 13.535,6.281 13.535,6.281 0,0 0,-15.718 0,-24.806 -3.517,-1.834 -5.93,-2.723 -9.098,-3.454 z"
+       id="path15-8"
+       style="fill:#39b5f2;fill-opacity:1" />
+  </g>
+</svg>

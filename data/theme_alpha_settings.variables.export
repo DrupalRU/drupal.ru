@@ -12,7 +12,7 @@
             "toggle_main_menu": 1,
             "toggle_secondary_menu": 1,
             "default_logo": 0,
-            "logo_path": "files\/logo-white.png",
+            "logo_path": "sites\/all\/themes\/local\/alpha\/logo.svg",
             "logo_upload": "",
             "default_favicon": 0,
             "favicon_path": "sites\/drupal.ru\/meta\/Icon-Small.png",

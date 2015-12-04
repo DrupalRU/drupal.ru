@@ -5,12 +5,21 @@ SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
 echo "Full site path: $SITEPATH"
 cd $SITEPATH
 
-#Issue #44 update logo settings
-drush en -y drupal_deploy
+#Update alttracker now
 
-drush ddi variables --file=$GITLC_DEPLOY_DIR/data/theme_alpha_settings.variables.export
+cd $SITEPATH/sites/all/modules/github/alttracker/
+git pull
 
-drush -y pm-disable drupal_deploy
+#Issue #21 install live update
+drush dl l10n_update
+drush -y en l10n_update
+drush -y l10n-update-refresh
+drush -y l10n-update
+
+#set auto update weekly
+drush vset l10n_update_check_frequency 7
+
+
 
 
 echo "Clean cache"

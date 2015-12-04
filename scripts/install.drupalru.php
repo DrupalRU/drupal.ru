@@ -184,7 +184,7 @@ exec('drush language-add ru');
 exec('drush language-default ru');
 exec('drush -y l10n-update-refresh');
 exec('drush -y l10n-update');
-
+exec('drush vset l10n_update_check_frequency 7');
 
 function get_promt_answer($promt){
   if (PHP_OS == 'WINNT' or !function_exists('readline')) {

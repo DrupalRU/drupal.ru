@@ -168,7 +168,7 @@ a:hover {
 
 /* Node styles.*/
 .node p img {
-  margin: 10px;
+  margin: 0px;
 }
 .node .user-picture {
   text-align: center;

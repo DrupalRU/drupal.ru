@@ -426,9 +426,13 @@ div.awesome_icon {
 }
 
 .comment {
-  padding: 15px 10px 10px;
+  padding: 0;
   margin: 0px;
   border-bottom: 1px solid #eee;
+}
+
+.comment-new {
+  padding: 15px 10px 10px;
 }
 
 .media.odd.comment {

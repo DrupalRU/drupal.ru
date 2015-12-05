@@ -5,20 +5,13 @@ SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
 echo "Full site path: $SITEPATH"
 cd $SITEPATH
 
-#Update alttracker now
+#Issue #148 enable compression
+drush vset preprocess_css 1
+drush vset preprocess_js 1
 
-cd $SITEPATH/sites/all/modules/github/alttracker/
-git pull
-
-#Issue #21 install live update
-drush dl l10n_update
-drush -y en l10n_update
-drush -y l10n-update-refresh
-drush -y l10n-update
-
-#set auto update weekly
-drush vset l10n_update_check_frequency 7
-
+#clean old directories
+rm -rf $SITEPATH/files/js
+rm -rf $SITEPATH/files/languages
 
 
 

@@ -3,7 +3,7 @@ echo "INIT Drupal.ru"
 
 CORE='drupal-7'
 SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
-CONTRIB="acl bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot tagadelic taxonomy_manager jquery_ui jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user quote-7.x-1.x-dev"
+CONTRIB="acl bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot tagadelic taxonomy_manager jquery_ui jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user quote-7.x-1.x-dev l10n_update"
 
 echo "Full site path: $SITEPATH"
 echo "Site core: $CORE"
@@ -90,6 +90,18 @@ echo "Set default variables"
 drush vset theme_default alpha
 drush vset filestore_tmp_dir /tmp
 drush vset admin_theme alpha
+
+echo "Update translation";
+drush -y dl drush_language
+drush language-add ru
+drush language-default ru
+drush -y l10n-update-refresh
+drush -y l10n-update
+
+#set auto update weekly
+drush vset l10n_update_check_frequency 7
+
+
 
 echo "Import META structure via module http://github.com/itpatrol/drupal_deploy."
 

@@ -138,6 +138,11 @@ drush ddi variables --file=$GITLC_DEPLOY_DIR/data/theme_alpha_settings.variables
 echo "Set default tmp"
 drush vset filestore_tmp_dir /tmp
 
+#Issue #148 enable compression
+echo "Enable compression for js, css"
+drush vset preprocess_css 1
+drush vset preprocess_js 1
+
 if [ "$SETTINGS_DEVEL" != "" ]; then
   cd $SITEPATH
   drush dl devel

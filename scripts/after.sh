@@ -5,12 +5,14 @@ SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
 echo "Full site path: $SITEPATH"
 cd $SITEPATH
 
-#Issue #44 update logo settings
-drush en -y drupal_deploy
+#Issue #148 enable compression
+drush vset preprocess_css 1
+drush vset preprocess_js 1
 
-drush ddi variables --file=$GITLC_DEPLOY_DIR/data/theme_alpha_settings.variables.export
+#clean old directories
+rm -rf $SITEPATH/files/js
+rm -rf $SITEPATH/files/languages
 
-drush -y pm-disable drupal_deploy
 
 
 echo "Clean cache"

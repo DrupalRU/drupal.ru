@@ -5,6 +5,7 @@ echo "This is install script to create dev environment for drupal.ru  code\n";
 
 $data['github_path'] = get_promt_answer('GITHUB DIR');  
 $data['site_path'] = get_promt_answer('DOCROOT');
+$data['mysql_host'] = get_promt_answer('MySQL Host');
 $data['mysql_user'] = get_promt_answer('MySQL User');
 $data['mysql_db'] = get_promt_answer('MySQL DB');
 $data['mysql_pass'] = get_promt_answer('MySQL Password');
@@ -18,7 +19,7 @@ $data['core'] = 'drupal-7';
 $data['site_name'] = 'Drupal.ru Dev version';
 
 // Contrib modules list.
-$data['contrib'] = 'acl bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot tagadelic taxonomy_manager jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user quote-7.x-1.x-dev';
+$data['contrib'] = 'acl bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot tagadelic taxonomy_manager jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user quote-7.x-1.x-dev l10n_update';
 
 
 echo "Full site path: " . $data['site_path'] . "\n";
@@ -34,7 +35,7 @@ exec('rm -rf ' . $data['site_path'] . '/drupal');
 
 echo "Install DRUPAL\n";
 
-exec('drush site-install standard -y --root=' . $data['site_path'] . ' --account-name=' . $data['account_name'] . ' --account-mail=' . $data['account_email'] . ' --account-pass=' . $data['account_pass'] . ' --uri=http://' . $data['domain'] . ' --site-name="' . $data['site_name'] . '" --site-mail=' . $data['account_email'] . ' --db-url=mysql://' . $data['mysql_user'] . ':' . $data['mysql_pass'] . '@localhost/' . $data['mysql_db']);
+exec('drush site-install standard -y --root=' . $data['site_path'] . ' --account-name=' . $data['account_name'] . ' --account-mail=' . $data['account_email'] . ' --account-pass=' . $data['account_pass'] . ' --uri=http://' . $data['domain'] . ' --site-name="' . $data['site_name'] . '" --site-mail=' . $data['account_email'] . ' --db-url=mysql://' . $data['mysql_user'] . ':' . $data['mysql_pass'] . '@' . $data['mysql_host'] . '/' . $data['mysql_db']);
 
 echo "make libraries dir\n";
 if(!is_dir($data['site_path'] . '/sites/all/libraries')){
@@ -178,6 +179,13 @@ echo "Disable toolbar, overlay modules\n";
 
 exec('drush dis -y overlay, toolbar');
 
+echo "Update translation\n";
+exec('drush -y dl drush_language');
+exec('drush language-add ru');
+exec('drush language-default ru');
+exec('drush -y l10n-update-refresh');
+exec('drush -y l10n-update');
+exec('drush vset l10n_update_check_frequency 7');
 
 function get_promt_answer($promt){
   if (PHP_OS == 'WINNT' or !function_exists('readline')) {

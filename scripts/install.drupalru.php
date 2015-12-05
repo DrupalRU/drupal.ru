@@ -5,6 +5,7 @@ echo "This is install script to create dev environment for drupal.ru  code\n";
 
 $data['github_path'] = get_promt_answer('GITHUB DIR');  
 $data['site_path'] = get_promt_answer('DOCROOT');
+$data['mysql_host'] = get_promt_answer('MySQL Host');
 $data['mysql_user'] = get_promt_answer('MySQL User');
 $data['mysql_db'] = get_promt_answer('MySQL DB');
 $data['mysql_pass'] = get_promt_answer('MySQL Password');
@@ -34,7 +35,7 @@ exec('rm -rf ' . $data['site_path'] . '/drupal');
 
 echo "Install DRUPAL\n";
 
-exec('drush site-install standard -y --root=' . $data['site_path'] . ' --account-name=' . $data['account_name'] . ' --account-mail=' . $data['account_email'] . ' --account-pass=' . $data['account_pass'] . ' --uri=http://' . $data['domain'] . ' --site-name="' . $data['site_name'] . '" --site-mail=' . $data['account_email'] . ' --db-url=mysql://' . $data['mysql_user'] . ':' . $data['mysql_pass'] . '@localhost/' . $data['mysql_db']);
+exec('drush site-install standard -y --root=' . $data['site_path'] . ' --account-name=' . $data['account_name'] . ' --account-mail=' . $data['account_email'] . ' --account-pass=' . $data['account_pass'] . ' --uri=http://' . $data['domain'] . ' --site-name="' . $data['site_name'] . '" --site-mail=' . $data['account_email'] . ' --db-url=mysql://' . $data['mysql_user'] . ':' . $data['mysql_pass'] . '@' . $data['mysql_host'] . '/' . $data['mysql_db']);
 
 echo "make libraries dir\n";
 if(!is_dir($data['site_path'] . '/sites/all/libraries')){

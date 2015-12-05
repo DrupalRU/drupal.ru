@@ -454,7 +454,7 @@ div.awesome_icon {
   margin-right: 15px;
 }
 
-@media (man-width: 768px) {
+@media (max-width: 768px) {
  .comment {
     padding: 15px 5px;
     margin: 0px -15px;

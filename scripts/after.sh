@@ -5,13 +5,14 @@ SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
 echo "Full site path: $SITEPATH"
 cd $SITEPATH
 
-#Issue #148 enable compression
-drush vset preprocess_css 1
-drush vset preprocess_js 1
+#Issue #167 replace favicon
 
-#clean old directories
-rm -rf $SITEPATH/files/js
-rm -rf $SITEPATH/files/languages
+echo "Import theme settings"
+drush -y en drupal_deploy
+
+drush ddi variables --file=$GITLC_DEPLOY_DIR/data/theme_alpha_settings.variables.export
+
+drush -y dis drupal_deploy
 
 
 

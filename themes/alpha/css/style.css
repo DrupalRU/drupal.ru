@@ -1,6 +1,6 @@
 /* Body. */
 body {
-  background: white url(../images/background.png) repeat;  
+  background: white url(../images/background.png) repeat;
 }
 
 body.navbar-is-fixed-top {
@@ -9,7 +9,7 @@ body.navbar-is-fixed-top {
 /* header */
 div.region.region-fluid-top {
   text-align: center;
-  background-color: #39B5F2;
+  background-color: #39b5f2;
   margin-top: -60px;
   padding-top: 60px;
   color: white;
@@ -29,7 +29,7 @@ div.region.region-fluid-top {
 .btn-outline-inverse:hover,
 .btn-outline-inverse:focus {
   background-color: #fff;
-  color: #39B5F2;
+  color: #39b5f2;
 }
 /* Content. */
 div.main-container.container {
@@ -51,23 +51,24 @@ div.main-container.container {
 /* Common elements*/
 
 a {
-  color: #39B5F2;
+  color: #39b5f2;
 }
 
 a:hover {
-    color: #309bd1;
+  color: #309bd1;
 }
 
 /* Navbar style. */
 .navbar-default {
-  background-color: #39B5F2;
-  border-color: #39B5F2;
+  background-color: #39b5f2;
+  border-color: #39b5f2;
 }
 .navbar-default .navbar-brand {
   color: #ffffff;
 }
-.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
-  color: #39B5F2;
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #39b5f2;
   background-color: #ffffff;
 }
 .navbar-default .navbar-text {
@@ -78,37 +79,42 @@ a:hover {
 }
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-  color: #39B5F2;
+  color: #39b5f2;
   background-color: #ffffff;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu {
-  background-color: #39B5F2;
+  background-color: #39b5f2;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a {
   color: #ffffff;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
-  color: #39B5F2;
+  color: #39b5f2;
   background-color: #ffffff;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
-  background-color: #39B5F2;
+  background-color: #39b5f2;
 }
-.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
-  color: #39B5F2;
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #39b5f2;
   background-color: #ffffff;
 }
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
-  color: #39B5F2;
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #39b5f2;
   background-color: #ffffff;
 }
 .navbar-default .navbar-toggle {
   border-color: #ffffff;
 }
-.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
-  color: #39B5F2;
-  background-color: #39B5F2;
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  color: #39b5f2;
+  background-color: #39b5f2;
 }
 .navbar-default .navbar-toggle .icon-bar {
   background-color: #ffffff;
@@ -121,26 +127,33 @@ a:hover {
   color: #ffffff;
 }
 .navbar-default .navbar-link:hover {
-  color: #39B5F2;
+  color: #39b5f2;
 }
 
 @media (max-width: 767px) {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     color: #ffffff;
   }
-  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-    color: #000;
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: 1000;
     background-color: #ffffff;
   }
-  .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-    color: #000;
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: 1000;
     background-color: #ffffff;
   }
 }
 
 .navbar-default .navbar-nav>.dropdown>a .caret,
-.navbar-default .navbar-nav>.open>a .caret, .navbar-default .navbar-nav>.open>a:hover .caret, .navbar-default .navbar-nav>.open>a:focus .caret,
-.nav .open>a .caret, .nav .open>a:hover .caret, .nav .open>a:focus .caret,
+.navbar-default .navbar-nav>.open>a .caret,
+.navbar-default .navbar-nav>.open>a:hover .caret,
+.navbar-default .navbar-nav>.open>a:focus .caret,
+.nav .open>a .caret,
+.nav .open>a:hover .caret,
+.nav .open>a:focus .caret,
 .nav .caret {
   color: #fff;
   border-top-color: #fff;
@@ -150,12 +163,12 @@ a:hover {
 /* Style user pic. */
 .user-picture img {
   border: 1px solid #e5e7e8;
-  padding: 1px; 
+  padding: 1px;
 }
 
 /* Node styles.*/
 .node p img {
-  margin: 10px;
+  margin: 0px;
 }
 .node .user-picture {
   text-align: center;
@@ -201,23 +214,57 @@ a:hover {
 
 #node-details.affix,
 #node-details.affix-top {
-   position:static;
+  position: static;
 }
 
 @media (min-width: 979px) {
   #node-details.affix-top {
     position: static;
-  	margin-top:50px;
+    margin-top: 50px;
   }
-  
+
   #node-details.affix {
     position: fixed;
-    top:70px;
+    top: 70px;
   }
 }
 
 .node code {
   white-space: normal;
+}
+
+/* Add icons to node links. */
+
+li.comment-add a:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f044';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: orange;
+}
+
+li.comment-comments a:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f0e6';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: orange;
+}
+
+li.blog_usernames_blog a:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f007';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: orange;
+}
+
+li.node-readmore a:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f0f6';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: orange;
 }
 
 /* Forums style. */
@@ -269,15 +316,14 @@ div.awesome_icon {
   color: orange;
   padding-right: 5px;
   font-size: 20px;
-  margin-top: 10px;  
+  margin-top: 10px;
 }
 
 #forum .posts .fa,
 #forum .topics .fa,
 #forum .last-reply .fa,
 #forum .replies .fa,
-#forum .author .fa
- {
+#forum .author .fa {
   color: #ddd;
 }
 
@@ -285,7 +331,7 @@ div.awesome_icon {
   #forum  .last-reply {
     text-align: right;
   }
-  #forum  .title {  
+  #forum  .title {
     min-height: 40px;
   }
   #forum  .details {
@@ -319,7 +365,7 @@ div.awesome_icon {
   color: orange;
   padding-right: 5px;
   font-size: 20px;
-  margin-top: 10px;  
+  margin-top: 10px;
 }
 
 
@@ -342,7 +388,7 @@ div.awesome_icon {
   .alttracker  .last-reply {
     text-align: right;
   }
-  .alttracker  .title {  
+  .alttracker  .title {
     min-height: 40px;
   }
 }
@@ -408,6 +454,16 @@ div.awesome_icon {
   margin-right: 15px;
 }
 
+@media (max-width: 768px) {
+ .comment {
+    padding: 15px 5px;
+    margin: 0px -15px;
+  }
+  .comment .pull-left {
+    margin-right: 0px;
+  }
+}
+
 /* Add icons to comment links. */
 
 li.comment-delete a:before {
@@ -444,7 +500,7 @@ li.quote a:before {
 
 /* Block quote. */
 blockquote {
-  color:#888;
+  color: #888;
   padding: 0 10px;
   margin: 0px;
   border-left: 2px solid #d34a32;
@@ -464,7 +520,7 @@ blockquote {
 }
 
 .bue-button:hover {
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid 1000;
 }
 
 .button-table img {
@@ -507,9 +563,10 @@ ul.file-links li span.size {
   display: inline-block;
 }
 
-#privatemsg-list-form .container-inline div, .container-inline label{
+#privatemsg-list-form .container-inline div,
+.container-inline label {
   width: auto;
-  display: inline-block;  
+  display: inline-block;
 }
 #privatemsg-list-form  span.input-group-addon {
   width: auto;
@@ -539,41 +596,42 @@ ul.file-links li span.size {
 #profile .dl-horizontal dd {
   margin-left: 51%;
 }
-  
 @media (max-width: 767px) {
   #profile .profile {
     height: auto;
   }
   #profile .dl-horizontal dt {
-      float: left;
-      width: 49%;
-      overflow: hidden;
-      clear: left;
-      text-align: right;
-      text-overflow: ellipsis;
-      white-space: nowrap
+    float: left;
+    width: 49%;
+    overflow: hidden;
+    clear: left;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap
   }
 
   #profile .dl-horizontal dd {
-      margin-left: 51%;
+    margin-left: 51%;
   }
 
-  #profile .dl-horizontal dd:before, #profile .dl-horizontal dd:after {
-      display: table;
-      content: " "
+  #profile .dl-horizontal dd:before,
+  #profile .dl-horizontal dd:after {
+    display: table;
+    content: " "
   }
 
   #profile .dl-horizontal dd:after {
-      clear: both
+    clear: both
   }
 
-  #profile .dl-horizontal dd:before, #profile .dl-horizontal dd:after {
-      display: table;
-      content: " "
+  #profile .dl-horizontal dd:before,
+  #profile .dl-horizontal dd:after {
+    display: table;
+    content: " "
   }
 
   #profile .dl-horizontal dd:after {
-      clear: both
+    clear: both
   }
 }
 
@@ -612,35 +670,37 @@ ul.file-links li span.size {
 
 @media (max-width: 767px) {
   .page-user .dl-horizontal dt {
-      float: left;
-      width: 49%;
-      overflow: hidden;
-      clear: left;
-      text-align: right;
-      text-overflow: ellipsis;
-      white-space: nowrap
+    float: left;
+    width: 49%;
+    overflow: hidden;
+    clear: left;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap
   }
 
   .page-user .dl-horizontal dd {
-      margin-left: 51%;
+    margin-left: 51%;
   }
 
-  .page-user .dl-horizontal dd:before, .page-user .dl-horizontal dd:after {
-      display: table;
-      content: " "
+  .page-user .dl-horizontal dd:before,
+  .page-user .dl-horizontal dd:after {
+    display: table;
+    content: " "
   }
 
   .page-user .dl-horizontal dd:after {
-      clear: both
+    clear: both
   }
 
-  .page-user .dl-horizontal dd:before, .page-user .dl-horizontal dd:after {
-      display: table;
-      content: " "
+  .page-user .dl-horizontal dd:before,
+  .page-user .dl-horizontal dd:after {
+    display: table;
+    content: " "
   }
 
   .page-user .dl-horizontal dd:after {
-      clear: both
+    clear: both
   }
 }
 
@@ -707,5 +767,3 @@ span.geshifilter:before {
   float: right;
   color: #333;
 }
-
-

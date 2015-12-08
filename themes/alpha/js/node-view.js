@@ -1,6 +1,8 @@
-/**
+/** 
  * @file
+ * Adjust node details block width for screen size.
  */
+
 (function ($, Drupal) {
   "use strict";
 

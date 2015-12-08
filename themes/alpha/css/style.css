@@ -431,10 +431,6 @@ div.awesome_icon {
   border-bottom: 1px solid #eee;
 }
 
-.media.odd.comment {
-/*  background-color: #f9f9f9;*/
-}
-
 .comment ul.links.list-inline {
   margin-bottom: 0px;
 }
@@ -607,7 +603,7 @@ ul.file-links li span.size {
     clear: left;
     text-align: right;
     text-overflow: ellipsis;
-    white-space: nowrap
+    white-space: nowrap;
   }
 
   #profile .dl-horizontal dd {
@@ -617,21 +613,21 @@ ul.file-links li span.size {
   #profile .dl-horizontal dd:before,
   #profile .dl-horizontal dd:after {
     display: table;
-    content: " "
+    content: " ";
   }
 
   #profile .dl-horizontal dd:after {
-    clear: both
+    clear: both;
   }
 
   #profile .dl-horizontal dd:before,
   #profile .dl-horizontal dd:after {
     display: table;
-    content: " "
+    content: " ";
   }
 
   #profile .dl-horizontal dd:after {
-    clear: both
+    clear: both;
   }
 }
 
@@ -676,7 +672,7 @@ ul.file-links li span.size {
     clear: left;
     text-align: right;
     text-overflow: ellipsis;
-    white-space: nowrap
+    white-space: nowrap;
   }
 
   .page-user .dl-horizontal dd {
@@ -686,21 +682,21 @@ ul.file-links li span.size {
   .page-user .dl-horizontal dd:before,
   .page-user .dl-horizontal dd:after {
     display: table;
-    content: " "
+    content: " ";
   }
 
   .page-user .dl-horizontal dd:after {
-    clear: both
+    clear: both;
   }
 
   .page-user .dl-horizontal dd:before,
   .page-user .dl-horizontal dd:after {
     display: table;
-    content: " "
+    content: " ";
   }
 
   .page-user .dl-horizontal dd:after {
-    clear: both
+    clear: both;
   }
 }
 

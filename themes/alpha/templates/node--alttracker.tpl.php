@@ -3,7 +3,7 @@
     <div class="icon col-xs-1">
       <?php
         $flag = '<i class="fa fa-envelope-o"></i>';
-        $history = _forum_user_last_visit($node->nid); 
+        $history = _forum_user_last_visit($node->nid);
         if($node->last_comment_timestamp > $history){
           $flag = '<i class="fa fa-envelope"></i>';
         }

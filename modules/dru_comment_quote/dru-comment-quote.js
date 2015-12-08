@@ -5,7 +5,7 @@
   /**
    * Provide node details affix feature.
    */
-  Drupal.behaviors.CommentReply = {
+  Drupal.behaviors.CommentQuote = {
     attach: function (context) {
       $('.comment-quote-link').once('comment-quote-link', function () {
         $(this).click(function (event) {

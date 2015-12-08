@@ -13,7 +13,7 @@
         if($promote){
           $flag = '<i class="fa fa-star"></i>';
         }
-        
+
         print $flag . ' ';
       ?>
     </div>

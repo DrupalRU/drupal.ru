@@ -9,7 +9,7 @@ cd $SITEPATH
 
 echo "Activate module: dru_comment_quote"
 
-ln -s $GITLC_DEPLOY_DIR/modules/dru_comment_quote $SITEPATH/sites/all/modules/local
+ln -s $GITLC_DEPLOY_DIR/modules/dru_comment_quote $SITEPATH/sites/all/modules/local/
 
 drush  en dru_comment_quote -y
 

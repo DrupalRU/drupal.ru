@@ -13,7 +13,8 @@
           var quote = getQoute(settings);
           if (quote === false) {
             alert(settings.pleas_select);
-          } else {
+          }
+          else {
             insertAtCursor(document.getElementsByName("comment_body[und][0][value]")[0], quote);
           }
           return false;
@@ -25,10 +26,12 @@
         try {
           if (window.getSelection) {
             range = window.getSelection().getRangeAt(0);
-          } else {
+          }
+          else {
             range = document.getSelection().getRangeAt(0);
           }
-        } catch (error) {
+        }
+        catch (error) {
           return false;
         }
 
@@ -71,7 +74,8 @@
           var position = textArea.selectionStart;
           textArea.value = textArea.value.substring(0, textArea.selectionStart) + text + textArea.value.substring(textArea.selectionEnd, textArea.value.length);
           textArea.selectionStart = textArea.selectionEnd = position + text.length;
-        } else {
+        }
+        else {
           textArea.value += text;
         }
         textArea.focus();

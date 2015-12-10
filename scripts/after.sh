@@ -5,15 +5,13 @@ SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
 echo "Full site path: $SITEPATH"
 cd $SITEPATH
 
-#Issue #148 enable compression
-drush vset preprocess_css 1
-drush vset preprocess_js 1
+#Issue #167 replace favicon
 
-#clean old directories
-rm -rf $SITEPATH/files/js
-rm -rf $SITEPATH/files/languages
+echo "Activate module: dru_comment_quote"
 
+ln -s $GITLC_DEPLOY_DIR/modules/dru_comment_quote $SITEPATH/sites/all/modules/local/
 
+drush  en dru_comment_quote -y
 
 echo "Clean cache"
 drush cc all

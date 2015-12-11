@@ -243,23 +243,23 @@ ul.links li a:before {
   vertical-align: middle;
 }
 
-li.comment-add:before {
+li.comment-add a:before {
   content: '\f044';
 }
 
-li.comment-comments:before {
+li.comment-comments a:before {
   content: '\f0e6';
 }
 
-li.blog_usernames_blog:before {
+li.blog_usernames_blog a:before {
   content: '\f007';
 }
 
-li.node-readmore:before {
+li.node-readmore a:before {
   content: '\f0f6';
 }
 
-li.quote-comment:before {
+li.quote-comment a:before {
   content: '\f10e';
 }
 

@@ -179,8 +179,8 @@ function alpha_preprocess_comment(&$variables) {
 
   $uri = entity_uri('comment', $comment);
   $variables['permalink'] = l('#', $uri['path'], $uri['options']);
-  
-  if(isset($variables['content']['links']['comment']['#links']['comment_forbidden'])){
+
+  if (isset($variables['content']['links']['comment']['#links']['comment_forbidden'])) {
     unset($variables['content']['links']['comment']['#links']['comment_forbidden']);
   }
 }

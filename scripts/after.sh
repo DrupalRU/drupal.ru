@@ -7,14 +7,11 @@ cd $SITEPATH
 
 #Issue #167 replace favicon
 
-echo "Import theme settings"
-drush -y en drupal_deploy
+echo "Activate module: dru_comment_quote"
 
-drush ddi variables --file=$GITLC_DEPLOY_DIR/data/theme_alpha_settings.variables.export
+ln -s $GITLC_DEPLOY_DIR/modules/dru_comment_quote $SITEPATH/sites/all/modules/local/
 
-drush -y dis drupal_deploy
-
-
+drush  en dru_comment_quote -y
 
 echo "Clean cache"
 drush cc all

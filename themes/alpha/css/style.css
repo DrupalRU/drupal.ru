@@ -55,7 +55,8 @@ a {
 }
 
 a:hover {
-  color: #309bd1;
+  color: #1474a0;
+  text-decoration: none;
 }
 
 /* Navbar style. */
@@ -235,36 +236,31 @@ a:hover {
 
 /* Add icons to node links. */
 
-li.comment-add a:before {
-  font: normal normal normal 14px/1 FontAwesome;
-  content: '\f044';
+ul.links li a:before {
+  color: orange;
+  font: 14px/1 FontAwesome;
   padding-right: 5px;
   vertical-align: middle;
-  color: orange;
+}
+
+li.comment-add a:before {
+  content: '\f044';
 }
 
 li.comment-comments a:before {
-  font: normal normal normal 14px/1 FontAwesome;
   content: '\f0e6';
-  padding-right: 5px;
-  vertical-align: middle;
-  color: orange;
 }
 
 li.blog_usernames_blog a:before {
-  font: normal normal normal 14px/1 FontAwesome;
   content: '\f007';
-  padding-right: 5px;
-  vertical-align: middle;
-  color: orange;
 }
 
 li.node-readmore a:before {
-  font: normal normal normal 14px/1 FontAwesome;
   content: '\f0f6';
-  padding-right: 5px;
-  vertical-align: middle;
-  color: orange;
+}
+
+li.quote-comment a:before {
+  content: '\f10e';
 }
 
 /* Forums style. */
@@ -431,10 +427,6 @@ div.awesome_icon {
   border-bottom: 1px solid #eee;
 }
 
-.media.odd.comment {
-/*  background-color: #f9f9f9;*/
-}
-
 .comment ul.links.list-inline {
   margin-bottom: 0px;
 }
@@ -501,8 +493,8 @@ li.quote a:before {
 /* Block quote. */
 blockquote {
   color: #888;
-  padding: 0 10px;
-  margin: 0px;
+  padding: 5px 10px;
+  margin: 10px;
   border-left: 2px solid #d34a32;
   font-style: italic;
   font-size: inherit;
@@ -607,7 +599,7 @@ ul.file-links li span.size {
     clear: left;
     text-align: right;
     text-overflow: ellipsis;
-    white-space: nowrap
+    white-space: nowrap;
   }
 
   #profile .dl-horizontal dd {
@@ -617,21 +609,21 @@ ul.file-links li span.size {
   #profile .dl-horizontal dd:before,
   #profile .dl-horizontal dd:after {
     display: table;
-    content: " "
+    content: " ";
   }
 
   #profile .dl-horizontal dd:after {
-    clear: both
+    clear: both;
   }
 
   #profile .dl-horizontal dd:before,
   #profile .dl-horizontal dd:after {
     display: table;
-    content: " "
+    content: " ";
   }
 
   #profile .dl-horizontal dd:after {
-    clear: both
+    clear: both;
   }
 }
 
@@ -676,7 +668,7 @@ ul.file-links li span.size {
     clear: left;
     text-align: right;
     text-overflow: ellipsis;
-    white-space: nowrap
+    white-space: nowrap;
   }
 
   .page-user .dl-horizontal dd {
@@ -686,21 +678,21 @@ ul.file-links li span.size {
   .page-user .dl-horizontal dd:before,
   .page-user .dl-horizontal dd:after {
     display: table;
-    content: " "
+    content: " ";
   }
 
   .page-user .dl-horizontal dd:after {
-    clear: both
+    clear: both;
   }
 
   .page-user .dl-horizontal dd:before,
   .page-user .dl-horizontal dd:after {
     display: table;
-    content: " "
+    content: " ";
   }
 
   .page-user .dl-horizontal dd:after {
-    clear: both
+    clear: both;
   }
 }
 

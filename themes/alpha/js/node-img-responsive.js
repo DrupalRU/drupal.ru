@@ -1,6 +1,8 @@
 /**
  * @file
+ * Make node images responsive.
  */
+
 (function ($, Drupal) {
   "use strict";
 

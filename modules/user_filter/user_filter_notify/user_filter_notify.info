@@ -1,0 +1,8 @@
+name = User filter notify
+description = Notify users when them mention like "@username"
+version = 7.x-1.0
+core = 7.x
+package = input-filters
+dependencies[] = token
+dependencies[] = user_filter
+configure = admin/config/people/accounts

@@ -5,13 +5,14 @@ SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
 echo "Full site path: $SITEPATH"
 cd $SITEPATH
 
-#Issue #167 replace favicon
+#Issue #95
 
-echo "Activate module: dru_comment_quote"
+echo "Activate module: user_filter"
 
-ln -s $GITLC_DEPLOY_DIR/modules/dru_comment_quote $SITEPATH/sites/all/modules/local/
+ln -s $GITLC_DEPLOY_DIR/modules/user_filter $SITEPATH/sites/all/modules/local/
 
-drush  en dru_comment_quote -y
+drush  en user_filter -y
+drush  en user_filter_notify -y
 
 echo "Clean cache"
 drush cc all

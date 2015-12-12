@@ -179,12 +179,19 @@ function alpha_preprocess_comment(&$variables) {
 
   $uri = entity_uri('comment', $comment);
   $variables['permalink'] = l('#', $uri['path'], $uri['options']);
+  
+  if(isset($variables['content']['links']['comment']['#links']['comment_forbidden'])){
+    unset($variables['content']['links']['comment']['#links']['comment_forbidden']);
+  }
 }
 
 /**
  * Implements hook_preprocess_node().
  */
 function alpha_preprocess_node(&$variables) {
+  if(isset($variables['links']['comment']['#links']['comment_forbidden'])){
+    unset($variables['links']['comment']['#links']['comment_forbidden']);
+  }
   $node = $variables['elements']['#node'];
   if ($variables['teaser']) {
     // Add a new item into the theme_hook_suggestions array.

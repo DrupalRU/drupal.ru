@@ -583,6 +583,10 @@ ul.file-links li span.size {
   margin: 0px;
 }
 
+#profile .profile .user-picture {
+  float: none;
+}
+
 #profile .dl-horizontal dt {
   width: 49%;
 }

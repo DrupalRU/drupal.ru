@@ -1,0 +1,21 @@
+<?php 
+
+function disable_login_implements_alter(&$implementations, $hook) {
+  if ($hook != 'preprocess_node') {
+    return;
+  }
+  $module = 'disable_login';
+  $group = $implementations[$module];
+  unset($implementations[$module]);
+  $implementations[$module] = $group;
+}
+
+function disable_login_preprocess_node(&$vars) {
+  
+  if(isset($vars['elements']['links']['comment']['#links']['comment_forbidden'])){
+    unset($vars['elements']['links']['comment']['#links']['comment_forbidden']);
+  }
+  if(isset($vars['content']['links']['comment']['#links']['comment_forbidden'])){
+    unset($vars['content']['links']['comment']['#links']['comment_forbidden']);
+  }
+}

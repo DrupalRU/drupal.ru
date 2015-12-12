@@ -1,0 +1,3 @@
+name = Disable Login
+description = Disable Login / Authorize links.
+core = 7.x

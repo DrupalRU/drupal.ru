@@ -1,0 +1,6 @@
+name = Mat filter
+description = Add "php-obscene-censor-rus" php-class.
+version = 7.x-1.x-dev
+core = 7.x
+package = content-authoring
+dependencies[] = simple_validate

@@ -73,6 +73,9 @@ ln -s $GITLC_DEPLOY_DIR/modules/* $SITEPATH/sites/all/modules/local/
 echo "Enable quote"
 drush en -y quote
 
+echo "Enable dru_comment_quote"
+drush en -y dru_comment_quote
+
 echo "Install Font awesome"
 cd  $SITEPATH/sites/all/libraries
 git clone https://github.com/FortAwesome/Font-Awesome.git fontawesome

@@ -1,0 +1,46 @@
+.user_filter {
+  border-bottom: 1px dashed;
+  position: relative;
+}
+
+.user_filter:hover {
+  text-decoration: none;
+}
+
+.user_info {
+  background: #fff none repeat scroll 0 0;
+  border-radius: 4px;
+  box-shadow: 0 5px 10px -5px #787878;
+  display: none;
+  max-width: 250px;
+  padding: 15px;
+  width: 90vw;
+  z-index: 9999;
+  position: absolute;
+}
+
+.user_info:before {
+  background: inherit;
+  border-radius: 2px;
+  bottom: -7px;
+  box-shadow: 1px 1px 5px #b0b0b0;
+  content: "";
+  display: block;
+  height: 15px;
+  left: 20px;
+  position: absolute;
+  transform: rotate(45deg);
+  width: 15px;
+  z-index: -1;
+}
+
+.user_info:after {
+  background: inherit;
+  bottom: 0;
+  content: "";
+  height: 15px;
+  left: 10px;
+  position: absolute;
+  width: 35px;
+  z-index: -1;
+}

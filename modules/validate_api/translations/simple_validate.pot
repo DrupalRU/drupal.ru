@@ -1,0 +1,49 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  simple_validate.module: n/a
+#  simple_validate.info: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-12-17 20:17+0200\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: simple_validate.module:43
+msgid "Title"
+msgstr ""
+
+#: simple_validate.module:73
+msgid "Node validation"
+msgstr ""
+
+#: simple_validate.module:79
+msgid "Use validation"
+msgstr ""
+
+#: simple_validate.module:113
+msgid "Validators"
+msgstr ""
+
+#: simple_validate.info:0
+msgid "Simple Validate"
+msgstr ""
+
+#: simple_validate.info:0
+msgid "Provide Simple Validate"
+msgstr ""
+
+#: simple_validate.info:0
+msgid "content-authoring"
+msgstr ""
+

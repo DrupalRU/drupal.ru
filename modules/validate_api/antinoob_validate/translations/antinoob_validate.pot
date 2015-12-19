@@ -3,8 +3,8 @@
 # LANGUAGE translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  simple_validators.module: n/a
-#  simple_validators.info: n/a
+#  antinoob_validate.module: n/a
+#  antinoob_validate.info: n/a
 #
 #, fuzzy
 msgid ""
@@ -19,47 +19,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: simple_validators.module:11
+#: antinoob_validate.module:11
 msgid "Exclamation point"
 msgstr ""
 
-#: simple_validators.module:12
+#: antinoob_validate.module:12
 msgid "It prohibits use more than one exclamation point in a row."
 msgstr ""
 
-#: simple_validators.module:18
+#: antinoob_validate.module:18
 msgid "Caps Lock"
 msgstr ""
 
-#: simple_validators.module:19
+#: antinoob_validate.module:19
 msgid "Prohibits the use of stricter caps."
 msgstr ""
 
-#: simple_validators.module:38;70;102
+#: antinoob_validate.module:38;70;102
 msgid "Title"
 msgstr ""
 
-#: simple_validators.module:57
+#: antinoob_validate.module:57
 msgid "Field \"@field\" isn't valid!"
 msgstr ""
 
-#: simple_validators.module:89
+#: antinoob_validate.module:89
 msgid "Field \"@field\" isn't valid! Do not use more than one exclamation point in a row."
 msgstr ""
 
-#: simple_validators.module:123
+#: antinoob_validate.module:123
 msgid "Field \"@field\" isn't valid! Do not use just stricter caps."
 msgstr ""
 
-#: simple_validators.info:0
+#: antinoob_validate.info:0
 msgid "Simple Validators"
 msgstr ""
 
-#: simple_validators.info:0
+#: antinoob_validate.info:0
 msgid "Add  few simple validators."
 msgstr ""
 
-#: simple_validators.info:0
+#: antinoob_validate.info:0
 msgid "content-authoring"
 msgstr ""
 

@@ -21,6 +21,7 @@ function dru_comment_quote_comment_view($comment) {
  */
 function dru_comment_quote_node_view($node, $view_mode) {
   if ($view_mode === 'full' && user_access('post comments') && in_array($node->type, _quote_variable_get('node_types')) && $node->comment == COMMENT_NODE_OPEN && _quote_variable_get('node_link_display')) {
+    drupal_add_js(drupal_get_path('module', 'dru_comment_quote') . '/dru-comment-quote.js');
     $node->content['#pre_render'][] = 'dru_comment_quote_link_pre_render';
   }
 }

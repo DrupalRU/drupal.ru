@@ -1,9 +1,9 @@
 <?php 
 
 /**
- * Implements hook_simple_validator_info().
+ * Implements hook_validator_info().
  */
-function mat_filter_simple_validator_info(){
+function antiswearing_validate_validator_info(){
   $items = array();
   $items[] = array(
     'type' => 'text',
@@ -20,7 +20,7 @@ function mat_filter_simple_validator_info(){
  * by Vearutop: https://github.com/vearutop/php-obscene-censor-rus
  */
 function mat_callback($field, $field_name, $entity, &$message){
-  module_load_include('php', 'mat_filter', 'obscene/obscene.class');
+  module_load_include('php', 'antiswearing_validate', 'obscene/obscene.class');
   
   $values = array();
   $valid = array();

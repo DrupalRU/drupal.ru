@@ -1,6 +1,6 @@
-name = Simple Validators
+name = Antinoob Validate
 description = Add  few simple validators.
 version = 7.x-1.x-dev
 core = 7.x
 package = content-authoring
-dependencies[] = simple_validate
+dependencies[] = validate_api

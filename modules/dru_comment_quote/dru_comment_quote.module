@@ -21,6 +21,7 @@ function dru_comment_quote_comment_view($comment) {
  */
 function dru_comment_quote_node_view($node, $view_mode) {
   if ($view_mode === 'full' && user_access('post comments') && in_array($node->type, _quote_variable_get('node_types')) && $node->comment == COMMENT_NODE_OPEN && _quote_variable_get('node_link_display')) {
+    drupal_add_js(drupal_get_path('module', 'dru_comment_quote') . '/dru-comment-quote.js');
     $node->content['#pre_render'][] = 'dru_comment_quote_link_pre_render';
   }
 }
@@ -33,8 +34,12 @@ function dru_comment_quote_preprocess_field(&$variables) {
   if (!in_array($variables['element']['#field_name'], array('body', 'comment_body'))) {
     return;
   }
-  $variables['classes_array'][] = 'dru-comment-quote-content';
-  $variables['attributes_array']['data-user'][] = $variables['element']['#object']->name;
+  
+  $entity = $variables['element']['#object'];
+  $user_name = !empty($entity->name) ? $entity->name : variable_get('anonymous', t('Anonymous'));
+
+  $variables['attributes_array']['data-source'][] = $variables['element']['#source_id'];
+  $variables['attributes_array']['data-user'][] = $user_name;
 }
 
 /**
@@ -45,27 +50,28 @@ function dru_comment_quote_preprocess_field(&$variables) {
  * @return
  */
 function dru_comment_quote_link_pre_render($element) {
-  static $js_added = FALSE;
 
-  if (!$js_added) {
-    drupal_add_js(drupal_get_path('module', 'dru_comment_quote') . '/dru-comment-quote.js');
-    drupal_add_js(array(
-      'dru_comment_quote' => array(
-        'pleas_select' => t('Please select the commented text'),
-      ),
-    ), 'setting');
-    $js_added = TRUE;
-  }
   if (!isset($element['links']['comment']['#links']['quote'])) {
     return;
   }
 
-  $link = $element['links']['comment']['#links']['quote'];
-  unset($element['links']['comment']['#links']['quote']);
-  unset($link['query']);
-  $link['href'] = 'comment';
-  $link['fragment'] = 'comment-quote';
+  //$element['classes_array'][]='comment-quote-source';
+  $id = "dru-comment-quote-{$element['#entity_type']}-";
+
+  switch ($element['#entity_type']) {
+    case 'node':
+      $id.=$element['#node']->nid;
+      $element['body']['#source_id'] = $id;
+      break;
+    case 'comment':
+      $id.=$element['#comment']->cid;
+      $element['comment_body']['#source_id'] = $id;
+      break;
+  }
+
+  $link = &$element['links']['comment']['#links']['quote'];
   $link['attributes']['class'][] = 'comment-quote-link';
-  $element['links']['comment']['#links']['quote-comment'] = $link;
+  $link['attributes']['data-id'] = $id;
+
   return $element;
 }

@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Implements hook_simple_validator_info().
+ * Implements hook_validator_info().
  * Тестовый валидатор.
  */
-function simple_validate_simple_validator_info(){
+function antinoob_validate_validator_info(){
   $items = array();
   $items[] = array(
     'type' => 'text',
@@ -25,12 +25,12 @@ function simple_validate_simple_validator_info(){
     'title' => 'Срочно',
     'description' => 'Запрет на слово "СРОЧНО"',
     'name' => 'simple_srochno',
-    'callback' => 'simple_srochno_callback',
+    'callback' => 'srochno_callback',
   );
   return $items;
 }
 
-function simple_srochno_callback($field, $field_name, $entity, &$message){
+function srochno_callback($field, $field_name, $entity, &$message){
   $values = array();
   $valid = array();
   if($field_name == 'title'){

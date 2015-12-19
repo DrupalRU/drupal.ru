@@ -1,4 +1,4 @@
-# Модуль Simple Validate
+# Модуль Validate API
 
 Позволяет использовать собственные валидаторы для полей материала.
 
@@ -15,10 +15,10 @@ function MYMODULE_simple_validator_info(){
   $items = array();
   
   $items[] = array(
-    'type'        => 'text',               // Field module
-    'name'        => 'simple_validate',    // Validator machine name
-    'title'       => 'Simple Validate',    // Validator title
-    'description' => 'Simple Discription', // Validator description
+    'type'        => 'text',                        // Field module
+    'name'        => 'simple_validate',             // Validator machine name
+    'title'       => 'Validate API',             // Validator title
+    'description' => 'Simple Discription',          // Validator description
     'callback'    => 'simple_validator_callback',   // Validation callback
   );
   
@@ -70,7 +70,7 @@ Callback возвращает булево значение "TRUE", если п�
 - **$field** - валидируемое поле (может быть значением, если передается *Title*, или массивом, если обычное поле);
 - **$field_name** - машинное имя поля;
 - **$entity** - валидируемая сущность (используется для получения лейбла поля);
-- **$message** - сообщение выводимое пользователю, в случаи не прохождения валидации.
+- **$message** - сообщение выводимое пользователю, в случае не прохождения валидации.
 
 ________________
 

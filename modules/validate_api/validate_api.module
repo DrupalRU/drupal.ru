@@ -2,12 +2,12 @@
 
 /**
  * Add API hook for imlements custom validators.
- * hook_simple_validate_info().
+ * hook_validator_info().
  */
 function _validators_types(){
   $validators = array();
   
-  foreach(module_invoke_all('simple_validator_info') as $validator){
+  foreach(module_invoke_all('validator_info') as $validator){
     $validators[$validator['type']][$validator['name']] = $validator;
   }
   
@@ -17,7 +17,7 @@ function _validators_types(){
 function _validators(){
   $validators = array();
   
-  foreach(module_invoke_all('simple_validator_info') as $validator){
+  foreach(module_invoke_all('validator_info') as $validator){
     $validators[$validator['name']] = $validator;
   }
   
@@ -28,7 +28,7 @@ function _validators(){
 /**
  * Implements hook_form().
  */
-function simple_validate_form_alter(&$form, $form_state, $form_id){
+function validate_api_form_alter(&$form, $form_state, $form_id){
   if($form_id == 'node_type_form'){
       
     $validators = _validators_types();
@@ -50,7 +50,7 @@ function simple_validate_form_alter(&$form, $form_state, $form_id){
         $field_types[] = $validator;
       }
       
-      $variable_name = 'simple_validate_' . $node_type;
+      $variable_name = 'validate_api_' . $node_type;
       $settings = variable_get($variable_name);
       
       if(empty($settings)){
@@ -145,23 +145,23 @@ function simple_validate_form_alter(&$form, $form_state, $form_id){
         );
       }
       
-      $form['#submit'][] = 'simple_validate_form_submit';
+      $form['#submit'][] = 'validate_api_form_submit';
     }
   }
   
   if(!empty($form['#node_edit_form'])){
     $node_type = $form['#bundle'];
-    $settings = variable_get('simple_validate_' . $node_type);
+    $settings = variable_get('validate_api_' . $node_type);
     if(!empty($settings['validate'])){
-      $form['#validate'][] = 'simple_validate_form_validate';
+      $form['#validate'][] = 'validate_api_form_validate';
     }
   }
 }
 
-function simple_validate_form_validate($form, &$form_state){
+function validate_api_form_validate($form, &$form_state){
   
   $node_type = $form['#bundle'];
-  $settings = variable_get('simple_validate_' . $node_type);
+  $settings = variable_get('validate_api_' . $node_type);
   if(!empty($settings['validate'])){
     $all_validators = _validators();
     foreach($settings['validate'] as $field => $validators){
@@ -183,7 +183,7 @@ function simple_validate_form_validate($form, &$form_state){
   }
 }
 
-function simple_validate_form_submit($form, &$form_state){
+function validate_api_form_submit($form, &$form_state){
   $use = $form_state['values']['validate_settings'];
     
   $node_type = $form['#node_type']->type;
@@ -223,13 +223,13 @@ function simple_validate_form_submit($form, &$form_state){
      }
     }
   }
-  $variable_name = 'simple_validate_' . $node_type;
+  $variable_name = 'validate_api_' . $node_type;
   if(!isset($validate_fields)){
     $validate_fields = array();
   }
-  $simple_validate = array(
+  $validate_api = array(
     'settings' => $use,
     'validate' => $validate_fields,
   );
-  variable_set($variable_name, $simple_validate);
+  variable_set($variable_name, $validate_api);
 }

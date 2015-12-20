@@ -92,5 +92,5 @@ msgid "@[author:name]:\n    \n[text:original]\n\n[comment:url]\n\n\n-- Site team
 msgstr "@[author:name]:\n    \n[text:original]\n\n[comment:url]\n\n\n-- Сайт [site:name]"
 
 #: user_filter_notify.install:17
-msgid "@[author:name] упомянул вас на сайте [site:name]"
-msgstr ""
+msgid "@[author:name] mentioned you on [site:name]"
+msgstr "@[author:name] упомянул вас на сайте [site:name]"

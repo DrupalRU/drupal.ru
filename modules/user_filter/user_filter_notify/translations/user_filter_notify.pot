@@ -98,3 +98,12 @@ msgstr ""
 #: user_filter_notify.info:0
 msgid "input-filters"
 msgstr ""
+
+#: user_filter_notify.install:7
+msgid "@[author:name]:\n    \n[text:original]\n\n[comment:url]\n\n\n-- Site team [site:name]"
+msgstr ""
+
+#: user_filter_notify.install:17
+msgid "@[author:name] mentioned you on [site:name]"
+msgstr ""
+

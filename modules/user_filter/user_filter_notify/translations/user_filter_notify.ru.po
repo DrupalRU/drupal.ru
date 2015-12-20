@@ -87,3 +87,10 @@ msgstr "Фильтр "упоминание пользователя""
 msgid "Notify users when them mention like \"@username\""
 msgstr "Уведомить пользователя, когда он был упомянут через \"@username\""
 
+#: user_filter_notify.install:7
+msgid "@[author:name]:\n    \n[text:original]\n\n[comment:url]\n\n\n-- Site team [site:name]"
+msgstr "@[author:name]:\n    \n[text:original]\n\n[comment:url]\n\n\n-- Сайт [site:name]"
+
+#: user_filter_notify.install:17
+msgid "@[author:name] упомянул вас на сайте [site:name]"
+msgstr ""

@@ -83,4 +83,3 @@ function dru_query_node_load_multiple_alter(QueryAlterableInterface &$query) {
   $query->addField('dr', 'resolved');
   $query->addField('dr', 'cid', 'resolved_cid');
 }
-

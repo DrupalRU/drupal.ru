@@ -4,15 +4,17 @@
  * Implements hook_install().
  */
 function user_filter_notify_install() {
-  $message = '@[author:name]:
+  $message = t('@[author:name]:
     
 [text:original]
 
+[comment:url]
 
--- Site team [site:name]';
+
+-- Site team [site:name]');
   variable_set('user_info_notify', array(
     'notify' => TRUE,
-    'subject' => '@[author:name] mentioned you on [site:name]',
+    'subject' => t('@[author:name] mentioned you on [site:name]'),
     'message' => $message,
   ));
 }

@@ -120,13 +120,13 @@ function user_filter_notify_form_alter(&$form, &$form_state, $form_id){
       ),
       'notify_subject' => array(
         '#type' => 'textfield',
-        '#title' => 'Тема',
+        '#title' => t('Subject'),
         '#default_value' => $default['subject'],
         '#maxlength' => 180,
       ),
       'notify_body' => array(
         '#type' => 'textarea',
-        '#title' => 'Содержимое',
+        '#title' => t('Body'),
         '#default_value' => $default['message'],
         '#rows' => 15,
       ),

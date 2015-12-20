@@ -4,12 +4,9 @@
  * Implements hook_install().
  */
 function user_filter_notify_install() {
-  $message = '@[author:name] [author:url]
+  $message = '@[author:name]:
     
 [text:original]
-
-[node:url]
-[comment:url]
 
 
 -- Site team [site:name]';

@@ -148,7 +148,7 @@ function validate_api_form_alter(&$form, $form_state, $form_id){
       $form['#submit'][] = 'validate_api_form_submit';
     }
   }
-  
+  drupal_set_message($form_id);
   if(!empty($form['#node_edit_form'])){
     $node_type = $form['#bundle'];
     $settings = variable_get('validate_api_' . $node_type);

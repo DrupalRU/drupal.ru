@@ -19,23 +19,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: antiswearing_validate.module:29
-msgid "Title"
+#: antiswearing_validate.module:10
+msgid "Coarse or offensive language filter"
 msgstr ""
 
-#: antiswearing_validate.module:48
-msgid "Field \"@field\" isn't valid! Use profanity is prohibited!"
+#: antiswearing_validate.module:11
+msgid "Do not allow to use coarse or offensive language"
 msgstr ""
 
-#: antiswearing_validate.info:0
-msgid "Mat filter"
-msgstr ""
-
-#: antiswearing_validate.info:0
-msgid "Add \"php-obscene-censor-rus\" php-class."
+#: antiswearing_validate.module:46
+msgid "Do not use coarse or offensive language: [@word]"
 msgstr ""
 
 #: antiswearing_validate.info:0
-msgid "content-authoring"
+msgid "Antiswearing Validate"
 msgstr ""
 
+#: antiswearing_validate.info:0
+msgid "Add \"php-obscene-censor-rus\" php-class for antiswearing validation."
+msgstr ""

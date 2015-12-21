@@ -149,10 +149,6 @@ function validate_api_form_alter(&$form, $form_state, $form_id){
     }
   }
 
-  if('comment_node_page_form' == $form_id){
-    drupal_set_message(print_r($form,true));    
-  }
-
   if(!empty($form['#node_edit_form'])){
     $node_type = $form['#bundle'];
     $settings = variable_get('validate_api_' . $node_type);

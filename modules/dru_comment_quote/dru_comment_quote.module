@@ -34,7 +34,7 @@ function dru_comment_quote_preprocess_field(&$variables) {
   if (!in_array($variables['element']['#field_name'], array('body', 'comment_body'))) {
     return;
   }
-  
+
   $entity = $variables['element']['#object'];
   $user_name = !empty($entity->name) ? $entity->name : variable_get('anonymous', t('Anonymous'));
 
@@ -55,16 +55,17 @@ function dru_comment_quote_link_pre_render($element) {
     return;
   }
 
-  //$element['classes_array'][]='comment-quote-source';
+  // $element['classes_array'][]='comment-quote-source';
   $id = "dru-comment-quote-{$element['#entity_type']}-";
 
   switch ($element['#entity_type']) {
     case 'node':
-      $id.=$element['#node']->nid;
+      $id .= $element['#node']->nid;
       $element['body']['#source_id'] = $id;
       break;
+
     case 'comment':
-      $id.=$element['#comment']->cid;
+      $id .= $element['#comment']->cid;
       $element['comment_body']['#source_id'] = $id;
       break;
   }

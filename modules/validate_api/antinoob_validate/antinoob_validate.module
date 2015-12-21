@@ -57,7 +57,7 @@ function antinoob_disallowed_words_callback($field, $field_name, $entity, &$mess
   
   foreach($values as $value){
     foreach($restricted_words as $word){
-      if(FALSE !== strpos($value, $word)){
+      if(FALSE !== strpos(str_replace(array(',', '!', '?'), $value), $word)){
         $status = TRUE;
         $message = t('[@word] is forbidden to use.', array('@word' => $word));
       }

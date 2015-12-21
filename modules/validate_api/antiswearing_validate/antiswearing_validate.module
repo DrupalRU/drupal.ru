@@ -43,7 +43,7 @@ function antiswearing_callback($field, $field_name, $entity, &$message){
   foreach($values as $value){
     if($word = ObsceneCensorRus::filterText($value)){
       $status = TRUE;
-      $message = t('Do not use coarse or offensive language: [@word]', array('@word' => $word));
+      $message = t('Do not use coarse or offensive language');
     }
   }
 

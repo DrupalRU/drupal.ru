@@ -1,9 +1,13 @@
-<?php 
+<?php
+/**
+ * @file
+ */
+
 
 /**
  * Implements hook_validator_info().
  */
-function antiswearing_validate_validator_info(){
+function antiswearing_validate_validator_info() {
   $items = array();
   $items[] = array(
     'type' => 'text',
@@ -17,22 +21,22 @@ function antiswearing_validate_validator_info(){
 
 /**
  * Validator callback. Use PHP-class "php-obscene-censor-rus"
- * by Vearutop: https://github.com/vearutop/php-obscene-censor-rus
+ * by Vearutop: https://github.com/vearutop/php-obscene-censor-rus.
  */
-function antiswearing_callback($field, $field_name, $entity, &$message){
+function antiswearing_callback($field, $field_name, $entity, &$message) {
   module_load_include('php', 'antiswearing_validate', 'obscene/obscene.class');
-  
+
   $values = array();
   $valid = array();
-  if($field_name == 'title'){
+  if ($field_name == 'title') {
     $values[] = $field;
     $label = t('Title');
   }
-  else{
+  else {
     $info = field_info_instance('node', $field_name, $entity->type);
     $label = $info['label'];
-    if(!empty($field['und'])){
-      foreach($field['und'] as $field_value){
+    if (!empty($field['und'])) {
+      foreach ($field['und'] as $field_value) {
         $values[] = $field_value['value'];
       }
     }
@@ -40,8 +44,8 @@ function antiswearing_callback($field, $field_name, $entity, &$message){
 
   $status = FALSE;
 
-  foreach($values as $value){
-    if($word = ObsceneCensorRus::filterText($value)){
+  foreach ($values as $value) {
+    if ($word = ObsceneCensorRus::filterText($value)) {
       $status = TRUE;
       $message = t('Do not use coarse or offensive language');
     }

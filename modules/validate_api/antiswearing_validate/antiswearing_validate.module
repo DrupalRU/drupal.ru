@@ -7,10 +7,10 @@ function antiswearing_validate_validator_info(){
   $items = array();
   $items[] = array(
     'type' => 'text',
-    'title' => 'Мат-фильтр',
-    'description' => 'Запрет употребления матершинных слов',
+    'title' => t('Coarse or offensive language filter'),
+    'description' => t('Do not allow to use coarse or offensive language'),
     'name' => 'mat',
-    'callback' => 'mat_callback',
+    'callback' => 'antiswearing_callback',
   );
   return $items;
 }
@@ -19,7 +19,7 @@ function antiswearing_validate_validator_info(){
  * Validator callback. Use PHP-class "php-obscene-censor-rus"
  * by Vearutop: https://github.com/vearutop/php-obscene-censor-rus
  */
-function mat_callback($field, $field_name, $entity, &$message){
+function antiswearing_callback($field, $field_name, $entity, &$message){
   module_load_include('php', 'antiswearing_validate', 'obscene/obscene.class');
   
   $values = array();
@@ -37,18 +37,15 @@ function mat_callback($field, $field_name, $entity, &$message){
       }
     }
   }
-  
+
+  $status = FALSE;
+
   foreach($values as $value){
-    if(ObsceneCensorRus::filterText($value)){
-      $valid[] = FALSE;
+    if($word = ObsceneCensorRus::filterText($value)){
+      $status = TRUE;
+      $message = t('Do not use coarse or offensive language: [@word]', array('@word' => $word));
     }
   }
-  
-  if(in_array(FALSE, $valid)){
-    $message = t('Field "@field" isn\'t valid! Use profanity is prohibited!', array('@field' => $label));
-    return FALSE;
-  }
-  else{
-    return TRUE;
-  }
+
+  return $status;
 }

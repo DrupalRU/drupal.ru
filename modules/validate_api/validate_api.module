@@ -14,7 +14,7 @@ function _validators_types(){
   return $validators;  
 }
 
-function _validators(){
+function validate_api_invoke_all_validators(){
   $validators = array();
   
   foreach(module_invoke_all('validator_info') as $validator){
@@ -102,7 +102,7 @@ function validate_api_form_alter(&$form, $form_state, $form_id){
           'fields' => array(),
         ),
       );
-      $validate_descriptions = _validators();
+      $validate_descriptions = validate_api_invoke_all_validators();
       $vdesc_output = '';
       foreach($validate_descriptions as $validate_description){
         $vdesc_output .= '<h3 class="validator_description_title">' . $validate_description['title'] . '</h3>';
@@ -163,7 +163,7 @@ function validate_api_form_validate($form, &$form_state){
   $node_type = $form['#bundle'];
   $settings = variable_get('validate_api_' . $node_type);
   if(!empty($settings['validate'])){
-    $all_validators = _validators();
+    $all_validators = validate_api_invoke_all_validators();
     foreach($settings['validate'] as $field => $validators){
       foreach($validators as $validator => $validator_name){
         if(array_key_exists($validator, $all_validators)){
@@ -173,7 +173,7 @@ function validate_api_form_validate($form, &$form_state){
             $field_name = $field;
             $node = $form['#node'];
             $result = $callback($field_value, $field_name, $node, $message);
-            if(!$result){
+            if($result){
               form_set_error($field_name, $message);
             }
           }

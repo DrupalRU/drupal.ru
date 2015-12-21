@@ -2,35 +2,39 @@
 
 /**
  * Implements hook_validator_info().
- * Тестовый валидатор.
+ * Antinoob validation.
  */
 function antinoob_validate_validator_info(){
   $items = array();
   $items[] = array(
     'type' => 'text',
-    'title' => t('Exclamation point'),
-    'description' => t('It prohibits use more than one exclamation point in a row.'),
+    'title' => t('Exclamation'),
+    'description' => t('Disallow to use multiple exclamation symbols in a row.'),
     'name' => 'exclamation_point',
-    'callback' => 'exclamation_point_callback',
+    'callback' => 'antinoob_exclamation_symbol_callback',
   );
+
   $items[] = array(
     'type' => 'text',
     'title' => t('Caps Lock'),
-    'description' => t('Prohibits the use of stricter caps.'),
+    'description' => t('Disallow to use all capital words.'),
     'name' => 'caps_lock',
-    'callback' => 'caps_lock_callback',
+    'callback' => 'antinoob_caps_lock_callback',
   );
+
+  $restricted_words = explode("\n", file_get_contents(drupal_get_path('module', 'dru_comment_quote')));
+  
   $items[] = array(
     'type' => 'text',
-    'title' => 'Срочно',
-    'description' => 'Запрет на слово "СРОЧНО"',
+    'title' => t('Disallowed words'),
+    'description' => t('Disallow to use word(s): !words.', array('!words' => implode(",", $restricted_words ))),
     'name' => 'simple_srochno',
-    'callback' => 'srochno_callback',
+    'callback' => 'antinoob_disallowed_words_callback',
   );
   return $items;
 }
 
-function srochno_callback($field, $field_name, $entity, &$message){
+function antinoob_disallowed_words_callback($field, $field_name, $entity, &$message){
   $values = array();
   $valid = array();
   if($field_name == 'title'){
@@ -46,23 +50,24 @@ function srochno_callback($field, $field_name, $entity, &$message){
       }
     }
   }
+  
+  $status = FALSE;
+  
+  $restricted_words = explode("\n", file_get_contents(drupal_get_path('module', 'dru_comment_quote')));
   
   foreach($values as $value){
-    if(preg_match('/срочно/ui', $value)){
-      $valid[] = FALSE;
+    foreach($restricted_words as $word){
+      if(FALSE !== strpos($value, $word)){
+        $status = TRUE;
+        $message = t('[@word] is forbidden to use.', array('@word' => $word));
+      }
     }
   }
-  
-  if(in_array(FALSE, $valid)){
-    $message = t('Field "@field" isn\'t valid!', array('@field' => $label));
-    return FALSE;
-  }
-  else{
-    return TRUE;
-  }
+
+  return $status;
 }
 
-function exclamation_point_callback($field, $field_name, $entity, &$message){
+function antinoob_exclamation_symbol_callback($field, $field_name, $entity, &$message){
   $values = array();
   $valid = array();
   if($field_name == 'title'){
@@ -78,23 +83,20 @@ function exclamation_point_callback($field, $field_name, $entity, &$message){
       }
     }
   }
+  
+  $status = FALSE;
   
   foreach($values as $value){
     if(preg_match('/!!/', $value)){
-      $valid[] = FALSE;
+      $status = TRUE;
+      $message = t('[@value] Do not use more than one exclamation point in a row.', array('@value' => $value));
     }
   }
   
-  if(in_array(FALSE, $valid)){
-    $message = t('Field "@field" isn\'t valid! Do not use more than one exclamation point in a row.', array('@field' => $label));
-    return FALSE;
-  }
-  else{
-    return TRUE;
-  }
+  return $status;
 }
 
-function caps_lock_callback($field, $field_name, $entity, &$message){
+function antinoob_caps_lock_callback($field, $field_name, $entity, &$message){
   $values = array();
   $valid = array();
   if($field_name == 'title'){
@@ -111,19 +113,17 @@ function caps_lock_callback($field, $field_name, $entity, &$message){
     }
   }
   
+  $status = FALSE;
+  
   foreach($values as $value){
-    $caps_words = preg_match_all('/[A-ZА-ЯЁ]{2,}/u', $value, $caps_words_matches);
-    $words = preg_match_all('/[\w\d]+/u', $value, $words_matches);
-    if(count($caps_words_matches[0]) == count($words_matches[0])){
-      $valid[] = FALSE;
+    $words = explode(' ', $value);
+    foreach($words as $word){
+      $upper = mb_strtoupper($word);
+      if($word == $upper){
+        $status = TRUE;
+        $message = t('[@word] Using ALL capital symbols is forbidden. ', array('@word' => $word));
+      }
     }
   }
-  
-  if(in_array(FALSE, $valid)){
-    $message = t('Field "@field" isn\'t valid! Do not use just stricter caps.', array('@field' => $label));
-    return FALSE;
-  }
-  else{
-    return TRUE;
-  }
+  return $status;
 }

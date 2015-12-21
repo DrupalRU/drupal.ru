@@ -1,5 +1,5 @@
 name = Antinoob Validate
-description = Add  few simple validators.
+description = Provide few antinoob validators.
 version = 7.x-1.0
 core = 7.x
 package = content-authoring

@@ -1,0 +1,45 @@
+<?php
+
+function xbbcode_dru_init() {
+  drupal_add_css(drupal_get_path('module', 'xbbcode_dru') . '/xbbcode_dru.css');
+}
+
+function xbbcode_dru_xbbcode_info() {
+  $tags['module'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-puzzle-piece"></i><a href="https://drupal.org/project/{option}" title="{content}">{content}</a></span>',
+    'description' => t('Drupal.org modules'),
+    'sample' => t('[module=module_name]Module name[/module]'),
+  );
+  $tags['theme'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-paint-brush"></i><a href="https://drupal.org/project/{option}" title="{content}">{content}</a></span>',
+    'description' => t('Drupal.org themes'),
+    'sample' => t('[theme=theme_name]Theme name[/theme]'),
+  );
+  $tags['user'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-user"></i><a href="/username/{option}" title="{content}">{content}</a></span>',
+    'description' => t('Users'),
+    'sample' => t('[user=user_name]Username[/user]'),
+  );
+  $tags['api'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i><a href="http://api.drupal.org/api/function/{option}" title="{content}">{content}</a></span>',
+    'description' => t('API Drupal.org'),
+    'sample' => t('[api=api]API Drupal.org[/api]'),
+  );
+  $tags['man'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-code"></i><a href="http://php.net/{option}" title="{content}">{content}</a></span>',
+    'description' => t('PHP manual'),
+    'sample' => t('[man=function]Function name[/man]'),
+  );
+  $tags['ruapi'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i><a href="http://api.drupal.ru/api/function/{name}/{v}" title="{content}">{content}</a></span>',
+    'description' => t('API Drupal.ru by version'),
+    'sample' => t('[ruapi name=function v=8]API ru Drupal 8[/ruapi]'),
+  );
+  $tags['ru_api'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i><a href="http://api.drupal.ru/api/function/{option}" title="{content}">{content}</a></span>',
+    'description' => t('API Drupal.ru (Drupal 6)'),
+    'sample' => t('[ru_api=function]Drupal 6[/ru_api]'),
+  );
+
+  return $tags;
+}

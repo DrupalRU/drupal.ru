@@ -3,8 +3,8 @@
 # Russian translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  simple_validators.module: n/a
-#  simple_validators.info: n/a
+#  antinoob_validate.module: n/a
+#  antinoob_validate.info: n/a
 #
 msgid ""
 msgstr ""
@@ -20,46 +20,46 @@ msgstr ""
 "Language: ru\n"
 "X-Generator: Poedit 1.8.6\n"
 
-#: simple_validators.module:11
+#: antinoob_validate.module:11
 msgid "Exclamation point"
 msgstr "Восклицательные знаки"
 
-#: simple_validators.module:12
+#: antinoob_validate.module:12
 msgid "It prohibits use more than one exclamation point in a row."
 msgstr "Запрещает использование более чем одного восклицательного знака в строке."
 
-#: simple_validators.module:18
+#: antinoob_validate.module:18
 msgid "Caps Lock"
 msgstr ""
 
-#: simple_validators.module:19
+#: antinoob_validate.module:19
 msgid "Prohibits the use of stricter caps."
 msgstr "Запрещает использовать только ЗАГЛАВНЫЕ буквы."
 
-#: simple_validators.module:38;70;102
+#: antinoob_validate.module:38;70;102
 msgid "Title"
 msgstr "Заголовок"
 
-#: simple_validators.module:57
+#: antinoob_validate.module:57
 msgid "Field \"@field\" isn't valid!"
-msgstr "Поле \"@field\" не коректно!"
+msgstr "Поле \"@field\" не коректно! Запрещено использование слова \"Срочно\""
 
-#: simple_validators.module:89
+#: antinoob_validate.module:89
 msgid "Field \"@field\" isn't valid! Do not use more than one exclamation point in a row."
 msgstr "Поле \"@field\" не коректно! Не используйте больше одного восклицательного знака в поле!"
 
-#: simple_validators.module:123
+#: antinoob_validate.module:123
 msgid "Field \"@field\" isn't valid! Do not use just stricter caps."
 msgstr "Поле \"@field\" не коректно! Не используйте только ЗАГЛАВНЫЕ буквы."
 
-#: simple_validators.info:0
+#: antinoob_validate.info:0
 msgid "Simple Validators"
 msgstr ""
 
-#: simple_validators.info:0
+#: antinoob_validate.info:0
 msgid "Add  few simple validators."
 msgstr "Добавляет несколько простых валидаторов."
 
-#: simple_validators.info:0
+#: antinoob_validate.info:0
 msgid "content-authoring"
 msgstr ""

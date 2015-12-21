@@ -1,0 +1,85 @@
+<?php
+
+/**
+ * @file
+ * Contain main functionality of the module.
+ */
+
+/**
+ * Include functionality for resolve questions (nodes).
+ */
+require_once "includes/dru.resolve.inc";
+
+/**
+ * Include ajax commands.
+ */
+require_once "includes/dru.ajax.inc";
+
+/**
+ * Constant for variable, which can be used in another modules.
+ */
+define('DRU_CAN_RESOLVED', 'dru_can_resolved');
+
+/**
+ * Implements hook_menu().
+ */
+function dru_menu() {
+  $items['node/%node/resolve/%comment/%dru_resolve_token'] = array(
+    'title'             => 'Resolve',
+    'page callback'     => 'dru_resolve_node_ajax_callback',
+    'page arguments'    => array(1, 3, 4),
+    'access callback'   => 'dru_resolve_access',
+    'access arguments'  => array(1, 3, 4),
+    'type'              => MENU_CALLBACK,
+    'delivery callback' => 'ajax_deliver',
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for node_type_form().
+ */
+function dru_form_node_type_form_alter(&$form, &$form_state, $form_id) {
+  dru_add_resolve_setting($form, $form_state, $form_id);
+}
+
+/**
+ * Implements hook_comment_view().
+ */
+function dru_comment_view($comment, $view_mode, $langcode) {
+  dru_add_resolve_link($comment, $view_mode, $langcode);
+}
+
+/**
+ * Implements hook_comment_view_alter().
+ */
+function dru_preprocess_comment(&$variables) {
+  if (!empty($variables['elements']['#comment']->best)) {
+    $variables['classes_array'][] = 'best-comment';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for theme_node().
+ */
+function dru_preprocess_node(&$variables) {
+  dru_add_resolve_mark($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for theme_page().
+ */
+function dru_preprocess_page(&$variables) {
+  if (!empty($variables['node']->resolved)) {
+    drupal_set_title('[' . t('Resolved') . '] ' . $variables['node']->title);
+  }
+}
+
+/**
+ * Implements hook_query_TAG_alter() for node_load_multiple().
+ */
+function dru_query_node_load_multiple_alter(QueryAlterableInterface &$query) {
+  $query->leftJoin('dru_resolved', 'dr', 'dr.nid = base.nid');
+  $query->addField('dr', 'resolved');
+  $query->addField('dr', 'cid', 'resolved_cid');
+}

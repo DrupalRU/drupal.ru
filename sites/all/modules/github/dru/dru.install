@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * Implements hook_uninstall().
+ */
+function dru_uninstall() {
+  foreach (node_type_get_types() as $type) {
+    variable_del('dru_can_resolved_' . $type->type);
+  }
+}
+
+
+/**
+ * Implements hook_schema().
+ */
+function dru_schema() {
+  $schema['dru_resolved'] = array(
+    'fields'  => array(
+      'nid'      => array(
+        'description' => 'Identifier of a node.',
+        'type'        => 'int',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+        'default'     => 0,
+      ),
+      'cid'      => array(
+        'description' => 'Identifier of a comment which resolved the node.',
+        'type'        => 'int',
+        'not null'    => TRUE,
+        'default'     => 0,
+      ),
+      'resolved' => array(
+        'description' => 'Flag which says that related node is resolved.',
+        'type'        => 'int',
+        'size'        => 'tiny',
+        'not null'    => TRUE,
+        'default'     => 1,
+      ),
+    ),
+    'indexes' => array(
+      'nid' => array('nid'),
+    ),
+  );
+  return $schema;
+}

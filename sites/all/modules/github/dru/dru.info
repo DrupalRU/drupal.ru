@@ -1,0 +1,7 @@
+name = "DrupalRU"
+description = "Contain custom functionality for drupal.ru site."
+core = "7.x"
+package = Other
+
+scripts[] = js/dru.js
+stylesheets[all][] = css/dru.css

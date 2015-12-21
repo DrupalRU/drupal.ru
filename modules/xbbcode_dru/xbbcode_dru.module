@@ -1,9 +1,19 @@
 <?php
 
+/**
+ * @file
+ */
+
+/**
+ *
+ */
 function xbbcode_dru_init() {
   drupal_add_css(drupal_get_path('module', 'xbbcode_dru') . '/xbbcode_dru.css');
 }
 
+/**
+ *
+ */
 function xbbcode_dru_xbbcode_info() {
   $tags['module'] = array(
     'markup' => '<span class="xbbcode_dru"><i class="fa fa-puzzle-piece"></i><a href="https://drupal.org/project/{option}" title="{content}">{content}</a></span>',

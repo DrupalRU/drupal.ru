@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implements hook_install().
  */
 function user_filter_notify_install() {
@@ -20,8 +24,8 @@ function user_filter_notify_install() {
 }
 
 /**
- * Implements hook_uninstall()
+ * Implements hook_uninstall().
  */
 function user_filter_notify_uninstall() {
-	variable_del('user_info_notify'); 
+  variable_del('user_info_notify');
 }

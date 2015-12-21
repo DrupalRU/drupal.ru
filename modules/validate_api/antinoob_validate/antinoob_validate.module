@@ -38,7 +38,7 @@ function antinoob_disallowed_words_callback($field, $field_name, $entity, &$mess
   $values = array();
   $valid = array();
   if($field_name == 'title'){
-    $values[] = str_replace(array(',', '!', '?'), '', $field);
+    $values[] = str_replace(array(',', '!', '?'), ' ', $field);
     $label = t('Title');
   }
   else{
@@ -46,7 +46,7 @@ function antinoob_disallowed_words_callback($field, $field_name, $entity, &$mess
     $label = $info['label'];
     if(!empty($field['und'])){
       foreach($field['und'] as $field_value){
-        $values[] = str_replace(array(',', '!', '?'), '', $field_value['value']);
+        $values[] = str_replace(array(',', '!', '?'), ' ', $field_value['value']);
       }
     }
   }
@@ -57,6 +57,7 @@ function antinoob_disallowed_words_callback($field, $field_name, $entity, &$mess
   
   foreach($values as $value){
     foreach($restricted_words as $word){
+      drupal_set_message($value." " . $word . mb_stripos($value, $word));
       if(FALSE !== mb_stripos($value, $word)){
         $status = TRUE;
         $message = t('[@word] is forbidden to use.', array('@word' => $word));

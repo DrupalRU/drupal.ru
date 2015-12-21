@@ -20,7 +20,7 @@ msgstr ""
 "Language: ru\n"
 "X-Generator: Poedit 1.8.6\n"
 
-: antiswearing_validate.module:10
+#: antiswearing_validate.module:10
 msgid "Coarse or offensive language filter"
 msgstr "Фильтр агрессивные или матерных слов"
 

@@ -55,6 +55,8 @@ function antinoob_disallowed_words_callback($field, $field_name, $entity, &$mess
   
   $restricted_words = explode("\n", file_get_contents(drupal_get_path('module', 'antinoob_validate')));
   
+  drupal_set_message(drupal_get_path('module', 'antinoob_validate'));
+  
   foreach($values as $value){
     foreach($restricted_words as $word){
       drupal_set_message($value." [" . $word ."][". mb_stripos($value, $word) ."]");

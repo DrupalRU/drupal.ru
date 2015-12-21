@@ -70,13 +70,13 @@ function validate_api_form_alter(&$form, $form_state, $form_id){
     
       $form['validation'] = array(
         '#type' => 'fieldset',
-        '#title' => t('Node validation'),
+        '#title' => t('Validate API'),
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
         '#group' => 'additional_settings',
         'validate_settings' => array(
           '#type' => 'checkbox',
-          '#title' => t('Use validation'),
+          '#title' => t('Enable'),
           '#default_value' => $settings['settings'],
         ),
         'validate_items' => array(

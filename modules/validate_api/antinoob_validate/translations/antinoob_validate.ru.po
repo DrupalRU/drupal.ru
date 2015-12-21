@@ -21,45 +21,45 @@ msgstr ""
 "X-Generator: Poedit 1.8.6\n"
 
 #: antinoob_validate.module:11
-msgid "Exclamation point"
+msgid "Exclamation"
 msgstr "Восклицательные знаки"
 
 #: antinoob_validate.module:12
-msgid "It prohibits use more than one exclamation point in a row."
-msgstr "Запрещает использование более чем одного восклицательного знака в строке."
-
-#: antinoob_validate.module:18
-msgid "Caps Lock"
-msgstr ""
+msgid "Disallow to use multiple exclamation symbols in a row."
+msgstr "Запрет на использование нескольки восклицательных знаков вподряд"
 
 #: antinoob_validate.module:19
-msgid "Prohibits the use of stricter caps."
-msgstr "Запрещает использовать только ЗАГЛАВНЫЕ буквы."
+msgid "Caps Lock"
+msgstr "Заглавные буквы"
 
-#: antinoob_validate.module:38;70;102
-msgid "Title"
-msgstr "Заголовок"
+#: antinoob_validate.module:20
+msgid "Disallow to use all capital words."
+msgstr "Запрет на использование только заглавных букв в тексе"
 
-#: antinoob_validate.module:57
-msgid "Field \"@field\" isn't valid!"
-msgstr "Поле \"@field\" не коректно! Запрещено использование слова \"Срочно\""
+#: antinoob_validate.module:29
+msgid "Disallowed words"
+msgstr "Запрещенные слова"
 
-#: antinoob_validate.module:89
-msgid "Field \"@field\" isn't valid! Do not use more than one exclamation point in a row."
-msgstr "Поле \"@field\" не коректно! Не используйте больше одного восклицательного знака в поле!"
+#: antinoob_validate.module:30
+msgid "Disallow to use word(s): !words."
+msgstr "Запрет на использование слов: !words."
 
-#: antinoob_validate.module:123
-msgid "Field \"@field\" isn't valid! Do not use just stricter caps."
-msgstr "Поле \"@field\" не коректно! Не используйте только ЗАГЛАВНЫЕ буквы."
+#: antinoob_validate.module:62
+msgid "[@word] is forbidden to use."
+msgstr "Запрещено употреблять: @word"
+
+#: antinoob_validate.module:92
+msgid "[@value] Do not use more than one exclamation point in a row."
+msgstr "[@value] Не используйте более чем 1 восклицательный знак вподряд."
+
+#: antinoob_validate.module:124
+msgid "[@word] Using ALL capital symbols is forbidden. "
+msgstr "[@word] Запрещено писать текст заглавными буквами"
 
 #: antinoob_validate.info:0
-msgid "Simple Validators"
-msgstr ""
+msgid "Antinoob Validate"
+msgstr "Антинубская валидация текста"
 
 #: antinoob_validate.info:0
-msgid "Add  few simple validators."
-msgstr "Добавляет несколько простых валидаторов."
-
-#: antinoob_validate.info:0
-msgid "content-authoring"
-msgstr ""
+msgid "Provide few antinoob validators."
+msgstr "Предоставляет несколько антинубских валидаций текста."

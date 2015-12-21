@@ -2,5 +2,5 @@ name = Antiswearing Validate
 description = Add "php-obscene-censor-rus" php-class for antiswearing validation.
 version = 7.x-1.0
 core = 7.x
-package = content-authoring
+package = "Content authoring"
 dependencies[] = validate_api

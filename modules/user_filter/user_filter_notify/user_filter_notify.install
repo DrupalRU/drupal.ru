@@ -1,40 +1,31 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implements hook_install().
  */
 function user_filter_notify_install() {
-  if(module_exists('mimemail')){
-    $message = 'User <a href="[author:path]" title="User [author:name]">[author:name]</a> you mentioned in the node <a href="[node:url]" title="[node:title]">[node:title]</a>.
+  $message = t('@[author:name]:
+    
+[text:original]
 
-Original text:
-[text:simple]
+[comment:url]
 
-View node «[node:title]»: [node:url].
 
-Site team «[site:name]»
-Go to site: [site:url]';
-  }
-  else{
-    $message = 'User [author:name] you mentioned in the node [node:title].
-
-Original text:
-[text:text]
-
-<a href="[node:url]" title="[node:title]">View node</a>.
-
--- Site team «<a href="[site:url]" title="[site:name]">[site:name]</a>»';
-  }
+-- Site team [site:name]');
   variable_set('user_info_notify', array(
     'notify' => TRUE,
-    'subject' => '[user:name], you mentioned on «[site:name]»',
+    'subject' => t('@[author:name] mentioned you on [site:name]'),
     'message' => $message,
   ));
 }
 
 /**
- * Implements hook_uninstall()
+ * Implements hook_uninstall().
  */
 function user_filter_notify_uninstall() {
-	variable_del('user_info_notify'); 
+  variable_del('user_info_notify');
 }

@@ -1,40 +1,47 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Add API hook for imlements custom validators.
  * hook_validator_info().
  */
-function _validators_types(){
+function _validators_types() {
   $validators = array();
-  
-  foreach(module_invoke_all('validator_info') as $validator){
+
+  foreach (module_invoke_all('validator_info') as $validator) {
     $validators[$validator['type']][$validator['name']] = $validator;
   }
-  
-  return $validators;  
+
+  return $validators;
 }
 
-function _validators(){
+/**
+ *
+ */
+function validate_api_invoke_all_validators() {
   $validators = array();
-  
-  foreach(module_invoke_all('validator_info') as $validator){
+
+  foreach (module_invoke_all('validator_info') as $validator) {
     $validators[$validator['name']] = $validator;
   }
-  
-  return $validators;  
+
+  return $validators;
 }
 
 
 /**
  * Implements hook_form().
  */
-function validate_api_form_alter(&$form, $form_state, $form_id){
-  if($form_id == 'node_type_form'){
-      
+function validate_api_form_alter(&$form, $form_state, $form_id) {
+  if ($form_id == 'node_type_form') {
+
     $validators = _validators_types();
-    
-    if(!empty($validators)){
-      
+
+    if (!empty($validators)) {
+
       $node_type = $form['#node_type']->type;
       $node_fields = field_info_instances('node', $node_type);
       $fields = array(
@@ -44,22 +51,22 @@ function validate_api_form_alter(&$form, $form_state, $form_id){
           'module' => 'text',
         ),
       );
-      
+
       $field_types = array();
-      foreach($validators as $validator => $type){
+      foreach ($validators as $validator => $type) {
         $field_types[] = $validator;
       }
-      
+
       $variable_name = 'validate_api_' . $node_type;
       $settings = variable_get($variable_name);
-      
-      if(empty($settings)){
+
+      if (empty($settings)) {
         $settings['settings'] = FALSE;
       }
-    
-      foreach($node_fields as $node_field){
+
+      foreach ($node_fields as $node_field) {
         $type = $node_field['widget']['module'];
-        if(in_array($type, $field_types)){
+        if (in_array($type, $field_types)) {
           $fields[] = array(
             'key' => $node_field['field_name'],
             'name' => $node_field['label'],
@@ -67,16 +74,16 @@ function validate_api_form_alter(&$form, $form_state, $form_id){
           );
         }
       }
-    
+
       $form['validation'] = array(
         '#type' => 'fieldset',
-        '#title' => t('Node validation'),
+        '#title' => t('Validate API'),
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
         '#group' => 'additional_settings',
         'validate_settings' => array(
           '#type' => 'checkbox',
-          '#title' => t('Use validation'),
+          '#title' => t('Enable'),
           '#default_value' => $settings['settings'],
         ),
         'validate_items' => array(
@@ -102,9 +109,9 @@ function validate_api_form_alter(&$form, $form_state, $form_id){
           'fields' => array(),
         ),
       );
-      $validate_descriptions = _validators();
+      $validate_descriptions = validate_api_invoke_all_validators();
       $vdesc_output = '';
-      foreach($validate_descriptions as $validate_description){
+      foreach ($validate_descriptions as $validate_description) {
         $vdesc_output .= '<h3 class="validator_description_title">' . $validate_description['title'] . '</h3>';
         $vdesc_output .= '<div class="validator_description ' . $validate_description['name'] . '">' . $validate_description['description'] . '</div>';
       }
@@ -117,8 +124,8 @@ function validate_api_form_alter(&$form, $form_state, $form_id){
           '#markup' => $vdesc_output,
         ),
       );
-    
-      foreach($fields as $field){
+
+      foreach ($fields as $field) {
         $name = $field['key'];
         $form['validation']['validate_items']['fields'][$name] = array(
           '#type' => 'fieldset',
@@ -127,15 +134,15 @@ function validate_api_form_alter(&$form, $form_state, $form_id){
           '#title' => $field['name'],
         );
         $current_validators = array();
-        foreach($validators[$field['module']] as $validator){
+        foreach ($validators[$field['module']] as $validator) {
           $option_key = $validator['name'];
           $option_value = $validator['title'];
           $current_validators[$option_key] = $option_value;
         }
-        if(isset($settings['validate'][$name])){
+        if (isset($settings['validate'][$name])) {
           $default_value = array_keys($settings['validate'][$name]);
         }
-        else{
+        else {
           $default_value = array();
         }
         $form['validation']['validate_items']['fields'][$name][$field['key'] . '_' . 'validators'] = array(
@@ -144,36 +151,39 @@ function validate_api_form_alter(&$form, $form_state, $form_id){
           '#default_value' => $default_value,
         );
       }
-      
+
       $form['#submit'][] = 'validate_api_form_submit';
     }
   }
-  
-  if(!empty($form['#node_edit_form'])){
+
+  if (!empty($form['#node_edit_form'])) {
     $node_type = $form['#bundle'];
     $settings = variable_get('validate_api_' . $node_type);
-    if(!empty($settings['validate'])){
+    if (!empty($settings['validate'])) {
       $form['#validate'][] = 'validate_api_form_validate';
     }
   }
 }
 
-function validate_api_form_validate($form, &$form_state){
-  
+/**
+ *
+ */
+function validate_api_form_validate($form, &$form_state) {
+
   $node_type = $form['#bundle'];
   $settings = variable_get('validate_api_' . $node_type);
-  if(!empty($settings['validate'])){
-    $all_validators = _validators();
-    foreach($settings['validate'] as $field => $validators){
-      foreach($validators as $validator => $validator_name){
-        if(array_key_exists($validator, $all_validators)){
+  if (!empty($settings['validate'])) {
+    $all_validators = validate_api_invoke_all_validators();
+    foreach ($settings['validate'] as $field => $validators) {
+      foreach ($validators as $validator => $validator_name) {
+        if (array_key_exists($validator, $all_validators)) {
           $callback = $all_validators[$validator]['callback'];
-          if(function_exists($callback)) {
+          if (function_exists($callback)) {
             $field_value = $form_state['values'][$field];
             $field_name = $field;
             $node = $form['#node'];
             $result = $callback($field_value, $field_name, $node, $message);
-            if(!$result){
+            if ($result) {
               form_set_error($field_name, $message);
             }
           }
@@ -183,48 +193,51 @@ function validate_api_form_validate($form, &$form_state){
   }
 }
 
-function validate_api_form_submit($form, &$form_state){
+/**
+ *
+ */
+function validate_api_form_submit($form, &$form_state) {
   $use = $form_state['values']['validate_settings'];
-    
+
   $node_type = $form['#node_type']->type;
   $node_fields = field_info_instances('node', $node_type);
-  
-  if($use){
-    
+
+  if ($use) {
+
     $existen_validators = _validators_types();
     $validator_types = array();
-    foreach($existen_validators as $existen_validator => $types){
-      foreach($types as $type => $arr){
-        if(!in_array($type, $validator_types)){
+    foreach ($existen_validators as $existen_validator => $types) {
+      foreach ($types as $type => $arr) {
+        if (!in_array($type, $validator_types)) {
           $validator_types[$type] = $arr['title'];
         }
       }
     }
-    
+
     $fields = array('title');
-    
-    foreach($node_fields as $node_field){
+
+    foreach ($node_fields as $node_field) {
       $fields[] = $node_field['field_name'];
     }
-    
+
     $validate_fields = array();
-    foreach($form_state['values'] as $value => $validators){
-      if(substr($value, -11) == '_validators'){
+    foreach ($form_state['values'] as $value => $validators) {
+      if (substr($value, -11) == '_validators') {
         $field = substr($value, 0, strrpos($value, '_validators'));
         $active_validators = array();
-        foreach($validators as $validator => $validator_name){
-          if(!empty($validator_name) && array_key_exists($validator_name, $validator_types)){
+        foreach ($validators as $validator => $validator_name) {
+          if (!empty($validator_name) && array_key_exists($validator_name, $validator_types)) {
             $active_validators[$validator_name] = $validator_types[$validator_name];
           }
         }
-        if(in_array($field, $fields) && !empty($active_validators)){
+        if (in_array($field, $fields) && !empty($active_validators)) {
           $validate_fields[$field] = $active_validators;
         }
-     }
+      }
     }
   }
   $variable_name = 'validate_api_' . $node_type;
-  if(!isset($validate_fields)){
+  if (!isset($validate_fields)) {
     $validate_fields = array();
   }
   $validate_api = array(

@@ -1,7 +1,10 @@
+/**
+ * @file
+ */
 (function ($) {
   Drupal.behaviors.userFilterPopup = {
     attach: function (context, settings) {
-      
+
       $('.user_filter').hover(
         function(){
           var position = $(this).offset();
@@ -26,16 +29,16 @@
         function(){
           var id = $('#' + $(this).attr('data-user') + '_info');
           var timer = setTimeout(function checkHover() {
-            if(id.hasClass('show_info')){
+            if (id.hasClass('show_info')) {
               var timerId = setTimeout(checkHover, 200);
             }
-            else{
+            else {
               clearTimeout(timer);
               id.fadeOut().detach();
             }
           }, 200);
         }
-      );      
+      );
     }
   };
 })(jQuery);

@@ -19,31 +19,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: validate_api.module:43
-msgid "Title"
-msgstr ""
-
-#: validate_api.module:73
-msgid "Node validation"
-msgstr ""
-
-#: validate_api.module:79
-msgid "Use validation"
-msgstr ""
-
 #: validate_api.module:113
 msgid "Validators"
 msgstr ""
 
 #: validate_api.info:0
-msgid "Simple Validate"
+msgid "Validate API"
 msgstr ""
 
 #: validate_api.info:0
-msgid "Provide Simple Validate"
+msgid "Provide Validate API"
 msgstr ""
-
-#: validate_api.info:0
-msgid "content-authoring"
-msgstr ""
-

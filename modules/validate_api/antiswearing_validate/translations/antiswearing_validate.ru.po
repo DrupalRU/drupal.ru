@@ -20,22 +20,22 @@ msgstr ""
 "Language: ru\n"
 "X-Generator: Poedit 1.8.6\n"
 
-#: antiswearing_validate.module:29
-msgid "Title"
-msgstr "Заголовок"
+#: antiswearing_validate.module:10
+msgid "Coarse or offensive language filter"
+msgstr "Фильтр агрессивные или матерных слов"
 
-#: antiswearing_validate.module:48
-msgid "Field \"@field\" isn't valid! Use profanity is prohibited!"
-msgstr "Поле \"@field\" не коректно! Использовать нецензурную лексику запрещено!"
+#: antiswearing_validate.module:11
+msgid "Do not allow to use coarse or offensive language"
+msgstr "Не разрешать использовать матерные или агрессивные слова"
 
-#: antiswearing_validate.info:0
-msgid "Mat filter"
-msgstr "Мат-фильтр"
-
-#: antiswearing_validate.info:0
-msgid "Add \"php-obscene-censor-rus\" php-class."
-msgstr "Добавляет PHP-класс \"php-obscene-censor-rus\""
+#: antiswearing_validate.module:46
+msgid "Do not use coarse or offensive language"
+msgstr "Не используйте матерные или агрессивные слова"
 
 #: antiswearing_validate.info:0
-msgid "content-authoring"
-msgstr ""
+msgid "Antiswearing Validate"
+msgstr "Валидатор мата или агрессивных слов"
+
+#: antiswearing_validate.info:0
+msgid "Add \"php-obscene-censor-rus\" php-class for antiswearing validation."
+msgstr "Добавить \"php-obscene-censor-rus\" php-class для валидации мата."

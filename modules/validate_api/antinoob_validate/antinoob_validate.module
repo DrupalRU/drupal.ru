@@ -117,8 +117,10 @@ function antinoob_caps_lock_callback($field, $field_name, $entity, &$message){
   
   foreach($values as $value){
     $words = explode(' ', $value);
-    drupal_set_message(print_r($words,true));
     foreach($words as $word){
+      if(empty($word)){
+        continue;
+      }
       $upper = mb_strtoupper($word);
       if($word == $upper){
         $status = TRUE;

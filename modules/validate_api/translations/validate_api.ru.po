@@ -3,8 +3,8 @@
 # Russian translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  simple_validate.module: n/a
-#  simple_validate.info: n/a
+#  validate_api.module: n/a
+#  validate_api.info: n/a
 #
 msgid ""
 msgstr ""
@@ -20,30 +20,30 @@ msgstr ""
 "Language: ru\n"
 "X-Generator: Poedit 1.8.6\n"
 
-#: simple_validate.module:43
+#: validate_api.module:43
 msgid "Title"
 msgstr "Заголовок"
 
-#: simple_validate.module:73
+#: validate_api.module:73
 msgid "Node validation"
 msgstr "Валидация материалов"
 
-#: simple_validate.module:79
+#: validate_api.module:79
 msgid "Use validation"
 msgstr "Проверять тип материала"
 
-#: simple_validate.module:113
+#: validate_api.module:113
 msgid "Validators"
 msgstr "Валидаторы"
 
-#: simple_validate.info:0
+#: validate_api.info:0
 msgid "Simple Validate"
 msgstr ""
 
-#: simple_validate.info:0
+#: validate_api.info:0
 msgid "Provide Simple Validate"
 msgstr ""
 
-#: simple_validate.info:0
+#: validate_api.info:0
 msgid "content-authoring"
 msgstr ""

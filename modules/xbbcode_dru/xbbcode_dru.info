@@ -1,0 +1,5 @@
+name = BBCode Tags for drupal.ru
+description = A package of the tags for drupal.ru
+package = Extensible BBCode
+dependencies[] = xbbcode
+core = 7.x

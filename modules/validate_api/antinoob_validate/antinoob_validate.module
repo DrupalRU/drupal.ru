@@ -26,13 +26,21 @@ function antinoob_validate_validator_info() {
     'callback' => 'antinoob_caps_lock_callback',
   );
 
-  $restricted_words = explode("\n", file_get_contents(drupal_get_path('module', 'dru_comment_quote')));
+  $restricted_words = explode("\n", file_get_contents(drupal_get_path('module', 'antinoob_validate') . '/forbitten.words'));
+  $words = array();
+  foreach($restricted_words as $word) {
+    $word = trim($word);
+    if(!empty($word)) {
+      $words[] = '"' . $word . '"';
+    }
+  }
+  
 
   $items[] = array(
     'type' => 'text',
     'title' => t('Disallowed words'),
-    'description' => t('Disallow to use word(s): !words.', array('!words' => implode(",", $restricted_words))),
-    'name' => 'simple_srochno',
+    'description' => t('Disallow to use word(s): !words.', array('!words' => implode(', ', $words))),
+    'name' => 'disallowed_words',
     'callback' => 'antinoob_disallowed_words_callback',
   );
   return $items;
@@ -60,13 +68,17 @@ function antinoob_disallowed_words_callback($field, $field_name, $entity, &$mess
 
   $status = FALSE;
 
-  $restricted_words = explode("\n", file_get_contents(drupal_get_path('module', 'antinoob_validate') . "/forbitten.words"));
+  $restricted_words = explode("\n", file_get_contents(drupal_get_path('module', 'antinoob_validate') . '/forbitten.words'));
 
   foreach ($values as $value) {
     foreach ($restricted_words as $word) {
-      if (FALSE !== mb_stripos($value, $word)) {
-        $status = TRUE;
-        $message = t('[@word] is forbidden to use.', array('@word' => $word));
+      if(!empty($word)) {
+        $word = trim($word);
+        if(mb_stripos($value, $word) !== FALSE) {
+          $words[] = $word;
+          $status = TRUE;
+          $message = t('[@word] is forbidden to use.', array('@word' => implode(', ', $words)));
+        }
       }
     }
   }

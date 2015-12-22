@@ -6,27 +6,53 @@
 #  validate_api.module: n/a
 #  validate_api.info: n/a
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2015-12-17 20:17+0200\n"
-"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
-"Last-Translator: Gor Martsen <gor@me.com>\n"
-"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2015-12-22 02:16+0200\n"
+"PO-Revision-Date: 2015-12-22 02:18+0200\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Russian <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=3; plural=((((n"
+"%10)==1)&&((n%100)!=11))?(0):(((((n"
+"%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n"
+"%100)>=20)))?(1):2));\n"
+"Language: ru\n"
+"X-Generator: Poedit 1.8.6\n"
 
-#: validate_api.module:113
-msgid "Validators"
-msgstr "Доступные расширения для проверки"
+#: validate_api.module:50
+msgid "Title"
+msgstr "Заголовок"
 
-#: validate_api.info:0
+#: validate_api.module:72 validate_api.info:0
 msgid "Validate API"
 msgstr "API проверки содержимого"
 
+#: validate_api.module:78
+msgid "Enable"
+msgstr "Включить"
+
+#: validate_api.module:109;206
+msgid "Validators"
+msgstr "Доступные расширения для проверки"
+
+#: validate_api.module:158
+msgid "Validate Comments"
+msgstr "Проверять комментарии"
+
+#: validate_api.module:164
+msgid "Comment validate"
+msgstr "Проверка комментариев"
+
 #: validate_api.info:0
 msgid "Provide Validate API"
-msgstr "Предоставляет возможность проведения проверок материала через API"
+msgstr ""
+"Предоставляет возможность проведения "
+"проверок материала через API"
+
+#: validate_api.info:0
+msgid "Content authoring"
+msgstr "Работа с содержимым"

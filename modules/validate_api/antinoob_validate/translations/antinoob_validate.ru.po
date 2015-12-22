@@ -26,7 +26,7 @@ msgstr "Восклицательные знаки"
 
 #: antinoob_validate.module:12
 msgid "Disallow to use multiple exclamation symbols in a row."
-msgstr "Запрет на использование нескольки восклицательных знаков вподряд"
+msgstr "Запрет на использование нескольки восклицательных знаков подряд"
 
 #: antinoob_validate.module:19
 msgid "Caps Lock"

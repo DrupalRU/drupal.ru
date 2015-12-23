@@ -458,7 +458,7 @@ div.awesome_icon {
 
 /* Add icons to comment links. */
 
-li.comment-delete a:before {
+/*li.comment-delete a:before {
   font: normal normal normal 14px/1 FontAwesome;
   content: '\f00d';
   padding-right: 5px;
@@ -488,7 +488,47 @@ li.quote a:before {
   padding-right: 5px;
   vertical-align: middle;
   color: orange;
+}*/
+
+/* /Add icons to comment links. */
+
+/*<--Links Icons-->*/
+
+.comment ul.links a {
+  background: #39b5f2 none repeat scroll 0 0;
+  border-radius: 7px;
+  color: #f5f5f5;
+  display: inline-block;
+  font-size: 150%;
+  height: 42px;
+  line-height: 1;
+  padding: 10px;
+  text-align: center;
+  width: 42px;
+  transition: all 400ms ease-out;
 }
+
+.comment ul.links li.comment-delete a:hover {
+  background: #e16c6c none repeat scroll 0 0;
+}
+
+.comment ul.links li.comment-edit a:hover {
+  background: #f7ba43 none repeat scroll 0 0;
+}
+
+.comment ul.links li.comment-reply a:hover {
+  background: #6fc27f none repeat scroll 0 0;
+}
+
+.comment ul.links li.darkmatter-link a:hover {
+  background: #666 none repeat scroll 0 0;
+}
+
+.comment ul.links li.quote-comment a:hover {
+  background: #ba7db9 none repeat scroll 0 0;
+}
+
+/*<--/Links Icons-->*/
 
 /* Block quote. */
 blockquote {

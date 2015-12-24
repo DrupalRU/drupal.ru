@@ -52,7 +52,7 @@ function dru_comment_quote_preprocess_field(&$variables) {
 function dru_comment_quote_link_pre_render($element) {
 
   if (!isset($element['links']['comment']['#links']['quote'])) {
-    return;
+    return $element;
   }
 
   // $element['classes_array'][]='comment-quote-source';

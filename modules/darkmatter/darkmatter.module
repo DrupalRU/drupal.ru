@@ -366,8 +366,8 @@ function darkmatter_comment_undo($ajax, $cid){
     
     foreach($cids as $cid){
       $replace_comment = 'Hmmm?';
-      if ($comment = entity_load('comment', $cid)) {
-        $replace_comment =  entity_view($comment, $view_mode);
+      if ($comment = _comment_load($cid)) {
+        $replace_comment = theme('comment',$comment);
       }
 
       $commands[] = ajax_command_replace('.darkmatter-comment-' . $cid, $replace_comment);

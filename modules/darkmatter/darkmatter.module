@@ -489,15 +489,15 @@ function darkmatter_comment_access($comment){
   }
 
   static $nodes;
-  if(!isset($nodes[$nid])){
+  if(!isset($nodes[$comment->nid])){
     $node = db_select('node', 'n')
       ->fields('n')
       ->condition('nid', $comment->nid)
       ->execute()
       ->fetchAssoc();
-    $nodes[$nid] = $node['uid'];
+    $nodes[$comment->nid] = $node['uid'];
   }
-  if($nodes[$nid] == $user->uid){
+  if($nodes[$comment->nid] == $user->uid){
     return TRUE;
   }
   

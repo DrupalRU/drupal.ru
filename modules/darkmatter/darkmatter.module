@@ -337,7 +337,7 @@ function darkmatter_comment($ajax, $comment){
   }
 }
 
-function darkmatter_comment_undo($cid){
+function darkmatter_comment_undo($ajax, $cid){
   global $user;
   $darkmatter_status = 0;
   

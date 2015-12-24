@@ -432,9 +432,13 @@ function darkmatter_comment_view($comment, $view_mode, $langcode) {
   drupal_add_library('system', 'drupal.ajax');
   
   if(darkmatter_comment_access($comment)){
-    if(!darkmatter_node_status($comment->nid)){
+    if(darkmatter_node_status($comment->nid)){
       $comment->content['links']['comment']['#links']['darkmatter-link'] = array(
-        'markup' => '<span class="darkmatter-comment-link-' . $comment->cid . '">' . t('not darkmatter') . '</span>',
+        'title' => t('not darkmatter'),
+        'html' => TRUE,
+        'attributes' => array(
+          'class' => array('darkmatter-comment-link-' . $comment->cid),
+        ),
       );
     }
     else {

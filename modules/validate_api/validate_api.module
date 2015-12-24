@@ -265,10 +265,10 @@ function validate_api_validator_description() {
  * Node validate
  */
 function validate_api_node_validate($form, &$form_state) {
-
-  $node_type = $form['#bundle'];
+  drupal_set_message(print_r($form,true));
+/*  $node_type = $form['#bundle'];
   $settings = variable_get('validate_api_' . $node_type);
-  validate_api_validation($settings, $form, $form_state);
+  validate_api_validation($settings, $form, $form_state);*/
   
 }
 

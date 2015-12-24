@@ -501,6 +501,8 @@ function darkmatter_comment_access($comment){
     return TRUE;
   }
   
+  drupal_set_message($nodes[$comment->nid] . ' ' . $user->uid);
+  
   return FALSE;
 }
 

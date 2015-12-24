@@ -353,26 +353,21 @@ function darkmatter_comment_undo($ajax, $cid){
     ->condition('cid', $cid)
     ->execute()
     ->fetchAssoc();
-  
-  $cids = darkmatter_comment_mark_subcomments($cid, $darkmatter_status);
-  $cids[] = $cid;
-  
+    
   darkmatter_update_stats_comment($darkmatter_status, $comment['uid']);
 
   $is_ajax = $ajax === 'ajax';
 
   if ($is_ajax) {
     $commands = array();
-    
-    foreach($cids as $cid){
-      $replace_comment = 'Hmmm?';
-      if ($comment_entity = entity_load('comment', array($cid))) {
-        $node = node_load($comment['nid']);
-        $replace_comment = drupal_render( comment_view_multiple(array($comment_entity), $node, 'full'));
-      }
 
-      $commands[] = ajax_command_replace('.darkmatter-comment-' . $cid, $replace_comment);
+    $replace_comment = 'Hmmm?';
+    if ($comment_entity = entity_load('comment', array($cid))) {
+      $node = node_load($comment['nid']);
+      $replace_comment = drupal_render( comment_view_multiple(array($comment_entity), $node, 'full'));
     }
+
+    $commands[] = ajax_command_replace('.darkmatter-comment-' . $cid, $replace_comment);
 
     return array(
       '#type' => 'ajax',

@@ -189,6 +189,14 @@ function darkmatter_node($ajax, $node){
   ->condition('nid', $node->nid)
   ->execute();
   
+  //update Comments
+  db_update('comment')
+    ->fields(array(
+      'darkmatter' => $darkmatter_status,
+    ))
+    ->condition('nid', $node->nid)
+    ->execute();  
+  
   darkmatter_update_stats_node($darkmatter_status, $node->uid, $node->nid);
   
   if($darkmatter_status){
@@ -336,12 +344,6 @@ function darkmatter_node_notify($node){
  * Notify all comments about marked as darkmatter.
  */
 function darkmatter_node_comments_notify($node){
-  db_update('comment')
-    ->fields(array(
-      'darkmatter' => 1,
-    ))
-    ->condition('nid', $node->nid)
-    ->execute();
   
   $comments = db_select('comment', 'c')
     ->fields('c')

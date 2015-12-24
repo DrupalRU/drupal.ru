@@ -70,9 +70,8 @@ function dru_comment_quote_link_pre_render($element) {
       break;
   }
 
-  $link = &$element['links']['comment']['#links']['quote'];
-  $link['attributes']['class'][] = 'comment-quote-link';
-  $link['attributes']['data-id'] = $id;
+  $element['links']['comment']['#links']['quote']['attributes']['class'][] = 'comment-quote-link';
+  $element['links']['comment']['#links']['quote']['attributes']['data-id'] = $id;
 
   return $element;
 }

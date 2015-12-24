@@ -219,13 +219,15 @@ function darkmatter_node($ajax, $node){
       if($darkmatter_status){
         $commands[] = ajax_command_invoke('.darkmatter-comment-' . $comment->cid, 'addClass', array('darkmatter'));
         $title = t('not darkmatter');
+        $link = '<span class="darkmatter-comment-link-' . $comment->cid . '">' . $title . '</span>';
+        $commands[] = ajax_command_replace('.darkmatter-comment-link-' . $comment->cid, $link);
       }else{
         $commands[] = ajax_command_invoke('.darkmatter-comment-' . $comment->cid, 'removeClass', array('darkmatter'));
         $title = t('darkmatter');
+        $link = l($title, 'darkmatter/comment/nojs/' . $comment->cid, array('attributes' => array('class' => array('use-ajax', 'darkmatter-comment-link-' . $comment->cid))));
+        $commands[] = ajax_command_replace('.darkmatter-comment-link-' . $comment->cid, $link);
       }
-      
-      $link = l($title, 'darkmatter/comment/nojs/' . $comment->cid, array('attributes' => array('class' => array('use-ajax', 'darkmatter-comment-link-' . $comment->cid))));
-      $commands[] = ajax_command_replace('.darkmatter-comment-link-' . $comment->cid, $link);
+
     }
     
     if($darkmatter_status){

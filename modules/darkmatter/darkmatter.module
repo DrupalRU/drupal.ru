@@ -72,23 +72,6 @@ function darkmatter_menu() {
     'delivery callback' => 'ajax_deliver',
     'type' => MENU_CALLBACK,
   );
-
-  $items['darkmatter/comment/undo/nojs/%'] = array(
-    'page callback' => 'darkmatter_comment_undo',
-    'page arguments' => array(3, 4),
-    'access callback' => 'darkmatter_comment_undo_access',
-    'access arguments' => array(4),
-    'type' => MENU_CALLBACK,
-  );
-  
-  $items['darkmatter/comment/undo/ajax/%'] = array(
-    'page callback' => 'darkmatter_comment_undo',
-    'page arguments' => array(3, 4),
-    'access callback' => 'darkmatter_comment_undo_access',
-    'access arguments' => array(4),
-    'delivery callback' => 'ajax_deliver',
-    'type' => MENU_CALLBACK,
-  );
   
   return $items;
 }
@@ -312,8 +295,7 @@ function darkmatter_comment($ajax, $comment){
       }
       
       if(!user_access('darkmatter comments') and !$user->darkmatter ){
-        $link = l(t('Undo'), 'darkmatter/comment/undo/nojs/' . $cid, array('attributes' => array('class' => array('use-ajax', 'darkmatter-comment-link-' . $cid))));
-        $title = t('Comment marked as darkmatter. !link', array('!link' => $link));
+        $title = t('Comment marked as darkmatter.');
         $replace_comment = '<div class="comment comment-removed bg-danger darkmatter-comment-link-' . $cid . '"> <p>' . $title. '</p></div>';
         $commands[] = ajax_command_replace('.darkmatter-comment-' . $cid, $replace_comment);
         
@@ -322,52 +304,6 @@ function darkmatter_comment($ajax, $comment){
         $commands[] = ajax_command_replace('.darkmatter-comment-link-' . $cid, $link);
       }
     }
-
-    return array(
-      '#type' => 'ajax',
-      '#commands' => $commands,
-    );
-  }else{
-    if($darkmatter_status){
-      drupal_set_message(t('Marked as dark matter'));
-    }else{
-      drupal_set_message(t('It is not a dark matter anymore'));
-    }
-    drupal_goto();
-  }
-}
-
-function darkmatter_comment_undo($ajax, $cid){
-  global $user;
-  $darkmatter_status = 0;
-  
-  db_update('comment') // Table name no longer needs {}
-  ->fields(array(
-    'darkmatter' => $darkmatter_status,
-  ))
-  ->condition('cid', $cid)
-  ->execute();
-  
-  $comment = db_select('comment', 'c')
-    ->fields('c')
-    ->condition('cid', $cid)
-    ->execute()
-    ->fetchAssoc();
-    
-  darkmatter_update_stats_comment($darkmatter_status, $comment['uid']);
-
-  $is_ajax = $ajax === 'ajax';
-
-  if ($is_ajax) {
-    $commands = array();
-
-    $replace_comment = 'Hmmm?';
-    if ($comment_entity = entity_load('comment', array($cid))) {
-      $node = node_load($comment['nid']);
-      $replace_comment = drupal_render( comment_view_multiple(array($comment_entity), $node, 'full'));
-    }
-
-    $commands[] = ajax_command_replace('.darkmatter-comment-' . $cid, $replace_comment);
 
     return array(
       '#type' => 'ajax',
@@ -536,26 +472,6 @@ function darkmatter_node_status($nid){
     $nodes[$nid] = $node['darkmatter'];
   }
   return $nodes[$nid];
-}
-
-/**
- * Menu access callback to check permissions.
- */
-function darkmatter_comment_undo_access($cid){
-  global $user;
-  $comment = db_select('comment', 'c')
-      ->fields('c')
-      ->condition('cid', $cid)
-      ->execute()
-      ->fetchAssoc();
-  $node = db_select('node', 'n')
-      ->fields('n')
-      ->condition('nid', $comment['nid'])
-      ->execute()
-      ->fetchAssoc();
-  if($node['uid'] == $user->uid){
-    return TRUE;
-  }
 }
 
 /**

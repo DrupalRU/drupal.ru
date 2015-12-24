@@ -497,11 +497,13 @@ function darkmatter_comment_access($comment){
       ->fetchAssoc();
     $nodes[$comment->nid] = $node['uid'];
   }
+
+  drupal_set_message($nodes[$comment->nid] . ' ' . $user->uid);
+
   if($nodes[$comment->nid] == $user->uid){
     return TRUE;
   }
   
-  drupal_set_message($nodes[$comment->nid] . ' ' . $user->uid);
   
   return FALSE;
 }

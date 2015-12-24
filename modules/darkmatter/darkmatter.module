@@ -462,7 +462,7 @@ function darkmatter_node_status($nid){
       ->condition('nid', $nid)
       ->execute()
       ->fetchAssoc();
-    $nodes[$nid] = $node->darkmatter;
+    $nodes[$nid] = $node['darkmatter'];
   }
   return $nodes[$nid];
 }

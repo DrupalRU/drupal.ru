@@ -295,12 +295,8 @@ function darkmatter_comment($ajax, $comment){
       }
       
       if(!user_access('darkmatter comments') and !$user->darkmatter ){
-//        $commands[] = ajax_command_remove('.darkmatter-comment-' . $cid);
-        $link = l(t('Recovery'), 'darkmatter/comment/nojs/' . $cid, array('attributes' => array('class' => array('use-ajax', 'darkmatter-comment-link-' . $cid))));
-        $title = t('Comment marked as darkmatter. Your profile settings require to hide it. Do you want to recovery it? Click : !link',
-        array('!link' => $link));
-         
-        $replace_comment = '<div class="comment comment-removed darkmatter-comment-link-' . $cid . '">' . $title. '</div>';
+        $title = t('Comment marked as darkmatter. Your profile settings require to hide it.');
+        $replace_comment = '<div class="comment comment-removed darkmatter-comment-link-' . $cid . '"> <p class="bg-danger">' . $title. '</p></div>';
         $commands[] = ajax_command_replace('.darkmatter-comment-' . $cid, $replace_comment);
         
       }else{
@@ -498,12 +494,9 @@ function darkmatter_comment_access($comment){
     $nodes[$comment->nid] = $node['uid'];
   }
 
-  drupal_set_message($nodes[$comment->nid] . ' ' . $user->uid);
-
   if($nodes[$comment->nid] == $user->uid){
     return TRUE;
   }
-  
   
   return FALSE;
 }

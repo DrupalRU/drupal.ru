@@ -5,11 +5,11 @@
             "notify": 1,
             "node": {
                 "subject": "[node:author:name] ваша тема была помечена как \"Темная материя\"",
-                "body": "[node:author:name],\r\n\r\nВаша тема была помечена как \"Темная материя\".\r\n[node:url]\r\n\r\n-- [site:name]"
+                "body": "[node:author:name],\r\n\r\nВаша тема была помечена как \"Темная материя\".\r\n[node:url]\r\n\r\n-- Сайт [site:name] \r\n[site:url]"
             },
             "comment": {
                 "subject": "[comment:author:name] ваш комментарий помечен как \"Темная материя\"",
-                "body": "[comment:author:name],\r\n\r\nВаш комментарий помечен как \"Темная материя\":\r\n\r\n[comment:body]\r\n\r\n[comment:url]\r\n\r\n\r\n-- [site:name]"
+                "body": "[comment:author:name],\r\n\r\nВаш комментарий помечен как \"Темная материя\":\r\n\r\n[comment:body]\r\n\r\n[comment:url]\r\n\r\n\r\n-- Сайт [site:name]\r\n[site:url]"
             }
         }
     }

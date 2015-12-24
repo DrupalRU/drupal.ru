@@ -105,6 +105,8 @@ if(!is_dir($data['site_path'] . '/sites/all/modules/local')){
 
 exec('ln -s ' . $data['github_path'] . '/modules/* ' . $data['site_path'] . '/sites/all/modules/local/');
 
+chdir($data['site_path']);
+exec('drush -y en user_filter user_filter_notify validate_api antinoob_validate antiswearing_validate darkmatter dru_comment_quote xbbcode_dru');
 
 
 echo "Install Latest Font awesome\n";
@@ -164,6 +166,11 @@ echo "Import theme settings\n";
 
 exec('drush ddi variables --file=' . $data['github_path'] . '/data/theme_alpha_settings.variables.export');
 
+echo "Import modules settings";
+
+exec('drush ddi variables --file=' . $data['github_path'] . '/data/darkmatter_notify.variables.export');
+exec('drush ddi variables --file=' . $data['github_path'] . '/data/user_info_notify.variables.export');
+
 echo "Disable drupal_deploy\n";
 exec('drush dis -y drupal_deploy');
 
@@ -186,6 +193,11 @@ exec('drush language-default ru');
 exec('drush -y l10n-update-refresh');
 exec('drush -y l10n-update');
 exec('drush vset l10n_update_check_frequency 7');
+
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/user_filter/user_filter_notify/translations/user_filter_notify.ru.po');
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_api/translations/validate_api.ru.po');
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_api/antiswearing_validate/translations/antiswearing_validate.ru.po');
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_api/antinoob_validate/translations/antinoob_validate.ru.po');
 
 function get_promt_answer($promt){
   if (PHP_OS == 'WINNT' or !function_exists('readline')) {

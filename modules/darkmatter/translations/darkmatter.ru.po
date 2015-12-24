@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2015-12-24 22:12+0300\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
-"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: gor martsen <gor@me.com>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -21,27 +21,27 @@ msgstr ""
 
 #: darkmatter.module:14
 msgid "Mark comments as darkmatter"
-msgstr ""
+msgstr "Помечать материалы и коментарии как темная материя (модератор)"
 
 #: darkmatter.module:221;235;291;409;440;449
 msgid "not darkmatter"
-msgstr ""
+msgstr "на свет"
 
 #: darkmatter.module:226;238;294
 msgid "darkmatter"
-msgstr ""
+msgstr "в тень"
 
 #: darkmatter.module:252;314
 msgid "Marked as dark matter"
-msgstr ""
+msgstr "помечен как \"темная материя\""
 
 #: darkmatter.module:254;316
 msgid "It is not a dark matter anymore"
-msgstr ""
+msgstr "Это более не на темной стороне"
 
 #: darkmatter.module:298
 msgid "Comment marked as darkmatter."
-msgstr ""
+msgstr "комментарий помечен как \"темная материя\""
 
 #: darkmatter.module:413;453
 msgid "It is not dark matter!"
@@ -53,57 +53,36 @@ msgstr ""
 
 #: darkmatter.module:537
 msgid "I agree with !link"
-msgstr ""
+msgstr "Я согласен с !link"
 
 #: darkmatter.module:539
 msgid "I Agree with Dark Matter term and conditions!"
-msgstr ""
+msgstr "Я согласен с условиями использования \"Темной Материи\""
 
 #: darkmatter.module:558
 msgid "Dark matter"
-msgstr ""
+msgstr "Темная материя"
 
 #: darkmatter.module:559
 msgid "Nodes: !dark_node/!total_node, comments: !dark_comment/!total_comment"
-msgstr ""
+msgstr "Материалов: !dark_node/!total_node, комментариев: !dark_comment/!total_comment"
 
 #: darkmatter.module:626
 msgid "Darkmatter notification"
-msgstr ""
+msgstr "Уведомления \"темная материя\""
 
 #: darkmatter.module:627
 msgid "Edit Email message sent to the user when node or comment marked as darkmatter"
-msgstr ""
+msgstr "Настройки для email оповещений модуля \"темная материя\""
 
 #: darkmatter.module:630
 msgid "Notify the user when node or comment marked as darkmatter."
-msgstr ""
+msgstr "Уведомлять пользователя когда материал или комментарий помечен как \"темная материя\""
 
 #: darkmatter.module:643
 msgid "Node settings"
-msgstr ""
-
-#: darkmatter.module:648;665
-msgid "Subject"
-msgstr ""
-
-#: darkmatter.module:654;671
-msgid "Body"
-msgstr ""
-
-#: darkmatter.module:660
-msgid "Comment settings"
-msgstr ""
-
-#: darkmatter.info:0
-msgid "Dark Matter"
-msgstr ""
+msgstr "Настройки для материалов"
 
 #: darkmatter.info:0
 msgid "Instead of deleting comments and nodes, this module mark it as Dark Matter and hide content from visitors. Only Users who agreed with term and conditions are able to see this content."
-msgstr ""
-
-#: darkmatter.info:0
-msgid "Moderation"
-msgstr ""
-
+msgstr "Вместо удаления комментариев и материалов, этот модуль помечает их как \"темная материя\" и прячет от посетителей. Только пользователи кто согласился с правилами использования, в состоянии видеть отмеченный материал и комментарии"

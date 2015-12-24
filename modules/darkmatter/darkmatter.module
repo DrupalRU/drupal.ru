@@ -406,7 +406,7 @@ function darkmatter_node_view($node, $view_mode) {
   
   if(user_access('darkmatter comments')){
     $node->content['links']['comment']['#links']['darkmatter-link'] = array(
-      'title' => $node->darkmatter ? t('not darkmatter') : t('dark matter'),
+      'title' => $node->darkmatter ? t('not darkmatter') : t('darkmatter'),
       'href' => "darkmatter/node/nojs/" . $node->nid,
       'query' => drupal_get_destination(),
       'attributes' => array(
@@ -446,7 +446,7 @@ function darkmatter_comment_view($comment, $view_mode, $langcode) {
     }
     else {
       $comment->content['links']['comment']['#links']['darkmatter-link'] = array(
-        'title' => $comment->darkmatter ? t('not darkmatter') : t('dark matter'),
+        'title' => $comment->darkmatter ? t('not darkmatter') : t('darkmatter'),
         'href' => "darkmatter/comment/nojs/" . $comment->cid,
         'query' => drupal_get_destination(),
         'attributes' => array(

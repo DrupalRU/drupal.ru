@@ -180,26 +180,6 @@ function alpha_preprocess_comment(&$variables) {
   $uri = entity_uri('comment', $comment);
   $variables['permalink'] = l('#', $uri['path'], $uri['options']);
   
-  // Add links icons
-  $variables['content']['links']['comment']['#links']['comment-delete']['title'] = '<i class="fa fa-times"></i>';
-  $variables['content']['links']['comment']['#links']['comment-delete']['attributes']['title'] = t('Delete');
-  $variables['content']['links']['comment']['#links']['comment-edit']['title'] = '<i class="fa fa-pencil"></i>';
-  $variables['content']['links']['comment']['#links']['comment-edit']['attributes']['title'] = t('Edit');
-  $variables['content']['links']['comment']['#links']['comment-reply']['title'] = '<i class="fa fa-reply"></i>';
-  $variables['content']['links']['comment']['#links']['comment-reply']['attributes']['title'] = t('Reply');
-  $variables['content']['links']['comment']['#links']['darkmatter-link']['html'] = TRUE;
-  // dm
-  if ($variables['content']['links']['comment']['#links']['darkmatter-link']['attributes']['title'] == 'Mark this content as dark matter.') {
-    $variables['content']['links']['comment']['#links']['darkmatter-link']['title'] = '<i class="fa fa-eye-slash"></i>';
-  }
-  elseif ($variables['content']['links']['comment']['#links']['darkmatter-link']['attributes']['title'] == 'It is not dark matter!') {
-    $variables['content']['links']['comment']['#links']['darkmatter-link']['title'] = '<i class="fa fa-eye"></i>';
-  }
-  // quote
-  $variables['content']['links']['comment']['#links']['quote']['attributes']['title'] = t('Quote');
-  $variables['content']['links']['comment']['#links']['quote']['html'] = TRUE;
-  $variables['content']['links']['comment']['#links']['quote']['title'] = '<i class="fa fa-quote-right"></i>';
-  
   if(isset($variables['content']['links']['comment']['#links']['comment_forbidden'])){
     unset($variables['content']['links']['comment']['#links']['comment_forbidden']);
   }

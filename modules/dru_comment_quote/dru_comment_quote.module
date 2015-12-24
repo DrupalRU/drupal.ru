@@ -38,8 +38,10 @@ function dru_comment_quote_preprocess_field(&$variables) {
   $entity = $variables['element']['#object'];
   $user_name = !empty($entity->name) ? $entity->name : variable_get('anonymous', t('Anonymous'));
 
-  $variables['attributes_array']['data-source'][] = $variables['element']['#source_id'];
-  $variables['attributes_array']['data-user'][] = $user_name;
+  if(isset($variables['element']['#source_id'])){
+    $variables['attributes_array']['data-source'][] = $variables['element']['#source_id'];
+    $variables['attributes_array']['data-user'][] = $user_name;
+  }
 }
 
 /**

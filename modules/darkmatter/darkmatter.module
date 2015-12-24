@@ -295,7 +295,14 @@ function darkmatter_comment($ajax, $comment){
       }
       
       if(!user_access('darkmatter comments') and !$user->darkmatter ){
-        $commands[] = ajax_command_remove('.darkmatter-comment-' . $cid);
+//        $commands[] = ajax_command_remove('.darkmatter-comment-' . $cid);
+        $link = l(t('Recovery'), 'darkmatter/comment/nojs/' . $cid, array('attributes' => array('class' => array('use-ajax', 'darkmatter-comment-link-' . $cid))));
+        $title = t('Comment marked as darkmatter. Your profile settings require to hide it. Do you want to recovery it? Click : !link',
+        array('!link' => $link));
+         
+        $replace_comment = '<div class="comment comment-removed darkmatter-comment-link-' . $cid . '">' . $title. '</div>';
+        $commands[] = ajax_command_replace('.darkmatter-comment-' . $cid, $replace_comment);
+        
       }else{
         $link = l($title, 'darkmatter/comment/nojs/' . $cid, array('attributes' => array('class' => array('use-ajax', 'darkmatter-comment-link-' . $cid))));
         $commands[] = ajax_command_replace('.darkmatter-comment-link-' . $cid, $link);
@@ -481,12 +488,16 @@ function darkmatter_comment_access($comment){
     return TRUE;
   }
 
-  $node = db_select('node', 'n')
-    ->fields('n')
-    ->condition('nid', $comment->nid)
-    ->execute()
-    ->fetchAssoc();
-  if($node['uid'] == $user->uid){
+  static $nodes;
+  if(!isset($nodes[$nid])){
+    $node = db_select('node', 'n')
+      ->fields('n')
+      ->condition('nid', $comment->nid)
+      ->execute()
+      ->fetchAssoc();
+    $nodes[$nid] = $node['uid'];
+  }
+  if($nodes[$nid] == $user->uid){
     return TRUE;
   }
   

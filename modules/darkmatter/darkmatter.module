@@ -430,7 +430,7 @@ function darkmatter_node_view($node, $view_mode) {
  */
 function darkmatter_comment_view($comment, $view_mode, $langcode) {
   drupal_add_library('system', 'drupal.ajax');
-  
+  drupal_set_message(print_r($comment,true));
   if(darkmatter_comment_access($comment)){
     $comment->content['links']['comment']['#links']['darkmatter-link'] = array(
       'title' => $comment->darkmatter ? t('not darkmatter') : t('dark matter'),

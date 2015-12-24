@@ -296,7 +296,7 @@ function darkmatter_comment($ajax, $comment){
       
       if(!user_access('darkmatter comments') and !$user->darkmatter ){
         $title = t('Comment marked as darkmatter. Your profile settings require to hide it.');
-        $replace_comment = '<div class="comment comment-removed darkmatter-comment-link-' . $cid . '"> <p class="bg-danger">' . $title. '</p></div>';
+        $replace_comment = '<div class="comment comment-removed bg-danger darkmatter-comment-link-' . $cid . '"> <p>' . $title. '</p></div>';
         $commands[] = ajax_command_replace('.darkmatter-comment-' . $cid, $replace_comment);
         
       }else{

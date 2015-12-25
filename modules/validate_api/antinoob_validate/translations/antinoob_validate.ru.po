@@ -53,8 +53,8 @@ msgid "[@value] Do not use more than one exclamation point in a row."
 msgstr "[@value] Не используйте более чем 1 восклицательный знак вподряд."
 
 #: antinoob_validate.module:124
-msgid "[@word] Using ALL capital symbols is forbidden. "
-msgstr "[@word] Запрещено писать текст заглавными буквами"
+msgid "Using ALL capital symbols is forbidden. "
+msgstr "Запрещено писать текст только заглавными буквами"
 
 #: antinoob_validate.info:0
 msgid "Antinoob Validate"

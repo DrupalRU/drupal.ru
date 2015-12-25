@@ -62,7 +62,7 @@ function darkmatter_install() {
   db_add_index('users', 'darkmatter', array('darkmatter'));
   
   $accounts = db_select('users', 'u')
-    ->fields('u')
+    ->fields('u', array('uid'))
     ->execute()
     ->fetchAll();
 

@@ -283,6 +283,7 @@ function validate_api_node_validate($node, $form, &$form_state) {
       $callback_function = $all_validators[$validator]['callback'];
       if(function_exists($callback_function)){
         if($validate_message = $callback_function($value)){
+          drupal_set_message($field_name . ' ' . $validate_message);
           form_set_error($field_name, $validate_message);
         }
       }

@@ -272,6 +272,10 @@ li.darkmatter-link a:before {
   content: '\f070';
 }
 
+li.comment-resolve a:before {
+  content: '\f11e';
+}
+
 .darkmatter li.darkmatter-link a:before {
   content: '\f06e';
 }

@@ -80,7 +80,7 @@ function antinoob_exclamation_symbol_callback($validate_value) {
   $status = FALSE;
 
   if (preg_match('/!!/', $validate_value)) {
-    $status = t('[@value] Do not use more than one exclamation point in a row.', array('@value' => $value));
+    $status = t('[@value] Do not use more than one exclamation point in a row.', array('@value' => $validate_value));
   }
 
   return $status;

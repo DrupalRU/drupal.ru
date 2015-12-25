@@ -259,10 +259,11 @@ function validate_api_validator_description() {
 function validate_api_node_validate($node, $form, &$form_state) {
 
   $settings = variable_get('validate_api_' . $node->type);
-  $all_validators = validate_api_invoke_all_validators();
   if(empty($settings['validate'])){
     return;
   }
+  $all_validators = validate_api_invoke_all_validators();
+  
   foreach($settings['validate'] as $field_name => $field_callbacks){
     $value = '';
     if(is_string($node->{$field_name})){
@@ -295,8 +296,31 @@ function validate_api_field_attach_validate($entity_type, $entity, &$errors) {
     $settings = variable_get('validate_api_' . $node_type . '_comment');
     drupal_set_message($node_type . print_r($settings,true));
     if(empty($settings['validate'])){
-    return;
-  }
+      return;
+    }
+    $all_validators = validate_api_invoke_all_validators();
+    
+    foreach($settings['validate'] as $field_name => $field_callbacks){
+      $value = '';
+      if(is_string($entity->{$field_name})){
+        $value = $entity->{$field_name};
+      }
+      elseif(isset($entity->{$field_name}[LANGUAGE_NONE][0]['value'])){
+        $value = $entity->{$field_name}[LANGUAGE_NONE][0]['value'];
+      }
+  
+      foreach($field_callbacks as $validator => $callback_comment){
+        $callback_function = $all_validators[$validator]['callback'];
+        if(function_exists($callback_function)){
+          if($validate_message = $callback_function($value)){
+            $errors['comment_body'][LANGUAGE_NONE][0][] = array(
+              'error' => $field_name,
+              'message' => $validate_message,
+            );
+          }
+        }
+      }
+    }
   }
 /*  foreach ($items as $delta => $item) {
     // @todo Length is counted separately for summary and value, so the maximum

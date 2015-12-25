@@ -263,6 +263,14 @@ li.quote-comment a:before {
   content: '\f10e';
 }
 
+li.darkmatter-link a:before {
+  content: '\f070';
+}
+
+div.darkmatter li.darkmatter-link a:before {
+  content: '\f06e';
+}
+
 /* Forums style. */
 
 div.awesome_icon {

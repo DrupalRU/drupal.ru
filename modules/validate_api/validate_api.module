@@ -289,7 +289,6 @@ function validate_api_field_attach_validate($entity_type, $entity, &$errors) {
     $node_type = substr($entity->node_type, 13);
     
     $settings = variable_get('validate_api_' . $node_type . '_comment');
-    drupal_set_message($node_type . print_r($settings,true));
     if(empty($settings['validate'])){
       return;
     }
@@ -320,43 +319,6 @@ function validate_api_field_attach_validate($entity_type, $entity, &$errors) {
 }
 
 /**
- * Comment validate
- */
-function validate_api_comment_validate($form, &$form_state) {
-
-  $node_type = $form['#node']->type;
-  $settings = variable_get('validate_api_' . $node_type . '_comment');
-  validate_api_validation($settings, $form, $form_state);
-
-}
-
-/**
- * Validation
- */
-function validate_api_validation($settings, $form, $form_state) {
-  if (!empty($settings['validate'])) {
-    $all_validators = validate_api_invoke_all_validators();
-    foreach ($settings['validate'] as $field => $validators) {
-      foreach ($validators as $validator => $validator_name) {
-        if (array_key_exists($validator, $all_validators)) {
-          $callback = $all_validators[$validator]['callback'];
-          if (function_exists($callback)) {
-            $field_value = $form_state['values'][$field];
-            $field_name = $field;
-//            drupal_set_message(print_r($form_state,true));
-            $node = $form_state['#node'];
-            $result = $callback($field_value, $field_name, $node, $message);
-            if ($result) {
-              form_set_error($field_name, $message);
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-/**
  *
  */
 function validate_api_form_submit($form, &$form_state) {
@@ -370,7 +332,7 @@ function validate_api_form_submit($form, &$form_state) {
   $node_fields = field_info_instances('node', $node_type);
 
   if ($use_node) {
-    $node_validate_fields = get_validate_settings($existen_validators, 'node', $node_fields, array('title'), $form_state);
+    $node_validate_fields = validate_api_get_validate_settings($existen_validators, 'node', $node_fields, array('title'), $form_state);
   }
   
   $node_variable_name = 'validate_api_' . $node_type;
@@ -390,7 +352,7 @@ function validate_api_form_submit($form, &$form_state) {
   $comment_fields = field_info_instances('comment', 'comment_node_' . $form['#node_type']->type);
   
   if ($use_comments) {
-    $comment_validate_fields = get_validate_settings($existen_validators, 'comment', $comment_fields, array(''), $form_state);
+    $comment_validate_fields = validate_api_get_validate_settings($existen_validators, 'comment', $comment_fields, array(''), $form_state);
   }
   $comment_variable_name = 'validate_api_' . $node_type . '_comment';
   if (!isset($comment_validate_fields)) {
@@ -407,7 +369,7 @@ function validate_api_form_submit($form, &$form_state) {
 /**
  * Return validate settings.
  */
-function get_validate_settings($existen_validators, $entity_type, $entity_fields, $custom_fields, $form_state) {
+function validate_api_get_validate_settings($existen_validators, $entity_type, $entity_fields, $custom_fields, $form_state) {
   $validator_types = array();
   foreach ($existen_validators as $existen_validator => $types) {
     foreach ($types as $type => $arr) {

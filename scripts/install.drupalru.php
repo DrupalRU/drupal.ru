@@ -106,7 +106,7 @@ if(!is_dir($data['site_path'] . '/sites/all/modules/local')){
 exec('ln -s ' . $data['github_path'] . '/modules/* ' . $data['site_path'] . '/sites/all/modules/local/');
 
 chdir($data['site_path']);
-exec('drush -y en user_filter user_filter_notify validate_api antinoob_validate antiswearing_validate darkmatter dru_comment_quote xbbcode_dru');
+exec('drush -y en user_filter user_filter_notify validate_api antinoob_validate antiswearing_validate darkmatter dru_comment_quote xbbcode_dru resolve');
 
 
 echo "Install Latest Font awesome\n";

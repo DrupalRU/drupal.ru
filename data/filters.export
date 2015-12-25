@@ -7,8 +7,7 @@
         "cache": 1,
         "roles": [
             "administrator",
-            "редактор сайта",
-            "управление рекламой"
+            "редактор сайта"
         ],
         "filters": [
             {
@@ -152,7 +151,8 @@
             "продвижение статей",
             "редактор сайта",
             "управление рекламой",
-            "модератор"
+            "модератор",
+            "редактор сайта"
         ],
         "filters": [
             {
@@ -263,6 +263,15 @@
                 }
             },
             {
+                "module": "user_filter",
+                "name": "user_filter",
+                "weight": 0,
+                "status": 1,
+                "settings": [
+
+                ]
+            },
+            {
                 "module": "xbbcode",
                 "name": "xbbcode",
                 "weight": -42,
@@ -272,10 +281,34 @@
                     "override": 0,
                     "tags": {
                         "_enabled": {
-                            "man": 0
+                            "api": "api",
+                            "man": "man",
+                            "module": "module",
+                            "ru_api": "ru_api",
+                            "ruapi": "ruapi",
+                            "theme": "theme",
+                            "user": "user"
+                        },
+                        "api": {
+                            "module": "xbbcode_dru"
                         },
                         "man": {
-                            "module": ""
+                            "module": "xbbcode_dru"
+                        },
+                        "module": {
+                            "module": "xbbcode_dru"
+                        },
+                        "ru_api": {
+                            "module": "xbbcode_dru"
+                        },
+                        "ruapi": {
+                            "module": "xbbcode_dru"
+                        },
+                        "theme": {
+                            "module": "xbbcode_dru"
+                        },
+                        "user": {
+                            "module": "xbbcode_dru"
                         }
                     }
                 }

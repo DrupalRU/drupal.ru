@@ -12,6 +12,7 @@ ln -s $GITLC_DEPLOY_DIR/modules/darkmatter $SITEPATH/sites/all/modules/local/
 ln -s $GITLC_DEPLOY_DIR/modules/user_filter $SITEPATH/sites/all/modules/local/
 
 # import translation
+drush -y dl drush_language
 drush -y language-import ru $GITLC_DEPLOY_DIR/modules/user_filter/user_filter_notify/translations/user_filter_notify.ru.po
 drush -y language-import ru $GITLC_DEPLOY_DIR/modules/validate_api/translations/validate_api.ru.po
 drush -y language-import ru $GITLC_DEPLOY_DIR/modules/validate_api/antiswearing_validate/translations/antiswearing_validate.ru.po
@@ -31,6 +32,8 @@ drush ddi filters  --file=$GITLC_DEPLOY_DIR/data/filters.export
 
 
 drush dis -y drupal_deploy
+
+drush vset darkmatter_term_nid 126699
 
 
 echo "Clean cache"

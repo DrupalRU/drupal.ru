@@ -270,11 +270,15 @@ function validate_api_node_validate($node, $form, &$form_state) {
   
   foreach($settings['validate'] as $field_name => $field_callbacks){
     
+/*    if(is_string($node->{$field_name})){
+      foreach($field_callbacks as )
+    }
+    LANGUAGE_NONE
+  */  
     drupal_set_message('<pre> validate' . print_r($node->{$field_name},true) . '</pre>');
     
   }
-// /  drupal_set_message('<pre>' . print_r($settings,true) . '</pre>');
-  drupal_set_message('<pre>' . print_r($node,true) . '</pre>');
+  drupal_set_message('<pre>' . print_r($settings,true) . '</pre>');
 //  drupal_set_message('<pre>' . print_r($form_state,true) . '</pre>');
 //  validate_api_validation($settings, $form, $form_state);
   

@@ -6,8 +6,10 @@ echo "Full site path: $SITEPATH"
 cd $SITEPATH
 
 #update 25 dec 2015
-
 ln -s $GITLC_DEPLOY_DIR/modules/validate_api $SITEPATH/sites/all/modules/local/
+ln -s $GITLC_DEPLOY_DIR/modules/resolve $SITEPATH/sites/all/modules/local/
+ln -s $GITLC_DEPLOY_DIR/modules/darkmatter $SITEPATH/sites/all/modules/local/
+ln -s $GITLC_DEPLOY_DIR/modules/user_filter $SITEPATH/sites/all/modules/local/
 
 # import translation
 drush -y language-import ru $GITLC_DEPLOY_DIR/modules/user_filter/user_filter_notify/translations/user_filter_notify.ru.po

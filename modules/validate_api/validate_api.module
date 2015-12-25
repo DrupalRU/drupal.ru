@@ -287,6 +287,12 @@ function validate_api_field_attach_validate($entity_type, $entity, &$errors) {
     'error' => "comment_body",
     'message' => 'test',
   );
+  if($entity_type == 'comment'){
+    $node_type = substr($entity->node_type, 13);
+    
+    $settings = variable_get('validate_api_' . $node_type . '_comment');
+    drupal_set_message($node_type . print_r($settings,true));
+  }
 /*  foreach ($items as $delta => $item) {
     // @todo Length is counted separately for summary and value, so the maximum
     //   length can be exceeded very easily.

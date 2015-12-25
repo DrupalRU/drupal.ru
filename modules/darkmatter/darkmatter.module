@@ -149,8 +149,10 @@ function darkmatter_update_stats_node($op, $uid, $nid){
   $comments = db_select('comment', 'c')
     ->fields('c')
     ->condition('nid', $nid)
+    ->condition('darkmatter', $op ? 0 : 1)
     ->execute()
     ->fetchAll();
+
   foreach($comments as $comment){
     darkmatter_update_stats_comment($op, $comment->uid);
   }
@@ -189,6 +191,8 @@ function darkmatter_node($ajax, $node){
   ->condition('nid', $node->nid)
   ->execute();
   
+  darkmatter_update_stats_node($darkmatter_status, $node->uid, $node->nid);
+  
   //update Comments
   db_update('comment')
     ->fields(array(
@@ -196,9 +200,7 @@ function darkmatter_node($ajax, $node){
     ))
     ->condition('nid', $node->nid)
     ->execute();  
-  
-  darkmatter_update_stats_node($darkmatter_status, $node->uid, $node->nid);
-  
+      
   if($darkmatter_status){
     darkmatter_node_notify($node);
     darkmatter_node_comments_notify($node);

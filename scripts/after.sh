@@ -22,6 +22,7 @@ drush -y language-import ru $GITLC_DEPLOY_DIR/modules/resolve/translations/resol
 #enable module
 drush -y en user_filter user_filter_notify validate_api antinoob_validate antiswearing_validate darkmatter resolve
 
+
 #import darkmatter settings
 drush en -y drupal_deploy
 drush ddi variables --file=$GITLC_DEPLOY_DIR/data/darkmatter_notify.variables.export

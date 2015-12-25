@@ -18,6 +18,7 @@ drush -y language-import ru $GITLC_DEPLOY_DIR/modules/validate_api/translations/
 drush -y language-import ru $GITLC_DEPLOY_DIR/modules/validate_api/antiswearing_validate/translations/antiswearing_validate.ru.po
 drush -y language-import ru $GITLC_DEPLOY_DIR/modules/validate_api/antinoob_validate/translations/antinoob_validate.ru.po
 drush -y language-import ru $GITLC_DEPLOY_DIR/modules/resolve/translations/resolve.ru.po
+drush -y language-import ru $GITLC_DEPLOY_DIR/modules/darkmatter/translations/darkmatter.ru.po
 
 #enable module
 drush -y en user_filter user_filter_notify validate_api antinoob_validate antiswearing_validate darkmatter resolve

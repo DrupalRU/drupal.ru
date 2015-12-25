@@ -1,0 +1,64 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (sites-all-modules-local-validate_api-antinoob_validate)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  antinoob_validate.module: n/a
+#  antinoob_validate.info: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-12-21 03:58+0300\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: Gor Martsen <gor@me.com>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: antinoob_validate.module:11
+msgid "Exclamation"
+msgstr ""
+
+#: antinoob_validate.module:12
+msgid "Disallow to use multiple exclamation symbols in a row."
+msgstr ""
+
+#: antinoob_validate.module:19
+msgid "Caps Lock"
+msgstr ""
+
+#: antinoob_validate.module:20
+msgid "Disallow to use all capital words."
+msgstr ""
+
+#: antinoob_validate.module:29
+msgid "Disallowed words"
+msgstr ""
+
+#: antinoob_validate.module:30
+msgid "Disallow to use word(s): !words."
+msgstr ""
+
+#: antinoob_validate.module:62
+msgid "[@word] is forbidden to use."
+msgstr ""
+
+#: antinoob_validate.module:92
+msgid "[@value] Do not use more than one exclamation point in a row."
+msgstr ""
+
+#: antinoob_validate.module:124
+msgid "[@word] Using ALL capital symbols is forbidden. "
+msgstr ""
+
+#: antinoob_validate.info:0
+msgid "Antinoob Validate"
+msgstr ""
+
+#: antinoob_validate.info:0
+msgid "Provide few antinoob validators."
+msgstr ""

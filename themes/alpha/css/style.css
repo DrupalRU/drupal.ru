@@ -234,6 +234,11 @@ a:hover {
   white-space: normal;
 }
 
+.node.darkmatter .content{
+  background-color: #333;
+  color: #fff;
+}
+
 /* Add icons to node links. */
 
 ul.links li a:before {
@@ -261,6 +266,18 @@ li.node-readmore a:before {
 
 li.quote-comment a:before {
   content: '\f10e';
+}
+
+li.darkmatter-link a:before {
+  content: '\f070';
+}
+
+li.comment-resolve a:before {
+  content: '\f11e';
+}
+
+.darkmatter li.darkmatter-link a:before {
+  content: '\f06e';
 }
 
 /* Forums style. */
@@ -447,13 +464,18 @@ div.awesome_icon {
 }
 
 @media (max-width: 768px) {
- .comment {
+  .comment {
     padding: 15px 5px;
     margin: 0px -15px;
   }
   .comment .pull-left {
     margin-right: 0px;
   }
+}
+
+.comment.darkmatter {
+  background-color: #333;
+  color: #fff;
 }
 
 /* Add icons to comment links. */

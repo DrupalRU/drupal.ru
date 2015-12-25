@@ -3,8 +3,8 @@
 # LANGUAGE translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  simple_validate.module: n/a
-#  simple_validate.info: n/a
+#  validate_api.module: n/a
+#  validate_api.info: n/a
 #
 #, fuzzy
 msgid ""
@@ -19,31 +19,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: simple_validate.module:43
-msgid "Title"
-msgstr ""
-
-#: simple_validate.module:73
-msgid "Node validation"
-msgstr ""
-
-#: simple_validate.module:79
-msgid "Use validation"
-msgstr ""
-
-#: simple_validate.module:113
+#: validate_api.module:113
 msgid "Validators"
 msgstr ""
 
-#: simple_validate.info:0
-msgid "Simple Validate"
+#: validate_api.info:0
+msgid "Validate API"
 msgstr ""
 
-#: simple_validate.info:0
-msgid "Provide Simple Validate"
+#: validate_api.info:0
+msgid "Provide Validate API"
 msgstr ""
-
-#: simple_validate.info:0
-msgid "content-authoring"
-msgstr ""
-

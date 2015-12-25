@@ -1,12 +1,16 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implements hook_token_info().
  */
 function user_filter_notify_token_info() {
-    
+
   $info = array();
-  
+
   $info['types']['author'] = array(
     'name' => t('Author'),
     'description' => t('Content author'),
@@ -16,7 +20,7 @@ function user_filter_notify_token_info() {
     'name' => t('Text'),
     'description' => t('Original Text'),
   );
-  
+
   $info['tokens']['author']['uid'] = array(
     'name' => t('Author UID'),
     'description' => t('Author User ID'),
@@ -41,7 +45,7 @@ function user_filter_notify_token_info() {
     'name' => t('Text without tags'),
     'description' => t('Strip all HTML-tags in text'),
   );
-  
+
   return $info;
 }
 
@@ -49,13 +53,13 @@ function user_filter_notify_token_info() {
  * Implements hook_tokens().
  */
 function user_filter_notify_tokens($type, $tokens, array $data = array(), array $options = array()) {
-  if(isset($data['author'])){
+  if (isset($data['author'])) {
     $author = $data['author'];
   }
-  if(isset($data['text'])){
+  if (isset($data['text'])) {
     $text = $data['text'];
   }
-  
+
   $replacements = array();
 
   if ($type == 'author' && !empty($author)) {
@@ -64,12 +68,15 @@ function user_filter_notify_tokens($type, $tokens, array $data = array(), array 
         case 'uid':
           $replacements[$original] = $author->uid;
           break;
+
         case 'name':
           $replacements[$original] = $author->name;
           break;
+
         case 'mail':
           $replacements[$original] = $author->mail;
           break;
+
         case 'path':
           $replacements[$original] = drupal_get_path_alias('user/' . $author->uid);
           break;
@@ -83,6 +90,7 @@ function user_filter_notify_tokens($type, $tokens, array $data = array(), array 
         case 'original':
           $replacements[$original] = $text;
           break;
+
         case 'simple':
           $replacements[$original] = strip_tags($text);
           break;
@@ -94,10 +102,10 @@ function user_filter_notify_tokens($type, $tokens, array $data = array(), array 
 }
 
 /**
-* Implements of hook_form_alter().
-*/
-function user_filter_notify_form_alter(&$form, &$form_state, $form_id){
-  if($form['#form_id'] == 'user_admin_settings'){
+ * Implements of hook_form_alter().
+ */
+function user_filter_notify_form_alter(&$form, &$form_state, $form_id) {
+  if ($form['#form_id'] == 'user_admin_settings') {
     $default = variable_get('user_info_notify');
     $form['user_info'] = array();
     $form['user_info']['#type'] = 'fieldset';
@@ -120,13 +128,13 @@ function user_filter_notify_form_alter(&$form, &$form_state, $form_id){
       ),
       'notify_subject' => array(
         '#type' => 'textfield',
-        '#title' => 'Тема',
+        '#title' => t('Subject'),
         '#default_value' => $default['subject'],
         '#maxlength' => 180,
       ),
       'notify_body' => array(
         '#type' => 'textarea',
-        '#title' => 'Содержимое',
+        '#title' => t('Body'),
         '#default_value' => $default['message'],
         '#rows' => 15,
       ),
@@ -145,11 +153,17 @@ function user_filter_notify_form_alter(&$form, &$form_state, $form_id){
   }
 }
 
-function user_filter_notify_form_validate($form, &$form_state){
-    
+/**
+ *
+ */
+function user_filter_notify_form_validate($form, &$form_state) {
+
 }
 
-function user_filter_notify_form_submit($form, &$form_state){
+/**
+ *
+ */
+function user_filter_notify_form_submit($form, &$form_state) {
   $user_info_notify = array(
     'notify' => $form_state['values']['notify'],
     'subject' => $form_state['values']['notify_subject'],
@@ -159,52 +173,57 @@ function user_filter_notify_form_submit($form, &$form_state){
 }
 
 /**
-* Implements of hook_entity_update().
-*/
-function user_filter_notify_entity_update($entity, $type){
-  user_filter_notify($entity, $type);
-}
-
-/**
-* Implements of hook_entity_insert().
-*/
-function user_filter_notify_entity_insert($entity, $type){
-  user_filter_notify($entity, $type);
-}
-
-/**
- * Send mail
+ * Implements of hook_entity_update().
  */
-function user_filter_notify($entity, $type){
+function user_filter_notify_entity_update($entity, $type) {
+  user_filter_notify($entity, $type);
+}
+
+/**
+ * Implements of hook_entity_insert().
+ */
+function user_filter_notify_entity_insert($entity, $type) {
+  user_filter_notify($entity, $type);
+}
+
+/**
+ * Send mail.
+ */
+function user_filter_notify($entity, $type) {
   $pattern = variable_get('user_info_notify');
-  if($pattern['notify']){
-    if($type == 'node' && !empty($entity->body['und'][0]['value'])){
+  if ($pattern['notify']) {
+    if ($type == 'node' && !empty($entity->body['und'][0]['value'])) {
       $body = $entity->body['und'][0]['value'];
       $node = $entity;
       $comment = NULL;
       $author = user_load($entity->uid);
     }
-    if($type == 'comment' && !empty($entity->comment_body['und'][0]['value'])){
+    if ($type == 'comment' && !empty($entity->comment_body['und'][0]['value'])) {
       $body = $entity->comment_body['und'][0]['value'];
       $node = node_load($entity->nid);
       $comment = $entity;
       $author = user_load($entity->uid);
     }
-    if(!empty($body)){
+    if (!empty($body)) {
       $users = user_filter_mention($body);
-      foreach($users as $user){
+      foreach ($users as $user) {
         $theme = token_replace($pattern['subject'], array('user' => $user, 'author' => $author, 'node' => $node, 'comment' => $comment, 'text' => $body));
         $message = token_replace($pattern['message'], array('user' => $user, 'author' => $author, 'node' => $node, 'comment' => $comment, 'text' => $body));
         $from = variable_get('site_mail', ini_get('sendmail_from'));
-        drupal_mail('user_filter_notify', 'user_filter_notify', $user->mail, language_default(), array('context' => array(
+        drupal_mail('user_filter_notify', 'user_filter_notify', $user->mail, language_default(), array(
+        'context' => array(
           'subject' => $theme,
           'message' => $message,
-        ), $from));
+        ), $from,
+        ));
       }
     }
   }
 }
 
+/**
+ *
+ */
 function user_filter_notify_mail($key, &$message, $params) {
   if ($key == 'user_filter_notify') {
     $message['subject'] = $params['context']['subject'];

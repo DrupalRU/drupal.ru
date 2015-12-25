@@ -260,7 +260,9 @@ function validate_api_node_validate($node, $form, &$form_state) {
 
   $settings = variable_get('validate_api_' . $node->type);
   $all_validators = validate_api_invoke_all_validators();
-  
+  if(empty($settings['validate'])){
+    return;
+  }
   foreach($settings['validate'] as $field_name => $field_callbacks){
     $value = '';
     if(is_string($node->{$field_name})){
@@ -283,15 +285,18 @@ function validate_api_node_validate($node, $form, &$form_state) {
 
 function validate_api_field_attach_validate($entity_type, $entity, &$errors) {
   drupal_set_message('Debug:' . $entity_type .' <pre>'. print_r($entity,true) .'</pre>');
-  $errors['comment_body'][LANGUAGE_NONE][0][] = array(
+/*  $errors['comment_body'][LANGUAGE_NONE][0][] = array(
     'error' => "comment_body",
     'message' => 'test',
-  );
+  );*/
   if($entity_type == 'comment'){
     $node_type = substr($entity->node_type, 13);
     
     $settings = variable_get('validate_api_' . $node_type . '_comment');
     drupal_set_message($node_type . print_r($settings,true));
+    if(empty($settings['validate'])){
+    return;
+  }
   }
 /*  foreach ($items as $delta => $item) {
     // @todo Length is counted separately for summary and value, so the maximum

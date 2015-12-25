@@ -279,15 +279,17 @@ function validate_api_node_validate($node, $form, &$form_state) {
     }
 
     foreach($field_callbacks as $validator => $callback_comment){
-    drupal_set_message('<pre> validate' . $all_validators[$validator]['callback'] . '('. $value . ')</pre>');
-      
+      drupal_set_message('<pre> validate' . $all_validators[$validator]['callback'] . '('. $value . ')</pre>');
+      $callback_function = $all_validators[$validator]['callback'];
+      if(function_exists($callback_function)){
+        if($validate_message = $callback_function($value)){
+          form_set_error($field_name, $validate_message);
+        }
+      }
     }
     
   }
   drupal_set_message('<pre>' . print_r($settings,true) . '</pre>');
-//  drupal_set_message('<pre>' . print_r($form_state,true) . '</pre>');
-//  validate_api_validation($settings, $form, $form_state);
-  
 }
 
 /**

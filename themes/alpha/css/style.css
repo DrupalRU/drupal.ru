@@ -234,6 +234,11 @@ a:hover {
   white-space: normal;
 }
 
+.node.darkmatter .content{
+  background-color: #333;
+  color: #fff;
+}
+
 /* Add icons to node links. */
 
 ul.links li a:before {
@@ -462,6 +467,11 @@ div.awesome_icon {
   .comment .pull-left {
     margin-right: 0px;
   }
+}
+
+.comment.darkmatter {
+  background-color: #333;
+  color: #fff;
 }
 
 /* Add icons to comment links. */

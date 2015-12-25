@@ -279,7 +279,7 @@ function validate_api_node_validate($node, $form, &$form_state) {
     }
 
     foreach($field_callbacks as $validator => $callback_comment){
-    drupal_set_message('<pre> validate' . $all_validators[$validator] . '('. $value . ')</pre>');
+    drupal_set_message('<pre> validate' . $all_validators[$validator]['callback'] . '('. $value . ')</pre>');
       
     }
     

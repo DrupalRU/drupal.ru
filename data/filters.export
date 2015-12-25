@@ -158,7 +158,7 @@
             {
                 "module": "bbcode",
                 "name": "bbcode",
-                "weight": -44,
+                "weight": -43,
                 "status": 1,
                 "settings": {
                     "bbcode_make_links": 1,
@@ -171,7 +171,7 @@
             {
                 "module": "filter",
                 "name": "filter_autop",
-                "weight": -42,
+                "weight": -41,
                 "status": 1,
                 "settings": [
 
@@ -180,7 +180,7 @@
             {
                 "module": "filter",
                 "name": "filter_html",
-                "weight": -48,
+                "weight": -47,
                 "status": 1,
                 "settings": {
                     "allowed_html": "<pre> <a> <b> <br> <code> <dd> <del> <dl> <dt> <em> <i> <img> <h2> <h3> <h4> <h5> <li> <ol> <u> <ul> <small> <span> <strike> <strong> <table> <td> <tr> <th> <blockquote> <quote> <audio> <video>",
@@ -209,7 +209,7 @@
             {
                 "module": "filter",
                 "name": "filter_url",
-                "weight": -43,
+                "weight": -42,
                 "status": 1,
                 "settings": {
                     "filter_url_length": 72
@@ -218,7 +218,7 @@
             {
                 "module": "geshifilter",
                 "name": "geshifilter",
-                "weight": -45,
+                "weight": -44,
                 "status": 1,
                 "settings": {
                     "allowed_html": "<a> <em> <strong> <cite> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd>",
@@ -229,7 +229,7 @@
             {
                 "module": "noindex_external_links",
                 "name": "external_links",
-                "weight": -40,
+                "weight": -48,
                 "status": 1,
                 "settings": [
 
@@ -238,7 +238,7 @@
             {
                 "module": "php",
                 "name": "php_code",
-                "weight": -47,
+                "weight": -46,
                 "status": 0,
                 "settings": [
 
@@ -247,7 +247,7 @@
             {
                 "module": "quote",
                 "name": "quote",
-                "weight": -41,
+                "weight": -40,
                 "status": 1,
                 "settings": [
 
@@ -256,7 +256,7 @@
             {
                 "module": "transliteration",
                 "name": "transliteration",
-                "weight": -46,
+                "weight": -45,
                 "status": 0,
                 "settings": {
                     "no_known_transliteration": "?"

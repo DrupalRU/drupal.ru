@@ -213,14 +213,6 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
       $form['#submit'][] = 'validate_api_form_submit';
     }
   }
-
-  if (!empty($form['#node_edit_form'])) {
-    $node_type = $form['#bundle'];
-    $node_settings = variable_get('validate_api_' . $node_type);
-    if (!empty($node_settings['validate'])) {
-//      $form['#validate'][] = 'validate_api_node_validate';
-    }
-  }
   
   if ($form['#id'] == 'comment-form') {
     $node_type = $form['#node']->type;
@@ -286,7 +278,6 @@ function validate_api_node_validate($node, $form, &$form_state) {
         }
       }
     }
-    
   }
 }
 

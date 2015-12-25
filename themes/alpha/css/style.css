@@ -272,7 +272,7 @@ li.darkmatter-link a:before {
   content: '\f070';
 }
 
-div.darkmatter li.darkmatter-link a:before {
+.darkmatter li.darkmatter-link a:before {
   content: '\f06e';
 }
 

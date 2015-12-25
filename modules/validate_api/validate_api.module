@@ -308,12 +308,14 @@ function validate_api_field_attach_validate($entity_type, $entity, &$errors) {
       elseif(isset($entity->{$field_name}[LANGUAGE_NONE][0]['value'])){
         $value = $entity->{$field_name}[LANGUAGE_NONE][0]['value'];
       }
+      
+      drupal_set_message(print_r($field_callbacks . " " . $value,true));
   
       foreach($field_callbacks as $validator => $callback_comment){
         $callback_function = $all_validators[$validator]['callback'];
         if(function_exists($callback_function)){
           if($validate_message = $callback_function($value)){
-            $errors['comment_body'][LANGUAGE_NONE][0][] = array(
+            $errors[$field_name][LANGUAGE_NONE][0][] = array(
               'error' => $field_name,
               'message' => $validate_message,
             );

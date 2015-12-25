@@ -170,6 +170,9 @@ echo "Import modules settings";
 
 exec('drush ddi variables --file=' . $data['github_path'] . '/data/darkmatter_notify.variables.export');
 exec('drush ddi variables --file=' . $data['github_path'] . '/data/user_info_notify.variables.export');
+exec('drush ddi variables --file=' . $data['github_path'] . '/data/quote.variables.export');
+exec('drush ddi variables --file=' . $data['github_path'] . '/data/validate_api.variables.export');
+
 
 echo "Disable drupal_deploy\n";
 exec('drush dis -y drupal_deploy');

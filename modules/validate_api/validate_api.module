@@ -267,6 +267,7 @@ function validate_api_validator_description() {
 function validate_api_node_validate($node, $form, &$form_state) {
 
   $settings = variable_get('validate_api_' . $node->type);
+  $all_validators = validate_api_invoke_all_validators();
   
   foreach($settings['validate'] as $field_name => $field_callbacks){
     $value = '';
@@ -277,8 +278,8 @@ function validate_api_node_validate($node, $form, &$form_state) {
       $value = $node->{$field_name}[LANGUAGE_NONE][0]['value'];
     }
 
-    foreach($field_callbacks as $callback => $callback_comment){
-    drupal_set_message('<pre> validate' . $callback . '('. $value . ')</pre>');
+    foreach($field_callbacks as $validator => $callback_comment){
+    drupal_set_message('<pre> validate' . $all_validators[$validator] . '('. $value . ')</pre>');
       
     }
     

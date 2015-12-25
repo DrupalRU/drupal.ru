@@ -92,15 +92,9 @@ function antinoob_exclamation_symbol_callback($validate_value) {
 function antinoob_caps_lock_callback($validate_value) {
   $status = FALSE;
 
-  $words = explode(' ', $validate_value);
-  foreach ($words as $word) {
-    if (empty($word)) {
-      continue;
-    }
-    $upper = mb_strtoupper($word);
-    if ($word == $upper) {
-      $status = t('[@word] Using ALL capital symbols is forbidden. ', array('@word' => $word));
-    }
+  $upper = mb_strtoupper($validate_value);
+  if ($validate_value == $upper) {
+    $status = t('Using ALL capital symbols is forbidden. ');
   }
 
   return $status;

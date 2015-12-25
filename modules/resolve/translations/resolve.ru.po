@@ -1,0 +1,54 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (resolve)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  resolve.module: n/a
+#  resolve.js: n/a
+#  resolve.info: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-12-25 06:35+0300\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: resolve.module:43
+msgid "resolve"
+msgstr "решение"
+
+#: resolve.module:108
+msgid "The questions can be resolved by comments."
+msgstr "Этот вопрос может быть решен комментариями."
+
+#: resolve.module:109
+msgid "Any node of the content type can be resolved by a comment."
+msgstr "Любой тип материала может быть решен комменатрием"
+
+#: resolve.module:153
+msgid "Best reply"
+msgstr "Лучший ответ"
+
+#: resolve.module:244 resolve.js:0;0
+msgid "Resolved"
+msgstr "Решен"
+
+#: resolve.module:18 resolve.info:0
+msgid "Resolve"
+msgstr "Решение"
+
+#: resolve.info:0
+msgid "Adds ability to create a question and to resolve him."
+msgstr "Добавляет возможность создавать вопрос и получать решение на него."
+
+#: resolve.info:0
+msgid "Other"
+msgstr "Другое"
+

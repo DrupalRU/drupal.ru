@@ -268,8 +268,11 @@ function validate_api_node_validate($form, &$form_state) {
   $node_type = $form->type;
   $settings = variable_get('validate_api_' . $node_type);
   
+  foreach($settings['validate'] as $field_name => $field_callbacks){
+    drupal_set_message('<pre>' . print_r($form_state[$field_name],true) . '</pre>');
+  }
   drupal_set_message('<pre>' . print_r($settings,true) . '</pre>');
-  drupal_set_message('<pre>' . print_r($form_state,true) . '</pre>');
+//  drupal_set_message('<pre>' . print_r($form_state,true) . '</pre>');
 //  validate_api_validation($settings, $form, $form_state);
   
 }

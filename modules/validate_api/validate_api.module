@@ -295,7 +295,7 @@ function validate_api_validation($settings, $form, $form_state) {
           if (function_exists($callback)) {
             $field_value = $form_state['values'][$field];
             $field_name = $field;
-            drupal_set_message(print_r($form_state,true));
+            drupal_set_message(print_r($form,true));
 //            $node = $form['#node'];
             $result = $callback($field_value, $field_name, $node, $message);
             if ($result) {

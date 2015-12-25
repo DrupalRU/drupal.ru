@@ -48,7 +48,7 @@ msgid "[@word] is forbidden to use."
 msgstr ""
 
 #: antinoob_validate.module:92
-msgid "[@value] Do not use more than one exclamation point in a row."
+msgid "Do not use more than one exclamation point in a row."
 msgstr ""
 
 #: antinoob_validate.module:124

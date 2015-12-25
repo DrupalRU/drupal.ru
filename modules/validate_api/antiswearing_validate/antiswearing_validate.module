@@ -1,0 +1,36 @@
+<?php
+/**
+ * @file
+ */
+
+
+/**
+ * Implements hook_validator_info().
+ */
+function antiswearing_validate_validator_info() {
+  $items = array();
+  $items[] = array(
+    'type' => 'text',
+    'title' => t('Coarse or offensive language filter'),
+    'description' => t('Do not allow to use coarse or offensive language'),
+    'name' => 'antiswearing',
+    'callback' => 'antiswearing_callback',
+  );
+  return $items;
+}
+
+/**
+ * Validator callback. Use PHP-class "php-obscene-censor-rus"
+ * by Vearutop: https://github.com/vearutop/php-obscene-censor-rus.
+ */
+function antiswearing_callback($validate_value) {
+  module_load_include('php', 'antiswearing_validate', 'obscene/obscene.class');
+
+  $status = FALSE;
+
+  if ($word = ObsceneCensorRus::filterText($validate_value)) {
+    $status = t('Do not use coarse or offensive language');
+  }
+
+  return $status;
+}

@@ -1,0 +1,10 @@
+[
+    {
+        "name": "user_info_notify",
+        "value": {
+            "notify": 1,
+            "subject": "@[author:name] упомянул вас на сайте [site:name]",
+            "message": "@[author:name]:\r\n    \r\n[text:original]\r\n\r\n[comment:url]\r\n\r\n\r\n-- Сайт [site:name]\r\n[site:url]"
+        }
+    }
+]

@@ -1,0 +1,96 @@
+# $Id$
+#
+# Russian translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  user_filter_notify.module: n/a
+#  user_filter_notify.info: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-12-20 19:16+0300\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: Gor Martsen <gor@me.com>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: user_filter_notify.module:12
+msgid "Content author"
+msgstr "Автор содержимого"
+
+#: user_filter_notify.module:16
+msgid "Text"
+msgstr "Текст"
+
+#: user_filter_notify.module:17
+msgid "Original Text"
+msgstr "Оригинал текста"
+
+#: user_filter_notify.module:21
+msgid "Author UID"
+msgstr "UID автора"
+
+#: user_filter_notify.module:22
+msgid "Author User ID"
+msgstr "UID автора"
+
+#: user_filter_notify.module:25;26
+msgid "Author name"
+msgstr "Имя автора"
+
+#: user_filter_notify.module:29;30
+msgid "Author mail"
+msgstr "Имейл автора"
+
+#: user_filter_notify.module:33
+msgid "Author path"
+msgstr "Путь к профайлу автора"
+
+#: user_filter_notify.module:34
+msgid "Path to Author profile"
+msgstr "Путь к профайлу автора"
+
+#: user_filter_notify.module:38
+msgid "Original Formatted Text"
+msgstr "Оригинал текста, отформатированный"
+
+#: user_filter_notify.module:41
+msgid "Text without tags"
+msgstr "Текст без HTML тегов"
+
+#: user_filter_notify.module:42
+msgid "Strip all HTML-tags in text"
+msgstr "Убрать все HTML теги в тексте"
+
+#: user_filter_notify.module:107
+msgid "Notification by the mention"
+msgstr "Уведомление при упоминании"
+
+#: user_filter_notify.module:108
+msgid "Edit Email message sent to the user at the mention of its publication in the \"@username\""
+msgstr "Измените темлейт текста email сообщения, которое будет послано при употреблении \"@username\""
+
+#: user_filter_notify.module:111
+msgid "Notify the user when his account was mentioned."
+msgstr "Уведомить пользователя, когда он был упомянут."
+
+#: user_filter_notify.info:0
+msgid "User filter notify"
+msgstr "Фильтр "упоминание пользователя""
+
+#: user_filter_notify.info:0
+msgid "Notify users when them mention like \"@username\""
+msgstr "Уведомить пользователя, когда он был упомянут через \"@username\""
+
+#: user_filter_notify.install:7
+msgid "@[author:name]:\n    \n[text:original]\n\n[comment:url]\n\n\n-- Site team [site:name]"
+msgstr "@[author:name]:\n    \n[text:original]\n\n[comment:url]\n\n\n-- Сайт [site:name]"
+
+#: user_filter_notify.install:17
+msgid "@[author:name] mentioned you on [site:name]"
+msgstr "@[author:name] упомянул вас на сайте [site:name]"

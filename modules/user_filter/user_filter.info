@@ -1,0 +1,6 @@
+name = User filter
+description = Add text filter for users by "@username"
+version = 7.x-1.0
+core = 7.x
+package = input-filters
+files[] = user_filter.page.inc

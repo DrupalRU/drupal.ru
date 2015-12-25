@@ -6,7 +6,6 @@ echo "Full site path: $SITEPATH"
 cd $SITEPATH
 
 #update 25 dec 2015
-
 ln -s $GITLC_DEPLOY_DIR/modules/validate_api $SITEPATH/sites/all/modules/local/
 
 # import translation

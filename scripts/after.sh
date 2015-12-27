@@ -31,7 +31,6 @@ drush ddi variables --file=$GITLC_DEPLOY_DIR/data/validate_api.variables.export
 drush ddi variables --file=$GITLC_DEPLOY_DIR/data/resolve_can.variables.export
 drush ddi filters  --file=$GITLC_DEPLOY_DIR/data/filters.export
 
-
 drush dis -y drupal_deploy
 
 drush vset darkmatter_term_nid 126699

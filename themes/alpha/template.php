@@ -236,6 +236,14 @@ function alpha_preprocess_node(&$variables) {
   }
 
   drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/' . 'node-img-responsive.js');
+  
+  // Delete Log in links from nodes
+  if (isset($variables['elements']['links']['comment']['#links']['comment_forbidden'])) {
+    unset($variables['elements']['links']['comment']['#links']['comment_forbidden']);
+  }
+  if (isset($variables['content']['links']['comment']['#links']['comment_forbidden'])) {
+    unset($variables['content']['links']['comment']['#links']['comment_forbidden']);
+  }
 }
 
 

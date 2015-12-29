@@ -363,7 +363,8 @@ function alpha_preprocess_forum_topic_list(&$variables) {
     $html = _forum_tablesort_header($cell, $forum_topic_list_header, $ts);
     $sort_header .= '<li>' . $html['data'] . '</li>';
     if(isset($html['class'])){
-      $current_active = $cell['data'];
+      $title_class = ($html['sort'] == 'asc') ? 'sort-desc' : 'sort-asc';
+      $current_active = '<span class="' . $title_class . '">' .  $cell['data'] . '</span>';
     }
   }
   $variables['sort_header'] = '<div class="btn-group">

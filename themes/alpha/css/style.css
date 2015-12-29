@@ -380,7 +380,7 @@ div.awesome_icon {
   background-color: #eee;
 }
 
-.forum-sort a.active.sort-asc:before {
+.forum-sort .sort-asc:before {
   font: normal normal normal 14px/1 FontAwesome;
   content: '\f160';
   padding-right: 5px;
@@ -388,7 +388,7 @@ div.awesome_icon {
   color: #333;  
 }
 
-.forum-sort a.active.sort-desc:before {
+.forum-sort .sort-desc:before {
   font: normal normal normal 14px/1 FontAwesome;
   content: '\f161';
   padding-right: 5px;

@@ -1,0 +1,35 @@
+<?php
+
+/**
+* Implements hook_install().
+*/
+function dru_forum_install() {
+  db_rename_table('field_deleted_revision_2', 'field_revision_taxonomy_forums');
+  db_rename_table('field_deleted_data_2', 'field_data_taxonomy_forums');
+
+  db_update('field_config_instance')
+    ->fields(array(
+      'deleted' => 0,
+    ))
+    ->condition('field_name', 'taxonomy_forums')
+    ->execute();
+
+  db_update('field_config')
+    ->fields(array(
+      'deleted' => 0,
+    ))
+    ->condition('field_name', 'taxonomy_forums')
+    ->execute();
+
+  db_update('field_revision_taxonomy_forums')
+    ->fields(array(
+      'deleted' => 0,
+    ))
+    ->execute();
+
+  db_update('field_data_taxonomy_forums')
+    ->fields(array(
+      'deleted' => 0,
+    ))
+    ->execute();
+}

@@ -37,7 +37,7 @@
  * @ingroup themeable
  */
 ?>
-<div class="forum-sort pull-right"> <?php print $sort_header; ?></div>
+<div class="forum-sort"> <?php print $sort_header; ?></div>
 <div id="forum-topic-<?php print $topic_id; ?>">
   <?php foreach ($topics as $topic): ?>
     <div class="row <?php print $topic->zebra;?>">

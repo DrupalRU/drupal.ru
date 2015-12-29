@@ -372,6 +372,10 @@ div.awesome_icon {
   color: #d34a32;
 }
 
+.forum-sort {
+  text-align: right;
+}
+
 /* Alt tracker style */
 
 .alttracker .icon .fa {

@@ -360,7 +360,7 @@ function alpha_preprocess_forum_topic_list(&$variables) {
   $sort_header = '';
   $current_active = '';
   foreach ($forum_topic_list_header as $cell) {
-    $html = tablesort_header($cell, $forum_topic_list_header, $ts);
+    $html = _forum_tablesort_header($cell, $forum_topic_list_header, $ts);
     $sort_header .= '<li>' . $html['data'] . '</li>';
     if(isset($html['class'])){
       $current_active = $cell['data'];
@@ -372,6 +372,27 @@ function alpha_preprocess_forum_topic_list(&$variables) {
 ' . $sort_header . '
 </ul> </div>';
 
+}
+
+
+function _forum_tablesort_header($cell, $header, $ts) {
+  // Special formatting for the currently sorted column header.
+  if (is_array($cell) && isset($cell['field'])) {
+    $title = t('sort by @s', array('@s' => $cell['data']));
+    if ($cell['data'] == $ts['name']) {
+      $ts['sort'] = (($ts['sort'] == 'asc') ? 'desc' : 'asc');
+      $cell['class'][] = 'active';
+      $cell['class'][] = 'sort-' . $ts['sort'];
+    }
+    else {
+      // If the user clicks a different header, we want to sort ascending initially.
+      $ts['sort'] = 'asc';
+    }
+    $cell['data'] = l($cell['data'], $_GET['q'], array('attributes' => array('title' => $title, 'class' => $cell['class']), 'query' => array_merge($ts['query'], array('sort' => $ts['sort'], 'order' => $cell['data'])), 'html' => TRUE));
+
+    unset($cell['field']);
+  }
+  return $cell;
 }
 
 /**

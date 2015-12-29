@@ -57,7 +57,7 @@ function dru_forum_install() {
         'taxonomy_forums_tid' => $record->field_taxonomy_forum_tid ,
       ))
       ->execute();
-    drupal_set_message(print_r($record,true));
+    print_r($record);
   }
   
   $data_records = db_select('field_data_field_taxonomy_forum', 'fd')
@@ -78,7 +78,7 @@ function dru_forum_install() {
         'taxonomy_forums_tid' => $record->field_taxonomy_forum_tid ,
       ))
       ->execute();
-    drupal_set_message(print_r($record,true));
+    print_r($record);
 
   }
 }

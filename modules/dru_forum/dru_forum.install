@@ -7,6 +7,11 @@ function dru_forum_install() {
   db_rename_table('field_deleted_revision_2', 'field_revision_taxonomy_forums');
   db_rename_table('field_deleted_data_2', 'field_data_taxonomy_forums');
 
+  db_update('system')
+    ->fields(array('weight' => 2))
+    ->condition('name', 'dru_forum')
+    ->execute();
+    
   db_update('field_config_instance')
     ->fields(array(
       'deleted' => 0,

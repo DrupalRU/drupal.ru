@@ -380,7 +380,6 @@ function _forum_tablesort_header($cell, $header, $ts) {
   if (is_array($cell) && isset($cell['field'])) {
     $title = t('sort by @s', array('@s' => $cell['data']));
     if ($cell['data'] == $ts['name']) {
-      $cell['class'][] = 'active';
       $cell['class'][] = 'sort-' . $ts['sort'];
       $ts['sort'] = (($ts['sort'] == 'asc') ? 'desc' : 'asc');
     }

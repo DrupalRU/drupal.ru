@@ -39,25 +39,6 @@ function dru_forum_install() {
     ->execute();
 
   // Migrate data from "new" - "taxonomy_forum" field.
-  $revision_records = db_select('field_revision_field_taxonomy_forum', 'fr')
-    ->fields('fr')
-    ->execute()
-    ->fetchAll();
-
-  foreach($revision_records as $record){
-    db_insert('field_revision_taxonomy_forums') // Table name no longer needs {}
-      ->fields(array(
-        'entity_type' => $record->entity_type ,
-        'bundle' => $record->bundle ,
-        'deleted' => $record->deleted ,
-        'entity_id' => $record->entity_id ,
-        'revision_id' => $record->revision_id ,
-        'language' => $record->language ,
-        'delta' => $record->delta ,
-        'taxonomy_forums_tid' => $record->field_taxonomy_forum_tid ,
-      ))
-      ->execute();
-  }
   
   $data_records = db_select('field_data_field_taxonomy_forum', 'fd')
     ->fields('fd')
@@ -65,18 +46,55 @@ function dru_forum_install() {
     ->fetchAll();
 
   foreach($data_records as $record){
-    print_r($record);
-    db_insert('field_data_taxonomy_forums') // Table name no longer needs {}
-      ->fields(array(
-        'entity_type' => $record->entity_type ,
-        'bundle' => $record->bundle ,
-        'deleted' => $record->deleted ,
-        'entity_id' => $record->entity_id ,
-        'revision_id' => $record->revision_id ,
-        'language' => $record->language ,
-        'delta' => $record->delta ,
-        'taxonomy_forums_tid' => $record->field_taxonomy_forum_tid ,
-      ))
-      ->execute();
+    $stored = db_select('field_data_taxonomy_forums', 'fds')
+      ->fields('fds')
+      ->condition('entity_type', $record->entity_type)
+      ->condition('entity_id', $record->entity_id)
+      ->condition('deleted', $record->deleted)
+      ->condition('delta', $record->delta)
+      ->condition('language', $record->language)
+      ->execute()
+      ->fetchAssoc();
+    
+    if(empty($stored)){
+      db_insert('field_data_taxonomy_forums') // Table name no longer needs {}
+        ->fields(array(
+          'entity_type' => $record->entity_type ,
+          'bundle' => $record->bundle ,
+          'deleted' => $record->deleted ,
+          'entity_id' => $record->entity_id ,
+          'revision_id' => $record->revision_id ,
+          'language' => $record->language ,
+          'delta' => $record->delta ,
+          'taxonomy_forums_tid' => $record->field_taxonomy_forum_tid ,
+        ))
+        ->execute();
+
+      // We need to transfer revisions now.
+      $revision_records = db_select('field_revision_field_taxonomy_forum', 'fds')
+        ->fields('fds')
+        ->condition('entity_type', $record->entity_type)
+        ->condition('entity_id', $record->entity_id)
+        ->execute()
+        ->fetchAll();
+
+      foreach($revision_records as $revision_record){
+        db_insert('field_revision_taxonomy_forums') // Table name no longer needs {}
+          ->fields(array(
+            'entity_type' => $revision_record->entity_type ,
+            'bundle' => $revision_record->bundle ,
+            'deleted' => $revision_record->deleted ,
+            'entity_id' => $revision_record->entity_id ,
+            'revision_id' => $revision_record->revision_id ,
+            'language' => $revision_record->language ,
+            'delta' => $revision_record->delta ,
+            'taxonomy_forums_tid' => $revision_record->field_taxonomy_forum_tid ,
+          ))
+          ->execute();
+      }
+    }
   }
+  
+  //Delete "new" field field_taxonomy_forum
+  field_delete_field('field_taxonomy_forum');
 }

@@ -380,9 +380,9 @@ function _forum_tablesort_header($cell, $header, $ts) {
   if (is_array($cell) && isset($cell['field'])) {
     $title = t('sort by @s', array('@s' => $cell['data']));
     if ($cell['data'] == $ts['name']) {
-      $ts['sort'] = (($ts['sort'] == 'asc') ? 'desc' : 'asc');
       $cell['class'][] = 'active';
       $cell['class'][] = 'sort-' . $ts['sort'];
+      $ts['sort'] = (($ts['sort'] == 'asc') ? 'desc' : 'asc');
     }
     else {
       // If the user clicks a different header, we want to sort ascending initially.

@@ -32,4 +32,47 @@ function dru_forum_install() {
       'deleted' => 0,
     ))
     ->execute();
+
+  // Migrate data from "new" - "taxonomy_forum" field.
+  $records = db_select('field_revision_field_taxonomy_forum', 'fr')
+    ->fields('fr')
+    ->execute()
+    ->fetchAll();
+  foreach($records as $record){
+    $record->taxonomy_forums_tid = $record->taxonomy_forums_tid;
+    drupal_write_record('field_revision_taxonomy_forums', $record);
+  }
+  
+  $records = db_select('field_data_field_taxonomy_forum', 'fd')
+    ->fields('fd')
+    ->execute()
+    ->fetchAll();
+  foreach($records as $record){
+    $record->taxonomy_forums_tid = $record->taxonomy_forums_tid;
+    drupal_write_record('field_data_taxonomy_forums', $record);
+  }
+}
+
+/**
+ * Migrate data from field_taxonomy_forum to taxonomy_forums.
+ */
+function dru_forum_update_7001() {
+  // Migrate data from "new" - "taxonomy_forum" field.
+  $records = db_select('field_revision_field_taxonomy_forum', 'fr')
+    ->fields('fr')
+    ->execute()
+    ->fetchAll();
+  foreach($records as $record){
+    $record->taxonomy_forums_tid = $record->taxonomy_forums_tid;
+    drupal_write_record('field_revision_taxonomy_forums', $record);
+  }
+  
+  $records = db_select('field_data_field_taxonomy_forum', 'fd')
+    ->fields('fd')
+    ->execute()
+    ->fetchAll();
+  foreach($records as $record){
+    $record->taxonomy_forums_tid = $record->taxonomy_forums_tid;
+    drupal_write_record('field_data_taxonomy_forums', $record);
+  }
 }

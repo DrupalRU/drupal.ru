@@ -360,7 +360,7 @@ function alpha_preprocess_forum_topic_list(&$variables) {
   $header = '';
   foreach ($forum_topic_list_header as $cell) {
     $cell = tablesort_header($cell, $forum_topic_list_header, $ts);
-    drupal_set_message(print_r($cell));
+    drupal_set_message(print_r($cell,true));
   }
 }
 

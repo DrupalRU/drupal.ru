@@ -95,6 +95,9 @@ function dru_forum_install() {
     }
   }
   
-  //Delete "new" field field_taxonomy_forum
+  // Delete "new" field field_taxonomy_forum.
   field_delete_field('field_taxonomy_forum');
+  
+  // Clear field cache.
+  field_cache_clear();
 }

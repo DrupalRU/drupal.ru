@@ -373,8 +373,10 @@ function alpha_preprocess_forum_topic_list(&$variables) {
 ' . $sort_header . '
 </ul> </div>';
 
+  foreach($variables['topics'] as $key => $topic){
+   $variables['topics'][$key]->time = format_interval(REQUEST_TIME - $topic->last_comment_timestamp);
+  }
 }
-
 
 function _forum_tablesort_header($cell, $header, $ts) {
   // Special formatting for the currently sorted column header.

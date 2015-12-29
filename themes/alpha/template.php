@@ -355,7 +355,13 @@ function alpha_preprocess_forum_list(&$variables) {
  * @see theme_forum_topic_list()
  */
 function alpha_preprocess_forum_topic_list(&$variables) {
-
+ global $forum_topic_list_header;
+  $ts = tablesort_init($forum_topic_list_header);
+  $header = '';
+  foreach ($forum_topic_list_header as $cell) {
+    $cell = tablesort_header($cell, $forum_topic_list_header, $ts);
+    drupal_set_message(print_r($cell));
+  }
 }
 
 /**

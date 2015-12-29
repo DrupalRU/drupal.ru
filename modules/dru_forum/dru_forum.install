@@ -57,7 +57,6 @@ function dru_forum_install() {
         'taxonomy_forums_tid' => $record->field_taxonomy_forum_tid ,
       ))
       ->execute();
-    print_r($record);
   }
   
   $data_records = db_select('field_data_field_taxonomy_forum', 'fd')
@@ -66,6 +65,7 @@ function dru_forum_install() {
     ->fetchAll();
 
   foreach($data_records as $record){
+    print_r($record);
     db_insert('field_data_taxonomy_forums') // Table name no longer needs {}
       ->fields(array(
         'entity_type' => $record->entity_type ,
@@ -78,7 +78,5 @@ function dru_forum_install() {
         'taxonomy_forums_tid' => $record->field_taxonomy_forum_tid ,
       ))
       ->execute();
-    print_r($record);
-
   }
 }

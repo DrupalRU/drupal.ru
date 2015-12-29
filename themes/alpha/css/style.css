@@ -376,6 +376,26 @@ div.awesome_icon {
   text-align: right;
 }
 
+.forum-sort a.active{
+  background-color: #eee;
+}
+
+.forum-sort a.active.sort-asc:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f160';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: #333;  
+}
+
+.forum-sort a.active.sort-desc:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f161';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: #333;  
+}
+
 /* Alt tracker style */
 
 .alttracker .icon .fa {

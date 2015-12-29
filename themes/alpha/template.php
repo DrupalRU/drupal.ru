@@ -357,11 +357,21 @@ function alpha_preprocess_forum_list(&$variables) {
 function alpha_preprocess_forum_topic_list(&$variables) {
  global $forum_topic_list_header;
   $ts = tablesort_init($forum_topic_list_header);
-  $header = '';
+  $sort_header = '';
+  $current_active = '';
   foreach ($forum_topic_list_header as $cell) {
-    $cell = tablesort_header($cell, $forum_topic_list_header, $ts);
-    drupal_set_message(print_r($cell,true));
+    $html = tablesort_header($cell, $forum_topic_list_header, $ts);
+    $sort_header .= '<li>' . $html['data'] . '</li>';
+    if(isset($html['class'])){
+      $current_active = $cell['data'];
+    }
   }
+  $variables['sort_header'] = '<div class="btn-group">
+  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $current_active . ' <span class="caret"></span></button>
+<ul class="dropdown-menu"> 
+' . $sort_header . '
+</ul> </div>';
+
 }
 
 /**

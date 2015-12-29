@@ -39,45 +39,43 @@ function dru_forum_install() {
     ->execute();
 
   // Migrate data from "new" - "taxonomy_forum" field.
-  $records = db_select('field_revision_field_taxonomy_forum', 'fr')
+  $revision_records = db_select('field_revision_field_taxonomy_forum', 'fr')
     ->fields('fr')
     ->execute()
     ->fetchAll();
-  foreach($records as $record){
-    $record->taxonomy_forums_tid = $record->field_taxonomy_forum_tid;
-    drupal_write_record('field_revision_taxonomy_forums', $record);
-  }
-  
-  $records = db_select('field_data_field_taxonomy_forum', 'fd')
-    ->fields('fd')
-    ->execute()
-    ->fetchAll();
-  foreach($records as $record){
-    $record->taxonomy_forums_tid = $record->field_taxonomy_forum_tid;
-    drupal_write_record('field_data_taxonomy_forums', $record);
-  }
-}
 
-/**
- * Migrate data from field_taxonomy_forum to taxonomy_forums.
- */
-function dru_forum_update_7001() {
-  // Migrate data from "new" - "taxonomy_forum" field.
-  $records = db_select('field_revision_field_taxonomy_forum', 'fr')
-    ->fields('fr')
-    ->execute()
-    ->fetchAll();
-  foreach($records as $record){
-    $record->taxonomy_forums_tid = $record->field_taxonomy_forum_tid;
-    drupal_write_record('field_revision_taxonomy_forums', $record);
+  foreach($revision_records as $record){
+    db_insert('field_revision_taxonomy_forums') // Table name no longer needs {}
+      ->fields(array(
+        'entity_type' => $record->entity_type ,
+        'bundle' => $record->bundle ,
+        'deleted' => $record->deleted ,
+        'entity_id' => $record->entity_id ,
+        'revision_id' => $record->revision_id ,
+        'language' => $record->language ,
+        'delta' => $record->delta ,
+        'taxonomy_forums_tid' => $record->field_taxonomy_forum_tid ,
+      ))
+      ->execute();
   }
   
-  $records = db_select('field_data_field_taxonomy_forum', 'fd')
+  $data_records = db_select('field_data_field_taxonomy_forum', 'fd')
     ->fields('fd')
     ->execute()
     ->fetchAll();
-  foreach($records as $record){
-    $record->taxonomy_forums_tid = $record->field_taxonomy_forum_tid;
-    drupal_write_record('field_data_taxonomy_forums', $record);
+
+  foreach($data_records as $record){
+    db_insert('field_data_taxonomy_forums') // Table name no longer needs {}
+      ->fields(array(
+        'entity_type' => $record->entity_type ,
+        'bundle' => $record->bundle ,
+        'deleted' => $record->deleted ,
+        'entity_id' => $record->entity_id ,
+        'revision_id' => $record->revision_id ,
+        'language' => $record->language ,
+        'delta' => $record->delta ,
+        'taxonomy_forums_tid' => $record->field_taxonomy_forum_tid ,
+      ))
+      ->execute();
   }
 }

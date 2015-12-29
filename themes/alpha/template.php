@@ -355,7 +355,48 @@ function alpha_preprocess_forum_list(&$variables) {
  * @see theme_forum_topic_list()
  */
 function alpha_preprocess_forum_topic_list(&$variables) {
+ global $forum_topic_list_header;
+  $ts = tablesort_init($forum_topic_list_header);
+  $sort_header = '';
+  $current_active = '';
+  foreach ($forum_topic_list_header as $cell) {
+    $html = _forum_tablesort_header($cell, $forum_topic_list_header, $ts);
+    $sort_header .= '<li>' . $html['data'] . '</li>';
+    if(isset($html['class'])){
+      $title_class = ($html['sort'] == 'asc') ? 'sort-desc' : 'sort-asc';
+      $current_active = '<span class="' . $title_class . '">' .  $cell['data'] . '</span>';
+    }
+  }
+  $variables['sort_header'] = '<div class="btn-group">
+  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $current_active . ' <span class="caret"></span></button>
+<ul class="dropdown-menu"> 
+' . $sort_header . '
+</ul> </div>';
 
+  foreach($variables['topics'] as $key => $topic){
+   $variables['topics'][$key]->time = format_interval(REQUEST_TIME - $topic->last_comment_timestamp);
+  }
+}
+
+function _forum_tablesort_header($cell, $header, $ts) {
+  // Special formatting for the currently sorted column header.
+  if (is_array($cell) && isset($cell['field'])) {
+    $title = t('sort by @s', array('@s' => $cell['data']));
+    if ($cell['data'] == $ts['name']) {
+      $cell['class'][] = 'sort-' . $ts['sort'];
+      $cell['class'][] = 'sort-active';
+      $ts['sort'] = (($ts['sort'] == 'asc') ? 'desc' : 'asc');
+    }
+    else {
+      // If the user clicks a different header, we want to sort ascending initially.
+      $ts['sort'] = 'asc';
+    }
+    $cell['data'] = l($cell['data'], $_GET['q'], array('attributes' => array('title' => $title, 'class' => $cell['class']), 'query' => array_merge($ts['query'], array('sort' => $ts['sort'], 'order' => $cell['data'])), 'html' => TRUE));
+
+    unset($cell['field']);
+    $cell['sort'] = $ts['sort'];
+  }
+  return $cell;
 }
 
 /**

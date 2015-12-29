@@ -432,7 +432,8 @@ div.awesome_icon {
   }
 }
 
-.alttracker .darkmatter {
+.alttracker .darkmatter,
+.alttracker .row.darkmatter.even {
   background-color: #333;
   color: #fff;
 }

@@ -391,6 +391,7 @@ function _forum_tablesort_header($cell, $header, $ts) {
     $cell['data'] = l($cell['data'], $_GET['q'], array('attributes' => array('title' => $title, 'class' => $cell['class']), 'query' => array_merge($ts['query'], array('sort' => $ts['sort'], 'order' => $cell['data'])), 'html' => TRUE));
 
     unset($cell['field']);
+    $cell['sort'] = $ts['sort'];
   }
   return $cell;
 }

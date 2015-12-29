@@ -396,6 +396,10 @@ div.awesome_icon {
   color: #333;  
 }
 
+.forum-sort span.sort-asc:before,
+.forum-sort span.sort-desc:before {
+  color: #fff;
+}
 /* Alt tracker style */
 
 .alttracker .icon .fa {

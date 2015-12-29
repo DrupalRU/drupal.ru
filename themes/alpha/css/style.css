@@ -374,6 +374,8 @@ div.awesome_icon {
 
 .forum-sort {
   text-align: right;
+  margin-top: -50px;
+  padding-bottom: 10px;
 }
 
 .forum-sort .sort-asc:before {

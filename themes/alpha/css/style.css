@@ -432,6 +432,14 @@ div.awesome_icon {
   }
 }
 
+.alttracker .darkmatter {
+  background-color: #333;
+  color: #fff;
+}
+
+.alttracker .darkmatter .icon .fa {
+  color: #fff;
+}
 
 /* Comments style*/
 

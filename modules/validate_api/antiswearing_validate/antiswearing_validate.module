@@ -28,7 +28,8 @@ function antiswearing_callback($validate_value) {
 
   $status = FALSE;
 
-  if ($word = ObsceneCensorRus::filterText($validate_value)) {
+  $filtred_value = ObsceneCensorRus::getFiltered($validate_value);
+  if ($filtred_value !== $validate_value) {
     $status = t('Do not use coarse or offensive language');
   }
 

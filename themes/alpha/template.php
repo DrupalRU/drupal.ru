@@ -382,6 +382,7 @@ function _forum_tablesort_header($cell, $header, $ts) {
     $title = t('sort by @s', array('@s' => $cell['data']));
     if ($cell['data'] == $ts['name']) {
       $cell['class'][] = 'sort-' . $ts['sort'];
+      $cell['class'][] = 'sort-active';
       $ts['sort'] = (($ts['sort'] == 'asc') ? 'desc' : 'asc');
     }
     else {

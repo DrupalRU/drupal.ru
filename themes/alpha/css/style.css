@@ -376,10 +376,6 @@ div.awesome_icon {
   text-align: right;
 }
 
-.forum-sort a.active{
-  background-color: #eee;
-}
-
 .forum-sort .sort-asc:before {
   font: normal normal normal 14px/1 FontAwesome;
   content: '\f160';

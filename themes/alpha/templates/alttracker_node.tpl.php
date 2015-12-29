@@ -1,4 +1,4 @@
-<div id="node-<?php print $node->nid; ?>"  class="row <?php if(isset($classes)): print $classes; endif;?> <?php print $zebra;?> "<?php if(isset($attributes)): print $attributes; endif;?>>
+<div id="node-<?php print $node->nid; ?>"  class="row  <?php if(isset($node->darkmatter) && $node->darkmatter): print 'darkmatter'; endif;?> <?php if(isset($classes)): print $classes; endif;?> <?php print $zebra;?> "<?php if(isset($attributes)): print $attributes; endif;?>>
   <div class="title col-xs-12 col-sm-6 col-md-6">
     <div class="icon col-xs-1">
       <?php print $icon; ?>

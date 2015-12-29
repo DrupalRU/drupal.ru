@@ -131,6 +131,19 @@ function darkmatter_query_comment_load_multiple_alter(QueryAlterableInterface $q
 }
 
 /**
+ * Implements hook_query_TAG_alter()().
+ */
+function darkmatter_query_alttracker_alter(QueryAlterableInterface $query){
+  global $user;
+
+  if(!user_access('darkmatter comments')){
+    if(!isset($user->darkmatter) or $user->darkmatter == 0 ){
+      $query->condition(db_or()->condition('n.darkmatter', 0)->condition('n.uid', $user->uid));
+    }
+  }
+}
+
+/**
  * Update darkmatter stats by node and all comments
  */
 function darkmatter_update_stats_node($op, $uid, $nid){

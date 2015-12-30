@@ -59,8 +59,10 @@ function antinoob_disallowed_words_callback($validate_value) {
   foreach ($restricted_words as $word) {
     if(!empty($word)) {
       $word = trim($word);
-      if(mb_stripos($validate_value, $word) !== FALSE) {
-        $words[] = $word;
+      preg_match('/(^|\s)' . $word . '($|\s)/ui', $validate_value, $matches);
+      $wd = trim(array_shift($matches));
+      if (!empty($wd)) {
+        $words[] = $wd;
       }
     }
   }

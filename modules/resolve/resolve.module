@@ -161,8 +161,8 @@ function resolve_preprocess_node(&$variables) {
 /**
  * Implements hook_preproces_HOOK().
  */
-function resolve_preprocess_alttracker(&$variables) {
-  array_walk($variables['nodes'], '_resolve_alttraker');
+function resolve_preprocess_alttracker_node(&$variables) {
+  resolve_add_mark($variables['title'], !empty($variables['node']->resolved));
 }
 
 /**
@@ -265,16 +265,4 @@ function _resolve_add_fields(QueryAlterableInterface &$query) {
  */
 function _resolve_path($nid, $cid) {
   return 'node/' . $nid . '/resolve/' . $cid . '/' . resolve_token_to_arg();
-}
-
-/**
- * Helper for array_walk.
- *
- * @param object $node
- *   Object of a node.
- *
- * @see resolve_preprocess_alttracker()
- */
-function _resolve_alttraker(&$node) {
-  resolve_add_mark($node->title, !empty($node->resolved));
 }

@@ -133,7 +133,7 @@ function darkmatter_query_comment_load_multiple_alter(QueryAlterableInterface $q
 /**
  * Implements hook_query_TAG_alter()().
  */
-function darkmatter_query_alttracker_nodes_load_alter(QueryAlterableInterface $query){
+function darkmatter_query_alttracker_nodes_condition_alter(QueryAlterableInterface $query){
   global $user;
 
   if(!user_access('darkmatter comments')){

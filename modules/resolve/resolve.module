@@ -132,29 +132,29 @@ function resolve_preprocess_node(&$variables) {
   // Adding best comment to bottom of the node.
   if ($correct_mode && $is_resolved && isset($variables['content'])) {
     $content = &$variables['content'];
-    $comment = comment_load($variables['resolved_cid']);
+    if($comment = comment_load($variables['resolved_cid'])){
+      $content['resolved_comment'] = comment_view($comment, $variables['node']);
 
-    $content['resolved_comment'] = comment_view($comment, $variables['node']);
-
-    // Get max weight of the page.
-    $weight = 0;
-    foreach ($content as $item) {
-      if (isset($item['#weight']) && $item['#weight'] > $weight) {
-        $weight = $item['#weight'];
+      // Get max weight of the page.
+      $weight = 0;
+      foreach ($content as $item) {
+        if (isset($item['#weight']) && $item['#weight'] > $weight) {
+          $weight = $item['#weight'];
+        }
       }
+  
+      // If weight not found.
+      if ($weight < count($content)) {
+        $weight = count($content) + 1;
+      }
+  
+      $content['best-comment-header'] = array(
+        '#markup' => '<h3>' . t('Best reply') . '</h3>',
+        '#weight' => ++$weight,
+      );
+  
+      $content['resolved_comment']['#weight'] = ++$weight;
     }
-
-    // If weight not found.
-    if ($weight < count($content)) {
-      $weight = count($content) + 1;
-    }
-
-    $content['best-comment-header'] = array(
-      '#markup' => '<h3>' . t('Best reply') . '</h3>',
-      '#weight' => ++$weight,
-    );
-
-    $content['resolved_comment']['#weight'] = ++$weight;
   }
 }
 

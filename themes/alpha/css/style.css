@@ -372,6 +372,32 @@ div.awesome_icon {
   color: #d34a32;
 }
 
+.forum-sort {
+  text-align: right;
+  margin-top: -50px;
+  padding-bottom: 10px;
+}
+
+.forum-sort .sort-asc:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f160';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: #333;  
+}
+
+.forum-sort .sort-desc:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f161';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: #333;  
+}
+
+.forum-sort span.sort-asc:before,
+.forum-sort span.sort-desc:before {
+  color: #fff;
+}
 /* Alt tracker style */
 
 .alttracker .icon .fa {
@@ -406,6 +432,15 @@ div.awesome_icon {
   }
 }
 
+.alttracker .darkmatter,
+.alttracker .row.darkmatter.even {
+  background-color: #333;
+  color: #fff;
+}
+
+.alttracker .darkmatter .icon .fa {
+  color: #fff;
+}
 
 /* Comments style*/
 

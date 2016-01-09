@@ -50,6 +50,16 @@ function xbbcode_dru_xbbcode_info() {
     'description' => t('API Drupal.ru (Drupal 6)'),
     'sample' => t('[ru_api=function]Drupal 6[/ru_api]'),
   );
+  $tags['node'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="https://drupal.ru/node/{option}" title="{content}">{content}</a></span>',
+    'description' => t('Drupal.ru node'),
+    'sample' => t('[node=nid]Node[/node]'),
+  );
+  $tags['comment'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="https://drupal.ru/comment/{option}#comment-{option}" title="{content}">{content}</a></span>',
+    'description' => t('Drupal.ru comment'),
+    'sample' => t('[comment=cid]Comment[/comment]'),
+  );
 
   return $tags;
 }

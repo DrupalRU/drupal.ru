@@ -34,6 +34,14 @@ _________
 
 ```<a href="https://drupal.ru/comment/cid#comment-cid" title="Comment">Comment</a>```
 _________
-[node=nid]Node[/node]
+[cid]CID[/cid]
 
-```<a href="https://drupal.ru/node/nid" title="Node">Node</a>```
+```<a href="https://drupal.ru/comment/cid#comment-cid" title="Comment CID">CID</a>```
+_________
+[node=nid]NID[/node]
+
+```<a href="https://drupal.ru/node/nid" title="Node NID">NID</a>```
+_________
+[nid]NID[/nid]
+
+```<a href="https://drupal.ru/node/nid" title="Node">NID</a>```

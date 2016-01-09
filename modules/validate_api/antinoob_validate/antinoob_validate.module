@@ -49,38 +49,26 @@ function antinoob_validate_validator_info() {
 /**
  *
  */
-function antinoob_disallowed_words_callback($field, $field_name, $entity, &$message) {
-  $values = array();
-  $valid = array();
-  if ($field_name == 'title') {
-    $values[] = str_replace(array(',', '!', '?'), ' ', $field);
-    $label = t('Title');
-  }
-  else {
-    $info = field_info_instance('node', $field_name, $entity->type);
-    $label = $info['label'];
-    if (!empty($field['und'])) {
-      foreach ($field['und'] as $field_value) {
-        $values[] = str_replace(array(',', '!', '?'), ' ', $field_value['value']);
-      }
-    }
-  }
-
+function antinoob_disallowed_words_callback($validate_value) {
   $status = FALSE;
 
   $restricted_words = explode("\n", file_get_contents(drupal_get_path('module', 'antinoob_validate') . '/forbitten.words'));
+  
+  $words = FALSE;
 
-  foreach ($values as $value) {
-    foreach ($restricted_words as $word) {
-      if(!empty($word)) {
-        $word = trim($word);
-        if(mb_stripos($value, $word) !== FALSE) {
-          $words[] = $word;
-          $status = TRUE;
-          $message = t('[@word] is forbidden to use.', array('@word' => implode(', ', $words)));
-        }
+  foreach ($restricted_words as $word) {
+    if(!empty($word)) {
+      $word = trim($word);
+      preg_match('/(^|\s)' . $word . '($|\s)/ui', $validate_value, $matches);
+      $wd = trim(array_shift($matches));
+      if (!empty($wd)) {
+        $words[] = $wd;
       }
     }
+  }
+  
+  if($words){
+    $status = t('[@word] is forbidden to use.', array('@word' => implode(', ', $words)));
   }
 
   return $status;
@@ -89,30 +77,12 @@ function antinoob_disallowed_words_callback($field, $field_name, $entity, &$mess
 /**
  *
  */
-function antinoob_exclamation_symbol_callback($field, $field_name, $entity, &$message) {
-  $values = array();
-  $valid = array();
-  if ($field_name == 'title') {
-    $values[] = $field;
-    $label = t('Title');
-  }
-  else {
-    $info = field_info_instance('node', $field_name, $entity->type);
-    $label = $info['label'];
-    if (!empty($field['und'])) {
-      foreach ($field['und'] as $field_value) {
-        $values[] = $field_value['value'];
-      }
-    }
-  }
+function antinoob_exclamation_symbol_callback($validate_value) {
 
   $status = FALSE;
 
-  foreach ($values as $value) {
-    if (preg_match('/!!/', $value)) {
-      $status = TRUE;
-      $message = t('[@value] Do not use more than one exclamation point in a row.', array('@value' => $value));
-    }
+  if (preg_match('/!!/', $validate_value)) {
+    $status = t('Do not use more than one exclamation point in a row.');
   }
 
   return $status;
@@ -121,37 +91,13 @@ function antinoob_exclamation_symbol_callback($field, $field_name, $entity, &$me
 /**
  *
  */
-function antinoob_caps_lock_callback($field, $field_name, $entity, &$message) {
-  $values = array();
-  $valid = array();
-  if ($field_name == 'title') {
-    $values[] = $field;
-    $label = t('Title');
-  }
-  else {
-    $info = field_info_instance('node', $field_name, $entity->type);
-    $label = $info['label'];
-    if (!empty($field['und'])) {
-      foreach ($field['und'] as $field_value) {
-        $values[] = $field_value['value'];
-      }
-    }
-  }
-
+function antinoob_caps_lock_callback($validate_value) {
   $status = FALSE;
 
-  foreach ($values as $value) {
-    $words = explode(' ', $value);
-    foreach ($words as $word) {
-      if (empty($word)) {
-        continue;
-      }
-      $upper = mb_strtoupper($word);
-      if ($word == $upper) {
-        $status = TRUE;
-        $message = t('[@word] Using ALL capital symbols is forbidden. ', array('@word' => $word));
-      }
-    }
+  $upper = mb_strtoupper($validate_value);
+  if ($validate_value == $upper) {
+    $status = t('Using ALL capital symbols is forbidden. ');
   }
+
   return $status;
 }

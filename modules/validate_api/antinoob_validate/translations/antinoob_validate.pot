@@ -48,11 +48,11 @@ msgid "[@word] is forbidden to use."
 msgstr ""
 
 #: antinoob_validate.module:92
-msgid "[@value] Do not use more than one exclamation point in a row."
+msgid "Do not use more than one exclamation point in a row."
 msgstr ""
 
 #: antinoob_validate.module:124
-msgid "[@word] Using ALL capital symbols is forbidden. "
+msgid "Using ALL capital symbols is forbidden. "
 msgstr ""
 
 #: antinoob_validate.info:0
@@ -60,5 +60,5 @@ msgid "Antinoob Validate"
 msgstr ""
 
 #: antinoob_validate.info:0
-msgid "Provide few antinoob validators"
+msgid "Provide few antinoob validators."
 msgstr ""

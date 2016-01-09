@@ -55,10 +55,20 @@ function xbbcode_dru_xbbcode_info() {
     'description' => t('Drupal.ru node'),
     'sample' => t('[node=nid]Node[/node]'),
   );
+  $tags['nid'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="https://drupal.ru/node/{content}" title="Node {content}">{content}</a></span>',
+    'description' => t('Drupal.ru node'),
+    'sample' => t('[nid]NID[/nid]'),
+  );
   $tags['comment'] = array(
     'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="https://drupal.ru/comment/{option}#comment-{option}" title="{content}">{content}</a></span>',
     'description' => t('Drupal.ru comment'),
     'sample' => t('[comment=cid]Comment[/comment]'),
+  );
+  $tags['cid'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="https://drupal.ru/comment/{content}#comment-{content}" title="Comment {content}">{content}</a></span>',
+    'description' => t('Drupal.ru comment'),
+    'sample' => t('[cid]CID[/cid]'),
   );
 
   return $tags;

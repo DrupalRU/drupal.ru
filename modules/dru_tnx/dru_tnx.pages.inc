@@ -71,19 +71,7 @@ function dru_tnx_data($vars) {
   
   global $user;
   
-  // Update entity
-  switch ($vars['type']) {
-    case 'node':
-        $id = 'nid';
-        $entity = node_load($vars['id']);
-        break;
-    case 'comment':
-        $id = 'cid';
-        $entity = comment_load($vars['id']);
-        break;
-  }
-  
-  $tnx_count = $entity->tnx;
+  $tnx_count = $vars['entity']->tnx;
   if ($vars['tnx'] == 'tnx') {
     $tnx_count++;
   
@@ -95,6 +83,13 @@ function dru_tnx_data($vars) {
         'uid'         => $user->uid,
       ))
       ->execute();
+      
+    // Count tnx
+    db_merge('tnx_stat')
+      ->key(array('uid' => $vars['entity']->uid))
+      ->fields(array($vars['type'] => 1))
+      ->expression($vars['type'], $vars['type'] . ' + :inc', array(':inc' => 1))
+      ->execute();
   }
   else {
     $tnx_count--;
@@ -105,12 +100,17 @@ function dru_tnx_data($vars) {
       ->condition('entity_type', $vars['type'])
       ->condition('uid', $user->uid)
       ->execute();
+      
+    // Count tnx
+    db_merge('tnx_stat')
+      ->key(array('uid' => $vars['entity']->uid))
+      ->fields(array($vars['type'] => 1))
+      ->expression($vars['type'], $vars['type'] . ' - :inc', array(':inc' => 1))
+      ->execute();
   }
   
-  if (isset($id)) {
-    $query = db_update($vars['type']);
-    $query->condition($id, $vars['id'])
-          ->fields(array('tnx' => $tnx_count))
-          ->execute();
-  }
+  $query = db_update($vars['type']);
+  $query->condition($vars['type'] == 'node' ? 'nid' : 'cid', $vars['id'])
+        ->fields(array('tnx' => $tnx_count))
+        ->execute();
 }

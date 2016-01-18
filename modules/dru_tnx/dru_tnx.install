@@ -34,6 +34,29 @@ function dru_tnx_schema() {
     ),
     'primary key' => array('id'),
   );
+  $schema['tnx_stat'] = array(
+    'description' => 'Thanks statistic',
+    'fields' => array(
+      'uid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'User ID.',
+      ),
+      'node' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Node count',
+      ),
+      'comment' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Comment count',
+      ),
+    ),
+    'primary key' => array('uid'),
+  );
   
   return $schema;
 }

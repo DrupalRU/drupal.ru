@@ -86,8 +86,6 @@ function dru_tnx_menu() {
 function dru_tnx_node_view($node, $view_mode) {
     
   global $user;
-  
-  $test = get_tnx_by_id('node', $node->nid);
     
   // Add node links
   drupal_add_library('system', 'drupal.ajax');
@@ -195,8 +193,7 @@ function get_tnx_by_uid($entity_type, $uid) {
        ->fields('t', array('entity_id'))
        ->condition('t.entity_type', $entity_type)
        ->condition('t.uid', $uid)
-       ->execute()
-       ->fetchAll();
+       ->execute();
   
   $result = array();
   $id = $entity_type == 'node' ? 'nid' : 'cid';

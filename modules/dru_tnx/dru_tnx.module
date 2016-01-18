@@ -86,6 +86,9 @@ function dru_tnx_menu() {
 function dru_tnx_node_view($node, $view_mode) {
     
   global $user;
+  
+  //$test = get_tnx_by_uid('node', $user->uid);
+  $test = get_tnx_by_id('node', $node->nid);
     
   // Add node links
   drupal_add_library('system', 'drupal.ajax');
@@ -175,14 +178,17 @@ function get_user_tnx($entity_type, $entity_id, $uid) {
  */
 function get_tnx_by_id($entity_type, $entity_id) {
   
-  $tnx = db_select('tnx', 't')
+  $users = db_select('tnx', 't')
        ->fields('t', array('uid'))
        ->condition('t.entity_type', $entity_type)
        ->condition('t.entity_id', $entity_id)
-       ->execute()
-       ->fetchAll();
+       ->execute();
   
-  return $tnx;
+  $result = array();
+  foreach ($users as $user) {
+    $result[] = $user->uid;
+  }
+  return $result;
   
 }
 
@@ -194,7 +200,7 @@ function get_tnx_by_id($entity_type, $entity_id) {
 function get_tnx_by_uid($entity_type, $uid) {
   
   $tnx = db_select('tnx', 't')
-       ->fields('t', array('id'))
+       ->fields('t', array('entity_id'))
        ->condition('t.entity_type', $entity_type)
        ->condition('t.uid', $uid)
        ->execute()

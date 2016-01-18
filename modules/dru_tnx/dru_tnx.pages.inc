@@ -41,19 +41,10 @@ function dru_tnx_callback($ajax, $vars) {
   
   $is_ajax = $ajax === 'ajax';
   
-  switch ($vars['type']) {
-    case 'node':
-        $entity = node_load($vars['id']);
-        break;
-    case 'comment':
-        $entity = comment_load($vars['id']);
-        break;
-  }
-  
   if ($is_ajax) {
     
     $tnx = get_user_tnx($vars['type'], $vars['id'], $user->uid);
-    $tnx_link = dru_tnx_link($entity, $vars['type'], $vars['id'], $tnx);
+    $tnx_link = dru_tnx_link($vars['entity'], $vars['type'], $vars['id'], $tnx);
     
     $link = l($tnx_link['title'], $tnx_link['href'], array('attributes' => $tnx_link['attributes']));
     

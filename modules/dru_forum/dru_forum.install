@@ -1,0 +1,130 @@
+<?php
+
+/**
+* Implements hook_install().
+*/
+function dru_forum_install() {
+  db_rename_table('field_deleted_revision_2', 'field_revision_taxonomy_forums');
+  db_rename_table('field_deleted_data_2', 'field_data_taxonomy_forums');
+
+  db_update('system')
+    ->fields(array('weight' => 2))
+    ->condition('name', 'dru_forum')
+    ->execute();
+    
+  db_update('field_config_instance')
+    ->fields(array(
+      'deleted' => 0,
+    ))
+    ->condition('field_name', 'taxonomy_forums')
+    ->execute();
+
+  db_update('field_config')
+    ->fields(array(
+      'deleted' => 0,
+    ))
+    ->condition('field_name', 'taxonomy_forums')
+    ->execute();
+
+  db_update('field_revision_taxonomy_forums')
+    ->fields(array(
+      'deleted' => 0,
+    ))
+    ->execute();
+
+  db_update('field_data_taxonomy_forums')
+    ->fields(array(
+      'deleted' => 0,
+    ))
+    ->execute();
+
+  // Migrate data from "new" - "taxonomy_forum" field.
+  
+  $data_records = db_select('field_data_field_taxonomy_forum', 'fd')
+    ->fields('fd')
+    ->execute()
+    ->fetchAll();
+
+  foreach($data_records as $record){
+    $stored = db_select('field_data_taxonomy_forums', 'fds')
+      ->fields('fds')
+      ->condition('entity_type', $record->entity_type)
+      ->condition('entity_id', $record->entity_id)
+      ->condition('deleted', $record->deleted)
+      ->condition('delta', $record->delta)
+      ->condition('language', $record->language)
+      ->execute()
+      ->fetchAssoc();
+    
+    if(empty($stored)){
+      db_insert('field_data_taxonomy_forums') // Table name no longer needs {}
+        ->fields(array(
+          'entity_type' => $record->entity_type ,
+          'bundle' => $record->bundle ,
+          'deleted' => $record->deleted ,
+          'entity_id' => $record->entity_id ,
+          'revision_id' => $record->revision_id ,
+          'language' => $record->language ,
+          'delta' => $record->delta ,
+          'taxonomy_forums_tid' => $record->field_taxonomy_forum_tid ,
+        ))
+        ->execute();
+
+      // We need to transfer revisions now.
+      $revision_records = db_select('field_revision_field_taxonomy_forum', 'fds')
+        ->fields('fds')
+        ->condition('entity_type', $record->entity_type)
+        ->condition('entity_id', $record->entity_id)
+        ->execute()
+        ->fetchAll();
+
+      foreach($revision_records as $revision_record){
+        db_insert('field_revision_taxonomy_forums') // Table name no longer needs {}
+          ->fields(array(
+            'entity_type' => $revision_record->entity_type ,
+            'bundle' => $revision_record->bundle ,
+            'deleted' => $revision_record->deleted ,
+            'entity_id' => $revision_record->entity_id ,
+            'revision_id' => $revision_record->revision_id ,
+            'language' => $revision_record->language ,
+            'delta' => $revision_record->delta ,
+            'taxonomy_forums_tid' => $revision_record->field_taxonomy_forum_tid ,
+          ))
+          ->execute();
+      }
+      
+      // Update forum index.
+      _dru_forum_update_forum_index($record);
+    }
+  }
+  
+  // Delete "new" field field_taxonomy_forum.
+  field_delete_field('field_taxonomy_forum');
+  
+  // Clear field cache.
+  field_cache_clear();
+}
+
+/**
+ * Update forum index for migration.
+ */
+function _dru_forum_update_forum_index($record){
+  $node = db_select('node', 'n')
+      ->fields('n')
+      ->condition('nid', $record->entity_id)
+      ->execute()
+      ->fetchObject();
+  $query = db_insert('forum_index')->fields(array('nid', 'title', 'tid', 'sticky', 'created', 'comment_count', 'last_comment_timestamp'));
+  $query->values(array(
+    'nid' => $node->nid,
+    'title' => $node->title,
+    'tid' => $record->field_taxonomy_forum_tid,
+    'sticky' => $node->sticky,
+    'created' => $node->created,
+    'comment_count' => 0,
+    'last_comment_timestamp' => $node->created,
+  ));
+  $query->execute();
+  
+  _forum_update_forum_index($node->nid);      
+}

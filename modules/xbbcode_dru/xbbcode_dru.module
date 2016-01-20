@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ */
+
+/**
+ *
+ */
+function xbbcode_dru_init() {
+  drupal_add_css(drupal_get_path('module', 'xbbcode_dru') . '/xbbcode_dru.css');
+}
+
+/**
+ *
+ */
+function xbbcode_dru_xbbcode_info() {
+  $tags['module'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-puzzle-piece"></i>&nbsp;<a href="https://drupal.org/project/{option}" title="{content}">{content}</a></span>',
+    'description' => t('Drupal.org modules'),
+    'sample' => t('[module=module_name]Module name[/module]'),
+  );
+  $tags['theme'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-paint-brush"></i>&nbsp;<a href="https://drupal.org/project/{option}" title="{content}">{content}</a></span>',
+    'description' => t('Drupal.org themes'),
+    'sample' => t('[theme=theme_name]Theme name[/theme]'),
+  );
+  $tags['user'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-user"></i>&nbsp;<a href="/username/{option}" title="{content}">{content}</a></span>',
+    'description' => t('Users'),
+    'sample' => t('[user=user_name]Username[/user]'),
+  );
+  $tags['api'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="http://api.drupal.org/api/function/{option}" title="{content}">{content}</a></span>',
+    'description' => t('API Drupal.org'),
+    'sample' => t('[api=api]API Drupal.org[/api]'),
+  );
+  $tags['man'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-code"></i>&nbsp;<a href="http://php.net/{option}" title="{content}">{content}</a></span>',
+    'description' => t('PHP manual'),
+    'sample' => t('[man=function]Function name[/man]'),
+  );
+  $tags['ruapi'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="http://api.drupal.ru/api/function/{name}/{v}" title="{content}">{content}</a></span>',
+    'description' => t('API Drupal.ru by version'),
+    'sample' => t('[ruapi name=function v=8]API ru Drupal 8[/ruapi]'),
+  );
+  $tags['ru_api'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="http://api.drupal.ru/api/function/{option}" title="{content}">{content}</a></span>',
+    'description' => t('API Drupal.ru (Drupal 6)'),
+    'sample' => t('[ru_api=function]Drupal 6[/ru_api]'),
+  );
+  $tags['node'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="https://drupal.ru/node/{option}" title="{content}">{content}</a></span>',
+    'description' => t('Drupal.ru node'),
+    'sample' => t('[node=nid]Node[/node]'),
+  );
+  $tags['nid'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="https://drupal.ru/node/{content}" title="Node {content}">{content}</a></span>',
+    'description' => t('Drupal.ru node'),
+    'sample' => t('[nid]NID[/nid]'),
+  );
+  $tags['comment'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="https://drupal.ru/comment/{option}#comment-{option}" title="{content}">{content}</a></span>',
+    'description' => t('Drupal.ru comment'),
+    'sample' => t('[comment=cid]Comment[/comment]'),
+  );
+  $tags['cid'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="https://drupal.ru/comment/{content}#comment-{content}" title="Comment {content}">{content}</a></span>',
+    'description' => t('Drupal.ru comment'),
+    'sample' => t('[cid]CID[/cid]'),
+  );
+
+  return $tags;
+}

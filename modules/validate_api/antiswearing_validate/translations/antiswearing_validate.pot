@@ -3,8 +3,8 @@
 # LANGUAGE translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  mat_filter.module: n/a
-#  mat_filter.info: n/a
+#  antiswearing_validate.module: n/a
+#  antiswearing_validate.info: n/a
 #
 #, fuzzy
 msgid ""
@@ -19,23 +19,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: mat_filter.module:29
-msgid "Title"
+#: antiswearing_validate.module:10
+msgid "Coarse or offensive language filter"
 msgstr ""
 
-#: mat_filter.module:48
-msgid "Field \"@field\" isn't valid! Use profanity is prohibited!"
+#: antiswearing_validate.module:11
+msgid "Do not allow to use coarse or offensive language"
 msgstr ""
 
-#: mat_filter.info:0
-msgid "Mat filter"
+#: antiswearing_validate.module:46
+msgid "Do not use coarse or offensive language"
 msgstr ""
 
-#: mat_filter.info:0
-msgid "Add \"php-obscene-censor-rus\" php-class."
+#: antiswearing_validate.info:0
+msgid "Antiswearing Validate"
 msgstr ""
 
-#: mat_filter.info:0
-msgid "content-authoring"
+#: antiswearing_validate.info:0
+msgid "Add \"php-obscene-censor-rus\" php-class for antiswearing validation."
 msgstr ""
-

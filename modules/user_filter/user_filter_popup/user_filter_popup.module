@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implements of hook_menu().
  */
 function user_filter_popup_menu() {
@@ -16,9 +20,9 @@ function user_filter_popup_menu() {
 }
 
 /**
- * Implements hook_entity_info_alter()
+ * Implements hook_entity_info_alter().
  */
-function user_filter_popup_entity_info_alter(&$entity_info){
+function user_filter_popup_entity_info_alter(&$entity_info) {
   $entity_info['user']['view modes']['user_info'] = array(
     'label' => t('User Info'),
     'custom settings' => TRUE,
@@ -26,9 +30,9 @@ function user_filter_popup_entity_info_alter(&$entity_info){
 }
 
 /**
- * Callback for view user tip
+ * Callback for view user tip.
  */
-function user_filter_popup_ajax_callback($profile){
+function user_filter_popup_ajax_callback($profile) {
   global $user;
   $content = drupal_render($profile);
   print $content;
@@ -37,16 +41,19 @@ function user_filter_popup_ajax_callback($profile){
 
 /**
  * Implements hook_init()
- * Add css and js files
+ * Add css and js files.
  */
 function user_filter_popup_init() {
   drupal_add_css(drupal_get_path('module', 'user_filter_popup') . '/user_filter_popup.css');
   drupal_add_js(drupal_get_path('module', 'user_filter_popup') . '/js/user_filter_popup.js');
 }
 
-function user_filter_popup_preprocess_user_profile(&$vars){
+/**
+ *
+ */
+function user_filter_popup_preprocess_user_profile(&$vars) {
   if ($vars['elements']['#view_mode'] == 'user_info') {
     $vars['theme_hook_suggestions'][] = 'user_profile__user_info';
-    //dpm($vars);
+    // dpm($vars);
   }
 }

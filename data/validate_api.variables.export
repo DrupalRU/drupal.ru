@@ -1,0 +1,33 @@
+[
+    {
+        "name": "validate_api_blog",
+        "value": {
+            "settings": 1,
+            "validate": {
+                "title": {
+                    "exclamation_point": "Восклицательные знаки",
+                    "caps_lock": "Заглавные буквы",
+                    "disallowed_words": "Запрещенные слова",
+                    "antiswearing": "Фильтр агрессивные или матерных слов"
+                },
+                "body": {
+                    "caps_lock": "Заглавные буквы",
+                    "disallowed_words": "Запрещенные слова",
+                    "antiswearing": "Фильтр агрессивные или матерных слов"
+                }
+            }
+        }
+    },
+    {
+        "name": "validate_api_blog_comment",
+        "value": {
+            "settings": 1,
+            "validate": {
+                "comment_body": {
+                    "disallowed_words": "Запрещенные слова",
+                    "antiswearing": "Фильтр агрессивные или матерных слов"
+                }
+            }
+        }
+    }
+]

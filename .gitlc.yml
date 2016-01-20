@@ -5,6 +5,7 @@ code_style:
     scripts: ignore
     data: ignore
     README.md: ignore
+    modules/validate_api/antiswearing_validate/obscene: ignore
 deploy:
   master:
     server: "karma.vps-private.net"

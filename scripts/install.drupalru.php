@@ -19,7 +19,7 @@ $data['core'] = 'drupal-7';
 $data['site_name'] = 'Drupal.ru Dev version';
 
 // Contrib modules list.
-$data['contrib'] = 'acl bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot tagadelic taxonomy_manager jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user quote-7.x-1.x-dev l10n_update';
+$data['contrib'] = 'acl bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot tagadelic taxonomy_manager jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user quote-7.x-1.x-dev l10n_update blog';
 
 
 echo "Full site path: " . $data['site_path'] . "\n";
@@ -106,7 +106,7 @@ if(!is_dir($data['site_path'] . '/sites/all/modules/local')){
 exec('ln -s ' . $data['github_path'] . '/modules/* ' . $data['site_path'] . '/sites/all/modules/local/');
 
 chdir($data['site_path']);
-exec('drush -y en user_filter user_filter_notify validate_api antinoob_validate antiswearing_validate darkmatter dru_comment_quote xbbcode_dru');
+exec('drush -y en user_filter user_filter_notify validate_api antinoob_validate antiswearing_validate darkmatter dru_comment_quote xbbcode_dru resolve');
 
 
 echo "Install Latest Font awesome\n";
@@ -170,6 +170,9 @@ echo "Import modules settings";
 
 exec('drush ddi variables --file=' . $data['github_path'] . '/data/darkmatter_notify.variables.export');
 exec('drush ddi variables --file=' . $data['github_path'] . '/data/user_info_notify.variables.export');
+exec('drush ddi variables --file=' . $data['github_path'] . '/data/quote.variables.export');
+exec('drush ddi variables --file=' . $data['github_path'] . '/data/validate_api.variables.export');
+
 
 echo "Disable drupal_deploy\n";
 exec('drush dis -y drupal_deploy');

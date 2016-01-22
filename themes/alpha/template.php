@@ -519,10 +519,10 @@ function alpha_pager($variables) {
   }
   // End of generation loop preparation.
 
-  $li_first = theme('pager_first', array('text' => '<i class="fa fa-angle-double-left"></i>', 'element' => $element, 'parameters' => $parameters));
-  $li_previous = theme('pager_previous', array('text' => '<i class="fa fa-angle-left"></i>', 'element' => $element, 'interval' => 1, 'parameters' => $parameters));
-  $li_next = theme('pager_next', array('text' => '<i class="fa fa-angle-right"></i>', 'element' => $element, 'interval' => 1, 'parameters' => $parameters));
-  $li_last = theme('pager_last', array('text' => '<i class="fa fa-angle-double-right"></i>', 'element' => $element, 'parameters' => $parameters));
+  $li_first = theme('pager_first', array('text' => (isset($tags[0]) ? $tags[0] : '<i class="fa fa-angle-double-left"></i>'), 'element' => $element, 'parameters' => $parameters));
+  $li_previous = theme('pager_previous', array('text' => (isset($tags[1]) ? $tags[1] : '<i class="fa fa-angle-left"></i>'), 'element' => $element, 'interval' => 1, 'parameters' => $parameters));
+  $li_next = theme('pager_next', array('text' => (isset($tags[3]) ? $tags[3] : '<i class="fa fa-angle-right"></i>'), 'element' => $element, 'interval' => 1, 'parameters' => $parameters));
+  $li_last = theme('pager_last', array('text' => (isset($tags[4]) ? $tags[4] : '<i class="fa fa-angle-double-right"></i>'), 'element' => $element, 'parameters' => $parameters));
 
   if ($pager_total[$element] > 1) {
     if ($li_first) {
@@ -578,10 +578,10 @@ function alpha_pager($variables) {
       'type' => 'ul',
     ));
     
-    return '<h2 class="element-invisible">' . t('Pages') 
-    . '</h2><center>'
+    return '<div class="pager"><h2 class="element-invisible">' . t('Pages') 
+    . '</h2>'
     . $list
-    . '</center>'; 
+    . '</div>'; 
   }
 }
 

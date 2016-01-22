@@ -633,7 +633,7 @@ function alpha_pager_link($variables) {
   return '<a' . drupal_attributes($attributes) . '>' . $text . '</a>';
 }
 
-function _alpha_item_list($variables) {
+function _alpha_pager_item_list($variables) {
   $items = $variables['items'];
   $title = $variables['title'];
   $type = $variables['type'];
@@ -674,7 +674,7 @@ function _alpha_item_list($variables) {
       }
       if (count($children) > 0) {
         // Render nested list.
-        $data .= theme_item_list(array('items' => $children, 'title' => NULL, 'type' => $type, 'attributes' => $attributes));
+        $data .= _alpha_pager_item_list(array('items' => $children, 'title' => NULL, 'type' => $type, 'attributes' => $attributes));
       }
       if ($i == 1) {
         $attributes['class'][] = 'first';

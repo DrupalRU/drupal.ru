@@ -532,13 +532,13 @@ function alpha_pager($variables) {
   if ($pager_total[$element] > 1) {
     if ($li_first) {
       $items[] = array(
-        'class' => array('pager-first'),
+        'class' => array('pager-first pagination-prev'),
         'data' => $li_first,
       );
     }
     if ($li_previous) {
       $items[] = array(
-        'class' => array('pager-previous'),
+        'class' => array('pager-previous pagination-prev'),
         'data' => $li_previous,
       );
     }
@@ -569,11 +569,13 @@ function alpha_pager($variables) {
     if ($li_next) {
       $items[] = array(
         'data' => $li_next,
+        'class' => array('pagination-next'),
       );
     }
     if ($li_last) {
       $items[] = array(
         'data' => $li_last,
+        'class' => array('pagination-next'),
       );
     }
     

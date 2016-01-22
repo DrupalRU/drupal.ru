@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_install().
+ */
+function user_filter_notify_install() {
+  $message = t('@[author:name]:
+    
+[text:original]
+
+[comment:url]
+
+
+-- Site team [site:name]');
+  variable_set('user_info_notify', array(
+    'notify' => TRUE,
+    'subject' => t('@[author:name] mentioned you on [site:name]'),
+    'message' => $message,
+  ));
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function user_filter_notify_uninstall() {
+  variable_del('user_info_notify');
+}

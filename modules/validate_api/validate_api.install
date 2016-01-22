@@ -1,0 +1,13 @@
+<?php
+
+/**
+* Implements hook_uninstall().
+*/
+function validate_api_uninstall() {
+  global $conf;
+  foreach (array_keys($conf) as $key) {
+    if (strpos($key, 'validate_api_') === 0) {
+      variable_del($key);
+    }
+  }
+}

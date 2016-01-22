@@ -3,7 +3,7 @@ echo "INIT Drupal.ru"
 
 CORE='drupal-7'
 SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
-CONTRIB="acl bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot tagadelic taxonomy_manager jquery_ui jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user"
+CONTRIB="acl bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot tagadelic taxonomy_manager jquery_ui jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user quote-7.x-1.x-dev l10n_update"
 
 echo "Full site path: $SITEPATH"
 echo "Site core: $CORE"
@@ -73,6 +73,9 @@ ln -s $GITLC_DEPLOY_DIR/modules/* $SITEPATH/sites/all/modules/local/
 echo "Enable quote"
 drush en -y quote
 
+echo "Enable dru_comment_quote"
+drush en -y dru_comment_quote
+
 echo "Install Font awesome"
 cd  $SITEPATH/sites/all/libraries
 git clone https://github.com/FortAwesome/Font-Awesome.git fontawesome
@@ -90,6 +93,18 @@ echo "Set default variables"
 drush vset theme_default alpha
 drush vset filestore_tmp_dir /tmp
 drush vset admin_theme alpha
+
+echo "Update translation";
+drush -y dl drush_language
+drush language-add ru
+drush language-default ru
+drush -y l10n-update-refresh
+drush -y l10n-update
+
+#set auto update weekly
+drush vset l10n_update_check_frequency 7
+
+
 
 echo "Import META structure via module http://github.com/itpatrol/drupal_deploy."
 
@@ -121,15 +136,20 @@ drush ddi menu --file=$GITLC_DEPLOY_DIR/data/user-menu.menu_links.export
 
 echo "Import theme settings"
 
-drush ddi variables --file=$GITLC_DEPLOY_DIR/data/theme_bootstrap_lite_settings.variables.export
+drush ddi variables --file=$GITLC_DEPLOY_DIR/data/theme_alpha_settings.variables.export
 
 echo "Set default tmp"
 drush vset filestore_tmp_dir /tmp
 
+#Issue #148 enable compression
+echo "Enable compression for js, css"
+drush vset preprocess_css 1
+drush vset preprocess_js 1
+
 if [ "$SETTINGS_DEVEL" != "" ]; then
   cd $SITEPATH
-  drudh dl devel
-  drusn -y en devel
+  drush dl devel
+  drusn -y en devel devel_generate
   drush generate-content 100
   drush generate-users 100
 fi

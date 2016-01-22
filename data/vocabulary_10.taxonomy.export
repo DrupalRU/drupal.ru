@@ -53,6 +53,11 @@
                 "weight": 0
             },
             {
+                "name": "addressfield",
+                "description": null,
+                "weight": 0
+            },
+            {
                 "name": "AddToAny buttons",
                 "description": "",
                 "weight": 0
@@ -64,6 +69,11 @@
             },
             {
                 "name": "adminimal_admin_menu",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "Administration menu",
                 "description": "",
                 "weight": 0
             },
@@ -83,6 +93,11 @@
                     "adsence",
                     "adsens"
                 ]
+            },
+            {
+                "name": "AdSense module",
+                "description": "",
+                "weight": 0
             },
             {
                 "name": "adsense_injector",
@@ -110,6 +125,11 @@
             {
                 "name": "aggregation",
                 "description": "",
+                "weight": 0
+            },
+            {
+                "name": "Ajax Download Counter",
+                "description": null,
                 "weight": 0
             },
             {
@@ -168,6 +188,11 @@
                 "weight": 0
             },
             {
+                "name": "Assist",
+                "description": "",
+                "weight": 0
+            },
+            {
                 "name": "async",
                 "description": "",
                 "weight": 0
@@ -211,6 +236,11 @@
                 ]
             },
             {
+                "name": "autocomplete_tags",
+                "description": "",
+                "weight": 0
+            },
+            {
                 "name": "autolocale",
                 "description": "",
                 "weight": 0
@@ -232,6 +262,11 @@
                 "synonyms": [
                     "--autotag"
                 ]
+            },
+            {
+                "name": "Backup and Migrate",
+                "description": "",
+                "weight": 0
             },
             {
                 "name": "backup_migrate",
@@ -282,6 +317,11 @@
             },
             {
                 "name": "bittorrent",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "block",
                 "description": "",
                 "weight": 0
             },
@@ -437,6 +477,11 @@
                 "weight": 0
             },
             {
+                "name": "Chaos tool suite (ctools)",
+                "description": "",
+                "weight": 0
+            },
+            {
                 "name": "chart",
                 "description": "",
                 "weight": 0
@@ -548,6 +593,26 @@
                 ]
             },
             {
+                "name": "commerce drupal 7.0",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "Commerce pre-calculated price field",
+                "description": null,
+                "weight": 0
+            },
+            {
+                "name": "Commerce Product Attributes",
+                "description": null,
+                "weight": 0
+            },
+            {
+                "name": "Commerce Product custom fields mapping missing",
+                "description": "",
+                "weight": 0
+            },
+            {
                 "name": "commerce shipping",
                 "description": "",
                 "weight": 0
@@ -584,6 +649,11 @@
                 ]
             },
             {
+                "name": "Content Injector (formerly AdSense Injector)",
+                "description": "",
+                "weight": 0
+            },
+            {
                 "name": "content_multigroup",
                 "description": "",
                 "weight": 0,
@@ -608,6 +678,11 @@
             },
             {
                 "name": "countdown",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "coworker",
                 "description": "",
                 "weight": 0
             },
@@ -721,6 +796,16 @@
                 ]
             },
             {
+                "name": "Download Count",
+                "description": null,
+                "weight": 0
+            },
+            {
+                "name": "Download Userpoints",
+                "description": null,
+                "weight": 0
+            },
+            {
                 "name": "draft",
                 "description": "",
                 "weight": 0
@@ -746,6 +831,11 @@
                 "weight": 0
             },
             {
+                "name": "Drupal-shop",
+                "description": "",
+                "weight": 0
+            },
+            {
                 "name": "drush",
                 "description": "",
                 "weight": 0,
@@ -754,6 +844,11 @@
                     "-+drush 5",
                     "-+drush sql-sync"
                 ]
+            },
+            {
+                "name": "Drushop",
+                "description": "",
+                "weight": 0
             },
             {
                 "name": "ecommerce",
@@ -787,7 +882,32 @@
                 ]
             },
             {
+                "name": "entity",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "Entity API",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "Entity cache",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "Entity Reference",
+                "description": null,
+                "weight": 0
+            },
+            {
                 "name": "entity_metadata_wrapper",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "entityform",
                 "description": "",
                 "weight": 0
             },
@@ -899,8 +1019,23 @@
                 ]
             },
             {
+                "name": "feeds drupal commerce",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "field",
+                "description": "",
+                "weight": 0
+            },
+            {
                 "name": "Field collection",
                 "description": "",
+                "weight": 0
+            },
+            {
+                "name": "field group",
+                "description": null,
                 "weight": 0
             },
             {
@@ -1024,6 +1159,16 @@
                 "weight": 0
             },
             {
+                "name": "form",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "Form API",
+                "description": null,
+                "weight": 0
+            },
+            {
                 "name": "forum_access",
                 "description": "",
                 "weight": 0,
@@ -1069,6 +1214,11 @@
                 ]
             },
             {
+                "name": "Gallery Formatter",
+                "description": null,
+                "weight": 0
+            },
+            {
                 "name": "garamond",
                 "description": "",
                 "weight": 0
@@ -1108,6 +1258,11 @@
             },
             {
                 "name": "geomap",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "geshifilter",
                 "description": "",
                 "weight": 0
             },
@@ -1439,6 +1594,11 @@
             },
             {
                 "name": "importer",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "inline_conditions",
                 "description": "",
                 "weight": 0
             },
@@ -1879,6 +2039,16 @@
                 "weight": 0
             },
             {
+                "name": "openwysiwyg",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "Organic groups",
+                "description": "",
+                "weight": 0
+            },
+            {
                 "name": "Owl_Carousel",
                 "description": "",
                 "weight": 0
@@ -2103,6 +2273,11 @@
                 "weight": 0
             },
             {
+                "name": "References dialog",
+                "description": null,
+                "weight": 0
+            },
+            {
                 "name": "registration",
                 "description": "",
                 "weight": 0
@@ -2110,6 +2285,11 @@
             {
                 "name": "relationships",
                 "description": "",
+                "weight": 0
+            },
+            {
+                "name": "REST",
+                "description": null,
                 "weight": 0
             },
             {
@@ -2191,6 +2371,16 @@
             },
             {
                 "name": "Services",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "services views",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "settings.php",
                 "description": "",
                 "weight": 0
             },
@@ -2385,6 +2575,16 @@
                 ]
             },
             {
+                "name": "tahonomi",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "talk",
+                "description": "",
+                "weight": 0
+            },
+            {
                 "name": "taxonomy",
                 "description": "",
                 "weight": 0
@@ -2392,6 +2592,11 @@
             {
                 "name": "taxonomy translation",
                 "description": "",
+                "weight": 0
+            },
+            {
+                "name": "taxonomy view",
+                "description": null,
                 "weight": 0
             },
             {
@@ -2596,6 +2801,11 @@
                 ]
             },
             {
+                "name": "token simplenews",
+                "description": null,
+                "weight": 0
+            },
+            {
                 "name": "token_custom",
                 "description": "",
                 "weight": 0,
@@ -2736,6 +2946,11 @@
                 ]
             },
             {
+                "name": "uc_assist",
+                "description": "",
+                "weight": 0
+            },
+            {
                 "name": "uc_checkout",
                 "description": "",
                 "weight": 0
@@ -2826,6 +3041,21 @@
                 "weight": 0
             },
             {
+                "name": "User profile comments",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "User relationship",
+                "description": null,
+                "weight": 0
+            },
+            {
+                "name": "User Stats",
+                "description": null,
+                "weight": 0
+            },
+            {
                 "name": "user_tags",
                 "description": "",
                 "weight": 0,
@@ -2841,6 +3071,16 @@
             {
                 "name": "userpoints",
                 "description": "",
+                "weight": 0
+            },
+            {
+                "name": "userpoints contrib",
+                "description": null,
+                "weight": 0
+            },
+            {
+                "name": "Userpoints Donation",
+                "description": null,
                 "weight": 0
             },
             {
@@ -2860,6 +3100,11 @@
             },
             {
                 "name": "video js",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "view",
                 "description": "",
                 "weight": 0
             },
@@ -2902,7 +3147,17 @@
                 "weight": 0
             },
             {
+                "name": "views database connector",
+                "description": "",
+                "weight": 0
+            },
+            {
                 "name": "views entity",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "views file",
                 "description": "",
                 "weight": 0
             },
@@ -3180,6 +3435,11 @@
                 "weight": 0
             },
             {
+                "name": "модуль",
+                "description": null,
+                "weight": 0
+            },
+            {
                 "name": "модуль rules",
                 "description": "",
                 "weight": 0
@@ -3206,6 +3466,11 @@
             },
             {
                 "name": "туры на Новый Год 2016",
+                "description": "",
+                "weight": 0
+            },
+            {
+                "name": "Установка Drupal",
                 "description": "",
                 "weight": 0
             },

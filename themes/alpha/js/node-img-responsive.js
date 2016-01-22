@@ -1,6 +1,11 @@
+/**
+ * @file
+ * Make node images responsive.
+ */
+
 (function ($, Drupal) {
   "use strict";
-  
+
   /**
    * Provide node details affix feature.
    */

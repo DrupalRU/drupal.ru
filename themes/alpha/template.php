@@ -575,6 +575,7 @@ function alpha_pager($variables) {
     $list = _alpha_item_list(array(
       'items' => $items,
       'attributes' => array('class' => array('pagination')),
+      'type' => 'ul',
     ));
     
     return '<h2 class="element-invisible">' . t('Pages') 

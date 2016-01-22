@@ -578,6 +578,8 @@ function alpha_pager($variables) {
       'type' => 'ul',
     ));
     
+    drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/' . 'responsive-paginate.js');
+    
     return '<div class="alpha-pager"><h2 class="element-invisible">' . t('Pages') 
     . '</h2>'
     . $list

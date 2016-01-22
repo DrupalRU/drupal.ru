@@ -485,6 +485,10 @@ function alpha_preprocess_alttracker_node(&$variables) {
   }
 }
 
+function alpha_preprocess_pager($variables){
+  drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/' . 'responsive-paginate.js');
+}
+
 function alpha_pager($variables) {
   $tags = $variables['tags'];
   $element = $variables['element'];
@@ -577,8 +581,6 @@ function alpha_pager($variables) {
       'attributes' => array('class' => array('pagination')),
       'type' => 'ul',
     ));
-    
-    drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/' . 'responsive-paginate.js');
     
     return '<div class="alpha-pager"><h2 class="element-invisible">' . t('Pages') 
     . '</h2>'

@@ -487,6 +487,7 @@ function alpha_preprocess_alttracker_node(&$variables) {
 
 function alpha_preprocess_pager($variables){
   drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/' . 'responsive-paginate.js');
+  drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/' . 'enable-responsive-paginate.js');
 }
 
 function alpha_pager($variables) {

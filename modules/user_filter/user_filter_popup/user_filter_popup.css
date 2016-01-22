@@ -1,3 +1,7 @@
+body {
+  /* Popup can't be positioned if body has static position */
+  position: relative;
+}
 .user_filter {
   border-bottom: 1px dashed;
   position: relative;

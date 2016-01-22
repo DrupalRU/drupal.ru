@@ -544,19 +544,17 @@ function alpha_pager($variables) {
       for (; $i <= $pager_last && $i <= $pager_max; $i++) {
         if ($i < $pager_current) {
           $items[] = array(
-            'class' => array('pager-item'),
             'data' => theme('pager_previous', array('text' => $i, 'element' => $element, 'interval' => ($pager_current - $i), 'parameters' => $parameters)),
           );
         }
         if ($i == $pager_current) {
           $items[] = array(
-            'class' => array('pager-current'),
+            'class' => array('active'),
             'data' => '<a href="#">' . $i . '</a>',
           );
         }
         if ($i > $pager_current) {
           $items[] = array(
-            'class' => array('pager-item'),
             'data' => theme('pager_next', array('text' => $i, 'element' => $element, 'interval' => ($i - $pager_current), 'parameters' => $parameters)),
           );
         }
@@ -565,13 +563,11 @@ function alpha_pager($variables) {
     // End generation.
     if ($li_next) {
       $items[] = array(
-        'class' => array('pager-next'),
         'data' => $li_next,
       );
     }
     if ($li_last) {
       $items[] = array(
-        'class' => array('pager-last'),
         'data' => $li_last,
       );
     }

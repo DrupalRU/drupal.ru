@@ -610,10 +610,10 @@ function alpha_pager_link($variables) {
     static $titles = NULL;
     if (!isset($titles)) {
       $titles = array(
-        t('« first') => t('Go to first page'),
-        t('‹ previous') => t('Go to previous page'),
-        t('next ›') => t('Go to next page'),
-        t('last »') => t('Go to last page'),
+        '<i class="fa fa-angle-double-left"></i>' => t('Go to first page'),
+        '<i class="fa fa-angle-left"></i>' => t('Go to previous page'),
+        '<i class="fa fa-angle-right"></i>' => t('Go to next page'),
+        '<i class="fa fa-angle-double-right"></i>' => t('Go to last page'),
       );
     }
     if (isset($titles[$text])) {

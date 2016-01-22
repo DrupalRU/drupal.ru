@@ -578,7 +578,7 @@ function alpha_pager($variables) {
       'type' => 'ul',
     ));
     
-    return '<div class="pager"><h2 class="element-invisible">' . t('Pages') 
+    return '<div class="alpha-pager"><h2 class="element-invisible">' . t('Pages') 
     . '</h2>'
     . $list
     . '</div>'; 

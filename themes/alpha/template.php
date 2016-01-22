@@ -572,7 +572,7 @@ function alpha_pager($variables) {
       );
     }
     
-    $list = _alpha_item_list(array(
+    $list = _alpha_pager_item_list(array(
       'items' => $items,
       'attributes' => array('class' => array('pagination')),
       'type' => 'ul',

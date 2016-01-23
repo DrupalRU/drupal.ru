@@ -9,7 +9,7 @@ body.navbar-is-fixed-top {
 /* header */
 div.region.region-fluid-top {
   text-align: center;
-  background-color: #39b5f2;
+  background: #39b5f2 url(../images/gray-blueprint.png) repeat top left;
   margin-top: -60px;
   padding-top: 60px;
   color: white;

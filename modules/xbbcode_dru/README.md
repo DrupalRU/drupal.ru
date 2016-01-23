@@ -29,3 +29,19 @@ _________
 [man=function]Function name[/man]
 
 ```<a href="http://php.net/function" title="Function name">Function name</a>```
+_________
+[comment=cid]Comment[/comment]
+
+```<a href="https://drupal.ru/comment/cid#comment-cid" title="Comment">Comment</a>```
+_________
+[cid]CID[/cid]
+
+```<a href="https://drupal.ru/comment/cid#comment-cid" title="Comment CID">CID</a>```
+_________
+[node=nid]NID[/node]
+
+```<a href="https://drupal.ru/node/nid" title="Node NID">NID</a>```
+_________
+[nid]NID[/nid]
+
+```<a href="https://drupal.ru/node/nid" title="Node">NID</a>```

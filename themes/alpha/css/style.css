@@ -9,7 +9,7 @@ body.navbar-is-fixed-top {
 /* header */
 div.region.region-fluid-top {
   text-align: center;
-  background-color: #39b5f2 url(../images/background-map.png);
+  background-color: #39b5f2;
   margin-top: -60px;
   padding-top: 60px;
   color: white;

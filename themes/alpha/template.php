@@ -70,7 +70,12 @@ function alpha_preprocess_page(&$variables) {
     if ($node->promote) {
       $flag = '<i class="fa fa-star"></i>';
     }
-    $variables['title'] = '<div class="flag">' . $flag . '</div>' . drupal_get_title();
+    if (module_exists('dru_solve_mark')) {
+      $variables['title'] = '<div class="flag">' . $flag . '</div>' . get_dru_solve_mark(drupal_get_title());
+    }
+    else {
+      $variables['title'] = '<div class="flag">' . $flag . '</div>' . drupal_get_title();
+    }
   }
   if ($variables['theme_hook_suggestions'][0] == 'page__user') {
     if (isset($variables['page']['content']['system_main']['#account'])) {

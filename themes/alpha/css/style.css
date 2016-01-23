@@ -822,3 +822,11 @@ span.geshifilter:before {
   float: right;
   color: #333;
 }
+
+/* Pager */
+
+.alpha-pager {
+  text-align: center;
+  padding-left: 0;
+  margin: 20px 0;
+}

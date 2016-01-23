@@ -68,13 +68,13 @@
   <div class="media-body">
     <span class="text-muted pull-right">
         <small class="text-muted"><?php isset($timeago) ? print $timeago : print $changed; ?></small>
+        <?php print render($content['links']) ?>
     </span>
     <strong class="text-success"><?php print $author; ?></strong>
     <?php print $permalink; ?>
     <div class="content" <?php print $content_attributes; ?>>
       <?php
         // We hide the links now so that we can render them later.
-        hide($content['links']);
         print render($content);
       ?>
       <?php if ($signature): ?>
@@ -82,9 +82,6 @@
         <?php print $signature; ?>
       </div>
       <?php endif; ?>
-    </div>
-    <div class="pull-right">
-    <?php print render($content['links']) ?>
     </div>
   </div>
 </article>

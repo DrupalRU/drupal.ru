@@ -102,7 +102,7 @@ function _organization_installed_instances() {
         'settings' => array(
           'preview_image_style' => 'thumbnail',
           'progress_indicator' => 'throbber',
-          'weight' => 1,
+          'weight' => -4,
         ),
       ),
       'display' => array(

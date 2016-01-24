@@ -134,6 +134,16 @@ function _organization_installed_instances() {
         'settings' => array('size' => 60),
         'weight' => 1,
       ),
+      'display' => array(
+        'default' => array(
+          'label' => 'inline',
+          'type' => 'text_default',
+        ),
+        'teaser' => array(
+          'label' => 'inline',
+          'type' => 'text_default',
+        ),
+      ),
     ),
     'organization_address' => array(
       'field_name' => 'organization_address',
@@ -159,6 +169,17 @@ function _organization_installed_instances() {
         'type' => 'options_select',
         'weight' => 3,
       ),
+      'display' => array(
+        'default' => array(
+          'label' => 'taxonomy_term_reference_link',
+          'type' => 'text_default',
+        ),
+        'teaser' => array(
+          'label' => 'inline',
+          'type' => 'text_default',
+        ),
+      ),
+
     ),
   );
 }

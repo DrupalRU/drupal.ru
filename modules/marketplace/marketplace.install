@@ -37,7 +37,6 @@ function _organization_installed_fields() {
       'settings' => array(
         'default_image' => 0,
         'uri_scheme' => 'public',
-        'weight' => -4,
       ),
     ),
     'organization_website' => array(
@@ -57,7 +56,6 @@ function _organization_installed_fields() {
       'type' => 'text',
       'settings' => array(
         'max_length' => 1000,
-        'weight' => 2,
       ),
     ),
     'organization_type' => array(
@@ -71,7 +69,6 @@ function _organization_installed_fields() {
             'parent' => 0,
           ),
         ),
-        'weight' => 3,
       ),
     ),
   );
@@ -106,6 +103,7 @@ function _organization_installed_instances() {
         'settings' => array(
           'preview_image_style' => 'thumbnail',
           'progress_indicator' => 'throbber',
+          'weight' => -4,
         ),
       ),
       'display' => array(
@@ -135,6 +133,7 @@ function _organization_installed_instances() {
       'widget' => array(
         'type' => 'text_textfield',
         'settings' => array('size' => 60),
+        'weight' => 1,
       ),
     ),
     'organization_address' => array(
@@ -148,6 +147,7 @@ function _organization_installed_instances() {
       'widget' => array(
         'type' => 'text_textfield',
         'settings' => array('size' => 60),
+        'weight' => 2,
       ),
     ),
     'organization_type' => array(
@@ -158,6 +158,7 @@ function _organization_installed_instances() {
       'required' => TRUE,
       'widget' => array(
         'type' => 'options_select',
+        'weight' => 3,
       ),
     ),
   );

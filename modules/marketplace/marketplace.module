@@ -12,7 +12,7 @@ function marketplace_node_info() {
     return array(
         'organization' => array(
             'name' => t('Organization'),
-            'base' => 'organization',
+            'base' => 'marketplace',
             'description' => t('Create organization page'),
             'has_title' => TRUE,
             'title_label' => t('Organization name')

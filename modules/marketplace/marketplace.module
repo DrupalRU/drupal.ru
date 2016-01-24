@@ -28,3 +28,62 @@ function marketplace_form($node, $form_state) {
   $type = node_type_get_type($node);
   return $form;
 }
+
+/**
+ * Implements hook_menu().
+ */
+function marketplace_menu() {
+  $items['services'] = array(
+    'page callback' => 'marketplace_list',
+    'access arguments' => array('access content'),
+    'menu_name' => 'navigation',
+    'type' => MENU_CALLBACK,
+    'title' => 'Marketplace',
+  );
+  return $items;
+}
+
+/**
+ * Display companies on market place
+ */
+function marketplace_list(){
+  $select = db_select('node', 'n')
+    ->fields('n', array('nid', 'created'))
+    ->condition('n.type', 'organization', '=')
+    ->condition('n.status', 1)
+    ->orderBy('n.title', 'ASC')
+    ->extend('PagerDefault')
+    ->limit(variable_get('default_nodes_main', 10))
+    ->addTag('node_access');
+
+  $nids = $select->execute()->fetchCol();
+
+  if (!empty($nids)) {
+    $nodes = node_load_multiple($nids);
+    $build = node_view_multiple($nodes);
+
+    $build['pager'] = array(
+      '#theme' => 'pager',
+      '#weight' => 5,
+    );
+  }
+  else {
+
+    $default_message = '<p>' . t('No companies has been added yet.') . '</p>';
+
+    $default_links = array();
+    if (_node_add_access()) {
+      $default_links[] = l(t('Add organisation'), 'node/add/organization');
+    }
+    if (!empty($default_links)) {
+      $default_message .= theme('item_list', array('items' => $default_links));
+    }
+
+    $build['default_message'] = array(
+      '#markup' => $default_message,
+      '#prefix' => '<div id="first-time">',
+      '#suffix' => '</div>',
+    );
+  }
+  return $build;
+}

@@ -24,5 +24,9 @@ function marketplace_node_info() {
  * Implement hook_form()
  */
 function marketplace_form($node, $form_state) {
-    return node_content_form($node, $form_state);
+  $form =  node_content_form($node, $form_state);
+  $type = node_type_get_type($node);
+  drupal_set_message('<pre>' . print_r($type, TRUE) . '</pre>');
+  drupal_set_message('<pre>' . print_r($form, TRUE) . '</pre>');
+  return $form;
 }

@@ -1,0 +1,28 @@
+<?php
+/**
+ * @file
+ * Marketplacd module.
+ */
+
+
+/**
+ * Implements hook_node_info()
+ */
+function marketplace_node_info() {
+    return array(
+        'organization' => array(
+            'name' => t('Organization'),
+            'base' => 'organization',
+            'description' => t('Create organization page'),
+            'has_title' => TRUE,
+            'title_label' => t('Organization name')
+         )
+    );
+}
+
+/**
+ * Implement hook_form()
+ */
+function marketplace_form($node, $form_state) {
+    return node_content_form($node, $form_state);
+}

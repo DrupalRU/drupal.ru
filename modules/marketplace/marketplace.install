@@ -37,6 +37,7 @@ function _organization_installed_fields() {
       'settings' => array(
         'default_image' => 0,
         'uri_scheme' => 'public',
+        'weight' => -4,
       ),
     ),
     'organization_website' => array(
@@ -171,12 +172,12 @@ function _organization_installed_instances() {
       ),
       'display' => array(
         'default' => array(
-          'label' => 'taxonomy_term_reference_link',
-          'type' => 'text_default',
+          'label' => 'inline',
+          'type' => 'taxonomy_term_reference_link',
         ),
         'teaser' => array(
           'label' => 'inline',
-          'type' => 'text_default',
+          'type' => 'taxonomy_term_reference_link',
         ),
       ),
 

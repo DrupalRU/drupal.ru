@@ -73,7 +73,7 @@ function marketplace_list(){
 
     $default_links = array();
     if (_node_add_access()) {
-      $default_links[] = l(t('Add organisation'), 'node/add/organization');
+      $default_links[] = l(t('Add organization'), 'node/add/organization');
     }
     if (!empty($default_links)) {
       $default_message .= theme('item_list', array('items' => $default_links));

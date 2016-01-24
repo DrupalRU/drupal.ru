@@ -26,7 +26,7 @@ function marketplace_node_info() {
 function marketplace_form($node, $form_state) {
   $form =  node_content_form($node, $form_state);
   $type = node_type_get_type($node);
-  drupal_set_message('<pre>' . print_r($type, TRUE) . '</pre>');
-  drupal_set_message('<pre>' . print_r($form, TRUE) . '</pre>');
+  drupal_set_message('type . <pre>' . print_r($type, TRUE) . '</pre>');
+  drupal_set_message('foem . <pre>' . print_r($form, TRUE) . '</pre>');
   return $form;
 }

@@ -37,7 +37,6 @@ function _organization_installed_fields() {
       'settings' => array(
         'default_image' => 0,
         'uri_scheme' => 'public',
-        'weight' => -4,
       ),
     ),
     'organization_website' => array(

@@ -25,7 +25,7 @@ function marketplace_node_info() {
  */
 function marketplace_form($node, $form_state) {
   $form =  node_content_form($node, $form_state);
-   
+  
   $form['logo'] = array(
     '#type' => 'file',
     '#title' => t('Logo'),
@@ -33,12 +33,18 @@ function marketplace_form($node, $form_state) {
     '#weight' => -4,
   );
 
+  if($node->logo){
+    $form['logo']['#prefix'] = '<div class="current_logo">' .  theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo'))) . '</div>';  
+  }
+
+
   $form['website'] = array(
     '#type' => 'textfield',
     '#title' => t('Website'),
     '#description' => t('Please provide your website address.'),
     '#weight' => 1,
     '#required' => TRUE,
+    '#default_value' => $node->website,
   );
 
   $form['address'] = array(
@@ -46,6 +52,7 @@ function marketplace_form($node, $form_state) {
     '#title' => t('Address'),
     '#description' => t('If you have office address, please provide.'),
     '#weight' => 1,
+    '#default_value' => $node->address,
   );
   // $type = node_type_get_type($node);
   

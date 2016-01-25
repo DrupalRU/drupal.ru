@@ -48,10 +48,7 @@ function marketplace_form($node, $form_state) {
   );
 
   if($node->logo){
-    $form['logo']['#prefix'] = '<div class="current_logo">' .  theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo'))) . '</div>';  
-    $form['logo_fid'] = array(
-      '#value' => $node->logo->fid,
-    );
+    $form['logo']['#prefix'] = '<div class="current_logo">' .  theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo'))) . '</div>';
   }
   
 
@@ -82,8 +79,8 @@ function marketplace_form($node, $form_state) {
  */
 
 function marketplace_validate($node, $form, &$form_state) {
-  drupal_set_message('<pre>' . print_r($node, true) . '</pre>');
-  drupal_set_message('<pre>' . print_r($form_state, true) . '</pre>');
+//  drupal_set_message('<pre>' . print_r($node, true) . '</pre>');
+//  drupal_set_message('<pre>' . print_r($form_state, true) . '</pre>');
   $logo_directory = file_default_scheme() . '://' . variable_get('marketplace_org_path', 'organization');
 
   file_prepare_directory($logo_directory, FILE_CREATE_DIRECTORY);
@@ -95,7 +92,7 @@ function marketplace_validate($node, $form, &$form_state) {
 
   //Save file
   if (!$file = file_save_upload('logo', $validators, $logo_directory)){
-    if(!$node->logo){
+    if(!$form_state['node']->logo){
       form_set_error('logo', 'Could not upload file.');
     }
   }else{

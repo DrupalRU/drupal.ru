@@ -58,7 +58,7 @@ function marketplace_form($node, $form_state) {
 
 function marketplace_validate($node, $form, &$form_state) {
   
-  $logo_directory = file_default_scheme() . '://' . variable_get('marketplace_org_path', 'organisations');
+  $logo_directory = file_default_scheme() . '://' . variable_get('marketplace_org_path', 'organization');
 
   file_prepare_directory($logo_directory, FILE_CREATE_DIRECTORY);
 
@@ -73,6 +73,18 @@ function marketplace_validate($node, $form, &$form_state) {
   }else{
     $form_state['values']['logo'] = $file;
   }
+}
+
+/**
+ * Implement hook_load()
+ */
+
+function marketplace_load($nodes) {
+  drupal_set_message('<pre>' . print_r($nodes,true) . '</pre>');
+/*  $result = db_query('SELECT nid, foo FROM {organizations} WHERE nid IN (:nids)', array(':nids' => array_keys($nodes)));
+  foreach ($result as $record) {
+    $nodes[$record->nid]->foo = $record->foo;
+  }*/
 }
 
 /**
@@ -148,14 +160,14 @@ function marketplace_view($node, $view_mode, $langcode = NULL) {
 
 /**
  * Implements hook_query_TAG_alter() for node_load_multiple().
- */
+
 function marketplace_query_node_load_multiple_alter(QueryAlterableInterface &$query) {
   $query->leftJoin('organizations', 'orgs', 'orgs.vid = base.vid');
   $query->leftJoin('files', 'f', 'orgs.logo_fid = f.fid');
   $query->fields('orgs');
   $query->addField('f', 'filepath');
 }
-
+*/
 
 /**
  * Implements hook_menu().

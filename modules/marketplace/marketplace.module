@@ -21,6 +21,20 @@ function marketplace_node_info() {
 }
 
 /**
+ * Implements hook_theme().
+ */
+function marketplace_theme($existing, $type, $theme, $path) {
+  $theme = array();
+  $theme['node__organization'] = array(
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'node--organization',
+    'path' => drupal_get_path('module', 'marketplace') . '/templates',
+   );
+  return $theme;
+}
+
+/**
  * Implement hook_form()
  */
 function marketplace_form($node, $form_state) {

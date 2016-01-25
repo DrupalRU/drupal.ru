@@ -94,7 +94,7 @@
       </div>
 
       <div class="logo">
-      <?php print render($content['logo']); ?>
+        <?php print render($content['logo']); ?>
       </div>
       
       <?php if ($content['website']): ?>
@@ -121,7 +121,7 @@
       hide($content['links']);
       print render($content);
     ?>
-    <div class="details">
+    </div>
   </div>
 
   <?php print render($content['links']); ?>

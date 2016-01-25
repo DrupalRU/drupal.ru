@@ -153,7 +153,7 @@ function marketplace_query_node_load_multiple_alter(QueryAlterableInterface &$qu
   $query->leftJoin('organizations', 'orgs', 'orgs.vid = n.vid');
   $query->leftJoin('files', 'f', 'orgs.logo_fid = f.fid');
   $query->fields('orgs');
-  $query->addField('files', 'filepath');
+  $query->addField('f', 'filepath');
 }
 
 

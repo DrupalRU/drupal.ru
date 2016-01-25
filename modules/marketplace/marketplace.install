@@ -26,7 +26,7 @@ function marketplace_install() {
 /**
  * Implements hook_schema().
  */
-function darkmatter_schema() {
+function marketplace_schema() {
   $schema['organizations'] = array(
     'description' => 'Stores organization data.',
     'fields' => array(

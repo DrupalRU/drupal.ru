@@ -155,9 +155,14 @@ function marketplace_view($node, $view_mode, $langcode = NULL) {
     '#markup' =>  $logo_img,
     '#weight' => 1,
   );
-
+  
+  if(0 == strpos("http", $node->website)){
+    $urlpath = $node->website;
+  }else{
+    $urlpath = 'http://' . $node->website;
+  }
   $node->content['website'] = array(
-    '#markup' =>  l($node->website, $node->website),
+    '#markup' =>  l($node->website, $urlpath, array('attributes' => array('rel' => 'nofollow'))),
     '#weight' => 1,
   );
 

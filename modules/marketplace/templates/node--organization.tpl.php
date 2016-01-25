@@ -116,7 +116,7 @@
       <?php endif; ?>
 
       <div class="organization-type">
-        <?php  print_r($content); ?>
+        <?php  print_r( array_keys($content)); ?>
       </div>
       
     </div>

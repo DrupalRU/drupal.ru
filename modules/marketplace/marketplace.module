@@ -165,7 +165,7 @@ function marketplace_query_node_load_multiple_alter(QueryAlterableInterface &$qu
  */
 function marketplace_menu() {
   $items['services'] = array(
-    'page callback' => 'business',
+    'page callback' => 'marketplace_list',
     'access arguments' => array('access content'),
     'menu_name' => 'navigation',
     'type' => MENU_CALLBACK,

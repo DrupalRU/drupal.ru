@@ -146,7 +146,6 @@ function marketplace_update($node) {
  
 function marketplace_view($node, $view_mode, $langcode = NULL) {
   if($node->logo){
-    drupal_set_message('<pre>' . print_r($node->logo,true) . '</pre>');
     $logo_img = theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo')));
   }
   else{

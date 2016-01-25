@@ -31,6 +31,12 @@ function marketplace_theme($existing, $type, $theme, $path) {
     'template' => 'node--organization',
     'path' => drupal_get_path('module', 'marketplace') . '/templates',
    );
+  $theme['node__organization__teaser'] = array(
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'node--organization--teaser',
+    'path' => drupal_get_path('module', 'marketplace') . '/templates',
+   );
   return $theme;
 }
 

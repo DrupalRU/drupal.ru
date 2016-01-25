@@ -35,7 +35,13 @@ function marketplace_form($node, $form_state) {
 
   if($node->logo){
     $form['logo']['#prefix'] = '<div class="current_logo">' .  theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo'))) . '</div>';  
+
+    $form['original_logo'] = array(
+      '#type' => 'value',
+      '#value' => $node->logo,
+    );
   }
+  
 
 
   $form['website'] = array(
@@ -128,6 +134,8 @@ function marketplace_insert($node) {
  */
 
 function marketplace_update($node) {
+  drupal_set_message('<pre>' . print_r($node,true) . '</pre>');
+  /*
   $fid = $node->logo_fid;
   if($node->new_file){
     file_delete(file_load($node->logo_fid));
@@ -135,13 +143,13 @@ function marketplace_update($node) {
     $file->status = FILE_STATUS_PERMANENT;
     $file = file_save($file);
     $fid = $file->fid;
-  }
+  }*/
   
   db_update('organizations')
     ->fields(array(
       'website' => $node->website,
       'address' => $node->address,
-      'logo_fid' => $fid,
+//      'logo_fid' => $fid,
     ))
     ->condition('vid', $node->vid)
     ->execute();

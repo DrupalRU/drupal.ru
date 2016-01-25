@@ -25,20 +25,151 @@ function marketplace_node_info() {
  */
 function marketplace_form($node, $form_state) {
   $form =  node_content_form($node, $form_state);
-  $type = node_type_get_type($node);
+   
+  $form['logo'] = array(
+    '#type' => 'file',
+    '#title' => t('Logo'),
+    '#description' => t('Click "Chose File" to select an image to upload. Allowed extensions:  jpg, jpeg, png '),
+    '#weight' => -4,
+  );
+
+  $form['website'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Website'),
+    '#description' => t('Please provide your website address.'),
+    '#weight' => 1,
+    '#required' => TRUE,
+  );
+
+  $form['address'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Address'),
+    '#description' => t('If you have office address, please provide.'),
+    '#weight' => 1,
+  );
+  // $type = node_type_get_type($node);
+  
   return $form;
 }
+
+/**
+ * Implement hook_validate()
+ */
+
+function marketplace_validate($node, $form, &$form_state) {
+  
+  $logo_directory = file_default_scheme() . '://' . variable_get('marketplace_org_path', 'organisations');
+
+  file_prepare_directory($logo_directory, FILE_CREATE_DIRECTORY);
+
+  if ($file = file_check_upload('logo')) {
+    
+    $validators = array(
+      'file_validate_is_image' => array(),
+      'file_validate_extensions' => array(' jpg, jpeg, png')
+    );
+
+    //Save file
+    if (!$file = file_save_upload('logo', $validators, $logo_directory)){
+      form_set_error('logo', 'Could not upload file.');
+    }else{
+      $node->logo = $file;
+      $node->new_file = TRUE;
+    }
+  }
+}
+
+/**
+ * Implement hook_insert()
+ */
+function marketplace_insert($node) {
+  $fid = 0;
+  if($node->new_file){
+    $file = $node->logo;
+    $file->status = FILE_STATUS_PERMANENT;
+    $file = file_save($file);
+    $fid = $file->fid;
+  }
+  db_insert('organizations')
+    ->fields(array(
+      'nid' => $node->nid,
+      'vid' => $node->vid,
+      'website' => $node->website,
+      'address' => $node->address,
+      'logo_fid' => $fid,
+    ))
+    ->execute();
+}
+
+/**
+ * Implement hook_update()
+ */
+
+function marketplace_update($node) {
+  $fid = $node->logo_fid;
+  if($node->new_file){
+    file_delete(file_load($node->logo_fid));
+    $file = $node->logo;
+    $file->status = FILE_STATUS_PERMANENT;
+    $file = file_save($file);
+    $fid = $file->fid;
+  }
+  
+  db_update('organizations')
+    ->fields(array(
+      'website' => $node->website,
+      'address' => $node->address,
+      'logo_fid' => $fid,
+    ))
+    ->condition('vid', $node->vid)
+    ->execute();
+}
+
+/**
+ * Implement hook_view()
+ */
+ 
+function marketplace_view($node, $view_mode, $langcode = NULL) {
+
+  $node->content['logo'] = array(
+    '#markup' =>  theme('image', array('path' => $node->filepath, 'attributes' => array('class' => 'organization-logo'))),
+    '#weight' => 1,
+  );
+
+  $node->content['website'] = array(
+    '#markup' =>  l($node->website, $node->website),
+    '#weight' => 1,
+  );
+
+  $node->content['address'] = array(
+    '#markup' =>  $node->address,
+    '#weight' => 1,
+  );
+
+  return $node;
+}
+
+/**
+ * Implements hook_query_TAG_alter() for node_load_multiple().
+ */
+function marketplace_query_node_load_multiple_alter(QueryAlterableInterface &$query) {
+  $query->leftJoin('organizations', 'orgs', 'orgs.vid = n.vid');
+  $query->leftJoin('files', 'f', 'orgs.logo_fid = f.fid');
+  $query->fields('orgs');
+  $query->addField('files', 'filepath');
+}
+
 
 /**
  * Implements hook_menu().
  */
 function marketplace_menu() {
   $items['services'] = array(
-    'page callback' => 'marketplace_list',
+    'page callback' => 'business',
     'access arguments' => array('access content'),
     'menu_name' => 'navigation',
     'type' => MENU_CALLBACK,
-    'title' => 'Marketplace',
+    'title' => 'Business',
   );
   return $items;
 }

@@ -24,39 +24,64 @@ function marketplace_install() {
 }
 
 /**
+ * Implements hook_schema().
+ */
+function darkmatter_schema() {
+  $schema['organizations'] = array(
+    'description' => 'Stores organization data.',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The {node} this version belongs to.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'vid' => array(
+        'description' => 'The primary identifier for this version.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'logo_fid' => array(
+        'description' => 'The {files} this version belongs to.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'website' => array(
+        'description' => 'The website name.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'address' => array(
+        'description' => 'Company address.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('vid'),
+    'foreign keys' => array(
+      'versioned_node' => array(
+        'table' => 'node',
+        'columns' => array('nid' => 'nid'),
+      ),
+    ),
+  );
+  return $schema;
+}
+
+/**
  * Fields for this module.
  */
 function _organization_installed_fields() {
   $t = get_t();
   return array(
-    'organization_logo' => array(
-      'field_name' => 'organization_logo',
-      'label' => $t('Logo'),
-      'cardinality' => 1,
-      'type' => 'image',
-      'settings' => array(
-        'default_image' => 0,
-        'uri_scheme' => 'public',
-      ),
-    ),
-    'organization_website' => array(
-      'field_name' => 'organization_website',
-      'label'  => $t('Website'),
-      'cardinality' => 1,
-      'type' => 'text',
-      'settings' => array(
-        'max_length' => 1000,
-      ),
-    ),
-    'organization_address' => array(
-      'field_name' => 'organization_address',
-      'label'  => $t('Address'),
-      'cardinality' => 1,
-      'type' => 'text',
-      'settings' => array(
-        'max_length' => 1000,
-      ),
-    ),
     'organization_type' => array(
       'field_name' => 'organization_type',
       'type' => 'taxonomy_term_reference',
@@ -80,85 +105,6 @@ function _organization_installed_fields() {
 function _organization_installed_instances() {
   $t = get_t();
   return array( 
-    'organization_logo' => array(
-      'field_name' => 'organization_logo',
-      'label'       => $t('Logo'),
-      'cardinality' => 1,
-      'bundle' => 'organization',
-      'entity_type' => 'node',
-      'description' => $t('Organization logo'),
-      'type' => 'organization_logo',
-      'settings' => array(
-        'file_extensions' => 'png jpg jpeg',
-        'file_directory' => 'organization',
-        'max_filesize' => '1 MB',
-        'alt_field' => 1,
-        'title_field' => 1,
-        'max_resolution' => '800x800',
-        'min_resolution' => '400x400',
-        'default_image' => 0,
-      ),
-      'widget' => array(
-        'settings' => array(
-          'preview_image_style' => 'thumbnail',
-          'progress_indicator' => 'throbber',
-          'weight' => -4,
-        ),
-      ),
-      'display' => array(
-        'default' => array(
-          'label' => 'hidden',
-          'type' => 'image',
-          'settings' => array(),
-          'weight' => -1,
-          'module' => 'image',
-        ),
-        'teaser' => array(
-          'label' => 'hidden',
-          'type' => 'image',
-          'settings' => array(),
-          'weight' => -1,
-          'module' => 'image',
-        ),
-      ),
-    ),
-    'organization_website' => array(
-      'field_name' => 'organization_website',
-      'label' => $t('Website'),
-      'required' => TRUE,
-      'cardinality' => 1,
-      'bundle' => 'organization',
-      'entity_type' => 'node',
-      'widget' => array(
-        'type' => 'text_textfield',
-        'settings' => array('size' => 60),
-        'weight' => 1,
-      ),
-      'display' => array(
-        'default' => array(
-          'label' => 'inline',
-          'type' => 'text_default',
-        ),
-        'teaser' => array(
-          'label' => 'inline',
-          'type' => 'text_default',
-        ),
-      ),
-    ),
-    'organization_address' => array(
-      'field_name' => 'organization_address',
-      'label' => $t('Address'),
-      'required' => FALSE,
-      'cardinality' => 1,
-      'bundle' => 'organization',
-      'entity_type' => 'node',
-      'description' => $t('Your company physical office address'),
-      'widget' => array(
-        'type' => 'text_textfield',
-        'settings' => array('size' => 60),
-        'weight' => 2,
-      ),
-    ),
     'organization_type' => array(
       'field_name' => 'organization_type',
       'bundle' => 'organization',
@@ -199,17 +145,17 @@ function marketplace_uninstall() {
   // Delete all the nodes at once
   node_delete_multiple($nids);
  
-  $instance = array('field_name' => 'comment_body','bundle' => 'comment_node_organization','entity_type' => 'comment');
+  $instance = array('field_name' => 'comment_body', 'bundle' => 'comment_node_organization', 'entity_type' => 'comment');
   field_delete_instance($instance);
  
-  $instance = array('field_name' => 'body','bundle' => 'organization','entity_type' => 'node');
+  $instance = array('field_name' => 'body', 'bundle' => 'organization', 'entity_type' => 'node');
   field_delete_instance($instance);
  
    $fields = array_keys(_organization_installed_fields());
    foreach ($fields as $field) {
       field_delete_field($field);
   }
- 
+
   // Purge all field infromation
    field_purge_batch(1000);
 }

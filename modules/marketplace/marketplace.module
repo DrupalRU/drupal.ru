@@ -81,6 +81,7 @@ function marketplace_validate($node, $form, &$form_state) {
  */
 function marketplace_insert($node) {
   $fid = 0;
+  drupal_set_message('<pre>' . print_r($node,true) . '</pre>');
   if($node->new_file){
     $file = $node->logo;
     $file->status = FILE_STATUS_PERMANENT;

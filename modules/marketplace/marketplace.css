@@ -9,4 +9,5 @@
 .node-organization .organization-logo {
   max-width: 150px;
   padding: 0px 25px;
+  height: auto;
 }

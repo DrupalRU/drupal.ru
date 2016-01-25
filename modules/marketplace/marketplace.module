@@ -145,9 +145,14 @@ function marketplace_update($node) {
  */
  
 function marketplace_view($node, $view_mode, $langcode = NULL) {
-
+  if($node->logo){
+    $logo_img = theme('image', array('path' => $node->logo->filepath, 'attributes' => array('class' => 'organization-logo')));
+  }
+  else{
+    $logo_img = theme('image', array('path' => drupal_get_path('module', 'marketplace') . '/marketplace-placeholder.png', 'attributes' => array('class' => 'organization-logo')));
+  }
   $node->content['logo'] = array(
-    '#markup' =>  theme('image', array('path' => $node->logo->filepath, 'attributes' => array('class' => 'organization-logo'))),
+    '#markup' =>  ,
     '#weight' => 1,
   );
 

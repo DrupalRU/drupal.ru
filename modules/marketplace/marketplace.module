@@ -56,7 +56,7 @@ function marketplace_form($node, $form_state) {
  * Implement hook_validate()
  */
 
-function marketplace_validate(&$node, $form, &$form_state) {
+function marketplace_validate($node, $form, &$form_state) {
   
   $logo_directory = file_default_scheme() . '://' . variable_get('marketplace_org_path', 'organisations');
 
@@ -71,8 +71,7 @@ function marketplace_validate(&$node, $form, &$form_state) {
   if (!$file = file_save_upload('logo', $validators, $logo_directory)){
     form_set_error('logo', 'Could not upload file.');
   }else{
-    $node->logo = $file;
-    $node->new_file = TRUE;
+    $form_state['values']['logo'] = $file;
   }
 }
 
@@ -82,7 +81,7 @@ function marketplace_validate(&$node, $form, &$form_state) {
 function marketplace_insert($node) {
   $fid = 0;
   drupal_set_message('<pre>' . print_r($node,true) . '</pre>');
-  if($node->new_file){
+  if($node->logo){
     $file = $node->logo;
     $file->status = FILE_STATUS_PERMANENT;
     $file = file_save($file);

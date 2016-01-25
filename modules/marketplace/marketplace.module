@@ -152,7 +152,7 @@ function marketplace_view($node, $view_mode, $langcode = NULL) {
     $logo_img = theme('image', array('path' => drupal_get_path('module', 'marketplace') . '/marketplace-placeholder.png', 'attributes' => array('class' => 'organization-logo')));
   }
   $node->content['logo'] = array(
-    '#markup' =>  ,
+    '#markup' =>  $logo_img,
     '#weight' => 1,
   );
 

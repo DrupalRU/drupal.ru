@@ -42,7 +42,7 @@ function marketplace_theme($existing, $type, $theme, $path) {
 
 function marketplace_preprocess_node(&$variables) {
   drupal_set_message('<pre>' . print_r($variables, true) . '</pre>');
-  if ($variables['elements']['#view_mode'] == 'teaser') {
+  if ($variables['type'] == 'organization' && $variables['elements']['#view_mode'] == 'teaser') {
     $variables['theme_hook_suggestions'][] = "node__organization__teaser";
   }
 }

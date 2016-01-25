@@ -80,11 +80,17 @@ function marketplace_validate($node, $form, &$form_state) {
  */
 
 function marketplace_load($nodes) {
-  drupal_set_message('<pre>' . print_r($nodes,true) . '</pre>');
-/*  $result = db_query('SELECT nid, foo FROM {organizations} WHERE nid IN (:nids)', array(':nids' => array_keys($nodes)));
+  $vids = array();
+  foreach($nodes as $node){
+    $vids[] = $node->vid;
+  }
+  
+  $result = db_query('SELECT * FROM {organizations} WHERE vid IN (:vids)', array(':vids' => $vids));
   foreach ($result as $record) {
-    $nodes[$record->nid]->foo = $record->foo;
-  }*/
+    $nodes[$record->nid]->website = $record->website;
+    $nodes[$record->nid]->address = $record->address;
+    $nodes[$record->nid]->logo = file_load($record->logo_fid);
+  }
 }
 
 /**
@@ -141,7 +147,7 @@ function marketplace_update($node) {
 function marketplace_view($node, $view_mode, $langcode = NULL) {
 
   $node->content['logo'] = array(
-    '#markup' =>  theme('image', array('path' => $node->filepath, 'attributes' => array('class' => 'organization-logo'))),
+    '#markup' =>  theme('image', array('path' => $node->logo->filepath, 'attributes' => array('class' => 'organization-logo'))),
     '#weight' => 1,
   );
 

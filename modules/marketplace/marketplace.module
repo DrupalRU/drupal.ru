@@ -62,20 +62,17 @@ function marketplace_validate($node, $form, &$form_state) {
 
   file_prepare_directory($logo_directory, FILE_CREATE_DIRECTORY);
 
-  if ($file = file_check_upload('logo')) {
-    
-    $validators = array(
-      'file_validate_is_image' => array(),
-      'file_validate_extensions' => array(' jpg, jpeg, png')
-    );
+  $validators = array(
+    'file_validate_is_image' => array(),
+    'file_validate_extensions' => array(' jpg, jpeg, png')
+  );
 
-    //Save file
-    if (!$file = file_save_upload('logo', $validators, $logo_directory)){
-      form_set_error('logo', 'Could not upload file.');
-    }else{
-      $node->logo = $file;
-      $node->new_file = TRUE;
-    }
+  //Save file
+  if (!$file = file_save_upload('logo', $validators, $logo_directory)){
+    form_set_error('logo', 'Could not upload file.');
+  }else{
+    $node->logo = $file;
+    $node->new_file = TRUE;
   }
 }
 

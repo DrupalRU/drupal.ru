@@ -114,6 +114,10 @@
           <?php print render($content['address']); ?>
         </div>
       <?php endif; ?>
+
+      <div class="organization-type">
+        <?php print render($content['organization-type']); ?>
+      </div>
       
     </div>
     <?php

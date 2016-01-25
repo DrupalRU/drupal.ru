@@ -191,6 +191,8 @@ function marketplace_update($node) {
  */
  
 function marketplace_view($node, $view_mode, $langcode = NULL) {
+  drupal_add_css(drupal_get_path('module', 'marketplace') . '/marketplace.css');
+  
   if($node->logo){
     $logo_img = theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo')));
   }

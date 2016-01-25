@@ -199,8 +199,6 @@ function alpha_preprocess_node(&$variables) {
     $variables['theme_hook_suggestions'][] = 'node__alttracker';
   }
   
-  drupal_set_message('<pre>' . print_r($variables['theme_hook_suggestions'], true) . '</pre>');
-
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $node->changed)));
 
   $picture = $node->picture;

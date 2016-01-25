@@ -98,9 +98,23 @@
 
   <div class="content"<?php print $content_attributes; ?>>
     <div class="attributes">
+
+      <div class="logo">
       <?php print render($content['logo']); ?>
-      <?php print render($content['website']); ?>
-      <?php print render($content['address']); ?>
+      </div>
+      
+      <?php if ($content['website']): ?>
+        <div class="website">
+          <?php print render($content['website']); ?>
+        </div>
+      <?php endif; ?>
+
+      <?php if ($content['address']): ?>
+        <div class="address">
+          <?php print render($content['address']); ?>
+        </div>
+      <?php endif; ?>
+      
     </div>
     <?php
       // We hide the comments and links now so that we can render them later.

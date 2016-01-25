@@ -3,4 +3,10 @@
 }
 .node-organization .details {
   margin-left: 200px;
+  min-height: 200px;
+}
+
+.node-organization .organization-logo {
+  max-width: 150px;
+  padding: 0px 25px;
 }

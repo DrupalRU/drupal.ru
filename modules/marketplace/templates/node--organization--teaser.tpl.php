@@ -120,13 +120,14 @@
       </div>
       
     </div>
-    TEASER
+    <div class="details">
     <?php
       // We hide the comments and links now so that we can render them later.
       hide($content['comments']);
       hide($content['links']);
       print render($content);
     ?>
+    </div>
   </div>
 
   <?php print render($content['links']); ?>

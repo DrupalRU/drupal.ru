@@ -49,6 +49,9 @@ function marketplace_form($node, $form_state) {
 
   if($node->logo){
     $form['logo']['#prefix'] = '<div class="current_logo">' .  theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo'))) . '</div>';  
+    $form['logo_fid'] = array(
+      '#value' => $node->logo->fid,
+    );
   }
   
 

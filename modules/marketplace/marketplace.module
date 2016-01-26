@@ -365,7 +365,6 @@ function marketplace_block_list($count){
     ->condition('n.type', 'organization', '=')
     ->condition('n.status', 1)
     ->orderBy('n.title', 'ASC')
-    ->limit($count)
     ->addTag('node_access');
 
   $nids = $select->execute()->fetchCol();

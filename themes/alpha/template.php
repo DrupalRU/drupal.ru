@@ -642,7 +642,6 @@ function alpha_pager_link($variables) {
 
 function _alpha_pager_item_list($variables) {
   $items = $variables['items'];
-  $title = $variables['title'];
   $type = $variables['type'];
   $attributes = $variables['attributes'];
 
@@ -650,8 +649,8 @@ function _alpha_pager_item_list($variables) {
   // Check to see whether the block title exists before adding a header.
   // Empty headers are not semantic and present accessibility challenges.
   $output = '';
-  if (isset($title) && $title !== '') {
-    $output .= '<h3>' . $title . '</h3>';
+  if (isset($variables['title']) && $variables['title'] !== '') {
+    $output .= '<h3>' . $variables['title'] . '</h3>';
   }
 
   if (!empty($items)) {

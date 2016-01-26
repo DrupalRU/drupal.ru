@@ -205,9 +205,9 @@ function marketplace_view($node, $view_mode, $langcode = NULL) {
   );
   
   if(0 === strpos("http", $node->website)){
-    $urlpath = $node->website;
+    $urlpath = check_plain($node->website);
   }else{
-    $urlpath = 'http://' . $node->website;
+    $urlpath = 'http://' . check_plain($node->website);
   }
   $node->content['website'] = array(
     '#markup' =>  l($node->website, $urlpath, array('attributes' => array('rel' => 'nofollow'))),
@@ -215,7 +215,7 @@ function marketplace_view($node, $view_mode, $langcode = NULL) {
   );
 
   $node->content['address'] = array(
-    '#markup' =>  $node->address,
+    '#markup' =>  check_plain($node->address),
     '#weight' => 1,
   );
 

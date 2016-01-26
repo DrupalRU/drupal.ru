@@ -251,6 +251,13 @@ a:hover {
   margin-left: 0px;
 }
 
+.node-organization .organization-logo {
+  max-width: 120px;
+  width: 50%;
+  padding: 0px;
+  height: auto;
+}
+
 /* Add icons to node links. */
 
 ul.links li a:before {

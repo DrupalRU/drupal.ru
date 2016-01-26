@@ -93,7 +93,7 @@
         <?php print render($title_suffix); ?>
       </div>
 
-      <div class="logo">
+      <div>
         <?php print render($content['logo']); ?>
       </div>
       

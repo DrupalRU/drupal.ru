@@ -85,16 +85,16 @@
   <div class="content"<?php print $content_attributes; ?>>
     <div class="attributes">
 
-      <div class="logo">
-        <?php print render($content['logo']); ?>
-      </div>
-
       <div class="name">
         <?php print render($title_prefix); ?>
         <?php if (!$page): ?>
           <h3<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h3>
         <?php endif; ?>
         <?php print render($title_suffix); ?>
+      </div>
+
+      <div class="logo">
+        <?php print render($content['logo']); ?>
       </div>
       
       <?php if ($content['website']): ?>

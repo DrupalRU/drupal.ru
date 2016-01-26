@@ -57,7 +57,7 @@ function marketplace_theme($existing, $type, $theme, $path) {
   );
 
   $theme['marketplace_random_block'] = array(
-    'variables' => array('nodes' => NULL),
+    'render element' => 'content',
     'template' => 'marketplace--random--block',
     'path' => drupal_get_path('module', 'marketplace') . '/templates',
 

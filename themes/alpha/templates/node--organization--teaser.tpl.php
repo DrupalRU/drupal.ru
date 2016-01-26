@@ -121,16 +121,6 @@
       hide($content['links']);
       print render($content);
     ?>
-    <hr>
-    <div class="badgeicon" style="text-align: right;"> 
-      <img src="https://www.drupal.org/sites/all/modules/drupalorg/drupalorg/images/association_hosting_signature_badge.svg" alt="Drupal Association Signature Hosting Supporter badge" style="width: 100px;
-background-color: white;
-border: none;"> 
-      <img src="https://www.drupal.org/sites/all/modules/drupalorg/drupalorg/images/association_hosting_signature_badge.svg" alt="Drupal Association Signature Hosting Supporter badge" style="width: 100px;
-background-color: white;
-border: none;"> 
-    
-    </div>
     </div>
     <div class="links">
       <?php print render($content['links']); ?>

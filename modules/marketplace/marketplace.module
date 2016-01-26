@@ -377,7 +377,7 @@ function marketplace_block_list($count){
   $default_message = '';
   $default_links = array();
   if (_node_add_access()) {
-    $default_links[] = l(t('Add organization'), 'node/add/organization');
+    $default_links[] = l(t('Add organization'), 'node/add/organization', array('attributes' => array('class' => array('btn', 'btn-success'))));
   }
   if (!empty($default_links)) {
     $default_message .= theme('item_list', array('items' => $default_links));
@@ -385,7 +385,7 @@ function marketplace_block_list($count){
 
   $build['default_message'] = array(
     '#markup' => $default_message,
-    '#prefix' => '<div id="first-time">',
+    '#prefix' => '<div class="action">',
     '#suffix' => '</div>',
   );
     

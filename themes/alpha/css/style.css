@@ -263,6 +263,10 @@ a:hover {
   text-align: center;
 }
 
+.block-organizations .action {
+  text-align: center;
+}
+
 /* Add icons to node links. */
 
 ul.links li a:before {

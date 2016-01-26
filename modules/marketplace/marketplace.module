@@ -129,7 +129,7 @@ function theme_marketplace_random_block($variables) {
   $output = '';
 
   foreach ($variables['nodes'] as $nid => $node) {
-//    drupal_set_message('<pre>' . print_r($node,true). '</pre>');
+    drupal_set_message('<pre>' . print_r($node,true). '</pre>');
     $output .= '<div class="attributes col-xs-12 col-sm-3">
       <div class="name">
           <h3><a href="' . $node->nid. '">' . $node->title. '</a></h3>

@@ -88,15 +88,7 @@
       <div class="logo">
         <?php print render($content['logo']); ?>
       </div>
-
-      <div class="name">
-        <?php print render($title_prefix); ?>
-        <?php if (!$page): ?>
-          <h3<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h3>
-        <?php endif; ?>
-        <?php print render($title_suffix); ?>
-      </div>
-            
+      
       <?php if ($content['website']): ?>
         <div class="website">
           <?php print render($content['website']); ?>

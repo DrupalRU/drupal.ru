@@ -161,7 +161,6 @@ function theme_marketplace_random_block($variables) {
       </div>
 
       <div class="organization-type">
-       ' . render ($node->organization_type). ' 
       </div>
       
     </div>';

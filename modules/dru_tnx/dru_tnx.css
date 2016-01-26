@@ -1,0 +1,11 @@
+li.dru-tnx a.dru-tnx:before {
+  content: "\f087";
+  font-family: "fa", "FontAwesome";
+  padding-right: 5px;
+}
+
+li.dru-tnx a.dru-untnx:before {
+  content: "\f088";
+  font-family: "fa", "FontAwesome";
+  padding-right: 5px;
+}

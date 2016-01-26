@@ -129,7 +129,7 @@ function theme_marketplace_random_block($variables) {
   $output = '';
 
   foreach ($variables['nodes'] as $node) {
-    drupal_set_message('<pre>' . print_r($node,true). '</pre>');
+//    drupal_set_message('<pre>' . print_r($node,true). '</pre>');
     if(0 === strpos("http", $node->website)){
       $urlpath = check_plain($node->website);
     }else{
@@ -161,6 +161,7 @@ function theme_marketplace_random_block($variables) {
       </div>
 
       <div class="organization-type">
+       ' . render ($node->organization_type). ' 
       </div>
       
     </div>';
@@ -385,6 +386,8 @@ function marketplace_block_list($count){
 
   if (!empty($nids)) {
     $nodes = node_load_multiple($nids);
+    $build = node_view_multiple($nodes);
+    drupal_set_message('<pre>' . print_r($build, true) . '</pre>');
   }
   return $nodes;
 }

@@ -30,22 +30,131 @@ function marketplace_theme($existing, $type, $theme, $path) {
     'base hook' => 'node',
     'template' => 'node--organization',
     'path' => drupal_get_path('module', 'marketplace') . '/templates',
-   );
+  );
+
   $theme['node__organization__teaser'] = array(
     'render element' => 'content',
     'base hook' => 'node',
     'template' => 'node--organization--teaser',
     'path' => drupal_get_path('module', 'marketplace') . '/templates',
-   );
+  );
+
+  $theme['marketplace_random_block'] = array(
+    'variables' => array('nodes' => NULL),
+  );
+  
   return $theme;
 }
 
+/**
+ * Implement hook_preprocess_node()
+ */
 function marketplace_preprocess_node(&$variables) {
 //  drupal_set_message('<pre>' . print_r($variables, true) . '</pre>');
   if ($variables['type'] == 'organization' && $variables['elements']['#view_mode'] == 'teaser') {
     $variables['theme_hook_suggestions'][] = "node__organization__teaser";
   }
 }
+
+/**
+ * Implements hook_block_info().
+ */
+function marketplace_block_info() {
+
+  $blocks = array();
+
+  $blocks['organizations'] = array(
+    'info' => t('Organizations'),
+    'cache' => DRUPAL_NO_CACHE
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function marketplace_block_configure($delta = '') {
+
+  $form = array();
+  if ($delta == 'organizations') {
+    $form['organizations_block_count'] = array(
+      '#type' => 'select',
+      '#title' => t('Number of recent content items to display'),
+      '#default_value' => variable_get('organizations_block_count', 3),
+      '#options' => drupal_map_assoc(array(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25, 30)),
+    );
+  }
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function marketplace_block_save($delta = '', $edit = array()) {
+
+  if ($delta == 'organizations') {
+    variable_set('organizations_block_count', $edit['organizations_block_count']);
+  }
+}
+
+
+/**
+ * Implements hook_block_view().
+ */
+function marketplace_block_view($delta = '') {
+   $block = array();
+
+  switch ($delta) {
+    case 'organizations':
+      if (user_access('access content')) {
+        $block['subject'] = t('Organizations');
+        if ($nodes = marketplace_block_list(variable_get('organizations_block_count', 10))) {
+          $block['content'] = array(
+            '#theme' => 'marketplace_random_block',
+            '#nodes' => $nodes,
+          );
+        }
+        else {
+          $block['content'] = t('No content available.');
+        }
+      }
+      break;
+  }
+  return $block;
+}
+
+function theme_marketplace_random_block($variables) {
+  $rows = array();
+  $output = '';
+
+  foreach ($variables['nodes'] as $node) {
+    $output .= '<div class="attributes col-xs-12 col-sm-3">
+      <div class="name">
+          <h3><a href="' . $node->nid. '">' . $node->title. '</a></h3>
+      </div>
+
+      <div>
+        ' . $node->logo->filepath. '
+      </div>
+      
+      <div class="website">
+        ' . $node->website . '
+      </div>
+
+      <div class="address">
+        ' . $node->address . '
+      </div>
+
+      <div class="organization-type">
+      </div>
+      
+    </div>';
+  }
+
+  return $output;
+}
+
 
 /**
  * Implement hook_form()
@@ -245,6 +354,26 @@ function marketplace_menu() {
     'title' => 'Business',
   );
   return $items;
+}
+
+/**
+ * Display companies on market place
+ */
+function marketplace_block_list($count){
+  $select = db_select('node', 'n')
+    ->fields('n', array('nid', 'created'))
+    ->condition('n.type', 'organization', '=')
+    ->condition('n.status', 1)
+    ->orderBy('n.title', 'ASC')
+    ->limit($count)
+    ->addTag('node_access');
+
+  $nids = $select->execute()->fetchCol();
+
+  if (!empty($nids)) {
+    $nodes = node_load_multiple($nids);
+  }
+  return $nodes;
 }
 
 /**

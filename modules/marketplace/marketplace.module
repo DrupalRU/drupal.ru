@@ -58,6 +58,9 @@ function marketplace_theme($existing, $type, $theme, $path) {
 
   $theme['marketplace_random_block'] = array(
     'variables' => array('nodes' => NULL),
+    'template' => 'marketplace--random--block',
+    'path' => drupal_get_path('module', 'marketplace') . '/templates',
+
   );
   
   return $theme;
@@ -144,16 +147,6 @@ function marketplace_block_view($delta = '') {
   }
   return $block;
 }
-
-function theme_marketplace_random_block($variables) {
-  $rows = array();
-  $output = '<div class="block-organizations clearfix">';
-  $output .= render($variables);
-  $output .= '<div class="clearfix"></div>';
-  $output .= '</div>';
-  return $output;
-}
-
 
 /**
  * Implement hook_form()
@@ -377,7 +370,7 @@ function marketplace_block_list($count){
   if (_node_add_access()) {
     $build['default_message'] = array(
       '#markup' => l(t('Add organization'), 'node/add/organization', array('attributes' => array('class' => array('btn', 'btn-success')))),
-      '#prefix' => '<div class="clearfix"></div><div class="action clearfix">',
+      '#prefix' => '<div class="action clearfix">',
       '#suffix' => '</div>',
     );
     }

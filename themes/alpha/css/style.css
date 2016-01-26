@@ -244,12 +244,11 @@ a:hover {
 }
 
 .node-organization .attributes {
-  float: none;
   text-align: center;
 }
 
 .node-organization .details {
-  margin-left: none;
+  margin-left: 0px;
 }
 
 /* Add icons to node links. */

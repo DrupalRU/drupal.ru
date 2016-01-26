@@ -83,7 +83,7 @@
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
   <div class="content"<?php print $content_attributes; ?>>
-    <div class="attributes">
+    <div class="attributes col-xs-12 col-sm-3">
 
       <div class="logo">
         <?php print render($content['logo']); ?>
@@ -106,7 +106,7 @@
       </div>
       
     </div>
-    <div class="details">
+    <div class="details col-xs-12 col-sm-9">
     <?php
       // We hide the comments and links now so that we can render them later.
       hide($content['comments']);
@@ -114,10 +114,12 @@
       print render($content);
     ?>
     </div>
+    <div class="links">
+      <?php print render($content['links']); ?>
+    </div>
   </div>
-
-  <?php print render($content['links']); ?>
-
+  <div class="clearfix"></div>
+  <hr>
   <?php print render($content['comments']); ?>
 
 </div>

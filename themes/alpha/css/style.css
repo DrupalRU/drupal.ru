@@ -256,6 +256,7 @@ a:hover {
   width: 50%;
   padding: 0px;
   height: auto;
+  padding-bottom: 15px;
 }
 
 .node-organization h3 {

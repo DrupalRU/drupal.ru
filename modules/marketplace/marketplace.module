@@ -149,6 +149,10 @@ function theme_marketplace_random_block($variables) {
   $rows = array();
   $output = '<div class="block-organizations clearfix">';
   $output .= render($variables['nodes']);
+  $output .= '<div class="clearfix"></div>';
+  if (_node_add_access()) {
+    $output .= '<div class="links">'. l(t('Add organization'), 'node/add/organization') .'</div>';
+  }
   $output .= '</div>';
   return $output;
 }

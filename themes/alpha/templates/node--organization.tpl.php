@@ -85,6 +85,10 @@
   <div class="content"<?php print $content_attributes; ?>>
     <div class="attributes">
 
+      <div class="logo">
+        <?php print render($content['logo']); ?>
+      </div>
+
       <div class="name">
         <?php print render($title_prefix); ?>
         <?php if (!$page): ?>
@@ -92,11 +96,7 @@
         <?php endif; ?>
         <?php print render($title_suffix); ?>
       </div>
-
-      <div class="logo">
-        <?php print render($content['logo']); ?>
-      </div>
-      
+            
       <?php if ($content['website']): ?>
         <div class="website">
           <?php print render($content['website']); ?>

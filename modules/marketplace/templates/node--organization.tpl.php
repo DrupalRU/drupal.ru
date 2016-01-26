@@ -128,10 +128,10 @@
       print render($content);
     ?>
     </div>
+    <div class="links">
+      <?php print render($content['links']); ?>
+    </div>
+    <hr>
   </div>
-
-  <?php print render($content['links']); ?>
-
   <?php print render($content['comments']); ?>
-
 </div>

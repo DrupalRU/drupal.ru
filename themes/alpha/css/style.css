@@ -239,6 +239,10 @@ a:hover {
   color: #fff;
 }
 
+.node .links {
+  text-align: right;
+}
+
 /* Add icons to node links. */
 
 ul.links li a:before {

@@ -83,7 +83,7 @@
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
   <div class="content"<?php print $content_attributes; ?>>
-    <div class="attributes">
+    <div class="col-xs-12 col-sm-3">
 
       <div class="name">
         <?php print render($title_prefix); ?>
@@ -114,7 +114,7 @@
       </div>
       
     </div>
-    <div class="details">
+    <div class="col-xs-12 col-sm-9">
     <?php
       // We hide the comments and links now so that we can render them later.
       hide($content['comments']);

@@ -126,33 +126,7 @@ function marketplace_block_view($delta = '') {
 
 function theme_marketplace_random_block($variables) {
   $rows = array();
-  $output = '';
-
-  foreach ($variables['nodes'] as $nid => $node) {
-    drupal_set_message('<pre>' . print_r($node,true). '</pre>');
-    $output .= '<div class="attributes col-xs-12 col-sm-3">
-      <div class="name">
-          <h3><a href="' . $node->nid. '">' . $node->title. '</a></h3>
-      </div>
-
-      <div>
-        ' . render($node['logo']) . '
-      </div>
-      
-      <div class="website">
-        ' . render($node['website']) . '
-      </div>
-
-      <div class="address">
-        ' . render($node['address']) . '
-      </div>
-
-      <div class="organization-type">
-        ' . render($node['organization_type']) . '
-      </div>
-      
-    </div>';
-  }
+  $output = render($variables['nodes']);
 
   return $output;
 }

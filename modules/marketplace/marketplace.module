@@ -148,11 +148,8 @@ function marketplace_block_view($delta = '') {
 function theme_marketplace_random_block($variables) {
   $rows = array();
   $output = '<div class="block-organizations clearfix">';
-  $output .= render($variables['nodes']);
+  $output .= render($variables);
   $output .= '<div class="clearfix"></div>';
-  if (_node_add_access()) {
-    $output .= '<div class="links">'. l(t('Add organization'), 'node/add/organization') .'</div>';
-  }
   $output .= '</div>';
   return $output;
 }
@@ -375,8 +372,23 @@ function marketplace_block_list($count){
   if (!empty($nids)) {
     $nodes = node_load_multiple($nids);
     $build = node_view_multiple($nodes, 'block');
-//    drupal_set_message('<pre>' . print_r($build, true) . '</pre>');
   }
+  
+  $default_message = '';
+  $default_links = array();
+  if (_node_add_access()) {
+    $default_links[] = l(t('Add organization'), 'node/add/organization');
+  }
+  if (!empty($default_links)) {
+    $default_message .= theme('item_list', array('items' => $default_links));
+  }
+
+  $build['default_message'] = array(
+    '#markup' => $default_message,
+    '#prefix' => '<div id="first-time">',
+    '#suffix' => '</div>',
+  );
+    
   return $build;
 }
 

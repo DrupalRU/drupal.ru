@@ -258,6 +258,10 @@ a:hover {
   height: auto;
 }
 
+.node-organization h3 {
+  margin-top: 0px;
+}
+
 /* Add icons to node links. */
 
 ul.links li a:before {

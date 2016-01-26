@@ -129,21 +129,35 @@ function theme_marketplace_random_block($variables) {
   $output = '';
 
   foreach ($variables['nodes'] as $node) {
+    drupal_set_message('<pre>' . print_r($node,true). '</pre>');
+    if(0 === strpos("http", $node->website)){
+      $urlpath = check_plain($node->website);
+    }else{
+      $urlpath = 'http://' . check_plain($node->website);
+    }
+    
+    if($node->logo){
+      $logo_img = theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo')));
+    }
+    else{
+      $logo_img = theme('image', array('path' => drupal_get_path('module', 'marketplace') . '/marketplace-placeholder.png', 'attributes' => array('class' => 'organization-logo')));
+    }
+  
     $output .= '<div class="attributes col-xs-12 col-sm-3">
       <div class="name">
           <h3><a href="' . $node->nid. '">' . $node->title. '</a></h3>
       </div>
 
       <div>
-        ' . $node->logo->filepath. '
+        ' . $logo_img. '
       </div>
       
       <div class="website">
-        ' . $node->website . '
+        ' .  l($node->website, $urlpath, array('attributes' => array('rel' => 'nofollow'))) . '
       </div>
 
       <div class="address">
-        ' . $node->address . '
+        ' . check_plain($node->address) . '
       </div>
 
       <div class="organization-type">

@@ -133,10 +133,10 @@ function marketplace_block_view($delta = '') {
     case 'organizations':
       if (user_access('access content')) {
         $block['subject'] = t('Organizations');
-        if ($nodes = marketplace_block_list(variable_get('organizations_block_count', 10))) {
+        if ($build = marketplace_block_list(variable_get('organizations_block_count', 10))) {
           $block['content'] = array(
             '#theme' => 'marketplace_random_block',
-            '#nodes' => $nodes,
+            'content' => $build,
           );
         }
         else {

@@ -71,6 +71,10 @@ function marketplace_preprocess_node(&$variables) {
   if ($variables['type'] == 'organization' && $variables['elements']['#view_mode'] == 'teaser') {
     $variables['theme_hook_suggestions'][] = "node__organization__teaser";
   }
+  if ($variables['type'] == 'organization' && $variables['elements']['#view_mode'] == 'block') {
+    $variables['theme_hook_suggestions'][] = "node__organization__block";
+  }
+
 }
 
 /**

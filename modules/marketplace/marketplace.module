@@ -117,6 +117,13 @@ function marketplace_theme($existing, $type, $theme, $path) {
     'path' => drupal_get_path('module', 'marketplace') . '/templates',
   );
 
+  $theme['node__organization__block'] = array(
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'node--organization--block',
+    'path' => drupal_get_path('module', 'marketplace') . '/templates',
+  );
+
   $theme['marketplace_random_block'] = array(
     'variables' => array('nodes' => NULL),
   );
@@ -425,7 +432,7 @@ function marketplace_block_list($count){
 
   if (!empty($nids)) {
     $nodes = node_load_multiple($nids);
-    $build = node_view_multiple($nodes);
+    $build = node_view_multiple($nodes, 'block');
 //    drupal_set_message('<pre>' . print_r($build, true) . '</pre>');
   }
   return $build;

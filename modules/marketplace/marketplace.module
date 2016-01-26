@@ -151,8 +151,9 @@ function theme_marketplace_random_block($variables) {
   drupal_set_message('<pre>' . print_r($variables, true) . '</pre>');
   $rows = array();
   $output = '<div class="block-organizations clearfix">';
-  $output .= render($variables);
+  $output .= render($variables['nodes']);
   $output .= '<div class="clearfix"></div>';
+  $output .= render($variables['action']);
   $output .= '</div>';
   return $output;
 }

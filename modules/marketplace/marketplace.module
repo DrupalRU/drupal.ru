@@ -373,22 +373,14 @@ function marketplace_block_list($count){
     $nodes = node_load_multiple($nids);
     $build = node_view_multiple($nodes, 'block');
   }
-  
-  $default_message = '';
-  $default_links = array();
-  if (_node_add_access()) {
-    $default_links[] = l(t('Add organization'), 'node/add/organization', array('attributes' => array('class' => array('btn', 'btn-success'))));
-  }
-  if (!empty($default_links)) {
-    $default_message .= theme('item_list', array('items' => $default_links));
-  }
 
-  $build['default_message'] = array(
-    '#markup' => $default_message,
-    '#prefix' => '<div class="action">',
-    '#suffix' => '</div>',
-  );
-    
+  if (_node_add_access()) {
+    $build['default_message'] = array(
+      '#markup' => l(t('Add organization'), 'node/add/organization', array('attributes' => array('class' => array('btn', 'btn-success')))),
+      '#prefix' => '<div class="clearfix"></div><div class="action clearfix">',
+      '#suffix' => '</div>',
+    );
+    }
   return $build;
 }
 

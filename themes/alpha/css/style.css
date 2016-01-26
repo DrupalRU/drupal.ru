@@ -239,8 +239,17 @@ a:hover {
   color: #fff;
 }
 
-.node .links {
+.node div.links {
   text-align: right;
+}
+
+.node-organization .attributes {
+  float: none;
+  text-align: center;
+}
+
+.node-organization .details {
+  margin-left: none;
 }
 
 /* Add icons to node links. */

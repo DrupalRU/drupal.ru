@@ -259,6 +259,10 @@ a:hover {
   padding-bottom: 15px;
 }
 
+.block-organizations .node {
+  text-align: center;
+}
+
 .node-organization h3 {
   margin-top: 0px;
 }

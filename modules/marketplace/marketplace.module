@@ -151,22 +151,6 @@ function template_preprocess_marketplace_random_block(&$variables) {
 }
 
 /**
- * Implement hook_preprocess_taxonomy_term()
- */
-function marketplace_preprocess_taxonomy_term(&$variables) {
-  $term = $variables['term'];
-  if($variables['vocabulary_machine_name'] == 'organizations'){
-    $breadcrumb = array();
-    $breadcrumb[] = l(t('Home'), NULL);
-    $breadcrumb[] = l(t('Services'), 'services');
-    $breadcrumb[] = l($variables['term_name'], $variables['term_url']);
-    drupal_set_breadcrumb($breadcrumb);
-  drupal_set_message('<pre>' . print_r($breadcrumb, true) . '</pre>');
-  }
-}
-
-
-/**
  * Implement hook_form()
  */
 function marketplace_form($node, $form_state) {

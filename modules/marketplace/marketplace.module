@@ -57,7 +57,7 @@ function marketplace_theme($existing, $type, $theme, $path) {
   );
 
   $theme['marketplace_random_block'] = array(
-    'variables' => array('nodes' => NULL),
+    'render element' => 'content',
     'path' => drupal_get_path('module', 'marketplace') . '/templates',
 
   );
@@ -132,10 +132,10 @@ function marketplace_block_view($delta = '') {
     case 'organizations':
       if (user_access('access content')) {
         $block['subject'] = t('Organizations');
-        if ($nodes = marketplace_block_list(variable_get('organizations_block_count', 10))) {
+        if ($content = marketplace_block_list(variable_get('organizations_block_count', 10))) {
           $block['content'] = array(
             '#theme' => 'marketplace_random_block',
-            '#nodes' => $nodes,
+            '#content' => $content,
           );
         }
         else {
@@ -147,13 +147,7 @@ function marketplace_block_view($delta = '') {
   return $block;
 }
 
-function theme_marketplace_random_block($variables) {
-  $output = '<div class="block-organizations clearfix">';
-  $output .= render($variables['nodes']);
-  $output .= '<div class="clearfix"></div>';
-  $output .= render($variables['links']);
-  $output .= '</div>';
-  return $output;
+function theme_marketplace_random_block(&$variables) {
 }
 
 

@@ -12,3 +12,8 @@
   padding: 0px 25px;
   height: auto;
 }
+
+.node-form .current_logo img {
+  max-width: 200px;
+  height: auto;
+}

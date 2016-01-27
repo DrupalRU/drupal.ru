@@ -150,6 +150,14 @@ function template_preprocess_marketplace_random_block(&$variables) {
   $variables['links'] = $variables['content']['links'];
 }
 
+/**
+ * Implement hook_preprocess_taxonomy_term()
+ */
+function marketplace_preprocess_taxonomy_term(&$variables) {
+  $term = $variables['term'];
+  drupal_set_message('<pre>' . print_r($variables, true) . '</pre>');
+}
+
 
 /**
  * Implement hook_form()
@@ -196,8 +204,6 @@ function marketplace_form($node, $form_state) {
  */
 
 function marketplace_validate($node, $form, &$form_state) {
-//  drupal_set_message('<pre>' . print_r($node, true) . '</pre>');
-//  drupal_set_message('<pre>' . print_r($form_state, true) . '</pre>');
   $logo_directory = file_default_scheme() . '://' . variable_get('marketplace_org_path', 'organization');
 
   file_prepare_directory($logo_directory, FILE_CREATE_DIRECTORY);

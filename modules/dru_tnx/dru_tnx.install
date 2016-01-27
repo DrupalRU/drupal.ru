@@ -4,6 +4,8 @@
  * Implements hook_schema().
  */
 function dru_tnx_schema() {
+  
+  // Tnx's table
   $schema['tnx'] = array(
     'description' => 'Thanks',
     'fields' => array(
@@ -34,24 +36,38 @@ function dru_tnx_schema() {
     ),
     'primary key' => array('id'),
   );
+  
+  // Statistic table
   $schema['tnx_stat'] = array(
     'description' => 'Thanks statistic',
     'fields' => array(
       'uid' => array(
-        'type' => 'serial',
-        'not null' => TRUE,
+        'type'        => 'serial',
+        'not null'    => TRUE,
         'description' => 'User ID.',
       ),
       'node' => array(
-        'type' => 'int',
-        'not null' => TRUE,
-        'default' => 0,
+        'type'        => 'int',
+        'not null'    => TRUE,
+        'default'     => 0,
         'description' => 'Node count',
       ),
       'comment' => array(
-        'type' => 'int',
-        'not null' => TRUE,
-        'default' => 0,
+        'type'        => 'int',
+        'not null'    => TRUE,
+        'default'     => 0,
+        'description' => 'Comment count',
+      ),
+      'tnx_node' => array(
+        'type'        => 'int',
+        'not null'    => TRUE,
+        'default'     => 0,
+        'description' => 'Node count',
+      ),
+      'tnx_comment' => array(
+        'type'        => 'int',
+        'not null'    => TRUE,
+        'default'     => 0,
         'description' => 'Comment count',
       ),
     ),

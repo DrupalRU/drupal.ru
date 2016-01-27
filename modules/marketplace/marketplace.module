@@ -148,7 +148,12 @@ function marketplace_block_view($delta = '') {
   return $block;
 }
 
+function template_preprocess_marketplace_random_block(&$variables) {
+  drupal_set_message('<pre>' . print_r($variables,true). '</pre>');
+}
+
 function theme_marketplace_random_block(&$variables) {
+//  drupal_set_message('<pre>' . print_r($variables,true). '</pre>');
 }
 
 

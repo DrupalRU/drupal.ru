@@ -1,5 +1,5 @@
 <div class="block-organizations clearfix">
-  <pre>
-  <?php print_r($content); ?>
-  </pre>
+  <?php render($nodes); ?>
+  <div class="clearfix"></div>
+  <?php render($links); ?>
 </div>

@@ -17,6 +17,11 @@ function alpha_theme($existing, $type, $theme, $path) {
       'variables' => array('node' => NULL),
       'template' => 'templates/alttracker_node',
     ),
+    'marketplace_random_block' => array(
+      'render element' => 'content',
+      'template' => 'templates/marketplace--blocklist',
+    ),
+
   );
 }
 

@@ -385,7 +385,7 @@ function marketplace_block_list($count){
   $build['links'] = array(
     '#theme' => 'links',
     '#links' => $links,
-    '#attributes' => array('class' => 'services_links'),
+    '#attributes' => array('class' => array('services_links')),
   );
   $build['#theme'] = 'marketplace_random_block';
   return $build;

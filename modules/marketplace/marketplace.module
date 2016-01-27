@@ -156,6 +156,13 @@ function template_preprocess_marketplace_random_block(&$variables) {
 function marketplace_preprocess_taxonomy_term(&$variables) {
   $term = $variables['term'];
   drupal_set_message('<pre>' . print_r($variables, true) . '</pre>');
+  if($variables['vocabulary_machine_name'] == 'organizations'){
+    $breadcrumb = array();
+    $breadcrumb[] = l(t('Home'), NULL);
+    $breadcrumb[] = l(t('Services'), 'services');
+    $breadcrumb[] = l($variables['term_name'], $variables['term_url']);
+    drupal_set_breadcrumb($breadcrumb);
+  }
 }
 
 

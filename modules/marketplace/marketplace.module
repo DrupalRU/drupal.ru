@@ -147,7 +147,8 @@ function marketplace_block_view($delta = '') {
 
 function template_preprocess_marketplace_random_block(&$variables) {
   $variables['nodes'] = $variables['content']['nodes'];
-  $variables['links'] = $variables['content']['links'];  
+  $variables['links'] = $variables['content']['links'];
+  drupal_set_message('<pre>' . print_r($variables,true). '</pre>');
 }
 
 

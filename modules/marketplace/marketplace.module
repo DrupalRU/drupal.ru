@@ -136,7 +136,7 @@ function marketplace_block_view($delta = '') {
         if ($content = marketplace_block_list(variable_get('organizations_block_count', 10))) {
           $block['content'] = array(
             '#theme' => 'marketplace_random_block',
-            '#content' => $content,
+            'content' => $content,
           );
         }
         else {
@@ -150,6 +150,7 @@ function marketplace_block_view($delta = '') {
 
 function template_preprocess_marketplace_random_block(&$variables) {
   drupal_set_message('<pre>' . print_r($variables,true). '</pre>');
+//  $variables['list'] = $variables['#content']
 }
 
 function theme_marketplace_random_block(&$variables) {

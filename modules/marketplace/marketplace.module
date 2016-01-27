@@ -389,13 +389,6 @@ function marketplace_block_list($count){
   );
   $build['#theme'] = 'marketplace_random_block';
   return $build;
-  return array(
-    'content' => array(
-      '#theme' => 'marketplace_random_block',
-      'links' => $build['links'],
-      'nodes' => $build['nodes'],
-    )
-  );
 }
 
 /**

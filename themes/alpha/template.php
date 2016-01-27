@@ -695,3 +695,7 @@ function _alpha_pager_item_list($variables) {
   $output .= '';
   return $output;
 }
+
+function alpha_preprocess_marketplace_random_block(&$variables) {
+  drupal_set_message('<pre>' . print_r($variables['links'],true) .'</pre>');
+}

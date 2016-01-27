@@ -1,3 +1,5 @@
 <div class="block-organizations clearfix">
-  <?php print render($content['nodes']); ?>
+  <pre>
+  <?php print_r($content); ?>
+  </pre>
 </div>

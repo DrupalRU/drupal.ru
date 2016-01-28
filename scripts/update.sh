@@ -3,7 +3,7 @@
 SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
 STATUSFILE="$SITEPATH/.deploy.status"
 
-UPDATEDIR="$GITLC_DEPLOY_DIR/update/"
+UPDATEDIR="$GITLC_DEPLOY_DIR/scripts/update/"
 
 touch $STATUSFILE
 

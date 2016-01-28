@@ -9,6 +9,12 @@ touch $STATUSFILE
 
 cd $SITEPATH
 
+#update drupal_deploy
+cd $SITEPATH/sites/all/modules/github/drupal_deploy
+git pull
+
+cd $SITEPATH
+
 # enable drupal deploy
 drush -y en drupal_deploy
 

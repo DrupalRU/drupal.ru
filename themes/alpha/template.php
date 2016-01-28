@@ -17,6 +17,11 @@ function alpha_theme($existing, $type, $theme, $path) {
       'variables' => array('node' => NULL),
       'template' => 'templates/alttracker_node',
     ),
+    'marketplace_random_block' => array(
+      'render element' => 'content',
+      'template' => 'templates/marketplace--blocklist',
+    ),
+
   );
 }
 
@@ -190,7 +195,7 @@ function alpha_preprocess_comment(&$variables) {
  */
 function alpha_preprocess_node(&$variables) {
   $node = $variables['elements']['#node'];
-  if ($variables['teaser']) {
+  if ($variables['teaser'] && $variables['type'] != 'organization') {
     // Add a new item into the theme_hook_suggestions array.
     $variables['theme_hook_suggestions'][] = 'node__teaser';
   }
@@ -198,7 +203,7 @@ function alpha_preprocess_node(&$variables) {
   if ($variables['view_mode'] == 'alttracker') {
     $variables['theme_hook_suggestions'][] = 'node__alttracker';
   }
-
+  
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $node->changed)));
 
   $picture = $node->picture;
@@ -642,7 +647,6 @@ function alpha_pager_link($variables) {
 
 function _alpha_pager_item_list($variables) {
   $items = $variables['items'];
-  $title = $variables['title'];
   $type = $variables['type'];
   $attributes = $variables['attributes'];
 
@@ -650,8 +654,8 @@ function _alpha_pager_item_list($variables) {
   // Check to see whether the block title exists before adding a header.
   // Empty headers are not semantic and present accessibility challenges.
   $output = '';
-  if (isset($title) && $title !== '') {
-    $output .= '<h3>' . $title . '</h3>';
+  if (isset($variables['title']) && $variables['title'] !== '') {
+    $output .= '<h3>' . $variables['title'] . '</h3>';
   }
 
   if (!empty($items)) {
@@ -695,4 +699,10 @@ function _alpha_pager_item_list($variables) {
   }
   $output .= '';
   return $output;
+}
+
+function alpha_preprocess_marketplace_random_block(&$variables) {
+  $variables['links']['#attributes']['class'][] = 'inline';
+  $variables['links']['#links']['add']['attributes']['class'] = array('btn', 'btn-primary');
+  $variables['links']['#links']['list']['attributes']['class'] = array('btn', 'btn-success');
 }

@@ -4,11 +4,15 @@
  * Callback dru_tnx_node
  */
 function dru_tnx_node($tnx, $ajax, $node) {
+  
+  global $user;
+  
   $vars = array(
     'type'   => 'node',
     'id'     => $node->nid,
     'entity' => $node,
     'tnx'    => $tnx,
+    'user'   => $user,
   );
   
   return dru_tnx_callback($ajax, $vars);
@@ -19,11 +23,15 @@ function dru_tnx_node($tnx, $ajax, $node) {
  * Callback dru_tnx_comment
  */
 function dru_tnx_comment($tnx, $ajax, $comment) {
+  
+  global $user;
+  
   $vars = array(
     'type'   => 'comment',
     'id'     => $comment->cid,
     'entity' => $comment,
     'tnx'    => $tnx,
+    'user'   => $user,
   );
   
   return dru_tnx_callback($ajax, $vars);
@@ -37,14 +45,13 @@ function dru_tnx_callback($ajax, $vars) {
   
   dru_tnx_data($vars);
   
-  global $user;
-  
   $is_ajax = $ajax === 'ajax';
   
   if ($is_ajax) {
     
-    $tnx = get_user_tnx($vars['type'], $vars['id'], $user->uid);
-    $tnx_link = dru_tnx_link($vars['entity'], $vars['type'], $vars['id'], $tnx);
+    $tnx = get_user_tnx($vars['type'], $vars['id'], $vars['user']->uid);
+    $tnx ? $new = -1 : $new = 1;
+    $tnx_link = dru_tnx_link($vars['entity'], $vars['type'], $vars['id'], $tnx, $new);
     
     $link = l($tnx_link['title'], $tnx_link['href'], array('attributes' => $tnx_link['attributes']));
     
@@ -69,18 +76,17 @@ function dru_tnx_callback($ajax, $vars) {
  */
 function dru_tnx_data($vars) {
   
-  global $user;
-  
+  // Counting tnx by entity
   $tnx_count = $vars['entity']->tnx;
   if ($vars['tnx'] == 'tnx') {
     $tnx_count++;
   
-    // Create tnx
+    // Add tnx
     db_insert('tnx')
       ->fields(array(
         'entity_id'   => $vars['id'],
         'entity_type' => $vars['type'],
-        'uid'         => $user->uid,
+        'uid'         => $vars['user']->uid,
       ))
       ->execute();
       
@@ -90,6 +96,13 @@ function dru_tnx_data($vars) {
       ->fields(array($vars['type'] => 1))
       ->expression($vars['type'], $vars['type'] . ' + :inc', array(':inc' => 1))
       ->execute();
+      
+    // Count user tnx
+    db_merge('tnx_stat')
+      ->key(array('uid' => $vars['user']->uid))
+      ->fields(array('tnx_' . $vars['type'] => 1))
+      ->expression('tnx_' . $vars['type'], 'tnx_' . $vars['type'] . ' + :inc', array(':inc' => 1))
+      ->execute();
   }
   else {
     $tnx_count--;
@@ -98,7 +111,7 @@ function dru_tnx_data($vars) {
     db_delete('tnx')
       ->condition('entity_id', $vars['id'])
       ->condition('entity_type', $vars['type'])
-      ->condition('uid', $user->uid)
+      ->condition('uid', $vars['user']->uid)
       ->execute();
       
     // Count tnx
@@ -107,8 +120,16 @@ function dru_tnx_data($vars) {
       ->fields(array($vars['type'] => 1))
       ->expression($vars['type'], $vars['type'] . ' - :inc', array(':inc' => 1))
       ->execute();
+      
+    // Count user tnx
+    db_merge('tnx_stat')
+      ->key(array('uid' => $vars['user']->uid))
+      ->fields(array('tnx_' . $vars['type'] => 1))
+      ->expression('tnx_' . $vars['type'], 'tnx_' . $vars['type'] . ' - :inc', array(':inc' => 1))
+      ->execute();
   }
   
+  // Write tnx count to entity
   $query = db_update($vars['type']);
   $query->condition($vars['type'] == 'node' ? 'nid' : 'cid', $vars['id'])
         ->fields(array('tnx' => $tnx_count))

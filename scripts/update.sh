@@ -3,6 +3,9 @@
 SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
 STATUSFILE="$SITEPATH/.deploy.status"
 
+#make SITEPATH available in sub scripts
+export SITEPATH=$SITEPATH
+
 UPDATEDIR="$GITLC_DEPLOY_DIR/scripts/update/"
 
 touch $STATUSFILE

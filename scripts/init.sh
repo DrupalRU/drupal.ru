@@ -134,6 +134,9 @@ echo "Import menu structure"
 drush ddi menu --file=$GITLC_DEPLOY_DIR/data/main-menu.menu_links.export
 drush ddi menu --file=$GITLC_DEPLOY_DIR/data/user-menu.menu_links.export
 
+echo "Import block settings"
+drush ddi blocks --file=$GITLC_DEPLOY_DIR/data/alpha-init.blocks.export
+
 echo "Import theme settings"
 
 drush ddi variables --file=$GITLC_DEPLOY_DIR/data/theme_alpha_settings.variables.export

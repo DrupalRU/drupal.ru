@@ -1,0 +1,72 @@
+[
+    {
+        "name": "organizations",
+        "machine_name": "organizations",
+        "description": "Типы организаций",
+        "hierarchy": 0,
+        "module": "taxonomy",
+        "weight": 0,
+        "fields": [
+
+        ],
+        "instances": [
+
+        ],
+        "terms": [
+            {
+                "name": "Анализ безопасности",
+                "description": "",
+                "weight": 6,
+                "path_alias": "services\/secure"
+            },
+            {
+                "name": "Виртуальный Хостинг",
+                "description": "",
+                "weight": 10,
+                "path_alias": "services\/shared-hosting"
+            },
+            {
+                "name": "Выделенные сервера",
+                "description": "",
+                "weight": 11,
+                "path_alias": "services\/dedicated"
+            },
+            {
+                "name": "Обновление сайтов",
+                "description": "",
+                "weight": 5,
+                "path_alias": "services\/updates"
+            },
+            {
+                "name": "Оптимизация и улучшение производительности",
+                "description": "",
+                "weight": 7,
+                "path_alias": "services\/optimization"
+            },
+            {
+                "name": "Создание дизайна",
+                "description": "",
+                "weight": 0,
+                "path_alias": "services\/design"
+            },
+            {
+                "name": "Создание модулей",
+                "description": "",
+                "weight": 1,
+                "path_alias": "services\/modules"
+            },
+            {
+                "name": "Создание тем",
+                "description": "",
+                "weight": 3,
+                "path_alias": "services\/themes"
+            },
+            {
+                "name": "Хостинг VDS\/VPS",
+                "description": "",
+                "weight": 9,
+                "path_alias": "services\/vps-hosting"
+            }
+        ]
+    }
+]

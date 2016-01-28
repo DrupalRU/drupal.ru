@@ -9,8 +9,6 @@ touch $STATUSFILE
 
 cd $SITEPATH
 
-export SITEPATH=$SITEPATH
-
 #update drupal_deploy
 cd $SITEPATH/sites/all/modules/github/drupal_deploy
 git pull

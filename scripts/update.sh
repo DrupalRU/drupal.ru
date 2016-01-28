@@ -18,7 +18,7 @@ drush -y en drupal_deploy
 
 for file in `ls $UPDATEDIR|grep sh$|grep -vf $STATUSFILE`;do
   echo "Processing $file"
-  sh $file
+  sh $UPDATEDIR/$file
   echo "$file" >> $STATUSFILE
 done
 

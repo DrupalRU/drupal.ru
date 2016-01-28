@@ -1,0 +1,110 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (marketplace)
+# Copyright 2016 Gor <gor@me.com>
+# Generated from files:
+#  marketplace.module: n/a
+#  marketplace.install: n/a
+#  marketplace.info: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2016-01-28 02:53+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <gor@me.com>\n"
+"Language-Team: LANGUAGE <gor@me.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: marketplace.module:14
+msgid "Organization"
+msgstr ""
+
+#: marketplace.module:16
+msgid "Create organization page"
+msgstr ""
+
+#: marketplace.module:18
+msgid "Organization name"
+msgstr ""
+
+#: marketplace.module:28
+msgid "Block view"
+msgstr ""
+
+#: marketplace.module:91;135
+msgid "Organizations"
+msgstr ""
+
+#: marketplace.module:107
+msgid "Number of recent content items to display"
+msgstr ""
+
+#: marketplace.module:140
+msgid "No content available."
+msgstr ""
+
+#: marketplace.module:161
+msgid "Logo"
+msgstr ""
+
+#: marketplace.module:162
+msgid "Click \"Chose File\" to select an image to upload. Allowed extensions:  jpg, jpeg, png "
+msgstr ""
+
+#: marketplace.module:174
+msgid "Website"
+msgstr ""
+
+#: marketplace.module:175
+msgid "Please provide your website address."
+msgstr ""
+
+#: marketplace.module:183
+msgid "Address"
+msgstr ""
+
+#: marketplace.module:184
+msgid "If you have office address, please provide."
+msgstr ""
+
+#: marketplace.module:374;421
+msgid "Add organization"
+msgstr ""
+
+#: marketplace.module:379
+msgid "See full list"
+msgstr ""
+
+#: marketplace.module:417
+msgid "No companies has been added yet."
+msgstr ""
+
+#: marketplace.module:346
+msgid "Services"
+msgstr ""
+
+#: marketplace.install:15
+msgid "Organization description"
+msgstr ""
+
+#: (duplicate) marketplace.install:112 
+msgid "Organizaition type"
+msgstr ""
+
+#: marketplace.info:0
+msgid "Marketplace functionality"
+msgstr ""
+
+#: marketplace.info:0
+msgid "Provide Marketplace node type and organization listing functionality"
+msgstr ""
+
+#: marketplace.info:0
+msgid "Content"
+msgstr ""
+

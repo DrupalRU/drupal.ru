@@ -7,8 +7,6 @@ UPDATEDIR="$GITLC_DEPLOY_DIR/scripts/update/"
 
 touch $STATUSFILE
 
-cd $SITEPATH
-
 #update drupal_deploy
 cd $SITEPATH/sites/all/modules/github/drupal_deploy
 git pull
@@ -20,7 +18,7 @@ drush -y en drupal_deploy
 
 for file in `ls $UPDATEDIR|grep sh$|grep -vf $STATUSFILE`;do
   echo "Processing $file"
-  sh $file
+  sh $UPDATEDIR/$file
   echo "$file" >> $STATUSFILE
 done
 

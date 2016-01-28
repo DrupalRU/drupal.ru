@@ -7,7 +7,7 @@ SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
 
 
 echo "Process new files"
-sh $GITLC_DEPLOY_DIR/update.sh
+sh $GITLC_DEPLOY_DIR/scripts/update.sh
 
 echo "Clean cache"
 drush cc all

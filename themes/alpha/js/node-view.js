@@ -15,7 +15,12 @@
       $("#node-details").width($("#node-details").parent().width());
 
       $("#node-details").affix({
-        offset: {top: 250 }
+        offset: {
+          top: 250,
+          bottom: function () { 
+            return (this.bottom = $('footer').outerHeight(true));
+          }
+        }
       });
 
       $(window).on('resize', function(){

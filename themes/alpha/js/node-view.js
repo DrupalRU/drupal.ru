@@ -18,7 +18,7 @@
         offset: {
           top: 250,
           bottom: function () { 
-            return (this.bottom = $('footer').outerHeight(true));
+            return (this.bottom = $('footer').outerHeight(true) + 20);
           }
         }
       });

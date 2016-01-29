@@ -1,0 +1,434 @@
+<?php
+/**
+ * @file
+ * Marketplacd module.
+ */
+
+
+/**
+ * Implements hook_node_info()
+ */
+function marketplace_node_info() {
+    return array(
+        'organization' => array(
+            'name' => t('Organization'),
+            'base' => 'marketplace',
+            'description' => t('Create organization page'),
+            'has_title' => TRUE,
+            'title_label' => t('Organization name')
+         )
+    );
+}
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function marketplace_entity_info_alter(&$entity_info) {
+  $entity_info['node']['view modes']['block'] = array(
+    'label' => t('Block view'),
+    'custom settings' => TRUE,
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function marketplace_theme($existing, $type, $theme, $path) {
+  $theme = array();
+  $theme['node__organization'] = array(
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'node--organization',
+    'path' => drupal_get_path('module', 'marketplace') . '/templates',
+  );
+
+  $theme['node__organization__teaser'] = array(
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'node--organization--teaser',
+    'path' => drupal_get_path('module', 'marketplace') . '/templates',
+  );
+
+  $theme['node__organization__block'] = array(
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'node--organization--block',
+    'path' => drupal_get_path('module', 'marketplace') . '/templates',
+  );
+
+  $theme['marketplace_random_block'] = array(
+    'render element' => 'content',
+    'template' => 'marketplace--blocklist',
+    'path' => drupal_get_path('module', 'marketplace') . '/templates',
+
+  );
+  
+  return $theme;
+}
+
+/**
+ * Implement hook_preprocess_node()
+ */
+function marketplace_preprocess_node(&$variables) {
+//  drupal_set_message('<pre>' . print_r($variables, true) . '</pre>');
+  if ($variables['type'] == 'organization' && $variables['elements']['#view_mode'] == 'teaser') {
+    $variables['theme_hook_suggestions'][] = "node__organization__teaser";
+  }
+  if ($variables['type'] == 'organization' && $variables['elements']['#view_mode'] == 'block') {
+    $variables['theme_hook_suggestions'][] = "node__organization__block";
+  }
+
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function marketplace_block_info() {
+
+  $blocks = array();
+
+  $blocks['organizations'] = array(
+    'info' => t('Organizations'),
+    'cache' => DRUPAL_NO_CACHE
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function marketplace_block_configure($delta = '') {
+
+  $form = array();
+  if ($delta == 'organizations') {
+    $form['organizations_block_count'] = array(
+      '#type' => 'select',
+      '#title' => t('Number of recent content items to display'),
+      '#default_value' => variable_get('organizations_block_count', 3),
+      '#options' => drupal_map_assoc(array(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25, 30)),
+    );
+  }
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function marketplace_block_save($delta = '', $edit = array()) {
+
+  if ($delta == 'organizations') {
+    variable_set('organizations_block_count', $edit['organizations_block_count']);
+  }
+}
+
+
+/**
+ * Implements hook_block_view().
+ */
+function marketplace_block_view($delta = '') {
+   $block = array();
+
+  switch ($delta) {
+    case 'organizations':
+      if (user_access('access content')) {
+        $block['subject'] = t('Organizations');
+        if ($content = marketplace_block_list(variable_get('organizations_block_count', 10))) {
+          $block['content'] = $content;
+        }
+        else {
+          $block['content'] = t('No content available.');
+        }
+      }
+      break;
+  }
+  return $block;
+}
+
+function template_preprocess_marketplace_random_block(&$variables) {
+  $variables['nodes'] = $variables['content']['nodes'];
+  $variables['links'] = $variables['content']['links'];
+}
+
+/**
+ * Implement hook_form()
+ */
+function marketplace_form($node, $form_state) {
+  $form =  node_content_form($node, $form_state);
+  
+  $form['logo'] = array(
+    '#type' => 'file',
+    '#title' => t('Logo'),
+    '#description' => t('Click "Chose File" to select an image to upload. Allowed extensions:  jpg, jpeg, png '),
+    '#weight' => -4,
+  );
+
+  if(isset($node->logo)){
+    $form['logo']['#prefix'] = '<div class="current_logo">' .  theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo'))) . '</div>';
+  }
+  
+
+
+  $form['website'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Website'),
+    '#description' => t('Please provide your website address.'),
+    '#weight' => 1,
+    '#required' => TRUE,
+    '#default_value' => isset($node->website) ? $node->website : '',
+  );
+
+  $form['address'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Address'),
+    '#description' => t('If you have office address, please provide.'),
+    '#weight' => 1,
+    '#default_value' => isset($node->address) ? $node->address : '',
+  );
+  // $type = node_type_get_type($node);
+  
+  return $form;
+}
+
+/**
+ * Implement hook_validate()
+ */
+
+function marketplace_validate($node, $form, &$form_state) {
+  $logo_directory = file_default_scheme() . '://' . variable_get('marketplace_org_path', 'organization');
+
+  file_prepare_directory($logo_directory, FILE_CREATE_DIRECTORY);
+
+  $validators = array(
+    'file_validate_is_image' => array(),
+    'file_validate_extensions' => array(' jpg, jpeg, png')
+  );
+
+  //Save file
+  if (!$file = file_save_upload('logo', $validators, $logo_directory)){
+    if(!$form_state['node']->logo){
+      form_set_error('logo', 'Could not upload file.');
+    }
+  }else{
+    $form_state['values']['logo'] = $file;
+  }
+}
+
+/**
+ * Implement hook_load()
+ */
+
+function marketplace_load($nodes) {
+  $vids = array();
+  foreach($nodes as $node){
+    $vids[] = $node->vid;
+  }
+  
+  $result = db_query('SELECT * FROM {organizations} WHERE vid IN (:vids)', array(':vids' => $vids));
+  foreach ($result as $record) {
+    $nodes[$record->nid]->website = $record->website;
+    $nodes[$record->nid]->address = $record->address;
+    $nodes[$record->nid]->logo = file_load($record->logo_fid);
+  }
+}
+
+/**
+ * Implement hook_insert()
+ */
+function marketplace_insert($node) {
+  $fid = 0;
+  if($node->logo){
+    $file = $node->logo;
+    $file->status = FILE_STATUS_PERMANENT;
+    $file = file_save($file);
+    $fid = $file->fid;
+  }
+  db_insert('organizations')
+    ->fields(array(
+      'nid' => $node->nid,
+      'vid' => $node->vid,
+      'website' => $node->website,
+      'address' => $node->address,
+      'logo_fid' => $fid,
+    ))
+    ->execute();
+}
+
+/**
+ * Implement hook_update()
+ */
+
+function marketplace_update($node) {
+
+  $fid = 0;
+
+  if($node->original->logo){
+    $fid = $node->original->logo->fid;
+  }
+
+  if($node->logo){
+    $file = $node->logo;
+    $file->status = FILE_STATUS_PERMANENT;
+    $file = file_save($file);
+    $fid = $file->fid;
+    
+    if($node->original->logo){
+      file_delete($node->original->logo);
+    }
+  }
+  
+  db_update('organizations')
+    ->fields(array(
+      'website' => $node->website,
+      'address' => $node->address,
+      'logo_fid' => $fid,
+    ))
+    ->condition('vid', $node->vid)
+    ->execute();
+}
+
+/**
+ * Implement hook_view()
+ */
+ 
+function marketplace_view($node, $view_mode, $langcode = NULL) {
+  drupal_add_css(drupal_get_path('module', 'marketplace') . '/marketplace.css');
+  
+  if($node->logo){
+    $logo_img = theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo')));
+  }
+  else{
+    $logo_img = theme('image', array('path' => drupal_get_path('module', 'marketplace') . '/marketplace-placeholder.png', 'attributes' => array('class' => 'organization-logo')));
+  }
+  $node->content['logo'] = array(
+    '#markup' =>  $logo_img,
+    '#weight' => 1,
+  );
+  
+  if(0 === strpos("http", $node->website)){
+    $urlpath = check_plain($node->website);
+  }else{
+    $urlpath = 'http://' . check_plain($node->website);
+  }
+  $node->content['website'] = array(
+    '#markup' =>  l($node->website, $urlpath, array('attributes' => array('rel' => 'nofollow'))),
+    '#weight' => 1,
+  );
+
+  $node->content['address'] = array(
+    '#markup' =>  check_plain($node->address),
+    '#weight' => 1,
+  );
+
+  return $node;
+}
+
+/**
+ * Implements hook_query_TAG_alter() for node_load_multiple().
+
+function marketplace_query_node_load_multiple_alter(QueryAlterableInterface &$query) {
+  $query->leftJoin('organizations', 'orgs', 'orgs.vid = base.vid');
+  $query->leftJoin('files', 'f', 'orgs.logo_fid = f.fid');
+  $query->fields('orgs');
+  $query->addField('f', 'filepath');
+}
+*/
+
+/**
+ * Implements hook_menu().
+ */
+function marketplace_menu() {
+  $items['services'] = array(
+    'page callback' => 'marketplace_list',
+    'access arguments' => array('access content'),
+    'menu_name' => 'navigation',
+    'type' => MENU_CALLBACK,
+    'title' => 'Services',
+  );
+  return $items;
+}
+
+/**
+ * Display companies on market place
+ */
+function marketplace_block_list($count){
+  $select = db_select('node', 'n')
+    ->fields('n', array('nid', 'created'))
+    ->condition('n.type', 'organization', '=')
+    ->condition('n.status', 1)
+    ->range(0,4)
+    ->orderRandom()
+    ->addTag('node_access');
+
+  $nids = $select->execute()->fetchCol();
+
+  if (!empty($nids)) {
+    $nodes = node_load_multiple($nids);
+    $build = node_view_multiple($nodes, 'block');
+  }
+
+  $links = array();  
+  if (_node_add_access()) {
+    $links['add'] = array(
+      'href' => 'node/add/organization',
+      'title' => t('Add organization'),
+    );
+  }  
+  $links['list'] = array(
+    'href' => 'services',
+    'title' => t('See full list'),
+  );
+  
+  $build['links'] = array(
+    '#theme' => 'links',
+    '#links' => $links,
+    '#attributes' => array('class' => array('services_links')),
+  );
+  $build['#theme'] = 'marketplace_random_block';
+  return $build;
+}
+
+/**
+ * Display companies on market place
+ */
+function marketplace_list(){
+  $select = db_select('node', 'n')
+    ->fields('n', array('nid', 'created'))
+    ->condition('n.type', 'organization', '=')
+    ->condition('n.status', 1)
+    ->orderBy('n.title', 'ASC')
+    ->extend('PagerDefault')
+    ->limit(variable_get('default_nodes_main', 10))
+    ->addTag('node_access');
+
+  $nids = $select->execute()->fetchCol();
+
+  if (!empty($nids)) {
+    $nodes = node_load_multiple($nids);
+    $build = node_view_multiple($nodes);
+
+    $build['pager'] = array(
+      '#theme' => 'pager',
+      '#weight' => 5,
+    );
+  }
+  else {
+
+    $default_message = '<p>' . t('No companies has been added yet.') . '</p>';
+
+    $default_links = array();
+    if (_node_add_access()) {
+      $default_links[] = l(t('Add organization'), 'node/add/organization');
+    }
+    if (!empty($default_links)) {
+      $default_message .= theme('item_list', array('items' => $default_links));
+    }
+
+    $build['default_message'] = array(
+      '#markup' => $default_message,
+      '#prefix' => '<div id="first-time">',
+      '#suffix' => '</div>',
+    );
+  }
+  return $build;
+}

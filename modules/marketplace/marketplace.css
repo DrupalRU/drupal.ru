@@ -1,0 +1,19 @@
+.node-organization .attributes {
+  float: left;
+  text-align: center;
+}
+.node-organization .details {
+  margin-left: 200px;
+  min-height: 220px;
+}
+
+.node-organization .organization-logo {
+  max-width: 150px;
+  padding: 0px 25px;
+  height: auto;
+}
+
+.node-form .current_logo img {
+  max-width: 200px;
+  height: auto;
+}

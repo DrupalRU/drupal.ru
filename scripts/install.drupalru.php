@@ -162,8 +162,11 @@ echo "Import menu structure\n";
 exec('drush ddi menu --file=' . $data['github_path'] . '/data/main-menu.menu_links.export');
 exec('drush ddi menu --file=' . $data['github_path'] . '/data/user-menu.menu_links.export');
 
-echo "Import theme settings\n";
+echo "Import block settings\n";
+exec('drush ddi blocks --file=' . $data['github_path'] . '/data/alpha-init.blocks.export');
 
+
+echo "Import theme settings\n";
 exec('drush ddi variables --file=' . $data['github_path'] . '/data/theme_alpha_settings.variables.export');
 
 echo "Import modules settings";

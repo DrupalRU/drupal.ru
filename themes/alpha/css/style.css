@@ -218,6 +218,10 @@ a:hover {
   position: static;
 }
 
+#node-details.affix-bottom {
+  position: absolute;
+}
+
 @media (min-width: 979px) {
   #node-details.affix-top {
     position: static;

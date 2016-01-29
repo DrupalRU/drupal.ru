@@ -271,6 +271,11 @@ a:hover {
   text-align: center;
   padding: 20px 0px;
 }
+/* Ridiculously Responsive Social Share Buttons. */
+
+.rrssb-item-list {
+  overflow: hidden;
+}
 
 /* Add icons to node links. */
 

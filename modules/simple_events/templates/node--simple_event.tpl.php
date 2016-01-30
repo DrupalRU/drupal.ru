@@ -102,6 +102,18 @@
       <div class="image">
       <?php print render($content['event_image']); ?>
       </div>
+
+      <?php if ($content['from']): ?>
+        <div class="time_from">
+          <?php print render($content['from']); ?>
+        </div>
+      <?php endif; ?>
+
+      <?php if ($content['to']): ?>
+        <div class="time_to">
+          <?php print render($content['to']); ?>
+        </div>
+      <?php endif; ?>
       
       <?php if ($content['url']): ?>
         <div class="website">

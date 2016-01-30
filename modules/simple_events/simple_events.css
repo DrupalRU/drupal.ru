@@ -1,0 +1,19 @@
+.node-simple-event .attributes {
+  float: left;
+  text-align: center;
+}
+.node-simple-event .details {
+  margin-left: 200px;
+  min-height: 220px;
+}
+
+.node-simple-event .event-image {
+  max-width: 150px;
+  padding: 0px 25px;
+  height: auto;
+}
+
+.node-form .current_image img {
+  max-width: 200px;
+  height: auto;
+}

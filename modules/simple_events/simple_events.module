@@ -133,8 +133,8 @@ function simple_events_insert($node) {
       'nid' => $node->nid,
       'vid' => $node->vid,
       'url' => $node->url,
-      'time_from' => $node->time_from,
-      'time_to' => $node->time_to,
+      'time_from' => strtotime($node->time_from),
+      'time_to' => strtotime($node->time_to),
       'address' => $node->address,
       'image_fid' => $fid,
     ))
@@ -168,8 +168,8 @@ function simple_events_update($node) {
     ->fields(array(
       'url' => $node->url,
       'address' => $node->address,
-      'time_from' => $node->time_from,
-      'time_to' => $node->time_to,
+      'time_from' => strtotime($node->time_from),
+      'time_to' => strtotime($node->time_to),
       'image_fid' => $fid,
     ))
     ->condition('vid', $node->vid)

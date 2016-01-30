@@ -17,7 +17,7 @@
       $("#node-details").affix({
         offset: {
           top: 250,
-          bottom: function () { 
+          bottom: function () {
             return (this.bottom = $('footer').outerHeight(true) + 20);
           }
         }

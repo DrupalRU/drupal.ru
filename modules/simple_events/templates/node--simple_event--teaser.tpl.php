@@ -120,17 +120,12 @@
       <div class="event-type">
         <?php print render($content['simple_event_type']); ?>
       </div>
-
-      <?php if (isset($content['rrssb'])): ?>
-        <div class="rrssb-links">
-          <?php print render($content['rrssb']); ?>
-        </div>
-      <?php endif; ?>
       
     </div>
     <div class="details">
     <?php
       // We hide the comments and links now so that we can render them later.
+      hide($content['rrssb']
       hide($content['comments']);
       hide($content['links']);
       print render($content);

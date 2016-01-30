@@ -304,7 +304,7 @@ function simple_events_download_ics($node) {
   }else{
     $end_date = date('Ymd', $node->event->time_to) . 'T' . date('His', $node->event->time_to) . '';
   }
-
+  $description = str_replace("\n", " ", check_plain($node->body[und][0]['safe_value']));
   
   echo 'BEGIN:VCALENDAR
 VERSION:2.0
@@ -315,7 +315,7 @@ DTSTAMP:' . $start_date . '
 DTSTART:' . $start_date . '
 DTEND:' . $end_date . '
 SUMMARY:' . check_plain($node->title) . '
-DESCRIPTION: ' . $node->body[und][0]['safe_value'] . ' - ' . url('node/' . $node->nid, array('absolute' => TRUE)) . '
+DESCRIPTION: ' . $description . ' - ' . url('node/' . $node->nid, array('absolute' => TRUE)) . '
 LOCATION:' . $node->event->address . '
 END:VEVENT
 END:VCALENDAR';

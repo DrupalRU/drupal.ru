@@ -54,20 +54,20 @@ function simple_events_menu() {
     'type' => MENU_CALLBACK,
   );
   
-  $items['events1'] = array(
+  $items['events'] = array(
     'page callback' => 'simple_events_list',
     'access arguments' => array('access content'),
     'title' => 'Events',
     'type' => MENU_CALLBACK,
   );
   
-  $items['events1/upcoming'] = array(
+  $items['events/upcoming'] = array(
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => -20,
     'title' => 'Upcoming events',
   );
 
-  $items['events1/past'] = array(
+  $items['events/past'] = array(
     'title' => 'Past events',
     'page callback' => 'simple_events_list_past',
     'access arguments' => array('access content'),

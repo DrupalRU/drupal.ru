@@ -221,8 +221,9 @@ function simple_events_update($node) {
  */
  
 function simple_events_view($node, $view_mode, $langcode = NULL) {
+
   drupal_add_css(drupal_get_path('module', 'simple_events') . '/simple_events.css');
-  drupal_set_message( '<pre>' . print_r($node,true) . '</pre>' );
+
   if(isset($node->event->image) && !empty($node->event->image)){
     $event_image = theme('image', array('path' => $node->event->image->uri, 'attributes' => array('class' => 'event-image')));
   }

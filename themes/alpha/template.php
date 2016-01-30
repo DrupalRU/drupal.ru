@@ -21,6 +21,12 @@ function alpha_theme($existing, $type, $theme, $path) {
       'render element' => 'content',
       'template' => 'templates/marketplace--blocklist',
     ),
+    'node__simple_event__teaser' => array(
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'templates/node--simple_event--teaser',
+  );
+
 
   );
 }

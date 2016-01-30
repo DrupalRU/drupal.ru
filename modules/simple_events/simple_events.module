@@ -260,7 +260,10 @@ function simple_events_view($node, $view_mode, $langcode = NULL) {
     '#weight' => 1,
   );
   
-  $time = '<div class="from">' .format_date($node->event->time_from, 'custom', 'DD M H:i') . '</div>';
+  $time = '<div class="from">' 
+    . format_date($node->event->time_from, 'custom', 'd M H:i') 
+    . t('Starts at !time', array('!time' => format_date($node->event->time_from, 'custom', 'H:i') ))
+    . '</div>';
   if(!empty($node->event->time_to)){
     $hours = round(($node->event->time_to - $node->event->time_from) / 3600, 0);
     

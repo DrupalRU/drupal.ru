@@ -101,25 +101,25 @@
       <?php print render($content['event_image']); ?>
       </div>
 
-      <?php if ($content['from']): ?>
+      <?php if (isset($content['from'])): ?>
         <div class="time_from">
           <?php print render($content['from']); ?>
         </div>
       <?php endif; ?>
 
-      <?php if ($content['to']): ?>
+      <?php if (isset($content['to'])): ?>
         <div class="time_to">
           <?php print render($content['to']); ?>
         </div>
       <?php endif; ?>
       
-      <?php if ($content['url']): ?>
+      <?php if (isset($content['url'])): ?>
         <div class="website">
           <?php print render($content['url']); ?>
         </div>
       <?php endif; ?>
 
-      <?php if ($content['address']): ?>
+      <?php if (isset($content['address'])): ?>
         <div class="address">
           <?php print render($content['address']); ?>
         </div>
@@ -129,7 +129,7 @@
         <?php print render($content['simple_event_type']); ?>
       </div>
 
-      <?php if ($content['rrssb']): ?>
+      <?php if (isset($content['rrssb'])): ?>
         <div class="rrssb-links">
           <?php print render($content['rrssb']); ?>
         </div>

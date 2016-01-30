@@ -57,8 +57,8 @@ function simple_events_menu() {
   $items['events'] = array(
     'page callback' => 'simple_events_list',
     'access arguments' => array('access content'),
-    'menu_name' => 'navigation',
     'title' => 'Events',
+    'type' => MENU_CALLBACK,
   );
   
   $items['events/upcoming'] = array(

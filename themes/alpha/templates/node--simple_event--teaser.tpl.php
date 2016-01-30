@@ -81,6 +81,15 @@
  */
 ?>
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+  <?php if ($display_submitted): ?>
+    <span class="name pull-right"><?php print $name; ?></span>
+    <span class="text-muted"> <i class="fa fa-calendar-o"></i> <?php print $date; ?></span>
+  <?php endif; ?>
+  <?php print render($title_prefix); ?>
+  <?php if (!$page): ?>
+    <h2 class="title"><a href="<?php print $node_url; ?>"> <i class="fa fa-calendar"></i> <?php print $title; ?></a></h2>
+  <?php endif; ?>
+  <?php print render($title_suffix); ?>  
   <div class="row">
     <div  class="col-xs-12 col-sm-12 col-md-3">
       <center>

@@ -364,8 +364,10 @@ END:VCALENDAR';
  */
 function simple_events_list(){
   $select = db_select('node', 'n')
+    ->join('simple_events', 'e', 'e.vid = n.vid')
     ->fields('n', array('nid', 'created'))
     ->condition('n.type', 'simple_event', '=')
+    ->condition('e.time_from', REQUEST_TIME , '>=')    
     ->condition('n.status', 1)
     ->orderBy('n.title', 'ASC')
     ->extend('PagerDefault')

@@ -410,16 +410,19 @@ function simple_events_list(){
  * Display past events
  */
 function simple_events_list_past(){
-  $select = db_select('node', 'n')
-    ->fields('n', array('nid', 'created'))
-    ->condition('n.type', 'simple_event', '=')
+    $query = db_select('node', 'n');
+  $query->addTag('node_access');
+  $query->join('simple_events', 'e', 'e.vid = n.vid');
+  $query->condition('n.type', 'simple_event', '=')
+    ->condition('e.time_from', REQUEST_TIME , '<')    
     ->condition('n.status', 1)
+    ->fields('n', array('nid', 'created'))
     ->orderBy('n.title', 'ASC')
     ->extend('PagerDefault')
-    ->limit(variable_get('default_nodes_main', 10))
-    ->addTag('node_access');
+    ->limit(variable_get('default_nodes_main', 10));
 
-  $nids = $select->execute()->fetchCol();
+  $nids = $query->execute()->fetchCol();
+
 
   if (!empty($nids)) {
     $nodes = node_load_multiple($nids);

@@ -46,7 +46,7 @@ function simple_events_theme($existing, $type, $theme, $path) {
 /**
  * Implements hook_menu().
  */
-function marketplace_menu() {
+function simple_events_menu() {
   $items['node/%node/vcal'] = array(
     'page callback' => 'simple_events_download_ics',
     'access arguments' => array('access content'),

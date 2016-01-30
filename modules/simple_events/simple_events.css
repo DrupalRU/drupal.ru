@@ -12,6 +12,9 @@
   padding: 0px 25px;
   height: auto;
 }
+.node-simple-event .rrssb-links {
+  padding: 0px 10px;
+}
 
 .node-form .current_image img {
   max-width: 200px;

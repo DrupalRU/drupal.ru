@@ -132,7 +132,7 @@
       </div>
 
       <?php if ($content['rrssb']): ?>
-        <div class="rrssb">
+        <div class="rrssb-links">
           <?php print render($content['rrssb']); ?>
         </div>
       <?php endif; ?>

@@ -278,13 +278,22 @@ a:hover {
 }
 
 /* Simple events */
-.node-simple-event .date_time:before {
+.node-simple-event .date_time .from:before {
   font: normal normal normal 14px/1 FontAwesome;
   content: '\f271';
   padding-right: 5px;
   vertical-align: middle;
   color: orange;
 }
+
+.node-simple-event .date_time .duration:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f017';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: orange;
+}
+
 
 /* Add icons to node links. */
 

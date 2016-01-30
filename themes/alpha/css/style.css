@@ -310,15 +310,6 @@ a:hover {
   color: orange;
 }
 
-.node-simple-event .event-type:before {
-  font: normal normal normal 14px/1 FontAwesome;
-  content: '\f02b';
-  padding-right: 5px;
-  vertical-align: middle;
-  color: orange;
-}
-
-
 /* Add icons to node links. */
 
 ul.links li a:before {

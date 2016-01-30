@@ -91,12 +91,12 @@ function simple_events_form($node, $form_state) {
     '#required' => TRUE,
   );
   
-  $default = isset($node->event->time_to) ? $node->event->time_to : REQUEST_TIME;
-
   $show_time_to = FALSE;
   if(isset($node->event->time_to) && !empty($node->event->time_to )){
     $show_time_to = TRUE;
+    $default = $node->event->time_to;
   }
+  
   $form['enable_time_to'] = array(
     '#type' => 'checkbox',
     '#title' => t("Provide end time."),

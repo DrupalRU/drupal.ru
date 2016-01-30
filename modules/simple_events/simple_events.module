@@ -44,6 +44,19 @@ function simple_events_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_menu().
+ */
+function marketplace_menu() {
+  $items['node/%node/vcal'] = array(
+    'page callback' => 'simple_events_download_ics',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+
+/**
  * Implement hook_form()
  */
 function simple_events_form($node, $form_state) {
@@ -239,7 +252,7 @@ function simple_events_view($node, $view_mode, $langcode = NULL) {
   );
   
   $node->content['from'] = array(
-    '#markup' =>  "FROM:" . format_date($node->event->time_from, 'custom', 'Y-m-d H:i'),
+    '#markup' =>  "FROM:" . format_date($node->event->time_from, 'custom', 'Y-m-d H:i') . l('calc', 'node/' . $node->nid. '/vcal'),
     '#weight' => 1,
   );
   
@@ -265,6 +278,42 @@ function simple_events_view($node, $view_mode, $langcode = NULL) {
   );
 
   return $node;
+}
+
+/**
+ * Download vCal.
+ */  
+function simple_events_download_ics($node) {
+  drupal_add_http_header('Content-Type', 'application/calendar; charset=utf-8');
+
+  // Set the filename.
+  $filename = preg_replace('/[\x00-\x1F]/u', '_', check_plain($node->title));
+  drupal_add_http_header('Content-Disposition', 'attachment; filename="' . $filename . '.ics"');
+
+  $start_date = date('Ymd', $node->event->time_from) . 'T' . date('His', $node->event->time_from) . '';
+  
+  if (empty($node->event->time_to)) {
+    $end_date = $start_date;
+  }else{
+    $end_date = date('Ymd', $node->event->time_to) . 'T' . date('His', $node->event->time_to) . '';
+  }
+
+  
+  echo 'BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+BEGIN:VEVENT
+UID:' . $node->type . '-' . $node->nid . '@' . $_SERVER['HTTP_HOST'] . '
+DTSTAMP:' . $start_date . '
+DTSTART:' . $start_date . '
+DTEND:' . $end_date . '
+SUMMARY:' . check_plain($node->title) . '
+DESCRIPTION: ' . "DESC" . ' - ' . url('node/' . $node->nid, array('absolute' => TRUE)) . '
+LOCATION:' . $node->event->address . '
+END:VEVENT
+END:VCALENDAR';
+
+  drupal_exit();
 }
 
 

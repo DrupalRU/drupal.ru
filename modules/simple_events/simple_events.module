@@ -64,7 +64,8 @@ function simple_events_menu() {
   $items['events/upcoming'] = array(
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => -20,
-    'title' => 'Events',
+    'title' => 'Upcoming events',
+    'access arguments' => array('access content'),
   );
 
   $items['events/past'] = array(

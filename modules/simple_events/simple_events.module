@@ -39,7 +39,7 @@ function simple_events_form($node, $form_state) {
 
   $dateformat = 'Y-m-d H:i';
   
-  $default = $node->event->time_from ? $node->event->time_from : REQUEST_TIME;
+  $default = isset($node->event->time_from) ? $node->event->time_from : REQUEST_TIME;
   
   $form['time_from'] = array(
     '#type' => 'date_popup',
@@ -51,7 +51,7 @@ function simple_events_form($node, $form_state) {
     '#required' => TRUE,
   );
   
-  $default = $node->event->time_to ? $node->event->time_to : REQUEST_TIME;
+  $default = isset($node->event->time_to) ? $node->event->time_to : REQUEST_TIME;
 
   $form['time_to'] = array(
     '#type' => 'date_popup',

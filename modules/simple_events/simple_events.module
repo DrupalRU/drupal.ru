@@ -56,6 +56,14 @@ function simple_events_menu() {
   return $items;
 }
 
+/**
+ * Implement hook_preprocess_node()
+ */
+function simple_events_preprocess_node(&$variables) {
+  if ($variables['type'] == 'simple_event' && $variables['elements']['#view_mode'] == 'teaser') {
+    $variables['theme_hook_suggestions'][] = "node__simple_event__teaser";
+  }
+}
 
 /**
  * Implement hook_form()

@@ -304,7 +304,7 @@ function simple_events_download_ics($node) {
   }else{
     $end_date = date('Ymd', $node->event->time_to) . 'T' . date('His', $node->event->time_to) . '';
   }
-  $description = str_replace("\n", " ", check_plain($node->body[und][0]['safe_value']));
+  $description = str_replace("\n", " ", check_plain($node->body[LANGUAGE_NONE][0]['safe_value']));
   
   echo 'BEGIN:VCALENDAR
 VERSION:2.0

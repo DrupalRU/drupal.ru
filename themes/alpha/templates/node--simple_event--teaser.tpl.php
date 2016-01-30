@@ -121,9 +121,8 @@
         <div class="links">
           <?php print render($content['links']); ?>
         </div>
-        <hr>
-    
       </div>
     </div>
+    <hr>
   </div>
 </div>

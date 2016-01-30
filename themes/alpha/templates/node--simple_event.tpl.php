@@ -127,7 +127,8 @@
         <hr>
     
       </div>
-    
+    </div>
+    <div class="col-xs-12">
       <?php print render($content['comments']); ?>
     </div>
   </div>

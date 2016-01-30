@@ -252,8 +252,14 @@ function simple_events_view($node, $view_mode, $langcode = NULL) {
     '#weight' => 1,
   );
   
-  $node->content['from'] = array(
-    '#markup' =>  "FROM:" . format_date($node->event->time_from, 'custom', 'Y-m-d H:i') . l('calc', 'node/' . $node->nid. '/vcal'),
+  $time = '<div class="from">' .format_date($node->event->time_from, 'short') . '</div>';
+  if(!empty($node->event->time_to)){
+    $time .= '<div class="to">' .format_date($node->event->time_to, 'short') . '</div>';
+  }
+
+  
+  $node->content['datetime'] = array(
+    '#markup' =>  l($time, 'node/' . $node->nid. '/vcal' , array('html' => TRUE)),
     '#weight' => 1,
   );
   
@@ -309,7 +315,7 @@ DTSTAMP:' . $start_date . '
 DTSTART:' . $start_date . '
 DTEND:' . $end_date . '
 SUMMARY:' . check_plain($node->title) . '
-DESCRIPTION: ' . "DESC" . ' - ' . url('node/' . $node->nid, array('absolute' => TRUE)) . '
+DESCRIPTION: ' . $node->body[und][0]['safe_value'] . ' - ' . url('node/' . $node->nid, array('absolute' => TRUE)) . '
 LOCATION:' . $node->event->address . '
 END:VEVENT
 END:VCALENDAR';

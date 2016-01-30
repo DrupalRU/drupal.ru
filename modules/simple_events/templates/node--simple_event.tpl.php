@@ -101,17 +101,9 @@
       <?php print render($content['event_image']); ?>
       </div>
 
-      <?php if (isset($content['from'])): ?>
-        <div class="time_from">
-          <?php print render($content['from']); ?>
-        </div>
-      <?php endif; ?>
-
-      <?php if (isset($content['to'])): ?>
-        <div class="time_to">
-          <?php print render($content['to']); ?>
-        </div>
-      <?php endif; ?>
+      <div class="date_time">
+        <?php print render($content['datetime']); ?>
+      </div>
       
       <?php if (isset($content['url'])): ?>
         <div class="website">

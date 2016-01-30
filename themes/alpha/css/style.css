@@ -294,6 +294,30 @@ a:hover {
   color: orange;
 }
 
+.node-simple-event .date_time .website:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f08e';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: orange;
+}
+
+.node-simple-event .date_time .address:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f124';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: orange;
+}
+
+.node-simple-event .date_time .event-type:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f02b';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: orange;
+}
+
 
 /* Add icons to node links. */
 

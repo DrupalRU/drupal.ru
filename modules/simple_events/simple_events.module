@@ -47,6 +47,9 @@ function simple_events_theme($existing, $type, $theme, $path) {
  * Implement hook_form()
  */
 function simple_events_form($node, $form_state) {
+
+  drupal_add_css(drupal_get_path('module', 'simple_events') . '/simple_events.css');
+
   $form = node_content_form($node, $form_state);
   
   $form['image'] = array(

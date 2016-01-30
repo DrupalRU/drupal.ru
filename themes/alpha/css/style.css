@@ -238,7 +238,7 @@ a:hover {
   white-space: normal;
 }
 
-.node.darkmatter .content{
+.node.darkmatter .content {
   background-color: #333;
   color: #fff;
 }
@@ -421,7 +421,7 @@ div.awesome_icon {
   content: '\f160';
   padding-right: 5px;
   vertical-align: middle;
-  color: #333;  
+  color: #333;
 }
 
 .forum-sort .sort-desc:before {
@@ -429,7 +429,7 @@ div.awesome_icon {
   content: '\f161';
   padding-right: 5px;
   vertical-align: middle;
-  color: #333;  
+  color: #333;
 }
 
 .forum-sort span.sort-asc:before,

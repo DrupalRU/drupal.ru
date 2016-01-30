@@ -20,6 +20,29 @@ function simple_events_node_info() {
   );
 }
 
+
+/**
+ * Implements hook_theme().
+ */
+function simple_events_theme($existing, $type, $theme, $path) {
+  $theme = array();
+  $theme['node__simple_event'] = array(
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'node--simple_event',
+    'path' => drupal_get_path('module', 'simple_events') . '/templates',
+  );
+
+  $theme['node__simple_event__teaser'] = array(
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'node--simple_event--teaser',
+    'path' => drupal_get_path('module', 'simple_events') . '/templates',
+  );
+
+  return $theme;
+}
+
 /**
  * Implement hook_form()
  */

@@ -127,6 +127,7 @@
           hide($content['links']);
           print render($content);
         ?>
+        <div class="clearfix"></div>
         <div class="links">
           <?php print render($content['links']); ?>
         </div>

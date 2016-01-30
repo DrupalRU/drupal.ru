@@ -128,6 +128,7 @@ function simple_events_form($node, $form_state) {
 function simple_events_validate($node, $form, &$form_state) {
   $logo_directory = file_default_scheme() . '://' . variable_get('simple_events_path', 'simpleevents');
 
+  drupal_set_message('ttt:' . $logo_directory);
   file_prepare_directory($logo_directory, FILE_CREATE_DIRECTORY);
 
   $validators = array(

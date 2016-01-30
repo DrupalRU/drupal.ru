@@ -65,7 +65,6 @@ function simple_events_menu() {
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => -20,
     'title' => 'Upcoming events',
-    'access arguments' => array('access content'),
   );
 
   $items['events/past'] = array(
@@ -366,7 +365,7 @@ END:VCALENDAR';
 function simple_events_list(){
   $select = db_select('node', 'n')
     ->fields('n', array('nid', 'created'))
-    ->condition('n.type', 'event_type', '=')
+    ->condition('n.type', 'simple_event', '=')
     ->condition('n.status', 1)
     ->orderBy('n.title', 'ASC')
     ->extend('PagerDefault')
@@ -411,7 +410,7 @@ function simple_events_list(){
 function simple_events_list_past(){
   $select = db_select('node', 'n')
     ->fields('n', array('nid', 'created'))
-    ->condition('n.type', 'event_type', '=')
+    ->condition('n.type', 'simple_event', '=')
     ->condition('n.status', 1)
     ->orderBy('n.title', 'ASC')
     ->extend('PagerDefault')

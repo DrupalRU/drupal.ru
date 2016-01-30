@@ -11,7 +11,7 @@
 function simple_events_node_info() {
   return array(
     'simple_event' => array(
-      'name' => t('Organization'),
+      'name' => t('Event'),
       'base' => 'simple_events',
       'description' => t('Create event'),
       'has_title' => TRUE,
@@ -60,7 +60,7 @@ function simple_events_form($node, $form_state) {
 
   $form['url'] = array(
     '#type' => 'textfield',
-    '#title' => t('Website'),
+    '#title' => t('Event url'),
     '#description' => t('Please provide event url.'),
     '#weight' => 1,
     '#default_value' => isset($node->event->url) ? $node->event->url : '',
@@ -91,11 +91,7 @@ function simple_events_validate($node, $form, &$form_state) {
   );
 
   //Save file
-  if (!$file = file_save_upload('image', $validators, $logo_directory)){
-    if(!$form_state['node']->image){
-      form_set_error('logo', 'Could not upload file.');
-    }
-  }else{
+  if ($file = file_save_upload('image', $validators, $logo_directory)){
     $form_state['values']['image'] = $file;
   }
 }

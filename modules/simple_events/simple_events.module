@@ -53,6 +53,12 @@ function simple_events_form($node, $form_state) {
   
   $default = isset($node->event->time_to) ? $node->event->time_to : REQUEST_TIME;
 
+  $form['enable_time_to'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Provide end time."),
+    '#default_value' => isset($node->event->time_to) ? TRUE : FALSE,
+  );
+  
   $form['time_to'] = array(
     '#type' => 'date_popup',
     '#date_timezone' => date_default_timezone(),
@@ -60,6 +66,11 @@ function simple_events_form($node, $form_state) {
     '#date_year_range' => '0:+1',
     '#title' => t('End'),
     '#default_value' => format_date($default, 'custom', 'Y-m-d H:i'),
+    '#states' => array(
+      'invisible' => array(
+        'input[name="enable_time_to"]' => array('checked' => FALSE),
+      ),
+    ),
   );
 
   $form['url'] = array(
@@ -134,7 +145,7 @@ function simple_events_insert($node) {
       'vid' => $node->vid,
       'url' => $node->url,
       'time_from' => strtotime($node->time_from),
-      'time_to' => strtotime($node->time_to),
+      'time_to' => $node->enable_time_to ? strtotime($node->time_to) : 0,
       'address' => $node->address,
       'image_fid' => $fid,
     ))
@@ -169,7 +180,7 @@ function simple_events_update($node) {
       'url' => $node->url,
       'address' => $node->address,
       'time_from' => strtotime($node->time_from),
-      'time_to' => strtotime($node->time_to),
+      'time_to' => $node->enable_time_to ? strtotime($node->time_to) : 0,
       'image_fid' => $fid,
     ))
     ->condition('vid', $node->vid)

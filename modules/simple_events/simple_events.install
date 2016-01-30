@@ -8,7 +8,7 @@
 /**
  * Implements hook_install().
  */
-function simple_event_install() {
+function simple_events_install() {
   node_types_rebuild();
   $types = node_type_get_types();
 

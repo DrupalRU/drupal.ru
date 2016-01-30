@@ -63,6 +63,8 @@ function simple_events_preprocess_node(&$variables) {
   if ($variables['type'] == 'simple_event' && $variables['elements']['#view_mode'] == 'teaser') {
     $variables['theme_hook_suggestions'][] = "node__simple_event__teaser";
   }
+  
+    drupal_set_message('<pre>' . print_r($variables['theme_hook_suggestions'],true). '</pre>');
 }
 
 /**
@@ -246,7 +248,7 @@ function simple_events_update($node) {
  */
  
 function simple_events_view($node, $view_mode, $langcode = NULL) {
-  drupal_set_message('<pre>' . print_r($node,true). '</pre>');
+
   drupal_add_css(drupal_get_path('module', 'simple_events') . '/simple_events.css');
 
   if(isset($node->event->image) && !empty($node->event->image)){

@@ -99,8 +99,8 @@
   <div class="content"<?php print $content_attributes; ?>>
     <div class="attributes">
 
-      <div class="logo">
-      <?php print render($content['image']); ?>
+      <div class="image">
+      <?php print render($content['event_image']); ?>
       </div>
       
       <?php if ($content['url']): ?>
@@ -115,8 +115,8 @@
         </div>
       <?php endif; ?>
 
-      <div class="organization-type">
-        <?php print render($content['event_type']); ?>
+      <div class="event-type">
+        <?php print render($content['simple_event_type']); ?>
       </div>
       
     </div>

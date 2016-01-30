@@ -100,7 +100,7 @@ function simple_events_form($node, $form_state) {
  */
 
 function simple_events_validate($node, $form, &$form_state) {
-  $logo_directory = file_default_scheme() . '://' . variable_get('simple_events_org_path', 'organization');
+  $logo_directory = file_default_scheme() . '://' . variable_get('simple_events_path', 'simpleevents');
 
   file_prepare_directory($logo_directory, FILE_CREATE_DIRECTORY);
 
@@ -200,7 +200,7 @@ function simple_events_update($node) {
 function simple_events_view($node, $view_mode, $langcode = NULL) {
   drupal_add_css(drupal_get_path('module', 'simple_events') . '/simple_events.css');
   drupal_set_message( '<pre>' . print_r($node,true) . '</pre>' );
-  if($node->event->image){
+  if(isset($node->event->image) && !empty($node->event->image)){
     $logo_img = theme('image', array('path' => $node->event->image->uri, 'attributes' => array('class' => 'event-image')));
   }
   else{

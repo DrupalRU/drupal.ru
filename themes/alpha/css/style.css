@@ -294,7 +294,7 @@ a:hover {
   color: orange;
 }
 
-.node-simple-event .date_time .website:before {
+.node-simple-event .website:before {
   font: normal normal normal 14px/1 FontAwesome;
   content: '\f08e';
   padding-right: 5px;
@@ -302,7 +302,7 @@ a:hover {
   color: orange;
 }
 
-.node-simple-event .date_time .address:before {
+.node-simple-event .address:before {
   font: normal normal normal 14px/1 FontAwesome;
   content: '\f124';
   padding-right: 5px;
@@ -310,7 +310,7 @@ a:hover {
   color: orange;
 }
 
-.node-simple-event .date_time .event-type:before {
+.node-simple-event .event-type:before {
   font: normal normal normal 14px/1 FontAwesome;
   content: '\f02b';
   padding-right: 5px;

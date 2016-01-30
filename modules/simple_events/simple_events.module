@@ -49,6 +49,7 @@ function simple_events_theme($existing, $type, $theme, $path) {
 function simple_events_menu() {
   $items['node/%node/vcal'] = array(
     'page callback' => 'simple_events_download_ics',
+    'page arguments' => array(1),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );

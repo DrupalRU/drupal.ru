@@ -306,6 +306,13 @@ function simple_events_download_ics($node) {
   }
   $description = str_replace("\n", " ", strip_tags($node->body[LANGUAGE_NONE][0]['safe_value']));
   
+  $url = '';
+  if(!empty($node->event->url)){
+    $url = $node->event->url;
+  }else{
+    $url = url('node/' . $node->nid, array('absolute' => TRUE));
+  }
+  
   echo 'BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//hacksw/handcal//NONSGML v1.0//EN
@@ -315,8 +322,9 @@ DTSTAMP:' . $start_date . '
 DTSTART:' . $start_date . '
 DTEND:' . $end_date . '
 SUMMARY:' . check_plain($node->title) . '
-DESCRIPTION: ' . $description . ' - ' . url('node/' . $node->nid, array('absolute' => TRUE)) . '
+DESCRIPTION: ' . $description . ' - ' . $url . '
 LOCATION:' . $node->event->address . '
+URL:' . $url . '
 END:VEVENT
 END:VCALENDAR';
 

@@ -130,6 +130,12 @@
       <div class="event-type">
         <?php print render($content['simple_event_type']); ?>
       </div>
+
+      <?php if ($content['rrssb']): ?>
+        <div class="rrssb">
+          <?php print render($content['rrssb']); ?>
+        </div>
+      <?php endif; ?>
       
     </div>
     <div class="details">

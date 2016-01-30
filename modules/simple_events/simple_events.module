@@ -238,7 +238,7 @@ function simple_events_update($node) {
  */
  
 function simple_events_view($node, $view_mode, $langcode = NULL) {
-
+  drupal_set_message('<pre>' . print_r($node,true). '</pre>');
   drupal_add_css(drupal_get_path('module', 'simple_events') . '/simple_events.css');
 
   if(isset($node->event->image) && !empty($node->event->image)){

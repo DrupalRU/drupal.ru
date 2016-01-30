@@ -123,6 +123,7 @@
         </div>
       </div>
     </div>
+    <div class="clearfix"></div>
     <hr>
   </div>
 </div>

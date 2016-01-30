@@ -57,7 +57,7 @@ function simple_events_form($node, $form_state) {
   );
 
   if(isset($node->event->image)){
-    $form['image']['#prefix'] = '<div class="current_image">' .  theme('image', array('path' => $node->event->image->uri, 'attributes' => array('class' => 'organization-logo'))) . '</div>';
+    $form['image']['#prefix'] = '<div class="current_image">' .  theme('image', array('path' => $node->event->image->uri, 'attributes' => array('class' => 'event-image'))) . '</div>';
   }
 
   $dateformat = 'Y-m-d H:i';

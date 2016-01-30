@@ -391,7 +391,7 @@ function simple_events_list(){
 
     $default_links = array();
     if (_node_add_access()) {
-      $default_links[] = l(t('Add event'), 'node/add/event-type');
+      $default_links[] = l(t('Add event'), 'node/add/simple-event');
     }
     if (!empty($default_links)) {
       $default_message .= theme('item_list', array('items' => $default_links));

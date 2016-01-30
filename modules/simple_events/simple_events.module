@@ -53,11 +53,11 @@ function simple_events_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  
   $items['events'] = array(
     'page callback' => 'simple_events_list',
     'access arguments' => array('access content'),
     'menu_name' => 'navigation',
-    'type' => MENU_CALLBACK,
     'title' => 'Events',
   );
   

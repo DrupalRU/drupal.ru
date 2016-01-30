@@ -63,8 +63,6 @@ function simple_events_preprocess_node(&$variables) {
   if ($variables['type'] == 'simple_event' && $variables['elements']['#view_mode'] == 'teaser') {
     $variables['theme_hook_suggestions'][] = "node__simple_event__teaser";
   }
-  
-    drupal_set_message('<pre>' . print_r($variables['theme_hook_suggestions'],true). '</pre>');
 }
 
 /**
@@ -272,15 +270,6 @@ function simple_events_view($node, $view_mode, $langcode = NULL) {
     '#markup' =>  l($time, 'node/' . $node->nid. '/vcal' , array('html' => TRUE)),
     '#weight' => 1,
   );
-  
-  if(!empty($node->event->time_to)){
-  $node->content['to'] = array(
-    '#markup' =>  "TO:" . format_date($node->event->time_to, 'custom', 'Y-m-d H:i'),
-    '#weight' => 1,
-  );
-    
-  }
-
   
   if(!empty($node->event->url)){
     $node->content['url'] = array(

@@ -216,7 +216,7 @@ function simple_events_view($node, $view_mode, $langcode = NULL) {
     '#weight' => 1,
   );
   
-  if(isset($node->event->time_from)){
+  if(!empty($node->event->time_to)){
   $node->content['to'] = array(
     '#markup' =>  "TO:" . format_date($node->event->time_to, 'custom', 'Y-m-d H:i'),
     '#weight' => 1,

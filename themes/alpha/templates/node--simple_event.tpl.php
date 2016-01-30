@@ -83,35 +83,37 @@
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <div class="row">
     <div  class="col-xs-12 col-sm-12 col-md-3">
-      <div class="image">
-      <?php print render($content['event_image']); ?>
-      </div>
-
-      <div class="date_time">
-        <?php print render($content['datetime']); ?>
-      </div>
-      
-      <?php if (isset($content['url'])): ?>
-        <div class="website">
-          <?php print render($content['url']); ?>
+      <center>
+        <div class="image">
+        <?php print render($content['event_image']); ?>
         </div>
-      <?php endif; ?>
-
-      <?php if (isset($content['address'])): ?>
-        <div class="address">
-          <?php print render($content['address']); ?>
+  
+        <div class="date_time">
+          <?php print render($content['datetime']); ?>
         </div>
-      <?php endif; ?>
-
-      <div class="event-type">
-        <?php print render($content['simple_event_type']); ?>
-      </div>
-
-      <?php if (isset($content['rrssb'])): ?>
-        <div class="rrssb-links">
-          <?php print render($content['rrssb']); ?>
+        
+        <?php if (isset($content['url'])): ?>
+          <div class="website">
+            <?php print render($content['url']); ?>
+          </div>
+        <?php endif; ?>
+  
+        <?php if (isset($content['address'])): ?>
+          <div class="address">
+            <?php print render($content['address']); ?>
+          </div>
+        <?php endif; ?>
+  
+        <div class="event-type">
+          <?php print render($content['simple_event_type']); ?>
         </div>
-      <?php endif; ?>
+  
+        <?php if (isset($content['rrssb'])): ?>
+          <div class="rrssb-links">
+            <?php print render($content['rrssb']); ?>
+          </div>
+        <?php endif; ?>
+      </center>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-9">
       <div class="content"<?php print $content_attributes; ?>>

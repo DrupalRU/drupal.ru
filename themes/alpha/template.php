@@ -21,7 +21,11 @@ function alpha_theme($existing, $type, $theme, $path) {
       'render element' => 'content',
       'template' => 'templates/marketplace--blocklist',
     ),
-
+    'node__simple_event__teaser' => array(
+      'render element' => 'content',
+      'base hook' => 'node',
+      'template' => 'templates/node--simple_event--teaser',
+    ),
   );
 }
 
@@ -195,7 +199,7 @@ function alpha_preprocess_comment(&$variables) {
  */
 function alpha_preprocess_node(&$variables) {
   $node = $variables['elements']['#node'];
-  if ($variables['teaser'] && $variables['type'] != 'organization') {
+  if ($variables['teaser'] && $variables['type'] != 'organization' && $variables['type'] != 'simple_event') {
     // Add a new item into the theme_hook_suggestions array.
     $variables['theme_hook_suggestions'][] = 'node__teaser';
   }

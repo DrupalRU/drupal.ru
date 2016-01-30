@@ -1,0 +1,333 @@
+<?php
+/**
+ * @file
+ * Simple event module.
+ */
+
+
+/**
+ * Implements hook_node_info()
+ */
+function simple_events_node_info() {
+  return array(
+    'simple_event' => array(
+      'name' => t('Event'),
+      'base' => 'simple_events',
+      'description' => t('Create event'),
+      'has_title' => TRUE,
+      'title_label' => t('Event title')
+    )
+  );
+}
+
+
+/**
+ * Implements hook_theme().
+ */
+function simple_events_theme($existing, $type, $theme, $path) {
+  $theme = array();
+  $theme['node__simple_event'] = array(
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'node--simple_event',
+    'path' => drupal_get_path('module', 'simple_events') . '/templates',
+  );
+
+  $theme['node__simple_event__teaser'] = array(
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'node--simple_event--teaser',
+    'path' => drupal_get_path('module', 'simple_events') . '/templates',
+  );
+
+  return $theme;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function simple_events_menu() {
+  $items['node/%node/vcal'] = array(
+    'page callback' => 'simple_events_download_ics',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Implement hook_preprocess_node()
+ */
+function simple_events_preprocess_node(&$variables) {
+  if ($variables['type'] == 'simple_event' && $variables['elements']['#view_mode'] == 'teaser') {
+    $variables['theme_hook_suggestions'][] = "node__simple_event__teaser";
+  }
+}
+
+/**
+ * Implement hook_form()
+ */
+function simple_events_form($node, $form_state) {
+
+  drupal_add_css(drupal_get_path('module', 'simple_events') . '/simple_events.css');
+
+  $form = node_content_form($node, $form_state);
+  
+  $form['image'] = array(
+    '#type' => 'file',
+    '#title' => t('Event image'),
+    '#description' => t('Click "Chose File" to select an image to upload. Allowed extensions:  jpg, jpeg, png '),
+    '#weight' => -4,
+  );
+
+  if(isset($node->event->image)){
+    $form['image']['#prefix'] = '<div class="current_image">' .  theme('image', array('path' => $node->event->image->uri, 'attributes' => array('class' => 'event-image'))) . '</div>';
+  }
+
+  $dateformat = 'Y-m-d H:i';
+  
+  $default = isset($node->event->time_from) ? $node->event->time_from : REQUEST_TIME;
+  
+  $form['time_from'] = array(
+    '#type' => 'date_popup',
+    '#date_timezone' => date_default_timezone(),
+    '#date_format' => $dateformat,
+    '#date_year_range' => '0:+1',
+    '#title' => t('Start'),
+    '#default_value' => format_date($default, 'custom', 'Y-m-d H:i'),
+    '#required' => TRUE,
+  );
+  
+  $show_time_to = FALSE;
+  if(isset($node->event->time_to) && !empty($node->event->time_to )){
+    $show_time_to = TRUE;
+    $default = $node->event->time_to;
+  }
+  
+  $form['enable_time_to'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Provide end time."),
+    '#default_value' => $show_time_to,
+  );
+  
+  $form['time_to'] = array(
+    '#type' => 'date_popup',
+    '#date_timezone' => date_default_timezone(),
+    '#date_format' => $dateformat,
+    '#date_year_range' => '0:+1',
+    '#title' => t('End'),
+    '#default_value' => format_date($default, 'custom', 'Y-m-d H:i'),
+    '#states' => array(
+      'invisible' => array(
+        'input[name="enable_time_to"]' => array('checked' => FALSE),
+      ),
+    ),
+  );
+
+  $form['url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Event url'),
+    '#description' => t('Please provide event url.'),
+    '#weight' => 1,
+    '#default_value' => isset($node->event->url) ? $node->event->url : '',
+  );
+
+  $form['address'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Address'),
+    '#description' => t('If you have office address, please provide.'),
+    '#weight' => 1,
+    '#default_value' => isset($node->event->address) ? $node->event->address : '',
+  );
+  return $form;
+}
+
+/**
+ * Implement hook_validate()
+ */
+
+function simple_events_validate($node, $form, &$form_state) {
+  $logo_directory = file_default_scheme() . '://' . variable_get('simple_events_path', 'simpleevents');
+
+  file_prepare_directory($logo_directory, FILE_CREATE_DIRECTORY);
+
+  $validators = array(
+    'file_validate_is_image' => array(),
+    'file_validate_extensions' => array(' jpg, jpeg, png')
+  );
+
+  //Save file
+  if ($file = file_save_upload('image', $validators, $logo_directory)){
+    $form_state['values']['image'] = $file;
+  }
+}
+
+/**
+ * Implement hook_load()
+ */
+
+function simple_events_load($nodes) {
+  $vids = array();
+  foreach($nodes as $node){
+    $vids[] = $node->vid;
+  }
+  
+  $result = db_query('SELECT * FROM {simple_events} WHERE vid IN (:vids)', array(':vids' => $vids));
+  foreach ($result as $record) {
+    $nodes[$record->nid]->event = $record;
+    if($record->image_fid){
+      $nodes[$record->nid]->event->image = file_load($record->image_fid);
+    }
+  }
+}
+
+/**
+ * Implement hook_insert()
+ */
+function simple_events_insert($node) {
+  $fid = 0;
+  if($node->image){
+    $file = $node->image;
+    $file->image = FILE_STATUS_PERMANENT;
+    $file = file_save($file);
+    $fid = $file->fid;
+  }
+  db_insert('simple_events')
+    ->fields(array(
+      'nid' => $node->nid,
+      'vid' => $node->vid,
+      'url' => $node->url,
+      'time_from' => strtotime($node->time_from),
+      'time_to' => $node->enable_time_to ? strtotime($node->time_to) : 0,
+      'address' => $node->address,
+      'image_fid' => $fid,
+    ))
+    ->execute();
+}
+
+/**
+ * Implement hook_update()
+ */
+
+function simple_events_update($node) {
+
+  $fid = 0;
+
+  if(isset($node->original->event->image)){
+    $fid = $node->original->event->image->fid;
+  }
+
+  if($node->image){
+    $file = $node->image;
+    $file->status = FILE_STATUS_PERMANENT;
+    $file = file_save($file);
+    $fid = $file->fid;
+    
+    if(isset($node->original->event->image)){
+      file_delete($node->original->event->image);
+    }
+  }
+  
+  db_update('simple_events')
+    ->fields(array(
+      'url' => $node->url,
+      'address' => $node->address,
+      'time_from' => strtotime($node->time_from),
+      'time_to' => $node->enable_time_to ? strtotime($node->time_to) : 0,
+      'image_fid' => $fid,
+    ))
+    ->condition('vid', $node->vid)
+    ->execute();
+}
+
+/**
+ * Implement hook_view()
+ */
+ 
+function simple_events_view($node, $view_mode, $langcode = NULL) {
+
+  drupal_add_css(drupal_get_path('module', 'simple_events') . '/simple_events.css');
+
+  if(isset($node->event->image) && !empty($node->event->image)){
+    $event_image = theme('image', array('path' => $node->event->image->uri, 'attributes' => array('class' => 'event-image')));
+  }
+  else{
+    $event_image = theme('image', array('path' => drupal_get_path('module', 'simple_events') . '/simple_events-placeholder.png', 'attributes' => array('class' => 'event-image')));
+  }
+  $node->content['event_image'] = array(
+    '#markup' =>  $event_image,
+    '#weight' => 1,
+  );
+  
+  $time = '<div class="from">' .format_date($node->event->time_from, 'short') . '</div>';
+  if(!empty($node->event->time_to)){
+    $time .= '<div class="to">' .format_date($node->event->time_to, 'short') . '</div>';
+  }
+
+  
+  $node->content['datetime'] = array(
+    '#markup' =>  l($time, 'node/' . $node->nid. '/vcal' , array('html' => TRUE)),
+    '#weight' => 1,
+  );
+  
+  if(!empty($node->event->url)){
+    $node->content['url'] = array(
+      '#markup' =>  l(t('Event website'), $node->event->url, array('attributes' => array('rel' => 'nofollow'))),
+      '#weight' => 1,
+    );
+  }
+
+  $node->content['address'] = array(
+    '#markup' =>  check_plain($node->event->address),
+    '#weight' => 1,
+  );
+
+  return $node;
+}
+
+/**
+ * Download vCal.
+ */  
+function simple_events_download_ics($node) {
+  drupal_add_http_header('Content-Type', 'application/calendar; charset=utf-8');
+
+  // Set the filename.
+  $filename = preg_replace('/[\x00-\x1F]/u', '_', check_plain($node->title));
+  drupal_add_http_header('Content-Disposition', 'attachment; filename="' . $filename . '.ics"');
+
+  $start_date = date('Ymd', $node->event->time_from) . 'T' . date('His', $node->event->time_from) . '';
+  
+  if (empty($node->event->time_to)) {
+    $end_date = $start_date;
+  }else{
+    $end_date = date('Ymd', $node->event->time_to) . 'T' . date('His', $node->event->time_to) . '';
+  }
+  $description = str_replace("\n", " ", strip_tags($node->body[LANGUAGE_NONE][0]['safe_value']));
+  
+  $url = '';
+  if(!empty($node->event->url)){
+    $url = $node->event->url;
+  }else{
+    $url = url('node/' . $node->nid, array('absolute' => TRUE));
+  }
+  
+  echo 'BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+BEGIN:VEVENT
+UID:' . $node->type . '-' . $node->nid . '@' . $_SERVER['HTTP_HOST'] . '
+DTSTAMP:' . $start_date . '
+DTSTART:' . $start_date . '
+DTEND:' . $end_date . '
+SUMMARY:' . check_plain($node->title) . '
+DESCRIPTION: ' . $description . ' - ' . $url . '
+LOCATION:' . $node->event->address . '
+URL:' . $url . '
+END:VEVENT
+END:VCALENDAR';
+
+  drupal_exit();
+}
+
+

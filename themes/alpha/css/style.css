@@ -277,6 +277,15 @@ a:hover {
   overflow: hidden;
 }
 
+/* Simple events */
+.node-simple-event .date_time:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f271';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: orange;
+}
+
 /* Add icons to node links. */
 
 ul.links li a:before {

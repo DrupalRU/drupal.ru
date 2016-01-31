@@ -417,11 +417,12 @@ function simple_events_view($node, $view_mode, $langcode = NULL) {
       '#weight' => 1,
     );
   }
-
-  $node->content['address'] = array(
-    '#markup' =>  check_plain($node->event->address),
-    '#weight' => 1,
-  );
+  if(!empty($node->event->address)){
+    $node->content['address'] = array(
+      '#markup' =>  check_plain($node->event->address),
+      '#weight' => 1,
+    );
+  }
 
   return $node;
 }

@@ -21,6 +21,18 @@ function simple_events_node_info() {
 }
 
 /**
+ * Implements hook_entity_info_alter().
+ */
+function simple_events_entity_info_alter(&$entity_info) {
+  if(!isset($entity_info['node']['view modes']['block'])){
+    $entity_info['node']['view modes']['block'] = array(
+      'label' => t('Block view'),
+      'custom settings' => TRUE,
+    );
+  }
+}
+
+/**
  * Implements hook_block_info().
  */
 function simple_events_block_info() {

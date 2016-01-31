@@ -104,6 +104,15 @@ function simple_events_theme($existing, $type, $theme, $path) {
     'path' => drupal_get_path('module', 'simple_events') . '/templates',
   );
 
+  $theme['simple_events_upcoming_block'] = array(
+    'render element' => 'content',
+    'template' => 'upcoming--blocklist',
+    'path' => drupal_get_path('module', 'simple_events') . '/templates',
+
+  );
+  
+
+
   return $theme;
 }
 
@@ -497,7 +506,25 @@ function simple_events_block_list($count){
     $build = node_view_multiple($nodes);
   }
 
-  return $build;  
+$links = array();  
+  if (_node_add_access()) {
+    $links['add'] = array(
+      'href' => 'node/add/simple-event',
+      'title' => t('Add event'),
+    );
+  }  
+  $links['list'] = array(
+    'href' => 'events',
+    'title' => t('See all events'),
+  );
+  
+  $build['links'] = array(
+    '#theme' => 'links',
+    '#links' => $links,
+    '#attributes' => array('class' => array('events_links')),
+  );
+  $build['#theme'] = 'simple_events_upcoming_block';
+  return $build; 
 }
 
 /**

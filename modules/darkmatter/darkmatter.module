@@ -21,19 +21,25 @@ function darkmatter_permission() {
  */
 function darkmatter_mail($key, &$message, $params) {
   $language = $message['language'];
-  
+
   $darkmatter_notify = variable_get('darkmatter_notify');
-  
-          
+
+
   switch ($key) {
     case 'node':
       $message['subject'] = token_replace($darkmatter_notify['node']['subject'], array('node' => $params['node']));
       $message['body'][] = token_replace($darkmatter_notify['node']['body'], array('node' => $params['node']));
-    break;
+      break;
     case 'comment':
-      $message['subject'] = token_replace($darkmatter_notify['comment']['subject'], array('node' => $params['node'], 'comment' => $params['comment']));
-      $message['body'][] = token_replace($darkmatter_notify['comment']['body'], array('node' => $params['node'], 'comment' => $params['comment']));
-    break;
+      $message['subject'] = token_replace($darkmatter_notify['comment']['subject'], array(
+        'node' => $params['node'],
+        'comment' => $params['comment']
+      ));
+      $message['body'][] = token_replace($darkmatter_notify['comment']['body'], array(
+        'node' => $params['node'],
+        'comment' => $params['comment']
+      ));
+      break;
   }
 }
 
@@ -41,38 +47,38 @@ function darkmatter_mail($key, &$message, $params) {
  * Implements hook_menu().
  */
 function darkmatter_menu() {
-  $items['darkmatter/node/nojs/%node'] = array(
+  $items['darkmatter/node/nojs/%node/%'] = array(
     'page callback' => 'darkmatter_node',
-    'page arguments' => array(2, 3),
+    'page arguments' => array(2, 3, 4),
     'access arguments' => array('darkmatter comments'),
     'type' => MENU_CALLBACK,
   );
-  
-  $items['darkmatter/node/ajax/%node'] = array(
+
+  $items['darkmatter/node/ajax/%node/%'] = array(
     'page callback' => 'darkmatter_node',
-    'page arguments' => array(2, 3),
+    'page arguments' => array(2, 3, 4),
     'access arguments' => array('darkmatter comments'),
     'delivery callback' => 'ajax_deliver',
     'type' => MENU_CALLBACK,
   );
-  
-  $items['darkmatter/comment/nojs/%comment'] = array(
+
+  $items['darkmatter/comment/nojs/%comment/%'] = array(
     'page callback' => 'darkmatter_comment',
-    'page arguments' => array(2, 3),
+    'page arguments' => array(2, 3, 4),
     'access callback' => 'darkmatter_comment_access',
     'access arguments' => array(3),
     'type' => MENU_CALLBACK,
   );
-  
-  $items['darkmatter/comment/ajax/%comment'] = array(
+
+  $items['darkmatter/comment/ajax/%comment/%'] = array(
     'page callback' => 'darkmatter_comment',
-    'page arguments' => array(2, 3),
+    'page arguments' => array(2, 3, 4),
     'access callback' => 'darkmatter_comment_access',
     'access arguments' => array(3),
     'delivery callback' => 'ajax_deliver',
     'type' => MENU_CALLBACK,
   );
-  
+
   return $items;
 }
 
@@ -80,39 +86,40 @@ function darkmatter_menu() {
  * Implements hook_comment_insert().
  */
 function darkmatter_comment_insert($comment) {
-  if($comment->pid > 0 ){
+  if ($comment->pid > 0) {
     $parent_comment = comment_load($comment->pid);
-    if($parent_comment->darkmatter){
+    if ($parent_comment->darkmatter) {
       db_update('comment')
         ->fields(array(
           'darkmatter' => 1,
         ))
         ->condition('cid', $comment->cid)
         ->execute();
-        return;
+      return;
     }
   }
   $node = node_load($comment->nid);
-  if($node->darkmatter){
+  if ($node->darkmatter) {
     db_update('comment')
       ->fields(array(
         'darkmatter' => 1,
       ))
       ->condition('cid', $comment->cid)
       ->execute();
-      return;
+    return;
   }
 }
 
 /**
  * Implements hook_query_TAG_alter()().
  */
-function darkmatter_query_node_load_multiple_alter(QueryAlterableInterface $query){
+function darkmatter_query_node_load_multiple_alter(QueryAlterableInterface $query) {
   global $user;
 
-  if(!user_access('darkmatter comments')){
-    if(!isset($user->darkmatter) or $user->darkmatter == 0 ){
-      $query->condition(db_or()->condition('base.darkmatter', 0)->condition('base.uid', $user->uid));
+  if (!user_access('darkmatter comments')) {
+    if (!isset($user->darkmatter) or $user->darkmatter == 0) {
+      $query->condition(db_or()->condition('base.darkmatter', 0)
+        ->condition('base.uid', $user->uid));
     }
   }
 }
@@ -120,12 +127,13 @@ function darkmatter_query_node_load_multiple_alter(QueryAlterableInterface $quer
 /**
  * Implements hook_query_TAG_alter()().
  */
-function darkmatter_query_comment_load_multiple_alter(QueryAlterableInterface $query){
+function darkmatter_query_comment_load_multiple_alter(QueryAlterableInterface $query) {
   global $user;
 
-  if(!user_access('darkmatter comments')){
-    if(!isset($user->darkmatter) or $user->darkmatter == 0 ){
-      $query->condition(db_or()->condition('base.darkmatter', 0)->condition('base.uid', $user->uid));
+  if (!user_access('darkmatter comments')) {
+    if (!isset($user->darkmatter) or $user->darkmatter == 0) {
+      $query->condition(db_or()->condition('base.darkmatter', 0)
+        ->condition('base.uid', $user->uid));
     }
   }
 }
@@ -133,12 +141,13 @@ function darkmatter_query_comment_load_multiple_alter(QueryAlterableInterface $q
 /**
  * Implements hook_query_TAG_alter()().
  */
-function darkmatter_query_alttracker_nodes_condition_alter(QueryAlterableInterface $query){
+function darkmatter_query_alttracker_nodes_condition_alter(QueryAlterableInterface $query) {
   global $user;
 
-  if(!user_access('darkmatter comments')){
-    if(!isset($user->darkmatter) or $user->darkmatter == 0 ){
-      $query->condition(db_or()->condition('n.darkmatter', 0)->condition('n.uid', $user->uid));
+  if (!user_access('darkmatter comments')) {
+    if (!isset($user->darkmatter) or $user->darkmatter == 0) {
+      $query->condition(db_or()->condition('n.darkmatter', 0)
+        ->condition('n.uid', $user->uid));
     }
   }
 }
@@ -146,19 +155,20 @@ function darkmatter_query_alttracker_nodes_condition_alter(QueryAlterableInterfa
 /**
  * Update darkmatter stats by node and all comments
  */
-function darkmatter_update_stats_node($op, $uid, $nid){
-  if($op){
+function darkmatter_update_stats_node($op, $uid, $nid) {
+  if ($op) {
     db_update('darkmatter_stats')
       ->expression('nodes', 'nodes + 1')
       ->condition('uid', $uid)
       ->execute();
-  }else{
+  }
+  else {
     db_update('darkmatter_stats')
       ->expression('nodes', 'nodes - 1')
       ->condition('uid', $uid)
       ->execute();
   }
-  
+
   $comments = db_select('comment', 'c')
     ->fields('c')
     ->condition('nid', $nid)
@@ -166,106 +176,128 @@ function darkmatter_update_stats_node($op, $uid, $nid){
     ->execute()
     ->fetchAll();
 
-  foreach($comments as $comment){
+  foreach ($comments as $comment) {
     darkmatter_update_stats_comment($op, $comment->uid);
   }
-  
+
 }
 
 /**
  * Update darkmatter stats by comments
  */
-function darkmatter_update_stats_comment($op, $uid){
-  if($op){
+function darkmatter_update_stats_comment($op, $uid) {
+  if ($op) {
     db_update('darkmatter_stats')
       ->expression('comments', 'comments + 1')
       ->condition('uid', $uid)
       ->execute();
-  }else{
+  }
+  else {
     db_update('darkmatter_stats')
-    ->expression('comments', 'comments - 1')
-    ->condition('uid', $uid)
-    ->execute();
+      ->expression('comments', 'comments - 1')
+      ->condition('uid', $uid)
+      ->execute();
   }
 }
 
 /**
  * Mark or remove mark 'darkmatter' from node.
  */
-function darkmatter_node($ajax, $node){
-  
+function darkmatter_node($ajax, $node, $token) {
+  if (!drupal_valid_token($token, 'darkmatter')) {
+    return;
+  }
+
   // If current state is darkmatter then we a unmark it.
   $darkmatter_status = $node->darkmatter ? 0 : 1;
 
   db_update('node') // Table name no longer needs {}
-  ->fields(array(
-    'darkmatter' => $darkmatter_status,
-  ))
-  ->condition('nid', $node->nid)
-  ->execute();
-  
+    ->fields(array(
+      'darkmatter' => $darkmatter_status,
+    ))
+    ->condition('nid', $node->nid)
+    ->execute();
+
   darkmatter_update_stats_node($darkmatter_status, $node->uid, $node->nid);
-  
+
   //update Comments
   db_update('comment')
     ->fields(array(
       'darkmatter' => $darkmatter_status,
     ))
     ->condition('nid', $node->nid)
-    ->execute();  
-      
-  if($darkmatter_status){
+    ->execute();
+
+  if ($darkmatter_status) {
     darkmatter_node_notify($node);
     darkmatter_node_comments_notify($node);
   }
-  
+
   $is_ajax = $ajax === 'ajax';
 
   if ($is_ajax) {
     $commands = array();
-    
+
     $comments = db_select('comment', 'c')
       ->fields('c')
       ->condition('nid', $node->nid)
       ->execute()
       ->fetchAll();
-      
-    foreach($comments as $comment){
-      if($darkmatter_status){
+
+    foreach ($comments as $comment) {
+      if ($darkmatter_status) {
         $commands[] = ajax_command_invoke('.darkmatter-comment-' . $comment->cid, 'addClass', array('darkmatter'));
         $title = t('not darkmatter');
         $link = '<span class="darkmatter-comment-link-' . $comment->cid . '">' . $title . '</span>';
         $commands[] = ajax_command_replace('.darkmatter-comment-link-' . $comment->cid, $link);
-      }else{
+      }
+      else {
         $commands[] = ajax_command_invoke('.darkmatter-comment-' . $comment->cid, 'removeClass', array('darkmatter'));
         $title = t('darkmatter');
-        $link = l($title, 'darkmatter/comment/nojs/' . $comment->cid, array('attributes' => array('class' => array('use-ajax', 'darkmatter-comment-link-' . $comment->cid))));
+        $link = l($title, 'darkmatter/comment/nojs/' . $comment->cid . '/' . darkmatter_token_to_arg(), array(
+          'attributes' => array(
+            'class' => array(
+              'use-ajax',
+              'darkmatter-comment-link-' . $comment->cid
+            )
+          )
+        ));
         $commands[] = ajax_command_replace('.darkmatter-comment-link-' . $comment->cid, $link);
       }
 
     }
-    
-    if($darkmatter_status){
+
+    if ($darkmatter_status) {
       $commands[] = ajax_command_invoke('#node-' . $node->nid, 'addClass', array('darkmatter'));
       $title = t('not darkmatter');
-    }else{
+    }
+    else {
       $commands[] = ajax_command_invoke('#node-' . $node->nid, 'removeClass', array('darkmatter'));
       $title = t('darkmatter');
     }
 
-    $link = l($title, 'darkmatter/node/nojs/' . $node->nid, array('attributes' => array('class' => array('use-ajax', 'darkmatter-node-' . $node->nid))));
+    $link = l($title, 'darkmatter/node/nojs/' . $node->nid . '/' . darkmatter_token_to_arg(), array(
+      'attributes' => array(
+        'class' => array(
+          'use-ajax',
+          'darkmatter-node-' . $node->nid
+        )
+      )
+    ));
 
     $commands[] = ajax_command_replace('.darkmatter-node-' . $node->nid, $link);
-    
-    
+
+
     return array(
       '#type' => 'ajax',
       '#commands' => $commands,
     );
-  }else{
-    if($darkmatter_status){
+  }
+  else {
+    if ($darkmatter_status) {
       drupal_set_message(t('Marked as dark matter'));
-    }else{
+    }
+    else {
       drupal_set_message(t('It is not a dark matter anymore'));
     }
     drupal_goto();
@@ -275,21 +307,24 @@ function darkmatter_node($ajax, $node){
 /**
  * Mark or remove mark 'darkmatter' from comment.
  */
-function darkmatter_comment($ajax, $comment){
+function darkmatter_comment($ajax, $comment, $token) {
+
+  if (!drupal_valid_token($token, 'darkmatter')) {
+    return;
+  }
   global $user;
-  
   // If current state is darkmatter then we a unmark it.
   $darkmatter_status = $comment->darkmatter ? 0 : 1;
 
-  
+
   db_update('comment') // Table name no longer needs {}
-  ->fields(array(
-    'darkmatter' => $darkmatter_status,
-  ))
-  ->condition('cid', $comment->cid)
-  ->execute();
-  
-  
+    ->fields(array(
+      'darkmatter' => $darkmatter_status,
+    ))
+    ->condition('cid', $comment->cid)
+    ->execute();
+
+
   $cids = darkmatter_comment_mark_subcomments($comment->cid, $darkmatter_status);
   $cids[] = $comment->cid;
 
@@ -299,23 +334,32 @@ function darkmatter_comment($ajax, $comment){
 
   if ($is_ajax) {
     $commands = array();
-    
-    foreach($cids as $cid){
-      if($darkmatter_status){
+
+    foreach ($cids as $cid) {
+      if ($darkmatter_status) {
         $commands[] = ajax_command_invoke('.darkmatter-comment-' . $cid, 'addClass', array('darkmatter'));
         $title = t('not darkmatter');
-      }else{
+      }
+      else {
         $commands[] = ajax_command_invoke('.darkmatter-comment-' . $cid, 'removeClass', array('darkmatter'));
         $title = t('darkmatter');
       }
-      
-      if(!user_access('darkmatter comments') and !$user->darkmatter ){
+
+      if (!user_access('darkmatter comments') and !$user->darkmatter) {
         $title = t('Comment marked as darkmatter.');
-        $replace_comment = '<div class="comment comment-removed bg-danger darkmatter-comment-link-' . $cid . '"> <p>' . $title. '</p></div>';
+        $replace_comment = '<div class="comment comment-removed bg-danger darkmatter-comment-link-' . $cid . '"> <p>' . $title . '</p></div>';
         $commands[] = ajax_command_replace('.darkmatter-comment-' . $cid, $replace_comment);
-        
-      }else{
-        $link = l($title, 'darkmatter/comment/nojs/' . $cid, array('attributes' => array('class' => array('use-ajax', 'darkmatter-comment-link-' . $cid))));
+
+      }
+      else {
+        $link = l($title, 'darkmatter/comment/nojs/' . $cid . '/' . darkmatter_token_to_arg(), array(
+          'attributes' => array(
+            'class' => array(
+              'use-ajax',
+              'darkmatter-comment-link-' . $cid
+            )
+          )
+        ));
         $commands[] = ajax_command_replace('.darkmatter-comment-link-' . $cid, $link);
       }
     }
@@ -324,10 +368,12 @@ function darkmatter_comment($ajax, $comment){
       '#type' => 'ajax',
       '#commands' => $commands,
     );
-  }else{
-    if($darkmatter_status){
+  }
+  else {
+    if ($darkmatter_status) {
       drupal_set_message(t('Marked as dark matter'));
-    }else{
+    }
+    else {
       drupal_set_message(t('It is not a dark matter anymore'));
     }
     drupal_goto();
@@ -337,25 +383,25 @@ function darkmatter_comment($ajax, $comment){
 /**
  * Mark all child comments as darkmatter
  */
-function darkmatter_comment_mark_subcomments($cid, $darkmatter){
+function darkmatter_comment_mark_subcomments($cid, $darkmatter) {
   $cids = array();
-  
+
   db_update('comment') // Table name no longer needs {}
     ->fields(array(
       'darkmatter' => $darkmatter,
     ))
     ->condition('pid', $cid)
     ->execute();
-  
+
   darkmatter_comment_notify($cid);
-  
+
   $subcomments = db_select('comment', 'c')
     ->fields('c')
     ->condition('pid', $cid)
     ->execute()
     ->fetchAll();
-    
-  foreach($subcomments as $subcomment){
+
+  foreach ($subcomments as $subcomment) {
     $cids[] = $subcomment->cid;
     darkmatter_update_stats_comment($darkmatter, $subcomment->uid);
     $subcids = darkmatter_comment_mark_subcomments($subcomment->cid, $darkmatter);
@@ -367,11 +413,11 @@ function darkmatter_comment_mark_subcomments($cid, $darkmatter){
 /**
  * Send notification to author that node marked as darkmatter.
  */
-function darkmatter_node_notify($node){
+function darkmatter_node_notify($node) {
   $darkmatter_notify = variable_get('darkmatter_notify');
-  if($darkmatter_notify['notify']){
+  if ($darkmatter_notify['notify']) {
     $account = user_load($node->uid);
-    
+
     $params = array(
       'node' => $node,
     );
@@ -382,14 +428,14 @@ function darkmatter_node_notify($node){
 /**
  * Notify all comments about marked as darkmatter.
  */
-function darkmatter_node_comments_notify($node){
-  
+function darkmatter_node_comments_notify($node) {
+
   $comments = db_select('comment', 'c')
     ->fields('c')
     ->condition('nid', $node->nid)
     ->execute()
     ->fetchAll();
-  foreach($comments as $comment){
+  foreach ($comments as $comment) {
     darkmatter_comment_notify($comment->cid);
   }
 }
@@ -398,9 +444,9 @@ function darkmatter_node_comments_notify($node){
 /**
  * Send notification to author that comment marked as darkmatter.
  */
-function darkmatter_comment_notify($cid){
+function darkmatter_comment_notify($cid) {
   $darkmatter_notify = variable_get('darkmatter_notify');
-  if($darkmatter_notify['notify']){
+  if ($darkmatter_notify['notify']) {
     $comment = comment_load($cid);
     $account = user_load($comment->uid);
     $node = node_load($comment->nid);
@@ -418,26 +464,26 @@ function darkmatter_comment_notify($cid){
 function darkmatter_node_view($node, $view_mode) {
   global $user;
   drupal_add_library('system', 'drupal.ajax');
-  
-  if(user_access('darkmatter comments')){
+
+  if (user_access('darkmatter comments')) {
     $node->content['links']['comment']['#links']['darkmatter-link'] = array(
       'title' => $node->darkmatter ? t('not darkmatter') : t('darkmatter'),
-      'href' => "darkmatter/node/nojs/" . $node->nid,
+      'href' => "darkmatter/node/nojs/" . $node->nid . '/' . darkmatter_token_to_arg(),
       'query' => drupal_get_destination(),
       'attributes' => array(
-        'title' => $node->darkmatter ?  t('It is not dark matter!'): t('Mark this content as dark matter.'),
+        'title' => $node->darkmatter ? t('It is not dark matter!') : t('Mark this content as dark matter.'),
         'class' => array('use-ajax', 'darkmatter-node-' . $node->nid),
       ),
     );
   }
-  if(isset($user->darkmatter) && $user->darkmatter){
+  if (isset($user->darkmatter) && $user->darkmatter) {
     $result = db_select('comment', 'c')
-        ->fields('c')
-        ->condition('darkmatter', 1)
-        ->condition('nid', $node->nid)
-        ->execute();
+      ->fields('c')
+      ->condition('darkmatter', 1)
+      ->condition('nid', $node->nid)
+      ->execute();
     $darkmatter_count = $result->rowCount();
-    if($darkmatter_count > 0 && isset($node->content['links']['comment']['#links']['comment-comments']['title'])){
+    if ($darkmatter_count > 0 && isset($node->content['links']['comment']['#links']['comment-comments']['title'])) {
       $node->content['links']['comment']['#links']['comment-comments']['title'] = $darkmatter_count . '/' . $node->content['links']['comment']['#links']['comment-comments']['title'];
     }
   }
@@ -448,9 +494,9 @@ function darkmatter_node_view($node, $view_mode) {
  */
 function darkmatter_comment_view($comment, $view_mode, $langcode) {
   drupal_add_library('system', 'drupal.ajax');
-  
-  if(darkmatter_comment_access($comment)){
-    if(darkmatter_node_status($comment->nid)){
+
+  if (darkmatter_comment_access($comment)) {
+    if (darkmatter_node_status($comment->nid)) {
       $comment->content['links']['comment']['#links']['darkmatter-link'] = array(
         'title' => t('not darkmatter'),
         'html' => TRUE,
@@ -462,11 +508,14 @@ function darkmatter_comment_view($comment, $view_mode, $langcode) {
     else {
       $comment->content['links']['comment']['#links']['darkmatter-link'] = array(
         'title' => $comment->darkmatter ? t('not darkmatter') : t('darkmatter'),
-        'href' => "darkmatter/comment/nojs/" . $comment->cid,
+        'href' => "darkmatter/comment/nojs/" . $comment->cid . '/' . darkmatter_token_to_arg(),
         'query' => drupal_get_destination(),
         'attributes' => array(
-          'title' => $comment->darkmatter ?  t('It is not dark matter!'): t('Mark this content as dark matter.'),
-          'class' => array('use-ajax', 'darkmatter-comment-link-' . $comment->cid),
+          'title' => $comment->darkmatter ? t('It is not dark matter!') : t('Mark this content as dark matter.'),
+          'class' => array(
+            'use-ajax',
+            'darkmatter-comment-link-' . $comment->cid
+          ),
         ),
       );
     }
@@ -476,9 +525,9 @@ function darkmatter_comment_view($comment, $view_mode, $langcode) {
 /**
  * Get node status by NID.
  */
-function darkmatter_node_status($nid){
+function darkmatter_node_status($nid) {
   static $nodes;
-  if(!isset($nodes[$nid])){
+  if (!isset($nodes[$nid])) {
     $node = db_select('node', 'n')
       ->fields('n')
       ->condition('nid', $nid)
@@ -492,15 +541,15 @@ function darkmatter_node_status($nid){
 /**
  * Menu access callback to check permissions.
  */
-function darkmatter_comment_access($comment){
+function darkmatter_comment_access($comment) {
   global $user;
 
-  if(user_access('darkmatter comments')){
+  if (user_access('darkmatter comments')) {
     return TRUE;
   }
 
   static $nodes;
-  if(!isset($nodes[$comment->nid])){
+  if (!isset($nodes[$comment->nid])) {
     $node = db_select('node', 'n')
       ->fields('n')
       ->condition('nid', $comment->nid)
@@ -509,10 +558,10 @@ function darkmatter_comment_access($comment){
     $nodes[$comment->nid] = $node['uid'];
   }
 
-  if($nodes[$comment->nid] == $user->uid){
+  if ($nodes[$comment->nid] == $user->uid) {
     return TRUE;
   }
-  
+
   return FALSE;
 }
 
@@ -521,10 +570,10 @@ function darkmatter_comment_access($comment){
  * Implements hook_preprocess_comment().
  *
  * Add class darkmatter to comment when applicable.
- */ 
+ */
 function darkmatter_preprocess_comment(&$variables) {
   $comment = $variables['comment'];
-  if($comment->darkmatter){
+  if ($comment->darkmatter) {
     $variables['classes_array'][] = 'darkmatter';
   }
   $variables['classes_array'][] = 'darkmatter-comment-' . $comment->cid;
@@ -537,7 +586,7 @@ function darkmatter_preprocess_comment(&$variables) {
  */
 function darkmatter_preprocess_node(&$variables) {
   $node = $variables['node'];
-  if($node->darkmatter){
+  if ($node->darkmatter) {
     $variables['classes_array'][] = 'darkmatter';
   }
 }
@@ -548,9 +597,10 @@ function darkmatter_preprocess_node(&$variables) {
  * Add settings to see darkmatter.
  */
 function darkmatter_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
-  if($term_nid = variable_get('darkmatter_term_nid', FALSE)){
+  if ($term_nid = variable_get('darkmatter_term_nid', FALSE)) {
     $title = t('I agree with !link', array('!link' => l('Dark Matter term and conditions!', 'node/' . $term_nid)));
-  }else{
+  }
+  else {
     $title = t('I Agree with Dark Matter term and conditions!');
   }
 
@@ -567,7 +617,7 @@ function darkmatter_form_user_profile_form_alter(&$form, &$form_state, $form_id)
  */
 function darkmatter_user_view($account, $view_mode) {
   $darkmatter_stats = darkmatter_stats($account->uid);
-  
+
   $account->content['summary']['darkmatter'] = array(
     '#type' => 'user_profile_item',
     '#title' => t('Dark matter'),
@@ -586,7 +636,7 @@ function darkmatter_user_view($account, $view_mode) {
 function darkmatter_node_load($nodes, $types) {
   global $user;
   foreach ($nodes as $node) {
-    if(isset($user->darkmatter) && !$user->darkmatter && isset($node->comment_count)){
+    if (isset($user->darkmatter) && !$user->darkmatter && isset($node->comment_count)) {
       // We need to hide darkmatter comment counters
       $result = db_select('comment', 'c')
         ->fields('c')
@@ -594,7 +644,7 @@ function darkmatter_node_load($nodes, $types) {
         ->condition('nid', $node->nid)
         ->execute();
       $node->comment_count = $result->rowCount();
-      
+
     }
   }
 }
@@ -602,14 +652,14 @@ function darkmatter_node_load($nodes, $types) {
 /**
  * Return user dark matter stats
  */
-function darkmatter_stats($uid){
+function darkmatter_stats($uid) {
 
   $darkmatter_stats = db_select('darkmatter_stats', 'ds')
     ->fields('ds')
     ->condition('uid', $uid)
     ->execute()
     ->fetchObject();
-    
+
   $result = db_select('comment', 'c')
     ->fields('c')
     ->condition('uid', $uid)
@@ -628,10 +678,10 @@ function darkmatter_stats($uid){
 }
 
 /**
-* Implements of hook_form_alter().
-*/
-function darkmatter_form_alter(&$form, &$form_state, $form_id){
-  if($form['#form_id'] == 'user_admin_settings'){
+ * Implements of hook_form_alter().
+ */
+function darkmatter_form_alter(&$form, &$form_state, $form_id) {
+  if ($form['#form_id'] == 'user_admin_settings') {
     $default = variable_get('darkmatter_notify');
     $form['darkmatter'] = array();
     $form['darkmatter']['#type'] = 'fieldset';
@@ -701,11 +751,25 @@ function darkmatter_form_alter(&$form, &$form_state, $form_id){
   }
 }
 
-function darkmatter_form_submit($form, &$form_state){
+function darkmatter_form_submit($form, &$form_state) {
   $darkmatter_notify = array(
     'notify' => $form_state['values']['darkmatter_notify'],
     'node' => $form_state['values']['node'],
     'comment' => $form_state['values']['comment'],
   );
   variable_set('darkmatter_notify', $darkmatter_notify);
+}
+
+/**
+ * Allows to protect the action from CSRF vulnerabilities.
+ *
+ * @return string
+ *   Generate token for "darkmatter" action.
+ */
+function darkmatter_token_to_arg() {
+  $token = & drupal_static(__FUNCTION__);
+  if (!isset($token)) {
+    $token = drupal_get_token('darkmatter');
+  }
+  return $token;
 }

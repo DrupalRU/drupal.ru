@@ -217,9 +217,8 @@ a:hover {
 #node-details.affix-top {
   position: static;
 }
-
-#node-details.affix-bottom {
-  position: absolute;
+#node-details.affix-bottom{
+  position: relative;
 }
 
 @media (min-width: 979px) {

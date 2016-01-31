@@ -47,14 +47,14 @@ function darkmatter_mail($key, &$message, $params) {
  * Implements hook_menu().
  */
 function darkmatter_menu() {
-  $items['darkmatter/node/nojs/%node/%darkmatter_token'] = array(
+  $items['darkmatter/node/nojs/%node/%'] = array(
     'page callback' => 'darkmatter_node',
     'page arguments' => array(2, 3, 4),
     'access arguments' => array('darkmatter comments'),
     'type' => MENU_CALLBACK,
   );
 
-  $items['darkmatter/node/ajax/%node/%darkmatter_token'] = array(
+  $items['darkmatter/node/ajax/%node/%'] = array(
     'page callback' => 'darkmatter_node',
     'page arguments' => array(2, 3, 4),
     'access arguments' => array('darkmatter comments'),
@@ -62,7 +62,7 @@ function darkmatter_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['darkmatter/comment/nojs/%comment/%darkmatter_token'] = array(
+  $items['darkmatter/comment/nojs/%comment/%'] = array(
     'page callback' => 'darkmatter_comment',
     'page arguments' => array(2, 3, 4),
     'access callback' => 'darkmatter_comment_access',
@@ -70,7 +70,7 @@ function darkmatter_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['darkmatter/comment/ajax/%comment/%darkmatter_token'] = array(
+  $items['darkmatter/comment/ajax/%comment/%'] = array(
     'page callback' => 'darkmatter_comment',
     'page arguments' => array(2, 3, 4),
     'access callback' => 'darkmatter_comment_access',
@@ -204,8 +204,7 @@ function darkmatter_update_stats_comment($op, $uid) {
  * Mark or remove mark 'darkmatter' from node.
  */
 function darkmatter_node($ajax, $node, $token) {
-  $token_new = darkmatter_token_to_arg();
-  if ($token_new != $token) {
+  if (!drupal_valid_token($token, 'darkmatter')) {
     return;
   }
 
@@ -309,8 +308,8 @@ function darkmatter_node($ajax, $node, $token) {
  * Mark or remove mark 'darkmatter' from comment.
  */
 function darkmatter_comment($ajax, $comment, $token) {
-  $token_new = darkmatter_token_to_arg();
-  if ($token_new != $token) {
+
+  if (!drupal_valid_token($token, 'darkmatter')) {
     return;
   }
   global $user;

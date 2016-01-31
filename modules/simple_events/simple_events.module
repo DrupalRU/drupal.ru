@@ -214,7 +214,7 @@ function simple_events_update($node) {
 
   $fid = 0;
 
-  if(isset($node->original->event->image)){
+  if (isset($node->original->event->image)) {
     $fid = $node->original->event->image->fid;
   }
 
@@ -224,7 +224,7 @@ function simple_events_update($node) {
     $file = file_save($file);
     $fid = $file->fid;
     
-    if(isset($node->original->event->image)){
+    if (isset($node->original->event->image)) {
       file_delete($node->original->event->image);
     }
   }

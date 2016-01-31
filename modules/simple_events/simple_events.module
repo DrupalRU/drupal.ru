@@ -100,7 +100,7 @@ function simple_events_form($node, $form_state) {
   );
   
   $show_time_to = FALSE;
-  if(isset($node->event->time_to) && !empty($node->event->time_to )){
+  if (isset($node->event->time_to) && !empty($node->event->time_to)) {
     $show_time_to = TRUE;
     $default = $node->event->time_to;
   }

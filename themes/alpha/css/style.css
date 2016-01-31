@@ -310,6 +310,14 @@ a:hover {
   color: orange;
 }
 
+.node-simple-event .event-type:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f02c';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: #ddd;
+}
+
 .block-simple-events .node-simple-event {
   padding: 5px 0px;
 }

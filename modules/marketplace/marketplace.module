@@ -356,7 +356,7 @@ function marketplace_block_list($count){
     ->fields('n', array('nid', 'created'))
     ->condition('n.type', 'organization', '=')
     ->condition('n.status', 1)
-    ->range(0,4)
+    ->range(0,variable_get('organizations_block_count', 3))
     ->orderRandom()
     ->addTag('node_access');
 

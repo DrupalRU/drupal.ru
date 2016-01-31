@@ -16,62 +16,62 @@ function dru_tnx_permission() {
  * Implements hook_menu().
  */
 function dru_tnx_menu() {
-  $items['tnx/node/nojs/%node'] = array(
+  $items['tnx/node/nojs/%node/%'] = array(
     'page callback'    => 'dru_tnx_node',
     'file'             => 'dru_tnx.pages.inc',
-    'page arguments'   => array(0, 2, 3),
+    'page arguments'   => array(0, 2, 3, 4),
     'access arguments' => array('tnx'),
     'type'             => MENU_CALLBACK,
   );
-  $items['tnx/node/ajax/%node'] = array(
+  $items['tnx/node/ajax/%node/%'] = array(
     'page callback'     => 'dru_tnx_node',
     'file'              => 'dru_tnx.pages.inc',
-    'page arguments'    => array(0, 2, 3),
+    'page arguments'    => array(0, 2, 3, 4),
     'access arguments'  => array('tnx'),
     'delivery callback' => 'ajax_deliver',
     'type'              => MENU_CALLBACK,
   );
-  $items['tnx/comment/nojs/%comment'] = array(
+  $items['tnx/comment/nojs/%comment/%'] = array(
     'page callback'    => 'dru_tnx_comment',
     'file'             => 'dru_tnx.pages.inc',
-    'page arguments'   => array(0, 2, 3),
+    'page arguments'   => array(0, 2, 3, 4),
     'access arguments' => array('tnx'),
     'type'             => MENU_CALLBACK,
   );
-  $items['tnx/comment/ajax/%comment'] = array(
+  $items['tnx/comment/ajax/%comment/%'] = array(
     'page callback'     => 'dru_tnx_comment',
     'file'              => 'dru_tnx.pages.inc',
-    'page arguments'    => array(0, 2, 3),
+    'page arguments'    => array(0, 2, 3, 4),
     'access arguments'  => array('tnx'),
     'delivery callback' => 'ajax_deliver',
     'type'              => MENU_CALLBACK,
   );
-  $items['untnx/node/nojs/%node'] = array(
+  $items['untnx/node/nojs/%node/%'] = array(
     'page callback'    => 'dru_tnx_node',
     'file'             => 'dru_tnx.pages.inc',
-    'page arguments'   => array(0, 2, 3),
+    'page arguments'   => array(0, 2, 3, 4),
     'access arguments' => array('tnx'),
     'type'             => MENU_CALLBACK,
   );
-  $items['untnx/node/ajax/%node'] = array(
+  $items['untnx/node/ajax/%node/%'] = array(
     'page callback'     => 'dru_tnx_node',
     'file'              => 'dru_tnx.pages.inc',
-    'page arguments'    => array(0, 2, 3),
+    'page arguments'    => array(0, 2, 3, 4),
     'access arguments'  => array('tnx'),
     'delivery callback' => 'ajax_deliver',
     'type'              => MENU_CALLBACK,
   );
-  $items['untnx/comment/nojs/%comment'] = array(
+  $items['untnx/comment/nojs/%comment/%'] = array(
     'page callback'    => 'dru_tnx_comment',
     'file'             => 'dru_tnx.pages.inc',
-    'page arguments'   => array(0, 2, 3),
+    'page arguments'   => array(0, 2, 3, 4),
     'access arguments' => array('tnx'),
     'type'             => MENU_CALLBACK,
   );
-  $items['untnx/comment/ajax/%comment'] = array(
+  $items['untnx/comment/ajax/%comment/%'] = array(
     'page callback'     => 'dru_tnx_comment',
     'file'              => 'dru_tnx.pages.inc',
-    'page arguments'    => array(0, 2, 3),
+    'page arguments'    => array(0, 2, 3, 4),
     'access arguments'  => array('tnx'),
     'delivery callback' => 'ajax_deliver',
     'type'              => MENU_CALLBACK,
@@ -126,10 +126,11 @@ function dru_tnx_link($entity, $entity_type, $entity_id, $tnx, $new = FALSE) {
   
   $tnx_action = $tnx ? 'tnx' : 'untnx';
   $type = $entity_type;
+  $token = drupal_get_token('dru_tnx');
   
   return array(
     'title'      => $tnx ? t('@count Thank you', array('@count' => $entity->tnx + $new)) : t('@count Revoke thank you', array('@count' => $entity->tnx + $new)),
-    'href'       => $tnx_action . '/' . $type . '/nojs/' . $entity_id,
+    'href'       => $tnx_action . '/' . $type . '/nojs/' . $entity_id . '/' . $token,
     'query'      => drupal_get_destination(),
     'attributes' => array(
       'class' => array(

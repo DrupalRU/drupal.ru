@@ -3,7 +3,11 @@
 /**
  * Callback dru_tnx_node
  */
-function dru_tnx_node($tnx, $ajax, $node) {
+function dru_tnx_node($tnx, $ajax, $node, $token) {
+  
+  if (!drupal_valid_token($token, 'dru_tnx')) {
+    return;
+  }
   
   global $user;
   
@@ -22,7 +26,11 @@ function dru_tnx_node($tnx, $ajax, $node) {
 /**
  * Callback dru_tnx_comment
  */
-function dru_tnx_comment($tnx, $ajax, $comment) {
+function dru_tnx_comment($tnx, $ajax, $comment, $token) {
+  
+  if (!drupal_valid_token($token, 'dru_tnx')) {
+    return;
+  }
   
   global $user;
   

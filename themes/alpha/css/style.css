@@ -316,6 +316,11 @@ a:hover {
   padding: 0px;
 }
 
+.block-simple-events .row.even {
+  background-color: #f9f9f9;
+}
+
+
 /* Add icons to node links. */
 
 ul.links li a:before {

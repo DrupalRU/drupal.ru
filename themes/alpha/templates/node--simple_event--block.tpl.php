@@ -9,7 +9,7 @@
         <div class="address">
           <?php print render($content['address']); ?>
         </div>
-      <?php else: ?>
+      <?php endif; ?>
       <div class="event-type">
         <?php print render($content['simple_event_type']); ?>
       </div>

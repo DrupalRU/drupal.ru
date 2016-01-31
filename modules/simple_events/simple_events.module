@@ -20,6 +20,70 @@ function simple_events_node_info() {
   );
 }
 
+/**
+ * Implements hook_block_info().
+ */
+function simple_events_block_info() {
+
+  $blocks = array();
+
+  $blocks['upcoming_events'] = array(
+    'info' => t('Upcoming events'),
+    'cache' => DRUPAL_NO_CACHE
+  );
+
+  return $blocks;
+}
+
+
+/**
+ * Implements hook_block_configure().
+ */
+function simple_events_block_configure($delta = '') {
+
+  $form = array();
+  if ($delta == 'upcoming_events') {
+    $form['upcoming_events_block_count'] = array(
+      '#type' => 'select',
+      '#title' => t('Number of upcoming events to display'),
+      '#default_value' => variable_get('upcoming_events_block_count', 3),
+      '#options' => drupal_map_assoc(array(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25, 30)),
+    );
+  }
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function simple_events_block_save($delta = '', $edit = array()) {
+  if ($delta == 'upcoming_events') {
+    variable_set('upcoming_events_block_count', $edit['upcoming_events_block_count']);
+  }
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function simple_events_block_view($delta = '') {
+   $block = array();
+
+  switch ($delta) {
+    case 'upcoming_events':
+      if (user_access('access content')) {
+        $block['subject'] = t('Upcoming events');
+        if ($content = simple_events_block_list(variable_get('upcoming_events_block_count', 10))) {
+          $block['content'] = $content;
+        }
+        else {
+          $block['content'] = t('No content available.');
+        }
+      }
+      break;
+  }
+  return $block;
+}
+
 
 /**
  * Implements hook_theme().
@@ -410,6 +474,27 @@ function simple_events_list(){
     );
   }
   return $build;
+}
+
+function simple_events_block_list($count){
+  $query = db_select('node', 'n');
+  $query->addTag('node_access');
+  $query->join('simple_events', 'e', 'e.vid = n.vid');
+  $query->condition('n.type', 'simple_event', '=')
+    ->condition('e.time_from', REQUEST_TIME , '>=')    
+    ->condition('n.status', 1)
+    ->fields('n', array('nid', 'created'))
+    ->orderBy('n.time_from', 'ASC')
+    ->range(0, $count);
+
+  $nids = $query->execute()->fetchCol();
+
+  if (!empty($nids)) {
+    $nodes = node_load_multiple($nids);
+    $build = node_view_multiple($nodes);
+  }
+
+  return $build;  
 }
 
 /**

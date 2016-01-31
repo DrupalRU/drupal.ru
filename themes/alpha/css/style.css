@@ -319,11 +319,11 @@ a:hover {
 }
 
 .block-simple-events .node-simple-event {
-  padding: 5px 0px;
+  padding: 10px 0px;
 }
 
 .block-simple-events .node-simple-event .event-image {
-  width: 30px;
+  width: 40px;
   height: auto;
   padding: 0px;
 }
@@ -332,6 +332,10 @@ a:hover {
   background-color: #f9f9f9;
 }
 
+.block-simple-events .event_links {
+  text-align: center;
+  padding: 20px 0px;
+}
 
 /* Add icons to node links. */
 

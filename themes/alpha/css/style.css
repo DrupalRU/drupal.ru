@@ -310,6 +310,10 @@ a:hover {
   color: orange;
 }
 
+.block-simple-events .node-simple-event {
+  padding: 5px 0px;
+}
+
 .block-simple-events .node-simple-event .event-image {
   width: 30px;
   height: auto;

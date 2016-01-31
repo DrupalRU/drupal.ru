@@ -440,7 +440,7 @@ function simple_events_list(){
     ->condition('e.time_from', REQUEST_TIME , '>=')    
     ->condition('n.status', 1)
     ->fields('n', array('nid', 'created'))
-    ->orderBy('n.title', 'ASC')
+    ->orderBy('n.time_from', 'ASC')
     ->extend('PagerDefault')
     ->limit(variable_get('default_nodes_main', 10));
 
@@ -508,7 +508,7 @@ function simple_events_list_past(){
     ->condition('e.time_from', REQUEST_TIME , '<')    
     ->condition('n.status', 1)
     ->fields('n', array('nid', 'created'))
-    ->orderBy('n.title', 'ASC')
+    ->orderBy('n.time_from', 'DESC')
     ->extend('PagerDefault')
     ->limit(variable_get('default_nodes_main', 10));
 

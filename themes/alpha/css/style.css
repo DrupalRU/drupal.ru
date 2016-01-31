@@ -310,6 +310,12 @@ a:hover {
   color: orange;
 }
 
+.block-simple-events .node-simple-event .event-image {
+  width: 30px;
+  height: auto;
+  padding: 0px;
+}
+
 /* Add icons to node links. */
 
 ul.links li a:before {

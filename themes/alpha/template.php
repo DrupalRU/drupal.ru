@@ -26,6 +26,11 @@ function alpha_theme($existing, $type, $theme, $path) {
       'base hook' => 'node',
       'template' => 'templates/node--simple_event--teaser',
     ),
+    'node__simple_event__block' => array(
+      'render element' => 'content',
+      'base hook' => 'node',
+      'template' => 'templates/node--simple_event--block',
+    ),
   );
 }
 

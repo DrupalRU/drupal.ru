@@ -218,6 +218,10 @@ a:hover {
   position: static;
 }
 
+#node-details.affix-bottom {
+  position: absolute;
+}
+
 @media (min-width: 979px) {
   #node-details.affix-top {
     position: static;
@@ -234,9 +238,52 @@ a:hover {
   white-space: normal;
 }
 
-.node.darkmatter .content{
+.node.darkmatter .content {
   background-color: #333;
   color: #fff;
+}
+
+.node div.links {
+  text-align: right;
+}
+
+.node-organization .attributes {
+  text-align: center;
+}
+
+.node-organization .details {
+  margin-left: 0px;
+}
+
+.node-organization .organization-logo {
+  max-width: 120px;
+  width: 50%;
+  padding: 0px;
+  height: auto;
+  padding-bottom: 15px;
+}
+
+.block-organizations .node {
+  text-align: center;
+}
+
+.block-organizations .actions {
+  text-align: center;
+  padding: 20px 0px;
+}
+/* Ridiculously Responsive Social Share Buttons. */
+
+.rrssb-item-list {
+  overflow: hidden;
+}
+
+/* Simple events */
+.node-simple-event .date_time:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f271';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: orange;
 }
 
 /* Add icons to node links. */
@@ -383,7 +430,7 @@ div.awesome_icon {
   content: '\f160';
   padding-right: 5px;
   vertical-align: middle;
-  color: #333;  
+  color: #333;
 }
 
 .forum-sort .sort-desc:before {
@@ -391,7 +438,7 @@ div.awesome_icon {
   content: '\f161';
   padding-right: 5px;
   vertical-align: middle;
-  color: #333;  
+  color: #333;
 }
 
 .forum-sort span.sort-asc:before,

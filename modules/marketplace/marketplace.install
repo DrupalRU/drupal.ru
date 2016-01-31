@@ -1,0 +1,161 @@
+<?php
+/**
+ * @file
+ * Marketplace install file.
+ */
+
+
+/**
+ * Implements hook_install().
+ */
+function marketplace_install() {
+  node_types_rebuild();
+  $types = node_type_get_types();
+
+  node_add_body_field($types['organization'], t('Organization description'));
+
+  foreach (_organization_installed_fields() as $field) {
+    field_create_field($field);
+  }
+ 
+  foreach (_organization_installed_instances() as $instance) {
+    field_create_instance($instance);
+  }
+}
+
+/**
+ * Implements hook_schema().
+ */
+function marketplace_schema() {
+  $schema['organizations'] = array(
+    'description' => 'Stores organization data.',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The {node} this version belongs to.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'vid' => array(
+        'description' => 'The primary identifier for this version.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'logo_fid' => array(
+        'description' => 'The {files} this version belongs to.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'website' => array(
+        'description' => 'The website name.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'address' => array(
+        'description' => 'Company address.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('vid'),
+    'foreign keys' => array(
+      'versioned_node' => array(
+        'table' => 'node',
+        'columns' => array('nid' => 'nid'),
+      ),
+    ),
+  );
+  return $schema;
+}
+
+/**
+ * Fields for this module.
+ */
+function _organization_installed_fields() {
+  $t = get_t();
+  return array(
+    'organization_type' => array(
+      'field_name' => 'organization_type',
+      'type' => 'taxonomy_term_reference',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      'settings' => array(
+        'allowed_values' => array(
+          array(
+            'vocabulary' => 'organizations',
+            'parent' => 0,
+          ),
+        ),
+      ),
+    ),
+  );
+ 
+}
+
+/**
+ * Instances for this module.
+ */
+function _organization_installed_instances() {
+  $t = get_t();
+  return array( 
+    'organization_type' => array(
+      'field_name' => 'organization_type',
+      'bundle' => 'organization',
+      'entity_type' => 'node',
+      'label' => $t('Organizaition type'),
+      'required' => TRUE,
+      'widget' => array(
+        'type' => 'options_select',
+        'weight' => 3,
+      ),
+      'display' => array(
+        'default' => array(
+          'label' => 'inline',
+          'type' => 'taxonomy_term_reference_link',
+        ),
+        'teaser' => array(
+          'label' => 'inline',
+          'type' => 'taxonomy_term_reference_link',
+        ),
+      ),
+
+    ),
+  );
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function marketplace_uninstall() {
+ 
+  $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+  $result = db_query($sql, array(':type' => 'organization'));
+  $nids = array();
+  foreach ($result as $row) {
+    $nids[] = $row->nid;
+  }
+ 
+  // Delete all the nodes at once
+  node_delete_multiple($nids);
+ 
+  $instance = array('field_name' => 'comment_body', 'bundle' => 'comment_node_organization', 'entity_type' => 'comment');
+  field_delete_instance($instance);
+ 
+  $instance = array('field_name' => 'body', 'bundle' => 'organization', 'entity_type' => 'node');
+  field_delete_instance($instance);
+ 
+   $fields = array_keys(_organization_installed_fields());
+   foreach ($fields as $field) {
+      field_delete_field($field);
+  }
+
+  // Purge all field infromation
+   field_purge_batch(1000);
+}

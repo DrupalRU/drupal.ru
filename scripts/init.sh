@@ -19,7 +19,12 @@ rm -rf drupal
 
 echo "Install DRUPAL"
 
-/usr/bin/drush site-install standard -y --root=$SITEPATH --account-name=$SETTINGS_ACCOUNT_NAME --account-mail=$SETTINGS_ACCOUNT_MAIL --account-pass=$SETTINGS_ACCOUNT_PASS --uri=http://$SETTINGS_DOMAIN --site-name="$SETTINGS_SITE_NAME" --site-mail=$SETTINGS_SITE_MAIL --db-url=mysql://$SETTINGS_DATABASE_USER:$SETTINGS_DATABASE_PASS@localhost/$SETTINGS_DATABASE_NAME
+if [ "$SETTINGS_DATABASE_NAME" == "" ];then
+  /usr/bin/drush site-install standard -y --root=$SITEPATH --account-name=$SETTINGS_ACCOUNT_NAME --account-mail=$SETTINGS_ACCOUNT_MAIL --account-pass=$SETTINGS_ACCOUNT_PASS --uri=http://$SETTINGS_DOMAIN --site-name="$SETTINGS_SITE_NAME" --site-mail=$SETTINGS_SITE_MAIL --db-url=mysql://$GITLC_DATABASE_USER:$GITLC_DATABASE_PASS@localhost/$GITLC_DATABASE
+else
+
+  /usr/bin/drush site-install standard -y --root=$SITEPATH --account-name=$SETTINGS_ACCOUNT_NAME --account-mail=$SETTINGS_ACCOUNT_MAIL --account-pass=$SETTINGS_ACCOUNT_PASS --uri=http://$SETTINGS_DOMAIN --site-name="$SETTINGS_SITE_NAME" --site-mail=$SETTINGS_SITE_MAIL --db-url=mysql://$SETTINGS_DATABASE_USER:$SETTINGS_DATABASE_PASS@localhost/$SETTINGS_DATABASE_NAME
+fi
 
 echo "make libraries dir"
 mkdir $SITEPATH/sites/all/libraries
@@ -133,6 +138,9 @@ drush ddi forum --file=$GITLC_DEPLOY_DIR/data/forum.export
 echo "Import menu structure"
 drush ddi menu --file=$GITLC_DEPLOY_DIR/data/main-menu.menu_links.export
 drush ddi menu --file=$GITLC_DEPLOY_DIR/data/user-menu.menu_links.export
+
+echo "Import block settings"
+drush ddi blocks --file=$GITLC_DEPLOY_DIR/data/alpha-init.blocks.export
 
 echo "Import theme settings"
 

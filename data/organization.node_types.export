@@ -1,0 +1,455 @@
+[
+    {
+        "type": "organization",
+        "name": "Organization",
+        "base": "marketplace",
+        "description": "Create organization page",
+        "help": "",
+        "has_title": 1,
+        "title_label": "Organization name",
+        "custom": 0,
+        "modified": 0,
+        "locked": 1,
+        "orig_type": "organization",
+        "module": "marketplace",
+        "disabled": 0,
+        "submission": {
+            "node_preview": "Optional"
+        },
+        "workflow": {
+            "node_options": [
+                "Published",
+                "Promoted to front page"
+            ],
+            "language_content_type": "Disabled",
+            "simplenews_content_type": 0
+        },
+        "display": {
+            "node_submitted": true
+        },
+        "comment": {
+            "comment": "Open",
+            "comment_default_mode": 1,
+            "comment_default_per_page": 50,
+            "comment_anonymous": "Anonymous posters may not enter their contact information",
+            "comment_subject_field": 1,
+            "comment_form_location": 1,
+            "comment_preview": "Optional"
+        },
+        "diff": {
+            "diff_show_preview_changes_node": true,
+            "diff_enable_revisions_page_node": true,
+            "diff_view_mode_preview_node": "Содержимое полностью"
+        },
+        "menu": {
+            "menu_options": null,
+            "menu_parent": null
+        },
+        "rrssb": {
+            "show": 0
+        },
+        "fields": {
+            "field_testlink": {
+                "translatable": 0,
+                "entity_types": [
+
+                ],
+                "settings": {
+                    "attributes": {
+                        "target": "default",
+                        "class": "",
+                        "rel": ""
+                    },
+                    "url": 0,
+                    "title": "optional",
+                    "title_value": "",
+                    "title_maxlength": 128,
+                    "enable_tokens": 1,
+                    "display": {
+                        "url_cutoff": 80
+                    }
+                },
+                "storage": {
+                    "type": "field_sql_storage",
+                    "settings": [
+
+                    ],
+                    "module": "field_sql_storage",
+                    "active": 1,
+                    "details": {
+                        "sql": {
+                            "FIELD_LOAD_CURRENT": {
+                                "field_data_field_testlink": {
+                                    "url": "field_testlink_url",
+                                    "title": "field_testlink_title",
+                                    "attributes": "field_testlink_attributes"
+                                }
+                            },
+                            "FIELD_LOAD_REVISION": {
+                                "field_revision_field_testlink": {
+                                    "url": "field_testlink_url",
+                                    "title": "field_testlink_title",
+                                    "attributes": "field_testlink_attributes"
+                                }
+                            }
+                        }
+                    }
+                },
+                "foreign keys": [
+
+                ],
+                "indexes": [
+
+                ],
+                "id": 54,
+                "field_name": "field_testlink",
+                "type": "link_field",
+                "module": "link",
+                "active": 1,
+                "locked": 0,
+                "cardinality": 1,
+                "deleted": 0,
+                "columns": {
+                    "url": {
+                        "type": "varchar",
+                        "length": 2048,
+                        "not null": false,
+                        "sortable": true
+                    },
+                    "title": {
+                        "type": "varchar",
+                        "length": 255,
+                        "not null": false,
+                        "sortable": true
+                    },
+                    "attributes": {
+                        "type": "text",
+                        "size": "medium",
+                        "not null": false
+                    }
+                },
+                "bundles": {
+                    "node": [
+                        "organization"
+                    ]
+                }
+            },
+            "body": {
+                "entity_types": [
+                    "node"
+                ],
+                "translatable": 0,
+                "settings": [
+
+                ],
+                "indexes": {
+                    "format": [
+                        "format"
+                    ]
+                },
+                "storage": {
+                    "type": "field_sql_storage",
+                    "settings": [
+
+                    ],
+                    "module": "field_sql_storage",
+                    "active": 1,
+                    "details": {
+                        "sql": {
+                            "FIELD_LOAD_CURRENT": {
+                                "field_data_body": {
+                                    "value": "body_value",
+                                    "summary": "body_summary",
+                                    "format": "body_format"
+                                }
+                            },
+                            "FIELD_LOAD_REVISION": {
+                                "field_revision_body": {
+                                    "value": "body_value",
+                                    "summary": "body_summary",
+                                    "format": "body_format"
+                                }
+                            }
+                        }
+                    }
+                },
+                "id": 11,
+                "foreign keys": {
+                    "format": {
+                        "table": "filter_format",
+                        "columns": {
+                            "format": "format"
+                        }
+                    }
+                },
+                "field_name": "body",
+                "type": "text_with_summary",
+                "module": "text",
+                "active": 1,
+                "locked": 0,
+                "cardinality": 1,
+                "deleted": 0,
+                "columns": {
+                    "value": {
+                        "type": "text",
+                        "size": "big",
+                        "not null": false
+                    },
+                    "summary": {
+                        "type": "text",
+                        "size": "big",
+                        "not null": false
+                    },
+                    "format": {
+                        "type": "varchar",
+                        "length": 255,
+                        "not null": false
+                    }
+                },
+                "bundles": {
+                    "node": [
+                        "blog",
+                        "book",
+                        "changes",
+                        "forum",
+                        "geshinode",
+                        "page",
+                        "simplenews",
+                        "organization"
+                    ]
+                }
+            },
+            "organization_type": {
+                "settings": {
+                    "allowed_values": [
+                        {
+                            "vocabulary": "organizations",
+                            "parent": 0
+                        }
+                    ]
+                },
+                "entity_types": [
+
+                ],
+                "translatable": 0,
+                "storage": {
+                    "type": "field_sql_storage",
+                    "settings": [
+
+                    ],
+                    "module": "field_sql_storage",
+                    "active": 1,
+                    "details": {
+                        "sql": {
+                            "FIELD_LOAD_CURRENT": {
+                                "field_data_organization_type": {
+                                    "tid": "organization_type_tid"
+                                }
+                            },
+                            "FIELD_LOAD_REVISION": {
+                                "field_revision_organization_type": {
+                                    "tid": "organization_type_tid"
+                                }
+                            }
+                        }
+                    }
+                },
+                "foreign keys": {
+                    "tid": {
+                        "table": "taxonomy_term_data",
+                        "columns": {
+                            "tid": "tid"
+                        }
+                    }
+                },
+                "indexes": {
+                    "tid": [
+                        "tid"
+                    ]
+                },
+                "id": 55,
+                "field_name": "organization_type",
+                "type": "taxonomy_term_reference",
+                "module": "taxonomy",
+                "active": 1,
+                "locked": 0,
+                "cardinality": -1,
+                "deleted": 0,
+                "columns": {
+                    "tid": {
+                        "type": "int",
+                        "unsigned": true,
+                        "not null": false
+                    }
+                },
+                "bundles": {
+                    "node": [
+                        "organization"
+                    ]
+                }
+            }
+        },
+        "instances": {
+            "field_testlink": {
+                "label": "testlink",
+                "widget": {
+                    "type": "link_field",
+                    "weight": 6,
+                    "settings": [
+
+                    ],
+                    "module": "link"
+                },
+                "settings": {
+                    "attributes": {
+                        "target": "default",
+                        "class": "",
+                        "rel": ""
+                    },
+                    "url": 0,
+                    "title": "optional",
+                    "title_value": "",
+                    "title_label_use_field_label": false,
+                    "title_maxlength": 128,
+                    "enable_tokens": 1,
+                    "display": {
+                        "url_cutoff": 80
+                    },
+                    "validate_url": 1,
+                    "absolute_url": 1,
+                    "user_register_form": false
+                },
+                "display": {
+                    "default": {
+                        "label": "above",
+                        "type": "link_default",
+                        "weight": 4,
+                        "settings": [
+
+                        ],
+                        "module": "link"
+                    },
+                    "teaser": {
+                        "label": "above",
+                        "type": "hidden",
+                        "weight": 0,
+                        "settings": [
+
+                        ]
+                    },
+                    "block": {
+                        "label": "above",
+                        "type": "hidden",
+                        "weight": 0,
+                        "settings": [
+
+                        ]
+                    }
+                },
+                "required": false,
+                "description": "",
+                "field_name": "field_testlink",
+                "deleted": 0,
+                "default_value": null
+            },
+            "body": {
+                "label": "Organization description",
+                "widget": {
+                    "type": "text_textarea_with_summary",
+                    "settings": {
+                        "rows": 20,
+                        "summary_rows": 5
+                    },
+                    "weight": 7,
+                    "module": "text"
+                },
+                "settings": {
+                    "display_summary": true,
+                    "text_processing": 1,
+                    "user_register_form": false
+                },
+                "display": {
+                    "default": {
+                        "label": "hidden",
+                        "type": "text_default",
+                        "weight": 5,
+                        "settings": [
+
+                        ],
+                        "module": "text"
+                    },
+                    "teaser": {
+                        "label": "hidden",
+                        "type": "text_summary_or_trimmed",
+                        "weight": 1,
+                        "settings": {
+                            "trim_length": 600
+                        },
+                        "module": "text"
+                    },
+                    "block": {
+                        "label": "above",
+                        "type": "hidden",
+                        "weight": 0,
+                        "settings": [
+
+                        ]
+                    }
+                },
+                "required": false,
+                "description": "",
+                "field_name": "body",
+                "deleted": 0,
+                "default_value": null
+            },
+            "organization_type": {
+                "label": "Organizaition type",
+                "required": true,
+                "widget": {
+                    "type": "options_select",
+                    "weight": 3,
+                    "settings": [
+
+                    ],
+                    "module": "options"
+                },
+                "display": {
+                    "default": {
+                        "label": "hidden",
+                        "type": "taxonomy_term_reference_link",
+                        "weight": 6,
+                        "settings": [
+
+                        ],
+                        "module": "taxonomy"
+                    },
+                    "teaser": {
+                        "label": "hidden",
+                        "type": "taxonomy_term_reference_link",
+                        "weight": 2,
+                        "settings": [
+
+                        ],
+                        "module": "taxonomy"
+                    },
+                    "block": {
+                        "label": "hidden",
+                        "type": "taxonomy_term_reference_link",
+                        "weight": 0,
+                        "settings": [
+
+                        ],
+                        "module": "taxonomy"
+                    }
+                },
+                "settings": {
+                    "user_register_form": false
+                },
+                "description": "",
+                "field_name": "organization_type",
+                "deleted": 0,
+                "default_value": null
+            }
+        }
+    }
+]

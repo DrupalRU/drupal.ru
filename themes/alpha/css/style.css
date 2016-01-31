@@ -310,7 +310,7 @@ a:hover {
   color: orange;
 }
 
-.node-simple-event .event-type:before {
+.node-simple-event .event-type a:before {
   font: normal normal normal 14px/1 FontAwesome;
   content: '\f02c';
   padding-right: 5px;

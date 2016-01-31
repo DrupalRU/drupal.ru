@@ -294,9 +294,15 @@ function simple_events_view($node, $view_mode, $langcode = NULL) {
     $time .= '<div class="duration">' .t('!hours hours', array('!hours' => $hours)) . '</div>';
   }
 
+  $datetime = '';
+  if(REQUEST_TIME > $node->event->time_from){
+    $datetime = $time;
+  }else{
+    $datetime = l($time, 'node/' . $node->nid. '/vcal' , array('html' => TRUE));
+  }
   
   $node->content['datetime'] = array(
-    '#markup' =>  l($time, 'node/' . $node->nid. '/vcal' , array('html' => TRUE)),
+    '#markup' =>  $datetime,
     '#weight' => 1,
   );
   

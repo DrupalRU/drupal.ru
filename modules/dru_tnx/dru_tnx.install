@@ -1,15 +1,11 @@
 <?php
 
 /**
- * @file
- */
-
-/**
  * Implements hook_schema().
  */
 function dru_tnx_schema() {
-
-  // Tnx's table.
+  
+  // Tnx's table
   $schema['tnx'] = array(
     'description' => 'Thanks',
     'fields' => array(
@@ -40,8 +36,8 @@ function dru_tnx_schema() {
     ),
     'primary key' => array('id'),
   );
-
-  // Statistic table.
+  
+  // Statistic table
   $schema['tnx_stat'] = array(
     'description' => 'Thanks statistic',
     'fields' => array(
@@ -77,7 +73,7 @@ function dru_tnx_schema() {
     ),
     'primary key' => array('uid'),
   );
-
+  
   return $schema;
 }
 
@@ -85,32 +81,32 @@ function dru_tnx_schema() {
  * Implements hook_install().
  */
 function dru_tnx_install() {
-
+    
   // Add tnx field to node.
   db_add_field('node', 'tnx', array(
     'type'        => 'int',
     'not null'    => TRUE,
     'default'     => 0,
     'description' => 'Thanks count.',
-  ));
+  )); 
   db_add_index('node', 'tnx', array('tnx'));
-
+  
   // Add tnx field to comment.
   db_add_field('comment', 'tnx', array(
     'type'        => 'int',
     'not null'    => TRUE,
     'default'     => 0,
     'description' => 'Thanks count.',
-  ));
+  )); 
   db_add_index('comment', 'tnx', array('tnx'));
-
+  
 }
 
 /**
  * Implements hook_schema_alter().
  */
 function dru_tnx_schema_alter(&$schema) {
-
+    
   // Add tnx field to node.
   $schema['node']['fields']['tnx'] = array(
     'description' => 'Thanks count.',
@@ -118,7 +114,7 @@ function dru_tnx_schema_alter(&$schema) {
     'not null'    => TRUE,
     'default'     => 0,
   );
-
+  
   // Add tnx field to comment.
   $schema['comment']['fields']['tnx'] = array(
     'description' => 'Thanks count.',
@@ -134,9 +130,9 @@ function dru_tnx_schema_alter(&$schema) {
  */
 function dru_tnx_uninstall() {
   drupal_uninstall_schema('dru_tnx');
-
+  
   db_drop_field('node', 'tnx');
   db_drop_field('comment', 'tnx');
-
+  
   cache_clear_all();
 }

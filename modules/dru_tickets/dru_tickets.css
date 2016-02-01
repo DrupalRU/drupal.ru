@@ -1,10 +1,18 @@
 @-webkit-keyframes animatedBackground {
-	from { background: rgba(255, 254, 139, .9); }
-	to { background: rgba(255, 254, 139, 0); }
+  from {
+    background: rgba(255, 254, 139, .9);
+  }
+  to {
+    background: rgba(255, 254, 139, 0);
+  }
 }
 @keyframes animatedBackground {
-	from { background: rgba(255, 254, 139, .9); }
-	to { background: rgba(255, 254, 139, 0); }
+  from {
+    background: rgba(255, 254, 139, .9);
+  }
+  to {
+    background: rgba(255, 254, 139, 0);
+  }
 }
 
 .tiket-changed {

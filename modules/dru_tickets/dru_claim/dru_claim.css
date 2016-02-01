@@ -43,7 +43,7 @@
   padding-right: 10px;
 }
 
-li.assign a:before {
+li.dru-claim a:before {
   content: "\f24e";
   font-family: "fa", "FontAwesome";
   padding-right: 5px;

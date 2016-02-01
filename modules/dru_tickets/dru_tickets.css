@@ -12,7 +12,7 @@
   animation: animatedBackground 4s ease-out;
 }
 
-li.ticket-accept a:before {
+li.ticket-assign a:before {
   content: "\f1b8";
   font-family: "fa", "FontAwesome";
   padding-right: 5px;

@@ -18,7 +18,8 @@ li.ticket-assign a:before {
   padding-right: 5px;
 }
 
-.moderator .label {
+.moderator .label,
+.verdict .label {
   display: inline-block;
   font-weight: bold;
   color: black;
@@ -28,6 +29,13 @@ li.ticket-assign a:before {
   padding-right: 10px;
 }
 
-.moderator .value {
+.moderator .value,
+.verdict .value {
   display: inline-block;
+}
+
+li.ticket-verdict a:before {
+  content: "\f0e3";
+  font-family: "fa", "FontAwesome";
+  padding-right: 5px;
 }

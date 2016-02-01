@@ -43,8 +43,8 @@ function dru_ticket_accept($node, $token) {
     ->fetchObject();
         
   if ($claim->moderate_uid == 0) {
-    $claim->moderate_uid = $user->uid;
     drupal_set_message(t('Ticket accepted') . print_r($claim,true) . print_r($node,true)); 
+    $claim->moderate_uid = $user->uid;
     drupal_write_record('ticket_claim', $claim, 'id');
   }
   elseif ($claim->moderate_uid == $user->uid) {

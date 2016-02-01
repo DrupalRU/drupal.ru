@@ -18,6 +18,21 @@ function dru_claim_permission() {
 }
 
 /**
+ * Implements hook_node_info()
+ */
+function dru_claim_node_info() {
+  return array(
+    'ticket' => array(
+      'name' => t('Ticket'),
+      'base' => 'dru_claim',
+      'description' => t('Claim rules violation or unacceptable behaviour.'),
+      'has_title' => TRUE,
+    )
+  );
+}
+
+
+/**
  * Implements hook_menu().
  */
 function dru_claim_menu() {
@@ -78,7 +93,18 @@ function dru_claim_preprocess_node(&$vars) {
     $vars['classes_array'][] = 'dru-claim-process node-claim';
   }
 }
+/**
+ * Implement hook_view()
+ */
+ 
+function dru_claim_view($node, $view_mode, $langcode = NULL) {
+  $node->content['test'] = array(
+    '#markup' =>  'test',
+    '#weight' => 1,
+  );
 
+  return $node;  
+}
 /**
  * Implements hook_node_view().
  */

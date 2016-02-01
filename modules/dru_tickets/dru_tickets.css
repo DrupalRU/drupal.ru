@@ -17,3 +17,9 @@ li.ticket-assign a:before {
   font-family: "fa", "FontAwesome";
   padding-right: 5px;
 }
+
+.moderator .label {
+  display: inline-block;
+  font-weight: bold;
+  padding-right: 10px;
+}

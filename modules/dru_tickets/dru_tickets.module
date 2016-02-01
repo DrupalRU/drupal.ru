@@ -70,7 +70,7 @@ function dru_tickets_load($nodes) {
   
   $result = db_query('SELECT * FROM {ticket} WHERE ticket_id IN (:nids)', array(':nids' => $nids));
   foreach ($result as $record) {
-    $nodes[$record->nid]->ticket = $record;
+    $nodes[$record->ticket_id]->ticket = $record;
   }
 }
 

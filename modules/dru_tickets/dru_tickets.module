@@ -120,7 +120,7 @@ function dru_tickets_update($node) {
  * Implement hook_view()
  */
 function dru_tickets_view($node, $view_mode, $langcode = NULL) {
-    drupal_add_js(drupal_get_path('module', 'dru_tickets') . '/dru_tickets.js');
+  drupal_add_js(drupal_get_path('module', 'dru_tickets') . '/dru_tickets.js');
   if (!empty($node->ticket->moderate_uid)){
     $author = user_load($node->ticket->moderate_uid); 
     $moderator = l($author->name, 'user/' . $author->uid);

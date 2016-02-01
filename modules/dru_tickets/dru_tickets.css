@@ -21,5 +21,13 @@ li.ticket-assign a:before {
 .moderator .label {
   display: inline-block;
   font-weight: bold;
+  color: black;
+  font-size: 100%;
+  padding: 0px;
+  margin: 0px;
   padding-right: 10px;
+}
+
+.moderator .value {
+  display: inline-block;
 }

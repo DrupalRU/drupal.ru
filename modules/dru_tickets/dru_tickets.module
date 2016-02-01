@@ -126,6 +126,7 @@ function dru_tickets_view($node, $view_mode, $langcode = NULL) {
       <div class="label">' . t('Moderator') . ':</div>
       <div class="value">' . $moderator . '</div>
     </div>',
+    '#weight' => 10,    
   );
       
   drupal_set_message('<pre>' . print_r($node,true). '</pre>');

@@ -10,10 +10,6 @@ function dru_tickets_permission() {
       'description'     => t('Allow users to view tickets'),
       'restrict access' => TRUE,
     ),
-    'create tickets'   => array(
-      'title'           => t('Create Tickets'),
-      'description'     => t('Allow users to create tickets'),
-    ),
     'moderate tickets' => array(
       'title'           => t('Moderate Tickets'),
       'description'     => t('Allow users to moderate tickets'),

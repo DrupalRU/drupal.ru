@@ -100,18 +100,13 @@ function dru_ticket_verdict($ajax, $node, $token) {
  * dru_verdict_form
  */
 function dru_verdict_form($form, &$form_state, $vars) {
-  
-  $claim = db_select('ticket_claim', 't')
-    ->fields('t', array('ticket_verdict'))
-    ->condition('t.ticket_id', $vars['ticket']->nid, '=')
-    ->execute()
-    ->fetchObject();
+  $node = $vars['ticket'];
     
-  if (empty($claim->ticket_verdict)) {
+  if (empty($node->ticket->ticket_verdict)) {
     $verdict = '';
   }
   else {
-    $verdict = $claim->ticket_verdict;
+    $verdict = $node->ticket->ticket_verdict;
   }
   
   $form['dru_verdict'] = array(
@@ -170,6 +165,8 @@ function dru_verdict_form_submit($form_id, &$form_state) {
   $verdict = $form_state['values']['dru_verdict'];
   $ticket  = $form_state['dru_ticket']['ticket'];
   
+  $ticket->ticket->ticket_verdict = $verdict;
+  
   if (!empty($verdict)) {
     $statuses = taxonomy_get_term_by_name(t('Closed'));
     foreach ($statuses as $tid => $status) {
@@ -188,12 +185,4 @@ function dru_verdict_form_submit($form_id, &$form_state) {
     }
     node_save($ticket);
   }
-  
-  $query = db_update('ticket_claim');
-  $query->fields(array(
-    'ticket_verdict' => $verdict,
-    ))
-    ->condition('ticket_id', $ticket->nid)
-    ->execute();
-  
 }

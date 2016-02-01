@@ -188,5 +188,4 @@ function dru_verdict_form_submit($form_id, &$form_state) {
     }
     node_save($ticket);
   }
-  drupal_goto('node/' . $ticket->nid);
 }

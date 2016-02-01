@@ -77,14 +77,14 @@ function dru_ticket_verdict($ajax, $node, $token) {
     
     $commands = array();
     
-    $render_form  = '<div id="claim-add-form">';
+    $render_form  = '<div id="verdict-add-form">';
     $render_form .= '<h2>';
     $render_form .= t('Add Verdict');
     $render_form .= '</h2>';
     $render_form .= render($form);
     $render_form .= '</div>';
     
-    $commands[] = ajax_command_append('body', '<div id="claim-add">' . $render_form . '</div>');
+    $commands[] = ajax_command_append('body', '<div id="verdict-add">' . $render_form . '</div>');
 
     return array(
       '#type' => 'ajax',
@@ -144,11 +144,14 @@ function dru_verdict_submit_js($form_id, $form_state) {
   $nid = $form_state['dru_ticket']['ticket']->nid;
   $commands = array();
   
-  $commands[] = ajax_command_replace('.clame-verdict-' . $nid, '<div class="field-items clame-verdict-value clame-verdict-' . $nid . '">' . $form_state['values']['dru_verdict'] . '</div>');
+  $commands[] = ajax_command_replace('.verdict', 'div class="verdict">
+        <div class="label">' . t('Verdict') . ':</div>
+        <div class="value">' . check_plain($form_state['values']['dru_verdict']) . '</div>
+      </div>');
   
-  $commands[] = ajax_command_invoke('.clame-verdict-' . $form_state['dru_ticket']['ticket']->nid, 'addClass', array('tiket-changed'));
+  $commands[] = ajax_command_invoke('.verdict', 'addClass', array('tiket-changed'));
   
-  $commands[] = ajax_command_remove('#claim-add');
+  $commands[] = ajax_command_remove('#verdict-add');
   
   return array(
     '#type'     => 'ajax',
@@ -185,4 +188,5 @@ function dru_verdict_form_submit($form_id, &$form_state) {
     }
     node_save($ticket);
   }
+  drupal_goto('node/' . $ticket->nid);
 }

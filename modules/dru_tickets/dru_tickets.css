@@ -39,3 +39,26 @@ li.ticket-verdict a:before {
   font-family: "fa", "FontAwesome";
   padding-right: 5px;
 }
+
+.dru-verdict-process {
+  /*background: #fff6ed;*/
+}
+
+#verdict-add {
+  background: rgba(0, 0, 0, 0.7) none repeat scroll 0 0;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+#verdict-add #verdict-add-form {
+  background: #fff none repeat scroll 0 0;
+  margin: 50px auto;
+  max-height: calc(100vh - 60px);
+  overflow: auto;
+  padding: 20px;
+  width: 320px;
+}

@@ -151,8 +151,7 @@ function dru_tickets_view($node, $view_mode, $langcode = NULL) {
     </div>',
     '#weight' => 10,    
   );
-      
-  drupal_set_message('<pre>' . print_r($node,true). '</pre>');
+
   return $node;  
 }
 

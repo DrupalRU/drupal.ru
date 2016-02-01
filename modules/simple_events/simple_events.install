@@ -184,7 +184,7 @@ function simple_events_uninstall() {
   $instance = array('field_name' => 'body', 'bundle' => 'simple_event', 'entity_type' => 'node');
   field_delete_instance($instance);
  
-   $fields = array_keys(_organization_installed_fields());
+   $fields = array_keys(_simple_event_installed_fields());
    foreach ($fields as $field) {
       field_delete_field($field);
   }

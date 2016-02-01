@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implements hook_schema().
  */
 function dru_claim_schema() {
@@ -37,7 +41,7 @@ function dru_claim_schema() {
       'content_type' => array('content_type'),
     ),
   );
-  
+
   return $schema;
 }
 
@@ -46,9 +50,9 @@ function dru_claim_schema() {
  */
 function dru_claim_install() {
   $t = get_t();
-  
+
   // Create "Claim Category" taxonomy vocabulary
-  // ! Delete after development
+  // ! Delete after development.
   if (!taxonomy_vocabulary_machine_name_load('claim_category')) {
     $vocabulary = array(
       'machine_name' => 'claim_category',
@@ -56,10 +60,10 @@ function dru_claim_install() {
     );
     $vocabulary = (object) $vocabulary;
     taxonomy_vocabulary_save($vocabulary);
-    
+
     $vid = $vocabulary->vid;
-  
-    // Create Claim Category terms
+
+    // Create Claim Category terms.
     $terms = array(
       'spam'       => array(
         'name' => $t('Spam'),
@@ -80,12 +84,12 @@ function dru_claim_install() {
       $tid = $term->tid;
     }
   }
-  
-  // Add "Claim Category" field
+
+  // Add "Claim Category" field.
   $field_claim_category = field_info_field('field_claim_category');
   if (empty($field_claim_category)) {
     $field_claim_category = array(
-      'field_name' => 'field_claim_category', 
+      'field_name' => 'field_claim_category',
       'type'       => 'taxonomy_term_reference',
       'settings'   => array(
         'allowed_values' => array(
@@ -99,13 +103,13 @@ function dru_claim_install() {
     );
     $field_claim_category = field_create_field($field_claim_category);
   }
-  
+
   $instance = field_info_instance('node', 'field_claim_category', 'ticket');
   if (empty($instance)) {
     $instance = array(
-      'field_name'  => 'field_claim_category', 
-      'entity_type' => 'node', 
-      'bundle'      => 'ticket', 
+      'field_name'  => 'field_claim_category',
+      'entity_type' => 'node',
+      'bundle'      => 'ticket',
       'label'       => $t('Claim Category'),
       'required'    => 1,
       'widget'      => array(
@@ -114,10 +118,10 @@ function dru_claim_install() {
       ),
       'display'     => array(
         'default' => array(
-          'label'  => 'inline', 
+          'label'  => 'inline',
           'type'   => 'taxonomy_term_reference_link',
           'module' => 'taxonomy',
-        ), 
+        ),
         'teaser'  => array(
           'label'  => 'inline',
           'type'   => 'taxonomy_term_reference_link',
@@ -134,25 +138,25 @@ function dru_claim_install() {
     'not null'    => TRUE,
     'default'     => 0,
     'description' => 'Claim id.',
-  )); 
+  ));
   db_add_index('node', 'claim', array('claim'));
-  
+
   // Add claim field to comment.
   db_add_field('comment', 'claim', array(
     'type'        => 'int',
     'not null'    => TRUE,
     'default'     => 0,
     'description' => 'Claim id.',
-  )); 
+  ));
   db_add_index('comment', 'claim', array('claim'));
-  
+
 }
 
 /**
  * Implements hook_schema_alter().
  */
 function dru_claim_schema_alter(&$schema) {
-  
+
   $schema['node']['fields']['claim'] = array(
     'description' => 'Claim id.',
     'type'        => 'int',
@@ -173,13 +177,13 @@ function dru_claim_schema_alter(&$schema) {
  */
 function dru_claim_uninstall() {
   drupal_uninstall_schema('dru_claim');
-  
-  // Delete "Claim Category" terms
+
+  // Delete "Claim Category" terms.
   $voc = taxonomy_vocabulary_machine_name_load('claim_category');
   taxonomy_vocabulary_delete($voc->vid);
-  
+
   db_drop_field('node', 'claim');
   db_drop_field('comment', 'claim');
-  
+
   cache_clear_all();
 }

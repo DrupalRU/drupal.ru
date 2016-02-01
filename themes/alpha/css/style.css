@@ -238,7 +238,7 @@ a:hover {
   white-space: normal;
 }
 
-.node.darkmatter .content{
+.node.darkmatter .content {
   background-color: #333;
   color: #fff;
 }
@@ -275,6 +275,70 @@ a:hover {
 
 .rrssb-item-list {
   overflow: hidden;
+}
+
+.rrssb-buttons.tiny-format {
+  height: 32px;
+}
+
+/* Simple events */
+.node-simple-event .date_time .from:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f271';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: orange;
+}
+
+.node-simple-event .date_time .duration:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f017';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: orange;
+}
+
+.node-simple-event .website:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f08e';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: orange;
+}
+
+.node-simple-event .address:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f124';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: orange;
+}
+
+.node-simple-event .event-type a:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: '\f02c';
+  padding-right: 5px;
+  vertical-align: middle;
+  color: #ddd;
+}
+
+.block-simple-events .node-simple-event {
+  padding: 10px 0px;
+}
+
+.block-simple-events .node-simple-event .event-image {
+  width: 40px;
+  height: auto;
+  padding: 0px;
+}
+
+.block-simple-events .row.even {
+  background-color: #f9f9f9;
+}
+
+.block-simple-events .actions {
+  text-align: center;
+  padding: 20px 0px;
 }
 
 /* Add icons to node links. */
@@ -421,7 +485,7 @@ div.awesome_icon {
   content: '\f160';
   padding-right: 5px;
   vertical-align: middle;
-  color: #333;  
+  color: #333;
 }
 
 .forum-sort .sort-desc:before {
@@ -429,7 +493,7 @@ div.awesome_icon {
   content: '\f161';
   padding-right: 5px;
   vertical-align: middle;
-  color: #333;  
+  color: #333;
 }
 
 .forum-sort span.sort-asc:before,

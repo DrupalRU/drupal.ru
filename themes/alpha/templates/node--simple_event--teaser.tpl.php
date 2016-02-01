@@ -87,38 +87,54 @@
   <?php endif; ?>
   <?php print render($title_prefix); ?>
   <?php if (!$page): ?>
-    <h2 class="title"><a href="<?php print $node_url; ?>">
-      <?php
-        $flag = '<i class="fa fa-envelope-o"></i>';
-        $history = _forum_user_last_visit($node->nid);
-        if($node->last_comment_timestamp > $history){
-          $flag = '<i class="fa fa-envelope"></i>';
-        }
-        if($sticky){
-          $flag = '<i class="fa fa-flag"></i>';
-        }
-        if($promote){
-          $flag = '<i class="fa fa-star"></i>';
-        }
-
-        print $flag . ' ';
-      ?>
-      <?php print $title; ?></a></h2>
+    <h2 class="title"><a href="<?php print $node_url; ?>"> <i class="fa fa-calendar"></i> <?php print $title; ?></a></h2>
   <?php endif; ?>
-  <?php print render($title_suffix); ?>
-
-  <div class="content"<?php print $content_attributes; ?>>
-    <?php
-      hide($content['comments']);
-      hide($content['links']);
-      hide($content['rrssb']);
-      print render($content);
-    ?>
+  <?php print render($title_suffix); ?>  
+  <div class="row">
+    <div  class="col-xs-12 col-sm-12 col-md-3">
+      <center>
+        <div class="image">
+        <?php print render($content['event_image']); ?>
+        </div>
+  
+        <div class="date_time">
+          <?php print render($content['datetime']); ?>
+        </div>
+        
+        <?php if (isset($content['url'])): ?>
+          <div class="website">
+            <?php print render($content['url']); ?>
+          </div>
+        <?php endif; ?>
+  
+        <?php if (isset($content['address'])): ?>
+          <div class="address">
+            <?php print render($content['address']); ?>
+          </div>
+        <?php endif; ?>
+  
+        <div class="event-type">
+          <?php print render($content['simple_event_type']); ?>
+        </div>
+      </center>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-9">
+      <div class="content"<?php print $content_attributes; ?>>
+        <?php
+          // We hide the comments and links now so that we can render them later.
+          hide($content['rrssb']);
+          hide($content['comments']);
+          hide($content['links']);
+          print render($content);
+        ?>
+      </div>
+    </div>
     <div class="clearfix"></div>
     <div class="links">
       <?php print render($content['links']); ?>
     </div>
+    
+    <div class="clearfix"></div>
+    <hr>
   </div>
-  <div class="clearfix"></div>
-  <hr>
 </div>

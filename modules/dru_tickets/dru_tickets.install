@@ -98,6 +98,38 @@ function dru_tickets_install() {
 }
 
 /**
+ * Implements hook_schema().
+ */
+function dru_tickets_schema() {
+  $schema['ticket'] = array(
+    'description' => 'Clame tickets',
+    'fields' => array(
+      'ticket_id' => array(
+        'description' => 'Ticket ID.',
+        'type'        => 'serial',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+      ),
+      'moderate_uid' => array(
+        'description' => 'Moderate UID.',
+        'type'        => 'int',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+      ),
+      'ticket_verdict' => array(
+        'description' => 'Verdict.',
+        'type'        => 'text',
+        'not null'    => FALSE,
+      ),
+    ),
+    'primary key' => array('ticket_id'),
+  );
+  
+  return $schema;
+}
+
+
+/**
  * Implements hook_uninstall().
  */
 function dru_tickets_uninstall() {

@@ -140,6 +140,11 @@ function dru_tickets_view($node, $view_mode, $langcode = NULL) {
       </div>',
       '#weight' => 10,    
     );
+  }else{
+    $node->content['verdict'] = array(
+      '#markup' => '<div class="verdict"></div>',
+      '#weight' => 10,    
+    );
   }
 
     

@@ -167,7 +167,7 @@ function dru_claim_form_submit($form_id, &$form_state) {
   $ticket->language = LANGUAGE_NONE;
   $ticket->body[$ticket->language][0]['value'] = $form_state['values']['dru_claim_description'];
   $ticket->field_claim_category[$ticket->language][0]['tid'] = $form_state['values']['dru_claim_category'];
-  $ticket->uid = 0;
+  $ticket->uid = $user->uid;
   node_save($ticket);
   
   // Create claim

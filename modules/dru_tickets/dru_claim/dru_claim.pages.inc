@@ -167,6 +167,11 @@ function dru_claim_form_submit($form_id, &$form_state) {
   $ticket->language = LANGUAGE_NONE;
   $ticket->body[$ticket->language][0]['value'] = $form_state['values']['dru_claim_description'];
   $ticket->field_claim_category[$ticket->language][0]['tid'] = $form_state['values']['dru_claim_category'];
+  
+  $terms = taxonomy_get_term_by_name(t('Open'));
+  $term = reset($terms);
+  $ticket->field_ticket_status[$ticket->language][0]['tid'] = $term->tid;
+  
   $ticket->uid = $user->uid;
   node_save($ticket);
   

@@ -127,24 +127,25 @@ function dru_tickets_view($node, $view_mode, $langcode = NULL) {
       <div class="value">' . $moderator . '</div>
     </div>',
   );
-  if ($node->ticket->moderate_uid == 0) {
-    $links['ticket-accept'] = array(
+      
+  drupal_set_message('<pre>' . print_r($node,true). '</pre>');
+  return $node;  
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function dru_tickets_node_view($node, $view_mode) {
+  if($node->type == 'ticket' && $node->ticket->moderate_uid == 0 && user_access('moderate tickets')){
+    $token = drupal_get_token('dru_tickets');
+    $node->content['links']['comment']['#links']['assign'] = array(
       'title' => t('Accept'),
       'href' => 'ticket/' . $node->nid . '/accept' . '/' . $token,
       'attributes' => array(
         'class' => array('ticket-accept'),
       ),
     );
-    $token = drupal_get_token('dru_tickets');
-    $node->content['ticket'] = array(
-      '#theme' => 'links__node__ticket',
-      '#links' => $links,
-      '#attributes' => array('class' => array('links', 'inline')),
-    );
   }
-      
-  drupal_set_message('<pre>' . print_r($node,true). '</pre>');
-  return $node;  
 }
 
 /**

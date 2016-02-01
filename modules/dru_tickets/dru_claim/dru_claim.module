@@ -96,15 +96,16 @@ function dru_claim_preprocess_node(&$vars) {
 /**
  * Implement hook_view()
  */
- 
 function dru_claim_view($node, $view_mode, $langcode = NULL) {
   $node->content['test'] = array(
     '#markup' =>  'test',
     '#weight' => 1,
   );
-
+      
+  drupal_set_message('<pre>' . print_r($node,true). '</pre>');
   return $node;  
 }
+
 /**
  * Implements hook_node_view().
  */
@@ -167,8 +168,7 @@ function dru_claim_node_view($node, $view_mode) {
         $original_text = $original->comment_body[LANGUAGE_NONE][0]['value'];
         $original_text .= l($original->subject, 'comment/' . $claim->content_id, array('fragment' => 'comment-' . $claim->content_id));
       }
-      
-      drupal_set_message('<pre>' . print_r($original,true). '</pre>');
+
       
       $node->content['ticket_entity'] = array(
         '#markup' => '<div class="field field-label-inline clearfix clame-extra clame-entity"><div class="field-label">' . t('Entity') . ':&nbsp;</div><div class="field-items clame-entity-value clame-entity-' . $node->nid . '">' . $original_text . '</div></div>',

@@ -46,6 +46,34 @@ function dru_tickets_menu() {
 }
 
 /**
+ * Implements hook_node_info()
+ */
+function dru_tickets_node_info() {
+  return array(
+    'ticket' => array(
+      'name' => t('Ticket'),
+      'base' => 'dru_tickets',
+      'description' => t('Claim rules violation or unacceptable behaviour.'),
+      'has_title' => FALSE,
+    )
+  );
+}
+
+/**
+ * Implement hook_view()
+ */
+function dru_tickets_view($node, $view_mode, $langcode = NULL) {
+  $node->content['test'] = array(
+    '#markup' =>  'test',
+    '#weight' => 1,
+  );
+      
+  drupal_set_message('<pre>' . print_r($node,true). '</pre>');
+  return $node;  
+}
+
+
+/**
  * Implements hook_node_view().
  */
 function dru_tickets_node_view($node, $view_mode) {

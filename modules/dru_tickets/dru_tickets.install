@@ -39,22 +39,10 @@ function dru_tickets_install() {
     }
   }
   
-  // Create "Ticket" node type
-  $ticket = node_type_set_defaults(array(
-    'type'        => 'ticket',
-    'name'        => $t('Ticket'),
-    'base'        => 'node_content',
-    'custom'      => 1,
-    'modified'    => 1,
-    'locked'      => 0,
-    //'title_label' => $t('Ticket title'),
-    'has_title'   => FALSE,
-    'description' => $t('Tickets for Drupal.ru'),
-  ));
-  node_add_body_field($ticket);
-  node_type_save($ticket);
-  
-  
+  node_types_rebuild();
+  $types = node_type_get_types();
+
+  node_add_body_field($types['ticket'], t('Claim text'));
   
   variable_set('node_options_ticket', array('status'));
   variable_set('menu_options_ticket', array());

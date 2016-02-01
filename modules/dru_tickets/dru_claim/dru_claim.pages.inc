@@ -163,6 +163,7 @@ function dru_claim_form_submit($form_id, &$form_state) {
   $ticket = new stdClass();
   $ticket->type = 'ticket';
   node_object_prepare($ticket);
+  $ticket->title = t('Claim !type=!id', array('!type' => $form_state['dru_claim_entity']['type'], '!id' => $form_state['dru_claim_entity']['id']));
   $ticket->language = LANGUAGE_NONE;
   $ticket->body[$ticket->language][0]['value'] = $form_state['values']['dru_claim_description'];
   $ticket->field_claim_category[$ticket->language][0]['tid'] = $form_state['values']['dru_claim_category'];

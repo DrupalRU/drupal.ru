@@ -138,8 +138,8 @@ function dru_claim_node_view($node, $view_mode) {
       );
     }
     
-    if ($node->uid == $user->uid && user_access('edit claim')) { 
-      
+    if ($node->type == 'ticket' && $claim->moderate_uid > 0 && user_access('moderate tickets')) {
+  
       drupal_add_library('system', 'drupal.ajax');
       $token = drupal_get_token('dru_claim');
       
@@ -150,7 +150,6 @@ function dru_claim_node_view($node, $view_mode) {
           'class' => array('use-ajax', 'ticket-verdict-' . $node->nid),
         ),
       );
-      
     }
   }
     

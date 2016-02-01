@@ -174,7 +174,7 @@ function dru_verdict_form_submit($form_id, &$form_state) {
     $statuses = taxonomy_get_term_by_name(t('Closed'));
     foreach ($statuses as $tid => $status) {
       if ($status->vocabulary_machine_name == 'ticket_status') {
-        $ticket->field_ticket_status[$ticket->language][0]['tid'] = $status->tid;
+        $ticket->field_ticket_status[LANGUAGE_NONE][0]['tid'] = $status->tid;
       }
     }
     node_save($ticket);
@@ -183,7 +183,7 @@ function dru_verdict_form_submit($form_id, &$form_state) {
     $statuses = taxonomy_get_term_by_name(t('Open'));
     foreach ($statuses as $tid => $status) {
       if ($status->vocabulary_machine_name == 'ticket_status') {
-        $ticket->field_ticket_status[$ticket->language][0]['tid'] = $tid;
+        $ticket->field_ticket_status[LANGUAGE_NONE][0]['tid'] = $tid;
       }
     }
     node_save($ticket);

@@ -84,12 +84,7 @@ function simple_events_block_view($delta = '') {
     case 'upcoming_events':
       if (user_access('access content')) {
         $block['subject'] = t('Upcoming events');
-        if ($content = simple_events_block_list(variable_get('upcoming_events_block_count', 10))) {
-          $block['content'] = $content;
-        }
-        else {
-          return FALSE;
-        }
+        $block['content'] = simple_events_block_list(variable_get('upcoming_events_block_count', 10));
       }
       break;
   }
@@ -536,7 +531,9 @@ function simple_events_block_list($count){
     $build = node_view_multiple($nodes, 'block');
   }
   else {
-    return FALSE;
+    $build['links'] = array(
+      '#markup' => t('No upcoming events yet.'),
+    );
   }
 
   $links = array();  

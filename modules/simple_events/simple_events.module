@@ -218,7 +218,7 @@ function simple_events_form($node, $form_state) {
     '#date_timezone' => date_default_timezone(),
     '#date_format' => $dateformat,
     '#date_year_range' => '0:+1',
-    '#title' => t('Start'),
+    '#title' => t('Event start'),
     '#default_value' => format_date($default, 'custom', 'Y-m-d H:i'),
     '#required' => TRUE,
   );
@@ -240,7 +240,7 @@ function simple_events_form($node, $form_state) {
     '#date_timezone' => date_default_timezone(),
     '#date_format' => $dateformat,
     '#date_year_range' => '0:+1',
-    '#title' => t('End'),
+    '#title' => t('Event end'),
     '#default_value' => format_date($default, 'custom', 'Y-m-d H:i'),
     '#states' => array(
       'invisible' => array(
@@ -260,7 +260,7 @@ function simple_events_form($node, $form_state) {
   $form['address'] = array(
     '#type' => 'textfield',
     '#title' => t('Address'),
-    '#description' => t('If you have office address, please provide.'),
+    '#description' => t('Address, where event will happen.'),
     '#weight' => 1,
     '#default_value' => isset($node->event->address) ? $node->event->address : '',
   );

@@ -138,7 +138,7 @@ function dru_claim_node_view($node, $view_mode) {
         $original = comment_load($claim->content_id);
       }
       
-      drupal_set_messahe('<pre>' . print_r($original,true). '</pre>');
+      drupal_set_message('<pre>' . print_r($original,true). '</pre>');
       
       $node->content['ticket_entity'] = array(
         '#markup' => '<div class="field field-label-inline clearfix clame-extra clame-entity"><div class="field-label">' . t('Entity') . ':&nbsp;</div><div class="field-items clame-entity-value clame-entity-' . $node->nid . '">' . $claim->content_type . '</div></div>',

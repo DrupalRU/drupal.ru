@@ -74,6 +74,37 @@ function dru_tickets_load($nodes) {
   }
 }
 
+
+/**
+ * Implement hook_insert()
+ */
+function dru_tickets_insert($node) {
+  db_insert('ticket')
+    ->fields(array(
+      'ticket_id' => $node->nid,
+      'moderate_uid' => 0,
+      'ticket_verdict' => '',
+    ))
+    ->execute();
+}
+
+/**
+ * Implement hook_update()
+ */
+
+function dru_tickets_update($node) {
+  
+  db_update('ticket')
+    ->fields(array(
+      'ticket_id' => $node->nid,
+      'moderate_uid' => $node->ticket->moderate_uid,
+      'ticket_verdict' => $node->ticket->ticket_verdict,
+    ))
+    ->condition('ticket_id', $node->nid)
+    ->execute();
+}
+
+
 /**
  * Implement hook_view()
  */

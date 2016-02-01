@@ -136,7 +136,7 @@ function dru_tickets_view($node, $view_mode, $langcode = NULL) {
       ),
     );
     $token = drupal_get_token('dru_tickets');
-    $node->content['links']['ticket'] = array(
+    $node->content['ticket'] = array(
       '#theme' => 'links__node__ticket',
       '#links' => $links,
       '#attributes' => array('class' => array('links', 'inline')),

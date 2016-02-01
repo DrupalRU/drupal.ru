@@ -41,6 +41,21 @@ function dru_tickets_menu() {
     'access arguments' => array('moderate tickets'),
     'type'             => MENU_CALLBACK,
   );
+  $items['ticket/%node/verdict/nojs/%'] = array(
+    'page callback'    => 'dru_ticket_verdict',
+    'file'             => 'dru_tickets.pages.inc',
+    'page arguments'   => array(3, 1, 4),
+    'access arguments' => array('moderate tickets'),
+    'type'             => MENU_CALLBACK,
+  );
+  $items['ticket/%node/verdict/ajax/%'] = array(
+    'page callback'     => 'dru_ticket_verdict',
+    'file'              => 'dru_tickets.pages.inc',
+    'page arguments'    => array(3, 1, 4),
+    'access arguments'  => array('moderate tickets'),
+    'delivery callback' => 'ajax_deliver',
+    'type'              => MENU_CALLBACK,
+  );
   
   return $items;
 }
@@ -109,10 +124,6 @@ function dru_tickets_update($node) {
  * Implement hook_view()
  */
 function dru_tickets_view($node, $view_mode, $langcode = NULL) {
-  $node->content['test'] = array(
-    '#markup' =>  'test',
-    '#weight' => 1,
-  );
 
   if (!empty($node->ticket->moderate_uid)){
     $author = user_load($node->ticket->moderate_uid); 
@@ -120,6 +131,17 @@ function dru_tickets_view($node, $view_mode, $langcode = NULL) {
   }else{
     $moderator = t('No taken yet');
   }
+  
+  if (!empty($node->ticket->ticket_verdict)){
+    $node->content['verdict'] = array(
+      '#markup' => '<div class="verdict">
+        <div class="label">' . t('Verdict') . ':</div>
+        <div class="value">' . check_plain($node->ticket->ticket_verdict) . '</div>
+      </div>',
+      '#weight' => 10,    
+    );
+  }
+
     
   $node->content['moderator'] = array(
     '#markup' => '<div class="moderator">
@@ -144,6 +166,20 @@ function dru_tickets_node_view($node, $view_mode) {
       'href' => 'ticket/' . $node->nid . '/accept' . '/' . $token,
       'attributes' => array(
         'class' => array('ticket-accept'),
+      ),
+    );
+  }
+  
+  if ($node->type == 'ticket' && $node->ticket->moderate_uid > 0 && user_access('moderate tickets')) {
+  
+    drupal_add_library('system', 'drupal.ajax');
+    $token = drupal_get_token('dru_tickets');
+    
+    $node->content['links']['comment']['#links']['ticket-verdict'] = array(
+      'title' => $node->ticket->ticket_verdict ? t('Change verdict') : t('Verdict'),
+      'href' => 'ticket/' . $node->nid . '/verdict/nojs/' . $token,
+      'attributes' => array(
+        'class' => array('use-ajax', 'ticket-verdict-' . $node->nid),
       ),
     );
   }

@@ -177,7 +177,7 @@ function dru_claim_form_submit($form_id, &$form_state) {
       'content_type' => $form_state['dru_claim_entity']['type'],
       'content_id'   => $form_state['dru_claim_entity']['id'],
       'init_uid'     => $user->uid,
-      'author_uid'   => $entity->uid,
+      'moderate_uid' => 0,
     ))
     ->execute();
   

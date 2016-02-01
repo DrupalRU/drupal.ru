@@ -26,10 +26,8 @@ li.dru-claim a:before {
   padding-right: 5px;
 }
 
-
 .initiator .label,
 .entity .label {
-  display: inline-block;
   font-weight: bold;
   color: black;
   font-size: 100%;
@@ -38,9 +36,16 @@ li.dru-claim a:before {
   padding-right: 10px;
 }
 
-.initiator .value,
-.entity .value {
+.claimed-entity-teaser .label,
+.claimed-entity-teaser .label {
   display: inline-block;
+  vertical-align: top;
+}
+
+.claimed-entity-teaser .value,
+.claimed-entity-teaser .value {
+  display: inline-block;
+  vertical-align: top;
 }
 
 .dru-verdict-process {
@@ -64,4 +69,10 @@ li.dru-claim a:before {
   overflow: auto;
   padding: 20px;
   width: 320px;
+}
+
+.claimed-entity-full .value {
+  background: #f7f7f7 none repeat scroll 0 0;
+  padding: 15px;
+  position: relative;
 }

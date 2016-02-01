@@ -5,7 +5,7 @@
  */
 
 /**
- *
+ * Tickets page
  */
 function dru_tickets_page() {
 
@@ -36,7 +36,7 @@ function dru_tickets_page() {
 }
 
 /**
- *
+ * Accept ticket
  */
 function dru_ticket_accept($node, $token) {
 
@@ -72,7 +72,7 @@ function dru_ticket_accept($node, $token) {
  * Verdict.
  */
 function dru_ticket_verdict($ajax, $node, $token) {
-
+  
   if (!drupal_valid_token($token, 'dru_tickets')) {
     return;
   }
@@ -88,6 +88,7 @@ function dru_ticket_verdict($ajax, $node, $token) {
     $commands = array();
 
     $render_form  = '<div id="verdict-add-form">';
+    $render_form .= '<div id="close-form"><i class="fa fa-times"></i></div>';
     $render_form .= '<h2>';
     $render_form .= t('Add Verdict');
     $render_form .= '</h2>';
@@ -162,6 +163,10 @@ function dru_verdict_submit_js($form_id, $form_state) {
   $commands[] = ajax_command_invoke('.verdict', 'addClass', array('tiket-changed'));
 
   $commands[] = ajax_command_remove('#verdict-add');
+  
+  $token = drupal_get_token('dru_tickets');
+  $link = l(t('Change verdict'), 'ticket/' . $nid . '/verdict/nojs/' . $token, array('attributes' => array('class' => array('use-ajax', 'ticket-verdict-' . $nid))));
+  $commands[] = ajax_command_replace('.ticket-verdict-' . $nid, $link);
 
   return array(
     '#type'     => 'ajax',

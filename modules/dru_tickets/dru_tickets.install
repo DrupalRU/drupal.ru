@@ -139,7 +139,7 @@ function dru_tickets_schema() {
 function dru_tickets_uninstall() {
 
   // Delete nodes and node type.
-  $ticket  = 'ticket';
+  $ticket = 'ticket';
   $sql    = 'SELECT nid FROM {node} n WHERE n.type = :type';
   $result = db_query($sql, array(':type' => $ticket));
   if (!empty($result)) {

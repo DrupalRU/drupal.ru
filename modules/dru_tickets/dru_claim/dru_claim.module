@@ -91,28 +91,40 @@ function dru_claim_node_view($node, $view_mode) {
 
       if ($claim->content_type == 'node') {
         $original = node_load($claim->content_id);
-        $original_text = $original->body[LANGUAGE_NONE][0]['value'];
-        $original_text .= l($original->title, 'node/' . $claim->content_id);
+        $original_format = $original->body[LANGUAGE_NONE][0]['format'];
+        $original_text   = $original->body[LANGUAGE_NONE][0]['value'];
+        $original_title  = l($original->title, 'node/' . $claim->content_id);
       }
       else {
         $original = comment_load($claim->content_id);
-        $original_text = $original->comment_body[LANGUAGE_NONE][0]['value'];
-        $original_text .= l($original->subject, 'comment/' . $claim->content_id, array('fragment' => 'comment-' . $claim->content_id));
+        $original_format = $original->comment_body[LANGUAGE_NONE][0]['format'];
+        $original_text   = $original->comment_body[LANGUAGE_NONE][0]['value'];
+        $original_title  = l($original->subject, 'comment/' . $claim->content_id, array('fragment' => 'comment-' . $claim->content_id));
       }
-
-      $node->content['entity'] = array(
-        '#markup' => '<div class="entity">
-            <div class="label">' . t('Entity') . ':</div>
-            <div class="value">' . $original_text . '</div>
+      
+      if ($view_mode == 'full') {
+        $node->content['entity'] = array(
+          '#markup' => '<div class="entity claimed-entity claimed-entity-full">
+            <div class="label claim-entity-label">' . t('Entity') . ':</div>
+            <div class="value claimed-entity-value">' . $original_title . check_markup($original_text, $original_format) . '</div>
           </div>',
-      );
+        );
+      }
+      else {
+        $node->content['entity'] = array(
+          '#markup' => '<div class="entity claimed-entity claimed-entity-teaser">
+            <div class="label claim-entity-label">' . t('Entity') . ':</div>
+            <div class="value claimed-entity-value">' . $original_title . '</div>
+          </div>',
+        );
+      }
     }
 
   }
 
   // Add node links.
   if ($node->type != 'ticket' && user_access('create claim')) {
-    drupal_add_js(drupal_get_path('module', 'dru_claim') . '/dru_claim.js');
+    drupal_add_js(drupal_get_path('module', 'dru_tickets') . '/dru_tickets.js');
 
     drupal_add_library('system', 'drupal.ajax');
     $token = drupal_get_token('dru_claim');

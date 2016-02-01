@@ -531,7 +531,7 @@ function simple_events_block_list($count){
     $build = node_view_multiple($nodes, 'block');
   }
   else {
-    $build['links'] = array(
+    $build['nodes'] = array(
       '#markup' => t('No upcoming events yet.'),
     );
   }

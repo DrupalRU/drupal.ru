@@ -204,7 +204,7 @@ function dru_claim_comment_view($comment, $view_mode) {
         
       if (is_object($ticket)) {
         if (!$ticket->ticket->ticket_verdict) {
-          $verdict = l(t('Claim is under review'), 'node/' . $ticket->nd);
+          $verdict = l(t('Claim is under review'), 'node/' . $ticket->nid);
           $icon    = '<i class="fa fa-cogs"></i>';
           $class   = 'claim_message_processed';
         }

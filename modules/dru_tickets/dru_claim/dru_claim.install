@@ -7,15 +7,9 @@ function dru_claim_schema() {
   $schema['ticket_claim'] = array(
     'description' => 'Clame tickets',
     'fields' => array(
-      'id' => array(
+      'ticket_id' => array(
         'description' => 'Clame ID.',
         'type'        => 'serial',
-        'unsigned'    => TRUE,
-        'not null'    => TRUE,
-      ),
-      'ticket_id' => array(
-        'description' => 'Ticket ID.',
-        'type'        => 'int',
         'unsigned'    => TRUE,
         'not null'    => TRUE,
       ),
@@ -37,21 +31,9 @@ function dru_claim_schema() {
         'unsigned'    => TRUE,
         'not null'    => TRUE,
       ),
-      'moderate_uid' => array(
-        'description' => 'Moderate UID.',
-        'type'        => 'int',
-        'unsigned'    => TRUE,
-        'not null'    => TRUE,
-      ),
-      'ticket_verdict' => array(
-        'description' => 'Verdict.',
-        'type'        => 'text',
-        'not null'    => FALSE,
-      ),
     ),
-    'primary key' => array('id'),
+    'primary key' => array('ticket_id'),
     'indexes' => array(
-      'ticket_id' => array('ticket_id'),
       'content_type' => array('content_type'),
     ),
   );
@@ -200,11 +182,4 @@ function dru_claim_uninstall() {
   db_drop_field('comment', 'claim');
   
   cache_clear_all();
-}
-
-/**
- * Implements hook_update_N().
- */
-function dru_claim_update_7001() {
-   db_change_field('ticket_claim', 'author_uid', 'moderate_uid', array('type' => 'int', 'unsigned'    => TRUE, 'not null' => TRUE, 'description' => 'Moderate UID.'));
 }

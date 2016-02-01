@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * simple_event install file.
+ * Simple_event install file.
  */
 
 
@@ -17,7 +17,7 @@ function simple_events_install() {
   foreach (_simple_event_installed_fields() as $field) {
     field_create_field($field);
   }
- 
+
   foreach (_simple_event_installed_instances() as $instance) {
     field_create_instance($instance);
   }
@@ -50,7 +50,7 @@ function _simple_event_installed_fields() {
  */
 function _simple_event_installed_instances() {
   $t = get_t();
-  return array( 
+  return array(
     'simple_event_type' => array(
       'field_name' => 'simple_event_type',
       'bundle' => 'simple_event',
@@ -167,28 +167,28 @@ function simple_events_schema() {
  * Implements hook_uninstall().
  */
 function simple_events_uninstall() {
- 
+
   $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
   $result = db_query($sql, array(':type' => 'simple_event'));
   $nids = array();
   foreach ($result as $row) {
     $nids[] = $row->nid;
   }
- 
-  // Delete all the nodes at once
+
+  // Delete all the nodes at once.
   node_delete_multiple($nids);
- 
+
   $instance = array('field_name' => 'comment_body', 'bundle' => 'comment_node_simple_event', 'entity_type' => 'comment');
   field_delete_instance($instance);
- 
+
   $instance = array('field_name' => 'body', 'bundle' => 'simple_event', 'entity_type' => 'node');
   field_delete_instance($instance);
- 
-   $fields = array_keys(_simple_event_installed_fields());
-   foreach ($fields as $field) {
-      field_delete_field($field);
+
+  $fields = array_keys(_simple_event_installed_fields());
+  foreach ($fields as $field) {
+    field_delete_field($field);
   }
 
-  // Purge all field infromation
-   field_purge_batch(1000);
+  // Purge all field infromation.
+  field_purge_batch(1000);
 }

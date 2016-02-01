@@ -277,6 +277,10 @@ a:hover {
   overflow: hidden;
 }
 
+.rrssb-buttons.tiny-format {
+  height: 32px;
+}
+
 /* Simple events */
 .node-simple-event .date_time .from:before {
   font: normal normal normal 14px/1 FontAwesome;

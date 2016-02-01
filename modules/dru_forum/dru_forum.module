@@ -1,5 +1,9 @@
 <?php
-  
+
+/**
+ * @file
+ */
+
 /**
  * Implements hook_form_BASE_FORM_ID_alter() for node_form().
  */

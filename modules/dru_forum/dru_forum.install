@@ -1,8 +1,12 @@
 <?php
 
 /**
-* Implements hook_install().
-*/
+ * @file
+ */
+
+/**
+ * Implements hook_install().
+ */
 function dru_forum_install() {
   db_rename_table('field_deleted_revision_2', 'field_revision_taxonomy_forums');
   db_rename_table('field_deleted_data_2', 'field_data_taxonomy_forums');
@@ -11,7 +15,7 @@ function dru_forum_install() {
     ->fields(array('weight' => 2))
     ->condition('name', 'dru_forum')
     ->execute();
-    
+
   db_update('field_config_instance')
     ->fields(array(
       'deleted' => 0,
@@ -39,13 +43,12 @@ function dru_forum_install() {
     ->execute();
 
   // Migrate data from "new" - "taxonomy_forum" field.
-  
   $data_records = db_select('field_data_field_taxonomy_forum', 'fd')
     ->fields('fd')
     ->execute()
     ->fetchAll();
 
-  foreach($data_records as $record){
+  foreach ($data_records as $record) {
     $stored = db_select('field_data_taxonomy_forums', 'fds')
       ->fields('fds')
       ->condition('entity_type', $record->entity_type)
@@ -55,9 +58,10 @@ function dru_forum_install() {
       ->condition('language', $record->language)
       ->execute()
       ->fetchAssoc();
-    
-    if(empty($stored)){
-      db_insert('field_data_taxonomy_forums') // Table name no longer needs {}
+
+    if (empty($stored)) {
+      db_insert('field_data_taxonomy_forums')
+      // Table name no longer needs {}
         ->fields(array(
           'entity_type' => $record->entity_type ,
           'bundle' => $record->bundle ,
@@ -78,8 +82,9 @@ function dru_forum_install() {
         ->execute()
         ->fetchAll();
 
-      foreach($revision_records as $revision_record){
-        db_insert('field_revision_taxonomy_forums') // Table name no longer needs {}
+      foreach ($revision_records as $revision_record) {
+        db_insert('field_revision_taxonomy_forums')
+        // Table name no longer needs {}
           ->fields(array(
             'entity_type' => $revision_record->entity_type ,
             'bundle' => $revision_record->bundle ,
@@ -92,15 +97,15 @@ function dru_forum_install() {
           ))
           ->execute();
       }
-      
+
       // Update forum index.
       _dru_forum_update_forum_index($record);
     }
   }
-  
+
   // Delete "new" field field_taxonomy_forum.
   field_delete_field('field_taxonomy_forum');
-  
+
   // Clear field cache.
   field_cache_clear();
 }
@@ -108,7 +113,7 @@ function dru_forum_install() {
 /**
  * Update forum index for migration.
  */
-function _dru_forum_update_forum_index($record){
+function _dru_forum_update_forum_index($record) {
   $node = db_select('node', 'n')
       ->fields('n')
       ->condition('nid', $record->entity_id)
@@ -125,6 +130,6 @@ function _dru_forum_update_forum_index($record){
     'last_comment_timestamp' => $node->created,
   ));
   $query->execute();
-  
-  _forum_update_forum_index($node->nid);      
+
+  _forum_update_forum_index($node->nid);
 }

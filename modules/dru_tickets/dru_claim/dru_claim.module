@@ -106,6 +106,8 @@ function dru_claim_node_view($node, $view_mode) {
     
   // Add node links
   if($node->type != 'ticket' && user_access('create claim')){
+    drupal_add_js(drupal_get_path('module', 'dru_claim') . '/dru_claim.js');
+    
     drupal_add_library('system', 'drupal.ajax');
     $token = drupal_get_token('dru_claim');
     
@@ -171,9 +173,8 @@ function dru_claim_preprocess_comment(&$vars) {
 function dru_claim_comment_view($comment, $view_mode) {
   // Add comment links
   drupal_add_css(drupal_get_path('module', 'dru_claim') . '/dru_claim.css');
-  drupal_set_message('<pre>' . print_r($comment,true). '</pre>');
   if(user_access('create claim')){
-      
+    drupal_add_js(drupal_get_path('module', 'dru_claim') . '/dru_claim.js');
     drupal_add_library('system', 'drupal.ajax');
     $token = drupal_get_token('dru_claim');
     

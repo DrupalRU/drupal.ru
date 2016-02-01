@@ -139,7 +139,7 @@ function dru_claim_node_view($node, $view_mode) {
       }else{
         $original = comment_load($claim->content_id);
         $original_text = $original->comment_body[LANGUAGE_NONE][0]['value'];
-        $original_text .= l($original->subject, 'comment/' . $claim->content_id);
+        $original_text .= l($original->subject, 'comment/' . $claim->content_id, array('fragment' => 'comment-' . $claim->content_id));
       }
       
       drupal_set_message('<pre>' . print_r($original,true). '</pre>');

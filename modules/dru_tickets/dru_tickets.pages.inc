@@ -144,7 +144,7 @@ function dru_verdict_submit_js($form_id, $form_state) {
   $nid = $form_state['dru_ticket']['ticket']->nid;
   $commands = array();
   
-  $commands[] = ajax_command_replace('.verdict', 'div class="verdict">
+  $commands[] = ajax_command_replace('.verdict', '<div class="verdict">
         <div class="label">' . t('Verdict') . ':</div>
         <div class="value">' . check_plain($form_state['values']['dru_verdict']) . '</div>
       </div>');

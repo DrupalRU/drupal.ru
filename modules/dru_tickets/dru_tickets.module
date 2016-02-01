@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implements hook_permission().
  */
 function dru_tickets_permission() {
@@ -22,7 +26,7 @@ function dru_tickets_permission() {
  * Implements hook_menu().
  */
 function dru_tickets_menu() {
-  
+
   $items['admin/content/tickets'] = array(
     'title'            => 'Tickets',
     'description'      => 'Tickets page',
@@ -52,12 +56,12 @@ function dru_tickets_menu() {
     'delivery callback' => 'ajax_deliver',
     'type'              => MENU_CALLBACK,
   );
-  
+
   return $items;
 }
 
 /**
- * Implements hook_node_info()
+ * Implements hook_node_info().
  */
 function dru_tickets_node_info() {
   return array(
@@ -66,19 +70,19 @@ function dru_tickets_node_info() {
       'base' => 'dru_tickets',
       'description' => t('Claim rules violation or unacceptable behaviour.'),
       'has_title' => FALSE,
-    )
+    ),
   );
 }
 
 
 /**
- * Implement hook_load()
+ * Implement hook_load().
  */
 
 function dru_tickets_load($nodes) {
-  
+
   $nids = array_keys($nodes);
-  
+
   $result = db_query('SELECT * FROM {ticket} WHERE ticket_id IN (:nids)', array(':nids' => $nids));
   foreach ($result as $record) {
     $nodes[$record->ticket_id]->ticket = $record;
@@ -87,7 +91,7 @@ function dru_tickets_load($nodes) {
 
 
 /**
- * Implement hook_insert()
+ * Implement hook_insert().
  */
 function dru_tickets_insert($node) {
   db_insert('ticket')
@@ -100,11 +104,11 @@ function dru_tickets_insert($node) {
 }
 
 /**
- * Implement hook_update()
+ * Implement hook_update().
  */
 
 function dru_tickets_update($node) {
-  
+
   db_update('ticket')
     ->fields(array(
       'ticket_id' => $node->nid,
@@ -117,49 +121,50 @@ function dru_tickets_update($node) {
 
 
 /**
- * Implement hook_view()
+ * Implement hook_view().
  */
 function dru_tickets_view($node, $view_mode, $langcode = NULL) {
   drupal_add_js(drupal_get_path('module', 'dru_tickets') . '/dru_tickets.js');
-  if (!empty($node->ticket->moderate_uid)){
-    $author = user_load($node->ticket->moderate_uid); 
+  if (!empty($node->ticket->moderate_uid)) {
+    $author = user_load($node->ticket->moderate_uid);
     $moderator = l($author->name, 'user/' . $author->uid);
-  }else{
+  }
+  else {
     $moderator = t('No taken yet');
   }
-  
-  if (!empty($node->ticket->ticket_verdict)){
+
+  if (!empty($node->ticket->ticket_verdict)) {
     $node->content['verdict'] = array(
       '#markup' => '<div class="verdict">
         <div class="label">' . t('Verdict') . ':</div>
         <div class="value">' . check_plain($node->ticket->ticket_verdict) . '</div>
       </div>',
-      '#weight' => 10,    
+      '#weight' => 10,
     );
-  }else{
+  }
+  else {
     $node->content['verdict'] = array(
       '#markup' => '<div class="verdict"></div>',
-      '#weight' => 10,    
+      '#weight' => 10,
     );
   }
 
-    
   $node->content['moderator'] = array(
     '#markup' => '<div class="moderator">
       <div class="label">' . t('Moderator') . ':</div>
       <div class="value">' . $moderator . '</div>
     </div>',
-    '#weight' => 10,    
+    '#weight' => 10,
   );
 
-  return $node;  
+  return $node;
 }
 
 /**
  * Implements hook_node_view().
  */
 function dru_tickets_node_view($node, $view_mode) {
-  if($node->type == 'ticket' && $node->ticket->moderate_uid == 0 && user_access('moderate tickets')){
+  if ($node->type == 'ticket' && $node->ticket->moderate_uid == 0 && user_access('moderate tickets')) {
     $token = drupal_get_token('dru_tickets');
     $node->content['links']['comment']['#links']['ticket-assign'] = array(
       'title' => t('Accept'),
@@ -169,12 +174,12 @@ function dru_tickets_node_view($node, $view_mode) {
       ),
     );
   }
-  
+
   if ($node->type == 'ticket' && $node->ticket->moderate_uid > 0 && user_access('moderate tickets')) {
-  
+
     drupal_add_library('system', 'drupal.ajax');
     $token = drupal_get_token('dru_tickets');
-    
+
     $node->content['links']['comment']['#links']['ticket-verdict'] = array(
       'title' => $node->ticket->ticket_verdict ? t('Change verdict') : t('Verdict'),
       'href' => 'ticket/' . $node->nid . '/verdict/nojs/' . $token,

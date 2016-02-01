@@ -11,8 +11,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2016-02-01 02:01+0200\n"
-"PO-Revision-Date: 2016-02-01 02:12+0200\n"
+"POT-Creation-Date: 2016-02-01 16:08+0200\n"
+"PO-Revision-Date: 2016-02-01 16:10+0200\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Russian <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -22,115 +22,67 @@ msgstr ""
 "Language: ru\n"
 "X-Generator: Poedit 1.8.6\n"
 
-#: dru_claim.pages.inc:54
+#: dru_claim.pages.inc:59
 msgid "Add claim"
 msgstr "Вызов модератора"
 
-#: dru_claim.pages.inc:85;86
+#: dru_claim.pages.inc:90;91
 msgid "Select a category claim"
 msgstr "Выберите категорию жалобы"
 
-#: dru_claim.pages.inc:93;94
+#: dru_claim.pages.inc:98;99
 msgid "Claim description"
 msgstr "Описание жалобы"
 
-#: dru_claim.pages.inc:100
+#: dru_claim.pages.inc:105
 msgid "Send"
 msgstr "Отправить"
 
-#: dru_claim.pages.inc:138 dru_claim.module:180;257
+#: dru_claim.pages.inc:144 dru_claim.module:150;221
 msgid "Claim is under review"
 msgstr "Жалоба обрабатывается"
 
-#: dru_claim.pages.inc:223
-msgid "Add Verdict"
-msgstr "Вынести вердикт"
+#: dru_claim.pages.inc:172
+msgid "Claim @type = @id"
+msgstr "Жалоба @type = @id"
 
-#: dru_claim.pages.inc:260
-msgid "Claim verdict"
-msgstr "Вердикт по жалобе"
-
-#: dru_claim.pages.inc:267
-msgid "Save"
-msgstr "Сохранить"
-
-#: dru_claim.pages.inc:315
-msgid "Closed"
-msgstr "Закрыто"
-
-#: dru_claim.pages.inc:324
+#: dru_claim.pages.inc:177
 msgid "Open"
 msgstr "Открыто"
 
-#: dru_claim.module:9
+#: dru_claim.module:13
 msgid "Create Claim"
 msgstr ""
 
-#: dru_claim.module:10
+#: dru_claim.module:14
 msgid "Allow users to create claim"
 msgstr ""
 
-#: dru_claim.module:13
-msgid "Edit Claim"
-msgstr ""
-
-#: dru_claim.module:14
-msgid "Allow users to edit claim"
-msgstr ""
-
-#: dru_claim.module:108
+#: dru_claim.module:87
 msgid "Initiator"
 msgstr "Инициатор"
 
-#: dru_claim.module:116
-msgid "Author"
-msgstr "Автор"
-
-#: dru_claim.module:123;141;298
-msgid "Verdict"
-msgstr "Вердикт"
-
-#: dru_claim.module:130
+#: dru_claim.module:108;116
 msgid "Entity"
 msgstr "Сущность"
 
-#: dru_claim.module:141
-msgid "Change verdict"
-msgstr "Изменить вердикт"
-
-#: dru_claim.module:160;235
+#: dru_claim.module:134;203
 msgid "Claim"
 msgstr "Позвать модератора"
 
-#: dru_claim.module:285
-msgid "Initiator UID"
-msgstr "UID инициатора"
-
-#: dru_claim.module:286
-msgid "Initiator User ID"
-msgstr "UID инициатора"
-
-#: dru_claim.module:290
-msgid "Author UID"
-msgstr "UID автора"
-
-#: dru_claim.module:294
-msgid "Entity type"
-msgstr "Тип сущности"
-
-#: (duplicate) dru_claim.install:69 ;123
+#: (duplicate) dru_claim.install:59 ;113
 msgid "Claim Category"
 msgstr "Категория жалобы"
 
-#: (duplicate) dru_claim.install:79
+#: (duplicate) dru_claim.install:69
 msgid "Spam"
 msgstr "Спам"
 
-#: (duplicate) dru_claim.install:83
+#: (duplicate) dru_claim.install:73
 msgid "Trolley Rage"
 msgstr "Флуд"
 
-#: (duplicate) dru_claim.install:87
+#: (duplicate) dru_claim.install:77
 msgid "Breach Rules"
 msgstr "Нарушение правил"
 

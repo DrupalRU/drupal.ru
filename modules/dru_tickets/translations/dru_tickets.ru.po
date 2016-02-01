@@ -11,8 +11,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2016-02-01 02:01+0200\n"
-"PO-Revision-Date: 2016-02-01 02:06+0200\n"
+"POT-Creation-Date: 2016-02-01 16:08+0200\n"
+"PO-Revision-Date: 2016-02-01 16:10+0200\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Russian <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -22,36 +22,56 @@ msgstr ""
 "Language: ru\n"
 "X-Generator: Poedit 1.8.6\n"
 
-#: dru_tickets.pages.inc:24
+#: dru_tickets.pages.inc:31
 msgid "There are no tickets"
 msgstr "Нет тикетов"
 
-#: dru_tickets.pages.inc:41
+#: dru_tickets.pages.inc:58
 msgid "Ticket accepted"
 msgstr "Тикет принят"
 
-#: dru_tickets.pages.inc:44
+#: dru_tickets.pages.inc:61
 msgid "Ticket already your"
 msgstr "Тикет уже закреплен за Вами"
 
-#: dru_tickets.pages.inc:48
+#: dru_tickets.pages.inc:65
 msgid "Ticket moderated by @name"
 msgstr "Тикет закреплен за @name"
 
-#: dru_tickets.module:9
+#: dru_tickets.pages.inc:93
+msgid "Add Verdict"
+msgstr "Вынести вердикт"
+
+#: dru_tickets.pages.inc:125
+msgid "Claim verdict"
+msgstr "Вердикт по жалобе"
+
+#: dru_tickets.pages.inc:132
+msgid "Save"
+msgstr "Сохранить"
+
+#: dru_tickets.pages.inc:159 dru_tickets.module:141;186
+msgid "Verdict"
+msgstr "Вердикт"
+
+#: dru_tickets.pages.inc:168 dru_tickets.module:186
+msgid "Change verdict"
+msgstr "Изменить вердикт"
+
+#: (duplicate) dru_tickets.pages.inc:189 dru_tickets.install:35
+msgid "Closed"
+msgstr "Закрыто"
+
+#: (duplicate) dru_tickets.pages.inc:198 dru_tickets.install:27
+msgid "Open"
+msgstr "Открыто"
+
+#: dru_tickets.module:13
 msgid "View Tickets"
 msgstr "Посмотреть тикеты"
 
-#: dru_tickets.module:10
-msgid "Allow users to view tickets"
-msgstr ""
-
 #: dru_tickets.module:14
-msgid "Create Tickets"
-msgstr ""
-
-#: dru_tickets.module:15
-msgid "Allow users to create tickets"
+msgid "Allow users to view tickets"
 msgstr ""
 
 #: dru_tickets.module:18
@@ -62,7 +82,23 @@ msgstr ""
 msgid "Allow users to moderate tickets"
 msgstr ""
 
-#: dru_tickets.module:61
+#: dru_tickets.module:69
+msgid "Ticket"
+msgstr "Тикет"
+
+#: dru_tickets.module:71
+msgid "Claim rules violation or unacceptable behaviour."
+msgstr ""
+
+#: dru_tickets.module:135
+msgid "No taken yet"
+msgstr "Еще не принят"
+
+#: dru_tickets.module:156
+msgid "Moderator"
+msgstr "Модератор"
+
+#: dru_tickets.module:172
 msgid "Accept"
 msgstr "Принять"
 
@@ -74,31 +110,19 @@ msgstr "Тикеты"
 msgid "Tickets page"
 msgstr "Тикеты"
 
-#: (duplicate) dru_tickets.install:13
+#: dru_tickets.install:49
+msgid "Claim text"
+msgstr "Текст жалобы"
+
+#: (duplicate) dru_tickets.install:17
 msgid "Ticket Ststus"
 msgstr "Статус тикета"
 
-#: (duplicate) dru_tickets.install:23
-msgid "Open"
-msgstr "Открыто"
-
-#: (duplicate) dru_tickets.install:27
+#: (duplicate) dru_tickets.install:31
 msgid "Processed"
 msgstr "В обработке"
 
-#: (duplicate) dru_tickets.install:31
-msgid "Closed"
-msgstr "Закрыто"
-
-#: (duplicate) dru_tickets.install:45
-msgid "Ticket"
-msgstr "Тикет"
-
-#: (duplicate) dru_tickets.install:52
-msgid "Tickets for Drupal.ru"
-msgstr ""
-
-#: (duplicate) dru_tickets.install:88
+#: (duplicate) dru_tickets.install:80
 msgid "Status"
 msgstr "Статус"
 

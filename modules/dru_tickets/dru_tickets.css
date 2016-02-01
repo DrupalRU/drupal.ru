@@ -65,8 +65,29 @@ li.ticket-verdict a:before {
 #verdict-add #verdict-add-form {
   background: #fff none repeat scroll 0 0;
   margin: 50px auto;
-  max-height: calc(100vh - 60px);
+  max-height: calc(100vh - 100px);
   overflow: auto;
   padding: 20px;
+  position: relative;
   width: 320px;
+}
+
+#close-form {
+  display: block;
+  position: absolute;
+  right: 4px;
+  top: 10px;
+}
+
+#close-form i {
+  color: #e6c8c8;
+  cursor: pointer;
+  font-size: 35px;
+  -webkit-transition: all 400ms ease-out;
+	transition: all 400ms ease-out;
+}
+
+#close-form:hover i{
+  color: #d56f6f;
+  transform: rotate(360deg);
 }

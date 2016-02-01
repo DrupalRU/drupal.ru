@@ -222,7 +222,6 @@ function dru_tickets_theme($existing, $type, $theme, $path) {
 function dru_tickets_preprocess_node(&$vars) {
   if ($vars['type'] == 'ticket' && $vars['elements']['#view_mode'] == 'teaser') {
     $vars['theme_hook_suggestions'][] = "node__ticket__teaser";
-    dpm($vars);
   }
 }
 

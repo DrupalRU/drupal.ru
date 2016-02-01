@@ -59,7 +59,7 @@ function resolve_comment_view($comment, $view_mode, $langcode) {
  * @param object $node
  *   Object of checked node.
  *
- * @param mixed  $comment
+ * @param mixed $commentObject or array of comment which is initiator.
  *   Object or array of comment which is initiator.
  *
  * @param string $token
@@ -132,7 +132,7 @@ function resolve_preprocess_node(&$variables) {
   // Adding best comment to bottom of the node.
   if ($correct_mode && $is_resolved && isset($variables['content'])) {
     $content = &$variables['content'];
-    if($comment = comment_load($variables['resolved_cid'])){
+    if ($comment = comment_load($variables['resolved_cid'])) {
       $content['resolved_comment'] = comment_view($comment, $variables['node']);
 
       // Get max weight of the page.
@@ -142,17 +142,17 @@ function resolve_preprocess_node(&$variables) {
           $weight = $item['#weight'];
         }
       }
-  
+
       // If weight not found.
       if ($weight < count($content)) {
         $weight = count($content) + 1;
       }
-  
+
       $content['best-comment-header'] = array(
         '#markup' => '<h3>' . t('Best reply') . '</h3>',
         '#weight' => ++$weight,
       );
-  
+
       $content['resolved_comment']['#weight'] = ++$weight;
     }
   }
@@ -237,7 +237,7 @@ function resolve_token_to_arg() {
  *
  * @param string $title
  *   Some title of node or page.
- * @param bool   $resolved
+ * @param bool $resolvedIf set to TRUE, then the flag says: "Hey, the node is resolved!"
  *   If set to TRUE, then the flag says: "Hey, the node is resolved!"
  */
 function resolve_add_mark(&$title, $resolved) {

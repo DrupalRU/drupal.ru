@@ -149,9 +149,7 @@ function dru_claim_node_view($node, $view_mode) {
   }
     
   // Add node links
-  
-  if(user_access('create claim')){
-      
+  if(user_access('create claim') && $node->type != 'ticket'){
     drupal_add_library('system', 'drupal.ajax');
     $token = drupal_get_token('dru_claim');
     
@@ -230,7 +228,7 @@ function dru_claim_comment_view($comment, $view_mode) {
     drupal_add_library('system', 'drupal.ajax');
     $token = drupal_get_token('dru_claim');
     
-    if ($comment->claim == 0) {
+    if ($comment->claim == 0  && $node->type != 'ticket') {
       $comment->content['links']['comment']['#links']['dru-claim'] = array(
         'title' => t('Claim'),
         'href'  => 'ticket/comment/nojs/' . $comment->cid . '/' . $token,

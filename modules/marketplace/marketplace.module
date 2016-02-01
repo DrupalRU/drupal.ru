@@ -6,18 +6,18 @@
 
 
 /**
- * Implements hook_node_info()
+ * Implements hook_node_info().
  */
 function marketplace_node_info() {
-    return array(
-        'organization' => array(
-            'name' => t('Organization'),
-            'base' => 'marketplace',
-            'description' => t('Create organization page'),
-            'has_title' => TRUE,
-            'title_label' => t('Organization name')
-         )
-    );
+  return array(
+    'organization' => array(
+      'name' => t('Organization'),
+      'base' => 'marketplace',
+      'description' => t('Create organization page'),
+      'has_title' => TRUE,
+      'title_label' => t('Organization name'),
+    ),
+  );
 }
 
 /**
@@ -62,15 +62,15 @@ function marketplace_theme($existing, $type, $theme, $path) {
     'path' => drupal_get_path('module', 'marketplace') . '/templates',
 
   );
-  
+
   return $theme;
 }
 
 /**
- * Implement hook_preprocess_node()
+ * Implement hook_preprocess_node().
  */
 function marketplace_preprocess_node(&$variables) {
-//  drupal_set_message('<pre>' . print_r($variables, true) . '</pre>');
+  //  drupal_set_message('<pre>' . print_r($variables, true) . '</pre>');
   if ($variables['type'] == 'organization' && $variables['elements']['#view_mode'] == 'teaser') {
     $variables['theme_hook_suggestions'][] = "node__organization__teaser";
   }
@@ -89,7 +89,7 @@ function marketplace_block_info() {
 
   $blocks['organizations'] = array(
     'info' => t('Organizations'),
-    'cache' => DRUPAL_NO_CACHE
+    'cache' => DRUPAL_NO_CACHE,
   );
 
   return $blocks;
@@ -127,7 +127,7 @@ function marketplace_block_save($delta = '', $edit = array()) {
  * Implements hook_block_view().
  */
 function marketplace_block_view($delta = '') {
-   $block = array();
+  $block = array();
 
   switch ($delta) {
     case 'organizations':
@@ -145,17 +145,20 @@ function marketplace_block_view($delta = '') {
   return $block;
 }
 
+/**
+ *
+ */
 function template_preprocess_marketplace_random_block(&$variables) {
   $variables['nodes'] = $variables['content']['nodes'];
   $variables['links'] = $variables['content']['links'];
 }
 
 /**
- * Implement hook_form()
+ * Implement hook_form().
  */
 function marketplace_form($node, $form_state) {
-  $form =  node_content_form($node, $form_state);
-  
+  $form = node_content_form($node, $form_state);
+
   $form['logo'] = array(
     '#type' => 'file',
     '#title' => t('Logo'),
@@ -163,11 +166,9 @@ function marketplace_form($node, $form_state) {
     '#weight' => -4,
   );
 
-  if(isset($node->logo)){
-    $form['logo']['#prefix'] = '<div class="current_logo">' .  theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo'))) . '</div>';
+  if (isset($node->logo)) {
+    $form['logo']['#prefix'] = '<div class="current_logo">' . theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo'))) . '</div>';
   }
-  
-
 
   $form['website'] = array(
     '#type' => 'textfield',
@@ -186,12 +187,11 @@ function marketplace_form($node, $form_state) {
     '#default_value' => isset($node->address) ? $node->address : '',
   );
   // $type = node_type_get_type($node);
-  
   return $form;
 }
 
 /**
- * Implement hook_validate()
+ * Implement hook_validate().
  */
 
 function marketplace_validate($node, $form, &$form_state) {
@@ -201,29 +201,30 @@ function marketplace_validate($node, $form, &$form_state) {
 
   $validators = array(
     'file_validate_is_image' => array(),
-    'file_validate_extensions' => array(' jpg, jpeg, png')
+    'file_validate_extensions' => array(' jpg, jpeg, png'),
   );
 
-  //Save file
-  if (!$file = file_save_upload('logo', $validators, $logo_directory)){
-    if(!$form_state['node']->logo){
+  // Save file.
+  if (!$file = file_save_upload('logo', $validators, $logo_directory)) {
+    if (!$form_state['node']->logo) {
       form_set_error('logo', 'Could not upload file.');
     }
-  }else{
+  }
+  else {
     $form_state['values']['logo'] = $file;
   }
 }
 
 /**
- * Implement hook_load()
+ * Implement hook_load().
  */
 
 function marketplace_load($nodes) {
   $vids = array();
-  foreach($nodes as $node){
+  foreach ($nodes as $node) {
     $vids[] = $node->vid;
   }
-  
+
   $result = db_query('SELECT * FROM {organizations} WHERE vid IN (:vids)', array(':vids' => $vids));
   foreach ($result as $record) {
     $nodes[$record->nid]->website = $record->website;
@@ -233,11 +234,11 @@ function marketplace_load($nodes) {
 }
 
 /**
- * Implement hook_insert()
+ * Implement hook_insert().
  */
 function marketplace_insert($node) {
   $fid = 0;
-  if($node->logo){
+  if ($node->logo) {
     $file = $node->logo;
     $file->status = FILE_STATUS_PERMANENT;
     $file = file_save($file);
@@ -255,28 +256,28 @@ function marketplace_insert($node) {
 }
 
 /**
- * Implement hook_update()
+ * Implement hook_update().
  */
 
 function marketplace_update($node) {
 
   $fid = 0;
 
-  if($node->original->logo){
+  if ($node->original->logo) {
     $fid = $node->original->logo->fid;
   }
 
-  if($node->logo){
+  if ($node->logo) {
     $file = $node->logo;
     $file->status = FILE_STATUS_PERMANENT;
     $file = file_save($file);
     $fid = $file->fid;
-    
-    if($node->original->logo){
+
+    if ($node->original->logo) {
       file_delete($node->original->logo);
     }
   }
-  
+
   db_update('organizations')
     ->fields(array(
       'website' => $node->website,
@@ -288,35 +289,36 @@ function marketplace_update($node) {
 }
 
 /**
- * Implement hook_view()
+ * Implement hook_view().
  */
- 
+
 function marketplace_view($node, $view_mode, $langcode = NULL) {
   drupal_add_css(drupal_get_path('module', 'marketplace') . '/marketplace.css');
-  
-  if($node->logo){
+
+  if ($node->logo) {
     $logo_img = theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo')));
   }
-  else{
+  else {
     $logo_img = theme('image', array('path' => drupal_get_path('module', 'marketplace') . '/marketplace-placeholder.png', 'attributes' => array('class' => 'organization-logo')));
   }
   $node->content['logo'] = array(
-    '#markup' =>  $logo_img,
+    '#markup' => $logo_img,
     '#weight' => 1,
   );
-  
-  if(0 === strpos("http", $node->website)){
+
+  if (0 === strpos("http", $node->website)) {
     $urlpath = check_plain($node->website);
-  }else{
+  }
+  else {
     $urlpath = 'http://' . check_plain($node->website);
   }
   $node->content['website'] = array(
-    '#markup' =>  l($node->website, $urlpath, array('attributes' => array('rel' => 'nofollow'))),
+    '#markup' => l($node->website, $urlpath, array('attributes' => array('rel' => 'nofollow'))),
     '#weight' => 1,
   );
 
   $node->content['address'] = array(
-    '#markup' =>  check_plain($node->address),
+    '#markup' => check_plain($node->address),
     '#weight' => 1,
   );
 
@@ -325,14 +327,13 @@ function marketplace_view($node, $view_mode, $langcode = NULL) {
 
 /**
  * Implements hook_query_TAG_alter() for node_load_multiple().
-
-function marketplace_query_node_load_multiple_alter(QueryAlterableInterface &$query) {
-  $query->leftJoin('organizations', 'orgs', 'orgs.vid = base.vid');
-  $query->leftJoin('files', 'f', 'orgs.logo_fid = f.fid');
-  $query->fields('orgs');
-  $query->addField('f', 'filepath');
-}
-*/
+ *  * function marketplace_query_node_load_multiple_alter(QueryAlterableInterface &$query) {
+ * $query->leftJoin('organizations', 'orgs', 'orgs.vid = base.vid');
+ * $query->leftJoin('files', 'f', 'orgs.logo_fid = f.fid');
+ * $query->fields('orgs');
+ * $query->addField('f', 'filepath');
+ * }.
+ */
 
 /**
  * Implements hook_menu().
@@ -349,14 +350,14 @@ function marketplace_menu() {
 }
 
 /**
- * Display companies on market place
+ * Display companies on market place.
  */
-function marketplace_block_list($count){
+function marketplace_block_list($count) {
   $select = db_select('node', 'n')
     ->fields('n', array('nid', 'created'))
     ->condition('n.type', 'organization', '=')
     ->condition('n.status', 1)
-    ->range(0,4)
+    ->range(0, $count)
     ->orderRandom()
     ->addTag('node_access');
 
@@ -367,18 +368,18 @@ function marketplace_block_list($count){
     $build = node_view_multiple($nodes, 'block');
   }
 
-  $links = array();  
+  $links = array();
   if (_node_add_access()) {
     $links['add'] = array(
       'href' => 'node/add/organization',
       'title' => t('Add organization'),
     );
-  }  
+  }
   $links['list'] = array(
     'href' => 'services',
     'title' => t('See full list'),
   );
-  
+
   $build['links'] = array(
     '#theme' => 'links',
     '#links' => $links,
@@ -389,9 +390,9 @@ function marketplace_block_list($count){
 }
 
 /**
- * Display companies on market place
+ * Display companies on market place.
  */
-function marketplace_list(){
+function marketplace_list() {
   $select = db_select('node', 'n')
     ->fields('n', array('nid', 'created'))
     ->condition('n.type', 'organization', '=')

@@ -17,7 +17,7 @@ function marketplace_install() {
   foreach (_organization_installed_fields() as $field) {
     field_create_field($field);
   }
- 
+
   foreach (_organization_installed_instances() as $instance) {
     field_create_instance($instance);
   }
@@ -96,7 +96,7 @@ function _organization_installed_fields() {
       ),
     ),
   );
- 
+
 }
 
 /**
@@ -104,7 +104,7 @@ function _organization_installed_fields() {
  */
 function _organization_installed_instances() {
   $t = get_t();
-  return array( 
+  return array(
     'organization_type' => array(
       'field_name' => 'organization_type',
       'bundle' => 'organization',
@@ -134,28 +134,28 @@ function _organization_installed_instances() {
  * Implements hook_uninstall().
  */
 function marketplace_uninstall() {
- 
+
   $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
   $result = db_query($sql, array(':type' => 'organization'));
   $nids = array();
   foreach ($result as $row) {
     $nids[] = $row->nid;
   }
- 
-  // Delete all the nodes at once
+
+  // Delete all the nodes at once.
   node_delete_multiple($nids);
- 
+
   $instance = array('field_name' => 'comment_body', 'bundle' => 'comment_node_organization', 'entity_type' => 'comment');
   field_delete_instance($instance);
- 
+
   $instance = array('field_name' => 'body', 'bundle' => 'organization', 'entity_type' => 'node');
   field_delete_instance($instance);
- 
-   $fields = array_keys(_organization_installed_fields());
-   foreach ($fields as $field) {
-      field_delete_field($field);
+
+  $fields = array_keys(_organization_installed_fields());
+  foreach ($fields as $field) {
+    field_delete_field($field);
   }
 
-  // Purge all field infromation
-   field_purge_batch(1000);
+  // Purge all field infromation.
+  field_purge_batch(1000);
 }

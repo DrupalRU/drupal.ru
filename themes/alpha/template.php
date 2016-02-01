@@ -26,6 +26,11 @@ function alpha_theme($existing, $type, $theme, $path) {
       'base hook' => 'node',
       'template' => 'templates/node--simple_event--teaser',
     ),
+    'node__simple_event__block' => array(
+      'render element' => 'content',
+      'base hook' => 'node',
+      'template' => 'templates/node--simple_event--block',
+    ),
   );
 }
 
@@ -722,6 +727,12 @@ function _alpha_pager_item_list($variables) {
  *
  */
 function alpha_preprocess_marketplace_random_block(&$variables) {
+  $variables['links']['#attributes']['class'][] = 'inline';
+  $variables['links']['#links']['add']['attributes']['class'] = array('btn', 'btn-primary');
+  $variables['links']['#links']['list']['attributes']['class'] = array('btn', 'btn-success');
+}
+
+function alpha_preprocess_simple_events_upcoming_block(&$variables) {
   $variables['links']['#attributes']['class'][] = 'inline';
   $variables['links']['#links']['add']['attributes']['class'] = array('btn', 'btn-primary');
   $variables['links']['#links']['list']['attributes']['class'] = array('btn', 'btn-success');

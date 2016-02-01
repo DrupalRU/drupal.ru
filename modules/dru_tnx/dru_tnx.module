@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implements hook_permission().
  */
 function dru_tnx_permission() {
@@ -76,7 +80,7 @@ function dru_tnx_menu() {
     'delivery callback' => 'ajax_deliver',
     'type'              => MENU_CALLBACK,
   );
-  
+
   return $items;
 }
 
@@ -84,35 +88,35 @@ function dru_tnx_menu() {
  * Implements hook_node_view().
  */
 function dru_tnx_node_view($node, $view_mode) {
-    
+
   global $user;
-  
-  // Add node links
-  if(user_access('tnx') && $node->uid !== $user->uid){
-    
+
+  // Add node links.
+  if (user_access('tnx') && $node->uid !== $user->uid) {
+
     drupal_add_library('system', 'drupal.ajax');
-  
+
     $tnx = get_user_tnx('node', $node->nid, $user->uid);
-    
+
     $node->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link($node, 'node', $node->nid, $tnx);
   }
-  
+
 }
 
 /**
  * Implements hook_comment_view().
  */
 function dru_tnx_comment_view($comment, $view_mode) {
-    
+
   global $user;
-  
-  // Add comment links
-  if(user_access('tnx') && $comment->uid !== $user->uid){
-  
+
+  // Add comment links.
+  if (user_access('tnx') && $comment->uid !== $user->uid) {
+
     drupal_add_library('system', 'drupal.ajax');
-  
+
     $tnx = get_user_tnx('comment', $comment->cid, $user->uid);
-    
+
     $comment->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link($comment, 'comment', $comment->cid, $tnx);
   }
 }
@@ -123,10 +127,10 @@ function dru_tnx_comment_view($comment, $view_mode) {
  * Return array.
  */
 function dru_tnx_link($entity, $entity_type, $entity_id, $tnx, $new = FALSE) {
-  
+
   $tnx_action = $tnx ? 'tnx' : 'untnx';
   $type = $entity_type;
-  
+
   return array(
     'title'      => $tnx ? t('@count Thank you', array('@count' => $entity->tnx + $new)) : t('@count Revoke thank you', array('@count' => $entity->tnx + $new)),
     'href'       => $tnx_action . '/' . $type . '/nojs/' . $entity_id,
@@ -137,7 +141,7 @@ function dru_tnx_link($entity, $entity_type, $entity_id, $tnx, $new = FALSE) {
         'dru-thanks',
         'dru-' . $tnx_action,
         'dru-tnx-' . $type,
-        'dru-tnx-' . $type . '-' . $entity_id
+        'dru-tnx-' . $type . '-' . $entity_id,
       ),
     ),
   );
@@ -149,7 +153,7 @@ function dru_tnx_link($entity, $entity_type, $entity_id, $tnx, $new = FALSE) {
  * Return Boolean TRUE if user alredy have thanked.
  */
 function get_user_tnx($entity_type, $entity_id, $uid) {
-  
+
   $tnx = db_select('tnx', 't')
        ->fields('t', array('id'))
        ->condition('t.entity_type', $entity_type)
@@ -157,9 +161,9 @@ function get_user_tnx($entity_type, $entity_id, $uid) {
        ->condition('t.uid', $uid)
        ->execute()
        ->fetchAll();
-       
+
   return empty($tnx) ? 1 : 0;
-  
+
 }
 
 /**
@@ -168,16 +172,16 @@ function get_user_tnx($entity_type, $entity_id, $uid) {
  * Return UID list.
  */
 function get_tnx_by_id($entity_type, $entity_id) {
-  
+
   $users = db_select('tnx', 't')
        ->fields('t', array('uid'))
        ->condition('t.entity_type', $entity_type)
        ->condition('t.entity_id', $entity_id)
        ->execute()
        ->fetchAssoc();
-  
+
   return $users;
-  
+
 }
 
 /**
@@ -186,26 +190,26 @@ function get_tnx_by_id($entity_type, $entity_id) {
  * Return Entity ID list.
  */
 function get_tnx_by_uid($entity_type, $uid) {
-  
+
   $tnxs = db_select('tnx', 't')
        ->fields('t', array('entity_id'))
        ->condition('t.entity_type', $entity_type)
        ->condition('t.uid', $uid)
        ->execute()
        ->fetchAssoc();
-  
+
   return $tnxs;
-  
+
 }
 
 /**
  * Implements hook_user_view().
  */
 function dru_tnx_user_view($account, $view_mode, $langcode) {
-  
+
   $tnx_stats = get_user_tnx_statistic($account->uid);
-  
-  // User tnx
+
+  // User tnx.
   $account->content['summary']['user_tnx'] = array(
     '#type'       => 'user_profile_item',
     '#title'      => t('User tnx'),
@@ -216,8 +220,8 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
       '@comment' => $tnx_stats->tnx_comment,
     )),
   );
-  
-  // Users tnx
+
+  // Users tnx.
   $account->content['summary']['users_tnx'] = array(
     '#type'       => 'user_profile_item',
     '#title'      => t('Users tnx'),
@@ -233,7 +237,7 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
 /**
  * Implementation get_user_tnx_statistic().
  *
- * Return user statistic object
+ * Return user statistic object.
  */
 function get_user_tnx_statistic($uid) {
   $statistic = db_select('tnx_stat', 't')
@@ -241,7 +245,7 @@ function get_user_tnx_statistic($uid) {
     ->condition('t.uid', $uid)
     ->execute()
     ->fetchObject();
-    
+
   return $statistic;
 }
 

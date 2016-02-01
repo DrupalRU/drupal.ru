@@ -3,7 +3,12 @@
 /**
  * Callback dru_claim_node
  */
-function dru_claim_node($ajax, $node) {
+function dru_claim_node($ajax, $node, $token) {
+  
+  if (!drupal_valid_token($token, 'dru_claim')) {
+    return;
+  }
+  
   $vars = array(
     'type'   => 'node',
     'id'     => $node->nid,
@@ -17,7 +22,12 @@ function dru_claim_node($ajax, $node) {
 /**
  * Callback dru_claim_comment
  */
-function dru_claim_comment($ajax, $comment) {
+function dru_claim_comment($ajax, $comment, $token) {
+  
+  if (!drupal_valid_token($token, 'dru_claim')) {
+    return;
+  }
+  
   $vars = array(
     'type'   => 'comment',
     'id'     => $comment->cid,
@@ -125,7 +135,7 @@ function dru_claim_submit_js($form_id, $form_state) {
   if (isset($body)) {
     $verdict  = '<div class="claim_message claim_message_processed">';
     $verdict .= '<i class="fa fa-cogs"></i>';
-    $verdict .= t('Claim processed');
+    $verdict .= t('Claim is under review');
     $verdict .= '</div>';
     
     $commands = array();
@@ -137,9 +147,6 @@ function dru_claim_submit_js($form_id, $form_state) {
       '#type'     => 'ajax',
       '#commands' => $commands,
     );
-  }
-  else {
-    return;
   }
   
 }
@@ -195,7 +202,12 @@ function dru_claim_form_submit($form_id, &$form_state) {
 /**
  * Verdict
  */
-function dru_ticket_verdict($ajax, $node) {
+function dru_ticket_verdict($ajax, $node, $token) {
+  
+  if (!drupal_valid_token($token, 'dru_claim')) {
+    return;
+  }
+  
   $is_ajax = $ajax === 'ajax';
   $vars = array(
     'ticket' => $node,
@@ -234,8 +246,8 @@ function dru_verdict_form($form, &$form_state, $vars) {
     ->fields('t', array('ticket_verdict'))
     ->condition('t.ticket_id', $vars['ticket']->nid, '=')
     ->execute()
-    ->fetchAll();
-  $claim = array_shift($claim);
+    ->fetchObject();
+    
   if (empty($claim->ticket_verdict)) {
     $verdict = '';
   }
@@ -297,13 +309,32 @@ function dru_verdict_submit_js($form_id, $form_state) {
 function dru_verdict_form_submit($form_id, &$form_state) {
   
   $verdict = $form_state['values']['dru_verdict'];
-  $ticket = $form_state['dru_ticket']['ticket'];
+  $ticket  = $form_state['dru_ticket']['ticket'];
+  
+  if (!empty($verdict)) {
+    $statuses = taxonomy_get_term_by_name(t('Closed'));
+    foreach ($statuses as $tid => $status) {
+      if ($status->vocabulary_machine_name == 'ticket_status') {
+        $ticket->field_ticket_status[$ticket->language][0]['tid'] = $status->tid;
+      }
+    }
+    node_save($ticket);
+  }
+  else {
+    $statuses = taxonomy_get_term_by_name(t('Open'));
+    foreach ($statuses as $tid => $status) {
+      if ($status->vocabulary_machine_name == 'ticket_status') {
+        $ticket->field_ticket_status[$ticket->language][0]['tid'] = $tid;
+      }
+    }
+    node_save($ticket);
+  }
   
   $query = db_update('ticket_claim');
   $query->fields(array(
     'ticket_verdict' => $verdict,
-  ));
-  $query->condition('ticket_id', $ticket->nid);
-  $num_updated = $query->execute();
+    ))
+    ->condition('ticket_id', $ticket->nid)
+    ->execute();
   
 }

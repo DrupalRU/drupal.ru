@@ -6,6 +6,7 @@ function dru_tickets_page() {
   $result = $query->entityCondition('entity_type', 'node')
                   ->propertyCondition('status', 1)
                   ->propertyCondition('type', 'ticket')
+                  ->propertyOrderBy('nid', 'DESC')
                   ->pager(10)
                   ->execute();
                   
@@ -27,7 +28,11 @@ function dru_tickets_page() {
   
 }
 
-function dru_ticket_accept($node) {
+function dru_ticket_accept($node, $token) {
+  
+  if (!drupal_valid_token($token, 'dru_tickets')) {
+    return;
+  }
   
   global $user;
   if ($node->uid == 0) {

@@ -1,0 +1,111 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  dru_tickets.pages.inc: n/a
+#  dru_tickets.module: n/a
+#  dru_tickets.install: n/a
+#  dru_tickets.info: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2016-02-01 02:01+0200\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: dru_tickets.pages.inc:24
+msgid "There are no tickets"
+msgstr ""
+
+#: dru_tickets.pages.inc:41
+msgid "Ticket accepted"
+msgstr ""
+
+#: dru_tickets.pages.inc:44
+msgid "Ticket already your"
+msgstr ""
+
+#: dru_tickets.pages.inc:48
+msgid "Ticket moderated by @name"
+msgstr ""
+
+#: dru_tickets.module:9
+msgid "View Tickets"
+msgstr ""
+
+#: dru_tickets.module:10
+msgid "Allow users to view tickets"
+msgstr ""
+
+#: dru_tickets.module:14
+msgid "Create Tickets"
+msgstr ""
+
+#: dru_tickets.module:15
+msgid "Allow users to create tickets"
+msgstr ""
+
+#: dru_tickets.module:18
+msgid "Moderate Tickets"
+msgstr ""
+
+#: dru_tickets.module:19
+msgid "Allow users to moderate tickets"
+msgstr ""
+
+#: dru_tickets.module:61
+msgid "Accept"
+msgstr ""
+
+#: dru_tickets.module:31
+msgid "Tickets"
+msgstr ""
+
+#: dru_tickets.module:32
+msgid "Tickets page"
+msgstr ""
+
+#: (duplicate) dru_tickets.install:13 
+msgid "Ticket Ststus"
+msgstr ""
+
+#: (duplicate) dru_tickets.install:23 
+msgid "Open"
+msgstr ""
+
+#: (duplicate) dru_tickets.install:27 
+msgid "Processed"
+msgstr ""
+
+#: (duplicate) dru_tickets.install:31 
+msgid "Closed"
+msgstr ""
+
+#: (duplicate) dru_tickets.install:45 
+msgid "Ticket"
+msgstr ""
+
+#: (duplicate) dru_tickets.install:52 
+msgid "Tickets for Drupal.ru"
+msgstr ""
+
+#: (duplicate) dru_tickets.install:88 
+msgid "Status"
+msgstr ""
+
+#: dru_tickets.info:0;0
+msgid "Tickets Drupal.ru"
+msgstr ""
+
+#: dru_tickets.info:0
+msgid "Moderation"
+msgstr ""
+

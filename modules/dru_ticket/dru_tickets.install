@@ -23,7 +23,7 @@ function dru_tickets_install() {
         'name' => $t('Open'),
         'vid'  => $vid,
       ),
-      'processed' => array(
+      'process' => array(
         'name' => $t('Processed'),
         'vid'  => $vid,
       ),

@@ -104,7 +104,7 @@ function dru_claim_install() {
       'settings'   => array(
         'allowed_values' => array(
           array(
-            'vocabulary' => 'ticket_status',
+            'vocabulary' => 'claim_category',
             'parent'     => 0,
           ),
         ),

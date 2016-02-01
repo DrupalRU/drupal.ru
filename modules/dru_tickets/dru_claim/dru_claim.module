@@ -87,7 +87,7 @@ function dru_claim_node_view($node, $view_mode) {
   global $user;
   
   $claim = db_select('ticket_claim', 't')
-    ->fields('t', array('init_uid', 'moderate_uid', 'content_type', 'ticket_verdict'))
+    ->fields('t')
     ->condition('t.ticket_id', $node->nid, '=')
     ->execute()
     ->fetchAll();

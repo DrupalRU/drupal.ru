@@ -1,0 +1,311 @@
+<?php
+
+/**
+ * Implements hook_permission().
+ */
+function dru_claim_permission() {
+  return array(
+    'create claim' => array(
+      'title'           => t('Create Claim'),
+      'description'     => t('Allow users to create claim'),
+    ),
+    'edit claim'   => array(
+      'title'           => t('Edit Claim'),
+      'description'     => t('Allow users to edit claim'),
+      'restrict access' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function dru_claim_menu() {
+  $items['ticket/node/nojs/%node/%'] = array(
+    'page callback'    => 'dru_claim_node',
+    'file'             => 'dru_claim.pages.inc',
+    'page arguments'   => array(2, 3, 4),
+    'access arguments' => array('create claim'),
+    'type'             => MENU_CALLBACK,
+  );
+  $items['ticket/node/ajax/%node/%'] = array(
+    'page callback'     => 'dru_claim_node',
+    'file'              => 'dru_claim.pages.inc',
+    'page arguments'    => array(2, 3, 4),
+    'access arguments'  => array('create claim'),
+    'delivery callback' => 'ajax_deliver',
+    'type'              => MENU_CALLBACK,
+  );
+  $items['ticket/comment/nojs/%comment/%'] = array(
+    'page callback'    => 'dru_claim_comment',
+    'file'             => 'dru_claim.pages.inc',
+    'page arguments'   => array(2, 3, 4),
+    'access arguments' => array('create claim'),
+    'type'             => MENU_CALLBACK,
+  );
+  $items['ticket/comment/ajax/%comment/%'] = array(
+    'page callback'     => 'dru_claim_comment',
+    'file'              => 'dru_claim.pages.inc',
+    'page arguments'    => array(2, 3, 4),
+    'access arguments'  => array('create claim'),
+    'delivery callback' => 'ajax_deliver',
+    'type'              => MENU_CALLBACK,
+  );
+  $items['ticket/%node/verdict/nojs/%'] = array(
+    'page callback'    => 'dru_ticket_verdict',
+    'file'             => 'dru_claim.pages.inc',
+    'page arguments'   => array(3, 1, 4),
+    'access arguments' => array('edit claim'),
+    'type'             => MENU_CALLBACK,
+  );
+  $items['ticket/%node/verdict/ajax/%'] = array(
+    'page callback'     => 'dru_ticket_verdict',
+    'file'              => 'dru_claim.pages.inc',
+    'page arguments'    => array(3, 1, 4),
+    'access arguments'  => array('edit claim'),
+    'delivery callback' => 'ajax_deliver',
+    'type'              => MENU_CALLBACK,
+  );
+  
+  return $items;
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function dru_claim_preprocess_node(&$vars) {
+  if ($vars['claim'] <> 0) {
+    $vars['classes_array'][] = 'dru-claim-process node-claim';
+  }
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function dru_claim_node_view($node, $view_mode) {
+  
+  global $user;
+  
+  $claim = db_select('ticket_claim', 't')
+    ->fields('t', array('init_uid', 'author_uid', 'content_type', 'ticket_verdict'))
+    ->condition('t.ticket_id', $node->nid, '=')
+    ->execute()
+    ->fetchAll();
+  $claim = array_shift($claim);
+  
+  // View extra fields
+  static $extra_fields = array();
+ 
+  $key = 'node:' . $node->type . ':' . $view_mode;
+  if (!isset($extra_fields[$key])) {
+    $extra_fields[$key] = field_extra_fields_get_display('node', $node->type, $view_mode);
+  }
+  
+  if (!empty($claim)) {
+    if (isset($extra_fields[$key]['ticket_init_uid']) && $extra_fields[$key]['ticket_init_uid']['visible']) {
+      $initiator = user_load($claim->init_uid);
+      $node->content['ticket_init_uid'] = array(
+        '#markup' => '<div class="field field-label-inline clearfix clame-extra clame-initiator"><div class="field-label">' . t('Initiator') . ':&nbsp;</div><div class="field-items clame-initiator-value clame-initiator-' . $node->nid . '">' . l($initiator->name, 'user/' . $initiator->uid) . '</div></div>',
+        '#weight' => $extra_fields[$key]['ticket_init_uid']['weight'],
+      );
+    }
+    
+    if (isset($extra_fields[$key]['ticket_author_uid']) && $extra_fields[$key]['ticket_author_uid']['visible']) {
+      $author = user_load($claim->author_uid);
+      $node->content['ticket_author_uid'] = array(
+        '#markup' => '<div class="field field-label-inline clearfix clame-extra clame-author"><div class="field-label">' . t('Author') . ':&nbsp;</div><div class="field-items clame-author-value clame-author-' . $node->nid . '">' . l($author->name, 'user/' . $author->uid) . '</div></div>',
+        '#weight' => $extra_fields[$key]['ticket_author_uid']['weight'],
+      );
+    }
+    
+    if (isset($extra_fields[$key]['ticket_verdict']) && $extra_fields[$key]['ticket_verdict']['visible']) {
+      $node->content['ticket_verdict'] = array(
+        '#markup' => '<div class="field field-label-inline clearfix clame-extra clame-verdict"><div class="field-label">' . t('Verdict') . ':&nbsp;</div><div class="field-items clame-verdict-value clame-verdict-' . $node->nid . '">' . $claim->ticket_verdict . '</div></div>',
+        '#weight' => $extra_fields[$key]['ticket_verdict']['weight'],
+      );
+    }
+    
+    if (isset($extra_fields[$key]['ticket_entity']) && $extra_fields[$key]['ticket_entity']['visible']) {
+      $node->content['ticket_entity'] = array(
+        '#markup' => '<div class="field field-label-inline clearfix clame-extra clame-entity"><div class="field-label">' . t('Entity') . ':&nbsp;</div><div class="field-items clame-entity-value clame-entity-' . $node->nid . '">' . $claim->content_type . '</div></div>',
+        '#weight' => $extra_fields[$key]['ticket_entity']['weight'],
+      );
+    }
+    
+    if ($node->uid == $user->uid && user_access('edit claim')) { 
+      
+      drupal_add_library('system', 'drupal.ajax');
+      $token = drupal_get_token('dru_claim');
+      
+      $node->content['links']['comment']['#links']['ticket-verdict'] = array(
+        'title' => $claim->ticket_verdict ? t('Change verdict') : t('Verdict'),
+        'href' => 'ticket/' . $node->nid . '/verdict/nojs/' . $token,
+        'attributes' => array(
+          'class' => array('use-ajax', 'ticket-verdict-' . $node->nid),
+        ),
+      );
+      
+    }
+  }
+    
+  // Add node links
+  
+  if(user_access('create claim')){
+      
+    drupal_add_library('system', 'drupal.ajax');
+    $token = drupal_get_token('dru_claim');
+    
+    if ($node->claim == 0) {
+      $node->content['links']['comment']['#links']['dru-claim'] = array(
+        'title' => t('Claim'),
+        'href' => 'ticket/node/nojs/' . $node->nid . '/' . $token,
+        'query' => drupal_get_destination(),
+        'attributes' => array(
+          'class' => array('use-ajax', 'claim-node-' . $node->nid),
+        ),
+      );
+    }
+  }
+  
+  // View claim verdict
+  if (user_is_logged_in()) {
+    if ($node->claim <> 0) {
+      $claim = db_select('ticket_claim', 't')
+        ->fields('t', array('ticket_verdict', 'ticket_id'))
+        ->condition('t.content_id', $node->nid, '=')
+        ->execute()
+        ->fetchObject();
+      if (is_object($claim)) {
+        if (!$claim->ticket_verdict) {
+          $verdict = l(t('Claim is under review'), 'node/' . $claim->ticket_id);
+          $icon    = '<i class="fa fa-cogs"></i>';
+          $class   = 'claim_message_processed';
+        }
+        else {
+          $verdict = $claim->ticket_verdict;
+          $icon    = '<i class="fa fa-balance-scale"></i>';
+          $class   = 'claim_message_done';
+        }
+        $claim_message  = '<div class="claim_message ' . $class . '">';
+        $claim_message .= $icon;
+        $claim_message .= $verdict;
+        $claim_message .= '</div>';
+        $claim_message .= $node->content['body'][0]['#markup'];
+        $node->content['body'][0]['#markup'] = $claim_message;
+      }
+    }
+  }
+  
+}
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function dru_claim_preprocess_field(&$vars) {
+  if ($vars['element']['#field_name'] == 'body' && $vars['element']['#entity_type'] == 'node') {
+    $vars['classes_array'][] = 'body-' . $vars['element']['#object']->nid;
+  }
+  if ($vars['element']['#field_name'] == 'comment_body' && $vars['element']['#entity_type'] == 'comment') {
+    $vars['classes_array'][] = 'body-' . $vars['element']['#object']->cid;
+  }
+}
+
+/**
+ * Implements hook_preprocess_comment().
+ */
+function dru_claim_preprocess_comment(&$vars) {
+  if ($vars['comment']->claim <> 0) {
+    $vars['classes_array'][] = 'dru-claim comment-claim';
+  }
+}
+
+/**
+ * Implements hook_comment_view().
+ */
+function dru_claim_comment_view($comment, $view_mode) {
+  // Add comment links
+  
+  if(user_access('create claim')){
+      
+    drupal_add_library('system', 'drupal.ajax');
+    $token = drupal_get_token('dru_claim');
+    
+    if ($comment->claim == 0) {
+      $comment->content['links']['comment']['#links']['dru-claim'] = array(
+        'title' => t('Claim'),
+        'href'  => 'ticket/comment/nojs/' . $comment->cid . '/' . $token,
+        'query' => drupal_get_destination(),
+        'attributes' => array(
+          'class' => array('use-ajax', 'claim-comment-' . $comment->cid),
+        ),
+      );
+    }
+  }
+  
+  // View claim verdict
+  if (user_is_logged_in()) {
+    if ($comment->claim <> 0) {
+        
+      $claim = db_select('ticket_claim', 't')
+        ->fields('t', array('ticket_verdict', 'ticket_id'))
+        ->condition('t.content_id', $comment->cid, '=')
+        ->execute()
+        ->fetchObject();
+        
+      if (is_object($claim)) {
+        if (!$claim->ticket_verdict) {
+          $verdict = l(t('Claim is under review'), 'node/' . $claim->ticket_id);
+          $icon    = '<i class="fa fa-cogs"></i>';
+          $class   = 'claim_message_processed';
+        }
+        else {
+          $verdict = $claim->ticket_verdict;
+          $icon    = '<i class="fa fa-balance-scale"></i>';
+          $class   = 'claim_message_done';
+        }
+        
+        $claim_message  = '<div class="claim_message ' . $class . '">';
+        $claim_message .= $icon;
+        $claim_message .= $verdict;
+        $claim_message .= '</div>';
+        $claim_message .= $comment->content['comment_body'][0]['#markup'];
+        
+        $comment->content['comment_body'][0]['#markup'] = $claim_message;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function dru_claim_field_extra_fields() {
+  $extra['node']['ticket']['display'] = array(
+    'ticket_init_uid'   => array(
+      'label'       => t('Initiator UID'),
+      'description' => t('Initiator User ID'),
+      'weight'      => 0,
+    ),
+    'ticket_author_uid' => array(
+      'label'  => t('Author UID'),
+      'weight' => 0,
+    ),
+    'ticket_entity' => array(
+      'label'  => t('Entity type'),
+      'weight' => 0,
+    ),
+    'ticket_verdict'    => array(
+      'label'  => t('Verdict'),
+      'weight' => 0,
+    ),
+  );
+  return $extra;
+}
+
+/**
+ * Implements hook_init().
+ */
+function dru_claim_init() {
+  drupal_add_js(drupal_get_path('module', 'dru_claim') . '/dru_claim.js');
+  drupal_add_css(drupal_get_path('module', 'dru_claim') . '/dru_claim.css');
+}

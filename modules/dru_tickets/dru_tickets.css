@@ -1,0 +1,72 @@
+@-webkit-keyframes animatedBackground {
+  from {
+    background: rgba(255, 254, 139, .9);
+  }
+  to {
+    background: rgba(255, 254, 139, 0);
+  }
+}
+@keyframes animatedBackground {
+  from {
+    background: rgba(255, 254, 139, .9);
+  }
+  to {
+    background: rgba(255, 254, 139, 0);
+  }
+}
+
+.tiket-changed {
+  -webkit-animation: animatedBackground 4s ease-out;
+  animation: animatedBackground 4s ease-out;
+}
+
+li.ticket-assign a:before {
+  content: "\f1b8";
+  font-family: "fa", "FontAwesome";
+  padding-right: 5px;
+}
+
+.moderator .label,
+.verdict .label {
+  display: inline-block;
+  font-weight: bold;
+  color: black;
+  font-size: 100%;
+  padding: 0px;
+  margin: 0px;
+  padding-right: 10px;
+}
+
+.moderator .value,
+.verdict .value {
+  display: inline-block;
+}
+
+li.ticket-verdict a:before {
+  content: "\f0e3";
+  font-family: "fa", "FontAwesome";
+  padding-right: 5px;
+}
+
+.dru-verdict-process {
+  /*background: #fff6ed;*/
+}
+
+#verdict-add {
+  background: rgba(0, 0, 0, 0.7) none repeat scroll 0 0;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+#verdict-add #verdict-add-form {
+  background: #fff none repeat scroll 0 0;
+  margin: 50px auto;
+  max-height: calc(100vh - 60px);
+  overflow: auto;
+  padding: 20px;
+  width: 320px;
+}

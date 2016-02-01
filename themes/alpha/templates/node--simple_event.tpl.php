@@ -123,13 +123,15 @@
           hide($content['links']);
           print render($content);
         ?>
-        <div class="links">
-          <?php print render($content['links']); ?>
-        </div>
-        <hr>
-    
       </div>
     </div>
+    <div class="clearfix"></div>
+    <div class="links">
+      <?php print render($content['links']); ?>
+    </div>
+    <div class="clearfix"></div>
+    <hr>
+        
     <div class="col-xs-12">
       <?php print render($content['comments']); ?>
     </div>

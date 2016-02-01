@@ -87,7 +87,7 @@ function dru_claim_node_view($node, $view_mode) {
   global $user;
   
   $claim = db_select('ticket_claim', 't')
-    ->fields('t', array('init_uid', 'author_uid', 'content_type', 'ticket_verdict'))
+    ->fields('t', array('init_uid', 'moderate_uid', 'content_type', 'ticket_verdict'))
     ->condition('t.ticket_id', $node->nid, '=')
     ->execute()
     ->fetchAll();
@@ -110,11 +110,11 @@ function dru_claim_node_view($node, $view_mode) {
       );
     }
     
-    if (isset($extra_fields[$key]['ticket_author_uid']) && $extra_fields[$key]['ticket_author_uid']['visible']) {
-      $author = user_load($claim->author_uid);
-      $node->content['ticket_author_uid'] = array(
-        '#markup' => '<div class="field field-label-inline clearfix clame-extra clame-author"><div class="field-label">' . t('Author') . ':&nbsp;</div><div class="field-items clame-author-value clame-author-' . $node->nid . '">' . l($author->name, 'user/' . $author->uid) . '</div></div>',
-        '#weight' => $extra_fields[$key]['ticket_author_uid']['weight'],
+    if (isset($extra_fields[$key]['ticket_moderate_uid']) && $extra_fields[$key]['ticket_moderate_uid']['visible']) {
+      $author = user_load($claim->moderate_uid);
+      $node->content['ticket_moderate_uid'] = array(
+        '#markup' => '<div class="field field-label-inline clearfix clame-extra clame-author"><div class="field-label">' . t('Moderator') . ':&nbsp;</div><div class="field-items clame-author-value clame-author-' . $node->nid . '">' . l($author->name, 'user/' . $author->uid) . '</div></div>',
+        '#weight' => $extra_fields[$key]['ticket_moderate_uid']['weight'],
       );
     }
     
@@ -284,7 +284,7 @@ function dru_claim_field_extra_fields() {
       'description' => t('Initiator User ID'),
       'weight'      => 0,
     ),
-    'ticket_author_uid' => array(
+    'ticket_moderate_uid' => array(
       'label'  => t('Author UID'),
       'weight' => 0,
     ),

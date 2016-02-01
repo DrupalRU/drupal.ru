@@ -36,16 +36,16 @@ function dru_ticket_accept($node, $token) {
   
   global $user;
   
-  $claim = db_select('ticket_claim', 't')
-        ->fields('t')
-        ->condition('t.content_id', $node->nid, '=')
-        ->execute()
-        ->fetchObject();
+  $claim = db_select('ticket_claim', 'tc')
+    ->fields('tc')
+    ->condition('content_id', $node->nid)
+    ->execute()
+    ->fetchObject();
         
   if ($claim->moderate_uid == 0) {
     $claim->moderate_uid = $user->uid;
-    drupal_write_record('ticket_claim', $claim, 'id');
     drupal_set_message(t('Ticket accepted') . print_r($claim,true) . print_r($node,true)); 
+    drupal_write_record('ticket_claim', $claim, 'id');
   }
   elseif ($claim->moderate_uid == $user->uid) {
     drupal_set_message(t('Ticket already your'));

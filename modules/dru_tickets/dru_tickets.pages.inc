@@ -35,16 +35,23 @@ function dru_ticket_accept($node, $token) {
   }
   
   global $user;
-  if ($node->uid == 0) {
-    $node->uid = $user->uid;
-    node_save($node);
+  
+  $claim = db_select('ticket_claim', 't')
+        ->fields('t')
+        ->condition('t.content_id', $node->nid, '=')
+        ->execute()
+        ->fetchObject();
+        
+  if ($claim->moderate_uid == 0) {
+    $claim->moderate_uid = $user->uid;
+    drupal_write_record('ticket_claim', $claim, array('id'));
     drupal_set_message(t('Ticket accepted')); 
   }
-  elseif ($node->uid == $user->uid) {
+  elseif ($claim->moderate_uid == $user->uid) {
     drupal_set_message(t('Ticket already your'));
   }
   else {
-    $moderator = user_load($node->uid);
+    $moderator = user_load($claim->moderate_uid);
     drupal_set_message(t("Ticket moderated by @name", array('@name' => format_username($moderator))), 'warning');
   }
   

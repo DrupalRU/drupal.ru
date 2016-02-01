@@ -37,8 +37,8 @@ function dru_claim_schema() {
         'unsigned'    => TRUE,
         'not null'    => TRUE,
       ),
-      'author_uid' => array(
-        'description' => 'Author UID.',
+      'moderate_uid' => array(
+        'description' => 'Moderate UID.',
         'type'        => 'int',
         'unsigned'    => TRUE,
         'not null'    => TRUE,
@@ -200,4 +200,11 @@ function dru_claim_uninstall() {
   db_drop_field('comment', 'claim');
   
   cache_clear_all();
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function dru_claim_update_7001() {
+   db_change_field('ticket_claim', 'author_uid', 'moderate_uid', array('type' => 'int', 'unsigned'    => TRUE, 'not null' => TRUE, 'description' => 'Moderate UID.'));
 }

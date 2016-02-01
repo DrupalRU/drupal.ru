@@ -8,7 +8,8 @@ ln -s $GITLC_DEPLOY_DIR/modules/simple_events $SITEPATH/sites/all/modules/local/
 drush ddi taxonomy --file=$GITLC_DEPLOY_DIR/data/event_types.taxonomy.export
 
 # drush dl
-drush -y dl date_popup date_api
+drush -y dl date
+drush -y en date_popup date_api
 
 # enable module
 drush -y en simple_events

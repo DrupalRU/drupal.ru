@@ -228,6 +228,8 @@ function dru_claim_comment_view($comment, $view_mode) {
     drupal_add_library('system', 'drupal.ajax');
     $token = drupal_get_token('dru_claim');
     
+    drupal_set_message('<pre>' . print_r($comment,true). '</pre>');
+    
     if ($comment->claim == 0  && $node->type != 'ticket') {
       $comment->content['links']['comment']['#links']['dru-claim'] = array(
         'title' => t('Claim'),

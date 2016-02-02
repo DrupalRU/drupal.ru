@@ -1,4 +1,5 @@
 # Модуль User Filter для Drupal 7
+[Репозиторий модуля](https://github.com/awd-studio/user_filter)
 _________________________________
 
 ## Модуль User Filter

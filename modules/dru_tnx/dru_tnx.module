@@ -1,0 +1,254 @@
+<?php
+
+/**
+ * Implements hook_permission().
+ */
+function dru_tnx_permission() {
+  return array(
+    'tnx' => array(
+      'title'       => t('Thank'),
+      'description' => t('Allow users thank content'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function dru_tnx_menu() {
+  $items['tnx/node/nojs/%node/%'] = array(
+    'page callback'    => 'dru_tnx_node',
+    'file'             => 'dru_tnx.pages.inc',
+    'page arguments'   => array(0, 2, 3, 4),
+    'access arguments' => array('tnx'),
+    'type'             => MENU_CALLBACK,
+  );
+  $items['tnx/node/ajax/%node/%'] = array(
+    'page callback'     => 'dru_tnx_node',
+    'file'              => 'dru_tnx.pages.inc',
+    'page arguments'    => array(0, 2, 3, 4),
+    'access arguments'  => array('tnx'),
+    'delivery callback' => 'ajax_deliver',
+    'type'              => MENU_CALLBACK,
+  );
+  $items['tnx/comment/nojs/%comment/%'] = array(
+    'page callback'    => 'dru_tnx_comment',
+    'file'             => 'dru_tnx.pages.inc',
+    'page arguments'   => array(0, 2, 3, 4),
+    'access arguments' => array('tnx'),
+    'type'             => MENU_CALLBACK,
+  );
+  $items['tnx/comment/ajax/%comment/%'] = array(
+    'page callback'     => 'dru_tnx_comment',
+    'file'              => 'dru_tnx.pages.inc',
+    'page arguments'    => array(0, 2, 3, 4),
+    'access arguments'  => array('tnx'),
+    'delivery callback' => 'ajax_deliver',
+    'type'              => MENU_CALLBACK,
+  );
+  $items['untnx/node/nojs/%node/%'] = array(
+    'page callback'    => 'dru_tnx_node',
+    'file'             => 'dru_tnx.pages.inc',
+    'page arguments'   => array(0, 2, 3, 4),
+    'access arguments' => array('tnx'),
+    'type'             => MENU_CALLBACK,
+  );
+  $items['untnx/node/ajax/%node/%'] = array(
+    'page callback'     => 'dru_tnx_node',
+    'file'              => 'dru_tnx.pages.inc',
+    'page arguments'    => array(0, 2, 3, 4),
+    'access arguments'  => array('tnx'),
+    'delivery callback' => 'ajax_deliver',
+    'type'              => MENU_CALLBACK,
+  );
+  $items['untnx/comment/nojs/%comment/%'] = array(
+    'page callback'    => 'dru_tnx_comment',
+    'file'             => 'dru_tnx.pages.inc',
+    'page arguments'   => array(0, 2, 3, 4),
+    'access arguments' => array('tnx'),
+    'type'             => MENU_CALLBACK,
+  );
+  $items['untnx/comment/ajax/%comment/%'] = array(
+    'page callback'     => 'dru_tnx_comment',
+    'file'              => 'dru_tnx.pages.inc',
+    'page arguments'    => array(0, 2, 3, 4),
+    'access arguments'  => array('tnx'),
+    'delivery callback' => 'ajax_deliver',
+    'type'              => MENU_CALLBACK,
+  );
+  
+  return $items;
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function dru_tnx_node_view($node, $view_mode) {
+    
+  global $user;
+  
+  // Add node links
+  if(user_access('tnx') && $node->uid !== $user->uid){
+    
+    drupal_add_library('system', 'drupal.ajax');
+  
+    $tnx = get_user_tnx('node', $node->nid, $user->uid);
+    
+    $node->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link($node, 'node', $node->nid, $tnx);
+  }
+  
+}
+
+/**
+ * Implements hook_comment_view().
+ */
+function dru_tnx_comment_view($comment, $view_mode) {
+    
+  global $user;
+  
+  // Add comment links
+  if(user_access('tnx') && $comment->uid !== $user->uid){
+  
+    drupal_add_library('system', 'drupal.ajax');
+  
+    $tnx = get_user_tnx('comment', $comment->cid, $user->uid);
+    
+    $comment->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link($comment, 'comment', $comment->cid, $tnx);
+  }
+}
+
+/**
+ * Implementation dru_tnx_link().
+ *
+ * Return array.
+ */
+function dru_tnx_link($entity, $entity_type, $entity_id, $tnx, $new = FALSE) {
+  
+  $tnx_action = $tnx ? 'tnx' : 'untnx';
+  $type       = $entity_type;
+  $token      = drupal_get_token('dru_tnx');
+  
+  return array(
+    'title'      => $tnx ? t('@count Thank you', array('@count' => $entity->tnx + $new)) : t('@count Revoke thank you', array('@count' => $entity->tnx + $new)),
+    'href'       => $tnx_action . '/' . $type . '/nojs/' . $entity_id . '/' . $token,
+    'query'      => drupal_get_destination(),
+    'attributes' => array(
+      'class' => array(
+        'use-ajax',
+        'dru-thanks',
+        'dru-' . $tnx_action,
+        'dru-tnx-' . $type,
+        'dru-tnx-' . $type . '-' . $entity_id
+      ),
+    ),
+  );
+}
+
+/**
+ * Implementation get_user_tnx().
+ *
+ * Return Boolean TRUE if user alredy have thanked.
+ */
+function get_user_tnx($entity_type, $entity_id, $uid) {
+  
+  $tnx = db_select('tnx', 't')
+       ->fields('t', array('id'))
+       ->condition('t.entity_type', $entity_type)
+       ->condition('t.entity_id', $entity_id)
+       ->condition('t.uid', $uid)
+       ->execute()
+       ->fetchAll();
+       
+  return empty($tnx) ? 1 : 0;
+  
+}
+
+/**
+ * Implementation get_tnx_by_id().
+ *
+ * Return UID list.
+ */
+function get_tnx_by_id($entity_type, $entity_id) {
+  
+  $users = db_select('tnx', 't')
+       ->fields('t', array('uid'))
+       ->condition('t.entity_type', $entity_type)
+       ->condition('t.entity_id', $entity_id)
+       ->execute()
+       ->fetchAssoc();
+  
+  return $users;
+  
+}
+
+/**
+ * Implementation get_tnx_by_uid().
+ *
+ * Return Entity ID list.
+ */
+function get_tnx_by_uid($entity_type, $uid) {
+  
+  $tnxs = db_select('tnx', 't')
+       ->fields('t', array('entity_id'))
+       ->condition('t.entity_type', $entity_type)
+       ->condition('t.uid', $uid)
+       ->execute()
+       ->fetchAssoc();
+  
+  return $tnxs;
+  
+}
+
+/**
+ * Implements hook_user_view().
+ */
+function dru_tnx_user_view($account, $view_mode, $langcode) {
+  
+  $tnx_stats = get_user_tnx_statistic($account->uid);
+  
+  // User tnx
+  $account->content['summary']['user_tnx'] = array(
+    '#type'       => 'user_profile_item',
+    '#title'      => t('User tnx'),
+    '#attributes' => array('class' => array('dru-tnx-user-stat', 'user-tnx-stat')),
+    '#weight'     => 1,
+    '#markup'     => t('Nodes: @nodes, Comments: @comment', array(
+      '@nodes'   => $tnx_stats->tnx_node,
+      '@comment' => $tnx_stats->tnx_comment,
+    )),
+  );
+  
+  // Users tnx
+  $account->content['summary']['users_tnx'] = array(
+    '#type'       => 'user_profile_item',
+    '#title'      => t('Users tnx'),
+    '#attributes' => array('class' => array('dru-tnx-user-stat', 'users-tnx-stat')),
+    '#weight'     => 2,
+    '#markup'     => t('Nodes: @nodes, Comments: @comment', array(
+      '@nodes'   => $tnx_stats->node,
+      '@comment' => $tnx_stats->comment,
+    )),
+  );
+}
+
+/**
+ * Implementation get_user_tnx_statistic().
+ *
+ * Return user statistic object
+ */
+function get_user_tnx_statistic($uid) {
+  $statistic = db_select('tnx_stat', 't')
+    ->fields('t')
+    ->condition('t.uid', $uid)
+    ->execute()
+    ->fetchObject();
+    
+  return $statistic;
+}
+
+/**
+ * Implements hook_init().
+ */
+function dru_tnx_init() {
+  drupal_add_css(drupal_get_path('module', 'dru_tnx') . '/dru_tnx.css');
+}

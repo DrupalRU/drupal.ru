@@ -526,6 +526,10 @@ div.awesome_icon {
 }
 
 @media (max-width: 767px) {
+  .alttracker .row {
+    margin-left: -15px;
+    margin-right: -15px;
+  }  
   .alttracker  .last-reply {
     text-align: right;
   }

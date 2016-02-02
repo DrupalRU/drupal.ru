@@ -564,17 +564,11 @@ function darkmatter_preprocess_node(&$variables) {
  * Add settings to see darkmatter.
  */
 function darkmatter_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
-  if ($term_nid = variable_get('darkmatter_term_nid', FALSE)) {
-    $title = t('I agree with !link', array('!link' => l('Dark Matter term and conditions!', 'node/' . $term_nid)));
-  }
-  else {
-    $title = t('I Agree with Dark Matter term and conditions!');
-  }
 
   $account = $form_state['user'];
   $form['darkmatter'] = array(
     '#type' => 'checkbox',
-    '#title' => $title,
+    '#title' => t('I agree to see all nodes and comments marked as Dark Matter.'),
     '#default_value' => $account->darkmatter,
   );
 }

@@ -9,9 +9,9 @@
   /**
    * Provide node details affix feature.
    */
-  Drupal.behaviors.CommentPopover = {
+  Drupal.behaviors.CommentActionSlide = {
     attach: function (context) {
-      $(".comment .actions").click(function() {
+      $(".comment .actions").once().click(function() {
         $('#comment-links-' + $(this).attr('data-source')).animate({
           width: "toggle"
         }, 200);

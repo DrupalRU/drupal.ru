@@ -190,7 +190,7 @@ function alpha_preprocess_user_picture(&$variables) {
  */
 function alpha_preprocess_comment(&$variables) {
   
-  drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/' . 'comment-action-popover.js');
+  drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/' . 'comment-action-slide.js');
   
   $comment = $variables['elements']['#comment'];
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $comment->changed)));

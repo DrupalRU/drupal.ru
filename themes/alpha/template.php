@@ -46,6 +46,7 @@ function alpha_js_alter(&$javascript) {
  * Implements hook_preprocess_html().
  */
 function alpha_preprocess_html(&$vars) {
+  drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/jquery.mobile.custom.min.js');
   $html_tag = array(
     '#type' => 'html_tag',
     '#tag' => 'meta',
@@ -188,6 +189,9 @@ function alpha_preprocess_user_picture(&$variables) {
  * Implements hook_preprocess_comment().
  */
 function alpha_preprocess_comment(&$variables) {
+  
+  drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/' . 'comment-action-popover.js');
+  
   $comment = $variables['elements']['#comment'];
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $comment->changed)));
 
@@ -197,8 +201,29 @@ function alpha_preprocess_comment(&$variables) {
   if (isset($variables['content']['links']['comment']['#links']['comment_forbidden'])) {
     unset($variables['content']['links']['comment']['#links']['comment_forbidden']);
   }
+  
+  // We need to make sure that we have links.
+  // If we don't have links we do not display icon "***".
+  if(!empty($variables['content']['links']['comment']['#links'])){
+    $variables['content']['links']['comment']['#links']['#cid'] = $comment->cid;
+  }
 }
 
+function alpha_links__comment(&$variables){
+  $cid = $variables['links']['#cid'];
+  unset($variables['links']['#cid']);
+  
+  if(!empty($variables['links'])){
+    $variables['attributes']['class'] = array('links comment-links');
+    return ''
+    . '<div id="comment-links-' . $cid . '" class="comment-actions">'
+    . theme_links($variables)
+    . '</div>';
+  }else{
+    return '';
+  }
+
+}
 /**
  * Implements hook_preprocess_node().
  */

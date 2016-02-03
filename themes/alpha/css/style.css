@@ -677,6 +677,12 @@ li.quote a:before {
   list-style: none;
 }
 
+.comment-actions {
+  border-left: 1px solid #ddd;
+  padding-left: 10px;
+  display: none;
+}
+
 /* Block quote. */
 blockquote {
   color: #888;

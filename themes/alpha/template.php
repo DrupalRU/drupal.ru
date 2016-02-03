@@ -209,7 +209,7 @@ function alpha_links__comment($variables){
   
   $variables['attributes']['class'] = array('links comment-links');
   return ''
-    . '<div id="comment-links-' . $cid . '" style="display:none ">'
+    . '<div id="comment-links-' . $cid . '" class="comment-actions">'
     . theme_links($variables)
     . '</div>';
 

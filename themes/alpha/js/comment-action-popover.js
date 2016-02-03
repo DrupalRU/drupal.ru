@@ -12,7 +12,8 @@
   Drupal.behaviors.CommentPopover = {
     attach: function (context) {
       $(".comment .actions").click(function() {
-        $('#comment-links-' + $(this).attr('data-source')).toggle();
+        $('#comment-links-' + $(this).attr('data-source')).toggle("slow");
+        $(this).toggleClass("open");
       });
     }
   };

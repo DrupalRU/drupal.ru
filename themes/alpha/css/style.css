@@ -653,16 +653,24 @@ li.quote a:before {
   color: orange;
 }
 
-.comment .btn-group .dropdown-toggle {
+.comment .actions {
   box-shadow: none;
   cursor: pointer;
   font-size: 15px;
   padding: 0px 10px;
   color: orange;
+  display: inline-block;
 }
 
-.comment .btn-group.open .dropdown-toggle {
+.comment .actions.open {
   color: #000;
+}
+.comment-links {
+  margin: 0px;
+  padding: 0px;
+}
+.comment-links li {
+  list-style: none;
 }
 
 /* Block quote. */

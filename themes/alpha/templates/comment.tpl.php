@@ -71,7 +71,9 @@
     </div>
     <span class="text-muted pull-right">
         <small class="text-muted"><?php isset($timeago) ? print $timeago : print $changed; ?></small>
-        <div href="#" class="actions" data-source="<?php print $comment->cid ?>"><i class="fa fa-ellipsis-h"> </i></div>
+        <?php if(!empty($content['links']['comment']['#links'])): ?>
+          <div href="#" class="actions" data-source="<?php print $comment->cid ?>"><i class="fa fa-ellipsis-h"> </i></div>
+        <?php endif; ?>
     </span>
     <strong class="text-success"><?php print $author; ?></strong>
     <?php print $permalink; ?>

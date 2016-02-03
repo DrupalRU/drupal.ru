@@ -201,7 +201,12 @@ function alpha_preprocess_comment(&$variables) {
   if (isset($variables['content']['links']['comment']['#links']['comment_forbidden'])) {
     unset($variables['content']['links']['comment']['#links']['comment_forbidden']);
   }
-  $variables['content']['links']['comment']['#links']['#cid'] = $comment->cid;
+  
+  // We need to make sure that we have links.
+  // If we don't have links we do not display icon "***".
+  if(!empty($variables['content']['links']['comment']['#links'])){
+    $variables['content']['links']['comment']['#links']['#cid'] = $comment->cid;
+  }
 }
 
 function alpha_links__comment(&$variables){

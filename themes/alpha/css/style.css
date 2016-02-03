@@ -275,9 +275,12 @@ a:hover {
 /* dru_tnx styles */
 
 .tnx-counter {
-  color: #bbb;
+  color: #FFF;
+  background-color: orange;
+  display: inline-block;
   font-weight: 300;
-  padding: 10px 0px 0px;
+  padding: 0px 5px;
+  border-radius: 5px;
 }
 
 .tnx-counter:before {

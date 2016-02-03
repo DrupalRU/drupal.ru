@@ -21,11 +21,13 @@
         $('#comment-links-' + $(this).attr('comment-id')).animate({
           width: "toggle"
         });
+        $( "div[data-source='" + $(this).attr('comment-id') + "']" ).toggleClass("open");
       });
       $( "div.media-body" ).on( "swiperight",  function() {
         $('#comment-links-' + $(this).attr('comment-id')).animate({
           width: "toggle"
         });
+        $( "div[data-source='" + $(this).attr('comment-id') + "']" ).toggleClass("open");
       });
 
     }

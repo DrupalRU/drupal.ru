@@ -65,8 +65,10 @@ function dru_tnx_callback($ajax, $vars) {
     
     $commands = array();
     
-    $commands[] = ajax_command_replace('.dru-tnx-' . $vars['type'] . '-' .$vars['id'], $link);
+    $commands[] = ajax_command_replace('.dru-tnx-' . $vars['type'] . '-' .$vars['id'] . '-counter', t('@count Thank you', array('@count' =>$tnx + $new)));
 
+    $commands[] = ajax_command_replace('.dru-tnx-' . $vars['type'] . '-' .$vars['id'], $link);
+    
     return array(
       '#type' => 'ajax',
       '#commands' => $commands,

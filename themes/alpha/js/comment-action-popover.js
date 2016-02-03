@@ -11,10 +11,16 @@
    */
   Drupal.behaviors.CommentPopover = {
     attach: function (context) {
-      $(".comment .actions").popover();
+
+      $(".comment .actions").popover({
+        html: true,
+        content: function() {
+          alert('test');
+          return "test";//$('#comment-links-' . $(this).attr('data-id')).html();
+        }
+      });
       
     }
   };
-  
 
 })(jQuery, Drupal);

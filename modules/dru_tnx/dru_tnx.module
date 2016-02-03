@@ -98,7 +98,7 @@ function dru_tnx_node_view($node, $view_mode) {
   }
   
   $node->content['tnx'] = array(
-    '#markup' => '<div class="tnx-counter dru-tnx-node-' . $node->nid . '-counter">' . t('@count Thank you', array('@count' => $node->tnx)) . '</div>',
+    '#markup' => '<div class="tnx-counter counter-' . $node->tnx . ' dru-tnx-node-' . $node->nid . '-counter">' . t('@count Thank you', array('@count' => $node->tnx)) . '</div>',
     '#weight' => 20,
   );
 }

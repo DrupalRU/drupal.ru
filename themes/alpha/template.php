@@ -204,7 +204,7 @@ function alpha_preprocess_comment(&$variables) {
   $variables['content']['links']['comment']['#links']['#cid'] = $comment->cid;
 }
 
-function alpha_links__comment($variables){
+function alpha_links__comment(&$variables){
   $cid = $variables['links']['#cid'];
   unset($variables['links']['#cid']);
   

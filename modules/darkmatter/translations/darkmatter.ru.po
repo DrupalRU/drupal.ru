@@ -51,13 +51,9 @@ msgstr ""
 msgid "Mark this content as dark matter."
 msgstr ""
 
-#: darkmatter.module:537
-msgid "I agree with !link"
-msgstr "Я согласен с !link"
-
 #: darkmatter.module:539
-msgid "I Agree with Dark Matter term and conditions!"
-msgstr "Я согласен с условиями использования \"Темной Материи\""
+msgid "I agree to see all nodes and comments marked as Dark Matter."
+msgstr "Я желаю видеть все материалы и комментарии помеченные как \"Темная Материя\"."
 
 #: darkmatter.module:558
 msgid "Dark matter"

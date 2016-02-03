@@ -598,6 +598,8 @@ div.awesome_icon {
 .comment .media-body {
   border-left: 1px solid #eee;
   padding-left: 15px;
+  width: auto;
+  display: block;
 }
 
 .comment .pull-left {

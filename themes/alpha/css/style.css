@@ -675,6 +675,7 @@ li.quote a:before {
 }
 .comment-links li {
   list-style: none;
+  padding: 2px 0px;
 }
 
 .comment-actions {

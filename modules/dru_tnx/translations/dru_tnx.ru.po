@@ -45,6 +45,14 @@ msgstr "@count Спасибо"
 msgid "@count Revoke thank you"
 msgstr "@count Отменить спасибо"
 
+#: dru_tnx.module:142
+msgid "Thank you"
+msgstr "Спасибо"
+
+#: dru_tnx.module:142
+msgid "Revoke thank you"
+msgstr "Отменить спасибо"
+
 #: dru_tnx.module:211
 msgid "User tnx"
 msgstr "Пользователь поблагодарил"

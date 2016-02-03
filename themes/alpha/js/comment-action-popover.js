@@ -17,16 +17,19 @@
         });
         $(this).toggleClass("open");
       });
-      $( "div.media-body" ).on( "swipeleft",  swipeLeftHandler);
+      $( "div.media-body" ).on( "swipeleft",  function() {
+        $('#comment-links-' + $(this).attr('comment-id')).animate({
+          width: "toggle"
+        });
+      });
+      $( "div.media-body" ).on( "swiperight",  function() {
+        $('#comment-links-' + $(this).attr('comment-id')).animate({
+          width: "toggle"
+        });
+      });
+
     }
   };
-  
-  function swipeLeftHandler(){
-    alert("test");
-    $('#comment-links-' + $(this).attr('comment-id')).animate({
-      width: "toggle"
-    });
-  }
 
 
 })(jQuery, Drupal);

@@ -13,9 +13,14 @@
     attach: function (context) {
       $(".comment .actions").click(function() {
         $('#comment-links-' + $(this).attr('data-source')).animate({
-                width: "toggle"
-            });
+          width: "toggle"
+        });
         $(this).toggleClass("open");
+      });
+      $( "div.media-body" ).on( "swipeleft", function() {
+        $('#comment-links-' + $(this).attr('comment-id')).animate({
+          width: "toggle"
+        });
       });
     }
   };

@@ -65,7 +65,7 @@
     <?php print $picture; ?>
   </div>
   <?php endif; ?>  
-  <div class="media-body">
+  <div class="media-body" comment-id="<?php print $comment->cid ?>">
     <div class="pull-right">
       <?php print render($content['links']) ?>
     </div>

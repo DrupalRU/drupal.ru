@@ -275,18 +275,17 @@ a:hover {
 /* dru_tnx styles */
 
 .tnx-counter {
-  color: #FFF;
-  background-color: orange;
+  color: #aaaaaa;
   display: inline-block;
   font-weight: 300;
-  padding: 0px 5px;
-  border-radius: 5px;
+  padding: 0px;
 }
 
 .tnx-counter:before {
   content: "\f087";
   font-family: "fa", "FontAwesome";
   padding-right: 5px;
+  color: orange;
 }
 
 

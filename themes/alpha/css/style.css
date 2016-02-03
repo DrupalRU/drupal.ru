@@ -271,6 +271,21 @@ a:hover {
   text-align: center;
   padding: 20px 0px;
 }
+
+/* dru_tnx styles */
+
+.tnx-counter {
+  color: #ddd;
+  font-weight: 300px;
+}
+
+.tnx-counter:before {
+  content: "\f087";
+  font-family: "fa", "FontAwesome";
+  padding-right: 5px;
+}
+
+
 /* Ridiculously Responsive Social Share Buttons. */
 
 .rrssb-item-list {

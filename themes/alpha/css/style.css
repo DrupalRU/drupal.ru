@@ -662,6 +662,10 @@ li.quote a:before {
   display: inline-block;
 }
 
+.comment .actions i.fa {
+  font-size: 16px;
+}
+
 .comment .actions.open {
   color: #000;
 }

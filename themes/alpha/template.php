@@ -204,14 +204,15 @@ function alpha_preprocess_comment(&$variables) {
 }
 
 function alpha_links__comment($variables){
-
+  $cid = $variables['links']['#cid'];
+  unset($variables['links']['#cid']);
+  
   $variables['attributes']['class'] = array('dropdown-menu');
-  return '<div class="actions" data-toggle="popover" data-placement="left"  data-trigger="focus" >'
+  return '<div class="actions" data-toggle="popover" data-placement="left"  data-trigger="focus" data-html="true" data-id="' . $cid . '">'
     . '  <i class="fa fa-ellipsis-h"> </i>'
-    . '  <div id="comment-links-" style="display:none ">'
+    . '  <div id="comment-links-' . $cid . '" style="display:none ">'
     . theme_links($variables)
     . '  </div>'
-    . '<pre>' . print_r($variables,true). '</pre>'
     . '</div>';
 
 }

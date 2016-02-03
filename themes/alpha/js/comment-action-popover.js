@@ -11,11 +11,10 @@
    */
   Drupal.behaviors.CommentPopover = {
     attach: function (context) {
-
       $(".comment .actions").popover({
         html: true,
         content: function() {
-          alert('test');
+          alert($('#comment-links-' . $(this).attr('rel')).html());
           return $('#comment-links-' . $(this).attr('rel')).html();
         }
       });

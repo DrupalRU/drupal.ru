@@ -11,8 +11,7 @@
    */
   Drupal.behaviors.CommentPopover = {
     attach: function (context) {
-
-      $(".comment .actions").popover();
+      $("[data-toggle=popover]").popover();
       
     }
   };

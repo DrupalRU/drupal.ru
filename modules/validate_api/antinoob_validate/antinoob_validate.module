@@ -28,13 +28,12 @@ function antinoob_validate_validator_info() {
 
   $restricted_words = explode("\n", file_get_contents(drupal_get_path('module', 'antinoob_validate') . '/forbitten.words'));
   $words = array();
-  foreach($restricted_words as $word) {
+  foreach ($restricted_words as $word) {
     $word = trim($word);
-    if(!empty($word)) {
+    if (!empty($word)) {
       $words[] = '"' . $word . '"';
     }
   }
-  
 
   $items[] = array(
     'type' => 'text',
@@ -53,11 +52,11 @@ function antinoob_disallowed_words_callback($validate_value) {
   $status = FALSE;
 
   $restricted_words = explode("\n", file_get_contents(drupal_get_path('module', 'antinoob_validate') . '/forbitten.words'));
-  
+
   $words = FALSE;
 
   foreach ($restricted_words as $word) {
-    if(!empty($word)) {
+    if (!empty($word)) {
       $word = trim($word);
       preg_match('/(^|\s)' . $word . '($|\s)/ui', $validate_value, $matches);
       $wd = trim(array_shift($matches));
@@ -66,8 +65,8 @@ function antinoob_disallowed_words_callback($validate_value) {
       }
     }
   }
-  
-  if($words){
+
+  if ($words) {
     $status = t('[@word] is forbidden to use.', array('@word' => implode(', ', $words)));
   }
 

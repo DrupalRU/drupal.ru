@@ -68,7 +68,7 @@
   <div class="media-body">
     <span class="text-muted pull-right">
         <small class="text-muted"><?php isset($timeago) ? print $timeago : print $changed; ?></small>
-        <?php print render($content['links']) ?>
+        <div href="#" class="actions" data-source="<?php print $comment->cid ?>"><i class="fa fa-ellipsis-h"> </i></div>
     </span>
     <strong class="text-success"><?php print $author; ?></strong>
     <?php print $permalink; ?>
@@ -83,5 +83,6 @@
       </div>
       <?php endif; ?>
     </div>
+    <?php print render($content['links']) ?>    
   </div>
 </article>

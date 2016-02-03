@@ -12,7 +12,9 @@
   Drupal.behaviors.CommentPopover = {
     attach: function (context) {
       $(".comment .actions").click(function() {
-        $('#comment-links-' + $(this).attr('data-source')).toggle("slide", { direction: "right" }, 200);
+        $('#comment-links-' + $(this).attr('data-source')).animate({
+                width: "toggle"
+            });
         $(this).toggleClass("open");
       });
     }

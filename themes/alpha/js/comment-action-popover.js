@@ -14,7 +14,7 @@
       $(".comment .actions").click(function() {
         $('#comment-links-' + $(this).attr('data-source')).animate({
           width: "toggle"
-        });
+        }, 200);
         $(this).toggleClass("open");
       });
       $( "div.media-body" ).on( "swipeleft",  function() {

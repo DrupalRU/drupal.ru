@@ -16,7 +16,7 @@
         html: true,
         content: function() {
           alert('test');
-          return "test";//$('#comment-links-' . $(this).attr('data-id')).html();
+          return $('#comment-links-' . $(this).attr('rel')).html();
         }
       });
       

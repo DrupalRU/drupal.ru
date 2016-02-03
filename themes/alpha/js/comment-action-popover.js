@@ -22,6 +22,7 @@
   };
   
   function swipeLeftHandler(){
+    alert("test");
     $('#comment-links-' + $(this).attr('comment-id')).animate({
       width: "toggle"
     });

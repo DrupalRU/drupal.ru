@@ -11,13 +11,9 @@
    */
   Drupal.behaviors.CommentPopover = {
     attach: function (context) {
-      $(".comment .actions").popover({
-        html: true,
-        content: function() {
-          return $('#comment-links-' + $(this).attr('rel')).html();
-        }
+      $(".comment .actions").click(function() {
+        $('#comment-links-' + $(this).attr('rel')).toggle();
       });
-      
     }
   };
 

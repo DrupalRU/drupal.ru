@@ -188,6 +188,9 @@ function alpha_preprocess_user_picture(&$variables) {
  * Implements hook_preprocess_comment().
  */
 function alpha_preprocess_comment(&$variables) {
+  
+  drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/' . 'comment-action-popover.js');
+  
   $comment = $variables['elements']['#comment'];
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $comment->changed)));
 
@@ -201,9 +204,7 @@ function alpha_preprocess_comment(&$variables) {
 
 function alpha_links__comment($variables){
   $variables['attributes']['class'] = array('dropdown-menu');
-  return '<div class="btn-group">'
-  . '<div class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-ellipsis-h"></i></div>'
-  . theme_links($variables)
+  return '<div class="actions" data-toggle="popover" data-placement="left"  data-trigger="focus" data-content="' . str_replace('"', '\"', theme_links($variables)) . ' "> <i class="fa fa-ellipsis-h"></i></div>'
   . '</div>';
 
 }

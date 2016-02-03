@@ -15,5 +15,7 @@
       
     }
   };
+  
+  $("[data-toggle=popover]").popover('show');
 
 })(jQuery, Drupal);

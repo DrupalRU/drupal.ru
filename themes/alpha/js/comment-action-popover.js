@@ -11,11 +11,10 @@
    */
   Drupal.behaviors.CommentPopover = {
     attach: function (context) {
-      $("[data-toggle=popover]").popover();
+      $(".comment .actions").popover();
       
     }
   };
   
-  $("[data-toggle=popover]").popover('show');
 
 })(jQuery, Drupal);

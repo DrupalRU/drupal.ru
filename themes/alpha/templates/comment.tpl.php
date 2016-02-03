@@ -66,6 +66,7 @@
   </div>
   <?php endif; ?>  
   <div class="media-body">
+    <div style="display: inline-block">
     <span class="text-muted pull-right">
         <small class="text-muted"><?php isset($timeago) ? print $timeago : print $changed; ?></small>
         <div href="#" class="actions" data-source="<?php print $comment->cid ?>"><i class="fa fa-ellipsis-h"> </i></div>
@@ -83,6 +84,9 @@
       </div>
       <?php endif; ?>
     </div>
+    </div>
+    <div style="display: inline-block">
+    <?php print render($content['links']) ?>
+    </div> 
   </div>
-  <?php print render($content['links']) ?>
 </article>

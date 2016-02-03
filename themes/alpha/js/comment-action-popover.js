@@ -12,12 +12,12 @@
   Drupal.behaviors.CommentPopover = {
     attach: function (context) {
 
-      $(".comment .actions").popover(
+      $(".comment .actions").popover({
         html: true,
         content: function() {
           return $('#comment-links-' . $(this).attr('data-id')).html();
         }
-      );
+      });
       
     }
   };

@@ -203,13 +203,14 @@ function alpha_preprocess_comment(&$variables) {
 }
 
 function alpha_links__comment($variables){
-  drupal_set_message('<pre>' . print_r($variables,true). '</pre>');
+
   $variables['attributes']['class'] = array('dropdown-menu');
   return '<div class="actions" data-toggle="popover" data-placement="left"  data-trigger="focus" >'
     . '  <i class="fa fa-ellipsis-h"> </i>'
     . '  <div id="comment-links-" style="display:none ">'
     . theme_links($variables)
     . '  </div>'
+    . '<pre>' . print_r($variables,true). '</pre>'
     . '</div>';
 
 }

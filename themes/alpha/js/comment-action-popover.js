@@ -21,7 +21,7 @@
         if(!$(this).hasClass("swipedleft")) {
           $('#comment-links-' + $(this).attr('comment-id')).animate({
             width: "toggle"
-          });
+          }, 200);
           $( "div[data-source='" + $(this).attr('comment-id') + "']" ).toggleClass("open");
           $(this).addClass("swipedleft");
         }
@@ -30,7 +30,7 @@
         if($(this).hasClass("swipedleft")) {
           $('#comment-links-' + $(this).attr('comment-id')).animate({
             width: "toggle"
-          });
+          }, 200);
           $( "div[data-source='" + $(this).attr('comment-id') + "']" ).toggleClass("open");
           $(this).removeClass("swipedleft");
         }

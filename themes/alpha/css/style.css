@@ -653,6 +653,18 @@ li.quote a:before {
   color: orange;
 }
 
+.comment .dropdown-menu .dropdown-toggle {
+  box-shadow: none;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 0px 10px;
+  color: orange;
+}
+
+.comment .dropdown-menu .btn-group.open .dropdown-toggle {
+  color: #000;
+}
+
 /* Block quote. */
 blockquote {
   color: #888;

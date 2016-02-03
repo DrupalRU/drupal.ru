@@ -202,7 +202,7 @@ function alpha_preprocess_comment(&$variables) {
 function alpha_links__comment($variables){
   $variables['attributes']['class'] = array('dropdown-menu');
   return '<div class="btn-group">'
-  . '<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-ellipsis-h"></i> <span class="caret"></span></button>'
+  . '<div class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-ellipsis-h"></i></div>'
   . theme_links($variables)
   . '</div>';
 

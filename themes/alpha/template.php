@@ -208,11 +208,15 @@ function alpha_links__comment($variables){
   $cid = $variables['links']['#cid'];
   unset($variables['links']['#cid']);
   
-  $variables['attributes']['class'] = array('links comment-links');
-  return ''
+  if(!empty($variables['links'])){
+    $variables['attributes']['class'] = array('links comment-links');
+    return ''
     . '<div id="comment-links-' . $cid . '" class="comment-actions">'
     . theme_links($variables)
     . '</div>';
+  }else{
+    return '';
+  }
 
 }
 /**

@@ -67,7 +67,7 @@
   <?php endif; ?>  
   <div class="media-body" comment-id="<?php print $comment->cid ?>">
     <div class="pull-right">
-      <?php print render($content['links']) ?>
+      <?php print_r($content['links']); print render($content['links']) ?>
     </div>
     <span class="text-muted pull-right">
         <small class="text-muted"><?php isset($timeago) ? print $timeago : print $changed; ?></small>

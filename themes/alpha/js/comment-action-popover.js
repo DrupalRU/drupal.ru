@@ -17,12 +17,15 @@
         });
         $(this).toggleClass("open");
       });
-      $( "div.media-body" ).on( "swipeleft", function() {
-        $('#comment-links-' + $(this).attr('comment-id')).animate({
-          width: "toggle"
-        });
-      });
+      $( "div.media-body" ).on( "swipeleft",  swipeLeftHandler);
     }
   };
+  
+  function swipeLeftHandler(){
+    $('#comment-links-' + $(this).attr('comment-id')).animate({
+      width: "toggle"
+    });
+  }
+
 
 })(jQuery, Drupal);

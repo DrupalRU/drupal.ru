@@ -211,8 +211,10 @@ function alpha_links__comment($variables){
   return '<div href="#" class="actions" data-source="' . $cid . '">'
     . '  <i class="fa fa-ellipsis-h"> </i>'
     . '</div>'
+    . '<div style="display:inline-block">'
     . '<div id="comment-links-' . $cid . '" style="display:none ">'
     . theme_links($variables)
+    . '</div>'
     . '</div>';
 
 }

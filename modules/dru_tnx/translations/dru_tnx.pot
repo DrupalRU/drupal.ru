@@ -44,6 +44,14 @@ msgstr ""
 msgid "@count Revoke thank you"
 msgstr ""
 
+#: dru_tnx.module:142
+msgid "Thank you"
+msgstr ""
+
+#: dru_tnx.module:142
+msgid "Revoke thank you"
+msgstr ""
+
 #: dru_tnx.module:211
 msgid "User tnx"
 msgstr ""

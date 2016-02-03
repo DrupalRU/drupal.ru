@@ -271,6 +271,22 @@ a:hover {
   text-align: center;
   padding: 20px 0px;
 }
+
+/* dru_tnx styles */
+
+.tnx-counter {
+  color: #bbb;
+  font-weight: 300;
+  padding: 10px 0px 0px;
+}
+
+.tnx-counter:before {
+  content: "\f087";
+  font-family: "fa", "FontAwesome";
+  padding-right: 5px;
+}
+
+
 /* Ridiculously Responsive Social Share Buttons. */
 
 .rrssb-item-list {
@@ -526,6 +542,10 @@ div.awesome_icon {
 }
 
 @media (max-width: 767px) {
+  .alttracker .row {
+    margin-left: -15px;
+    margin-right: -15px;
+  }  
   .alttracker  .last-reply {
     text-align: right;
   }
@@ -594,6 +614,8 @@ div.awesome_icon {
 .comment .media-body {
   border-left: 1px solid #eee;
   padding-left: 15px;
+  width: auto;
+  display: block;
 }
 
 .comment .pull-left {
@@ -647,6 +669,42 @@ li.quote a:before {
   padding-right: 5px;
   vertical-align: middle;
   color: orange;
+}
+
+.comment .actions {
+  box-shadow: none;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 0px 10px;
+  color: orange;
+  display: inline-block;
+}
+
+.comment .actions i.fa {
+  font-size: 16px;
+}
+
+.comment .actions.open {
+  color: #000;
+}
+.comment-links {
+  margin: 0px;
+  padding: 0px;
+}
+.comment-links li {
+  list-style: none;
+  padding: 2px 0px;
+}
+
+.comment-actions {
+  border-left: 1px solid #ddd;
+  padding: 0px 10px;
+  display: none;
+}
+
+.comment small.text-muted {
+  color: #aaa;
+  font-weight: 300;
 }
 
 /* Block quote. */

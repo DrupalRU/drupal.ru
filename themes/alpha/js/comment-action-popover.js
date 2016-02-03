@@ -18,16 +18,22 @@
         $(this).toggleClass("open");
       });
       $( "div.media-body" ).on( "swipeleft",  function() {
-        $('#comment-links-' + $(this).attr('comment-id')).animate({
-          width: "toggle"
-        });
-        $( "div[data-source='" + $(this).attr('comment-id') + "']" ).toggleClass("open");
+        if(!$(this).hasClass("swipedleft")) {
+          $('#comment-links-' + $(this).attr('comment-id')).animate({
+            width: "toggle"
+          });
+          $( "div[data-source='" + $(this).attr('comment-id') + "']" ).toggleClass("open");
+          $(this).addClass("swipedleft");
+        }
       });
       $( "div.media-body" ).on( "swiperight",  function() {
-        $('#comment-links-' + $(this).attr('comment-id')).animate({
-          width: "toggle"
-        });
-        $( "div[data-source='" + $(this).attr('comment-id') + "']" ).toggleClass("open");
+        if($(this).hasClass("swipedleft")) {
+          $('#comment-links-' + $(this).attr('comment-id')).animate({
+            width: "toggle"
+          });
+          $( "div[data-source='" + $(this).attr('comment-id') + "']" ).toggleClass("open");
+          $(this).removeClass("swipedleft");
+        }
       });
 
     }

@@ -653,7 +653,7 @@ li.quote a:before {
   color: orange;
 }
 
-.comment .dropdown-menu .dropdown-toggle {
+.comment .btn-group .dropdown-toggle {
   box-shadow: none;
   cursor: pointer;
   font-size: 15px;
@@ -661,7 +661,7 @@ li.quote a:before {
   color: orange;
 }
 
-.comment .dropdown-menu .btn-group.open .dropdown-toggle {
+.comment .btn-group.open .dropdown-toggle {
   color: #000;
 }
 

@@ -14,7 +14,7 @@
       $(".comment .actions").popover({
         html: true,
         content: function() {
-          alert($('#comment-links-' . this.attr('rel')).html());
+          alert($(this));
           return $('#comment-links-' . this.attr('rel')).html();
         }
       });

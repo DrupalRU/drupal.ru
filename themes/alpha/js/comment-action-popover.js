@@ -15,7 +15,7 @@
       $(".comment .actions").popover({
         html: true,
         content: function() {
-          return $('#comment-links-' . $(this).attr('data-id')).html();
+          return "test";//$('#comment-links-' . $(this).attr('data-id')).html();
         }
       });
       

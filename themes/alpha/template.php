@@ -46,7 +46,7 @@ function alpha_js_alter(&$javascript) {
  * Implements hook_preprocess_html().
  */
 function alpha_preprocess_html(&$vars) {
-  drupal_add_js("//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js");
+  drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/jquery.mobile.custom.min.js');
   $html_tag = array(
     '#type' => 'html_tag',
     '#tag' => 'meta',

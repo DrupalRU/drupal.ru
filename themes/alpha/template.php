@@ -207,7 +207,7 @@ function alpha_links__comment($variables){
   $cid = $variables['links']['#cid'];
   unset($variables['links']['#cid']);
   
-  $variables['attributes']['class'] = array('dropdown-menu');
+  $variables['attributes']['class'] = array('links');
   return '<div href="#" class="actions" data-toggle="popover" data-placement="left" data-html="true" rel="' . $cid . '">'
     . '  <i class="fa fa-ellipsis-h"> </i>'
     . '</div>'

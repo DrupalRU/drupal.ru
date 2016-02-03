@@ -277,14 +277,13 @@ a:hover {
 .tnx-counter {
   color: #bbb;
   font-weight: 300;
-  padding: 10px 0px;
+  padding: 10px 0px 0px;
 }
 
 .tnx-counter:before {
   content: "\f087";
   font-family: "fa", "FontAwesome";
   padding-right: 5px;
-  color: orange;
 }
 
 

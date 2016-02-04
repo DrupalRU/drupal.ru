@@ -350,13 +350,27 @@ a:hover {
   padding: 0px;
 }
 
+.block-simple-events .actions {
+  text-align: center;
+  padding: 20px 0px;
+}
+
+.block-simple-events .row {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin: 0px;
+}
+
 .block-simple-events .row.even {
   background-color: #f9f9f9;
 }
 
-.block-simple-events .actions {
-  text-align: center;
-  padding: 20px 0px;
+@media (max-width: 767px) {
+  .block-simple-events .row {
+    margin-left: -15px;
+    margin-right: -15px;
+  }  
 }
 
 /* Add icons to node links. */

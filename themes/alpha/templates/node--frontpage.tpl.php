@@ -85,6 +85,9 @@
     <div class="icon col-xs-1">
       <i class="fa fa-star"></i>
     </div>
+    <pre>
+      <?php print_r($node); ?>
+    </pre>
     <div class="col-xs-10 title">
       <a href="<?php print $node->url; ?>"><?php print $title; ?></a>
       <?php

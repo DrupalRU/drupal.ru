@@ -80,45 +80,39 @@
  * @ingroup themeable
  */
 ?>
-<div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-  <?php if ($display_submitted): ?>
-    <span class="name pull-right"><?php print $name; ?></span>
-    <span class="text-muted"> <i class="fa fa-calendar-o"></i> <?php print $date; ?></span>
-  <?php endif; ?>
-  <?php print render($title_prefix); ?>
-  <?php if (!$page): ?>
-    <h2 class="title"><a href="<?php print $node_url; ?>">
-      <?php
-        $flag = '<i class="fa fa-envelope-o"></i>';
-        $history = _forum_user_last_visit($node->nid);
-        if($node->last_comment_timestamp > $history){
-          $flag = '<i class="fa fa-envelope"></i>';
-        }
-        if($sticky){
-          $flag = '<i class="fa fa-flag"></i>';
-        }
-        if($promote){
-          $flag = '<i class="fa fa-star"></i>';
-        }
-
-        print $flag . ' ';
-      ?>
-      <?php print $title; ?></a></h2>
-  <?php endif; ?>
-  <?php print render($title_suffix); ?>
-
-  <div class="content"<?php print $content_attributes; ?>>
-    <?php
-      hide($content['comments']);
-      hide($content['links']);
-      hide($content['rrssb']);
-      print render($content);
-    ?>
-    <div class="clearfix"></div>
-    <div class="links">
-      <?php print render($content['links']); ?>
+<div id="node-<?php print $node->nid; ?>" class="row <?php print $classes; ?> <?php print $zebra;?> "<?php print $attributes; ?>>
+  <div class="title col-xs-12 col-sm-6 col-md-6">
+    <div class="icon col-xs-1">
+      <i class="fa fa-star"></i>
+    </div>
+    <div class="col-xs-10 title">
+      <a href="<?php print $node->url; ?>"><?php print $title; ?></a>
+      <?php if(isset($term)): ?>
+      <div class="terms">
+        <i class="fa fa-tags"></i> 
+          <?php
+            foreach($content as $type => $value){
+              if(0 == strncmp($type, 'taxonomy', 8)){
+                print render($content[$type]);
+              }
+            }
+          ?>
+      </div>
+      <?php endif; ?>
     </div>
   </div>
-  <div class="clearfix"></div>
-  <hr>
+  <div class="author col-xs-4 col-sm-2 col-md-2 col-xs-offset-1 col-sm-offset-0">
+    <i class="fa fa-user"></i>
+    <?php print $name; ?>
+  </div>
+  <div class="replies col-xs-3 col-sm-2 col-md-2">
+    <i class="fa fa-comments-o"></i>
+    <?php print $node->comment_count; ?>
+    <?php if ($node->new_replies): ?>
+      <span class="new_replies">
+        <a href="<?php print $node->url; ?>"><i class="fa fa-comment"></i>&nbsp;<?php print $node->new_replies; ?></a>
+      </span>
+    <?php endif; ?>
+  </div>
+  <div class="col-xs-4 col-sm-2 col-md-2 last-reply"><i class="fa fa-history"></i> <?php print $timeago; ?></div>
 </div>

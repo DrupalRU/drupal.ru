@@ -122,6 +122,17 @@ function dru_frontpage_list() {
     
     }
     $page = node_view_multiple($nodes, 'frontpage');
+
+    $links['list'] = array(
+      'href' => 'node',
+      'title' => t('See full list'),
+    );
+  
+    $page['links'] = array(
+      '#theme' => 'links',
+      '#links' => $links,
+      '#attributes' => array('class' => array('frontpage_links')),
+    );
     
   }else{
     $default_message = '<p>' . t('No nodes has been promoted yer.') . '</p>';

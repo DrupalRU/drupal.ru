@@ -604,6 +604,38 @@ div.awesome_icon {
   }
 }
 
+.frontpage-list .author .fa,
+.frontpage-list .replies .fa,
+.frontpage-list .terms .fa,
+.frontpage-list .last-reply .fa {
+  color: #ddd;
+}
+
+.frontpage-list .terms ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  display: inline-block;
+}
+.frontpage-list .terms ul li {
+  display: inline-block;
+  padding-left: 2px;
+}
+
+.frontpage-list .terms ul li a {
+  color: #888;
+  font-size: small;
+}
+
+.frontpage-list .terms ul li a:after {
+  content: ',';
+}
+
+.frontpage-list .terms ul li.last a:after {
+  content: '';
+}
+
+
 /* Comments style*/
 
 .indented {

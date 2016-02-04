@@ -36,6 +36,10 @@ function alpha_theme($existing, $type, $theme, $path) {
       'base hook' => 'node',
       'template' => 'templates/node--frontpage',
     ),
+    'frontpage__list' => array(
+      'render element' => 'content',
+      'template' => 'templates/frontpage--list',
+    ),
 
   );
 }

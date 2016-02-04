@@ -60,6 +60,9 @@ function dru_frontpage_theme($existing, $type, $theme, $path) {
   return $theme;
 }
 
+function template_preprocess_node__frontpage(&$variables){
+  drupal_set_message('<pre>' . print_r($variables,true) .'</pre>');
+}
 
 /**
  * Implement hook_preprocess_node().

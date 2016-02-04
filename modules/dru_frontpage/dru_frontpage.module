@@ -125,7 +125,7 @@ function dru_frontpage_list() {
 
     $links['list'] = array(
       'href' => 'node',
-      'title' => t('See full list'),
+      'title' => t('Show more content'),
     );
   
     $page['links'] = array(

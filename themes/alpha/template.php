@@ -487,6 +487,21 @@ function alpha_alttracker($variables) {
   $output .= '</div>';
   return $output;
 }
+
+function alpha_preprocess_node__frontpage(&$variables) {
+  $node = $variables['node'];
+  if (!empty($node->terms)) {
+    $terms_links = array();
+    foreach ($node->terms as $term) {
+      $terms_links[] = array(
+        'title' => check_plain($term->name),
+        'href' => url("taxonomy/term/" . $term->tid),
+        'html' => TRUE,
+      );
+    }
+    $variables['term'] = theme('links', array('links' => $terms_links));
+  }
+}
 /**
  * Process variables for alttracker_node.tpl.php.
  *

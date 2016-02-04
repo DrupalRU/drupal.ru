@@ -1,4 +1,6 @@
 <div class="frontpage-list clearfix">
-  <?php print render($content); ?>
+  <pre>
+  <?php print print_r($content); ?>
+  </pre>
   <div class="clearfix"></div>
 </div>

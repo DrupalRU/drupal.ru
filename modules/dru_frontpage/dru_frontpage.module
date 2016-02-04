@@ -51,18 +51,14 @@ function dru_frontpage_list() {
       }
     }
     if(!empty($in_types)){
-      $query->leftJoin('node', 'n', 'n.nid = t.nid');
       $query->condition('n.type', $in_types, 'IN');
     }
   }
   
-  $query->condition('n.promote', 1);
-  
-  
   $nids = $query
     ->addTag('frontpage_nodes_condition')
-    ->fields('n', array('nid', 'changed'))
-    ->condition('n.published', 1)
+    ->fields('n', array('nid'))
+    ->condition('n.status', 1)
     ->condition('n.promote', 1)
     ->orderBy('n.changed', 'DESC')
     ->execute()

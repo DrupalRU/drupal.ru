@@ -28,6 +28,29 @@ function dru_frontpage_entity_info_alter(&$entity_info) {
   );
 }
 
+/**
+ * Implements hook_theme().
+ */
+function dru_frontpage_theme($existing, $type, $theme, $path) {
+  $theme = array();
+  $theme['node__frontpage'] = array(
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'node--frontpage',
+    'path' => drupal_get_path('module', 'dru_frontpage') . '/templates',
+  );
+  return $theme;
+}
+
+
+/**
+ * Implement hook_preprocess_node().
+ */
+function dru_frontpage_preprocess_node(&$variables) {
+  if ($variables['elements']['#view_mode'] == 'frontpage') {
+    $variables['theme_hook_suggestions'][] = "node__frontpage";
+  }
+}
 
 /**
  * Display companies on market place.

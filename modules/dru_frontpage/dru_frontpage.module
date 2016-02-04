@@ -26,8 +26,7 @@ function dru_frontpage_menu() {
     'type' => MENU_NORMAL_ITEM,
     'file' => 'dru_frontpage.admin.inc',
   );
-  
-  
+
   return $items;
 }
 
@@ -51,6 +50,12 @@ function dru_frontpage_theme($existing, $type, $theme, $path) {
     'base hook' => 'node',
     'template' => 'node--frontpage',
     'path' => drupal_get_path('module', 'dru_frontpage') . '/templates',
+  );
+  $theme['frontpage_list'] = array(
+    'render element' => 'content',
+    'template' => 'frontpage--list',
+    'path' => drupal_get_path('module', 'dru_frontpage') . '/templates',
+
   );
   return $theme;
 }

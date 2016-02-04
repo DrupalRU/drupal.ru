@@ -566,6 +566,44 @@ div.awesome_icon {
   color: #fff;
 }
 
+/* Frontpage nodes style */
+
+.frontpage-list .icon .fa {
+  color: orange;
+  padding-right: 5px;
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+
+.frontpage-list .new_replies .fa {
+  color: #d34a32;
+}
+
+.frontpage-list .row {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin: 0px;
+}
+
+.frontpage-list .row.even {
+  background-color: #f9f9f9;
+}
+
+@media (max-width: 767px) {
+  .frontpage-list .row {
+    margin-left: -15px;
+    margin-right: -15px;
+  }  
+  .frontpage-list  .last-reply {
+    text-align: right;
+  }
+  .frontpage-list  .title {
+    min-height: 40px;
+  }
+}
+
 /* Comments style*/
 
 .indented {

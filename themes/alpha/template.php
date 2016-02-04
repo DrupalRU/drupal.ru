@@ -788,6 +788,7 @@ function alpha_preprocess_simple_events_upcoming_block(&$variables) {
 }
 
 function alpha_preprocess_frontpage_list(&$variables) {
+  drupal_set_message('<pre>' . print_r($variables,true) . '</pre>');
   $variables['links']['#attributes']['class'][] = 'inline';
   $variables['links']['#links']['list']['attributes']['class'] = array('btn', 'btn-success');
 }

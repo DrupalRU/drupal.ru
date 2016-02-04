@@ -86,7 +86,7 @@
       <i class="fa fa-star"></i>
     </div>
     <div class="col-xs-10 title">
-      <?php print l($title, 'node/' .$node->nid); ?>
+      <a href="<?php print $node->url; ?>"><?php print $title; ?></a>
       <?php
         $terms = '';
         foreach($content as $type => $value){
@@ -114,7 +114,7 @@
  ?>
     <?php if ($newreplies): ?>
       <span class="new_replies">
-        <a href="<?php print url('node/' .$node->nid); ?>"><i class="fa fa-comment"></i>&nbsp;<?php print print $newreplies; ?></a>
+        <a href="<?php print $node->url; ?>"><i class="fa fa-comment"></i>&nbsp;<?php print print $newreplies; ?></a>
       </span>
     <?php endif; ?>
   </div>

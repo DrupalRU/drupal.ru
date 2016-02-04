@@ -36,7 +36,7 @@ function alpha_theme($existing, $type, $theme, $path) {
       'base hook' => 'node',
       'template' => 'templates/node--frontpage',
     ),
-    'frontpage__list' => array(
+    'frontpage_list' => array(
       'render element' => 'content',
       'template' => 'templates/frontpage--list',
     ),
@@ -787,7 +787,7 @@ function alpha_preprocess_simple_events_upcoming_block(&$variables) {
   $variables['links']['#links']['list']['attributes']['class'] = array('btn', 'btn-success');
 }
 
-function alpha_preprocess_frontpage__list(&$variables) {
+function alpha_preprocess_frontpage_list(&$variables) {
   $variables['links']['#attributes']['class'][] = 'inline';
   $variables['links']['#links']['list']['attributes']['class'] = array('btn', 'btn-success');
 }

@@ -787,7 +787,7 @@ function alpha_preprocess_simple_events_upcoming_block(&$variables) {
   $variables['links']['#links']['list']['attributes']['class'] = array('btn', 'btn-success');
 }
 
-function alpha_preprocess_frontpage_list(&$variables) {
+function alpha_preprocess_frontpage__list(&$variables) {
   $variables['links']['#attributes']['class'][] = 'inline';
   $variables['links']['#links']['list']['attributes']['class'] = array('btn', 'btn-success');
 }

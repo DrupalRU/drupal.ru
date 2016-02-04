@@ -98,7 +98,7 @@
       <?php if(isset($term)): ?>
       <div class="terms">
         <i class="fa fa-tags"></i> 
-         <?php print $term; ?>
+         <?php print $terms; ?>
       </div>
       <?php endif; ?>
     </div>

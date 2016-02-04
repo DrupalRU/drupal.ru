@@ -1009,7 +1009,7 @@ ul.file-links li span.size {
 /* Footer. */
 
 .footer {
-  background-color: #333;
+  background: #333 url(../images/background.png) repeat;
   color: white;
   text-align: center;
 }

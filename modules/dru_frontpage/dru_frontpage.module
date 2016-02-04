@@ -7,7 +7,7 @@
 /**
  * Implements hook_menu().
  */
-function dru_frontapge_menu() {
+function dru_frontpage_menu() {
   $items['frontpage'] = array(
     'page callback' => 'dru_frontpage_list',
     'access arguments' => array('access content'),
@@ -21,7 +21,7 @@ function dru_frontapge_menu() {
 /**
  * Implements hook_entity_info_alter().
  */
-function marketplace_entity_info_alter(&$entity_info) {
+function dru_frontpage_entity_info_alter(&$entity_info) {
   $entity_info['node']['view modes']['frontpage'] = array(
     'label' => t('Frontpage view'),
     'custom settings' => TRUE,

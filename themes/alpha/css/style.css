@@ -606,7 +606,7 @@ div.awesome_icon {
 
 .frontpage-list .author .fa,
 .frontpage-list .replies .fa,
-.frontpage-list .terms .fa,
+.frontpage-list .node .title .terms .fa,
 .frontpage-list .last-reply .fa {
   color: #ddd;
 }

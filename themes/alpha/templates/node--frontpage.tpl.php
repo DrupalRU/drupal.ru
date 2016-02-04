@@ -87,16 +87,18 @@
     </div>
     <div class="col-xs-10 title">
       <a href="<?php print $node->url; ?>"><?php print $title; ?></a>
+      <?php
+        $terms = '';
+        foreach($content as $type => $value){
+          if(0 == strncmp($type, 'taxonomy', 8)){
+            $terms .= render($content[$type]);
+          }
+        }
+      ?>
       <?php if(isset($term)): ?>
       <div class="terms">
         <i class="fa fa-tags"></i> 
-          <?php
-            foreach($content as $type => $value){
-              if(0 == strncmp($type, 'taxonomy', 8)){
-                print render($content[$type]);
-              }
-            }
-          ?>
+         <?php print $term; ?>
       </div>
       <?php endif; ?>
     </div>

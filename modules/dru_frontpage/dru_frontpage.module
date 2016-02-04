@@ -15,6 +15,19 @@ function dru_frontpage_menu() {
     'type' => MENU_CALLBACK,
     'title' => 'Front page',
   );
+
+  // Administer menu.
+  $items['admin/config/content/frontpage'] = array(
+    'title' => 'Drupal.ru Frontpage Settings',
+    'description' => 'Configure Drupal.ru Frontpage behaviour.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dru_frontpage_admin_settings'),
+    'access arguments' => array('administer nodes'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'dru_frontpage.admin.inc',
+  );
+  
+  
   return $items;
 }
 
@@ -65,7 +78,7 @@ function dru_frontpage_list() {
   
   $query = db_select('node', 'n', array('target' => 'slave'))->extend('AltPager');
  
-  if($types = variable_get('frontpage_node_type')){
+  if($types = variable_get('dru_frontpage_node_type')){
     $in_types = array();
 
     foreach($types as $type => $val){
@@ -87,7 +100,7 @@ function dru_frontpage_list() {
     ->execute()
     ->fetchCol();
     
-  $max = variable_get('frontpage_max_count', 40);
+  $max = variable_get('dru_frontpage_max_count', 40);
   $current = altpager_count_all_items();
   
   if($current > $max){

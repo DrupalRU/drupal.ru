@@ -129,6 +129,13 @@ function dru_frontpage_list() {
         $node->url = url("node/$node->nid");
       }
       
+      $tids = db_select('taxonomy_index', 't', array('target' => 'slave'))
+        ->fields('t', array('tid'))
+        ->condition('t.nid', $node->nid)
+        ->execute()
+        ->fetchCol();
+      $node->terms = taxonomy_term_load_multiple($tids, array());
+      
       $nodes[$key] = $node;
     
     }

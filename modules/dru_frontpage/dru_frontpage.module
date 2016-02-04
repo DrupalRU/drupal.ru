@@ -78,7 +78,7 @@ function dru_frontpage_list() {
     );
 
     $nodes = node_load_multiple($nids);
-    $page = node_view_multiple($nodes, 'frontpage');
+    $page += node_view_multiple($nodes, 'frontpage');
 
     $page['last-pager'] = array(
       '#theme' => 'altpager',

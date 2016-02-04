@@ -85,11 +85,8 @@
     <div class="icon col-xs-1">
       <i class="fa fa-star"></i>
     </div>
-    <pre>
-      <?php print_r($node); ?>
-    </pre>
     <div class="col-xs-10 title">
-      <a href="<?php print $node->url; ?>"><?php print $title; ?></a>
+      <?php print l($title, 'node/' .$node->nid); ?>
       <?php
         $terms = '';
         foreach($content as $type => $value){
@@ -98,7 +95,7 @@
           }
         }
       ?>
-      <?php if(isset($term)): ?>
+      <?php if(isset($terms)): ?>
       <div class="terms">
         <i class="fa fa-tags"></i> 
          <?php print $terms; ?>

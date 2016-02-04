@@ -110,9 +110,11 @@
   <div class="replies col-xs-3 col-sm-2 col-md-2">
     <i class="fa fa-comments-o"></i>
     <?php print $node->comment_count; ?>
-    <?php if ($node->new_replies): ?>
+    <?php  $history = _forum_user_last_visit($node->nid); $newreplies = comment_num_new($node->nid, $history); 
+ ?>
+    <?php if ($newreplies): ?>
       <span class="new_replies">
-        <a href="<?php print $node->url; ?>"><i class="fa fa-comment"></i>&nbsp;<?php print $node->new_replies; ?></a>
+        <a href="<?php print url('node/' .$node->nid); ?>"><i class="fa fa-comment"></i>&nbsp;<?php print print $newreplies; ?></a>
       </span>
     <?php endif; ?>
   </div>

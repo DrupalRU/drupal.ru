@@ -65,7 +65,7 @@ function dru_tnx_callback($ajax, $vars) {
     
     $commands = array();
     
-    $counter = '<div class="tnx-counter dru-tnx-' . $vars['type'] . '-' . $vars['id'] . '-counter">' . t('@count Thank you', array('@count' =>$tnx + $new)) . '</div>';
+    $counter = '<div class="tnx-counter counter-' . ($tnx + $new) . ' dru-tnx-' . $vars['type'] . '-' . $vars['id'] . '-counter">' . t('@count Thank you', array('@count' =>$tnx + $new)) . '</div>';
     
     $commands[] = ajax_command_replace('.dru-tnx-' . $vars['type'] . '-' .$vars['id'] . '-counter', $counter);
 

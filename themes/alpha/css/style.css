@@ -635,6 +635,11 @@ div.awesome_icon {
   content: '';
 }
 
+.frontpage-list .actions {
+  text-align: center;
+  padding: 20px 0px;
+}
+
 
 /* Comments style*/
 

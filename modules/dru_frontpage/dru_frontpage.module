@@ -50,6 +50,7 @@ function dru_frontpage_preprocess_node(&$variables) {
   if ($variables['elements']['#view_mode'] == 'frontpage') {
     $variables['theme_hook_suggestions'][] = "node__frontpage";
   }
+  drupal_set_message('<pre>' . print_r($variables, true) . '</pre>');
 }
 
 /**

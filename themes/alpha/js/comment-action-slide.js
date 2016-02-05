@@ -16,6 +16,12 @@
           width: "toggle"
         }, 200);
         $(this).toggleClass("open");
+        
+        if($( "div[comment-id='" + $(this).attr('comment-id') + "']" )).hasClass("swipedleft")) {
+          $( "div[comment-id='" + $(this).attr('comment-id') + "']" ).removeClass("swipedleft");
+        }else{
+          $( "div[comment-id='" + $(this).attr('comment-id') + "']" ).addClass("swipedleft");
+        }
       });
       $( "div.media-body" ).on( "swipeleft",  function() {
         if(!$(this).hasClass("swipedleft")) {

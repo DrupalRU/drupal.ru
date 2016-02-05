@@ -107,6 +107,7 @@ class ObsceneCensorRus {
         'eep',
         'dying',
         'laun',
+        'doubl',
     );
     public static function getFiltered($text, $charset = 'UTF-8') {
         self::filterText($text, $charset);

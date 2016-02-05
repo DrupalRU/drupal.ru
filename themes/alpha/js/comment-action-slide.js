@@ -16,7 +16,14 @@
           width: "toggle"
         }, 200);
         $(this).toggleClass("open");
+        
+        if($( "div[comment-id='" + $(this).attr('data-source') + "']" ).hasClass("swipedleft")) {
+          $( "div[comment-id='" + $(this).attr('data-source') + "']" ).removeClass("swipedleft");
+        }else{
+          $( "div[comment-id='" + $(this).attr('data-source') + "']" ).addClass("swipedleft");
+        }
       });
+      
       $( "div.media-body" ).on( "swipeleft",  function() {
         if(!$(this).hasClass("swipedleft")) {
           $('#comment-links-' + $(this).attr('comment-id')).animate({
@@ -26,6 +33,7 @@
           $(this).addClass("swipedleft");
         }
       });
+      
       $( "div.media-body" ).on( "swiperight",  function() {
         if($(this).hasClass("swipedleft")) {
           $('#comment-links-' + $(this).attr('comment-id')).animate({

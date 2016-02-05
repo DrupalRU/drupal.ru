@@ -31,6 +31,31 @@ div.region.region-fluid-top {
   background-color: #fff;
   color: #39b5f2;
 }
+
+/* Frontpage blocks */
+#block-simple-events-upcoming-events {
+  margin-left: -15px;
+  margin-right: -15px;
+  background-color: #fff;
+}
+
+#block-marketplace-organizations.block.block-marketplace {
+  margin-left: -15px;
+  margin-right: -15px;
+  background-color: #333;
+  color: #fff;
+}
+
+#block-marketplace-organizations.block.block-marketplace a {
+  color: #fff;
+}
+
+.container-fluid #block-system-main {
+  margin-left: -15px;
+  margin-right: -15px;
+  background-color: #fff;
+}
+
 /* Content. */
 div.main-container.container {
   background-color: white;

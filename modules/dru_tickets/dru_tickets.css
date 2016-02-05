@@ -75,8 +75,8 @@ li.ticket-verdict a:before {
 #close-form {
   display: block;
   position: absolute;
-  right: 4px;
-  top: 10px;
+  right: 10px;
+  top: 8px;
 }
 
 #close-form i {

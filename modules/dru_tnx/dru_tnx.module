@@ -97,6 +97,10 @@ function dru_tnx_node_view($node, $view_mode) {
     $node->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link($node, 'node', $node->nid, $tnx);
   }
   
+  $node->content['tnx'] = array(
+    '#markup' => '<div class="tnx-counter counter-' . $node->tnx . ' dru-tnx-node-' . $node->nid . '-counter">' . t('@count Thank you', array('@count' => $node->tnx)) . '</div>',
+    '#weight' => 20,
+  );
 }
 
 /**
@@ -115,6 +119,12 @@ function dru_tnx_comment_view($comment, $view_mode) {
     
     $comment->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link($comment, 'comment', $comment->cid, $tnx);
   }
+
+  $comment->content['tnx'] = array(
+    '#markup' => '<div class="tnx-counter counter-' . $comment->tnx . ' dru-tnx-comment-' . $comment->cid . '-counter">' . t('@count Thank you', array('@count' => $comment->tnx)) . '</div>',
+    '#weight' => 20,
+  );
+
 }
 
 /**
@@ -129,7 +139,7 @@ function dru_tnx_link($entity, $entity_type, $entity_id, $tnx, $new = FALSE) {
   $token      = drupal_get_token('dru_tnx');
   
   return array(
-    'title'      => $tnx ? t('@count Thank you', array('@count' => $entity->tnx + $new)) : t('@count Revoke thank you', array('@count' => $entity->tnx + $new)),
+    'title'      => $tnx ? t('Thank you') : t('Revoke thank you'),
     'href'       => $tnx_action . '/' . $type . '/nojs/' . $entity_id . '/' . $token,
     'query'      => drupal_get_destination(),
     'attributes' => array(

@@ -9,3 +9,7 @@ li.dru-tnx a.dru-untnx:before {
   font-family: "fa", "FontAwesome";
   padding-right: 5px;
 }
+
+.tnx-counter.counter-0 {
+  display: none;
+}

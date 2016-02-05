@@ -31,6 +31,16 @@ function alpha_theme($existing, $type, $theme, $path) {
       'base hook' => 'node',
       'template' => 'templates/node--simple_event--block',
     ),
+    'node__frontpage' => array(
+      'render element' => 'content',
+      'base hook' => 'node',
+      'template' => 'templates/node--frontpage',
+    ),
+    'frontpage_list' => array(
+      'render element' => 'content',
+      'template' => 'templates/frontpage--list',
+    ),
+
   );
 }
 
@@ -105,16 +115,19 @@ function alpha_preprocess_page(&$variables) {
       $account = user_load($uid);
     }
 
-    $picture = $account->picture;
-    if (!empty($picture)) {
-      if (!empty($picture->uri)) {
-        $filepath = $picture->uri;
+
+    if (!empty($account->picture)) {
+      if (!empty($account->picture->uri)) {
+        $filepath = $account->picture->uri;
       }
     }
     elseif (variable_get('user_picture_default', '')) {
       $filepath = variable_get('user_picture_default', '');
     }
-    if (isset($filepath)) {
+    if($account->uid == 0){
+      $variables['user_picture'] = theme('image', array('path' => $filepath, 'attributes' => array('class' => array('img-circle'))));
+    }
+    elseif (isset($filepath)) {
       if (module_exists('image') && file_valid_uri($filepath) && $style = variable_get('user_picture_style_node', '')) {
         $variables['user_picture'] = theme('image_style', array('style_name' => $style, 'path' => $filepath, 'alt' => $account->name, 'title' => $account->name, 'attributes' => array('class' => array('img-circle'))));
       }
@@ -279,6 +292,18 @@ function alpha_preprocess_node(&$variables) {
   }
   if (isset($variables['content']['links']['comment']['#links']['comment_forbidden'])) {
     unset($variables['content']['links']['comment']['#links']['comment_forbidden']);
+  }
+  
+  if (!empty($node->terms)) {
+    $terms_links = array();
+    foreach ($node->terms as $term) {
+      $terms_links[] = array(
+        'title' => check_plain($term->name),
+        'href' => url("taxonomy/term/" . $term->tid),
+        'html' => TRUE,
+      );
+    }
+    $variables['term'] = theme('links', array('links' => $terms_links));
   }
 }
 
@@ -481,6 +506,8 @@ function alpha_alttracker($variables) {
   $output .= '</div>';
   return $output;
 }
+
+
 /**
  * Process variables for alttracker_node.tpl.php.
  *
@@ -761,4 +788,9 @@ function alpha_preprocess_simple_events_upcoming_block(&$variables) {
   $variables['links']['#attributes']['class'][] = 'inline';
   $variables['links']['#links']['add']['attributes']['class'] = array('btn', 'btn-primary');
   $variables['links']['#links']['list']['attributes']['class'] = array('btn', 'btn-success');
+}
+
+function alpha_preprocess_frontpage_list(&$variables) {
+  $variables['content']['links']['#attributes']['class'][] = 'inline';
+  $variables['content']['links']['#links']['list']['attributes']['class'] = array('btn', 'btn-success');
 }

@@ -35,8 +35,9 @@ div.region.region-fluid-top {
 /* Frontpage blocks */
 
 .fontpageicon .fa {
-  font-size: 20em;
+  font-size: 13em;
   color: #333;
+  padding: 20px 0px 40px;
 }
 
 #block-simple-events-upcoming-events {
@@ -55,7 +56,7 @@ div.region.region-fluid-top {
 #block-marketplace-organizations.block.block-marketplace a {
   color: #fff;
 }
-#block-marketplace-organizations.block.block-marketplace .fontpageicon {
+#block-marketplace-organizations.block.block-marketplace .fontpageicon .fa{
   color: #fff;
 }
 

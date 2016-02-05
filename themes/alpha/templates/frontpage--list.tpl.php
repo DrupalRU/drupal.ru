@@ -1,7 +1,7 @@
 <div class="container">
   <div class="col-xs-12 col-md-4">
-    <h2>Избранное, Новости, Важное</h2>
-      <center class="fontpageicon">
+    <center class="fontpageicon">
+      <h2>Избранное, Новости, Важное</h2>
       <i class="fa fa-bullhorn"></i>
     </center>
   </div>

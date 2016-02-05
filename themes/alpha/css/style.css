@@ -35,7 +35,7 @@ div.region.region-fluid-top {
 /* Frontpage blocks */
 
 .fontpageicon .fa {
-  font-size: 13em;
+  font-size: 10em;
   color: #333;
   padding: 20px 0px 40px;
 }
@@ -44,6 +44,11 @@ div.region.region-fluid-top {
   margin-left: -15px;
   margin-right: -15px;
   background-color: #fff;
+  padding: 20px 0px;
+}
+
+#block-simple-events-upcoming-events ul.inline li a {
+  margin-top: 10px;
 }
 
 #block-marketplace-organizations.block.block-marketplace {
@@ -51,6 +56,7 @@ div.region.region-fluid-top {
   margin-right: -15px;
   background-color: #333;
   color: #fff;
+  padding: 20px 0px;
 }
 
 #block-marketplace-organizations.block.block-marketplace a {
@@ -60,11 +66,16 @@ div.region.region-fluid-top {
   color: #fff;
 }
 
+#block-marketplace-organizations ul.inline li a {
+  margin-top: 10px;
+}
+
+
 .container-fluid #block-system-main {
   margin-left: -15px;
   margin-right: -15px;
   background-color: #fff;
-  padding: 10px 0px;
+  padding: 20px 0px;
 }
 
 .container-fluid #block-system-main .content {

@@ -126,7 +126,8 @@ function alpha_preprocess_page(&$variables) {
     }
     if($account->uid == 0){
       $variables['user_picture'] = theme('image', array('path' => $filepath, 'attributes' => array('class' => array('img-circle'))));
-    }esleif (isset($filepath)) {
+    }
+    elseif (isset($filepath)) {
       if (module_exists('image') && file_valid_uri($filepath) && $style = variable_get('user_picture_style_node', '')) {
         $variables['user_picture'] = theme('image_style', array('style_name' => $style, 'path' => $filepath, 'alt' => $account->name, 'title' => $account->name, 'attributes' => array('class' => array('img-circle'))));
       }

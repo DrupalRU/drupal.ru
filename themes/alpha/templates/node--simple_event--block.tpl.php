@@ -15,7 +15,7 @@
       </div>
     </div>
 
-  <div class="col-xs-10 col-xs-offset-2 col-sm-4 date_time">
+  <div class="col-xs-10 col-xs-offset-2 col-sm-offset-0 col-sm-4 date_time">
     <?php print render($content['datetime']); ?>
   </div>
 </div>

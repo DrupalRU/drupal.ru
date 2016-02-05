@@ -6,6 +6,9 @@
         <h2<?php print $title_attributes; ?>><?php print $block->subject ?></h2>
       <?php endif;?>
       <?php print render($title_suffix); ?>
+      <center class="fontpageicon">
+      <i class="fa fa-calendar"></i>
+      </center>
     </div>
     <div class="col-xs-12 col-md-8">
       <div class="content"<?php print $content_attributes; ?>>

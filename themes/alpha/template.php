@@ -115,16 +115,18 @@ function alpha_preprocess_page(&$variables) {
       $account = user_load($uid);
     }
 
-    $picture = $account->picture;
-    if (!empty($picture)) {
-      if (!empty($picture->uri)) {
-        $filepath = $picture->uri;
+
+    if (!empty($account->picture)) {
+      if (!empty($account->picture->uri)) {
+        $filepath = $account->picture->uri;
       }
     }
     elseif (variable_get('user_picture_default', '')) {
       $filepath = variable_get('user_picture_default', '');
     }
-    if (isset($filepath)) {
+    if($account->uid == 0){
+      $variables['user_picture'] = theme('image', array('path' => $filepath, 'attributes' => array('class' => array('img-circle'))));
+    }esleif (isset($filepath)) {
       if (module_exists('image') && file_valid_uri($filepath) && $style = variable_get('user_picture_style_node', '')) {
         $variables['user_picture'] = theme('image_style', array('style_name' => $style, 'path' => $filepath, 'alt' => $account->name, 'title' => $account->name, 'attributes' => array('class' => array('img-circle'))));
       }

@@ -148,6 +148,7 @@
         <h1 class="page-header"><?php print $title; ?></h1>
       <?php endif; ?>
       <?php print render($title_suffix); ?>
+      <div class="container">
       <?php print $messages; ?>
       <?php if (!empty($tabs)): ?>
         <?php print render($tabs); ?>
@@ -158,6 +159,7 @@
       <?php if (!empty($action_links)): ?>
         <ul class="nav nav-pills action-links"><?php print render($action_links); ?></ul>
       <?php endif; ?>
+      </div>
       <?php print render($page['content']); ?>
     </section>
 

@@ -4,7 +4,7 @@
         "name": "Мероприятие",
         "base": "simple_events",
         "description": "Для публикации данных о мероприятия на главной и в разделе мероприятий.",
-        "help": "<strong>Перед публикацией, ознакомьтесь с <a href=\"\/rules\">правилами<\/a>.<\/strong><br\/>\r\nКоммерческая реклама и материалы нарушающие законодательство РФ - удаляются.<br \/>\r\n",
+        "help": "<strong>Перед публикацией, ознакомьтесь с <a href=\"\/rules\">правилами<\/a>.<\/strong><br\/>\r\n\r\n",
         "has_title": 1,
         "title_label": "Название мероприятия",
         "custom": 0,
@@ -18,8 +18,7 @@
         },
         "workflow": {
             "node_options": [
-                "Published",
-                "Promoted to front page"
+                "Published"
             ],
             "language_content_type": "Disabled",
             "simplenews_content_type": 0
@@ -28,13 +27,25 @@
             "node_submitted": 0
         },
         "comment": {
-            "comment": "Open",
+            "comment": "Closed",
             "comment_default_mode": 1,
             "comment_default_per_page": 50,
             "comment_anonymous": "Anonymous posters may not enter their contact information",
             "comment_subject_field": 0,
             "comment_form_location": 1,
-            "comment_preview": "Optional"
+            "comment_preview": "Optional",
+            "resolve_can": 0,
+            "validate_comments": 0,
+            "comment_validate": {
+                "comment_body": {
+                    "comment_body_comment_validators": [
+
+                    ]
+                },
+                "validator_descriptions": {
+                    "validators": null
+                }
+            }
         },
         "diff": {
             "diff_show_preview_changes_node": 1,
@@ -49,6 +60,11 @@
         },
         "rrssb": {
             "show": 1
+        },
+        "validation": {
+            "validate_settings": 0,
+            "validate_items": null,
+            "validate_descriptions": null
         },
         "fields": {
             "body": {
@@ -133,7 +149,8 @@
                         "page",
                         "simplenews",
                         "organization",
-                        "simple_event"
+                        "simple_event",
+                        "ticket"
                     ]
                 }
             },
@@ -185,7 +202,7 @@
                         "tid"
                     ]
                 },
-                "id": 58,
+                "id": 19,
                 "field_name": "simple_event_type",
                 "type": "taxonomy_term_reference",
                 "module": "taxonomy",
@@ -250,13 +267,21 @@
                         "settings": [
 
                         ]
+                    },
+                    "frontpage": {
+                        "label": "hidden",
+                        "type": "hidden",
+                        "weight": 0,
+                        "settings": [
+
+                        ]
                     }
                 },
                 "required": false,
                 "description": "",
+                "default_value": null,
                 "field_name": "body",
-                "deleted": 0,
-                "default_value": null
+                "deleted": 0
             },
             "simple_event_type": {
                 "label": "Event type",
@@ -296,15 +321,24 @@
 
                         ],
                         "module": "taxonomy"
+                    },
+                    "frontpage": {
+                        "label": "hidden",
+                        "type": "taxonomy_term_reference_link",
+                        "weight": 0,
+                        "settings": [
+
+                        ],
+                        "module": "taxonomy"
                     }
                 },
                 "settings": {
                     "user_register_form": false
                 },
                 "description": "",
+                "default_value": null,
                 "field_name": "simple_event_type",
-                "deleted": 0,
-                "default_value": null
+                "deleted": 0
             }
         }
     }

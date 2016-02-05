@@ -1133,3 +1133,9 @@ span.geshifilter:before {
   padding-left: 0;
   margin: 20px 0;
 }
+
+/* Node type forms*/
+
+.container-inline-date edit-time-from label {
+  display: block;
+}

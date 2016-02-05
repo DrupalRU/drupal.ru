@@ -34,7 +34,7 @@ div.region.region-fluid-top {
 
 /* Frontpage blocks */
 
-.fontpageicon fa {
+.fontpageicon .fa {
   font-size: 20em;
   color: #333;
 }

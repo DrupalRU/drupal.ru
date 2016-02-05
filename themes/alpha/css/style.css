@@ -54,6 +54,11 @@ div.region.region-fluid-top {
   margin-left: -15px;
   margin-right: -15px;
   background-color: #fff;
+  padding: 10px 0px;
+}
+
+.container-fluid #block-system-main .content {
+  margin: 0px;
 }
 
 /* Content. */

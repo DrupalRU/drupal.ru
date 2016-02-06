@@ -14,12 +14,17 @@
  */
 ?>
 <li class="result-folded">
-  <h3 class="title-result"><span
-      class="number-result"><?php print $result['number']; ?>
-      .</span> <?php print $result['title']; ?></h3>
+  <h3 class="title-result">
+    <span class="number-result"><?php print $result['number']; ?>.</span> 
+    <?php print $result['title']; ?>
+  </h3>
   <?php if (isset($result['excerpts'])): ?>
     <div class="content-result">
-      <?php print $result['excerpts']; ?>
+      <?php if (!empty($result['excerpts'])): ?>
+        <p class="search-excerpt">
+        <?php print $result['excerpts']; ?>
+        </p>
+      <?php endif; ?>
     </div>
   <?php endif; ?>
 
@@ -30,11 +35,6 @@
 
     <?php if (isset($result['username'])): ?>
       <span class="autor-result"><?php print $result['username']; ?></span>
-    <?php endif; ?>
-
-    <?php if (isset($result['tags'])): ?>
-      <span
-        class="tax-result"><?php print t('Tags') . ': ' . $result['tags']; ?></span>
     <?php endif; ?>
   </div>
 </li>

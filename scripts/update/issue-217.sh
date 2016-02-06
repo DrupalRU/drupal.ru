@@ -21,6 +21,3 @@ drush vset organizations_block_count '3'
 
 echo "Set event limits"
 drush vset upcoming_events_block_count '5'
-
-# update block settings
-drush ddi blocks --file=$GITLC_DEPLOY_DIR/data/alpha.blocks.export

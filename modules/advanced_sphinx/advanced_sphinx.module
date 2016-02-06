@@ -30,18 +30,22 @@ function advanced_sphinx_theme() {
       'variables' => array(
         'result' => array(),
       ),
+      'path' => drupal_get_path('module', 'advanced_sphinx') . '/templates',
+
     ),
     'advanced_sphinx_items_result_main' => array(
       'template' => 'advanced_sphinx_items_result_main',
       'variables' => array(
         'result' => array(),
       ),
+      'path' => drupal_get_path('module', 'advanced_sphinx') . '/templates',
     ),
     'advanced_sphinx_base_sphinx' => array(
       'template' => 'advanced_sphinx_base_sphinx',
       'variables' => array(
         'config' => array(),
       ),
+      'path' => drupal_get_path('module', 'advanced_sphinx') . '/templates',
     ),
     'advanced_sphinx_sorted_links' => array(
       'variables' => array(

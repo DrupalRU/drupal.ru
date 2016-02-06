@@ -204,7 +204,6 @@ function theme_advanced_sphinx_sorted_links($variables) {
 
 function advanced_sphinx_get_items_result_main($search_options, $search_results) {
   $items_result = array();
-  drupal_set_message('<pre>' . print_r($search_results, true). '</pre>');
   $result_wrapper = array('result' => '');
   $page = isset($_GET['page']) ? (int) $_GET['page'] : 0;
 

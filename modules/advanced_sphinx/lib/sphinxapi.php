@@ -495,10 +495,17 @@ class SphinxClient {
   /// set searchd host name (string) and port (integer)
   function SetServer($host, $port = 0) {
     assert(is_string($host));
-    if ($host[0] == '/' or $host[0] == "~") {
+    if ($host[0] == '/' ) {
       $this->_path = 'unix://' . $host;
       return;
     }
+    
+    if( $host[0] == "~"){
+      $homedir = `cd ~ && pwd`;
+      $this->_path .= substr($host, 1);
+      return;
+    }
+    
     if (substr($host, 0, 7) == "unix://") {
       $this->_path = $host;
       return;

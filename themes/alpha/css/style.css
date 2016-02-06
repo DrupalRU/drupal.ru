@@ -44,7 +44,12 @@ div.region.region-fluid-top {
   margin-left: -15px;
   margin-right: -15px;
   background-color: #fff;
+  padding: 0px;
+}
+
+#block-simple-events-upcoming-events .container {
   padding: 20px 0px;
+  background: url(../images/blocks/event.png) no-repeat top left;
 }
 
 #block-simple-events-upcoming-events ul.inline li a {

@@ -96,6 +96,14 @@ div.region.region-fluid-top {
   display: none;
 }
 
+#advanced-sphinx-search-box .form-item {
+  margin: 0;
+}
+
+#advanced-sphinx-search-box .btn {
+  vertical-align: top;
+}
+
 /* Content. */
 div.main-container.container {
   background-color: white;
@@ -1153,3 +1161,5 @@ span.geshifilter:before {
 .container-inline-date edit-time-from label {
   display: block;
 }
+
+

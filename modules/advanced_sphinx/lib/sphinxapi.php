@@ -502,7 +502,7 @@ class SphinxClient {
     
     if( $host[0] == "~"){
       $homedir = `cd ~ && pwd`;
-      $this->_path = trim($homedir) . substr($host, 1);
+      $this->_path = 'unix://' . trim($homedir) . substr($host, 1);
       return;
     }
     

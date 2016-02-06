@@ -1,0 +1,5 @@
+name = "Advanced sphinx"
+description = "Sphinx search integration for Drupal, based on MySQL-source type and support for main+delta index scheme."
+package = "advanced_sphinx"
+core = "7.x"
+configure = admin/config/search/advanced_sphinx

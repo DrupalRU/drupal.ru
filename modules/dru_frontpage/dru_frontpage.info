@@ -1,0 +1,10 @@
+name = "Drupal.ru Frontpage"
+description = "Front page functionality: blocks, listings and etc."
+dependencies[] = fontawesome
+
+core = "7.x"
+package = Content
+
+version = 7.x-dev
+
+

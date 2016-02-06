@@ -1,0 +1,101 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the Advanced Sphinx module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function advanced_sphinx_install() {
+  global $databases;
+  $prefix = $databases['default']['default']['prefix'];
+  db_query("CREATE OR REPLACE VIEW {$prefix}sphinxmain AS
+          SELECT node.nid, node.vid, users.uid, users.name, node.created, node.type, node.changed,
+                  field_data_body.body_value, node_revision.title, LENGTH(node_revision.title) AS countitl
+          FROM {node}, {node_revision}, {users}, {field_data_body}
+          WHERE node_revision.timestamp=node.changed
+                AND node_revision.nid=node.nid AND node_revision.vid = node.vid
+                AND users.uid=node.uid
+                AND node.status=1
+                AND field_data_body.entity_type='node'
+                AND field_data_body.entity_id=node.nid AND field_data_body.revision_id = node.vid ");
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function advanced_sphinx_uninstall() {
+  global $databases;
+  $prefix = $databases['default']['default']['prefix'];
+
+  // Delete module variables.
+  variable_del('advanced_sphinx_generate_config');
+  variable_del('advanced_sphinx_path_config');
+  variable_del('advanced_sphinx_searchd_host');
+  variable_del('advanced_sphinx_searchd_port');
+  variable_del('advanced_sphinx_searchd_timeout');
+  variable_del('advanced_sphinx_query_index');
+  variable_del('advanced_sphinx_query_index_delta');
+  variable_del('advanced_sphinx_excerpts_index');
+  variable_del('advanced_sphinx_search_path');
+  variable_del('advanced_sphinx_results_per_page');
+  variable_del('advanced_sphinx_logs');
+  variable_del('advanced_sphinx_excerpts_limit');
+  variable_del('advanced_sphinx_excerpts_around');
+  variable_del('advanced_sphinx_excerpts_single_passage');
+  variable_del('advanced_sphinx_keys');
+
+  // Drop view sphinxmain.
+  db_query("DROP VIEW {$prefix}sphinxmain");
+}
+
+/**
+ * Implements hook_schema().
+ */
+function advanced_sphinx_schema() {
+  $schema['advanced_sphinx_livup'] = array(
+    'fields' => array(
+      'counter_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'max_doc_id' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('counter_id'),
+  );
+  $schema['advanced_sphinx_logs'] = array(
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'keyword' => array(
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'default' => '',
+        'length' => 255,
+      ),
+      'nid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'counter' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}

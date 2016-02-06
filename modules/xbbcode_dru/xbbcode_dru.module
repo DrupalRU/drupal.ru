@@ -50,6 +50,26 @@ function xbbcode_dru_xbbcode_info() {
     'description' => t('API Drupal.ru (Drupal 6)'),
     'sample' => t('[ru_api=function]Drupal 6[/ru_api]'),
   );
+  $tags['node'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="https://drupal.ru/node/{option}" title="{content}">{content}</a></span>',
+    'description' => t('Drupal.ru node'),
+    'sample' => t('[node=nid]Node[/node]'),
+  );
+  $tags['nid'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="https://drupal.ru/node/{content}" title="Node {content}">{content}</a></span>',
+    'description' => t('Drupal.ru node'),
+    'sample' => t('[nid]NID[/nid]'),
+  );
+  $tags['comment'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="https://drupal.ru/comment/{option}#comment-{option}" title="{content}">{content}</a></span>',
+    'description' => t('Drupal.ru comment'),
+    'sample' => t('[comment=cid]Comment[/comment]'),
+  );
+  $tags['cid'] = array(
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="https://drupal.ru/comment/{content}#comment-{content}" title="Comment {content}">{content}</a></span>',
+    'description' => t('Drupal.ru comment'),
+    'sample' => t('[cid]CID[/cid]'),
+  );
 
   return $tags;
 }

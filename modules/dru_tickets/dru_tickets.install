@@ -1,0 +1,166 @@
+<?php
+/**
+ * @file
+ */
+
+
+/**
+ * Implements hook_install().
+ */
+function dru_tickets_install() {
+  $t = get_t();
+
+  // Create "Ticket Status" taxonomy vocabulary.
+  if (!taxonomy_vocabulary_machine_name_load('ticket_status')) {
+    $vocabulary = array(
+      'machine_name' => 'ticket_status',
+      'name'         => $t('Ticket Ststus'),
+    );
+    $vocabulary = (object) $vocabulary;
+    taxonomy_vocabulary_save($vocabulary);
+
+    $vid = $vocabulary->vid;
+
+    // Create status terms.
+    $terms = array(
+      'open'      => array(
+        'name' => $t('Open'),
+        'vid'  => $vid,
+      ),
+      'process' => array(
+        'name' => $t('Processed'),
+        'vid'  => $vid,
+      ),
+      'closed'    => array(
+        'name' => $t('Closed'),
+        'vid'  => $vid,
+      ),
+    );
+    foreach ($terms as $term) {
+      $term = (object) $term;
+      taxonomy_term_save($term);
+      $tid = $term->tid;
+    }
+  }
+
+  node_types_rebuild();
+  $types = node_type_get_types();
+
+  node_add_body_field($types['ticket'], t('Claim text'));
+
+  variable_set('node_options_ticket', array('status'));
+  variable_set('menu_options_ticket', array());
+  variable_set('comment_ticket', COMMENT_NODE_OPEN);
+
+  // Add "Status" field.
+  $field_ticket_status = field_info_field('field_ticket_status');
+  if (empty($field_ticket_status)) {
+    $field_ticket_status = array(
+      'field_name' => 'field_ticket_status',
+      'type'       => 'taxonomy_term_reference',
+      'settings'   => array(
+        'allowed_values' => array(
+          array(
+            'vocabulary' => 'ticket_status',
+            'parent'     => 0,
+          ),
+        ),
+      ),
+      'module' => 'taxonomy',
+    );
+    $field_ticket_status = field_create_field($field_ticket_status);
+  }
+
+  $instance = field_info_instance('node', 'field_ticket_status', 'ticket');
+  if (empty($instance)) {
+    $instance = array(
+      'field_name'  => 'field_ticket_status',
+      'entity_type' => 'node',
+      'bundle'      => 'ticket',
+      'label'       => $t('Status'),
+      'required'    => 1,
+      'widget'      => array(
+        'type'   => 'options_select',
+        'module' => 'options',
+      ),
+      'display'     => array(
+        'default' => array(
+          'label'  => 'inline',
+          'type'   => 'taxonomy_term_reference_link',
+          'module' => 'taxonomy',
+        ),
+        'teaser'  => array(
+          'label'  => 'inline',
+          'type'   => 'taxonomy_term_reference_link',
+          'module' => 'taxonomy',
+        ),
+      ),
+    );
+    $instance = field_create_instance($instance);
+  }
+
+}
+
+/**
+ * Implements hook_schema().
+ */
+function dru_tickets_schema() {
+  $schema['ticket'] = array(
+    'description' => 'Clame tickets',
+    'fields' => array(
+      'ticket_id' => array(
+        'description' => 'Ticket ID.',
+        'type'        => 'serial',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+      ),
+      'moderate_uid' => array(
+        'description' => 'Moderate UID.',
+        'type'        => 'int',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+      ),
+      'ticket_verdict' => array(
+        'description' => 'Verdict.',
+        'type'        => 'text',
+        'not null'    => FALSE,
+      ),
+    ),
+    'primary key' => array('ticket_id'),
+  );
+
+  return $schema;
+}
+
+
+/**
+ * Implements hook_uninstall().
+ */
+function dru_tickets_uninstall() {
+
+  // Delete nodes and node type.
+  $ticket = 'ticket';
+  $sql    = 'SELECT nid FROM {node} n WHERE n.type = :type';
+  $result = db_query($sql, array(':type' => $ticket));
+  if (!empty($result)) {
+    $ids = array();
+    foreach ($result as $row) {
+      $ids[] = $row->nid;
+    }
+
+    node_delete_multiple($ids);
+  }
+
+  node_type_delete($ticket);
+
+  variable_del('node_options_ticket');
+  variable_del('menu_options_ticket');
+  variable_del('comment_ticket');
+
+  // Delete "Status" terms.
+  $voc = taxonomy_vocabulary_machine_name_load('ticket_status');
+  taxonomy_vocabulary_delete($voc->vid);
+
+  cache_clear_all();
+
+}

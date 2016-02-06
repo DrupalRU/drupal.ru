@@ -6,6 +6,9 @@ code_style:
     data: ignore
     README.md: ignore
     modules/validate_api/antiswearing_validate/obscene: ignore
+    themes/alpha/js/jquery.mobile.custom.min.js: ignore
+    themes/alpha/js/responsive-paginate.js: ignore
+    themes/alpha/js/jquery.mobile.custom.js: ignore
 deploy:
   master:
     server: "karma.vps-private.net"

@@ -86,7 +86,7 @@
                 "link_title": "User management",
                 "link_path": "admin\/user",
                 "hidden": 0,
-                "has_children": 1,
+                "has_children": 0,
                 "expanded": 0,
                 "options": {
                     "attributes": {
@@ -102,7 +102,7 @@
                         "weight": -49,
                         "link_title": "Vote up\/down",
                         "link_path": "admin\/settings\/voteupdown",
-                        "hidden": 0,
+                        "hidden": 1,
                         "has_children": 0,
                         "expanded": 0,
                         "options": [
@@ -846,59 +846,6 @@
                                                 "updated": 0
                                             }
                                         ]
-                                    }
-                                ]
-                            },
-                            {
-                                "menu_name": "user-menu",
-                                "weight": 0,
-                                "link_title": "BBCode",
-                                "link_path": "admin\/config\/content\/xbbcode",
-                                "hidden": 0,
-                                "has_children": 0,
-                                "expanded": 0,
-                                "options": {
-                                    "attributes": {
-                                        "title": "Add or modify custom BBCode tags for your text formats."
-                                    }
-                                },
-                                "module": "system",
-                                "customized": 0,
-                                "updated": 0,
-                                "children": [
-                                    {
-                                        "menu_name": "user-menu",
-                                        "weight": 0,
-                                        "link_title": "Custom tags",
-                                        "link_path": "admin\/config\/content\/xbbcode\/tags",
-                                        "hidden": -1,
-                                        "has_children": 0,
-                                        "expanded": 0,
-                                        "options": {
-                                            "attributes": {
-                                                "title": "Add or modify your own tags"
-                                            }
-                                        },
-                                        "module": "system",
-                                        "customized": 0,
-                                        "updated": 0
-                                    },
-                                    {
-                                        "menu_name": "user-menu",
-                                        "weight": 0,
-                                        "link_title": "Handlers",
-                                        "link_path": "admin\/config\/content\/xbbcode\/settings",
-                                        "hidden": -1,
-                                        "has_children": 0,
-                                        "expanded": 0,
-                                        "options": {
-                                            "attributes": {
-                                                "title": "Enable or disable tags and choose the module that handles them."
-                                            }
-                                        },
-                                        "module": "system",
-                                        "customized": 0,
-                                        "updated": 0
                                     }
                                 ]
                             }
@@ -5382,7 +5329,7 @@
                 "weight": -45,
                 "link_title": "этот тип не использовать",
                 "link_path": "node\/add\/forum",
-                "hidden": 0,
+                "hidden": 1,
                 "has_children": 0,
                 "expanded": 0,
                 "options": {
@@ -5416,7 +5363,7 @@
                 "weight": -46,
                 "link_title": "этот тип не использовать!",
                 "link_path": "node\/add\/poll",
-                "hidden": 0,
+                "hidden": 1,
                 "has_children": 0,
                 "expanded": 0,
                 "options": {
@@ -5450,12 +5397,46 @@
                 "weight": -47,
                 "link_title": "Newsletter issue",
                 "link_path": "node\/add\/simplenews",
-                "hidden": 0,
+                "hidden": 1,
                 "has_children": 0,
                 "expanded": 0,
                 "options": {
                     "attributes": {
                         "title": "A newsletter issue to be sent to subscribed email addresses."
+                    }
+                },
+                "module": "system",
+                "customized": 1,
+                "updated": 0
+            },
+            {
+                "menu_name": "user-menu",
+                "weight": 0,
+                "link_title": "Организация",
+                "link_path": "node\/add\/organization",
+                "hidden": 0,
+                "has_children": 0,
+                "expanded": 0,
+                "options": {
+                    "attributes": {
+                        "title": "Создать страницу организации"
+                    }
+                },
+                "module": "system",
+                "customized": 1,
+                "updated": 0
+            },
+            {
+                "menu_name": "user-menu",
+                "weight": 0,
+                "link_title": "Мероприятие",
+                "link_path": "node\/add\/simple-event",
+                "hidden": 0,
+                "has_children": 0,
+                "expanded": 0,
+                "options": {
+                    "attributes": {
+                        "title": "Для публикации данных о мероприятия на главной и в разделе мероприятий."
                     }
                 },
                 "module": "system",
@@ -5629,7 +5610,7 @@
                 "menu_name": "user-menu",
                 "weight": -49,
                 "link_title": "Мой трекер",
-                "link_path": "alttracker\/my",
+                "link_path": "tracker\/my",
                 "hidden": 0,
                 "has_children": 0,
                 "expanded": 0,

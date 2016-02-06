@@ -194,7 +194,7 @@ function dru_claim_comment_view($comment, $view_mode) {
   // Add comment links.
   drupal_add_css(drupal_get_path('module', 'dru_claim') . '/dru_claim.css');
   if (user_access('create claim')) {
-    drupal_add_js(drupal_get_path('module', 'dru_claim') . '/dru_claim.js');
+    drupal_add_js(drupal_get_path('module', 'dru_tickets') . '/dru_tickets.js');
     drupal_add_library('system', 'drupal.ajax');
     $token = drupal_get_token('dru_claim');
 

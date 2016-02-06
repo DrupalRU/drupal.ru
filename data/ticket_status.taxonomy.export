@@ -1,0 +1,33 @@
+[
+    {
+        "name": "Статус тикета",
+        "machine_name": "ticket_status",
+        "description": null,
+        "hierarchy": 0,
+        "module": "taxonomy",
+        "weight": 0,
+        "fields": [
+
+        ],
+        "instances": [
+
+        ],
+        "terms": [
+            {
+                "name": "В обработке",
+                "description": null,
+                "weight": 0
+            },
+            {
+                "name": "Закрыто",
+                "description": null,
+                "weight": 0
+            },
+            {
+                "name": "Открыт",
+                "description": "",
+                "weight": 0
+            }
+        ]
+    }
+]

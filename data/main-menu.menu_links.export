@@ -34,7 +34,7 @@
         "weight": -48,
         "link_title": "Блоги",
         "link_path": "blog",
-        "hidden": 0,
+        "hidden": 1,
         "has_children": 0,
         "expanded": 0,
         "options": {
@@ -66,7 +66,7 @@
         "weight": -46,
         "link_title": "API",
         "link_path": "http:\/\/api.drupal.ru",
-        "hidden": 0,
+        "hidden": 1,
         "has_children": 0,
         "expanded": 0,
         "options": [
@@ -143,7 +143,7 @@
         "weight": -42,
         "link_title": "Планета",
         "link_path": "planet",
-        "hidden": 0,
+        "hidden": 1,
         "has_children": 0,
         "expanded": 0,
         "options": {
@@ -191,7 +191,41 @@
         "menu_name": "main-menu",
         "weight": -50,
         "link_title": "Трекер",
-        "link_path": "alttracker",
+        "link_path": "tracker",
+        "hidden": 0,
+        "has_children": 0,
+        "expanded": 0,
+        "options": {
+            "attributes": {
+                "title": ""
+            }
+        },
+        "module": "menu",
+        "customized": 1,
+        "updated": 0
+    },
+    {
+        "menu_name": "main-menu",
+        "weight": 0,
+        "link_title": "Мероприятия",
+        "link_path": "events",
+        "hidden": 0,
+        "has_children": 0,
+        "expanded": 0,
+        "options": {
+            "attributes": {
+                "title": ""
+            }
+        },
+        "module": "menu",
+        "customized": 1,
+        "updated": 0
+    },
+    {
+        "menu_name": "main-menu",
+        "weight": 0,
+        "link_title": "Бизнес",
+        "link_path": "services",
         "hidden": 0,
         "has_children": 0,
         "expanded": 0,

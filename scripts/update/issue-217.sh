@@ -17,7 +17,7 @@ echo "Import settings"
 drush ddi variables --file=$GITLC_DEPLOY_DIR/data/dru_frontpage.variables.export
 
 echo "Set organisations limits"
-drush vset organizations_block_count '4'
+drush vset organizations_block_count '3'
 
 echo "Set event limits"
 drush vset upcoming_events_block_count '5'

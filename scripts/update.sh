@@ -16,6 +16,7 @@ git pull
 
 cd $SITEPATH
 
+
 # enable drupal deploy
 drush -y en drupal_deploy
 

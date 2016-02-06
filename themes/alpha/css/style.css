@@ -79,12 +79,21 @@ div.region.region-fluid-top {
 .container-fluid #block-system-main {
   margin-left: -15px;
   margin-right: -15px;
-  background-color: #fff;
   padding: 20px 0px;
+  background: #fff url(../images/blocks/news.png);
 }
 
 .container-fluid #block-system-main .content {
   margin: 0px;
+}
+
+/* Other block */
+#block-advanced-sphinx-searchbox.block.block-advanced-sphinx {
+  float: right;
+}
+
+#block-advanced-sphinx-searchbox.block.block-advanced-sphinx h2 {
+  display: none;
 }
 
 /* Content. */

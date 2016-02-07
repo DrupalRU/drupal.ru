@@ -1,33 +1,33 @@
 [
     {
-        "type": "organization",
-        "name": "Страница компании",
-        "base": "marketplace",
-        "description": "Добавить организацию (компанию) в раздел \"Бизнес\".\r\n\r\n<strong>Материалы проходят проверку перед публикацией<\/strong>",
-        "help": "<p>Раздел \"Бизнес\" - включает в себя список компаний, предоставляющих услуги связанные с Drupal CMS:<\/p>\r\n<ul>\r\n<li>разработка<\/li>\r\n<li>поддержка<\/li>\r\n<li>хостинг<\/li>\r\n<li>тренинги<\/li>\r\n<li>проведение мероприятий<\/li>\r\n<\/ul>\r\n<p>\r\n<strong>и обязательно делают вклад в Drupal сообщество<\/strong>\r\n<\/p>\r\n<br\/>\r\n<p><strong>Материалы проходят проверку перед публикацией<\/strong><\/p>",
-        "has_title": 1,
-        "title_label": "Имя компании",
+        "type": "ticket",
+        "name": "Тикет",
+        "base": "dru_tickets",
+        "description": "Сообщение модератору о нарушении <a href=\"http:\/\/www.drupal.ru\/rules\"> правил <\/a>.",
+        "help": "",
+        "has_title": 0,
+        "title_label": "",
         "custom": 0,
         "modified": 1,
         "locked": 1,
-        "orig_type": "organization",
-        "module": "marketplace",
+        "orig_type": "ticket",
+        "module": "dru_tickets",
         "disabled": 0,
         "submission": {
             "node_preview": "Optional"
         },
         "workflow": {
             "node_options": [
-
+                "Published"
             ],
             "language_content_type": "Disabled",
             "simplenews_content_type": 0
         },
         "display": {
-            "node_submitted": 0
+            "node_submitted": 1
         },
         "comment": {
-            "comment": "Closed",
+            "comment": "Open",
             "comment_default_mode": 1,
             "comment_default_per_page": 50,
             "comment_anonymous": "Anonymous posters may not enter their contact information",
@@ -154,11 +154,11 @@
                     ]
                 }
             },
-            "organization_type": {
+            "field_ticket_status": {
                 "settings": {
                     "allowed_values": [
                         {
-                            "vocabulary": "organizations",
+                            "vocabulary": "ticket_status",
                             "parent": 0
                         }
                     ]
@@ -177,13 +177,13 @@
                     "details": {
                         "sql": {
                             "FIELD_LOAD_CURRENT": {
-                                "field_data_organization_type": {
-                                    "tid": "organization_type_tid"
+                                "field_data_field_ticket_status": {
+                                    "tid": "field_ticket_status_tid"
                                 }
                             },
                             "FIELD_LOAD_REVISION": {
-                                "field_revision_organization_type": {
-                                    "tid": "organization_type_tid"
+                                "field_revision_field_ticket_status": {
+                                    "tid": "field_ticket_status_tid"
                                 }
                             }
                         }
@@ -202,13 +202,13 @@
                         "tid"
                     ]
                 },
-                "id": 18,
-                "field_name": "organization_type",
+                "id": 20,
+                "field_name": "field_ticket_status",
                 "type": "taxonomy_term_reference",
                 "module": "taxonomy",
                 "active": 1,
                 "locked": 0,
-                "cardinality": -1,
+                "cardinality": 1,
                 "deleted": 0,
                 "columns": {
                     "tid": {
@@ -219,21 +219,90 @@
                 },
                 "bundles": {
                     "node": [
-                        "organization"
+                        "ticket"
+                    ]
+                }
+            },
+            "field_claim_category": {
+                "settings": {
+                    "allowed_values": [
+                        {
+                            "vocabulary": "claim_category",
+                            "parent": 0
+                        }
+                    ]
+                },
+                "entity_types": [
+
+                ],
+                "translatable": 0,
+                "storage": {
+                    "type": "field_sql_storage",
+                    "settings": [
+
+                    ],
+                    "module": "field_sql_storage",
+                    "active": 1,
+                    "details": {
+                        "sql": {
+                            "FIELD_LOAD_CURRENT": {
+                                "field_data_field_claim_category": {
+                                    "tid": "field_claim_category_tid"
+                                }
+                            },
+                            "FIELD_LOAD_REVISION": {
+                                "field_revision_field_claim_category": {
+                                    "tid": "field_claim_category_tid"
+                                }
+                            }
+                        }
+                    }
+                },
+                "foreign keys": {
+                    "tid": {
+                        "table": "taxonomy_term_data",
+                        "columns": {
+                            "tid": "tid"
+                        }
+                    }
+                },
+                "indexes": {
+                    "tid": [
+                        "tid"
+                    ]
+                },
+                "id": 21,
+                "field_name": "field_claim_category",
+                "type": "taxonomy_term_reference",
+                "module": "taxonomy",
+                "active": 1,
+                "locked": 0,
+                "cardinality": 1,
+                "deleted": 0,
+                "columns": {
+                    "tid": {
+                        "type": "int",
+                        "unsigned": true,
+                        "not null": false
+                    }
+                },
+                "bundles": {
+                    "node": [
+                        "ticket"
                     ]
                 }
             }
         },
         "instances": {
             "body": {
-                "label": "Organization description",
+                "label": "Claim text",
                 "widget": {
                     "type": "text_textarea_with_summary",
                     "settings": {
                         "rows": 20,
                         "summary_rows": 5
                     },
-                    "weight": 7,
+                    "weight": 41,
                     "module": "text"
                 },
                 "settings": {
@@ -245,100 +314,153 @@
                     "default": {
                         "label": "hidden",
                         "type": "text_default",
-                        "weight": 5,
                         "settings": [
 
                         ],
-                        "module": "text"
+                        "module": "text",
+                        "weight": 0
                     },
                     "teaser": {
                         "label": "hidden",
                         "type": "text_summary_or_trimmed",
-                        "weight": 1,
                         "settings": {
                             "trim_length": 600
                         },
-                        "module": "text"
-                    },
-                    "block": {
-                        "label": "above",
-                        "type": "hidden",
-                        "weight": 0,
-                        "settings": [
-
-                        ]
+                        "module": "text",
+                        "weight": 0
                     },
                     "frontpage": {
-                        "label": "above",
                         "type": "hidden",
-                        "weight": 1,
+                        "label": "above",
                         "settings": [
 
-                        ]
+                        ],
+                        "weight": 0
+                    },
+                    "block": {
+                        "type": "hidden",
+                        "label": "above",
+                        "settings": [
+
+                        ],
+                        "weight": 0
                     }
                 },
                 "required": false,
                 "description": "",
-                "default_value": null,
                 "field_name": "body",
-                "deleted": 0
+                "deleted": 0,
+                "default_value": null
             },
-            "organization_type": {
-                "label": "Organizaition type",
-                "required": true,
+            "field_ticket_status": {
+                "label": "Статус",
+                "required": 1,
                 "widget": {
                     "type": "options_select",
-                    "weight": 3,
+                    "module": "options",
                     "settings": [
 
                     ],
-                    "module": "options"
+                    "weight": 42
                 },
                 "display": {
                     "default": {
-                        "label": "hidden",
+                        "label": "inline",
                         "type": "taxonomy_term_reference_link",
-                        "weight": 6,
+                        "module": "taxonomy",
                         "settings": [
 
                         ],
-                        "module": "taxonomy"
+                        "weight": 1
                     },
                     "teaser": {
-                        "label": "hidden",
+                        "label": "inline",
                         "type": "taxonomy_term_reference_link",
-                        "weight": 2,
+                        "module": "taxonomy",
                         "settings": [
 
                         ],
-                        "module": "taxonomy"
-                    },
-                    "block": {
-                        "label": "hidden",
-                        "type": "taxonomy_term_reference_link",
-                        "weight": 0,
-                        "settings": [
-
-                        ],
-                        "module": "taxonomy"
+                        "weight": 1
                     },
                     "frontpage": {
-                        "label": "hidden",
-                        "type": "taxonomy_term_reference_link",
-                        "weight": 0,
+                        "type": "hidden",
+                        "label": "above",
                         "settings": [
 
                         ],
-                        "module": "taxonomy"
+                        "weight": 0
+                    },
+                    "block": {
+                        "type": "hidden",
+                        "label": "above",
+                        "settings": [
+
+                        ],
+                        "weight": 0
                     }
                 },
                 "settings": {
                     "user_register_form": false
                 },
                 "description": "",
-                "default_value": null,
-                "field_name": "organization_type",
-                "deleted": 0
+                "field_name": "field_ticket_status",
+                "deleted": 0,
+                "default_value": null
+            },
+            "field_claim_category": {
+                "label": "Claim Category",
+                "required": 1,
+                "widget": {
+                    "type": "options_select",
+                    "module": "options",
+                    "settings": [
+
+                    ],
+                    "weight": 43
+                },
+                "display": {
+                    "default": {
+                        "label": "inline",
+                        "type": "taxonomy_term_reference_link",
+                        "module": "taxonomy",
+                        "settings": [
+
+                        ],
+                        "weight": 2
+                    },
+                    "teaser": {
+                        "label": "inline",
+                        "type": "taxonomy_term_reference_link",
+                        "module": "taxonomy",
+                        "settings": [
+
+                        ],
+                        "weight": 2
+                    },
+                    "frontpage": {
+                        "type": "hidden",
+                        "label": "above",
+                        "settings": [
+
+                        ],
+                        "weight": 0
+                    },
+                    "block": {
+                        "type": "hidden",
+                        "label": "above",
+                        "settings": [
+
+                        ],
+                        "weight": 0
+                    }
+                },
+                "settings": {
+                    "user_register_form": false
+                },
+                "description": "",
+                "field_name": "field_claim_category",
+                "deleted": 0,
+                "default_value": null
             }
         }
     }

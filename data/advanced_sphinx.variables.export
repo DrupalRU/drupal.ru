@@ -1,0 +1,62 @@
+[
+    {
+        "name": "advanced_sphinx_connections_type",
+        "value": "socket"
+    },
+    {
+        "name": "advanced_sphinx_excerpts_around",
+        "value": 5
+    },
+    {
+        "name": "advanced_sphinx_excerpts_index",
+        "value": "index_main"
+    },
+    {
+        "name": "advanced_sphinx_excerpts_limit",
+        "value": 256
+    },
+    {
+        "name": "advanced_sphinx_excerpts_single_passage",
+        "value": 0
+    },
+    {
+        "name": "advanced_sphinx_generate_config",
+        "value": 0
+    },
+    {
+        "name": "advanced_sphinx_logs",
+        "value": 0
+    },
+    {
+        "name": "advanced_sphinx_path_config",
+        "value": "~\/sphinx"
+    },
+    {
+        "name": "advanced_sphinx_query_index",
+        "value": "index_main"
+    },
+    {
+        "name": "advanced_sphinx_query_index_delta",
+        "value": "index_delta"
+    },
+    {
+        "name": "advanced_sphinx_results_per_page",
+        "value": 25
+    },
+    {
+        "name": "advanced_sphinx_search_path",
+        "value": "search"
+    },
+    {
+        "name": "advanced_sphinx_searchd_host",
+        "value": "~\/sphinx\/sphinx.s"
+    },
+    {
+        "name": "advanced_sphinx_searchd_port",
+        "value": 3312
+    },
+    {
+        "name": "advanced_sphinx_searchd_timeout",
+        "value": 6
+    }
+]

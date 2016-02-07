@@ -48,7 +48,7 @@ msgstr "Жалоба @type = @id"
 
 #: dru_claim.pages.inc:177
 msgid "Open"
-msgstr "Открыто"
+msgstr "Открыт"
 
 #: dru_claim.module:13
 msgid "Create Claim"

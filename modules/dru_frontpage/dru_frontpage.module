@@ -1,0 +1,149 @@
+<?php
+/**
+ * @file
+ * Dru_frontpage module.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function dru_frontpage_menu() {
+  $items['frontpage'] = array(
+    'page callback' => 'dru_frontpage_list',
+    'access arguments' => array('access content'),
+    'menu_name' => 'navigation',
+    'type' => MENU_CALLBACK,
+    'title' => '',
+  );
+
+  // Administer menu.
+  $items['admin/config/content/frontpage'] = array(
+    'title' => 'Drupal.ru Frontpage Settings',
+    'description' => 'Configure Drupal.ru Frontpage behaviour.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dru_frontpage_admin_settings'),
+    'access arguments' => array('administer nodes'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'dru_frontpage.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function dru_frontpage_entity_info_alter(&$entity_info) {
+  $entity_info['node']['view modes']['frontpage'] = array(
+    'label' => t('Frontpage view'),
+    'custom settings' => TRUE,
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function dru_frontpage_theme($existing, $type, $theme, $path) {
+  $theme = array();
+  $theme['node__frontpage'] = array(
+    'render element' => 'content',
+    'base hook' => 'node',
+    'template' => 'node--frontpage',
+    'path' => drupal_get_path('module', 'dru_frontpage') . '/templates',
+  );
+  $theme['frontpage_list'] = array(
+    'render element' => 'content',
+    'template' => 'frontpage--list',
+    'path' => drupal_get_path('module', 'dru_frontpage') . '/templates',
+
+  );
+  return $theme;
+}
+
+/**
+ * Implement hook_preprocess_node().
+ */
+function dru_frontpage_preprocess_node(&$variables) {
+  if ($variables['elements']['#view_mode'] == 'frontpage') {
+    $variables['theme_hook_suggestions'][] = "node__frontpage";
+  }
+}
+
+/**
+ * Display companies on market place.
+ */
+function dru_frontpage_list() {
+  $query = db_select('node', 'n', array('target' => 'slave'));
+ 
+  if($types = variable_get('dru_frontpage_node_type')){
+    $in_types = array();
+
+    foreach($types as $type => $val){
+      if($val){
+        $in_types[] = $type;
+      }
+    }
+    if(!empty($in_types)){
+      $query->condition('n.type', $in_types, 'IN');
+    }
+  }
+  
+  $nids = $query
+    ->addTag('frontpage_nodes_condition')
+    ->fields('n', array('nid', 'created'))
+    ->condition('n.status', 1)
+    ->condition('n.promote', 1)
+    ->range(0, variable_get('dru_frontpage_max_count', 40))
+    ->orderBy('n.changed', 'DESC')
+    ->execute()
+    ->fetchCol();
+    
+  if (!empty($nids)) {
+    
+    $nodes = node_load_multiple($nids);
+    foreach($nodes as $key => $node){
+      $history = _forum_user_last_visit($node->nid); 
+      $node->new_replies = comment_num_new($node->nid, $history);
+      $node->new = $node->new_replies || (isset($node->last_comment_timestamp) && $node->last_comment_timestamp > $history);
+      if($node->new){
+        $node->url = url("node/$node->nid", array('query' => comment_new_page_count($node->comment_count, $node->new_replies, $node), 'fragment' => 'new'));
+      }else{
+        $node->url = url("node/$node->nid");
+      }
+      
+      $tids = db_select('taxonomy_index', 't', array('target' => 'slave'))
+        ->fields('t', array('tid'))
+        ->condition('t.nid', $node->nid)
+        ->execute()
+        ->fetchCol();
+      $node->terms = taxonomy_term_load_multiple($tids, array());
+      
+      $nodes[$key] = $node;
+    
+    }
+    $page = node_view_multiple($nodes, 'frontpage');
+
+    $links['list'] = array(
+      'href' => 'node',
+      'title' => t('Show more content'),
+    );
+  
+    $page['links'] = array(
+      '#theme' => 'links',
+      '#links' => $links,
+      '#attributes' => array('class' => array('frontpage_links')),
+    );
+    drupal_set_title('');
+  }else{
+    drupal_set_title(t('Welcome to @site-name', array('@site-name' => variable_get('site_name', 'Drupal'))), PASS_THROUGH);
+    $default_message = '<p>' . t('No nodes has been promoted yer.') . '</p>';
+    $build['default_message'] = array(
+      '#markup' => $default_message,
+      '#prefix' => '<div id="first-time">',
+      '#suffix' => '</div>',
+    );
+  }
+  
+  $page['#theme'] = 'frontpage_list';
+  return $page;
+}

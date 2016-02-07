@@ -24,25 +24,27 @@
         }
       });
       
-      $( "div.media-body" ).on( "swipeleft",  function() {
-        if(!$(this).hasClass("swipedleft")) {
-          $('#comment-links-' + $(this).attr('comment-id')).animate({
-            width: "toggle"
-          }, 200);
-          $( "div[data-source='" + $(this).attr('comment-id') + "']" ).toggleClass("open");
-          $(this).addClass("swipedleft");
-        }
-      });
+      if ($(window).width() > 768) {
+        $( "div.media-body" ).on( "swipeleft",  function() {
+          if(!$(this).hasClass("swipedleft")) {
+            $('#comment-links-' + $(this).attr('comment-id')).animate({
+              width: "toggle"
+            }, 200);
+            $( "div[data-source='" + $(this).attr('comment-id') + "']" ).toggleClass("open");
+            $(this).addClass("swipedleft");
+          }
+      }});
       
-      $( "div.media-body" ).on( "swiperight",  function() {
-        if($(this).hasClass("swipedleft")) {
-          $('#comment-links-' + $(this).attr('comment-id')).animate({
-            width: "toggle"
-          }, 200);
-          $( "div[data-source='" + $(this).attr('comment-id') + "']" ).toggleClass("open");
-          $(this).removeClass("swipedleft");
-        }
-      });
+      if ($(window).width() > 768) {
+        $( "div.media-body" ).on( "swiperight",  function() {
+          if($(this).hasClass("swipedleft")) {
+            $('#comment-links-' + $(this).attr('comment-id')).animate({
+              width: "toggle"
+            }, 200);
+            $( "div[data-source='" + $(this).attr('comment-id') + "']" ).toggleClass("open");
+            $(this).removeClass("swipedleft");
+          }
+      }});
 
     }
   };

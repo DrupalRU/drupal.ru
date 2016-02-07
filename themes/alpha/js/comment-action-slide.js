@@ -33,7 +33,8 @@
             $( "div[data-source='" + $(this).attr('comment-id') + "']" ).toggleClass("open");
             $(this).addClass("swipedleft");
           }
-      }});
+        });
+      }
       
       if ($(window).width() > 768) {
         $( "div.media-body" ).on( "swiperight",  function() {
@@ -44,7 +45,8 @@
             $( "div[data-source='" + $(this).attr('comment-id') + "']" ).toggleClass("open");
             $(this).removeClass("swipedleft");
           }
-      }});
+        });
+      }
 
     }
   };

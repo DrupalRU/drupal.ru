@@ -37,6 +37,7 @@
             "create book content",
             "create page content",
             "create simplenews content",
+            "create url aliases",
             "delete any blog content",
             "delete any book content",
             "delete any page content",

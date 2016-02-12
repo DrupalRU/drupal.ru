@@ -7,7 +7,8 @@
         "cache": 1,
         "roles": [
             "administrator",
-            "редактор сайта"
+            "редактор сайта",
+            "управление рекламой"
         ],
         "filters": [
             {
@@ -151,8 +152,7 @@
             "продвижение статей",
             "редактор сайта",
             "управление рекламой",
-            "модератор",
-            "редактор сайта"
+            "модератор"
         ],
         "filters": [
             {
@@ -164,7 +164,7 @@
                     "bbcode_make_links": 1,
                     "bbcode_filter_nofollow": 0,
                     "bbcode_encode_mailto": 0,
-                    "bbcode_paragraph_breaks": 1,
+                    "bbcode_paragraph_breaks": 0,
                     "bbcode_debug": 0
                 }
             },
@@ -282,8 +282,12 @@
                     "tags": {
                         "_enabled": {
                             "api": "api",
+                            "cid": "cid",
+                            "comment": "comment",
                             "man": "man",
                             "module": "module",
+                            "nid": "nid",
+                            "node": "node",
                             "ru_api": "ru_api",
                             "ruapi": "ruapi",
                             "theme": "theme",
@@ -292,11 +296,23 @@
                         "api": {
                             "module": "xbbcode_dru"
                         },
+                        "cid": {
+                            "module": ""
+                        },
+                        "comment": {
+                            "module": ""
+                        },
                         "man": {
                             "module": "xbbcode_dru"
                         },
                         "module": {
                             "module": "xbbcode_dru"
+                        },
+                        "nid": {
+                            "module": ""
+                        },
+                        "node": {
+                            "module": ""
                         },
                         "ru_api": {
                             "module": "xbbcode_dru"

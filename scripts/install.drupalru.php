@@ -1,5 +1,19 @@
 #!/usr/bin/php
 <?php
+
+/**
+ * Get user input for variables.
+ */
+function get_promt_answer($promt){
+  if (PHP_OS == 'WINNT' or !function_exists('readline')) {
+    echo $promt .': ';
+    $line = stream_get_line(STDIN, 1024, PHP_EOL);
+  } else {
+    $line = readline($promt . ': ');
+  }
+  return $line;
+}
+
   
 echo "This is install script to create dev environment for drupal.ru  code\n";
 
@@ -127,12 +141,3 @@ exec('drush -y language-import ru ' . $data['github_path'] . 'profiles/drupalru/
 exec('drush -y language-import ru ' . $data['github_path'] . 'profiles/drupalru/modules/validate_api/antiswearing_validate/translations/antiswearing_validate.ru.po');
 exec('drush -y language-import ru ' . $data['github_path'] . 'profiles/drupalru/modules/validate_api/antinoob_validate/translations/antinoob_validate.ru.po');
 
-function get_promt_answer($promt){
-  if (PHP_OS == 'WINNT' or !function_exists('readline')) {
-    echo $promt .': ';
-    $line = stream_get_line(STDIN, 1024, PHP_EOL);
-  } else {
-    $line = readline($promt . ': ');
-  }
-  return $line;
-}

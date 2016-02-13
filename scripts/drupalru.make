@@ -85,12 +85,11 @@ libraries[geshi][type] = "library"
 libraries[geshi][download][type] = "file"
 libraries[geshi][download][url] = "http://sourceforge.net/projects/geshi/files/geshi/GeSHi%201.0.8.10/GeSHi-1.0.8.10.tar.gz/download"
 
-; not really libraries... but I don't see other way
-libraries[drupalru][type] = "library"
-libraries[drupalru][download][type] = "git"
-libraries[drupalru][download][url] = "http://github.com/drupalru/drupal.ru"
-libraries[drupalru][download][branch] = "stage"
-libraries[drupalru][destination] = "sites/default/"
+; Downloading drupal.ru repo like profile
+; projects[drupalru][type] = "profile"
+; projects[drupalru][download][type] = "git"
+; projects[drupalru][download][url] = "http://github.com/drupalru/drupal.ru"
+; projects[drupalru][download][branch] = "stage"
 
 ; Load Russian translations.
 ; translations[] = ru

@@ -1,10 +1,9 @@
-#!/usr/bin/php
 <?php
 
 /**
  * Get user input for variables.
  */
-function get_promt_answer($promt){
+function get_promt_answer($promt) {
   if (PHP_OS == 'WINNT' or !function_exists('readline')) {
     echo $promt .': ';
     $line = stream_get_line(STDIN, 1024, PHP_EOL);
@@ -14,7 +13,6 @@ function get_promt_answer($promt){
   return $line;
 }
 
-  
 echo "This is install script to create dev environment for drupal.ru  code\n";
 
 $data['github_url'] = get_promt_answer("Provide url to your drupal.ru fork. \nExample:https://github.com/DrupalRu/drupal.ru\n");

@@ -28,15 +28,9 @@ chdir($data['site_path']);
 
 echo "Download DRUPAL.\n";
 
-exec('drush make https://raw.githubusercontent.com/DrupalRu/drupal.ru/stage/scripts/drupalru.make ' . $data['site_path']);
+exec('drush make https://raw.githubusercontent.com/DrupalRu/drupal.ru/stage/scripts/drupalru.make');
 
-exec('git clone ' . $data['github_url'] . ' profiles/drupalru');
-
-chdir($data['site_path'] . '/profiles/drupalru');
-
-exec('git checkout ' . $data['github_branch']);
-
-chdir($data['site_path']);
+exec('git clone -b  ' . $data['github_branch'] . ' ' . $data['github_url'] . ' profiles/drupalru');
 
 echo "Install DRUPAL\n";
 

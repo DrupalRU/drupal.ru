@@ -51,6 +51,40 @@ function dru_claim_schema() {
 function dru_claim_install() {
   $t = get_t();
 
+  // Create "Claim Category" taxonomy vocabulary
+  // ! Delete after development.
+  if (!taxonomy_vocabulary_machine_name_load('claim_category')) {
+    $vocabulary = array(
+      'machine_name' => 'claim_category',
+      'name'         => $t('Claim Category'),
+    );
+    $vocabulary = (object) $vocabulary;
+    taxonomy_vocabulary_save($vocabulary);
+
+    $vid = $vocabulary->vid;
+
+    // Create Claim Category terms.
+    $terms = array(
+      'spam'       => array(
+        'name' => $t('Spam'),
+        'vid'  => $vid,
+      ),
+      'aggressive' => array(
+        'name' => $t('Trolley Rage'),
+        'vid'  => $vid,
+      ),
+      'rules'      => array(
+        'name' => $t('Breach Rules'),
+        'vid'  => $vid,
+      ),
+    );
+    foreach ($terms as $term) {
+      $term = (object) $term;
+      taxonomy_term_save($term);
+      $tid = $term->tid;
+    }
+  }
+
   // Add "Claim Category" field.
   $field_claim_category = field_info_field('field_claim_category');
   if (empty($field_claim_category)) {

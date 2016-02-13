@@ -1,0 +1,18 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the standard installation profile.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Perform actions to set up the site for this profile.
+ *
+ * @see system_install()
+ */
+function drupalru_install() {
+  variable_set('theme_default', 'alpha');
+  variable_set('admin_theme', 'alpha');
+  variable_set('l10n_update_check_frequency', 7);
+}

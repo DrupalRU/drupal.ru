@@ -7,8 +7,6 @@ core = 7.x
 projects[] = drupal
 
 ; Contrib modules
-; Libraries module goes first
-projects[libraries][subdir] = "contrib"
 
 projects[ban_user][subdir] = "contrib"
 projects[bbcode][subdir] = "contrib"

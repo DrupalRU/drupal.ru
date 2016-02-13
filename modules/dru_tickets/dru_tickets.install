@@ -10,39 +10,6 @@
 function dru_tickets_install() {
   $t = get_t();
 
-  // Create "Ticket Status" taxonomy vocabulary.
-  if (!taxonomy_vocabulary_machine_name_load('ticket_status')) {
-    $vocabulary = array(
-      'machine_name' => 'ticket_status',
-      'name'         => $t('Ticket Ststus'),
-    );
-    $vocabulary = (object) $vocabulary;
-    taxonomy_vocabulary_save($vocabulary);
-
-    $vid = $vocabulary->vid;
-
-    // Create status terms.
-    $terms = array(
-      'open'      => array(
-        'name' => $t('Open'),
-        'vid'  => $vid,
-      ),
-      'process' => array(
-        'name' => $t('Processed'),
-        'vid'  => $vid,
-      ),
-      'closed'    => array(
-        'name' => $t('Closed'),
-        'vid'  => $vid,
-      ),
-    );
-    foreach ($terms as $term) {
-      $term = (object) $term;
-      taxonomy_term_save($term);
-      $tid = $term->tid;
-    }
-  }
-
   node_types_rebuild();
   $types = node_type_get_types();
 

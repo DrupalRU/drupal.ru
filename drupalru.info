@@ -54,7 +54,6 @@ dependencies[] = transliteration
 dependencies[] = xbbcode
 dependencies[] = quote
 dependencies[] = diff
-dependencies[] = bootstrap_lite
 
 # Git modules
 dependencies[] = altpager
@@ -64,8 +63,6 @@ dependencies[] = inner_poll
 
 # Drupalru modules
 
-dependencies[] = alpha
-dependencies[] = advanced_sphinx
 dependencies[] = antinoob_validate
 dependencies[] = antiswearing_validate
 dependencies[] = darkmatter

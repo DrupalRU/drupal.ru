@@ -128,15 +128,15 @@ exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_
 exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_api/antiswearing_validate/translations/antiswearing_validate.ru.po');
 exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_api/antinoob_validate/translations/antinoob_validate.ru.po');
 
-exec('drush -y language-import ru ' . $data['github_path'] . 'profiles/drupalru/modules/darkmatter/translations/darkmatter.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . 'profiles/drupalru/modules/dru_tickets/dru_claim/translations/dru_claim.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . 'profiles/drupalru/modules/dru_tickets/translations/dru_tickets.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . 'profiles/drupalru/modules/simple_events/translations/simple_events.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . 'profiles/drupalru/modules/user_filter/user_filter_notify/translations/user_filter_notify.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . 'profiles/drupalru/modules/resolve/translations/resolve.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . 'profiles/drupalru/modules/marketplace/translations/marketplace.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . 'profiles/drupalru/modules/dru_tnx/translations/dru_tnx.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . 'profiles/drupalru/modules/validate_api/translations/validate_api.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . 'profiles/drupalru/modules/validate_api/antiswearing_validate/translations/antiswearing_validate.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . 'profiles/drupalru/modules/validate_api/antinoob_validate/translations/antinoob_validate.ru.po');
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/darkmatter/translations/darkmatter.ru.po');
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/dru_tickets/dru_claim/translations/dru_claim.ru.po');
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/dru_tickets/translations/dru_tickets.ru.po');
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/simple_events/translations/simple_events.ru.po');
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/user_filter/user_filter_notify/translations/user_filter_notify.ru.po');
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/resolve/translations/resolve.ru.po');
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/marketplace/translations/marketplace.ru.po');
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/dru_tnx/translations/dru_tnx.ru.po');
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_api/translations/validate_api.ru.po');
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_api/antiswearing_validate/translations/antiswearing_validate.ru.po');
+exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_api/antinoob_validate/translations/antinoob_validate.ru.po');
 

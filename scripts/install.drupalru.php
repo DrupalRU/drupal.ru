@@ -116,6 +116,8 @@ exec('drush generate-content 100 100');
 
 
 echo "Update translation\n";
+
+exec('drush drush -y dl drush_language');
 exec('drush language-add ru');
 exec('drush language-default ru');
 exec('drush -y l10n-update-refresh');

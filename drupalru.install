@@ -15,4 +15,5 @@ function drupalru_install() {
   variable_set('theme_default', 'alpha');
   variable_set('admin_theme', 'alpha');
   variable_set('l10n_update_check_frequency', 7);
+  variable_set('site_frontpage', 'frontpage');
 }

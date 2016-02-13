@@ -35,14 +35,13 @@ $data['site_name'] = 'Drupal.ru Dev version';
 $data['github_path'] = 'profiles/drupalru';
 
 echo "Full site path: " . $data['site_path'] . "\n";
-echo "Site core: " . $data['core'] . "\n";
 echo "Github DIR: " . $data['github_path'] . "\n";
 
 chdir($data['site_path']);
 
 echo "Download DRUPAL.\n";
 
-exec('drush make https://raw.githubusercontent.com/DrupalRu/drupal.ru/stage/scripts/drupalru.make');
+exec('drush -y make https://raw.githubusercontent.com/DrupalRu/drupal.ru/stage/scripts/drupalru.make');
 
 exec('git clone -b  ' . $data['github_branch'] . ' ' . $data['github_url'] . ' profiles/drupalru');
 

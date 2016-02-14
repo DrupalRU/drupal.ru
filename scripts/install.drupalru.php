@@ -15,18 +15,35 @@ function get_promt_answer($promt) {
 
 echo "This is install script to create dev environment for drupal.ru  code\n";
 
-$data['github_url'] = get_promt_answer("Provide url to your drupal.ru fork. \nExample:https://github.com/DrupalRu/drupal.ru\n");
-$data['github_branch'] =get_promt_answer("Branch name");
+// param => "Question for promt".
+$params = array(
+  'github_url'    => "Provide url to your drupal.ru fork. \nExample:https://github.com/DrupalRu/drupal.ru\n",
+  'github_branch' => "Branch name",
+  'site_path'     => "Site directory",
+  'mysql_host'    => "MySQL Host",
+  'mysql_user'    => "MySQL User",
+  'mysql_db'      => "MySQL DB",
+  'mysql_pass'    => "MySQL Password",
+  'domain'        => "Domain",
+  'account_name'  => "Drupal User name",
+  'account_email' => "Drupal User email",
+  'account_pass'  => "Drupal User Password",
+);
 
-$data['site_path'] = get_promt_answer('DOCROOT');
-$data['mysql_host'] = get_promt_answer('MySQL Host');
-$data['mysql_user'] = get_promt_answer('MySQL User');
-$data['mysql_db'] = get_promt_answer('MySQL DB');
-$data['mysql_pass'] = get_promt_answer('MySQL Password');
-$data['domain'] = get_promt_answer('Domain');
-$data['account_name'] = get_promt_answer('Drupal User name');
-$data['account_email'] = get_promt_answer('Drupal User email');
-$data['account_pass'] = get_promt_answer('Drupal User Password');
+// Get these params from request.
+$data = getopt('', array_map(function ($opt) {
+  return $opt . '::';
+}, array_keys($params)));
+
+// Check params.
+foreach ($params as $param => $question) {
+  if (!isset($data[$param])) {
+    $data[$param] = get_promt_answer($question);
+  }
+  else {
+    echo $question . ': ' . $data[$param] . PHP_EOL;
+  }
+}
 
 // Some static variables.
 $data['site_name'] = 'Drupal.ru Dev version';

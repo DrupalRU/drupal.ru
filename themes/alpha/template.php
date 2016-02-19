@@ -115,7 +115,6 @@ function alpha_preprocess_page(&$variables) {
       $account = user_load($uid);
     }
 
-
     if (!empty($account->picture)) {
       if (!empty($account->picture->uri)) {
         $filepath = $account->picture->uri;
@@ -202,9 +201,9 @@ function alpha_preprocess_user_picture(&$variables) {
  * Implements hook_preprocess_comment().
  */
 function alpha_preprocess_comment(&$variables) {
-  
+
   drupal_add_js(drupal_get_path('theme', 'alpha') . '/js/' . 'comment-action-slide.js');
-  
+
   $comment = $variables['elements']['#comment'];
   $variables['timeago'] = t('@time ago', array('@time' => format_interval(time() - $comment->changed)));
 
@@ -214,25 +213,29 @@ function alpha_preprocess_comment(&$variables) {
   if (isset($variables['content']['links']['comment']['#links']['comment_forbidden'])) {
     unset($variables['content']['links']['comment']['#links']['comment_forbidden']);
   }
-  
+
   // We need to make sure that we have links.
   // If we don't have links we do not display icon "***".
-  if(!empty($variables['content']['links']['comment']['#links'])){
+  if (!empty($variables['content']['links']['comment']['#links'])) {
     $variables['content']['links']['comment']['#links']['#cid'] = $comment->cid;
   }
 }
 
-function alpha_links__comment(&$variables){
+/**
+ *
+ */
+function alpha_links__comment(&$variables) {
   $cid = $variables['links']['#cid'];
   unset($variables['links']['#cid']);
-  
-  if(!empty($variables['links'])){
+
+  if (!empty($variables['links'])) {
     $variables['attributes']['class'] = array('links comment-links');
     return ''
     . '<div id="comment-links-' . $cid . '" class="comment-actions">'
     . theme_links($variables)
     . '</div>';
-  }else{
+  }
+  else {
     return '';
   }
 
@@ -293,7 +296,7 @@ function alpha_preprocess_node(&$variables) {
   if (isset($variables['content']['links']['comment']['#links']['comment_forbidden'])) {
     unset($variables['content']['links']['comment']['#links']['comment_forbidden']);
   }
-  
+
   if (!empty($node->terms)) {
     $terms_links = array();
     foreach ($node->terms as $term) {
@@ -784,12 +787,18 @@ function alpha_preprocess_marketplace_random_block(&$variables) {
   $variables['links']['#links']['list']['attributes']['class'] = array('btn', 'btn-success');
 }
 
+/**
+ *
+ */
 function alpha_preprocess_simple_events_upcoming_block(&$variables) {
   $variables['links']['#attributes']['class'][] = 'inline';
   $variables['links']['#links']['add']['attributes']['class'] = array('btn', 'btn-primary');
   $variables['links']['#links']['list']['attributes']['class'] = array('btn', 'btn-success');
 }
 
+/**
+ *
+ */
 function alpha_preprocess_frontpage_list(&$variables) {
   $variables['content']['links']['#attributes']['class'][] = 'inline';
   $variables['content']['links']['#links']['list']['attributes']['class'] = array('btn', 'btn-success');

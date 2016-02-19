@@ -1,6 +1,7 @@
 <?php
 /**
  * @file
+ * Template for private message view page.
  */
 ?>
 <article class="media comment <?php

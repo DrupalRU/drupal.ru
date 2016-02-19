@@ -1,8 +1,12 @@
+<?php
 /**
  * @file
  */
+?>
 <article class="media comment <?php
-if ($new) {print "bg-info";} ?> <?php if (!empty($message_classes)) {echo implode(' ', $message_classes);} ?> clearfix"  id="privatemsg-mid-<?php print $mid; ?>">
+if ($new) {print "bg-info";} ?> <?php if (!empty($message_classes)) {
+  echo implode(' ', $message_classes);
+} ?> clearfix"  id="privatemsg-mid-<?php print $mid; ?>">
   <?php if($author_picture): ?>
   <div class="pull-left">
     <?php print $author_picture; ?>

@@ -1,4 +1,8 @@
-<div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?>  col-xs-12 col-sm-4"<?php print $attributes; ?>>
+<div id="node-<?php
+/**
+ * @file
+ */
+print $node->nid; ?>" class="<?php print $classes; ?>  col-xs-12 col-sm-4"<?php print $attributes; ?>>
   <div class="name">
     <?php print render($title_prefix); ?>
     <h3<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h3>

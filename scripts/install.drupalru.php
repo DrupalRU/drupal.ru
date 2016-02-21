@@ -1,8 +1,5 @@
 <?php
 
-// Test
-// php install.drupalru.php --github_url=https://github.com/mbaev/drupal.ru --github_branch=stage --site_path=/var/www/drupal.loc --mysql_host=127.0.0.1 --mysql_user=root --mysql_db=drupal --mysql_pass="111" --domain=drupal.loc --account_name=admin --account_email=admin@example.com --account_pass=111
-
 define('MAKE_SCRIPT_URL', 'https://raw.githubusercontent.com/DrupalRu/drupal.ru/stage/scripts/drupalru.make');
 
 
@@ -238,82 +235,82 @@ function rules($data) {
       'do before' => array('to_docroot', $data),
       'title' => 'Import roles',
       'validate' => array(
-        "Dir $ghp not found" => array('is_dir', $ghp),
+        "Dir $ghp not found" => array('is_dir', $ghp)
       ),
       'commands' => array(
-        array('drush ddi roles --file=%s/root/roles.export', $ghp),
+        array('drush ddi roles --file=%s/data/roles.export', $ghp),
       ),
     ),
     array(
       'title' => 'Import filters',
       'commands' => array(
-        array('drush ddi filters --file=%s/root/filters.export', $ghp),
+        array('drush ddi filters --file=%s/data/filters.export', $ghp),
       ),
     ),
     array(
       'title' => 'Import content types',
       'commands' => array(
-        array('drush ddi node_types --file=%s/root/blog.node_types.export', $ghp),
-        array('drush ddi node_types --file=%s/root/organization.node_types.export', $ghp),
-        array('drush ddi node_types --file=%s/root/simple_event.node_types.export', $ghp),
-        array('drush ddi node_types --file=%s/root/ticket.node_types.export', $ghp),
+        array('drush ddi node_types --file=%s/data/blog.node_types.export', $ghp),
+        array('drush ddi node_types --file=%s/data/organization.node_types.export', $ghp),
+        array('drush ddi node_types --file=%s/data/simple_event.node_types.export', $ghp),
+        array('drush ddi node_types --file=%s/data/ticket.node_types.export', $ghp),
       ),
     ),
     array(
       'title' => 'Import taxonomy',
       'commands' => array(
-        array('drush ddi taxonomy --file=%s/root/vocabulary_1.taxonomy.export', $ghp),
-        array('drush ddi taxonomy --file=%s/root/vocabulary_2.taxonomy.export',$ghp),
-        array('drush ddi taxonomy --file=%s/root/vocabulary_3.taxonomy.export',$ghp),
-        array('drush ddi taxonomy --file=%s/root/vocabulary_4.taxonomy.export', $ghp),
-        array('drush ddi taxonomy --file=%s/root/vocabulary_5.taxonomy.export', $ghp),
-        array('drush ddi taxonomy --file=%s/root/vocabulary_6.taxonomy.export', $ghp),
-        array('drush ddi taxonomy --file=%s/root/vocabulary_7.taxonomy.export', $ghp),
-        array('drush ddi taxonomy --file=%s/root/vocabulary_8.taxonomy.export', $ghp),
-        array('drush ddi taxonomy --file=%s/root/vocabulary_9.taxonomy.export', $ghp),
-        array('drush ddi taxonomy --file=%s/root/vocabulary_10.taxonomy.export', $ghp),
-        array('drush ddi taxonomy --file=%s/root/claim_category.taxonomy.export', $ghp),
-        array('drush ddi taxonomy --file=%s/root/event_types.taxonomy.export', $ghp),
-        array('drush ddi taxonomy --file=%s/root/organizations.taxonomy.export', $ghp),
-        array('drush ddi taxonomy --file=%s/root/ticket_status.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_1.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_2.taxonomy.export',$ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_3.taxonomy.export',$ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_4.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_5.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_6.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_7.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_8.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_9.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_10.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/claim_category.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/event_types.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/organizations.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/ticket_status.taxonomy.export', $ghp),
       ),
     ),
     array(
       'title' => 'Import forum',
       'commands' => array(
-        array('drush ddi forum --file=%s/root/forum.export', $ghp),
+        array('drush ddi forum --file=%s/data/forum.export', $ghp),
       ),
     ),
     array(
       'title' => 'Import menu structure',
       'commands' => array(
-        array('drush ddi menu --file=%s/root/main-menu.menu_links.export', $ghp),
-        array('drush ddi menu --file=%s/root/user-menu.menu_links.export', $ghp),
+        array('drush ddi menu --file=%s/data/main-menu.menu_links.export', $ghp),
+        array('drush ddi menu --file=%s/data/user-menu.menu_links.export', $ghp),
       ),
     ),
     array(
       'title' => 'Import theme blocks settings',
       'commands' => array(
-        array('drush ddi blocks --file=%s/root/alpha.blocks.export', $ghp),
+        array('drush ddi blocks --file=%s/data/alpha.blocks.export', $ghp),
       ),
     ),
     array(
       'title' => 'Import theme settings',
       'commands' => array(
-        array('drush ddi variables --file=%s/root/theme_settings.variables.export', $ghp),
-        array('drush ddi variables --file=%s/root/theme_alpha_settings.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/theme_settings.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/theme_alpha_settings.variables.export', $ghp),
       ),
     ),
     array(
       'title' => 'Import modules settings',
       'commands' => array(
-        array('drush ddi variables --file=%s/root/advanced_sphinx.variables.export', $ghp),
-        array('drush ddi variables --file=%s/root/darkmatter_notify.variables.export', $ghp),
-        array('drush ddi variables --file=%s/root/dru_frontpage.variables.export', $ghp),
-        array('drush ddi variables --file=%s/root/resolve_can.variables.export', $ghp),
-        array('drush ddi variables --file=%s/root/user_info_notify.variables.export', $ghp),
-        array('drush ddi variables --file=%s/root/quote.variables.export', $ghp),
-        array('drush ddi variables --file=%s/root/validate_api.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/advanced_sphinx.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/darkmatter_notify.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/dru_frontpage.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/resolve_can.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/user_info_notify.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/quote.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/validate_api.variables.export', $ghp),
       ),
     ),
     array(
@@ -398,4 +395,3 @@ check_exception(command_exists('git'), 'You do not have installed git.');
 $params = get_params();
 $rules = rules($params);
 install($rules);
-

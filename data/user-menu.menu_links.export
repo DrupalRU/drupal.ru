@@ -86,7 +86,7 @@
                 "link_title": "User management",
                 "link_path": "admin\/user",
                 "hidden": 0,
-                "has_children": 0,
+                "has_children": 1,
                 "expanded": 0,
                 "options": {
                     "attributes": {
@@ -102,7 +102,7 @@
                         "weight": -49,
                         "link_title": "Vote up\/down",
                         "link_path": "admin\/settings\/voteupdown",
-                        "hidden": 1,
+                        "hidden": 0,
                         "has_children": 0,
                         "expanded": 0,
                         "options": [
@@ -5287,6 +5287,23 @@
                         "updated": 0
                     }
                 ]
+            },
+            {
+                "menu_name": "user-menu",
+                "weight": 0,
+                "link_title": "Очередь модератора",
+                "link_path": "admin\/content\/tickets",
+                "hidden": 0,
+                "has_children": 0,
+                "expanded": 0,
+                "options": {
+                    "attributes": {
+                        "title": ""
+                    }
+                },
+                "module": "menu",
+                "customized": 1,
+                "updated": 0
             }
         ]
     },
@@ -5329,7 +5346,7 @@
                 "weight": -45,
                 "link_title": "этот тип не использовать",
                 "link_path": "node\/add\/forum",
-                "hidden": 1,
+                "hidden": 0,
                 "has_children": 0,
                 "expanded": 0,
                 "options": {
@@ -5363,7 +5380,7 @@
                 "weight": -46,
                 "link_title": "этот тип не использовать!",
                 "link_path": "node\/add\/poll",
-                "hidden": 1,
+                "hidden": 0,
                 "has_children": 0,
                 "expanded": 0,
                 "options": {
@@ -5397,7 +5414,7 @@
                 "weight": -47,
                 "link_title": "Newsletter issue",
                 "link_path": "node\/add\/simplenews",
-                "hidden": 1,
+                "hidden": 0,
                 "has_children": 0,
                 "expanded": 0,
                 "options": {
@@ -5412,14 +5429,14 @@
             {
                 "menu_name": "user-menu",
                 "weight": 0,
-                "link_title": "Организация",
+                "link_title": "Страница компании",
                 "link_path": "node\/add\/organization",
                 "hidden": 0,
                 "has_children": 0,
                 "expanded": 0,
                 "options": {
                     "attributes": {
-                        "title": "Создать страницу организации"
+                        "title": "Добавить организацию (компанию) в раздел \"Бизнес\".\r\n\r\n<strong>Материалы проходят проверку перед публикацией<\/strong>"
                     }
                 },
                 "module": "system",

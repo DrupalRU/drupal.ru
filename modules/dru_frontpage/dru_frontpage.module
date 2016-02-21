@@ -135,7 +135,7 @@ function dru_frontpage_list() {
     );
     drupal_set_title('');
   }else{
-    drupal_set_title(t('Welcome to @site-name', array('@site-name' => variable_get('site_name', 'Drupal'))), PASS_THROUGH);
+    drupal_set_title('', PASS_THROUGH);
     $default_message = '<p>' . t('No nodes has been promoted yer.') . '</p>';
     $build['default_message'] = array(
       '#markup' => $default_message,

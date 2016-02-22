@@ -137,10 +137,24 @@ function dru_tickets_insert($node) {
     ->execute();
     
   $users = dru_tickets_get_moderators();
+  $category = taxonomy_term_load($node->field_claim_category['und'][0]['tid']);
   
-  $theme   = t('New ticket #@ticket_id', array('@ticket_id' => $node->nid));
-  $message = l(t('View ticket'), 'node/' . $node->nid);
-  $from    = variable_get('site_mail');
+  $theme    = $node->title;
+  $message  = '<strong>';
+  $message .= t('Claim text') . ': ';
+  $message .= '</strong>';
+  $message .= '<br />';
+  $message .= $node->body['und'][0]['value'];
+  $message .= '<br />';
+  $message .= '<br />';
+  $message .= '<strong>';
+  $message .= t('Category') . ': ';
+  $message .= '</strong>';
+  $message .= $category->name;
+  $message .= '<br />';
+  $message .= '<br />';
+  $message .= l(t('View ticket'), 'node/' . $node->nid);
+  $from     = variable_get('site_mail');
   
   foreach ($users as $user) {
     drupal_mail('dru_tickets', 'dru_tickets', $user->mail, language_default(), array(

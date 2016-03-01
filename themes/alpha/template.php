@@ -120,10 +120,12 @@ function alpha_preprocess_page(&$variables) {
         $filepath = $account->picture->uri;
       }
     }
-    elseif (variable_get('user_picture_default', '')) {
-      $filepath = variable_get('user_picture_default', '');
+    else {
+      if (variable_get('user_picture_default')) {
+        $filepath = variable_get('user_picture_default', '');
+      }
     }
-    if (isset($account->uid) && $account->uid == 0) {
+    if (isset($account->uid) && $account->uid == 0 && !empty($filepath)) {
       $variables['user_picture'] = theme('image', array('path' => $filepath, 'attributes' => array('class' => array('img-circle'))));
     }
     elseif (isset($filepath)) {

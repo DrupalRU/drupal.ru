@@ -297,6 +297,10 @@ a:hover {
     position: fixed;
     top: 70px;
   }
+  
+  .page-node-edit #node-details.affix {
+    position: relative;
+  }
 }
 
 .node code {

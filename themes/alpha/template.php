@@ -469,6 +469,7 @@ function _forum_tablesort_header($cell, $header, $ts) {
     }
     else {
       // If the user clicks a different header, we want to sort ascending initially.
+      $cell['class'] = array();
       $ts['sort'] = 'asc';
     }
     $cell['data'] = l($cell['data'], $_GET['q'], array('attributes' => array('title' => $title, 'class' => $cell['class']), 'query' => array_merge($ts['query'], array('sort' => $ts['sort'], 'order' => $cell['data'])), 'html' => TRUE));

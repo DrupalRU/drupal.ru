@@ -89,7 +89,7 @@ div.region.region-fluid-top {
 
 /* Other block */
 #block-advanced-sphinx-searchbox.block.block-advanced-sphinx {
-  float: right;
+  text-align: right;
 }
 
 #block-advanced-sphinx-searchbox.block.block-advanced-sphinx h2 {

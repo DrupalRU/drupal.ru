@@ -223,8 +223,8 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
     '#attributes' => array('class' => array('dru-tnx-user-stat', 'user-tnx-stat')),
     '#weight'     => 1,
     '#markup'     => t('Nodes: @nodes, Comments: @comment', array(
-      '@nodes'   => $tnx_stats->tnx_node,
-      '@comment' => $tnx_stats->tnx_comment,
+      '@nodes'   => isset($tnx_stats->tnx_node) ? $tnx_stats->tnx_node : 0,
+      '@comment' => isset($tnx_stats->tnx_comment) ? $tnx_stats->tnx_comment : 0,
     )),
   );
   
@@ -235,8 +235,8 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
     '#attributes' => array('class' => array('dru-tnx-user-stat', 'users-tnx-stat')),
     '#weight'     => 2,
     '#markup'     => t('Nodes: @nodes, Comments: @comment', array(
-      '@nodes'   => $tnx_stats->node,
-      '@comment' => $tnx_stats->comment,
+      '@nodes'   => isset($tnx_stats->node) ? $tnx_stats->node : 0,
+      '@comment' => isset($tnx_stats->comment) ? $tnx_stats->comment : 0,
     )),
   );
 }

@@ -123,7 +123,7 @@ function alpha_preprocess_page(&$variables) {
     elseif (variable_get('user_picture_default', '')) {
       $filepath = variable_get('user_picture_default', '');
     }
-    if ($account->uid == 0) {
+    if (isset($account->uid) && $account->uid == 0) {
       $variables['user_picture'] = theme('image', array('path' => $filepath, 'attributes' => array('class' => array('img-circle'))));
     }
     elseif (isset($filepath)) {

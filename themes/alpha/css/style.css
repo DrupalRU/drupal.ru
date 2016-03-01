@@ -1091,7 +1091,8 @@ ul.file-links li span.size {
   background-color: #333;
   color: white;
   text-align: center;
-  padding: 20px 0px;
+  padding: 10px 0px;
+  font-size: 90%;
 }
 
 /* Common */

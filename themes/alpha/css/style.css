@@ -867,6 +867,35 @@ li.quote a:before {
   font-weight: 300;
 }
 
+.comment .actions i {
+  position: relative;
+  -webkit-transition: all 0s ease-out;
+  -moz-transition: all 0s ease-out;
+  -o-transition: all 0s ease-out;
+  transition: all 0s ease-out;
+}
+
+.comment:hover .actions i {
+  transform: rotate(360deg);
+  -webkit-transition: all 400ms ease-out;
+  -moz-transition: all 400ms ease-out;
+  -o-transition: all 400ms ease-out;
+  transition: all 400ms ease-out;
+}
+
+.comment-actions {
+  background: #fff;
+  padding-bottom: 10px;
+}
+
+.comment.darkmatter .comment-actions {
+  background: #333 none repeat scroll 0 0;
+}
+
+.comment.darkmatter .actions.open {
+  color: #bbb;
+}
+
 /* Block quote. */
 blockquote {
   color: #888;

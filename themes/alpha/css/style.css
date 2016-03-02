@@ -888,8 +888,12 @@ li.quote a:before {
   padding-bottom: 10px;
 }
 
+.comment.comment-new .comment-actions {
+  background: #d9edf7;
+}
+
 .comment.darkmatter .comment-actions {
-  background: #333 none repeat scroll 0 0;
+  background: #333;
 }
 
 .comment.darkmatter .actions.open {

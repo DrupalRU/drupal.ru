@@ -106,3 +106,45 @@ function dru_ticket_moderate_command_publish($entity_type, $entity_id) {
     '#commands' => $commands,
   );
 }
+
+/**
+ * Moderate command callback - promote.
+ */
+function dru_ticket_moderate_command_promote($entity_type, $entity_id) {
+
+  $commands = array();
+  
+  $node = node_load($entity_id);
+  $node->promote = NODE_PROMOTED;
+  node_save($node);
+        
+  $node_link = l(t('Unpromote'), 'admin/moderate/command/unpromote/node/' . $entity_id, array('attributes' => array('class' => array('use-ajax', 'moderate-unpromote', 'moderate-unpromote-' . $entity_id))));
+
+  $commands[] = ajax_command_replace('.moderate-promote-' . $entity_id, $node_link);
+
+  return array(
+    '#type' => 'ajax',
+    '#commands' => $commands,
+  );
+}
+
+/**
+ * Moderate command callback - unpromote.
+ */
+function dru_ticket_moderate_command_unpromote($entity_type, $entity_id) {
+
+  $commands = array();
+  
+  $node = node_load($entity_id);
+  $node->promote = NODE_NOT_PROMOTED;
+  node_save($node);
+        
+  $node_link = l(t('Promote'), 'admin/moderate/command/promote/node/' . $entity_id, array('attributes' => array('class' => array('use-ajax', 'moderate-promote', 'moderate-promote-' . $entity_id))));
+
+  $commands[] = ajax_command_replace('.moderate-unpromote-' . $entity_id, $node_link);
+
+  return array(
+    '#type' => 'ajax',
+    '#commands' => $commands,
+  );
+}

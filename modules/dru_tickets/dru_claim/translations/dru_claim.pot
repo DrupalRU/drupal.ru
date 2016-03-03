@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2016-02-01 16:08+0200\n"
+"POT-Creation-Date: 2016-03-03 03:18+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -37,15 +37,11 @@ msgstr ""
 msgid "Send"
 msgstr ""
 
-#: dru_claim.pages.inc:144 dru_claim.module:150;221
-msgid "Claim is under review"
-msgstr ""
-
-#: dru_claim.pages.inc:172
+#: dru_claim.pages.inc:142
 msgid "Claim @type = @id"
 msgstr ""
 
-#: dru_claim.pages.inc:177
+#: dru_claim.pages.inc:147
 msgid "Open"
 msgstr ""
 
@@ -65,8 +61,16 @@ msgstr ""
 msgid "Entity"
 msgstr ""
 
-#: dru_claim.module:134;203
+#: dru_claim.module:134;251
 msgid "Claim"
+msgstr ""
+
+#: dru_claim.module:159
+msgid "Claim is under review"
+msgstr ""
+
+#: dru_claim.module:193
+msgid "View ticket"
 msgstr ""
 
 #: (duplicate) dru_claim.install:59 ;113 

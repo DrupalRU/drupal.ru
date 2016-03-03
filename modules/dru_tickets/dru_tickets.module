@@ -258,6 +258,8 @@ function dru_tickets_node_view($node, $view_mode) {
   drupal_add_library('system', 'drupal.ajax');
   
   if ($node->type !== 'ticket' && user_access('moderate tickets')) {
+    
+    // Publish / Unpublish node
     if ($node->status) {
       $unpublish_action = 'unpublish';
       $unpublish_title = t('Unpublish');
@@ -273,6 +275,24 @@ function dru_tickets_node_view($node, $view_mode) {
         'class' => array('use-ajax', 'moderate-' . $unpublish_action, 'moderate-' . $unpublish_action . '-' . $node->nid),
       ),
     );
+    
+    // To frontpage
+    if ($node->promote) {
+      $promote_action = 'unpromote';
+      $promote_title = t('Unpromote');
+    }
+    else {
+      $promote_action = 'promote';
+      $promote_title = t('Promote');
+    }
+    $node->content['links']['comment']['#links']['promote'] = array(
+      'title' => $promote_title,
+      'href'  => 'admin/moderate/command/' . $promote_action . '/node/' . $node->nid,
+      'attributes' => array(
+        'class' => array('use-ajax', 'moderate-' . $promote_action, 'moderate-' . $promote_action . '-' . $node->nid),
+      ),
+    );
+    
   }
   if ($node->type == 'ticket' && user_access('moderate tickets')) {
     if ($node->ticket->moderate_uid == 0) {
@@ -285,7 +305,8 @@ function dru_tickets_node_view($node, $view_mode) {
         ),
       );
     }
-
+    
+    // View moderate rules
     $node->content['links']['comment']['#links']['moderate-help'] = array(
       'title' => t('Moderate help'),
       'href' => 'admin/moderate/help',

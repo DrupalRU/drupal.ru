@@ -11,8 +11,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2016-02-01 16:08+0200\n"
-"PO-Revision-Date: 2016-02-01 16:10+0200\n"
+"POT-Creation-Date: 2016-03-03 03:18+0200\n"
+"PO-Revision-Date: 2016-03-03 03:22+0200\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Russian <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
 "Language: ru\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 1.8.7\n"
 
 #: dru_claim.pages.inc:59
 msgid "Add claim"
@@ -38,21 +38,17 @@ msgstr "Описание жалобы"
 msgid "Send"
 msgstr "Отправить"
 
-#: dru_claim.pages.inc:144 dru_claim.module:150;221
-msgid "Claim is under review"
-msgstr "Жалоба обрабатывается"
-
-#: dru_claim.pages.inc:172
+#: dru_claim.pages.inc:142
 msgid "Claim @type = @id"
 msgstr "Жалоба @type = @id"
 
-#: dru_claim.pages.inc:177
+#: dru_claim.pages.inc:147
 msgid "Open"
-msgstr "Открыт"
+msgstr "Открыто"
 
 #: dru_claim.module:13
 msgid "Create Claim"
-msgstr ""
+msgstr "Создать жалобу"
 
 #: dru_claim.module:14
 msgid "Allow users to create claim"
@@ -66,9 +62,17 @@ msgstr "Инициатор"
 msgid "Entity"
 msgstr "Сущность"
 
-#: dru_claim.module:134;203
+#: dru_claim.module:134;251
 msgid "Claim"
 msgstr "Позвать модератора"
+
+#: dru_claim.module:159
+msgid "Claim is under review"
+msgstr "Жалоба обрабатывается"
+
+#: dru_claim.module:193
+msgid "View ticket"
+msgstr "Смотреть тикет"
 
 #: (duplicate) dru_claim.install:59 ;113
 msgid "Claim Category"

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+printenv
+
 SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
 STATUSFILE="$SITEPATH/.deploy.status"
 

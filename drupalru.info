@@ -2,6 +2,7 @@ name = DrupalRu
 description = DrupalRu q profile for dev purposes.
 version = 7.x-dev
 core = 7.x
+
 dependencies[] = block
 dependencies[] = book
 dependencies[] = color

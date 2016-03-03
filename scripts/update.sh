@@ -1,8 +1,5 @@
 #!/bin/sh
 
-echo "Enviorment debug info"
-printenv
-
 SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
 STATUSFILE="$SITEPATH/.deploy.status"
 

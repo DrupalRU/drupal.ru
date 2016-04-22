@@ -3,14 +3,14 @@ echo "INIT Drupal.ru"
 
 CORE='drupal-7'
 SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
-CONTRIB="acl bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev fasttoggle geshifilter google_plusone gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot tagadelic taxonomy_manager jquery_ui jquery_update token rrssb ajax_comments fontawesome transliteration libraries views xmlsitemap bootstrap_lite xbbcode ban_user quote-7.x-1.x-dev l10n_update"
+CONTRIB="bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev geshifilter gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot jquery_update token rrssb  fontawesome transliteration libraries bootstrap_lite xbbcode ban_user quote-7.x-1.x-dev l10n_update"
 
 echo "Full site path: $SITEPATH"
 echo "Site core: $CORE"
 echo "Deploy DIR: $GITLC_DEPLOY_DIR"
 
 cd $SITEPATH
-echo "Download DRUPAL."
+echo "Process make."
 
 drush dl $CORE --drupal-project-rename="drupal"
 

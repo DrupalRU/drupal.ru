@@ -2,6 +2,7 @@ name = DrupalRu
 description = DrupalRu q profile for dev purposes.
 version = 7.x-dev
 core = 7.x
+
 dependencies[] = block
 dependencies[] = book
 dependencies[] = color
@@ -62,7 +63,6 @@ dependencies[] = drupal_deploy
 dependencies[] = inner_poll
 
 # Drupalru modules
-
 dependencies[] = antinoob_validate
 dependencies[] = antiswearing_validate
 dependencies[] = darkmatter

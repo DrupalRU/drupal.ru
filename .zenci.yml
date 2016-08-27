@@ -1,8 +1,10 @@
 deploy:
   master:
     server: "goblin.vps-private.net"
-    user: "drupal"
+    username: "drupal"
+    dir: '{home}/github/{repo_owner}/{repo_name}/{branch}'
     env_vars:
+      docroot: '{home}/domains/drupalru.vps-private.net'
       domain: "drupalru.vps-private.net"
       account-name: "root"
       account-mail: "gor.martsen@gmail.com"
@@ -12,10 +14,10 @@ deploy:
       database-user: "drupal_main"
       database-name: "drupal_main"
       database-pass: "HJGRj345t63"
-    dir: '{home}/github/{branch}'
-    init: '{deploy_dir}/scripts/init.sh'
-    before: '{deploy_dir}/scripts/before.sh'
-    after: '{deploy_dir}/scripts/after.sh'
+    scripts:      
+      init: '{deploy_dir}/scripts/init.sh'
+      before: '{deploy_dir}/scripts/before.sh'
+      after: '{deploy_dir}/scripts/after.sh'
   stage:
     server: "karma.vps-private.net"
     user: "stage"

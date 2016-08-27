@@ -16,7 +16,6 @@ deploy:
       database_pass: "HJGRj345t63"
     scripts:      
       init: '{deploy_dir}/scripts/init.sh'
-      before: '{deploy_dir}/scripts/before.sh'
       after: '{deploy_dir}/scripts/after.sh'
   stage:
     server: "karma.vps-private.net"

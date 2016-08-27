@@ -2,7 +2,7 @@ deploy:
   master:
     server: "goblin.vps-private.net"
     user: "drupal"
-    settings:
+    env_vars:
       domain: "drupalru.vps-private.net"
       account-name: "root"
       account-mail: "gor.martsen@gmail.com"

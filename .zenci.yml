@@ -6,14 +6,14 @@ deploy:
     env_vars:
       docroot: '{home}/domains/drupalru.vps-private.net'
       domain: "drupalru.vps-private.net"
-      account-name: "root"
-      account-mail: "gor.martsen@gmail.com"
-      account-pass: "d6testing"
-      site-name: "Drupal.ru dev site"
-      site-mail: "noreply@production.drupal.ru"
-      database-user: "drupal_main"
+      account_name: "root"
+      account_mail: "gor.martsen@gmail.com"
+      account_pass: "d6testing"
+      site_name: "Drupal.ru dev site"
+      site_mail: "noreply@production.drupal.ru"
+      database_user: "drupal_main"
       database-name: "drupal_main"
-      database-pass: "HJGRj345t63"
+      database_pass: "HJGRj345t63"
     scripts:      
       init: '{deploy_dir}/scripts/init.sh'
       before: '{deploy_dir}/scripts/before.sh'

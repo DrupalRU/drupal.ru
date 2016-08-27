@@ -18,7 +18,7 @@ rm -rf drupal
 
 echo "Install DRUPAL"
 
-/usr/bin/drush site-install standard -y --root=$DOCROOT --account-name=$ACCOUNT_NAME --account-mail=$ACCOUNT_MAIL --account-pass=$ACCOUNT_PASS --uri=http://$DOMAIN --site-name="$SITE_NAME" --site-mail=$SITE_MAIL --db-url=mysql://$DATABASE_USER:$DATABASE_PASS@localhost/$DATABASE_NAME
+/usr/bin/drush site-install standard -y --root=$DOCROOT --account-name=$ACCOUNT_NAME --account-mail=$ACCOUNT_MAIL --account-pass=$ACCOUNT_PASS --uri=http://$DOMAIN --site-name="$SITE_NAME" --site-mail=$SITE_MAIL --db-url=mysqli://$DATABASE_USER:$DATABASE_PASS@localhost/$DATABASE_NAME
 
 echo "make libraries dir"
 mkdir $DOCROOT/sites/all/libraries

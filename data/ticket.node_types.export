@@ -35,7 +35,7 @@
             "comment_form_location": 1,
             "comment_preview": "Optional",
             "resolve_can": 0,
-            "validate_comments": 0,
+            "validate_comments": false,
             "comment_validate": {
                 "comment_body": {
                     "comment_body_comment_validators": [
@@ -62,7 +62,7 @@
             "show": 0
         },
         "validation": {
-            "validate_settings": 0,
+            "validate_settings": false,
             "validate_items": null,
             "validate_descriptions": null
         },
@@ -348,9 +348,9 @@
                 },
                 "required": false,
                 "description": "",
+                "default_value": null,
                 "field_name": "body",
-                "deleted": 0,
-                "default_value": null
+                "deleted": 0
             },
             "field_ticket_status": {
                 "label": "Статус",
@@ -403,9 +403,9 @@
                     "user_register_form": false
                 },
                 "description": "",
+                "default_value": null,
                 "field_name": "field_ticket_status",
-                "deleted": 0,
-                "default_value": null
+                "deleted": 0
             },
             "field_claim_category": {
                 "label": "Claim Category",
@@ -458,9 +458,9 @@
                     "user_register_form": false
                 },
                 "description": "",
+                "default_value": null,
                 "field_name": "field_claim_category",
-                "deleted": 0,
-                "default_value": null
+                "deleted": 0
             }
         }
     }

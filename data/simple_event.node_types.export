@@ -35,7 +35,7 @@
             "comment_form_location": 1,
             "comment_preview": "Optional",
             "resolve_can": 0,
-            "validate_comments": 0,
+            "validate_comments": null,
             "comment_validate": {
                 "comment_body": {
                     "comment_body_comment_validators": [

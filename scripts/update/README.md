@@ -13,4 +13,4 @@ drush en -y mymodule
 drush -y en mymodule
 ```
 
-Скрипт будет вызван из папки: "$HOME/domains/$SETTINGS_DOMAIN"
+Скрипт будет вызван из папки: "$HOME/domains/$DOMAIN"

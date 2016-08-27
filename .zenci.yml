@@ -1,0 +1,54 @@
+deploy:
+  master:
+    server: "goblin.vps-private.net"
+    user: "drupal"
+    env_vars:
+      domain: "drupalru.vps-private.net"
+      account-name: "root"
+      account-mail: "gor.martsen@gmail.com"
+      account-pass: "d6testing"
+      site-name: "Drupal.ru dev site"
+      site-mail: "noreply@production.drupal.ru"
+      database-user: "drupal_main"
+      database-name: "drupal_main"
+      database-pass: "HJGRj345t63"
+    dir: '{home}/github/{branch}'
+    init: '{deploy_dir}/scripts/init.sh'
+    before: '{deploy_dir}/scripts/before.sh'
+    after: '{deploy_dir}/scripts/after.sh'
+  stage:
+    server: "karma.vps-private.net"
+    user: "stage"
+    settings:
+      domain: "stage.drupal.ru"
+      account-name: "root"
+      account-mail: "gor.martsen@gmail.com"
+      account-pass: "d6testing"
+      site-name: "Drupal.ru dev site"
+      site-mail: "noreply@production.drupal.ru"
+      database-user: "stage_main"
+      database-name: "stage_main"
+      database-pass: "BHjrb454"
+      devel: TRUE
+    dir: '{home}/github/{branch}'
+    init: '{deploy_dir}/scripts/init.sh'
+    before: '{deploy_dir}/scripts/before.sh'
+    after: '{deploy_dir}/scripts/after.sh'
+  pull_request:
+    robin:
+      domain: "{pr_number}.pr.drupal.ru"
+      server: "karma.vps-private.net"
+      user: "pr"
+      password: "NJRk4355d"
+    settings:
+      domain: "{domainname}"
+      account-name: "devel"
+      account-mail: "devel@drupal.ru"
+      account-pass: "drupalrutesting"
+      site-name: "PR {pr_number}"
+      site-mail: "noreply@{domainname}"
+    dir: '{home}/github/pr/{pr_number}'
+    init: '{deploy_dir}/scripts/init.sh'
+    before: '{deploy_dir}/scripts/before.sh'
+    after: '{deploy_dir}/scripts/after.sh'
+

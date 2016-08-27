@@ -40,8 +40,6 @@
             "comment_validate": {
                 "comment_body": {
                     "comment_body_comment_validators": [
-                        "Caps Lock",
-                        "Disallowed words",
                         "Coarse or offensive language filter"
                     ]
                 },

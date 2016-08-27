@@ -34,18 +34,7 @@
             "comment_subject_field": 0,
             "comment_form_location": 1,
             "comment_preview": "Optional",
-            "resolve_can": 0,
-            "validate_comments": 0,
-            "comment_validate": {
-                "comment_body": {
-                    "comment_body_comment_validators": [
-
-                    ]
-                },
-                "validator_descriptions": {
-                    "validators": null
-                }
-            }
+            "resolve_can": 0
         },
         "diff": {
             "diff_show_preview_changes_node": 1,
@@ -62,7 +51,7 @@
             "show": 0
         },
         "validation": {
-            "validate_settings": 0,
+            "validate_settings": false,
             "validate_items": null,
             "validate_descriptions": null
         },

@@ -76,3 +76,22 @@ li.dru-claim a:before {
   padding: 15px;
   position: relative;
 }
+
+.ticket-info {
+  background: #f2f2f2 none repeat scroll 0 0;
+  border-left: 3px solid #d6d5d5;
+  color: #555;
+  margin-bottom: 15px;
+  padding: 15px;
+}
+
+.ticket-info i {
+  margin-right: 10px;
+}
+
+.small-inline-text {
+  display: inline-block;
+  font-size: 80%;
+  margin-right: 15px;
+  vertical-align: middle;
+}

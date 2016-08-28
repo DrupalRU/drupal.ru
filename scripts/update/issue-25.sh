@@ -24,9 +24,9 @@ cp  $ZENCI_DEPLOY_DIR/data/sphinx.conf ~/sphinx/
 DATABASE_PASS=`drush st --show-passwords|grep password|awk '{print$4}'`
 
 sed -i "s|HOMEDIR|$HOME|g" ~/sphinx/sphinx.conf
-sed -i "s|SQLUSER|$SETTINGS_DATABASE_USER|g" ~/sphinx/sphinx.conf
+sed -i "s|SQLUSER|$DATABASE_USER|g" ~/sphinx/sphinx.conf
 sed -i "s|SQLPASS|$DATABASE_PASS|g" ~/sphinx/sphinx.conf
-sed -i "s|SQLDB|$SETTINGS_DATABASE_NAME|g" ~/sphinx/sphinx.conf
+sed -i "s|SQLDB|$DATABASE_NAME|g" ~/sphinx/sphinx.conf
 
 #index it:
 /usr/bin/sphinx-indexer --config $HOME/sphinx/sphinx.conf --all

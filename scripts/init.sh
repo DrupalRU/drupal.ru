@@ -124,6 +124,20 @@ echo "Enable compression for js, css"
 drush vset preprocess_css 1
 drush vset preprocess_js 1
 
+# INIT deploy status scripts.
+STATUSFILE="$DOCROOT/.deploy.status"
+UPDATEDIR="$ZENCI_DEPLOY_DIR/scripts/update/"
+
+touch $STATUSFILE
+
+for file in `ls $UPDATEDIR|grep sh$|grep -vf $STATUSFILE`;do
+  echo "$file" >> $STATUSFILE
+done
+
+echo "Enable sphinx search"
+sh $ZENCI_DEPLOY_DIR/scripts/update/issue-25.sh
+
+
 if [ "$DEVEL" != "" ]; then
   cd $DOCROOT
   drush dl devel

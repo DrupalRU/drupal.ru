@@ -2,7 +2,7 @@
 echo "INIT Drupal.ru"
 
 CORE='drupal-7'
-CONTRIB="bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev geshifilter gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot jquery_update token rrssb  fontawesome transliteration libraries bootstrap_lite xbbcode ban_user quote-7.x-1.x-dev l10n_update devel ctools metatag date"
+CONTRIB="bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev geshifilter gravatar imageapi noindex_external_links pathauto privatemsg simplenews smtp spambot jquery_update token rrssb  fontawesome transliteration libraries bootstrap_lite xbbcode ban_user quote-7.x-1.x-dev l10n_update devel ctools metatag date taxonomy_manager tagadelic xmlsitemap fasttoggle captcha_pack"
 
 echo "Full site path: $DOCROOT"
 echo "Site core: $CORE"
@@ -58,11 +58,17 @@ echo "Install DRUPAL"
 /usr/bin/drush site-install drupalru -y --root=$DOCROOT --account-name=$ACCOUNT_NAME --account-mail=$ACCOUNT_MAIL --account-pass=$ACCOUNT_PASS --uri=http://$DOMAIN --site-name="$SITE_NAME" --site-mail=$SITE_MAIL --db-url=mysqli://$DATABASE_USER:$DATABASE_PASS@localhost/$DATABASE_NAME
 
 
-echo "Install Font awesome"
+echo "Download Font awesome"
 cd  $DOCROOT/sites/all/libraries
 git clone https://github.com/FortAwesome/Font-Awesome.git fontawesome
 
+echo "Download geshi library"
+wget http://sourceforge.net/projects/geshi/files/geshi/GeSHi%201.0.8.10/GeSHi-1.0.8.10.tar.gz/download -O geshi.tar.gz
+tar -xzpf geshi.tar.gz
 cd $DOCROOT
+
+echo "Download rrssbdl library"
+drush rrssbdl
 
 echo "Update translation";
 drush -y dl drush_language

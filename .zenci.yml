@@ -18,22 +18,23 @@ deploy:
       init: '{deploy_dir}/scripts/init.sh'
       after: '{deploy_dir}/scripts/after.sh'
   stage:
-    server: "karma.vps-private.net"
-    user: "stage"
-    settings:
+    server: "goblin.vps-private.net"
+    username: "stage"
+    dir: '{home}/github/{repo_owner}/{repo_name}/{branch}'
+    env_vars:
+      docroot: '{home}/domains/stage.drupal.ru'
       domain: "stage.drupal.ru"
-      account-name: "root"
-      account-mail: "gor.martsen@gmail.com"
-      account-pass: "d6testing"
-      site-name: "Drupal.ru dev site"
-      site-mail: "noreply@production.drupal.ru"
-      database-user: "stage_main"
-      database-name: "stage_main"
-      database-pass: "BHjrb454"
+      database_user: "stage_main"
+      database_name: "stage_main"
+      database_pass: "HGrhet45t65ret"
+      account_user: "stage"
+      account_mail: "stage@drupal.ru"
+      account_pass: REPLACE_WITH_ADMIN_PASSWORD
+      site_mail: noreply@drupal.ru
+      site_name: 'Stage site for {repo_owner}/{repo_name}'      
       devel: TRUE
     dir: '{home}/github/{branch}'
-    init: '{deploy_dir}/scripts/init.sh'
-    before: '{deploy_dir}/scripts/before.sh'
+    init: '{deploy_dir}/scripts/stage_init.sh'
     after: '{deploy_dir}/scripts/after.sh'
   pull_request:
     server: qa.drupal.ru

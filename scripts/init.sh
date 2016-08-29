@@ -56,6 +56,9 @@ mkdir $DOCROOT/sites/all/libraries
 echo "Link themes"
 ln -s  $ZENCI_DEPLOY_DIR/themes $DOCROOT/sites/all/themes/local
 
+echo "Link modules"
+ln -s  $ZENCI_DEPLOY_DIR/modules $DOCROOT/sites/all/modules/local
+
 echo "Install DRUPAL"
 
 /usr/bin/drush site-install drupalru -y --root=$DOCROOT --account-name=$ACCOUNT_NAME --account-mail=$ACCOUNT_MAIL --account-pass=$ACCOUNT_PASS --uri=http://$DOMAIN --site-name="$SITE_NAME" --site-mail=$SITE_MAIL --db-url=mysqli://$DATABASE_USER:$DATABASE_PASS@localhost/$DATABASE_NAME

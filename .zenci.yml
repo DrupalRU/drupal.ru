@@ -36,20 +36,24 @@ deploy:
     before: '{deploy_dir}/scripts/before.sh'
     after: '{deploy_dir}/scripts/after.sh'
   pull_request:
-    robin:
-      domain: "{pr_number}.pr.drupal.ru"
-      server: "karma.vps-private.net"
-      user: "pr"
-      password: "NJRk4355d"
-    settings:
-      domain: "{domainname}"
-      account-name: "devel"
-      account-mail: "devel@drupal.ru"
-      account-pass: "drupalrutesting"
-      site-name: "PR {pr_number}"
-      site-mail: "noreply@{domainname}"
-    dir: '{home}/github/pr/{pr_number}'
-    init: '{deploy_dir}/scripts/init.sh'
-    before: '{deploy_dir}/scripts/before.sh'
-    after: '{deploy_dir}/scripts/after.sh'
+    server: qa.drupal.ru
+    username: test
+    dir: '{home}/github/{repo_owner}/{repo_name}/pr/{pr_number}'
+    env_vars:
+      docroot: '{home}/domains/{pr_number}.{branch}.qa.drupal.ru'
+      domain: '{pr_number}.{branch}.qa.drupal.ru'
+      database_name: 'dru_{branch}_{pr_number}'
+      database_user: 'dru_{branch}_{pr_number}'
+      database_pass: 'dru_{branch}_{pr_number}'
+      database_server: localhost
+      account_user: "devel"
+      account_mail: "devel@drupal.ru"
+      account_pass: REPLACE_WITH_ADMIN_PASSWORD
+      site_mail: noreply@drupal.ru
+      site_name: '{pr_number} {branch} QA site for {repo_owner}/{repo_name}'
+      default_theme: "alpha"
+    scripts:
+      init: '{deploy_dir}/scripts/qa_deploy_init.sh'
+      after: '{deploy_dir}/scripts/after.sh'
+      remove: '{deploy_dir}/scripts/qa_deploy_remove.sh'
 

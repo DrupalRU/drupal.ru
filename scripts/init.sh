@@ -53,6 +53,9 @@ git clone https://github.com/itpatrol/alttracker
 echo "make libraries dir"
 mkdir $DOCROOT/sites/all/libraries
 
+echo "Link themes"
+ln -s  $ZENCI_DEPLOY_DIR/themes $DOCROOT/sites/all/themes/local
+
 echo "Install DRUPAL"
 
 /usr/bin/drush site-install drupalru -y --root=$DOCROOT --account-name=$ACCOUNT_NAME --account-mail=$ACCOUNT_MAIL --account-pass=$ACCOUNT_PASS --uri=http://$DOMAIN --site-name="$SITE_NAME" --site-mail=$SITE_MAIL --db-url=mysqli://$DATABASE_USER:$DATABASE_PASS@localhost/$DATABASE_NAME
@@ -137,6 +140,9 @@ done
 echo "Enable sphinx search"
 sh $ZENCI_DEPLOY_DIR/scripts/update/issue-25.sh
 
+echo "Patch bbcode"
+cd $DOCROOT/sites/all/modules/contrib/bbcode
+cat $ZENCI_DEPLOY_DIR/patches/bbcode-php7.patch |patch -p1
 
 if [ "$DEVEL" != "" ]; then
   cd $DOCROOT

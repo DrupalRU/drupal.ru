@@ -1,12 +1,12 @@
 #!/bin/sh
 
-SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
+SITEPATH="$HOME/domains/$DOMAIN"
 STATUSFILE="$SITEPATH/.deploy.status"
 
 #make SITEPATH available in sub scripts
 export SITEPATH=$SITEPATH
 
-UPDATEDIR="$GITLC_DEPLOY_DIR/scripts/update/"
+UPDATEDIR="$ZENCI_DEPLOY_DIR/scripts/update/"
 
 touch $STATUSFILE
 

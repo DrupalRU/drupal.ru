@@ -1,29 +1,17 @@
-code_style:
-  default: [codespell,drupal,drupalpractice]
-  rules:
-    media: ignore
-    scripts: ignore
-    data: ignore
-    README.md: ignore
-    modules/validate_api/antiswearing_validate/obscene: ignore
-    themes/alpha/js/jquery.mobile.custom.min.js: ignore
-    themes/alpha/js/responsive-paginate.js: ignore
-    themes/alpha/js/jquery.mobile.custom.js: ignore
 deploy:
   master:
-    server: "karma.vps-private.net"
+    server: "goblin.vps-private.net"
     user: "drupal"
-    settings:
-      domain: "production.drupal.ru"
+    env_vars:
+      domain: "drupalru.vps-private.net"
       account-name: "root"
       account-mail: "gor.martsen@gmail.com"
       account-pass: "d6testing"
       site-name: "Drupal.ru dev site"
       site-mail: "noreply@production.drupal.ru"
-      database-user: "drupal_prod"
-      database-name: "drupal_production"
-      database-pass: "Jrbn43t45t"
-      devel: TRUE
+      database-user: "drupal_main"
+      database-name: "drupal_main"
+      database-pass: "HJGRj345t63"
     dir: '{home}/github/{branch}'
     init: '{deploy_dir}/scripts/init.sh'
     before: '{deploy_dir}/scripts/before.sh'

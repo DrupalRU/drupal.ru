@@ -52,6 +52,7 @@ deploy:
       site_mail: noreply@drupal.ru
       site_name: '{pr_number} {branch} QA site for {repo_owner}/{repo_name}'
       default_theme: "alpha"
+      devel: TRUE
     scripts:
       init: '{deploy_dir}/scripts/qa_deploy_init.sh'
       after: '{deploy_dir}/scripts/after.sh'

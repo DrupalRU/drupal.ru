@@ -13,6 +13,8 @@ rm -f $HOME/conf.d/$DOMAIN.conf
 
 #remove DOCROOT
 chmod -R 755 $DOCROOT/files
+chmod -R 755 $DOCROOT/sites/*
+
 rm -rf $DOCROOT
 sudo apachectl restart
 

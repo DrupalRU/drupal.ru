@@ -33,9 +33,9 @@ deploy:
       site_mail: noreply@drupal.ru
       site_name: 'Stage site for {repo_owner}/{repo_name}'      
       devel: TRUE
-    dir: '{home}/github/{branch}'
-    init: '{deploy_dir}/scripts/stage_init.sh'
-    after: '{deploy_dir}/scripts/after.sh'
+    scripts:      
+      init: '{deploy_dir}/scripts/stage_init.sh'
+      after: '{deploy_dir}/scripts/after.sh'
   pull_request:
     server: qa.drupal.ru
     username: test

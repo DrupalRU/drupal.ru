@@ -759,6 +759,11 @@ div.awesome_icon {
   }
 }
 
+.indented > .indented > .indented .indented {
+  padding-left: 0;
+  margin-left: 0;
+}
+
 .comment {
   padding: 15px 10px 10px;
   margin: 0px;

@@ -1,0 +1,345 @@
+[
+    {
+        "type": "simple_event",
+        "name": "Мероприятие",
+        "base": "simple_events",
+        "description": "Для публикации данных о мероприятия на главной и в разделе мероприятий.",
+        "help": "<strong>Перед публикацией, ознакомьтесь с <a href=\"\/rules\">правилами<\/a>.<\/strong><br\/>\r\n\r\n",
+        "has_title": 1,
+        "title_label": "Название мероприятия",
+        "custom": 0,
+        "modified": 1,
+        "locked": 1,
+        "orig_type": "simple_event",
+        "module": "simple_events",
+        "disabled": 0,
+        "submission": {
+            "node_preview": "Optional"
+        },
+        "workflow": {
+            "node_options": [
+                "Published"
+            ],
+            "language_content_type": "Disabled",
+            "simplenews_content_type": 0
+        },
+        "display": {
+            "node_submitted": 0
+        },
+        "comment": {
+            "comment": "Closed",
+            "comment_default_mode": 1,
+            "comment_default_per_page": 50,
+            "comment_anonymous": "Anonymous posters may not enter their contact information",
+            "comment_subject_field": 0,
+            "comment_form_location": 1,
+            "comment_preview": "Optional",
+            "resolve_can": 0,
+            "validate_comments": null,
+            "comment_validate": {
+                "comment_body": {
+                    "comment_body_comment_validators": [
+
+                    ]
+                },
+                "validator_descriptions": {
+                    "validators": null
+                }
+            }
+        },
+        "diff": {
+            "diff_show_preview_changes_node": 1,
+            "diff_enable_revisions_page_node": 1,
+            "diff_view_mode_preview_node": "Содержимое полностью"
+        },
+        "menu": {
+            "menu_options": [
+
+            ],
+            "menu_parent": "main-menu:0"
+        },
+        "rrssb": {
+            "show": 1
+        },
+        "validation": {
+            "validate_settings": 0,
+            "validate_items": null,
+            "validate_descriptions": null
+        },
+        "fields": {
+            "body": {
+                "entity_types": [
+                    "node"
+                ],
+                "translatable": 0,
+                "settings": [
+
+                ],
+                "indexes": {
+                    "format": [
+                        "format"
+                    ]
+                },
+                "storage": {
+                    "type": "field_sql_storage",
+                    "settings": [
+
+                    ],
+                    "module": "field_sql_storage",
+                    "active": 1,
+                    "details": {
+                        "sql": {
+                            "FIELD_LOAD_CURRENT": {
+                                "field_data_body": {
+                                    "value": "body_value",
+                                    "summary": "body_summary",
+                                    "format": "body_format"
+                                }
+                            },
+                            "FIELD_LOAD_REVISION": {
+                                "field_revision_body": {
+                                    "value": "body_value",
+                                    "summary": "body_summary",
+                                    "format": "body_format"
+                                }
+                            }
+                        }
+                    }
+                },
+                "id": 11,
+                "foreign keys": {
+                    "format": {
+                        "table": "filter_format",
+                        "columns": {
+                            "format": "format"
+                        }
+                    }
+                },
+                "field_name": "body",
+                "type": "text_with_summary",
+                "module": "text",
+                "active": 1,
+                "locked": 0,
+                "cardinality": 1,
+                "deleted": 0,
+                "columns": {
+                    "value": {
+                        "type": "text",
+                        "size": "big",
+                        "not null": false
+                    },
+                    "summary": {
+                        "type": "text",
+                        "size": "big",
+                        "not null": false
+                    },
+                    "format": {
+                        "type": "varchar",
+                        "length": 255,
+                        "not null": false
+                    }
+                },
+                "bundles": {
+                    "node": [
+                        "blog",
+                        "book",
+                        "changes",
+                        "forum",
+                        "geshinode",
+                        "page",
+                        "simplenews",
+                        "organization",
+                        "simple_event",
+                        "ticket"
+                    ]
+                }
+            },
+            "simple_event_type": {
+                "settings": {
+                    "allowed_values": [
+                        {
+                            "vocabulary": "event_types",
+                            "parent": 0
+                        }
+                    ]
+                },
+                "entity_types": [
+
+                ],
+                "translatable": 0,
+                "storage": {
+                    "type": "field_sql_storage",
+                    "settings": [
+
+                    ],
+                    "module": "field_sql_storage",
+                    "active": 1,
+                    "details": {
+                        "sql": {
+                            "FIELD_LOAD_CURRENT": {
+                                "field_data_simple_event_type": {
+                                    "tid": "simple_event_type_tid"
+                                }
+                            },
+                            "FIELD_LOAD_REVISION": {
+                                "field_revision_simple_event_type": {
+                                    "tid": "simple_event_type_tid"
+                                }
+                            }
+                        }
+                    }
+                },
+                "foreign keys": {
+                    "tid": {
+                        "table": "taxonomy_term_data",
+                        "columns": {
+                            "tid": "tid"
+                        }
+                    }
+                },
+                "indexes": {
+                    "tid": [
+                        "tid"
+                    ]
+                },
+                "id": 19,
+                "field_name": "simple_event_type",
+                "type": "taxonomy_term_reference",
+                "module": "taxonomy",
+                "active": 1,
+                "locked": 0,
+                "cardinality": 1,
+                "deleted": 0,
+                "columns": {
+                    "tid": {
+                        "type": "int",
+                        "unsigned": true,
+                        "not null": false
+                    }
+                },
+                "bundles": {
+                    "node": [
+                        "simple_event"
+                    ]
+                }
+            }
+        },
+        "instances": {
+            "body": {
+                "label": "Event description",
+                "widget": {
+                    "type": "text_textarea_with_summary",
+                    "settings": {
+                        "rows": 20,
+                        "summary_rows": 5
+                    },
+                    "weight": 31,
+                    "module": "text"
+                },
+                "settings": {
+                    "display_summary": true,
+                    "text_processing": 1,
+                    "user_register_form": false
+                },
+                "display": {
+                    "default": {
+                        "label": "hidden",
+                        "type": "text_default",
+                        "weight": 0,
+                        "settings": [
+
+                        ],
+                        "module": "text"
+                    },
+                    "teaser": {
+                        "label": "hidden",
+                        "type": "text_summary_or_trimmed",
+                        "weight": 0,
+                        "settings": {
+                            "trim_length": 600
+                        },
+                        "module": "text"
+                    },
+                    "block": {
+                        "label": "above",
+                        "type": "hidden",
+                        "weight": 0,
+                        "settings": [
+
+                        ]
+                    },
+                    "frontpage": {
+                        "label": "hidden",
+                        "type": "hidden",
+                        "weight": 0,
+                        "settings": [
+
+                        ]
+                    }
+                },
+                "required": false,
+                "description": "",
+                "default_value": null,
+                "field_name": "body",
+                "deleted": 0
+            },
+            "simple_event_type": {
+                "label": "Event type",
+                "required": true,
+                "widget": {
+                    "type": "options_select",
+                    "weight": 3,
+                    "settings": [
+
+                    ],
+                    "module": "options"
+                },
+                "display": {
+                    "default": {
+                        "label": "hidden",
+                        "type": "taxonomy_term_reference_link",
+                        "weight": 1,
+                        "settings": [
+
+                        ],
+                        "module": "taxonomy"
+                    },
+                    "teaser": {
+                        "label": "hidden",
+                        "type": "taxonomy_term_reference_link",
+                        "weight": 1,
+                        "settings": [
+
+                        ],
+                        "module": "taxonomy"
+                    },
+                    "block": {
+                        "label": "hidden",
+                        "type": "taxonomy_term_reference_link",
+                        "weight": 0,
+                        "settings": [
+
+                        ],
+                        "module": "taxonomy"
+                    },
+                    "frontpage": {
+                        "label": "hidden",
+                        "type": "taxonomy_term_reference_link",
+                        "weight": 0,
+                        "settings": [
+
+                        ],
+                        "module": "taxonomy"
+                    }
+                },
+                "settings": {
+                    "user_register_form": false
+                },
+                "description": "",
+                "default_value": null,
+                "field_name": "simple_event_type",
+                "deleted": 0
+            }
+        }
+    }
+]

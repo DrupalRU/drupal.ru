@@ -1,0 +1,4 @@
+name = Marketplace functionality
+description = Provide Marketplace node type and organization listing functionality
+package = Content
+core = 7.x

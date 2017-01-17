@@ -65,16 +65,21 @@
     <?php print $picture; ?>
   </div>
   <?php endif; ?>  
-  <div class="media-body">
+  <div class="media-body" comment-id="<?php print $comment->cid ?>">
+    <div class="pull-right">
+      <?php print render($content['links']) ?>
+    </div>
     <span class="text-muted pull-right">
         <small class="text-muted"><?php isset($timeago) ? print $timeago : print $changed; ?></small>
+        <?php if(!empty($content['links']['comment']['#links'])): ?>
+          <div href="#" class="actions" data-source="<?php print $comment->cid ?>"><i class="fa fa-ellipsis-h"> </i></div>
+        <?php endif; ?>
     </span>
     <strong class="text-success"><?php print $author; ?></strong>
     <?php print $permalink; ?>
     <div class="content" <?php print $content_attributes; ?>>
       <?php
         // We hide the links now so that we can render them later.
-        hide($content['links']);
         print render($content);
       ?>
       <?php if ($signature): ?>
@@ -82,9 +87,6 @@
         <?php print $signature; ?>
       </div>
       <?php endif; ?>
-    </div>
-    <div class="pull-right">
-    <?php print render($content['links']) ?>
-    </div>
+    </div> 
   </div>
 </article>

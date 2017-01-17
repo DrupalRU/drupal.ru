@@ -1,0 +1,131 @@
+@-webkit-keyframes animatedBackground {
+  from {
+    background: rgba(255, 254, 139, .9);
+  }
+  to {
+    background: rgba(255, 254, 139, 0);
+  }
+}
+@keyframes animatedBackground {
+  from {
+    background: rgba(255, 254, 139, .9);
+  }
+  to {
+    background: rgba(255, 254, 139, 0);
+  }
+}
+
+.tiket-changed {
+  -webkit-animation: animatedBackground 4s ease-out;
+  animation: animatedBackground 4s ease-out;
+}
+
+li.ticket-assign a:before {
+  content: "\f1b8";
+  font-family: "fa", "FontAwesome";
+  padding-right: 5px;
+}
+
+.moderator .label,
+.verdict .label {
+  display: inline-block;
+  font-weight: bold;
+  color: black;
+  font-size: 100%;
+  padding: 0px;
+  margin: 0px;
+  padding-right: 10px;
+}
+
+.moderator .value,
+.verdict .value {
+  display: inline-block;
+}
+
+li.ticket-verdict a:before {
+  content: "\f0e3";
+  font-family: "fa", "FontAwesome";
+  padding-right: 5px;
+}
+
+li.moderate-help a:before {
+  content: "\f128";
+  font-family: "fa", "FontAwesome";
+  padding-right: 5px;
+}
+
+li.unpublish a:before {
+  font-family: "fa", "FontAwesome";
+  padding-right: 5px;
+}
+
+li.unpublish a.moderate-publish:before {
+  content: "\f01e";
+}
+
+li.unpublish a.moderate-unpublish:before {
+  content: "\f014";
+}
+
+.dru-verdict-process {
+  /*background: #fff6ed;*/
+}
+
+#verdict-add {
+  background: rgba(0, 0, 0, 0.7) none repeat scroll 0 0;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+#verdict-add #verdict-add-form {
+  background: #fff none repeat scroll 0 0;
+  margin: 50px auto;
+  max-height: calc(100vh - 100px);
+  overflow: auto;
+  padding: 20px;
+  position: relative;
+  width: 320px;
+}
+
+#ticket-help {
+  background: #fff none repeat scroll 0 0;
+  margin: 50px auto;
+  max-height: calc(100vh - 100px);
+  overflow: auto;
+  padding: 20px;
+  position: relative;
+  width: 90%;
+  max-width: 700px;
+}
+
+#close-form {
+  display: block;
+  position: absolute;
+  right: 10px;
+  top: 8px;
+}
+
+#close-form i {
+  color: #e6c8c8;
+  cursor: pointer;
+  font-size: 35px;
+  -webkit-transition: all 400ms ease-out;
+	transition: all 400ms ease-out;
+}
+
+#close-form:hover i{
+  color: #d56f6f;
+  transform: rotate(360deg);
+}
+
+.no-taken-ticket {
+  background: #fff8f8 none repeat scroll 0 0;
+}
+
+.my-ticket {
+  background: #eef9fe none repeat scroll 0 0;
+}

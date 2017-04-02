@@ -1,0 +1,7 @@
+name        = Drupal.ru comments
+description = Comments technical module
+package     = Comments
+version     = 7.x-1.x-dev
+core        = 7.x
+
+dependencies[] = comment

@@ -150,7 +150,6 @@ cat $ZENCI_DEPLOY_DIR/patches/bbcode-php7.patch |patch -p1
 
 if [ "$DEVEL" != "" ]; then
   cd $DOCROOT
-  drush dl devel
   drusn -y en devel devel_generate
   drush generate-content 100
   drush generate-users 100

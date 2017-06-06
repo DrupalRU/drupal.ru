@@ -44,7 +44,7 @@ deploy:
       docroot: '{home}/domains/{pr_number}.{branch}.qa.drupal.ru'
       domain: '{pr_number}.{branch}.qa.drupal.ru'
       database_server: localhost
-      account_user: "devel"
+      account_name: "devel"
       account_mail: "devel@drupal.ru"
       site_mail: noreply@drupal.ru
       site_name: '{pr_number} {branch} QA site for {repo_owner}/{repo_name}'

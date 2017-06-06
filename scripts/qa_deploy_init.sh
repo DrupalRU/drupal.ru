@@ -2,6 +2,8 @@
 
 #prepare database access
 export DATABASE_NAME=`echo $DATABASE_NAME|md5sum|awk '{print$1}'`
+export DATABASE_USER=`echo $DATABASE_NAME|md5sum|awk '{print$1}'`
+export DATABASE_PASS=`echo $DATABASE_NAME|md5sum|awk '{print$1}'`
 
 mysqladmin -uroot create $DATABASE_NAME
 mysql -u root mysql -e "CREATE USER '"$DATABASE_USER"'@'localhost';"

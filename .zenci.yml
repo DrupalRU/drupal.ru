@@ -54,4 +54,3 @@ deploy:
       init: '{deploy_dir}/scripts/qa_deploy_init.sh'
       after: '{deploy_dir}/scripts/after.sh'
       remove: '{deploy_dir}/scripts/qa_deploy_remove.sh'
-

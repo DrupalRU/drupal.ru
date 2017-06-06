@@ -1,0 +1,99 @@
+# $Id$
+#
+# Russian translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  dru_claim.pages.inc: n/a
+#  dru_claim.module: n/a
+#  dru_claim.install: n/a
+#  dru_claim.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2016-02-01 16:08+0200\n"
+"PO-Revision-Date: 2016-02-01 16:10+0200\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Russian <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
+"Language: ru\n"
+"X-Generator: Poedit 1.8.6\n"
+
+#: dru_claim.pages.inc:59
+msgid "Add claim"
+msgstr "Вызов модератора"
+
+#: dru_claim.pages.inc:90;91
+msgid "Select a category claim"
+msgstr "Выберите категорию жалобы"
+
+#: dru_claim.pages.inc:98;99
+msgid "Claim description"
+msgstr "Описание жалобы"
+
+#: dru_claim.pages.inc:105
+msgid "Send"
+msgstr "Отправить"
+
+#: dru_claim.pages.inc:144 dru_claim.module:150;221
+msgid "Claim is under review"
+msgstr "Жалоба обрабатывается"
+
+#: dru_claim.pages.inc:172
+msgid "Claim @type = @id"
+msgstr "Жалоба @type = @id"
+
+#: dru_claim.pages.inc:177
+msgid "Open"
+msgstr "Открыт"
+
+#: dru_claim.module:13
+msgid "Create Claim"
+msgstr ""
+
+#: dru_claim.module:14
+msgid "Allow users to create claim"
+msgstr ""
+
+#: dru_claim.module:87
+msgid "Initiator"
+msgstr "Инициатор"
+
+#: dru_claim.module:108;116
+msgid "Entity"
+msgstr "Сущность"
+
+#: dru_claim.module:134;203
+msgid "Claim"
+msgstr "Позвать модератора"
+
+#: (duplicate) dru_claim.install:59 ;113
+msgid "Claim Category"
+msgstr "Категория жалобы"
+
+#: (duplicate) dru_claim.install:69
+msgid "Spam"
+msgstr "Спам"
+
+#: (duplicate) dru_claim.install:73
+msgid "Trolley Rage"
+msgstr "Флуд"
+
+#: (duplicate) dru_claim.install:77
+msgid "Breach Rules"
+msgstr "Нарушение правил"
+
+#: dru_claim.info:0
+msgid "Dru Claim Tickets"
+msgstr ""
+
+#: dru_claim.info:0
+msgid "Drupal.ru Claim Tickets"
+msgstr ""
+
+#: dru_claim.info:0
+msgid "Moderation"
+msgstr ""

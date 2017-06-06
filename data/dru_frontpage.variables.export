@@ -1,0 +1,20 @@
+[
+    {
+        "name": "dru_frontpage_max_count",
+        "value": 10
+    },
+    {
+        "name": "dru_frontpage_node_type",
+        "value": {
+            "blog": "blog",
+            "simplenews": 0,
+            "ticket": 0,
+            "simple_event": 0,
+            "organization": 0,
+            "page": 0,
+            "book": 0,
+            "forum": 0,
+            "poll": 0
+        }
+    }
+]

@@ -1,0 +1,454 @@
+# $Id$
+#
+# Russian translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  advanced_sphinx_items_result_main.tpl.php, v 1.0 2011/07/05 19:59:16 gagaga
+#  advanced_sphinx_result_wrapper.tpl.php, v 1.0 2011/07/05 19:59:16 gagaga
+#  advanced_sphinx.admin.inc, v 1.0 2011/07/05 19:59:16 gagaga
+#  advanced_sphinx.common.inc, v 1.0 2011/07/05 19:59:16 gagaga
+#  advanced_sphinx.pages.inc, v 1.0 2011/07/05 19:59:16 gagaga
+#  advanced_sphinx.module: n/a
+#  advanced_sphinx.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2013-03-15 15:29+0200\n"
+"PO-Revision-Date: 2013-04-09 10:51+0300\n"
+"Last-Translator: Vitaly Morvanyuk <bober2000@ukr.net>\n"
+"Language-Team: Russian <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
+
+#: advanced_sphinx_items_result_main.tpl.php:35
+msgid "Tags"
+msgstr "Теги"
+
+#: advanced_sphinx_result_wrapper.tpl.php:24;32
+msgid "Sort"
+msgstr "Сортировка"
+
+#: advanced_sphinx.admin.inc:16
+msgid "Function <em>memory_get_usage</em> not found. Please, make sure your PHP installation is compiled with --enable-memory-limit option."
+msgstr "Функция <em>memory_get_usage</em> не найдена. Проверьте, скомпилирован ли PHP  с опцией --enable-memory-limit option."
+
+#: advanced_sphinx.admin.inc:21
+msgid "Sphinx server and config settings"
+msgstr "Sphinx-сервер и настройки конфигурации"
+
+#: advanced_sphinx.admin.inc:23
+msgid "Use this section to setup options related to your Sphinx server installation."
+msgstr "Настройка опций Sphinx-сервера."
+
+#: advanced_sphinx.admin.inc:28
+msgid "Generate configuration file"
+msgstr "Сгенерировать конфигурационный файл"
+
+#: advanced_sphinx.admin.inc:34
+msgid "Path to confige file"
+msgstr "Путь к конфигурационному файлу"
+
+#: advanced_sphinx.admin.inc:36
+msgid "Default \"sites/default/sphinx\"."
+msgstr "По-умолчанию \"sites/default/sphinx\"."
+
+#: advanced_sphinx.admin.inc:42
+msgid "Type of connection to Sphinx daemon"
+msgstr "Тип соединения с демоном Sphinx"
+
+#: advanced_sphinx.admin.inc:46
+msgid "Socket"
+msgstr "Сокет"
+
+#: advanced_sphinx.admin.inc:47
+msgid "Port"
+msgstr "Порт"
+
+#: advanced_sphinx.admin.inc:53
+msgid "Sphinx searchd host name or path to socket"
+msgstr "Хост или путь к сокету на котором запущен демон Sphinx"
+
+#: advanced_sphinx.admin.inc:55
+msgid "Host name where your <strong>Sphinx searchd daemon</strong> is running, i.e. <code>localhost</code>, <code>sphinx.example.com</code> or <code>192.168.0.1</code>."
+msgstr "Хост на котором запущен <strong>демон Sphinx </strong>, например <code>localhost</code>, <code>sphinx.example.com</code> или <code>192.168.0.1</code>."
+
+#: advanced_sphinx.admin.inc:61
+msgid "Sphinx searchd port"
+msgstr "Порт демона Sphinx"
+
+#: advanced_sphinx.admin.inc:63
+msgid "Port on which your <strong>Sphinx searchd daemon</strong> listens. Default Sphinx port is 3312."
+msgstr "Порт, который слушает демон Sphinx. По умолчанию 3312."
+
+#: advanced_sphinx.admin.inc:69
+msgid "Sphinx searchd connection timeout"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:72
+msgid "Timeout in seconds used for connections to your <strong>Sphinx searchd daemon</strong>. Leave 0 for PHP defaults for <a href=\"@fsockopen\" target=\"_blank\">fsockopen()</a>."
+msgstr "Таймаут в секундах при соединении с <strong>демоном Sphinx</strong>.Указать 0, чтобы установить значение по-умолчанию для <a href=\"@fsockopen\" target=\"_blank\">fsockopen()</a>."
+
+#: advanced_sphinx.admin.inc:77
+msgid "Sphinx index settings"
+msgstr "Настройки индекса Sphinx"
+
+#: advanced_sphinx.admin.inc:79
+msgid "Use this section to setup options related to your Sphinx indexes. Note that there a few options that will require you to rebuild your Sphinx indexes if you change them."
+msgstr "Настройки индекса Sphinx. Обратите внимание, что при измении данных опций вам нужно будет заново перестроить индекс Sphinx."
+
+#: advanced_sphinx.admin.inc:84
+msgid "Index name for queries"
+msgstr "Индексы для запросов"
+
+#: advanced_sphinx.admin.inc:86
+msgid "Name of the Sphinx index used for queries. If you have more than one index (ie. main+delta), you may configure Sphinx with a distributed index that joins all of them (local and/or remote) to provide a single interface to resolve queries."
+msgstr "Индексы, которые используются для запросов. Если у вас больше одного индекса(например main+delta), вы можете настроить работу Sphinx с помощью distributed-индексов, для того, чтобы объединить их всех(локальные и удаленные). Это делается для того, что обеспечить общий интерфейс при запросах к демону."
+
+#: advanced_sphinx.admin.inc:91
+msgid "Index name for queries delta"
+msgstr "Индекс для дельты"
+
+#: advanced_sphinx.admin.inc:93
+msgid "Name of the Sphinx index used for queries delta."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:98
+msgid "Index name for building excerpts"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:100
+msgid "Regardless of the index used for queries, Sphinx needs an index with tokenizing settings defined to build excerpts. Sphinx may be unable to build excertps from distributed indexes. It is recommended to use the name of your first main index for this purpose."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:105
+msgid "Search page settings"
+msgstr "Настройки страницы поиска"
+
+#: advanced_sphinx.admin.inc:107
+msgid "Use these options to customize the behaviour of your search page."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:110
+msgid "Use this option to setup the path for the main search page."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:113
+msgid "Note that Drupal search module is installed. You cannot take over the 'search' path."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:116
+msgid "Note that Drupal search module is not installed. You can take over the 'search' path."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:121
+msgid "Search path"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:129
+msgid "Results per page"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:132
+msgid "How many items will be shown on search results page."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:137
+msgid "Enable log for search requests"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:149
+msgid "Excerpts builder settings"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:152
+msgid "Use these options to customize how to build excerpts for search results."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:157
+msgid "Excerpts size limit"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:160
+msgid "Maximum snippet size (in Sphinx symbols) used to build content excerpts for search results."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:165
+msgid "Words around matches"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:168
+msgid "How much words to pick around each matching keywords block when building excerpts. Note that the actual number of words around matches also depends on Sphinx index configuration options such as <code>min_word_len</code>, <code>charset_table</code>, etc."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:173
+msgid "Single passage"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:175
+msgid "Enabled"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:175
+msgid "Disabled"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:176
+msgid "Whether to extract single best passage only. When this option is enabled, <em>Words around matches</em> setting is ignored and excerpts are build with a single passage up to <em>Excerpts size limit</em> long."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:191
+msgid "Sphinx port must be a numeric positive value."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:195
+msgid "Search path cannot contain whitespaces."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:198
+msgid "You should first uninstall the Drupal search module to be able to take over the <code>'search'</code> path."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:231
+msgid "Testing Sphinx searchd daemon connection."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:236;280;319
+msgid "OK"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:236
+msgid "Your Sphinx searchd daemon is up and running."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:239;258;265;306;314
+msgid "ERROR"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:239
+msgid "Unable to connect to your Sphinx searchd daemon."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:241
+msgid "searchd host: %host"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:242
+msgid "searchd port: %port"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:243;266;294;315
+msgid "Sphinx message: %message"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:250
+msgid "Testing search query using index %index."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:252
+msgid "Query asks for a list of all indexed documents to retrieve the last indexed node."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:253
+msgid "MySQL equivalent would look something like:<br /><code>SELECT nid FROM {node} ORDER BY nid DESC LIMIT 1;</code>"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:258
+msgid "Sphinx query index not specified. Please, check module settings to match your Sphinx server configuration."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:265
+msgid "Search query failed."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:276
+msgid "N/A - Oops! It apears that your Sphinx indexes are empty."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:280;319
+msgid "Test passed successfully. Sphinx results summary follow:"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:282
+msgid "Query execution time: @time seconds"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:283
+msgid "Total results found: @total"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:284
+msgid "Total results available: @total"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:285
+msgid "Last indexed node: @nid @updated"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:293
+msgid "WARNING"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:293
+msgid "There was a problem while trying to resolve the query."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:301
+msgid "Testing excerpts builder using index %index."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:306
+msgid "Sphinx excerpts index not specified. Please, check module settings to match your Sphinx server configuration."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:309
+msgid "The quick brown fox jumps over a lazy dog."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:310
+msgid "brown lazy"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:314
+msgid "Unable to build excerpts."
+msgstr ""
+
+#: advanced_sphinx.admin.inc:321
+msgid "Sample text: <code>@sample</code>"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:322
+msgid "Keywords: <code>@keywords</code>"
+msgstr ""
+
+#: advanced_sphinx.admin.inc:323
+msgid "Result: <code>@result</code>"
+msgstr ""
+
+#: advanced_sphinx.common.inc:209
+msgid "Sphinx query index not specified."
+msgstr ""
+
+#: advanced_sphinx.common.inc:215
+msgid "Sphinx excerpts index not specified."
+msgstr ""
+
+#: advanced_sphinx.common.inc:269
+msgid "Search service is disabled temporarily. Please, try again later."
+msgstr ""
+
+#: advanced_sphinx.common.inc:272
+msgid "Search failed using index %index. Sphinx error: %message"
+msgstr ""
+
+#: advanced_sphinx.common.inc:280
+msgid "Search query warning: %message"
+msgstr ""
+
+#: advanced_sphinx.common.inc:313
+msgid "Unable to build excerpts for content titles. Sphinx error: %message"
+msgstr ""
+
+#: advanced_sphinx.common.inc:327
+msgid "Unable to build excerpts for content snippets. Sphinx error: %message"
+msgstr ""
+
+#: advanced_sphinx.pages.inc:78
+msgid "Enter your keywords"
+msgstr "Введите поисковый запрос"
+
+#: advanced_sphinx.pages.inc:93
+#: advanced_sphinx.module:141;101
+msgid "Search"
+msgstr "Поиск"
+
+#: advanced_sphinx.pages.inc:104
+msgid "Enter search request in search field!"
+msgstr "Пожалуйста, введите поисковый запрос"
+
+#: advanced_sphinx.pages.inc:115
+msgid "Please enter some keywords and/or other search options."
+msgstr "Пожалуйста, введите поисковый запрос"
+
+#: advanced_sphinx.pages.inc:137
+msgid "Found results: @count on @seconds seconds."
+msgstr "Найдено результатов: @count за @seconds секунд."
+
+#: advanced_sphinx.pages.inc:142
+msgid "results: @docs, repeats: @hits"
+msgstr "результатов: @docs, повторов: @hits"
+
+#: advanced_sphinx.pages.inc:158
+msgid "Relevance"
+msgstr "Релевантность"
+
+#: advanced_sphinx.pages.inc:159
+msgid "Date"
+msgstr "Дата"
+
+#: advanced_sphinx.pages.inc:160
+msgid "Update"
+msgstr "Обновлено"
+
+#: advanced_sphinx.module:54
+msgid "Use Advanced sphinx"
+msgstr ""
+
+#: advanced_sphinx.module:55
+msgid "Allow to search with Advanced sphinx"
+msgstr ""
+
+#: advanced_sphinx.module:58
+msgid "Administer Advanced sphinx"
+msgstr ""
+
+#: advanced_sphinx.module:122
+msgid "Sphinx search box"
+msgstr "Блок поиска Sphinx"
+
+#: advanced_sphinx.module:167
+msgid "Enter the terms you wish to search for."
+msgstr ""
+
+#: advanced_sphinx.module:173
+msgid "search"
+msgstr "поиск"
+
+#: advanced_sphinx.module:77
+msgid "Sphinx search"
+msgstr "Sphinx поиск"
+
+#: advanced_sphinx.module:78;86
+msgid "Administer Sphinx search module settings"
+msgstr ""
+
+#: advanced_sphinx.module:85
+msgid "Settings"
+msgstr "Настройки"
+
+#: advanced_sphinx.module:92
+msgid "Check connection"
+msgstr "Проверка соединения"
+
+#: advanced_sphinx.module:93
+msgid "Check connection to Sphinx searchd daemon"
+msgstr "Проверка соединения к демону Sphinx searchd"
+
+#: advanced_sphinx.module:108
+msgid "Service"
+msgstr "Сервис"
+
+#: advanced_sphinx.info:0
+msgid "Advanced sphinx"
+msgstr "Продвинутый sphinx"
+
+#: advanced_sphinx.info:0
+msgid "Sphinx search integration for Drupal, based on MySQl-source type and support for main+delta index scheme."
+msgstr "Интеграция sphinx поиска в Drupal основанная на MySQL c поддержкой main и delta индексов"
+
+#: advanced_sphinx.info:0
+msgid "advanced_sphinx"
+msgstr ""
+

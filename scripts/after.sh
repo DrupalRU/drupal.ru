@@ -1,12 +1,13 @@
 #!/bin/sh
 
-SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
+SITEPATH="$HOME/domains/$DOMAIN"
 
-echo "Full site path: $SITEPATH"
+# Please put your script into scripts/update/
+# It will be called when deployed only once.
 
-#mini update #259
-cd $SITEPATH/sites/all/modules/github/alttracker/
-git pull
+
+echo "Process new files"
+sh $ZENCI_DEPLOY_DIR/scripts/update.sh
 
 echo "Clean cache"
 drush cc all

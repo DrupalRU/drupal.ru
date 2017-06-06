@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SITEPATH="$HOME/domains/$SETTINGS_DOMAIN"
+SITEPATH="$HOME/domains/$DOMAIN"
 cd $SITEPATH
 
 

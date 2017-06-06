@@ -848,59 +848,6 @@
                                         ]
                                     }
                                 ]
-                            },
-                            {
-                                "menu_name": "user-menu",
-                                "weight": 0,
-                                "link_title": "BBCode",
-                                "link_path": "admin\/config\/content\/xbbcode",
-                                "hidden": 0,
-                                "has_children": 0,
-                                "expanded": 0,
-                                "options": {
-                                    "attributes": {
-                                        "title": "Add or modify custom BBCode tags for your text formats."
-                                    }
-                                },
-                                "module": "system",
-                                "customized": 0,
-                                "updated": 0,
-                                "children": [
-                                    {
-                                        "menu_name": "user-menu",
-                                        "weight": 0,
-                                        "link_title": "Custom tags",
-                                        "link_path": "admin\/config\/content\/xbbcode\/tags",
-                                        "hidden": -1,
-                                        "has_children": 0,
-                                        "expanded": 0,
-                                        "options": {
-                                            "attributes": {
-                                                "title": "Add or modify your own tags"
-                                            }
-                                        },
-                                        "module": "system",
-                                        "customized": 0,
-                                        "updated": 0
-                                    },
-                                    {
-                                        "menu_name": "user-menu",
-                                        "weight": 0,
-                                        "link_title": "Handlers",
-                                        "link_path": "admin\/config\/content\/xbbcode\/settings",
-                                        "hidden": -1,
-                                        "has_children": 0,
-                                        "expanded": 0,
-                                        "options": {
-                                            "attributes": {
-                                                "title": "Enable or disable tags and choose the module that handles them."
-                                            }
-                                        },
-                                        "module": "system",
-                                        "customized": 0,
-                                        "updated": 0
-                                    }
-                                ]
                             }
                         ]
                     },
@@ -5340,6 +5287,23 @@
                         "updated": 0
                     }
                 ]
+            },
+            {
+                "menu_name": "user-menu",
+                "weight": 0,
+                "link_title": "Очередь модератора",
+                "link_path": "admin\/content\/tickets",
+                "hidden": 0,
+                "has_children": 0,
+                "expanded": 0,
+                "options": {
+                    "attributes": {
+                        "title": ""
+                    }
+                },
+                "module": "menu",
+                "customized": 1,
+                "updated": 0
             }
         ]
     },
@@ -5456,6 +5420,40 @@
                 "options": {
                     "attributes": {
                         "title": "A newsletter issue to be sent to subscribed email addresses."
+                    }
+                },
+                "module": "system",
+                "customized": 1,
+                "updated": 0
+            },
+            {
+                "menu_name": "user-menu",
+                "weight": 0,
+                "link_title": "Страница компании",
+                "link_path": "node\/add\/organization",
+                "hidden": 0,
+                "has_children": 0,
+                "expanded": 0,
+                "options": {
+                    "attributes": {
+                        "title": "Добавить организацию (компанию) в раздел \"Бизнес\".\r\n\r\n<strong>Материалы проходят проверку перед публикацией<\/strong>"
+                    }
+                },
+                "module": "system",
+                "customized": 1,
+                "updated": 0
+            },
+            {
+                "menu_name": "user-menu",
+                "weight": 0,
+                "link_title": "Мероприятие",
+                "link_path": "node\/add\/simple-event",
+                "hidden": 0,
+                "has_children": 0,
+                "expanded": 0,
+                "options": {
+                    "attributes": {
+                        "title": "Для публикации данных о мероприятия на главной и в разделе мероприятий."
                     }
                 },
                 "module": "system",
@@ -5629,7 +5627,7 @@
                 "menu_name": "user-menu",
                 "weight": -49,
                 "link_title": "Мой трекер",
-                "link_path": "alttracker\/my",
+                "link_path": "tracker\/my",
                 "hidden": 0,
                 "has_children": 0,
                 "expanded": 0,

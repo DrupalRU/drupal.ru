@@ -256,6 +256,7 @@ function simple_events_form($node, $form_state) {
     '#description' => t('Address, where event will happen.'),
     '#weight' => 1,
     '#default_value' => isset($node->event->address) ? $node->event->address : '',
+    '#required' => TRUE
   );
   return $form;
 }
@@ -271,7 +272,7 @@ function simple_events_validate($node, $form, &$form_state) {
 
   $validators = array(
     'file_validate_is_image' => array(),
-    'file_validate_extensions' => array(' jpg, jpeg, png'),
+    'file_validate_extensions' => array('jpg jpeg png'),
   );
 
   // Save file.
@@ -366,15 +367,18 @@ function simple_events_view($node, $view_mode, $langcode = NULL) {
   if (!isset($node->event) || empty($node->event)) {
     return $node;
   }
+  $module_path = drupal_get_path('module', 'simple_events');
 
-  drupal_add_css(drupal_get_path('module', 'simple_events') . '/simple_events.css');
+  drupal_add_css($module_path . '/simple_events.css');
 
-  if (isset($node->event->image) && !empty($node->event->image)) {
-    $event_image = theme('image', array('path' => $node->event->image->uri, 'attributes' => array('class' => 'event-image')));
-  }
-  else {
-    $event_image = theme('image', array('path' => drupal_get_path('module', 'simple_events') . '/simple_events-placeholder.png', 'attributes' => array('class' => 'event-image')));
-  }
+  $image = !empty($node->event->image) ? $node->event->image : NULL;
+  $event_image = theme('image_style', array(
+    'style_name' => 'event_teaser',
+    'path'       =>  $image ? $image->uri : 'public://default-calendar.jpg',
+    'attributes' => array(
+      'class' => 'event-image',
+    ),
+  ));
   $node->content['event_image'] = array(
     '#markup' => $event_image,
     '#weight' => 1,
@@ -389,7 +393,6 @@ function simple_events_view($node, $view_mode, $langcode = NULL) {
     . '</div>';
   if (!empty($node->event->time_to)) {
     $hours = round(($node->event->time_to - $node->event->time_from) / 3600, 0);
-
     $time .= '<div class="duration">' . t('!hours hours', array('!hours' => $hours)) . '</div>';
   }
 
@@ -408,10 +411,16 @@ function simple_events_view($node, $view_mode, $langcode = NULL) {
 
   if (!empty($node->event->url)) {
     $node->content['url'] = array(
-      '#markup' => l(t('Event website'), $node->event->url, array('attributes' => array('rel' => 'nofollow'))),
+      '#markup' => l($node->event->url, $node->event->url, array(
+        'attributes' => array(
+          'rel' => 'nofollow',
+          'class' => array('text-ellipsis')
+        ),
+      )),
       '#weight' => 1,
     );
   }
+
   if (!empty($node->event->address)) {
     $node->content['address'] = array(
       '#markup' => check_plain($node->event->address),
@@ -440,7 +449,11 @@ function simple_events_download_ics($node) {
   else {
     $end_date = date('Ymd', $node->event->time_to) . 'T' . date('His', $node->event->time_to) . '';
   }
-  $description = str_replace("\n", " ", strip_tags($node->body[LANGUAGE_NONE][0]['safe_value']));
+  $description = '';
+  if (isset($node->body[LANGUAGE_NONE][0]['safe_value'])) {
+    $description = $node->body[LANGUAGE_NONE][0]['safe_value'];
+  }
+  $description = str_replace("\n", " ", strip_tags($description));
 
   $url = '';
   if (!empty($node->event->url)) {

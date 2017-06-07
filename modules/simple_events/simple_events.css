@@ -7,13 +7,8 @@
   min-height: 220px;
 }
 
-.node-simple-event .event-image {
-  max-width: 150px;
-  padding: 0px 25px;
-  height: auto;
-}
 .node-simple-event .rrssb-links {
-  padding: 0px 10px;
+  padding: 0 10px;
 }
 
 .node-form .current_image img {

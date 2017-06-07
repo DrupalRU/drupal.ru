@@ -3,8 +3,9 @@
 # LANGUAGE translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  dru_tickets.pages.inc: n/a
+#  dru_tickets.moderate.inc: n/a
 #  dru_tickets.module: n/a
+#  dru_tickets.pages.inc: n/a
 #  dru_tickets.install: n/a
 #  dru_tickets.info: n/a
 #
@@ -12,7 +13,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2016-02-01 16:08+0200\n"
+"POT-Creation-Date: 2016-03-03 03:19+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -21,47 +22,83 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: dru_tickets.pages.inc:31
+#: dru_tickets.moderate.inc:48;59 dru_tickets.module:241;269
+msgid "Publish"
+msgstr ""
+
+#: dru_tickets.moderate.inc:86;97 dru_tickets.module:237;265
+msgid "Unpublish"
+msgstr ""
+
+#: dru_tickets.moderate.inc:121 dru_tickets.module:282
+msgid "Unpromote"
+msgstr ""
+
+#: dru_tickets.moderate.inc:142 dru_tickets.module:286
+msgid "Promote"
+msgstr ""
+
+#: dru_tickets.pages.inc:15;25
+msgid "Select"
+msgstr ""
+
+#: dru_tickets.pages.inc:71
 msgid "There are no tickets"
 msgstr ""
 
-#: dru_tickets.pages.inc:58
+#: (duplicate) dru_tickets.pages.inc:89 dru_tickets.install:80 
+msgid "Status"
+msgstr ""
+
+#: dru_tickets.pages.inc:96
+msgid "Claim category"
+msgstr ""
+
+#: dru_tickets.pages.inc:103
+msgid "Send"
+msgstr ""
+
+#: dru_tickets.pages.inc:108
+msgid "Clear"
+msgstr ""
+
+#: dru_tickets.pages.inc:158
 msgid "Ticket accepted"
 msgstr ""
 
-#: dru_tickets.pages.inc:61
+#: dru_tickets.pages.inc:161
 msgid "Ticket already your"
 msgstr ""
 
-#: dru_tickets.pages.inc:65
+#: dru_tickets.pages.inc:165
 msgid "Ticket moderated by @name"
 msgstr ""
 
-#: dru_tickets.pages.inc:93
+#: dru_tickets.pages.inc:193
 msgid "Add Verdict"
 msgstr ""
 
-#: dru_tickets.pages.inc:125
+#: dru_tickets.pages.inc:225
 msgid "Claim verdict"
 msgstr ""
 
-#: dru_tickets.pages.inc:132
+#: dru_tickets.pages.inc:232
 msgid "Save"
 msgstr ""
 
-#: dru_tickets.pages.inc:159 dru_tickets.module:141;186
+#: dru_tickets.pages.inc:259 dru_tickets.module:204;323
 msgid "Verdict"
 msgstr ""
 
-#: dru_tickets.pages.inc:168 dru_tickets.module:186
+#: dru_tickets.pages.inc:268 dru_tickets.module:323
 msgid "Change verdict"
 msgstr ""
 
-#: (duplicate) dru_tickets.pages.inc:189 dru_tickets.install:35 
+#: (duplicate) dru_tickets.pages.inc:289 dru_tickets.install:35 
 msgid "Closed"
 msgstr ""
 
-#: (duplicate) dru_tickets.pages.inc:198 dru_tickets.install:27 
+#: (duplicate) dru_tickets.pages.inc:298 dru_tickets.install:27 
 msgid "Open"
 msgstr ""
 
@@ -81,24 +118,40 @@ msgstr ""
 msgid "Allow users to moderate tickets"
 msgstr ""
 
-#: dru_tickets.module:69
+#: dru_tickets.module:84
 msgid "Ticket"
 msgstr ""
 
-#: dru_tickets.module:71
+#: dru_tickets.module:86
 msgid "Claim rules violation or unacceptable behaviour."
 msgstr ""
 
-#: dru_tickets.module:135
-msgid "No taken yet"
+#: dru_tickets.module:144 dru_tickets.install:49
+msgid "Claim text"
+msgstr ""
+
+#: dru_tickets.module:151
+msgid "Category"
 msgstr ""
 
 #: dru_tickets.module:156
+msgid "View ticket"
+msgstr ""
+
+#: dru_tickets.module:198
+msgid "No taken yet"
+msgstr ""
+
+#: dru_tickets.module:219
 msgid "Moderator"
 msgstr ""
 
-#: dru_tickets.module:172
+#: dru_tickets.module:301
 msgid "Accept"
+msgstr ""
+
+#: dru_tickets.module:311
+msgid "Moderate help"
 msgstr ""
 
 #: dru_tickets.module:31
@@ -109,20 +162,12 @@ msgstr ""
 msgid "Tickets page"
 msgstr ""
 
-#: dru_tickets.install:49
-msgid "Claim text"
-msgstr ""
-
 #: (duplicate) dru_tickets.install:17 
 msgid "Ticket Ststus"
 msgstr ""
 
 #: (duplicate) dru_tickets.install:31 
 msgid "Processed"
-msgstr ""
-
-#: (duplicate) dru_tickets.install:80 
-msgid "Status"
 msgstr ""
 
 #: dru_tickets.info:0;0

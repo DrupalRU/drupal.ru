@@ -67,6 +67,19 @@ li.unpublish a.moderate-unpublish:before {
   content: "\f014";
 }
 
+li.promote a:before {
+  font-family: "fa", "FontAwesome";
+  padding-right: 5px;
+}
+
+li.promote a.moderate-promote:before {
+  content: "\f023";
+}
+
+li.promote a.moderate-unpromote:before {
+  content: "\f09c";
+}
+
 .dru-verdict-process {
   /*background: #fff6ed;*/
 }

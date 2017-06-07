@@ -1,0 +1,21 @@
+.nav {
+  margin-bottom: @padding-large-vertical * 2;
+}
+
+.tabs--primary {
+  text-align: right;
+
+  li {
+    float: none;
+    display: inline-block;
+
+    + li{
+      margin-left: -4px;
+    }
+    &.active {
+      a.active {
+        border-bottom: 1px solid @brand-accent;
+      }
+    }
+  }
+}

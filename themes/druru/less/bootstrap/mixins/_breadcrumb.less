@@ -1,0 +1,23 @@
+.breadcrumb-loop(@n, @i: 1) when (@i =< @n) {
+  + li {
+    z-index: 100 - @i;
+    margin-left: -(@breadcrumb-padding-horizontal/2);
+
+    > a {
+      background: lighten(@breadcrumb-bg, @tone * @i/1.5);
+      color: lighten(@breadcrumb-color, @tone * @i/1.5);
+      padding-left: (@breadcrumb-padding-horizontal * 3);
+      &:after {
+        border-left-color: lighten(@breadcrumb-bg, @tone * @i/1.5);
+      }
+      &:hover, &:focus {
+        color: lighten(@breadcrumb-color, @tone * (@i - 2));
+        background: lighten(@breadcrumb-bg, @tone * (@i - 2));
+        &:after {
+          border-left-color: lighten(@breadcrumb-bg, @tone * (@i - 2));
+        }
+      }
+    }
+    .breadcrumb-loop(@n, (@i + 1));
+  }
+}

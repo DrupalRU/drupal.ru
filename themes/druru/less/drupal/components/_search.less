@@ -1,0 +1,116 @@
+#block-advanced-sphinx-searchbox {
+  &, > form {
+    &, > div {
+      &, > .input-group {
+        width: 100%;
+      }
+    }
+  }
+
+  .search-sphinx {
+    height: 38px;
+    background: @body-bg;
+    border: none;
+    border-top: 2px solid transparent;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    max-width: initial;
+    width: 99%;
+    .transition(width @transition-speed);
+
+    &:focus {
+      height: 40px;
+      border-top-color: @brand-accent;
+      top: -2px;
+      + button {
+        .button-variant(@body-bg, @brand-accent, darken(@brand-accent, @tone));
+
+        + label {
+          left: 100%;
+        }
+      }
+    }
+  }
+
+  .btn {
+    height: 38px;
+    border: none;
+    background: @navbar-default-bg;
+    z-index: 2;
+    position: relative;
+    .transition(background @transition-speed);
+
+    // Disallow overlay of label at the button in next states.
+    &:focus, &:hover, &:active {
+      background: darken(@navbar-default-bg, @tone);
+      + label {
+        display: none;
+      }
+    }
+  }
+
+  label {
+    position: absolute;
+    z-index: 3;
+    top: -2px;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: 0;
+    cursor: pointer;
+    max-width: initial;
+    border-top: 2px solid @little-darker;
+    .menu-item-animation('to-bottom');
+    .transition(left @transition-speed);
+
+    &:after {
+      background: @little-darker;
+    }
+    &:hover, &:focus {
+      border-top-color: @nav-item-hover-border;
+    }
+  }
+
+  @media screen and (max-width: @screen-sm-min) {
+    .search-sphinx {
+      border-left: 2px solid @navbar-default-bg;
+      &:focus {
+        + .btn {
+          .button-variant(@body-bg, @brand-accent, darken(@brand-accent, @tone));
+        }
+      }
+    }
+
+    .btn {
+      background-color: darken(@brand-primary, 5%);
+    }
+
+    label {
+      left: 100%;
+    }
+  }
+
+  @media @very-smalld {
+    .search-sphinx {
+      height: 50px;
+
+      &:focus {
+        height: 52px;
+      }
+    }
+
+    .btn {
+      height: 50px;
+    }
+  }
+
+  @media @tablet {
+    .search-sphinx {
+      &:focus {
+        .box-shadow(none);
+        width: 25em;
+      }
+    }
+  }
+}

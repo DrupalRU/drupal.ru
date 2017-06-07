@@ -1,0 +1,214 @@
+.modal-body {
+  overflow: auto;
+
+  .thumbnails-select {
+    .form-type-checkbox {
+      @label-border: 3px;
+      @default-border-color: @gray-lighter;
+      @selected-border-color: @brand-accent;
+      @icon-size: 40px;
+      display: inline-block;
+      vertical-align: top;
+      margin: 0 @padding-base-vertical @padding-base-vertical 0;
+
+      .form-checkbox {
+        + label {
+          display: inline-block;
+          border: @label-border solid @default-border-color;
+          padding-left: 0;
+          overflow: hidden;
+          position: relative;
+          z-index: 3;
+
+          .field, .node {
+            margin: 0;
+          }
+
+          &, * {
+            .user-select();
+          }
+
+          // Fix for IE9+, where parent label not clickable without it.
+          @media @ie9plus {
+            img {
+              pointer-events: none;
+            }
+          }
+
+          h4 {
+            margin: 0;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            text-align: center;
+            padding: 0 @padding-base-horizontal;
+          }
+
+          > .icon, &:before {
+            display: none;
+            position: absolute;
+            top: -@label-border / 2;
+            right: -@label-border / 2;
+            bottom: auto;
+            left: auto;
+            background: none;
+            border: none;
+            .rounded(0);
+            .box-shadow(none);
+            color: @body-bg;
+            z-index: 2;
+          }
+          &:before {
+            width: 0;
+            height: 0;
+            border: @icon-size / 2 solid @selected-border-color;
+            border-bottom-color: transparent;
+            border-left-color: transparent;
+            content: '';
+          }
+          > .icon {
+            padding: @icon-size * .1;
+          }
+        }
+        &:checked {
+
+          + label {
+            border-color: @selected-border-color;
+            > .icon, &:before {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.ctools-dropbutton,
+.ctools-button {
+  .grey-border-bottom-right-box();
+  background: @lighter;
+  .border-radius(3px);
+
+  .ctools-content {
+    ul {
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+
+html.js {
+  div.ctools-dropdown {
+    float: left;
+    position: relative;
+    z-index: auto;
+    @hpadd: 8px;
+    @vpadd: 6px;
+    @vmarg: 12px - @vpadd;
+
+    .loader-circle('small');
+
+    .ctools-dropdown-container-wrapper {
+      .ctools-dropdown-container {
+        margin: -1px 0 0 .2em;
+        border: 1px solid @main-border-color;
+        background: @body-bg;
+        z-index: 98;
+        a {
+          padding: 5px .3em 5px .7em;
+          font-size: 16px;
+          font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+          font-weight: 400;
+          color: #8a8a8a;
+          width: auto;
+          &:hover:not(.active) {
+            background: lighten(@well-bg, 6.25%);
+          }
+        }
+      }
+    }
+
+    a.ctools-dropdown-image-link {
+      text-indent: -9999px;
+      color: transparent;
+      height: 18px;
+      width: 20px;
+      display: block;
+      margin: calc(@vmarg ~ " + 1px") calc(~"0.5em + 1px") 1px calc(~".2em + 1px");
+      padding: @vpadd @hpadd;
+      box-sizing: content-box;
+      z-index: 99;
+      position: relative;
+
+      // Bars
+      .icon-bar {
+        display: block;
+        height: 3px;
+        border-radius: 1px;
+        background-color: @navbar-default-toggle-icon-bar-bg;
+        transition: transform @transition-speed, margin @transition-speed, display @transition-speed;
+
+        + .icon-bar {
+          margin-top: 4px;
+        }
+      }
+
+      &:hover {
+        .icon-bar {
+          background-color: darken(@navbar-default-toggle-icon-bar-bg, 10%);
+        }
+      }
+    }
+
+    &.opened {
+      z-index: 100;
+
+      a.ctools-dropdown-image-link {
+        background-position: @hpadd calc(~"-40px + " @vpadd);
+        background-color: @body-bg;
+        margin: @vmarg 0.5em 0 .2em;
+        border: 1px solid @main-border-color;
+
+        .icon-bar {
+          background-color: darken(@navbar-default-toggle-icon-bar-bg, 10%);
+
+          &:nth-child(1) {
+            .transform(rotate(45deg));
+            margin-top: 8px;
+          }
+          &:nth-child(2) {
+            display: none;
+          }
+          &:nth-child(3) {
+            .transform(rotate(-45deg));
+            margin-top: -3px;
+          }
+        }
+        &, &:hover {
+          border-bottom: none;
+        }
+      }
+      .ctools-dropdown-container {
+        display: block;
+      }
+    }
+  }
+
+  .node {
+    div.ctools-dropdown {
+
+      &.opened {
+        a.ctools-dropdown-link {
+          margin: 1px 4px 0 0;
+        }
+      }
+      a.ctools-dropdown-link {
+        margin: 2px 5px 1px 1px;
+      }
+      .ctools-dropdown-container {
+        margin-left: 0;
+      }
+    }
+  }
+}

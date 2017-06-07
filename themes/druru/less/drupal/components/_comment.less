@@ -1,0 +1,181 @@
+.media-header-item {
+  margin-right: 10px;
+}
+
+.comment-variant(@color, @dropdown) {
+  @dropdown-icon-bg: @dropdown;
+
+  background: lighten(@color, @tone);
+  border-color: @color;
+
+  &.hovered {
+    background: @color;
+    border-color: darken(@color, @tone);
+  }
+
+  .dropdown {
+
+    &.open {
+      .dropdown-toggle {
+        &, &:hover, &:focus, &:active {
+          background: transparent;
+          border-color: @dropdown-toggle-active-border;
+
+          .icon-bar {
+            background: @dropdown-icon-active-bg;
+          }
+        }
+      }
+    }
+
+    .dropdown-toggle {
+      border-color: @dropdown-toggle-border;
+
+      &:hover, &:focus, &:active {
+        border-color: @dropdown-toggle-hover-border;
+
+        .icon-bar {
+          background: @dropdown-icon-hover-bg;
+        }
+      }
+      .icon-bar {
+        background: @dropdown-icon-bg;
+      }
+    }
+  }
+}
+
+.main-content {
+
+  .comment {
+    border: 1px solid transparent;
+    position: relative;
+    margin-top: @padding-base-vertical;
+
+    .user-picture {
+      margin-bottom: 0;
+      img {
+        max-width: inherit;
+      }
+    }
+    &:hover, &:focus {
+      .dropdown {
+        opacity: 1;
+      }
+    }
+
+    &.darkmatter {
+      .comment-variant(#444, #383838);
+
+      &:not(.best-comment) {
+        color: @gray-lighter;
+      }
+
+      &.darkmatter-unaccessed {
+        .media-body {
+          padding: @padding-small-vertical @padding-base-horizontal;
+        }
+      }
+      &.best-comment {
+        border-color: #bbb;
+      }
+    }
+    &.best-comment {
+      .comment-variant(@state-success-bg, desaturate(darken(@state-success-bg, @tone * 2), @tone * 2));
+    }
+
+    &.hovered {
+      background: rgba(0, 0, 0, 0.06);
+
+      .dropdown {
+        opacity: 1;
+      }
+    }
+    &.new-comment {
+      border-left: 10px solid @brand-info;
+      margin-left: 0;
+    }
+
+    .dropdown {
+      opacity: .5;
+      .transition(opacity @transition-speed);
+
+      &.open {
+        .dropdown-toggle {
+          &, &:hover, &:focus, &:active {
+            background: transparent;
+            border-color: @dropdown-toggle-active-border;
+            .icon-bar {
+              background: @dropdown-icon-active-bg;
+            }
+          }
+        }
+      }
+
+      .dropdown-toggle {
+        border-color: @dropdown-toggle-border;
+        background: transparent;
+        padding: 8px;
+
+        &:hover, &:focus, &:active {
+          border-color: @dropdown-toggle-hover-border;
+          outline: none;
+
+          .icon-bar {
+            background: @dropdown-icon-hover-bg;
+          }
+        }
+        .icon-bar {
+          background: @dropdown-icon-bg;
+          width: 20px;
+          height: 3px;
+          display: block;
+          .rounded(1px);
+
+          + .icon-bar {
+            margin-top: 3px;
+          }
+        }
+      }
+      .dropdown-menu {
+        .darkmatter-link > span {
+          color: @btn-link-disabled-color;
+        }
+        a, .darkmatter-link > span {
+          padding-left: 12px;
+          .fa {
+            width: 21px;
+            text-align: center;
+            margin-right: 3px;
+          }
+        }
+      }
+    }
+  }
+
+  .indented {
+    padding-left: @padding-large-horizontal;
+  }
+
+  #comment-form {
+    #edit-author--2 {
+      margin-bottom: 0;
+
+      label {
+        line-height: 2em;
+        margin-bottom: 0;
+        text-transform: capitalize;
+      }
+      .user-picture {
+        img {
+          height: 2em;
+          width: auto;
+        }
+      }
+    }
+
+    .field-name-comment-body {
+      clear: both;
+    }
+  }
+}

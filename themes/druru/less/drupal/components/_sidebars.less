@@ -1,0 +1,123 @@
+body {
+  .region-sidebar-first,
+  .region-sidebar-second {
+
+    .block {
+      margin-top: 18px;
+      position: relative;
+      .loader-circle('gt-small');
+
+      > div {
+        // for correct work of ajax-loaders
+        position: relative;
+      }
+
+      h2.block-title {
+        margin-top: 0;
+      }
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      a.active {
+
+        &, &:hover, &:focus, &:active, &:visited {
+          text-decoration: none;
+          cursor: default;
+          font-weight: bold;
+        }
+      }
+
+      .view {
+        position: relative;
+
+        .view-content {
+          .li-select();
+        }
+
+        .views-row {
+          word-wrap: break-word;
+        }
+
+        .more-link {
+          text-align: right;
+          margin-top: 6px;
+        }
+      }
+
+      .submitted {
+        font-size: @font-size-small;
+        margin: 2px 0 5px 5px;
+        color: lighten(@text-color, 35%);
+        line-height: 1em;
+
+        a {
+          color: lighten(@link-color, 10%);
+        }
+
+        @media @tablet {
+          font-size: @font-size-very-small;
+          margin: 0 0 2px;
+        }
+      }
+
+      &#block-drurum-new {
+        h2 {
+          a {
+            line-height: 1.4em;
+            color: lighten(@brand-primary, @tone);
+            &:hover, &:focus {
+              color: @brand-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .col-sm-3 {
+    .inline-user-login-block-links('small');
+  }
+
+  .region {
+    &.well {
+      border: 1px solid @well-border;
+      box-shadow: none;
+    }
+  }
+
+  &.two-sidebars, &.sidebar-first {
+    section.main {
+      @media @very-smalld {
+        float: right;
+      }
+    }
+  }
+  aside {
+    &.second {
+      clear: left;
+      @media @very-smalld {
+        clear: none;
+      }
+    }
+    ul:not(.pager) {
+
+      // Makes links in left side block black.
+      // Need to move inside .li(<here>) and uncomment.
+      //
+      //  ~'*'; {
+      //  a:first-of-type {
+      //    color: lighten(@gray, @tone * 2);
+      //    &:hover, &:focus, &.active {
+      //      &, &.active{
+      //        color: lighten(@gray-darker, @tone);
+      //      }
+      //    }
+      //  }
+      //}
+
+      .li-select();
+    }
+  }
+}

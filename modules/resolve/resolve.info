@@ -3,5 +3,4 @@ description = "Adds ability to create a question and to resolve him."
 core = "7.x"
 package = Other
 
-scripts[] = resolve.js
 stylesheets[all][] = resolve.css

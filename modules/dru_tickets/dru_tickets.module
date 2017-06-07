@@ -67,7 +67,7 @@ function dru_tickets_menu() {
   $items['admin/moderate/help'] = array(
     'page callback'     => 'dru_ticket_moderate_help',
     'file'              => 'dru_tickets.moderate.inc',
-    'access arguments'  => TRUE,
+    'access arguments'  => array('moderate tickets'),
     'delivery callback' => 'ajax_deliver',
     'type'              => MENU_CALLBACK,
   );

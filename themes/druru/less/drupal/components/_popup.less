@@ -1,0 +1,69 @@
+.popup {
+  padding: @padding-large-vertical*1.5 @padding-large-horizontal*1.5;
+  background: @body-bg;
+  width: 100%;
+  overflow: auto;
+
+  @media @tablet {
+    width: 70%;
+  }
+
+  @media @smalld {
+    width: 60%;
+  }
+
+  @media @middled {
+    width: 50%;
+  }
+
+  @media @larged {
+    width: 40%;
+  }
+
+  .form-item {
+    margin-top: 0;
+  }
+
+  .form-actions {
+    margin-bottom: 0;
+  }
+
+  .popup-header {
+    &:extend(h3);
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-right: 35px;
+  }
+
+  .popup-content {
+    min-width: 480px;
+  }
+
+  #status-page {
+    margin: @padding-large-vertical @padding-large-horizontal;
+
+    .title {
+      font-size: 1.2em;
+      margin-bottom: @padding-base-vertical;
+    }
+    .description {
+      font-size: 1em;
+      padding-bottom: @padding-base-vertical;
+    }
+  }
+
+  .tabs-left {
+    .vertical-tabs-list {
+      .vertical-tab-button:not(.active) {
+        a {
+          &:focus, &:hover {
+            @tab-hover-color: darken(@body-bg, 3%);
+            @bodrder-hover-color: darken(@tab-hover-color, 3%);
+            background: @tab-hover-color;
+            border-color: @bodrder-hover-color #ddd @bodrder-hover-color @bodrder-hover-color;
+          }
+        }
+      }
+    }
+  }
+}

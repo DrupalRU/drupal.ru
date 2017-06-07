@@ -1,0 +1,341 @@
+<?php
+
+/**
+ * Variable name which contains flag. If the flag is set to TRUE,
+ * then it means that we need to automatically redirect user from
+ * 403 page to authorization form. After authorization module
+ * login_destination will return back user.
+ */
+define('DRURUM_LOGIN_WHEN_403', 'drurum_login_when_403');
+/**
+ * Variable name which contains list of rules for rename actions (menu links).
+ */
+define('DRURUM_ACTIONS_OVERRIDE', 'drurum_actions_override');
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function drurum_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'menu_local_tasks') {
+    $group = $implementations['drurum'];
+    unset($implementations['drurum']);
+    $implementations['drurum'] = $group;
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function drurum_menu() {
+  $items['admin/config/system/drupal-ru'] = array(
+    'title'            => 'Drupal.ru customizations',
+    'type'             => MENU_NORMAL_ITEM,
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('drurum_admin_form'),
+    'access arguments' => array('administer site configurations'),
+    'file'             => 'drurum.admin.inc',
+    'file path'        => drupal_get_path('module', 'drurum') . '/includes',
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function drurum_preprocess_menu_local_action(&$link) {
+  // If we have any rules of overriding actions titles, then handle their.
+  if (variable_get(DRURUM_ACTIONS_OVERRIDE)) {
+    foreach (variable_get(DRURUM_ACTIONS_OVERRIDE) as $action_path => $action_name) {
+      $link = &$link['element']['#link'];
+      // Override in case when path started from rule.
+      if (!empty($link['href']) && strpos($link['href'], $action_path) === 0) {
+        $link['element']['#link']['title'] = $action_name;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_query_privatemsg_unread_count_alter().
+ */
+function drurum_query_privatemsg_unread_count_alter(&$query) {
+  $expressions = &$query->getExpressions();
+  $expressions['unread_count']['expression'] = 'COUNT(thread_id)';
+}
+
+/**
+ * Attempts to log in anonymous users before throwing an access denied message.
+ */
+function drurum_deliver_html_page($page_callback_result) {
+  $is_access_denied = $page_callback_result == MENU_ACCESS_DENIED;
+  $redirect_enabled = variable_get(DRURUM_LOGIN_WHEN_403, TRUE);
+
+  if ($is_access_denied && $redirect_enabled && user_is_anonymous()) {
+    drupal_set_message(t('Please log in to continue'));
+    drupal_goto('user/login', array(
+      'query' => drupal_get_destination(),
+    ));
+  }
+  else {
+    drupal_deliver_html_page($page_callback_result);
+  }
+}
+
+/**
+ * Implements hook_page_delivery_callback_alter().
+ */
+function drurum_page_delivery_callback_alter(&$callback) {
+  // Swap out the page callback for our own.
+  if ($callback == 'drupal_deliver_html_page') {
+    $callback = 'drurum_deliver_html_page';
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function drurum_block_info() {
+  $blocks['new'] = array(
+    'info'       => t('New at the forum'),
+    'cache'      => DRUPAL_CACHE_CUSTOM,
+    'properties' => array(
+      'administrative' => TRUE,
+    ),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function druru_block_configure($delta = '') {
+  return forum_block_configure($delta);
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function druru_block_save($delta = '', $edit = array()) {
+  forum_block_save($delta, $edit);
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function drurum_block_view($delta = '') {
+  $query = db_select('forum_index', 'f')->fields('f')->addTag('node_access');
+  $query->distinct();
+  $query->leftJoin('node', 'n', 'f.nid = n.nid');
+  $query->fields('n', array('type'));
+  $title = '';
+  switch ($delta) {
+    case 'active':
+      $title = t('Active forum topics');
+      $query->orderBy('f.last_comment_timestamp', 'DESC')
+        ->range(0, variable_get('forum_block_num_active', '5'));
+      break;
+
+    case 'new':
+      $title = t('New forum topics');
+      $count = drupal_is_front_page() ? 30 : variable_get('forum_block_num_new', 5);
+      $query->orderBy('f.created', 'DESC')
+        ->range(0, $count);
+      break;
+  }
+
+  // Attach resolved mark.
+  if (module_enable(array('resolve'))) {
+    $query->leftJoin('resolved', 'r', 'r.nid = f.nid');
+    $query->fields('r', array('resolved'));
+  }
+
+  $block['subject'] = $title;
+  // Cache based on the altered query. Enables us to cache with node access enabled.
+  $block['content'] = drupal_render_cache_by_query($query, 'forum_block_view');
+  $block['content']['#access'] = user_access('access content');
+
+  // We need to disable cache,
+  // because in other case we will have incorrect behavior.
+//  if (!variable_get('block_cache')) {
+  $query->leftJoin('node', 'n', 'n.nid = f.nid');
+  $query->addField('n', 'changed');
+  $result = $query->execute();
+  $node_title_list = drurum_node_title_list($result);
+  if ($node_title_list) {
+    $block['content'] = array();
+    $block['content']['forum_list'] = $node_title_list;
+    $block['content']['forum_more'] = array(
+      '#theme' => 'more_link',
+      '#url'   => 'forum',
+      '#title' => t('Read the latest forum topics.'),
+    );
+  }
+//  }
+  return $block;
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function drurum_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  if (isset($data['actions']['output'])) {
+    foreach ($data['actions']['output'] as $idx => &$action) {
+      if (isset($action['#link']['path']) && 'messages/new' == $action['#link']['path']) {
+        unset($data['actions']['output'][$idx]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_privatemsg_autocomplete_alter().
+ */
+function drurum_privatemsg_autocomplete_alter(&$matches, $names, $fragment) {
+  $select = db_select('pm_block_user', 'pmb')
+    ->fields('pmb', array('author'))
+    ->condition('pmb.recipient', $GLOBALS['user']->uid);
+
+  // Only show existing users, therefore join users.
+  $select->innerJoin('users', 'u', 'u.uid = pmb.author');
+}
+
+/**
+ * Duplicate of node_title_list() with little changes.
+ *
+ * @param      $result
+ * @param null $title
+ *
+ * @return array|bool
+ *
+ * @see node_title_list().
+ */
+function drurum_node_title_list($result, $title = NULL) {
+  $items = array();
+
+  foreach ($result as $node) {
+    $options = array('html' => TRUE);
+
+    // Add comment count to title.
+    if (!empty($node->comment_count)) {
+      $node_title = format_plural($node->comment_count, '1 comment', '@count comments');
+      $option['attributes']['title'] = $node_title;
+    }
+    $icon = drurum_node_icon($node);
+    $mark = theme('mark', array(
+      'type' => node_mark($node->nid, $node->changed),
+    ));
+
+    $items[] = l($icon . check_plain($node->title) . $mark, 'node/' . $node->nid, $options);
+  }
+
+  return $items ? array(
+    '#theme' => 'item_list__node',
+    '#items' => $items,
+    '#title' => $title,
+  ) : FALSE;
+}
+
+function drurum_node_icon($node) {
+  $node_types = &drupal_static(__FUNCTION__, array());
+  if (!isset($node_types[$node->nid])) {
+    $node_types[$node->nid] = NULL;
+    $icon = &$node_types[$node->nid];
+    // @todo: make UI for adding rules.
+    if (function_exists('druru_icon')) {
+      switch (TRUE) {
+        // Will be used icon "calendar" for events.
+        case !empty($node->type) && $node->type == 'simple_event':
+          $icon = 'calendar';
+          break;
+
+        // Will be used icon "calendar" for events.
+        case !empty($node->type) && $node->type == 'organization':
+          $icon = 'building-o';
+          break;
+
+        // The question can be resolved. Check it.
+        case drurum_is_resolved($node->nid) && drurum_can_be_resolved($node):
+          $icon = empty($node->resolved) ? 'question-circle-o' : 'check-circle-o';
+          break;
+
+        default:
+          $icon = 'file-text-o';
+          break;
+      }
+      $icon = druru_icon($icon);
+    }
+    unset($icon);
+  }
+
+  return $node_types[$node->nid];
+}
+
+function drurum_is_resolved($nid) {
+  $resolved = &drupal_static(__FUNCTION__, array());
+  if (!isset($resolved[$nid])) {
+    $resolved[$nid] = db_select('taxonomy_index', 'ti')
+        ->condition('ti.nid', $nid)
+        // @todo: to add UI for configure the term id.
+        ->condition('ti.tid', 15362)
+        ->countQuery()
+        ->execute()
+        ->fetchField() > 0;
+  }
+  return $resolved[$nid];
+}
+
+function drurum_simple_events_list() {
+  $default_message = '';
+
+  if (_node_add_access()) {
+    $default_message .= '<div>';
+    $default_message .= l(t('Add event'), 'node/add/simple-event', array(
+      'attributes' => array(
+        'class' => array('btn', 'btn-success'),
+      ),
+    ));
+    $default_message .= '</div>';
+  }
+
+  $nids = _drurum_simple_events_list_nodes();
+  if (!empty($nids)) {
+    $nodes = node_load_multiple($nids);
+    $build = node_view_multiple($nodes);
+    $build['pager'] = array(
+      '#theme'  => 'pager',
+      '#weight' => 5,
+    );
+  }
+  else {
+    $default_message .= '<p>' . t('No upcoming events yet.') . '</p>';
+    $build['default_message'] = array(
+      '#markup' => $default_message,
+      '#prefix' => '<div id="first-time">',
+      '#suffix' => '</div>',
+    );
+  }
+  return $build;
+}
+
+function _drurum_simple_events_list_nodes() {
+  $query = db_select('node', 'n');
+  $query->addTag('node_access');
+  $query->join('simple_events', 'e', 'e.vid = n.vid');
+  $query->condition('n.type', 'simple_event', '=')
+    ->condition('n.status', 1)
+    ->fields('n', array('nid', 'created'))
+    ->orderBy('e.time_from', 'ASC')
+    ->extend('PagerDefault')
+    ->limit(variable_get('default_nodes_main', 10));
+  return $query->execute()->fetchCol();
+}
+
+/**
+ * @param $node
+ *
+ * @return bool
+ */
+function drurum_can_be_resolved($node) {
+  $func = 'resolved_node_can_be_resolved';
+  return function_exists($func) && $func($node);
+}

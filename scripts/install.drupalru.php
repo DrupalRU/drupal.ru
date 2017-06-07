@@ -1,159 +1,397 @@
 <?php
 
+define('MAKE_SCRIPT_URL', 'https://raw.githubusercontent.com/DrupalRu/drupal.ru/stage/scripts/drupalru.make');
+
+
+################ Helpers ################
+
 /**
  * Get user input for variables.
  */
-function get_promt_answer($promt) {
-  if (PHP_OS == 'WINNT' or !function_exists('readline')) {
-    echo $promt .': ';
+function to_ask($promt) {
+  if (is_windows() or !function_exists('readline')) {
+    print $promt . ': ';
     $line = stream_get_line(STDIN, 1024, PHP_EOL);
-  } else {
+  }
+  else {
     $line = readline($promt . ': ');
   }
   return $line;
 }
 
-echo "This is install script to create dev environment for drupal.ru  code\n";
-
-// param => "Question for promt".
-$params = array(
-  'github_url'    => "Provide url to your drupal.ru fork. \nExample:https://github.com/DrupalRu/drupal.ru\n",
-  'github_branch' => "Branch name",
-  'site_path'     => "Site directory",
-  'mysql_host'    => "MySQL Host",
-  'mysql_user'    => "MySQL User",
-  'mysql_db'      => "MySQL DB",
-  'mysql_pass'    => "MySQL Password",
-  'domain'        => "Domain",
-  'account_name'  => "Drupal User name",
-  'account_email' => "Drupal User email",
-  'account_pass'  => "Drupal User Password",
-);
-
-// Get these params from request.
-$data = getopt('', array_map(function ($opt) {
-  return $opt . '::';
-}, array_keys($params)));
-
-// Check params.
-foreach ($params as $param => $question) {
-  if (!isset($data[$param])) {
-    $data[$param] = get_promt_answer($question);
-  }
-  else {
-    echo $question . ': ' . $data[$param] . PHP_EOL;
+function check_exception($condition, $message = NULL) {
+  if (!$condition) {
+    if ($message) {
+      to_show($message);
+    }
+    exit;
   }
 }
 
-// Some static variables.
-$data['site_name'] = 'Drupal.ru Dev version';
-$data['github_path'] = 'profiles/drupalru';
+function is_windows() {
+  return PHP_OS == 'WINNT';
+}
 
-echo "Full site path: " . $data['site_path'] . "\n";
-echo "Github DIR: " . $data['github_path'] . "\n";
+function title($title) {
+  to_show('');
+  to_show('################## ' . $title . ' ##################');
+}
 
-chdir($data['site_path']);
+function to_show($message) {
+  print call_user_func_array('format', func_get_args()) . PHP_EOL;
+}
 
-echo "Download DRUPAL.\n";
+function format($message) {
+  $args = func_get_args();
+  $args[0] = is_array($args[0]) ? implode(PHP_EOL, $args[0]) : $args[0];
+  return call_user_func_array('sprintf', $args);
+}
 
-exec('drush -y make https://raw.githubusercontent.com/DrupalRu/drupal.ru/stage/scripts/drupalru.make');
+function _do($script, $params) {
+  exec(strtr($script, $params));
+}
 
-exec('git clone -b  ' . $data['github_branch'] . ' ' . $data['github_url'] . ' profiles/drupalru');
+function param_to_opt($opt) {
+  return $opt . '::';
+}
 
-echo "Install DRUPAL\n";
+function execute_func($param) {
+  $result = NULL;
+  if (is_string($param) && function_exists($param)) {
+    $result = call_user_func($param);
+  }
+  elseif (is_array($param)) {
+    $function = array_shift($param);
+    $result = call_user_func_array($function, $param);
+  }
+  return $result;
+}
 
-exec('drush site-install drupalru -y --root=' . $data['site_path'] . ' --account-name=' . $data['account_name'] . ' --account-mail=' . $data['account_email'] . ' --account-pass=' . $data['account_pass'] . ' --uri=http://' . $data['domain'] . ' --site-name="' . $data['site_name'] . '" --site-mail=' . $data['account_email'] . ' --db-url=mysql://' . $data['mysql_user'] . ':' . $data['mysql_pass'] . '@' . $data['mysql_host'] . '/' . $data['mysql_db']);
-
-
-chdir($data['site_path']);
-
-
-echo "Import META structure via module http://github.com/itpatrol/drupal_deploy.\n";
-
-echo "Import roles\n";
-
-exec('drush ddi roles --file=' . $data['github_path'] . '/data/roles.export');
-
-echo "Import filters\n";
-exec('drush ddi filters --file=' . $data['github_path'] . '/data/filters.export');
-
-echo "Import nodetypes\n";
-exec('drush ddi node_types --file=' . $data['github_path'] . '/data/blog.node_types.export');
-exec('drush ddi node_types --file=' . $data['github_path'] . '/data/organization.node_types.export');
-exec('drush ddi node_types --file=' . $data['github_path'] . '/data/simple_event.node_types.export');
-exec('drush ddi node_types --file=' . $data['github_path'] . '/data/ticket.node_types.export');
-
-echo "Import taxonomy\n";
-exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_1.taxonomy.export');
-exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_2.taxonomy.export');
-exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_3.taxonomy.export');
-exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_4.taxonomy.export');
-exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_5.taxonomy.export');
-exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_7.taxonomy.export');
-exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_8.taxonomy.export');
-exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/vocabulary_10.taxonomy.export');
-exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/claim_category.taxonomy.export');
-exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/event_types.taxonomy.export');
-exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/organizations.taxonomy.export');
-exec('drush ddi taxonomy --file=' . $data['github_path'] . '/data/ticket_status.taxonomy.export');
-
-echo "Import forum\n";
-exec('drush ddi forum --file=' . $data['github_path'] . '/data/forum.export');
-
-echo "Import menu structure\n";
-exec('drush ddi menu --file=' . $data['github_path'] . '/data/main-menu.menu_links.export');
-exec('drush ddi menu --file=' . $data['github_path'] . '/data/user-menu.menu_links.export');
-
-echo "Import theme blocks settings\n";
-exec('drush ddi blocks --file=' . $data['github_path'] . '/data/alpha.blocks.export');
+function command_exists($command) {
+  $process = proc_open("which $command", array(
+    array("pipe", "r"),
+    array("pipe", "w"),
+    array("pipe", "r"),
+  ), $pipes);
+  $exists = stream_get_contents($pipes[1]);
+  proc_close($process);
+  return !empty($exists);
+}
 
 
-echo "Import theme settings\n";
-exec('drush ddi variables --file=' . $data['github_path'] . '/data/theme_settings.variables.export');
-exec('drush ddi variables --file=' . $data['github_path'] . '/data/theme_alpha_settings.variables.export');
+################ Custom functions. ################
+
+function check_drush_version() {
+  $process = proc_open("drush --version", array(
+    array("pipe", "r"),
+    array("pipe", "w"),
+    array("pipe", "r"),
+  ), $pipes);
+  $result = stream_get_contents($pipes[1]);
+  proc_close($process);
+  preg_match("/\d(.*)/", $result, $version);
+  $version = isset($version[0]) ? trim($version[0]) : FALSE;
+
+  if (FALSE === $version) {
+    check_exception(FALSE, 'Can not detect drush version');
+  }
+
+  if(!version_compare(trim($version), '6.0', '>=')){
+    check_exception(FALSE, "Your drush version {$version}, but needed more than 6.0");
+  }
+}
+
+function check_root($root) {
+  if (!is_dir($root)) {
+    mkdir($root);
+  }
+}
+
+function to_docroot($data) {
+  check_root($data['site_path']);
+  chdir($data['site_path']);
+}
 
 
-echo "Import modules settings";
+################ System functions ################
 
-exec('drush ddi variables --file=' . $data['github_path'] . '/data/advanced_sphinx.variables.export');
-exec('drush ddi variables --file=' . $data['github_path'] . '/data/darkmatter_notify.variables.export');
-exec('drush ddi variables --file=' . $data['github_path'] . '/data/dru_frontpage.variables.export');
-exec('drush ddi variables --file=' . $data['github_path'] . '/data/resolve_can.variables.export');
-exec('drush ddi variables --file=' . $data['github_path'] . '/data/user_info_notify.variables.export');
-exec('drush ddi variables --file=' . $data['github_path'] . '/data/quote.variables.export');
-exec('drush ddi variables --file=' . $data['github_path'] . '/data/validate_api.variables.export');
+function get_params() {
+  // List of params which need to get from user.
+  // Example:
+  // 'param_name' => array(
+  //    'question' => "Question for show to user",
+  //    'default'  => "Default value for the param",
+  // ).
+  $params = array(
+    'github_url' => array(
+      'question' => 'Provide url to your drupal.ru fork (Example: "https://github.com/DrupalRu/drupal.ru")',
+    ),
+    'github_branch' => array(
+      'question' => 'Branch name',
+      'default' => 'stage',
+    ),
+    'domain' => array(
+      'question' => 'Domain',
+      'default' => 'drupal.loc',
+    ),
+    'site_path' => array(
+      'question' => 'Site directory',
+      'default' => __DIR__,
+    ),
+    'mysql_host' => array(
+      'question' => 'MySQL Host',
+      'default' => 'localhost',
+    ),
+    'mysql_user' => array(
+      'question' => 'MySQL User',
+      'default' => 'root',
+    ),
+    'mysql_db' => array(
+      'question' => 'MySQL DB',
+      'default' => 'drupal',
+    ),
+    'mysql_pass' => array(
+      'question' => 'MySQL Password',
+    ),
+    'account_name' => array(
+      'question' => 'Drupal User name',
+      'default' => 'admin',
+    ),
+    'account_email' => array(
+      'question' => 'Drupal User email',
+      'default' => 'admin@example.com',
+    ),
+    'account_pass' => array(
+      'question' => 'Drupal User Password',
+      'default' => '123',
+    ),
+    'site_name' => array(
+      'question' => 'Site name',
+      'default' => 'Drupal.ru Dev version',
+    ),
+  );
 
+  // Get params from request.
+  $data = getopt('', array_map('param_to_opt', array_keys($params)));
 
-echo "Disable drupal_deploy\n";
-exec('drush dis -y drupal_deploy');
+  // Check params.
+  foreach ($params as $key => &$param) {
+    if (!isset($data[$key])) {
+      if (isset($param['default'])) {
+        $param['question'] = format($param['question'] . ' [%s]', $param['default']);
+      }
+      $data[$key] = to_ask($param['question']);
+      if (!$data[$key] && isset($param['default'])) {
+        $data[$key] = $param['default'];
+      }
+    }
+    else {
+      to_show("{$param['question']}: %s", $data[$key]);
+    }
 
-echo "Generate content and users\n";
-exec('drush generate-users 100');
-exec('drush generate-content 100 100');
+    if ('domain' == $key) {
+      $params['site_path']['default'] .= '/' . $data[$key];
+    }
+  }
+  // Some static variables.
+  $data['github_path'] = 'profiles/drupalru';
+  to_show("Github DIR: '%s'", $data['github_path']);
+  return $data;
+}
 
+function rules($data) {
+  $ghp = $data['github_path'];
+  return array(
+    array(
+      'title' => 'Download Drupal',
+      'do before' => array('to_docroot', $data),
+      'commands' => array(
+        array('drush -y make %s', MAKE_SCRIPT_URL),
+        array('git clone -b  %s %s profiles/drupalru', $data['github_branch'], $data['github_url']),
+      ),
+    ),
+    array(
+      'title' => 'Install Drupal',
+      'commands' => array(
+        array(
+          'drush site-install drupalru -y --root=%s --account-name=%s' .
+          ' --account-mail=%s --account-pass=%s --uri=http://%s --site-name="%s"' .
+          ' --site-mail=%s --db-url=mysql://%s:%s@%s/%s',
+          $data['site_path'],
+          $data['account_name'],
+          $data['account_email'],
+          $data['account_pass'],
+          $data['domain'],
+          $data['site_name'],
+          $data['account_email'],
+          $data['mysql_user'],
+          $data['mysql_pass'],
+          $data['mysql_host'],
+          $data['mysql_db'],
+        ),
+      ),
+    ),
+    array(
+      'do before' => array('to_docroot', $data),
+      'title' => 'Import roles',
+      'validate' => array(
+        "Dir $ghp not found" => array('is_dir', $ghp)
+      ),
+      'commands' => array(
+        array('drush ddi roles --file=%s/data/roles.export', $ghp),
+      ),
+    ),
+    array(
+      'title' => 'Import filters',
+      'commands' => array(
+        array('drush ddi filters --file=%s/data/filters.export', $ghp),
+      ),
+    ),
+    array(
+      'title' => 'Import content types',
+      'commands' => array(
+        array('drush ddi node_types --file=%s/data/blog.node_types.export', $ghp),
+        array('drush ddi node_types --file=%s/data/organization.node_types.export', $ghp),
+        array('drush ddi node_types --file=%s/data/simple_event.node_types.export', $ghp),
+        array('drush ddi node_types --file=%s/data/ticket.node_types.export', $ghp),
+      ),
+    ),
+    array(
+      'title' => 'Import taxonomy',
+      'commands' => array(
+        array('drush ddi taxonomy --file=%s/data/vocabulary_1.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_2.taxonomy.export',$ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_3.taxonomy.export',$ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_4.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_5.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_6.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_7.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_8.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_9.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/vocabulary_10.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/claim_category.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/event_types.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/organizations.taxonomy.export', $ghp),
+        array('drush ddi taxonomy --file=%s/data/ticket_status.taxonomy.export', $ghp),
+      ),
+    ),
+    array(
+      'title' => 'Import forum',
+      'commands' => array(
+        array('drush ddi forum --file=%s/data/forum.export', $ghp),
+      ),
+    ),
+    array(
+      'title' => 'Import menu structure',
+      'commands' => array(
+        array('drush ddi menu --file=%s/data/main-menu.menu_links.export', $ghp),
+        array('drush ddi menu --file=%s/data/user-menu.menu_links.export', $ghp),
+      ),
+    ),
+    array(
+      'title' => 'Import theme blocks settings',
+      'commands' => array(
+        array('drush ddi blocks --file=%s/data/alpha.blocks.export', $ghp),
+      ),
+    ),
+    array(
+      'title' => 'Import theme settings',
+      'commands' => array(
+        array('drush ddi variables --file=%s/data/theme_settings.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/theme_alpha_settings.variables.export', $ghp),
+      ),
+    ),
+    array(
+      'title' => 'Import modules settings',
+      'commands' => array(
+        array('drush ddi variables --file=%s/data/advanced_sphinx.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/darkmatter_notify.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/dru_frontpage.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/resolve_can.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/user_info_notify.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/quote.variables.export', $ghp),
+        array('drush ddi variables --file=%s/data/validate_api.variables.export', $ghp),
+      ),
+    ),
+    array(
+      'title' => 'Disable drupal_deploy',
+      'commands' => array(
+        array('drush dis -y drupal_deploy'),
+      ),
+    ),
+    array(
+      'title' => 'Generate content and users',
+      'commands' => array(
+        array('drush generate-users 100'),
+        array('drush generate-content 100 100'),
+      ),
+    ),
+    array(
+      'title' => 'Update translation',
+      'commands' => array(
+        array('drush -y dl drush_language'),
+        array('drush language-add ru'),
+        array('drush language-default ru'),
+        array('drush -y l10n-update-refresh'),
+        array('drush -y l10n-update'),
+        array('drush -y language-import ru %s/modules/user_filter/user_filter_notify/translations/user_filter_notify.ru.po', $ghp),
+        array('drush -y language-import ru %s/modules/validate_api/translations/validate_api.ru.po', $ghp),
+        array('drush -y language-import ru %s/modules/validate_api/antiswearing_validate/translations/antiswearing_validate.ru.po', $ghp),
+        array('drush -y language-import ru %s/modules/validate_api/antinoob_validate/translations/antinoob_validate.ru.po', $ghp),
+        array('drush -y language-import ru %s/modules/darkmatter/translations/darkmatter.ru.po', $ghp),
+        array('drush -y language-import ru %s/modules/dru_tickets/dru_claim/translations/dru_claim.ru.po', $ghp),
+        array('drush -y language-import ru %s/modules/dru_tickets/translations/dru_tickets.ru.po', $ghp),
+        array('drush -y language-import ru %s/modules/simple_events/translations/simple_events.ru.po', $ghp),
+        array('drush -y language-import ru %s/modules/user_filter/user_filter_notify/translations/user_filter_notify.ru.po', $ghp),
+        array('drush -y language-import ru %s/modules/resolve/translations/resolve.ru.po', $ghp),
+        array('drush -y language-import ru %s/modules/marketplace/translations/marketplace.ru.po', $ghp),
+        array('drush -y language-import ru %s/modules/dru_tnx/translations/dru_tnx.ru.po', $ghp),
+        array('drush -y language-import ru %s/modules/validate_api/translations/validate_api.ru.po', $ghp),
+        array('drush -y language-import ru %s/modules/validate_api/antiswearing_validate/translations/antiswearing_validate.ru.po', $ghp),
+        array('drush -y language-import ru %s/modules/validate_api/antinoob_validate/translations/antinoob_validate.ru.po', $ghp),
+      ),
+    ),
+  );
 
-echo "Update translation\n";
+}
 
-exec('drush -y dl drush_language');
-exec('drush language-add ru');
-exec('drush language-default ru');
-exec('drush -y l10n-update-refresh');
-exec('drush -y l10n-update');
+function install($rules) {
+  foreach ($rules as $rule) {
 
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/user_filter/user_filter_notify/translations/user_filter_notify.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_api/translations/validate_api.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_api/antiswearing_validate/translations/antiswearing_validate.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_api/antinoob_validate/translations/antinoob_validate.ru.po');
+    if (isset($rule['validate'])) {
+      foreach ($rule['validate'] as $message => $validate_rule) {
+        check_exception(execute_func($validate_rule), $message);
+      }
+    }
 
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/darkmatter/translations/darkmatter.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/dru_tickets/dru_claim/translations/dru_claim.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/dru_tickets/translations/dru_tickets.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/simple_events/translations/simple_events.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/user_filter/user_filter_notify/translations/user_filter_notify.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/resolve/translations/resolve.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/marketplace/translations/marketplace.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/dru_tnx/translations/dru_tnx.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_api/translations/validate_api.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_api/antiswearing_validate/translations/antiswearing_validate.ru.po');
-exec('drush -y language-import ru ' . $data['github_path'] . '/modules/validate_api/antinoob_validate/translations/antinoob_validate.ru.po');
+    if (isset($rule['do before'])) {
+      execute_func($rule['do before']);
+    }
+    if (isset($rule['title'])) {
+      title($rule['title']);
+    }
+    if (isset($rule['commands'])) {
+      foreach ($rule['commands'] as $command) {
+        exec(call_user_func_array('sprintf', $command));
+      }
+    }
+    if (isset($rule['do after'])) {
+      execute_func($rule['do after']);
+    }
+  };
+}
 
+to_show("");
+to_show("/*********************************************/");
+to_show("/*     This is install script to create      */");
+to_show("/*    dev environment for drupal.ru code.    */");
+to_show("/*********************************************/");
+to_show("");
+
+check_exception(command_exists('drush'), 'You do not have installed drush.');
+check_drush_version();
+check_exception(command_exists('git'), 'You do not have installed git.');
+
+$params = get_params();
+$rules = rules($params);
+install($rules);

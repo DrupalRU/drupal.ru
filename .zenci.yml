@@ -43,13 +43,9 @@ deploy:
     env_vars:
       docroot: '{home}/domains/{pr_number}.{branch}.qa.drupal.ru'
       domain: '{pr_number}.{branch}.qa.drupal.ru'
-      database_name: 'dru_{branch}_{pr_number}'
-      database_user: 'dru_{branch}_{pr_number}'
-      database_pass: 'dru_{branch}_{pr_number}'
       database_server: localhost
-      account_user: "devel"
+      account_name: "devel"
       account_mail: "devel@drupal.ru"
-      account_pass: REPLACE_WITH_ADMIN_PASSWORD
       site_mail: noreply@drupal.ru
       site_name: '{pr_number} {branch} QA site for {repo_owner}/{repo_name}'
       default_theme: "alpha"
@@ -58,4 +54,3 @@ deploy:
       init: '{deploy_dir}/scripts/qa_deploy_init.sh'
       after: '{deploy_dir}/scripts/after.sh'
       remove: '{deploy_dir}/scripts/qa_deploy_remove.sh'
-

@@ -83,4 +83,3 @@ dependencies[] = admin_menu
 dependencies[] = adminimal_admin_menu
 dependencies[] = login_destination
 dependencies[] = module_filter
-dependencies[] = admin_menu

@@ -74,7 +74,7 @@ function dru_frontpage_preprocess_node(&$variables) {
  */
 function dru_frontpage_list() {
   $query = db_select('node', 'n', array('target' => 'slave'));
- 
+
   if($types = variable_get('dru_frontpage_node_type')){
     $in_types = array();
 
@@ -87,22 +87,22 @@ function dru_frontpage_list() {
       $query->condition('n.type', $in_types, 'IN');
     }
   }
-  
+
   $nids = $query
     ->addTag('frontpage_nodes_condition')
     ->fields('n', array('nid', 'created'))
     ->condition('n.status', 1)
     ->condition('n.promote', 1)
     ->range(0, variable_get('dru_frontpage_max_count', 40))
-    ->orderBy('n.changed', 'DESC')
+    ->orderBy('n.created', 'DESC')
     ->execute()
     ->fetchCol();
-    
+
   if (!empty($nids)) {
-    
+
     $nodes = node_load_multiple($nids);
     foreach($nodes as $key => $node){
-      $history = _forum_user_last_visit($node->nid); 
+      $history = _forum_user_last_visit($node->nid);
       $node->new_replies = comment_num_new($node->nid, $history);
       $node->new = $node->new_replies || (isset($node->last_comment_timestamp) && $node->last_comment_timestamp > $history);
       if($node->new){
@@ -110,16 +110,16 @@ function dru_frontpage_list() {
       }else{
         $node->url = url("node/$node->nid");
       }
-      
+
       $tids = db_select('taxonomy_index', 't', array('target' => 'slave'))
         ->fields('t', array('tid'))
         ->condition('t.nid', $node->nid)
         ->execute()
         ->fetchCol();
       $node->terms = taxonomy_term_load_multiple($tids, array());
-      
+
       $nodes[$key] = $node;
-    
+
     }
     $page = node_view_multiple($nodes, 'frontpage');
 
@@ -127,7 +127,7 @@ function dru_frontpage_list() {
       'href' => 'node',
       'title' => t('Show more content'),
     );
-  
+
     $page['links'] = array(
       '#theme' => 'links',
       '#links' => $links,
@@ -143,7 +143,7 @@ function dru_frontpage_list() {
       '#suffix' => '</div>',
     );
   }
-  
+
   $page['#theme'] = 'frontpage_list';
   return $page;
 }

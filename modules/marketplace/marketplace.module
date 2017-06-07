@@ -149,8 +149,8 @@ function marketplace_block_view($delta = '') {
  *
  */
 function template_preprocess_marketplace_random_block(&$variables) {
-  $variables['nodes'] = $variables['content']['nodes'];
-  $variables['links'] = $variables['content']['links'];
+  $variables['nodes'] = !empty($variables['content']['nodes']) ? $variables['content']['nodes'] : array();
+  $variables['links'] = !empty($variables['content']['links']) ? $variables['content']['links'] : array();
 }
 
 /**
@@ -166,8 +166,13 @@ function marketplace_form($node, $form_state) {
     '#weight' => -4,
   );
 
-  if (isset($node->logo)) {
-    $form['logo']['#prefix'] = '<div class="current_logo">' . theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo'))) . '</div>';
+  if (!empty($node->logo)) {
+    $image = theme('image_style', array(
+      'style_name' => 'company',
+      'path'       => $node->logo->uri,
+      'attributes' => array('class' => 'organization-logo'),
+    ));
+    $form['logo']['#prefix'] = "<div class='current_logo'>{$image}</div>";
   }
 
   $form['website'] = array(
@@ -181,7 +186,7 @@ function marketplace_form($node, $form_state) {
 
   $form['address'] = array(
     '#type' => 'textfield',
-    '#title' => t('Address'),
+    '#title' => t('Location'),
     '#description' => t('If you have office address, please provide.'),
     '#weight' => 1,
     '#default_value' => isset($node->address) ? $node->address : '',
@@ -201,16 +206,11 @@ function marketplace_validate($node, $form, &$form_state) {
 
   $validators = array(
     'file_validate_is_image' => array(),
-    'file_validate_extensions' => array(' jpg, jpeg, png'),
+    'file_validate_extensions' => array('jpg jpeg png'),
   );
 
   // Save file.
-  if (!$file = file_save_upload('logo', $validators, $logo_directory)) {
-    if (!$form_state['node']->logo) {
-      form_set_error('logo', 'Could not upload file.');
-    }
-  }
-  else {
+  if ($file = file_save_upload('logo', $validators, $logo_directory)) {
     $form_state['values']['logo'] = $file;
   }
 }
@@ -295,12 +295,17 @@ function marketplace_update($node) {
 function marketplace_view($node, $view_mode, $langcode = NULL) {
   drupal_add_css(drupal_get_path('module', 'marketplace') . '/marketplace.css');
 
+  $image_path = 'public://default-organization.png';
   if ($node->logo) {
-    $logo_img = theme('image', array('path' => $node->logo->uri, 'attributes' => array('class' => 'organization-logo')));
+    $image_path = $node->logo->uri;
   }
-  else {
-    $logo_img = theme('image', array('path' => drupal_get_path('module', 'marketplace') . '/marketplace-placeholder.png', 'attributes' => array('class' => 'organization-logo')));
-  }
+  $logo_img = theme('image_style', array(
+    'style_name' => 'company',
+    'path'       => $image_path,
+    'attributes' => array(
+      'class' => 'organization-logo',
+    ),
+  ));
   $node->content['logo'] = array(
     '#markup' => $logo_img,
     '#weight' => 1,

@@ -63,8 +63,8 @@ dependencies[] = drupal_deploy
 dependencies[] = inner_poll
 
 # Drupalru modules
-dependencies[] = antinoob_validate
-dependencies[] = antiswearing_validate
+;dependencies[] = antinoob_validate
+;dependencies[] = antiswearing_validate
 dependencies[] = darkmatter
 dependencies[] = dru_comment_quote
 dependencies[] = dru_forum
@@ -79,3 +79,8 @@ dependencies[] = user_filter
 dependencies[] = user_filter_notify
 dependencies[] = validate_api
 dependencies[] = xbbcode_dru
+dependencies[] = admin_menu
+dependencies[] = adminimal_admin_menu
+dependencies[] = login_destination
+dependencies[] = module_filter
+dependencies[] = admin_menu

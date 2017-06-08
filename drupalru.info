@@ -63,8 +63,8 @@ dependencies[] = drupal_deploy
 dependencies[] = inner_poll
 
 # Drupalru modules
-;dependencies[] = antinoob_validate
-;dependencies[] = antiswearing_validate
+dependencies[] = antinoob_validate
+dependencies[] = antiswearing_validate
 dependencies[] = darkmatter
 dependencies[] = dru_comment_quote
 dependencies[] = dru_forum

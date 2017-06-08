@@ -3,7 +3,7 @@ echo "INIT Drupal.ru"
 
 CORE='drupal-7'
 # imageapi-7.x is not secure. we install dev version imageapi-7.x-1.x-dev
-CONTRIB="bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev geshifilter gravatar imageapi-7.x-1.x-dev noindex_external_links pathauto privatemsg simplenews smtp spambot jquery_update token rrssb  fontawesome transliteration libraries bootstrap_lite xbbcode ban_user quote-7.x-1.x-dev l10n_update devel ctools metatag date taxonomy_manager tagadelic xmlsitemap fasttoggle captcha_pack"
+CONTRIB="bbcode bueditor captcha  comment_notify diff-7.x-3.x-dev geshifilter gravatar imageapi-7.x-1.x-dev noindex_external_links pathauto privatemsg simplenews smtp spambot jquery_update token rrssb  fontawesome transliteration libraries bootstrap_lite xbbcode ban_user quote-7.x-1.x-dev l10n_update devel ctools metatag date taxonomy_manager tagadelic xmlsitemap fasttoggle captcha_pack adminimal_theme"
 
 echo "Full site path: $DOCROOT"
 echo "Site core: $CORE"

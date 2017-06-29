@@ -119,48 +119,18 @@ function dru_claim_form($form, &$form_state, $vars) {
  * Callback dru_claim_form_validate.
  */
 function dru_claim_form_validate($form, &$form_state) {
-
-}
-
-/**
- * Callback dru_claim_submit_js.
- */
-function dru_claim_submit_js($form_id, $form_state) {
-
-  $entity = $form_state['dru_claim_entity'];
-  switch ($entity['type']) {
-    case 'node':
-        $body = 'field-name-body';
-      break;
-
-    case 'comment':
-        $body = 'field-name-comment-body';
-      break;
-  }
-
-  if (isset($body)) {
-    $verdict  = '<div class="claim_message claim_message_processed">';
-    $verdict .= '<i class="fa fa-cogs"></i>';
-    $verdict .= t('Claim is under review');
-    $verdict .= '</div>';
-
-    $commands = array();
-    $commands[] = ajax_command_remove('.claim-' . $entity['type'] . '-' . $entity['id']);
-    $commands[] = ajax_command_before('.body-' . $entity['id'] . ' .field-item', $verdict);
-    $commands[] = ajax_command_remove('#verdict-add');
-
-    return array(
-      '#type'     => 'ajax',
-      '#commands' => $commands,
-    );
-  }
-
 }
 
 /**
  * Callback dru_claim_form_submit.
  */
 function dru_claim_form_submit($form_id, &$form_state) {
+}
+
+/**
+ * Callback dru_claim_submit_js.
+ */
+function dru_claim_submit_js($form_id, $form_state) {
 
   $entity = $form_state['dru_claim_entity']['entity'];
   global $user;
@@ -209,4 +179,34 @@ function dru_claim_form_submit($form_id, &$form_state) {
     $query->condition($id_type, $form_state['dru_claim_entity']['id'], '=');
     $num_updated = $query->execute();
   }
+  
+  // 
+
+  $entity_link = $form_state['dru_claim_entity'];
+  switch ($entity_link['type']) {
+    case 'node':
+        $body = 'field-name-body';
+      break;
+
+    case 'comment':
+        $body = 'field-name-comment-body';
+      break;
+  }
+
+  if (isset($body)) {
+    $verdict .= '<div class="field-item">';
+    $verdict = dru_claim_get_ticket_info($ticket, $entity_link['entity'], $entity_link['type']);
+    $verdict .= '</div>';
+
+    $commands = array();
+    $commands[] = ajax_command_remove('.claim-' . $entity_link['type'] . '-' . $entity_link['id']);
+    $commands[] = ajax_command_before('.body-' . $entity_link['id'] . ' .field-item', $verdict);
+    $commands[] = ajax_command_remove('#verdict-add');
+
+    return array(
+      '#type'     => 'ajax',
+      '#commands' => $commands,
+    );
+  }
+
 }

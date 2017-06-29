@@ -1,0 +1,50 @@
+deploy:
+  master:
+    server: "goblin.vps-private.net"
+    username: "drupal"
+    dir: '{home}/github/{repo_owner}/{repo_name}/{branch}'
+    env_vars:
+      docroot: '{home}/domains/drupalru.vps-private.net'
+      domain: "drupalru.vps-private.net"
+      account_name: "root"
+      account_mail: "gor.martsen@gmail.com"
+      account_pass: "d6testing"
+      site_name: "Drupal.ru dev site"
+      site_mail: "noreply@production.drupal.ru"
+      database_user: "drupal_main"
+      database_name: "drupal_main"
+      database_pass: "HJGRj345t63"
+    scripts:      
+      init: '{deploy_dir}/scripts/init.sh'
+      after: '{deploy_dir}/scripts/after.sh'
+  stage:
+    server: "qa.drupal.ru"
+    username: "stage"
+    dir: '{home}/github/{repo_owner}/{repo_name}/{branch}'
+    env_vars:
+      docroot: '{home}/domains/stage.drupal.ru'
+      domain: "stage.drupal.ru"
+      database_user: "stage_main"
+      database_name: "stage_main"
+      site_name: 'Stage site for {repo_owner}/{repo_name}'      
+    scripts:      
+      init: '{deploy_dir}/scripts/stage_init.sh'
+      after: '{deploy_dir}/scripts/after.sh'
+  pull_request:
+    server: qa.drupal.ru
+    username: test
+    dir: '{home}/github/{repo_owner}/{repo_name}/pr/{pr_number}'
+    env_vars:
+      docroot: '{home}/domains/{pr_number}.{branch}.qa.drupal.ru'
+      domain: '{pr_number}.{branch}.qa.drupal.ru'
+      database_server: localhost
+      account_name: "devel"
+      account_mail: "devel@drupal.ru"
+      site_mail: noreply@drupal.ru
+      site_name: '{pr_number} {branch} QA site for {repo_owner}/{repo_name}'
+      default_theme: "alpha"
+      devel: TRUE
+    scripts:
+      init: '{deploy_dir}/scripts/qa_deploy_init.sh'
+      after: '{deploy_dir}/scripts/after.sh'
+      remove: '{deploy_dir}/scripts/qa_deploy_remove.sh'

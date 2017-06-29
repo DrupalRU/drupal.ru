@@ -18,7 +18,7 @@ deploy:
       init: '{deploy_dir}/scripts/init.sh'
       after: '{deploy_dir}/scripts/after.sh'
   stage:
-    server: "goblin.vps-private.net"
+    server: "qa.drupal.ru"
     username: "stage"
     dir: '{home}/github/{repo_owner}/{repo_name}/{branch}'
     env_vars:
@@ -26,13 +26,7 @@ deploy:
       domain: "stage.drupal.ru"
       database_user: "stage_main"
       database_name: "stage_main"
-      database_pass: "HGrhet45t65ret"
-      account_user: "stage"
-      account_mail: "stage@drupal.ru"
-      account_pass: REPLACE_WITH_ADMIN_PASSWORD
-      site_mail: noreply@drupal.ru
       site_name: 'Stage site for {repo_owner}/{repo_name}'      
-      devel: TRUE
     scripts:      
       init: '{deploy_dir}/scripts/stage_init.sh'
       after: '{deploy_dir}/scripts/after.sh'

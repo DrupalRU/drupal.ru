@@ -3,6 +3,7 @@
 echo "Clean QA settings when removed"
 
 export DATABASE_NAME=`echo $DATABASE_NAME|md5sum|awk '{print$1}'`
+export DATABASE_USER=`echo $DATABASE_NAME|md5sum|awk '{print$1}'|cut -c 1-10`
 
 #remove database
 mysqladmin -uroot -f drop $DATABASE_NAME
@@ -18,3 +19,4 @@ chmod -R 755 $DOCROOT/sites/*
 rm -rf $DOCROOT
 sudo apachectl restart
 
+echo "Website $DOMAIN removed."

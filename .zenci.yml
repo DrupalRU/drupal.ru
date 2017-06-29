@@ -29,7 +29,7 @@ deploy:
       site_name: 'Stage site for {repo_owner}/{repo_name}'      
     scripts:      
       init: '{deploy_dir}/scripts/stage_init.sh'
-      after: '{deploy_dir}/scripts/after.sh'
+      after: '{deploy_dir}/scripts/stage_after.sh'
   pull_request:
     server: qa.drupal.ru
     username: test

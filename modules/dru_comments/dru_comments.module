@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * Implements hook_menu_alter().
+ */
+function dru_comments_menu_alter(&$items) {
+  $items['comment/%comment/edit']['access callback'] = 'dru_comments_comment_access';
+  $items['comment/%comment/edit']['access arguments'] = array('edit', 1);
+}
+
+/**
+ * Custom comment edit asses callback.
+ *
+ * @param $op
+ * @param $comment
+ *
+ * @return bool
+ */
+function dru_comments_comment_access($op, $comment) {
+  global $user;
+  $canedit = ($comment->created + 3600) > time();
+
+  if ($op == 'edit') {
+    return ($user->uid && $user->uid == $comment->uid && $comment->status == COMMENT_PUBLISHED && user_access('edit own comments') && $canedit) || user_access('administer comments');
+  }
+}
+
+/**
+ * Implements hook_comment_view().
+ */
+function dru_comments_comment_view($comment, $view_mode, $langcode) {
+  if (!dru_comments_comment_access('edit', $comment)) {
+    unset($comment->content['links']['comment']['#links']['comment-edit']['href']);
+  }
+}

@@ -67,6 +67,7 @@ dependencies[] = antinoob_validate
 dependencies[] = antiswearing_validate
 dependencies[] = darkmatter
 dependencies[] = dru_comment_quote
+dependencies[] = dru_comments
 dependencies[] = dru_forum
 dependencies[] = dru_frontpage
 dependencies[] = dru_tickets

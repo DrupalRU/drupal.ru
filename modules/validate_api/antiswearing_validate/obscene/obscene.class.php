@@ -109,6 +109,7 @@ class ObsceneCensorRus {
         'laun',
         'doubl',
         'чаепитие',
+        'ying',
     );
     public static function getFiltered($text, $charset = 'UTF-8') {
         self::filterText($text, $charset);

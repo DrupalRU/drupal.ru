@@ -23,13 +23,7 @@ function user_filter_filter_info() {
  */
 function user_filter_filter_process($text, $filter, $format) {
   if (!empty($text)) {
-    $users = user_filter_mention($text);
-    if (!empty($users)) {
-      foreach ($users as $user) {
-        $user_profile = l('@' . $user->name, drupal_get_path_alias('user/' . $user->uid), array('attributes' => array('class' => array('user_filter'), 'data-user' => array($user->name))));
-        $text = preg_replace('/@' . $user->name . '/', $user_profile, $text);
-      }
-    }
+    $text = preg_replace_callback('/(?!\b)((@[\w\d@_-]+)\b)/ui', 'user_filter_callback', $text);
     return $text;
   }
   else {
@@ -38,24 +32,15 @@ function user_filter_filter_process($text, $filter, $format) {
 }
 
 /**
- * User Filter API.
- *
- * Check Users in text by "@username".
- *
- * Function "user_filter_mention($text)".
- * Return an array with User objects.
+ * Callback user_filter_callback($matches).
  */
-function user_filter_mention($text) {
-  if (!empty($text)) {
-    $users = array();
-    preg_match_all('/[@][\w\d]+/', $text, $matches);
-    foreach ($matches[0] as $match) {
-      $name = drupal_substr($match, 1, $length = NULL);
-      $user = user_load_by_name($name);
-      if (is_object($user)) {
-        $users[] = $user;
-      }
-    }
-    return $users;
+function user_filter_callback($matches) {
+  $name = drupal_substr($matches[0], 1, $length = NULL);
+  $user = user_load_by_name($name);
+  if (is_object($user)) {
+    return l('@' . $user->name, drupal_get_path_alias('user/' . $user->uid), array('attributes' => array('class' => array('user_filter'), 'data-user' => array($user->name))));
+  }
+  else {
+    return $matches[0];
   }
 }

@@ -583,10 +583,10 @@ function darkmatter_user_view($account, $view_mode) {
     '#type' => 'user_profile_item',
     '#title' => t('Dark matter'),
     '#markup' => t('Nodes: !dark_node/!total_node, comments: !dark_comment/!total_comment', array(
-      '!dark_node' => $darkmatter_stats->nodes,
-      '!total_node' => $darkmatter_stats->total_nodes,
-      '!dark_comment' => $darkmatter_stats->comments,
-      '!total_comment' => $darkmatter_stats->total_comments,
+      '!dark_node' => isset($darkmatter_stats->nodes) ? $darkmatter_stats->nodes : 0,
+      '!total_node' => isset($darkmatter_stats->total_nodes) ? $darkmatter_stats->total_nodes : 0,
+      '!dark_comment' => isset($darkmatter_stats->comments) ? $darkmatter_stats->comments : 0,
+      '!total_comment' => isset($darkmatter_stats->total_comments) ? $darkmatter_stats->total_comments : 0,
     )),
   );
 }

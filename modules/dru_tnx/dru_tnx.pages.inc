@@ -59,13 +59,14 @@ function dru_tnx_callback($ajax, $vars) {
     
     $tnx = get_user_tnx($vars['type'], $vars['id'], $vars['user']->uid);
     $tnx ? $new = -1 : $new = 1;
+    $tnx_count = $vars['entity']->tnx + $new;
     $tnx_link = dru_tnx_link($vars['entity'], $vars['type'], $vars['id'], $tnx, $new);
     
     $link = l($tnx_link['title'], $tnx_link['href'], array('attributes' => $tnx_link['attributes']));
     
     $commands = array();
     
-    $counter = '<div class="tnx-counter counter-' . ($tnx + $new) . ' dru-tnx-' . $vars['type'] . '-' . $vars['id'] . '-counter">' . t('@count Thank you', array('@count' =>$tnx + $new)) . '</div>';
+    $counter = '<div class="tnx-counter counter-' . ($tnx_count) . ' dru-tnx-' . $vars['type'] . '-' . $vars['id'] . '-counter">' . t('@count Thank you', array('@count' => $tnx_count)) . '</div>';
     
     $commands[] = ajax_command_replace('.dru-tnx-' . $vars['type'] . '-' .$vars['id'] . '-counter', $counter);
 

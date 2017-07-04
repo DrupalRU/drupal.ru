@@ -89,7 +89,7 @@ div.region.region-fluid-top {
 
 /* Other block */
 #block-advanced-sphinx-searchbox.block.block-advanced-sphinx {
-  float: right;
+  text-align: right;
 }
 
 #block-advanced-sphinx-searchbox.block.block-advanced-sphinx h2 {
@@ -304,6 +304,10 @@ a:hover {
   #node-details.affix {
     position: fixed;
     top: 70px;
+  }
+  
+  .page-node-edit #node-details.affix {
+    position: relative;
   }
 }
 
@@ -871,6 +875,39 @@ li.quote a:before {
   font-weight: 300;
 }
 
+.comment .actions i {
+  position: relative;
+  -webkit-transition: all 0s ease-out;
+  -moz-transition: all 0s ease-out;
+  -o-transition: all 0s ease-out;
+  transition: all 0s ease-out;
+}
+
+.comment:hover .actions i {
+  transform: rotate(360deg);
+  -webkit-transition: all 400ms ease-out;
+  -moz-transition: all 400ms ease-out;
+  -o-transition: all 400ms ease-out;
+  transition: all 400ms ease-out;
+}
+
+.comment-actions {
+  background: #fff;
+  padding-bottom: 10px;
+}
+
+.comment.comment-new .comment-actions {
+  background: #d9edf7;
+}
+
+.comment.darkmatter .comment-actions {
+  background: #333;
+}
+
+.comment.darkmatter .actions.open {
+  color: #bbb;
+}
+
 /* Block quote. */
 blockquote {
   color: #888;
@@ -1099,7 +1136,8 @@ ul.file-links li span.size {
   background-color: #333;
   color: white;
   text-align: center;
-  padding: 20px 0px;
+  padding: 10px 0px;
+  font-size: 90%;
 }
 
 /* Common */

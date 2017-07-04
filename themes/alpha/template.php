@@ -125,10 +125,12 @@ function alpha_preprocess_page(&$variables) {
         $filepath = $account->picture->uri;
       }
     }
-    elseif (variable_get('user_picture_default', '')) {
-      $filepath = variable_get('user_picture_default', '');
+    else {
+      if (variable_get('user_picture_default')) {
+        $filepath = variable_get('user_picture_default', '');
+      }
     }
-    if ($account->uid == 0) {
+    if (isset($account->uid) && $account->uid == 0 && !empty($filepath)) {
       $variables['user_picture'] = theme('image', array('path' => $filepath, 'attributes' => array('class' => array('img-circle'))));
     }
     elseif (isset($filepath)) {
@@ -472,6 +474,7 @@ function _forum_tablesort_header($cell, $header, $ts) {
     }
     else {
       // If the user clicks a different header, we want to sort ascending initially.
+      $cell['class'] = array();
       $ts['sort'] = 'asc';
     }
     $cell['data'] = l($cell['data'], $_GET['q'], array('attributes' => array('title' => $title, 'class' => $cell['class']), 'query' => array_merge($ts['query'], array('sort' => $ts['sort'], 'order' => $cell['data'])), 'html' => TRUE));

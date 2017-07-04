@@ -115,7 +115,9 @@
 <header id="user-profile" role="banner" class="navbar navbar-default ">
   <div class="container">
     <div class="user-picture">
+      <?php if (!empty($user_picture)): ?>
       <?php print $user_picture; ?>
+      <?php endif; ?>
     </div>
   </div>
 </header>

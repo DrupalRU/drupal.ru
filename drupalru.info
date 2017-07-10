@@ -80,3 +80,7 @@ dependencies[] = user_filter
 dependencies[] = user_filter_notify
 dependencies[] = validate_api
 dependencies[] = xbbcode_dru
+dependencies[] = admin_menu
+dependencies[] = adminimal_admin_menu
+dependencies[] = login_destination
+dependencies[] = module_filter

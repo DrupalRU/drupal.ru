@@ -553,13 +553,15 @@
 
 // Breadcrumbs
 // -------------------------
-@breadcrumb-bg: #ccc;
-@breadcrumb-color: @gray;
-@breadcrumb-active-color: darken(@breadcrumb-color, 25%);
+@breadcrumb-bg-start: lighten(@brand-primary, @tone * 8);
+@breadcrumb-bg-end: lighten(@brand-primary, @tone * 6);
+@breadcrumb-bg: ~"linear-gradient(to right, @{breadcrumb-bg-start}, @{breadcrumb-bg-end})";
+@breadcrumb-color: #21425a;
+@breadcrumb-active-color: darken(@breadcrumb-color, @tone);
 // Will not work, because we have custom breadcrumbs.
 @breadcrumb-separator: "/";
 @breadcrumb-padding-horizontal: .5em;
-@breadcrumb-padding-vertical: .3em;
+@breadcrumb-padding-vertical: .5em;
 @breadcrumb-font-size: 1em;
 @breadcrumb-line-height: 1.2em;
 

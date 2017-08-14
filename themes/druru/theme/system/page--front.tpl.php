@@ -87,12 +87,12 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <?php if(_druru_count_unread_messages()):?>
-            <i class="fa fa-circle small whistleblower"></i>
+            <i class="fa fa-circle small whistle-blower"></i>
           <?php endif;?>
         </button>
       </div>
 
-      <?php if (!empty($primary_nav) || !empty($secondary_nav) || !empty($page['navigation'])): ?>
+      <?php if (!empty($primary_nav) || !empty($secondary_nav) || !empty($page['between_menus'])): ?>
         <div class="navbar-collapse collapse">
           <nav role="navigation">
             <?php
@@ -106,14 +106,18 @@
             if (!empty($secondary_nav)) {
               print trim(render($secondary_nav));
             }
-            if (!empty($page['navigation'])) {
-              print trim(render($page['navigation']));
-            }
             ?>
           </nav>
         </div>
       <?php endif; ?>
     </div>
+    <?php if (!empty($page['navigation'])) : ?>
+      <div class="navbar-second navbar-collapse collapse">
+        <div class="container">
+          <?php print trim(render($page['navigation'])); ?>
+        </div>
+      </div>
+    <?php endif; ?>
   </header>
 
   <div class="main-container">

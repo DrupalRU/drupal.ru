@@ -62,16 +62,9 @@ function _druru_menu_link_fill_icons(&$element) {
       }
 
       $element['#weight'] = 1000;
-      $element['#title'] = druru_icon('user') . ucfirst($GLOBALS['user']->name);
+      $icon = _druru_user_menu_icon();
+      $element['#title'] = $icon . ' ' . ucfirst($GLOBALS['user']->name);
       $element['#localized_options']['html'] = TRUE;
-      // For notifications in the future.
-//      if ($has_notifications) {
-//        $element['#title'] .= ' <sup>';
-//        $element['#title'] .= druru_icon('asterisk', NULL, array(
-//          'class' => array('text-accent'),
-//        ));
-//        $element['#title'] .= '</sup> ';
-//      }
       break;
 
     case 'messages':
@@ -100,17 +93,72 @@ function _druru_menu_link_fill_icons(&$element) {
     case 'user/register':
       _druru_menu_link_fill_icon($element, 'user-plus');
       break;
+
+    default:
+      if ($element['#original_link']['menu_name'] == 'menu-social-links') {
+        if ($icon = druru_search_icon_key($element['#title'])) {
+          _druru_menu_link_fill_icon($element, $icon, 'delete');
+        }
+      }
+      break;
+  }
+
+}
+
+/**
+ * Saturate link with icon.
+ *
+ * @param array $element
+ *   Menu item
+ * @param $icon
+ *   Icon key
+ * @param string $text
+ *   Indicates what's need to do with text: "hide" from desktop devices
+ *     or delete from all devices (any other string)
+ */
+function _druru_menu_link_fill_icon(&$element, $icon_key, $text = 'hide') {
+  if ($icon = druru_icon($icon_key)) {
+    $title = $element['#title'];
+    $element['#title'] = $icon;
+    if ($text == 'hide') {
+      $element['#title'] .= ' ';
+      $element['#title'] .= '<span class="visible-xs-inline-block">';
+      $element['#title'] .= $title;
+      $element['#title'] .= '</span>';
+    }
+    $element['#localized_options']['attributes']['class'][] = 'type-' . $icon_key;
+    $element['#localized_options']['html'] = TRUE;
   }
 }
 
-function _druru_menu_link_fill_icon(&$element, $icon) {
-  if ($icon = druru_icon($icon)) {
-    $title = $element['#title'];
-    $element['#title'] = $icon;
-    $element['#title'] .= ' ';
-    $element['#title'] .= '<span class="visible-xs-inline-block">';
-    $element['#title'] .= $title;
-    $element['#title'] .= '</span>';
-    $element['#localized_options']['html'] = TRUE;
+/**
+ * Returns avatar of the user or default image if the avatar is not set.
+ * If the default avatar is not set also, then will returned icon of user.
+ *
+ * @return string
+ */
+function _druru_user_menu_icon() {
+  if (module_exists('image')) {
+    $account = $GLOBALS['user'];
+    if (!empty($account->picture)) {
+      if (is_numeric($account->picture)) {
+        $account->picture = file_load($account->picture);
+      }
+      if (!empty($account->picture->uri)) {
+        $filepath = $account->picture->uri;
+      }
+    }
   }
+
+  if (!empty($filepath)) {
+    $icon = theme('image_style', array(
+      'style_name' => 'avatar_menu',
+      'path' => $filepath,
+      'alt' => 'user-icon',
+    ));
+  }
+  else {
+    $icon = druru_icon('user');
+  }
+  return $icon;
 }

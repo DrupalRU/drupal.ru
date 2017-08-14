@@ -4,7 +4,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
-@import 'https://fonts.googleapis.com/css?family=Roboto:100,300,400&subset=cyrillic-ext';
+@import 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,400i,700&subset=cyrillic';
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -6777,6 +6777,25 @@ fieldset[disabled] .btn-accent.focus {
 #navbar {
   font-weight: 300;
 }
+.navbar .navbar-header {
+  padding: 0 1em;
+  background: rgba(0, 0, 0, 0.1);
+  height: 88px;
+  margin-bottom: -100%;
+}
+.navbar .navbar-header .brand-link {
+  margin: 0;
+  height: 100%;
+}
+.navbar .navbar-header .brand-link .navbar-brand {
+  height: 100%;
+  padding-left: 0;
+}
+@media screen and (max-width: 747px) {
+  .navbar .navbar-header .brand-link .navbar-brand {
+    margin-left: 0;
+  }
+}
 .navbar.navbar-default {
   text-align: right;
   border-bottom: none;
@@ -6787,7 +6806,7 @@ fieldset[disabled] .btn-accent.focus {
   margin: 0;
   padding: 15px;
 }
-.navbar.navbar-default .navbar-toggle .whistleblower {
+.navbar.navbar-default .navbar-toggle .whistle-blower {
   position: absolute;
   top: 7px;
   right: 10px;
@@ -6885,6 +6904,9 @@ fieldset[disabled] .btn-accent.focus {
 .navbar.navbar-default .nav > li > a:focus:after {
   width: 0;
 }
+.navbar.navbar-default .nav > li > a img {
+  vertical-align: bottom;
+}
 .navbar.navbar-default .nav > li > a:hover,
 .navbar.navbar-default .nav > li > a:focus,
 .navbar.navbar-default .nav > li > a.active {
@@ -6946,19 +6968,49 @@ fieldset[disabled] .btn-accent.focus {
     border-top-color: #df9b10;
   }
 }
-.navbar .logo {
-  margin-right: -12px;
-  padding-left: 12px;
-  padding-right: 12px;
+.navbar .navbar-second {
+  background: rgba(0, 0, 0, 0.1);
 }
-@media screen and (min-width: 748px) {
-  .navbar .logo {
-    margin-right: 0;
-    padding-left: 0;
+.navbar .navbar-second .nav > li {
+  display: inline-block;
+}
+.navbar .navbar-second .nav > li a {
+  color: #9ae7ff;
+}
+.navbar .navbar-second .nav > li a,
+.navbar .navbar-second .nav > li a:hover,
+.navbar .navbar-second .nav > li a:focus,
+.navbar .navbar-second .nav > li a:before,
+.navbar .navbar-second .nav > li a:after {
+  border: none;
+  background: none;
+}
+.navbar .navbar-second .nav > li a:hover,
+.navbar .navbar-second .nav > li a:focus {
+  color: #fff;
+}
+.navbar .navbar-second .nav > li a.type-heart {
+  color: #71bd71;
+}
+.navbar .navbar-second .nav > li a.type-heart:hover,
+.navbar .navbar-second .nav > li a.type-heart:active {
+  color: #efab20;
+}
+@media screen and (max-width: 747px) {
+  .navbar .navbar-second .nav > li a {
+    padding: .5em .7em;
+    font-size: 1.4em;
   }
 }
 .navbar-collapse {
   border: none;
+  clear: left;
+  padding: 0;
+}
+@media screen and (min-width: 1004px) {
+  .navbar-collapse {
+    clear: none;
+  }
 }
 h1,
 .h1 {
@@ -7528,20 +7580,20 @@ body.admin-menu {
   padding-right: 0;
   padding-bottom: 0;
   margin-left: 15px;
-  background-position: -10px center;
+  background-position: 155px 8px;
 }
 .navbar > .container .navbar-brand:hover,
 .navbar > .container .navbar-brand:focus {
   color: #fff;
 }
 .navbar > .container .navbar-brand .site-name {
-  font-size: 1.4em;
-  line-height: .5em;
+  font-size: 2.5em;
+  line-height: 1.3em;
   font-family: 'Segoe UI', Frutiger, 'Frutiger Linotype', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
   margin-bottom: 6px;
 }
 .navbar > .container .navbar-brand .site-slogan {
-  margin-left: 1px;
+  margin-left: 4px;
   font-size: .9em;
 }
 @media screen and (min-width: 748px) {
@@ -8259,6 +8311,9 @@ body.page-user #blog.short-view .node:not(:first-child) h2 {
 body.front {
   background: #1D3E5A;
   color: #c8dce5;
+}
+body.front .navbar-second {
+  background: transparent;
 }
 body.front .region-content section {
   margin-top: 25px;
@@ -9336,8 +9391,7 @@ body:not(.front) #navbar {
   width: 100%;
 }
 #block-advanced-sphinx-searchbox .search-sphinx {
-  height: 38px;
-  background: #fafafa;
+  height: 37px;
   border: none;
   border-top: 2px solid transparent;
   position: absolute;
@@ -9345,16 +9399,17 @@ body:not(.front) #navbar {
   z-index: 1;
   max-width: initial;
   width: 99%;
-  -webkit-transition: width 0.2s;
-  -o-transition: width 0.2s;
-  transition: width 0.2s;
-  -webkit-transition: all width 0.2s ease-out;
-  -moz-transition: all width 0.2s ease-out;
-  -o-transition: all width 0.2s ease-out;
-  transition: all width 0.2s ease-out;
+  -webkit-transition: width 0.2s, background 0.2s;
+  -o-transition: width 0.2s, background 0.2s;
+  transition: width 0.2s, background 0.2s;
+  -webkit-transition: all width 0.2s, background 0.2s ease-out;
+  -moz-transition: all width 0.2s, background 0.2s ease-out;
+  -o-transition: all width 0.2s, background 0.2s ease-out;
+  transition: all width 0.2s, background 0.2s ease-out;
 }
 #block-advanced-sphinx-searchbox .search-sphinx:focus {
-  height: 40px;
+  height: 39px;
+  background: #fafafa;
   border-top-color: #df9b10;
   top: -2px;
 }
@@ -9418,8 +9473,13 @@ fieldset[disabled] #block-advanced-sphinx-searchbox .search-sphinx:focus + butto
 #block-advanced-sphinx-searchbox .search-sphinx:focus + button + label {
   left: 100%;
 }
+@media screen and (min-width: 748px) {
+  #block-advanced-sphinx-searchbox .search-sphinx {
+    background: transparent;
+  }
+}
 #block-advanced-sphinx-searchbox .btn {
-  height: 38px;
+  height: 37px;
   border: none;
   background: #3D76A0;
   z-index: 2;
@@ -9586,7 +9646,7 @@ fieldset[disabled] #block-advanced-sphinx-searchbox .search-sphinx:focus + butto
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
-    width: 25em;
+    width: 27em;
   }
 }
 .node-simple_event-form .container-inline-date {
@@ -10701,7 +10761,7 @@ body #admin-menu .dropdown li {
 }
 @media screen and (min-width: 748px) {
   .container {
-    width: 748px;
+    width: auto;
   }
 }
 @media screen and (min-width: 1004px) {

@@ -1,0 +1,16 @@
+.tone(@property, @colors, @tones: 1, @value: color) {
+  @step: 16;
+  @red: red(@colors) + (@step * @tones);
+  @green: green(@colors) + (@step * @tones);
+  @blue: blue(@colors) + (@step * @tones);
+  @color: rgb(@red, @green, @blue);
+  @{property}: @@value;
+}
+
+.lighter(@property, @color, @tones: 1) {
+  .tone(@property, @color, @tones);
+}
+
+.darker(@property, @colors, @tones: 1) {
+  .tone(@property, @colors, @tones*(-1));
+}

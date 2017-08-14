@@ -104,14 +104,14 @@ function _druru_prepare_user_picture(&$elements) {
 function _druru_prepare_order(&$elements) {
   $x = -100;
   $weigts = array(
-    'Персональные данные' => $x++,
-    'Контакты' => $x++,
-    'Координаты в интернете' => $x++,
-    'Предлагаю сервисы для Drupal' => $x++,
-    'Мои работы для Drupal' => $x++,
-    'Рассылки' => $x++,
-    'summary' => $x++,
-    'simplenews' => $x++,
+    'Персональные данные' => ++$x,
+    'Контакты' => ++$x,
+    'Координаты в интернете' => ++$x,
+    'Предлагаю сервисы для Drupal' => ++$x,
+    'Мои работы для Drupal' => ++$x,
+    'Рассылки' => ++$x,
+    'summary' => ++$x,
+    'simplenews' => ++$x,
   );
   foreach ($weigts as $key => $weigt) {
     if(isset($elements[$key])){

@@ -78,21 +78,22 @@
     <div class="container">
       <div class="navbar-header">
 
-        <?php if ($logo): print $logo; endif;?>
+        <?php if ($logo): print $logo; endif; ?>
 
         <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                data-target=".navbar-collapse">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
-          <?php if(_druru_count_unread_messages()):?>
-            <i class="fa fa-circle small whistleblower"></i>
-          <?php endif;?>
+          <?php if (_druru_count_unread_messages()): ?>
+            <i class="fa fa-circle small whistle-blower"></i>
+          <?php endif; ?>
         </button>
       </div>
 
-      <?php if (!empty($primary_nav) || !empty($secondary_nav) || !empty($page['navigation'])): ?>
+      <?php if (!empty($primary_nav) || !empty($page['between_menus']) || !empty($secondary_nav)): ?>
         <div class="navbar-collapse collapse">
           <nav role="navigation">
             <?php
@@ -106,21 +107,25 @@
             if (!empty($secondary_nav)) {
               print trim(render($secondary_nav));
             }
-            if (!empty($page['navigation'])) {
-              print trim(render($page['navigation']));
-            }
             ?>
           </nav>
         </div>
       <?php endif; ?>
     </div>
+    <?php if (!empty($page['navigation'])) : ?>
+      <div class="navbar-second navbar-collapse collapse">
+        <div class="container">
+          <?php print trim(render($page['navigation'])); ?>
+        </div>
+      </div>
+    <?php endif; ?>
   </header>
 
   <div class="main-container">
     <div class="container">
       <div class="row">
 
-        <?php if($page['header']): ?>
+        <?php if ($page['header']): ?>
           <header role="banner" id="page-header">
             <?php print render($page['header']); ?>
           </header> <!-- /#page-header -->
@@ -129,10 +134,11 @@
         <section<?php print drupal_attributes($content_column_attributes); ?>>
           <div class="main-content">
             <?php if (!empty($page['highlighted'])): ?>
-              <div class="highlighted jumbotron"><?php print render($page['highlighted']); ?></div>
+              <div
+                  class="highlighted jumbotron"><?php print render($page['highlighted']); ?></div>
             <?php endif; ?>
 
-            <?php if (!empty($breadcrumb)): print $breadcrumb; endif;?>
+            <?php if (!empty($breadcrumb)): print $breadcrumb; endif; ?>
 
             <a id="main-content"></a>
             <?php print render($title_prefix); ?>

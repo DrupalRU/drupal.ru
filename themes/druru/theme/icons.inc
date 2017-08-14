@@ -359,12 +359,12 @@ function druru_icon($name, $force = FALSE, $attributes = array()) {
   $prefix = theme_get_setting('druru_icons_library');
 
   // Attempt to use the Icon API module, if enabled and it generates output.
-  if (module_exists('icon')) {
-    $output = theme('icon', array(
-      'bundle' => 'druru',
-      'icon'   => $prefix . '-' . $name,
-    ));
-  }
+//  if (module_exists('icon')) {
+//    $output = theme('icon', array(
+//      'bundle' => 'druru',
+//      'icon'   => $prefix . '-' . $name,
+//    ));
+//  }
 
   // Mimic the Icon API markup if module is not exists.
   if (empty($output)) {
@@ -548,6 +548,27 @@ function druru_icons_libraries() {
         ),
         'user-plus'      => array(
           t('Create new account'),
+        ),
+        'github'      => array(
+          t('Github'),
+        ),
+        'comments'      => array(
+          t('Gitter'),
+        ),
+        'youtube'      => array(
+          t('YouTube'),
+        ),
+        'twitter'      => array(
+          t('Twitter'),
+        ),
+        'facebook'      => array(
+          t('Facebook'),
+        ),
+        'vk'      => array(
+          t('VK'),
+        ),
+        'heart'      => array(
+          t('Yandex.Money'),
         ),
       ),
     ),

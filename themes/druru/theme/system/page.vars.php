@@ -144,7 +144,7 @@ function _druru_struct_logo(&$variables) {
       $variables['logo'] = l($logo, $variables['front_page'], array(
         'attributes' => array(
           'alt'   => t('Home'),
-          'class' => array('navbar-btn', 'pull-left'),
+          'class' => array('navbar-btn', 'brand-link'),
         ),
         'html'       => TRUE,
       ));
@@ -153,7 +153,7 @@ function _druru_struct_logo(&$variables) {
     $variables['logo'] .= l($brand, $variables['front_page'], array(
       'attributes' => array(
         'alt'   => t('Home'),
-        'class' => array('navbar-btn', 'pull-left'),
+        'class' => array('navbar-btn', 'brand-link'),
       ),
       'html'       => TRUE,
     ));
@@ -175,12 +175,9 @@ function _druru_generate_columns_classes(&$variables) {
   $second_column_exists = !empty($variables['page']['sidebar_second']);
 
   // In case if these custom attributes defined somewhere.
-  $variables['sidebar_first_attributes'] = @$variables['sidebar_first_attributes']
-    ?: array();
-  $variables['sidebar_second_attributes'] = @$variables['sidebar_second_attributes']
-    ?: array();
-  $variables['content_column_attributes'] = @$variables['content_column_attributes']
-    ?: array();
+  $variables['sidebar_first_attributes'] = @$variables['sidebar_first_attributes'] ?: array();
+  $variables['sidebar_second_attributes'] = @$variables['sidebar_second_attributes'] ?: array();
+  $variables['content_column_attributes'] = @$variables['content_column_attributes'] ?: array();
 
   // To short variables, which contains attributes.
   // ca meas "column attributes".

@@ -96,8 +96,8 @@ function drurum_page_delivery_callback_alter(&$callback) {
  */
 function drurum_block_info() {
   $blocks['new'] = array(
-    'info'       => t('New at the forum'),
-    'cache'      => DRUPAL_CACHE_CUSTOM,
+    'info' => t('New at the forum'),
+    'cache' => DRUPAL_CACHE_CUSTOM,
     'properties' => array(
       'administrative' => TRUE,
     ),
@@ -338,4 +338,28 @@ function _drurum_simple_events_list_nodes() {
 function drurum_can_be_resolved($node) {
   $func = 'resolved_node_can_be_resolved';
   return function_exists($func) && $func($node);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function drurum_form_menu_edit_item_alter(&$form, &$form_state) {
+  array_unshift($form['#submit'], 'drurum_form_menu_edit_item_submit');
+  $build = $form_state['build_info'];
+  $html_allowed = FALSE;
+  if (isset($build['args'][1]['options']['html_allowed'])) {
+    $html_allowed = $build['args'][1]['options']['html_allowed'];
+  }
+  $form['html_allowed'] = array(
+    '#type' => 'checkbox',
+    '#title' => 'Html in title',
+    '#default_value' => $html_allowed,
+  );
+}
+
+function drurum_form_menu_edit_item_submit($form, &$form_state) {
+  $vals = &$form_state['values'];
+  if (isset($vals['html_allowed'])) {
+    $vals['options']['html_allowed'] = $vals['html_allowed'];
+  }
 }

@@ -1,12 +1,12 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 COMMIT=$(git log -n1 --abbrev-commit|grep commit|awk '{print $2}')
 TIMESTAMP=$(date +%Y.%m.%d_%H:%M:%S)
 SCRIPTS_PATH="$ZENCI_DEPLOY_DIR/scripts/zen.ci"
-ENVIRONMENT=${ENVIRONMENT: -$BRANCH}
+ENVIRONMENT=${ENVIRONMENT:-dev}
 VERSIONS_PATH="$HOME/github/environments/$ENVIRONMENT"
 VERSION_PATH="$VERSIONS_PATH/$TIMESTAMP.$COMMIT"
-SITE_NAME=${SITE: -"$ENVIRONMENT.drupal.ru"}
+SITE_NAME=${SITE:-$ENVIRONMENT.drupal.ru}
 SITE_PATH="$HOME/domains/$SITE_NAME"
 PROFILES_PATH="$SITE_PATH/profiles"
 header() {
@@ -16,6 +16,7 @@ header() {
 header "Создание новой версии $TIMESTAMP.$COMMIT"
 if [ ! -d "$VERSION_PATH" ]; then
   mkdir -p "$VERSION_PATH"
+  echo "Создание выполнено"
 fi
 
 header "Деплоймент новой версии $TIMESTAMP.$COMMIT"
@@ -25,6 +26,7 @@ if [ -h "./$PROFILE" ]; then
   rm "./$PROFILE"
 fi
 ln -s "$VERSION_PATH" "$PROFILE"
+echo "Деплоймент выполнен"
 
 header "Запуск обновлений"
 drush updb -y

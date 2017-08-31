@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 while [ $(ls -l | grep -c ^d) -gt $STORE_VERSIONS ]
 do

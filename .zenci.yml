@@ -1,11 +1,12 @@
 deploy:
-  dev:
+  master:
     server: drupal.ru
     username: drupal
     dir: '{home}/github/repository'
     env_vars:
-      environment: dev
-      store_versions: 13
+      environment: prod
+      site: drupal.ru
+      store_versions: 3
       profile: drupalru
     scripts:
       after: '{deploy_dir}/scripts/zen.ci/deploy.sh'
@@ -15,6 +16,16 @@ deploy:
     dir: '{home}/github/repository'
     env_vars:
       environment: stage
+      store_versions: 13
+      profile: drupalru
+    scripts:
+      after: '{deploy_dir}/scripts/zen.ci/deploy.sh'
+  dev:
+    server: drupal.ru
+    username: drupal
+    dir: '{home}/github/repository'
+    env_vars:
+      environment: dev
       store_versions: 13
       profile: drupalru
     scripts:

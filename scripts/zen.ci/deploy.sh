@@ -19,7 +19,7 @@ if [ ! -d "$VERSION_PATH" ]; then
   echo "Создание выполнено"
 fi
 
-header "Деплоймент новой версии $TIMESTAMP.$COMMIT"
+header "Деплоймент новой $ENVIRONMENT версии $TIMESTAMP.$COMMIT"
 rsync -am --stats "$ZENCI_DEPLOY_DIR/" "$VERSION_PATH" --exclude=".git"
 cd "$PROFILES_PATH"
 if [ -h "./$PROFILE" ]; then

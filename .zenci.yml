@@ -4,6 +4,7 @@ deploy:
     username: drupal
     dir: '{home}/github/repository'
     env_vars:
+      environment: dev
       store_versions: 13
       profile: drupalru
     scripts:
@@ -13,6 +14,7 @@ deploy:
     username: drupal
     dir: '{home}/github/repository'
     env_vars:
+      environment: stage
       store_versions: 13
       profile: drupalru
     scripts:

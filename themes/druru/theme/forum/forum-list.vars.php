@@ -4,8 +4,8 @@
  * Preprocess for theme_forum_list().
  */
 function druru_preprocess_forum_list(&$vars) {
-  $forum_icons = theme_get_setting('forum_icons');
-  if (isset($vars['forums']) && is_array(['forums']) && $forum_icons) {
+  $forum_icons = array_map('trim', theme_get_setting('forum_icons'));
+  if (isset($vars['forums']) && is_array($vars['forums']) && $forum_icons) {
     foreach ($vars['forums'] as &$forum) {
       $forum->icon = NULL;
       if (isset($forum_icons[$forum->link])) {

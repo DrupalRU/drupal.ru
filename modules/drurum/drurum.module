@@ -124,9 +124,8 @@ function druru_block_save($delta = '', $edit = array()) {
  */
 function drurum_block_view($delta = '') {
   $query = db_select('forum_index', 'f')->fields('f')->addTag('node_access');
-  $query->distinct();
   $query->leftJoin('node', 'n', 'f.nid = n.nid');
-  $query->fields('n', array('type'));
+  $query->fields('n', array('type', 'changed'));
   $title = '';
   switch ($delta) {
     case 'active':
@@ -154,11 +153,6 @@ function drurum_block_view($delta = '') {
   $block['content'] = drupal_render_cache_by_query($query, 'forum_block_view');
   $block['content']['#access'] = user_access('access content');
 
-  // We need to disable cache,
-  // because in other case we will have incorrect behavior.
-//  if (!variable_get('block_cache')) {
-  $query->leftJoin('node', 'n', 'n.nid = f.nid');
-  $query->addField('n', 'changed');
   $result = $query->execute();
   $node_title_list = drurum_node_title_list($result);
   if ($node_title_list) {
@@ -170,7 +164,6 @@ function drurum_block_view($delta = '') {
       '#title' => t('Read the latest forum topics.'),
     );
   }
-//  }
   return $block;
 }
 

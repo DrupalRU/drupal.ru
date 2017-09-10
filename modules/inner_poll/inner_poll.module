@@ -425,7 +425,7 @@ function _add_new_poll($node) {
       $counter++;
     }
     elseif (!empty($question)) {
-      form_set_error("question", t("If you want to create poll you must type minimum 6 simbols in quiestion field. Poll dont save. Edit your node, to create poll."));
+      form_set_error("question", t("If you want to create poll you must type minimum 6 symbols in question field. Poll don not save. Edit your node, to create poll."));
       exit();
     }
 
@@ -441,7 +441,7 @@ function _add_new_poll($node) {
 
     if ($counter != 0) {
       if ($counter < 2 || strlen($question) < variable_get('inner_poll_question_length', 1)) {
-        form_set_error("question", "if you want to create poll you must enter question and minimum to choices. " . $counter);
+        form_set_error("question", 'If you want to create poll you must enter question and minimum @counter answers to choice.', array('@counter' => 2));
         exit();
       }
       else {
@@ -549,7 +549,7 @@ function _update_poll($node) {
     }
 
     foreach ($_POST as $key => $value) {
-      if (strstr($key, "choice_")) {
+      if (strstr($key, "choice_") && trim($value)) {
         $counter++;
         $choices[] = trim(check_plain($value));
       }
@@ -558,7 +558,7 @@ function _update_poll($node) {
     $length = variable_get('inner_poll_question_length', 1);
     if ($counter || strlen($question)) {
       if (($counter > 0 && $counter < 2) || strlen($question) < $length) {
-        form_set_error("question", t('If you want to create poll you must enter question and minimum to choices. @counter', array('@counter' => $counter)));
+        form_set_error("question", t('If you want to create poll you must enter question and minimum @counter answers to choice.', array('@counter' => 2)));
       }
       else {
         // Перебираем все ответы на вопрос и пересохраняем их.

@@ -42,6 +42,7 @@ function resolve_menu() {
 function resolve_attach_js() {
   static $attached;
   if (!isset($attached)) {
+    drupal_add_library('system', 'drupal.ajax');
     drupal_add_js(drupal_get_path('module', 'resolve') . '/resolve.js');
     $attached = TRUE;
   }

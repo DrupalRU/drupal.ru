@@ -1,6 +1,6 @@
 deploy:
   master:
-    server: drupal.ru
+    server: 85.143.172.161
     username: drupal
     dir: '{home}/github/repository'
     env_vars:
@@ -11,7 +11,7 @@ deploy:
     scripts:
       after: '{deploy_dir}/scripts/zen.ci/deploy.sh'
   stage:
-    server: drupal.ru
+    server: 85.143.172.161
     username: drupal
     dir: '{home}/github/repository'
     env_vars:
@@ -21,7 +21,7 @@ deploy:
     scripts:
       after: '{deploy_dir}/scripts/zen.ci/deploy.sh'
   dev:
-    server: drupal.ru
+    server: 85.143.172.161
     username: drupal
     dir: '{home}/github/repository'
     env_vars:

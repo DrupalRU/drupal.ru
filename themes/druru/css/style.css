@@ -8406,10 +8406,28 @@ body.front .navbar {
   margin: 0;
 }
 body.front .jumbotron {
-  background: #3D76A0 url('../img/bg-blue.png') center bottom no-repeat;
+  background-image: url("../img/front-bg.svg");
+  background-image: url("../img/front-bg.svg"), -moz-linear-gradient(top, #3D76A0 0%, #71afdc 100%);
+  /* FF3.6+ */
+  background-image: url("../img/front-bg.svg"), -webkit-gradient(linear, left top, left bottom, color-stop(0%, #3D76A0), color-stop(100%, #71afdc));
+  /* Chrome,Safari4+ */
+  background-image: url("../img/front-bg.svg"), -webkit-linear-gradient(top, #3D76A0 0%, #71afdc 100%);
+  /* Chrome10+,Safari5.1+ */
+  background-image: url("../img/front-bg.svg"), -o-linear-gradient(top, #3D76A0 0%, #71afdc 100%);
+  /* Opera 11.10+ */
+  background-image: url("../img/front-bg.svg"), -ms-linear-gradient(top, #3D76A0 0%, #71afdc 100%);
+  /* IE10+ */
+  background-image: url("../img/front-bg.svg"), linear-gradient(to bottom, #3D76A0 0%, #71afdc 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@start', endColorstr='@stop', GradientType=0);
+  /* IE6-9 */
+  background-position: center   101%;
+  background-repeat: repeat-x;
   color: #efefef;
-  padding-bottom: 210px;
+  padding-bottom: 260px;
   padding-top: 60px;
+  position: relative;
+  z-index: 2;
 }
 body.front .jumbotron .download-drupal-front {
   color: #e2b674;
@@ -8417,6 +8435,7 @@ body.front .jumbotron .download-drupal-front {
 body.front .jumbotron .download-drupal-front:hover,
 body.front .jumbotron .download-drupal-front:focus {
   color: #e8c48e;
+  text-decoration: none;
 }
 body.front .jumbotron .download-drupal-front i {
   -webkit-text-shadow: 0 0 80px;

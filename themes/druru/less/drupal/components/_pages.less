@@ -109,16 +109,21 @@ body {
     }
 
     .jumbotron {
-      background: @brand-primary url('../img/bg-blue.png') center bottom no-repeat;
+      .gradient-image("../img/front-bg.svg", @brand-primary, #71afdc);
+      background-position: center   101%;
+      background-repeat: repeat-x;
       color: @navbar-default-link-color;
-      padding-bottom: 210px;
+      padding-bottom: 260px;
       padding-top: 60px;
+      position: relative;
+      z-index: 2;
 
       .download-drupal-front {
         color: #e2b674;
 
         &:hover, &:focus {
           color: lighten(#e2b674, @tone);
+          text-decoration: none;
         }
 
         i {

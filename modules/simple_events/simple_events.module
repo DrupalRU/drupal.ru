@@ -352,7 +352,7 @@ function simple_events_update($node) {
       'time_to' => $node->enable_time_to ? strtotime($node->time_to) : 0,
       'image_fid' => $fid,
     ))
-    ->condition('vid', $node->vid)
+    ->condition('nid', $node->nid)
     ->execute();
 }
 

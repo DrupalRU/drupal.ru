@@ -7129,6 +7129,9 @@ blockquote {
   border-left-color: #e6e6e6;
   padding-top: 26px;
 }
+strong {
+  font-weight: bolder;
+}
 sup.label {
   padding: .1em .3em;
 }

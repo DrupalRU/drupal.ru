@@ -28,13 +28,13 @@ function drurum_module_implements_alter(&$implementations, $hook) {
  */
 function drurum_menu() {
   $items['admin/config/system/drupal-ru'] = array(
-    'title'            => 'Drupal.ru customizations',
-    'type'             => MENU_NORMAL_ITEM,
-    'page callback'    => 'drupal_get_form',
-    'page arguments'   => array('drurum_admin_form'),
+    'title' => 'Drupal.ru customizations',
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('drurum_admin_form'),
     'access arguments' => array('administer site configurations'),
-    'file'             => 'drurum.admin.inc',
-    'file path'        => drupal_get_path('module', 'drurum') . '/includes',
+    'file' => 'drurum.admin.inc',
+    'file path' => drupal_get_path('module', 'drurum') . '/includes',
   );
   return $items;
 }
@@ -51,6 +51,22 @@ function drurum_preprocess_menu_local_action(&$link) {
       if (!empty($link['href']) && strpos($link['href'], $action_path) === 0) {
         $link['element']['#link']['title'] = $action_name;
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_query_alter().
+ */
+function drurum_query_alter(QueryAlterableInterface $query) {
+  $tables = $query->getTables();
+  $joins = array('n', 'ncs', 'f', 'u', 'u2');
+  // The query at forum page has many joins and we can detect it easy.
+  if (count(array_intersect($joins, array_keys($tables))) == 5) {
+    // Forum index page requested sorting here.
+    if ($query instanceof TableSort) {
+      $query->leftJoin('resolved', 'r', 'r.nid = f.nid');
+      $query->addField('r', 'resolved');
     }
   }
 }
@@ -160,7 +176,7 @@ function drurum_block_view($delta = '') {
     $block['content']['forum_list'] = $node_title_list;
     $block['content']['forum_more'] = array(
       '#theme' => 'more_link',
-      '#url'   => 'forum',
+      '#url' => 'forum',
       '#title' => t('Read the latest forum topics.'),
     );
   }
@@ -247,7 +263,7 @@ function drurum_node_icon($node) {
           break;
 
         // The question can be resolved. Check it.
-        case drurum_is_resolved($node->nid) && drurum_can_be_resolved($node):
+        case drurum_can_be_resolved($node) && drurum_need_to_resolve($node->nid):
           $icon = empty($node->resolved) ? 'question-circle-o' : 'check-circle-o';
           break;
 
@@ -263,7 +279,7 @@ function drurum_node_icon($node) {
   return $node_types[$node->nid];
 }
 
-function drurum_is_resolved($nid) {
+function drurum_need_to_resolve($nid) {
   $resolved = &drupal_static(__FUNCTION__, array());
   if (!isset($resolved[$nid])) {
     $resolved[$nid] = db_select('taxonomy_index', 'ti')
@@ -295,7 +311,7 @@ function drurum_simple_events_list() {
     $nodes = node_load_multiple($nids);
     $build = node_view_multiple($nodes);
     $build['pager'] = array(
-      '#theme'  => 'pager',
+      '#theme' => 'pager',
       '#weight' => 5,
     );
   }

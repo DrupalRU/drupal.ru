@@ -1,0 +1,6 @@
+name = Slack API
+description = Slack support for management project
+core = 7.x
+package = Management
+configure = admin/config/dru_slack/settings
+files[] = ./inc/slackAPI.php.inc

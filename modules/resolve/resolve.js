@@ -1,6 +1,22 @@
 (function ($) {
   "use strict";
 
+  Drupal.resolve = Drupal.resolve || {
+        titleSelector: 'h1.page-header',
+        markClass: 'resolved'
+      };
+  /**
+   * Command for make a node as unsolved.
+   *
+   * @param ajax
+   * @param response
+   * @param status
+   */
+  Drupal.ajax.prototype.commands.unsolved = function (ajax, response, status) {
+    if (status) {
+      $(Drupal.resolve.titleSelector).find('.' + Drupal.resolve.markClass).remove();
+    }
+  };
   /**
    * Command for resolve a node.
    *
@@ -10,15 +26,17 @@
    */
   Drupal.ajax.prototype.commands.resolve = function (ajax, response, status) {
     if (status) {
-      var $pageTitle = $('h1.page-header'), $children = $pageTitle.children();
-      $pageTitle.text('[' + Drupal.t('Resolved') + '] '+ $pageTitle.text()).prepend($children);
+      var $pageTitle = $(Drupal.resolve.titleSelector),
+          $children = $pageTitle.children();
+      $pageTitle.text(Drupal.theme('resolve') + ' ' + $pageTitle.text()).prepend($children);
     }
   };
 
-  Drupal.theme.prototype.resolved = function (resolved) {
-    if (typeof resolved == 'undefined' || !resolved) {
-      resolved = true;
-    }
-    return resolved ? '[' + Drupal.t('Resolved') + ']' : '';
+  Drupal.theme.prototype.resolve = function () {
+    return '<span class="' + Drupal.resolve.markClass + '">[' + Drupal.t('Resolved') + ']</span>';
+  };
+
+  Drupal.theme.prototype.unsolved = function () {
+    return '<span class="' + Drupal.resolve.markClass + '">[' + Drupal.t('Unsolved') + ']</span>';
   };
 })(jQuery);

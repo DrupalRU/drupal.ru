@@ -1,0 +1,103 @@
+<?php
+
+require_once __DIR__ . '/inc/help.inc';
+
+/**
+ * Implements hook_menu().
+ */
+function dru_slack_menu() {
+
+  $items = [];
+
+  $items['admin/config/dru_slack/settings'] = [  // Настройки модуля
+    'title' => t('Настройки Slack'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['dru_slack_admin'],
+    'access arguments' => ['administer settings'],
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'inc/admin.inc',
+  ];
+  $items['slack/badge/%/badge.svg'] = [  // Страница бейджа
+    'page callback' => 'dru_slack_badge',
+    'page arguments' => [2],
+    'access callback' => 'user_access',
+    'access arguments' => ['access content'],
+    'type' => MENU_CALLBACK,
+
+  ];
+  $items['slack/callback/%'] = [  // Роут для получения команд из Slack
+    'title' => 'Slack callback',
+    'page callback' => 'dru_slack_incoming',
+    'page arguments' => [2],
+    'access callback' => 'user_access',
+    'access arguments' => ['access content'],
+    'type' => MENU_CALLBACK,
+
+  ];
+
+  return $items;
+}
+
+/**
+ * Контроллер для обработки команд с сервера Slack
+ *
+ * @param $method
+ *   Параметр из url
+ */
+function dru_slack_incoming($method) {
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = $_POST;
+    $slack = new slackAPI();
+    if (strstr(variable_get('slack_approved_users'), $data['user_id'])) {
+      $args = explode(' ', $data['text']);
+      $result = $slack->run($method, $args);
+    }
+    else {
+      $result = [
+        "username" => variable_get('site_name', t('Машина Тьюринга')),
+        "attachments" => [
+          [
+            "color" => "f00",
+            "pretext" => t("Не хулюгань!!! Я всё вижу, <@{$data['user_id']}>"),
+            "title" => t("403"),
+            "text" => t("У вас нет прав на выполнение команд через данный интерфейс"),
+          ],
+        ],
+
+      ];
+    }
+    $slack->notificate_by_url($data['response_url'], $result);
+  }
+}
+
+/**
+ * Контроллер для показа бейджа
+ *
+ * @param $height
+ *   Высота бейджа в px
+ */
+function dru_slack_badge($height) {
+  $width = intval($height)*6;
+  $slack = new slackAPI();
+  $badge = $slack->badge();
+  $counter = "{$badge['active']}/{$badge['total']}";
+  header("Content-type: image/svg+xml");
+  print theme('slack_badge', [
+    'html' => NULL,
+    'height' => $height,
+    'width' => $width,
+    'counter' => $counter,
+  ]);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function dru_slack_theme($existing, $type, $theme, $path) {
+  return [
+    'slack_badge' => [
+      'template' => 'templates/badge',
+      'variables' => ['height' => NULL, 'counter' => NULL],
+    ],
+  ];
+}

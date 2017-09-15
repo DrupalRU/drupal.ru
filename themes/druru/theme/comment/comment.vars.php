@@ -47,11 +47,12 @@ function druru_preprocess_comment(&$vars) {
     'dru-claim'     => 'balance-scale',
   );
   $icons2 = array(
-    'darkmatter-link' => 'moon-o',
-    'comment-resolve' => 'flag',
-    'unpublish'       => 'eye-slash',
-    'comment-edit'    => 'pencil',
-    'comment-delete'  => 'trash',
+    'darkmatter-link'  => 'moon-o',
+    'comment-resolve'  => 'flag',
+    'comment-unsolved' => 'flag-o',
+    'unpublish'        => 'eye-slash',
+    'comment-edit'     => 'pencil',
+    'comment-delete'   => 'trash',
   );
 
   if (array_intersect_key($icons2, $links['comment']['#links'])) {

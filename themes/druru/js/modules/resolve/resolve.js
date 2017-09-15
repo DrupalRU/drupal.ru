@@ -1,6 +1,6 @@
 (function ($) {
   "use strict";
-  
+
   // Hide these in a ready to ensure that Drupal.ajax is set up first.
   $(function () {
     /**
@@ -12,32 +12,41 @@
      */
     Drupal.ajax.prototype.commands.resolve = function (ajax, response, status) {
       if (status) {
-        var $pageTitle = $('h1.page-header');
-        if ($pageTitle.length) {
-          var $icon = $pageTitle.find('i');
-          if ($icon.length) {
-            $icon.replaceWith(Drupal.theme('resolved'));
-          }
-          else {
-            $pageTitle.prepend(Drupal.theme('resolved'));
-          }
-        }
+        var $pageTitle = $(Drupal.resolve.titleSelector);
+        $pageTitle.html(Drupal.theme('resolve') + $pageTitle.text());
       }
     };
+    /**
+     * Command for make a node as unsolved.
+     *
+     * @param ajax
+     * @param response
+     * @param status
+     */
+    Drupal.ajax.prototype.commands.unsolved = function (ajax, response, status) {
+      if (status) {
+        var $pageTitle = $(Drupal.resolve.titleSelector);
+        $pageTitle.html(Drupal.theme('unsolved', false) + $pageTitle.text());
+      }
+    };
+
+    /**
+     * Overrides for Drupal.theme.resolved of module "Resolve".
+     *
+     * @returns {string}
+     */
+    Drupal.theme.prototype.resolve = function () {
+      return ' ' + Drupal.theme('icon', 'check-circle-o', {title: Drupal.t('Resolved')}) + ' ';
+    };
+
+    /**
+     * Overrides for Drupal.theme.resolved of module "Resolve".
+     *
+     * @returns {string}
+     */
+    Drupal.theme.prototype.unsolved = function () {
+      return ' ' + Drupal.theme('icon', 'question-circle-o', {title: Drupal.t('Unsolved')}) + ' ';
+    };
+
   });
-  
-  /**
-   * Overrides for Drupal.theme.resolved of module "Resolve".
-   *
-   * @param resolved
-   * @returns {string}
-   */
-  Drupal.theme.prototype.resolved = function (resolved) {
-    if (typeof resolved == 'undefined' || !resolved) {
-      resolved = true;
-    }
-    var mark = Drupal.theme('icon', 'check-circle-o', {title: Drupal.t('Resolved')});
-    return resolved ? ' ' + mark + ' ' : '';
-  };
-  
 })(jQuery);

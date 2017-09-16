@@ -21,6 +21,9 @@ function druru_preprocess_node(&$vars) {
       '#suffix' => '</small>',
     );
   }
+  if ($vars['view_mode'] == 'frontpage') {
+    $vars['name'] = $vars['node']->name;
+  }
 }
 
 /**

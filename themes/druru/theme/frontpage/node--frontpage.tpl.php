@@ -80,36 +80,18 @@
  * @ingroup themeable
  */
 ?>
-<div class="row <?php print $classes; ?> <?php print $zebra; ?> "<?php print $attributes; ?>>
+<a href="<?php print $node->url; ?>" class="text-ellipsis clearfix list-group-item">
+  <span class="label label-<?php print($node->new_replies?'success':'primary'); ?> pull-right">
+    <?php print druru_icon('comment'.($node->new_replies?'':'-o')); ?>
+    <?php print $node->comment_count; ?>
+    <?php if ($node->new_replies): ?> / <?php print $node->new_replies; ?><?php endif; ?>
+  </span>
 
-  <div class="col-sm-6 col-sd-8 title">
-    <a href="<?php print $node->url; ?>" class="text-ellipsis">
-      <?php print $title; ?>
-    </a>
-  </div>
+  <div class="text-ellipsis text-primary participants h4"><?php print $title; ?></div>
 
-  <div class="col-sm-6 col-sd-4 author">
-    <span class="small">
-      <span class="item-detail user">
-        <small class="text-muted">
-          <?php print druru_icon('user'); ?>
-        </small>
-        <?php print $name; ?>
-      </span>
-
-      <small class="text-muted item-detail ago">
-        <?php print druru_icon('history'); ?>
-        <?php print $time; ?>
-      </small>
-    </span>
-
-    <span class="item-detail text-right comments">
-      <<?php if ($node->new_replies): ?>a href="<?php print $node->url; ?>"<?php else: ?>span<?php endif; ?>
-        class="label label-<?php print($node->new_replies?'success':'primary'); ?> count-replies">
-        <?php print druru_icon('comment'.($node->new_replies?'':'-o')); ?>
-        <?php print $node->comment_count; ?>
-        <?php if ($node->new_replies): ?> / <?php print $node->new_replies; ?><?php endif; ?>
-        </<?php if ($node->new_replies): ?>a<?php else: ?>span<?php endif; ?>>
-    </span>
-  </div>
-</div>
+  <small class="text-muted pull-right">
+    <?php print druru_icon('history'); ?>
+    <?php print $time; ?>
+  </small>
+  <div class="subject text-muted"><?php print $name; ?></div>
+</a>

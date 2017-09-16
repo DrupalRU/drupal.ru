@@ -8503,31 +8503,32 @@ body.front .frontpage-list {
   border: 1px solid #132e45;
   padding: 10px 16px;
 }
-body.front .frontpage-list .row {
-  padding-bottom: 6px;
+body.front .frontpage-list .list-group {
+  margin-left: -16px;
+  margin-right: -16px;
 }
-body.front .frontpage-list .row .title i {
-  margin-right: 5px;
+body.front .frontpage-list .list-group,
+body.front .frontpage-list .list-group .list-group-item {
+  background: none;
+  border: none;
+}
+body.front .frontpage-list .list-group .list-group-item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+body.front .frontpage-list .list-group .list-group-item:last-child {
+  border-bottom: none;
+}
+body.front .frontpage-list .list-group .list-group-item:focus,
+body.front .frontpage-list .list-group .list-group-item:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+body.front .frontpage-list .h4 {
+  margin: 0;
+  padding-right: 16px;
+}
+body.front .frontpage-list .h4 .icon {
   color: #df9b10;
-}
-body.front .frontpage-list .row .user-picture {
-  display: inline;
-  padding-right: 3px;
-}
-body.front .frontpage-list .row .user-picture img,
-body.front .frontpage-list .row .user-picture i {
-  height: 1.3em;
-  width: auto;
-}
-body.front .frontpage-list .row .item-detail {
-  width: 32%;
-  display: inline-block;
-}
-body.front .frontpage-list .row .item-detail.comments {
-  width: 25%;
-}
-body.front .frontpage-list .row .item-detail.user {
-  width: 40%;
+  width: 20px;
 }
 body.front aside ul:not(.pager) > * a:first-of-type i {
   color: rgba(255, 255, 255, 0.5);

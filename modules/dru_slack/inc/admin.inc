@@ -5,45 +5,46 @@
  */
 function dru_slack_admin() {
 
-  $chanels = variable_get('slack_chanels', []);
+  $chanels = variable_get('slack_chanels');
   $chanelsForms = [];
   $i = 0;
-  foreach ($chanels as $key => $val) {
-    $chanelsForms['inline'][] = _init_chanel($key, $val, $i);
-    $i++;
+  if ($chanels) {
+    foreach ($chanels as $key => $val) {
+      $chanelsForms['inline'][] = _dru_slack_init_chanel($key, $val, $i);
+      $i++;
+    }
+  } else {
+    $chanelsForms['inline'][] = _dru_slack_init_chanel('', '', $i);
   }
-  if (count($chanels) == 0) {
-    $chanelsForms['inline'][] = _init_chanel('', '', $i);
-  }
-  $chanelsForms['#prefix'] = '<div id="chanels"><h2>' . t('Каналы для сообщений в Slack') . '</h2>';
+  $chanelsForms['#prefix'] = '<div id="chanels"><h2>' . t('Slack chanels') . '</h2>';
   $chanelsForms['#suffix'] = '</div>';
 
   $form = [
     'slack_team_hostname' => [
       '#type' => 'textfield',
-      '#title' => t('Имя хоста в Slack'),
-      '#default_value' => variable_get('slack_team_hostname', NULL),
-      '#description' => t('Название хоста. Только название, без суффикса .slack.com'),
+      '#title' => t('Slack hostname'),
+      '#default_value' => variable_get('slack_team_hostname'),
+      '#description' => t('hostname without suffix ".slack.com"'),
       '#required' => TRUE,
     ],
     'slack_token' => [
       '#type' => 'textfield',
-      '#title' => t('Токен авторизации'),
-      '#default_value' => variable_get('slack_token', NULL),
-      '#description' => t('Создать токен для своего приложения можно на следующей <a href="https://api.slack.com/custom-integrations/legacy-tokens">странице</a>.'),
+      '#title' => t('Auth token'),
+      '#default_value' => variable_get('slack_token'),
+      '#description' => t('You can create a token for your application on the next <a href="@url">page</a>', ['@url' => 'https://api.slack.com/custom-integrations/legacy-tokens']),
       '#required' => TRUE,
     ],
     'slack_approved_users' => [
       '#type' => 'textfield',
-      '#title' => t('Пользователи с доступом к командам'),
-      '#default_value' => variable_get('slack_approved_users', NULL),
-      '#description' => t('Список ID пользователей Slack, которые имеют право выполнять команды, через запятую'),
+      '#title' => t('User list to access for slack commands'),
+      '#default_value' => variable_get('slack_approved_users'),
+      '#description' => t('Comma separated user list, who access to execute slack commands'),
       '#required' => FALSE,
     ],
     'container' => $chanelsForms,
     'add_url' => [
       '#type' => 'button',
-      '#value' => t('Добавить канал'),
+      '#value' => t('Add chanel'),
       '#ajax' => [
         'callback' => 'dru_slack_add_chanel',
         'wrapper' => 'chanels',
@@ -71,14 +72,14 @@ function dru_slack_admin() {
  * @return array
  *   Набор элементов для инлайн формы
  */
-function _init_chanel($label, $value, $i) {
+function _dru_slack_init_chanel($label, $value, $i) {
   $output = [
     '#prefix' => '<div style="display: flex;">',
     '#suffix' => '</div>',
     'label_' . $i => [
       '#type' => 'textfield',
-      '#title' => t('Канал'),
-      '#description' => t('Название канала без #'),
+      '#title' => t('Chanel'),
+      '#description' => t('Chanel name without #'),
       '#attributes' => ['style' => 'margin-right: 2em'],
       '#default_value' => $label,
       '#required' => FALSE,
@@ -124,7 +125,7 @@ function _init_chanel($label, $value, $i) {
  *
  * @return array
  */
-function _chanels_to_save($values, $trigger = -1) {
+function _dru_slack_chanels_to_save($values, $trigger = -1) {
   $data = [];
   foreach ($values as $k => $v) {
     if (substr($k, 0, 5) == 'label') {
@@ -148,7 +149,7 @@ function _chanels_to_save($values, $trigger = -1) {
  * @return mixed
  */
 function dru_slack_add_chanel($form, &$form_state) {
-  $form['container']['inline'][] = _init_chanel('', '', count($form['container']['inline']) - 2);
+  $form['container']['inline'][] = _dru_slack_init_chanel('', '', count($form['container']['inline']) - 2);
   return $form['container'];
 }
 
@@ -163,7 +164,7 @@ function dru_slack_add_chanel($form, &$form_state) {
 function dru_slack_remove_chanel($form, &$form_state) {
   $tmp = explode('_', $form_state['triggering_element']['#name']);
   $iter = end($tmp);
-  $inlinedata = _chanels_to_save($form_state['values'], $iter);
+  $inlinedata = _dru_slack_chanels_to_save($form_state['values'], $iter);
   $old = variable_get('slack_chanels', []);
   if ($old != $inlinedata) {
     variable_set('slack_chanels', $inlinedata);
@@ -190,8 +191,7 @@ function dru_slack_send_test_message($form, &$form_state) {
   $slack->notificate_by_url(
     $url,
     [
-      'text' => t('Тестовое сообщение'),
-      'username' => variable_get('site_name', t('Машина Тьюринга')),
+      'text' => t('Test message'),
     ]
   );
   return NULL;
@@ -214,8 +214,8 @@ function dru_slack_form_submit($form, &$form_state) {
       variable_set($formKey, $form_state['values'][$formKey]);
     }
   }
-  $inlinedata = _chanels_to_save($form_state['values']);
-  $old = variable_get('slack_chanels', []);
+  $inlinedata = _dru_slack_chanels_to_save($form_state['values']);
+  $old = variable_get('slack_chanels');
   if ($old != $inlinedata) {
     variable_set('slack_chanels', $inlinedata);
   }

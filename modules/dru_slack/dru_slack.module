@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/inc/help.inc';
+require_once __DIR__ . '/includes/dru_slack.help.inc';
 
 /**
  * Implements hook_menu().
@@ -26,7 +26,6 @@ function dru_slack_menu() {
     'access callback' => 'user_access',
     'access arguments' => ['access content'],
     'type' => MENU_CALLBACK,
-
   ];
 
   // Роут для получения команд из Slack
@@ -36,7 +35,6 @@ function dru_slack_menu() {
     'access callback' => 'user_access',
     'access arguments' => ['access content'],
     'type' => MENU_CALLBACK,
-
   ];
 
   return $items;
@@ -66,7 +64,6 @@ function dru_slack_incoming($method) {
             "text" => t("You do not have permission to use this interface"),
           ],
         ],
-
       ];
     }
     $slack->notificate_by_url($data['response_url'], $result);

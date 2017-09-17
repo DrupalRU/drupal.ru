@@ -8233,9 +8233,6 @@ a.cke_combo_button span.cke_button_disabled span {
     float: none;
   }
 }
-img {
-  max-width: 100%;
-}
 body footer.footer {
   border-width: 1px 0 0 0;
   border-color: #112639;
@@ -10641,6 +10638,9 @@ fieldset[disabled] #inner_poll_add_field_link a.focus {
 .page-events .main .main-content {
   background: none;
   border: none;
+}
+.block-simple-events img {
+  max-width: 100%;
 }
 .node.node-organization {
   margin-top: 18px;

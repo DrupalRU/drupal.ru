@@ -21,8 +21,8 @@ class slackAPI {
   protected $token;
 
   public function __construct() {
-    $this->hostname = variable_get('slack_team_hostname', NULL);
-    $this->token = variable_get('slack_token', NULL);;
+    $this->hostname = variable_get('slack_team_hostname');
+    $this->token = variable_get('slack_token');
   }
 
   /**
@@ -47,7 +47,7 @@ class slackAPI {
       'data' => $json_string,
     ];
 
-    return drupal_http_request("{$url}", $options);
+    return drupal_http_request($url, $options);
   }
 
   /**
@@ -61,8 +61,12 @@ class slackAPI {
    * @return object
    */
   public function notificate_by_chanel($chanel, $message) {
-    $url = variable_get('slack_chanels')[$chanel];
-    return $this->notificate_by_url($url, $message);
+    $chanels = variable_get('slack_chanels');
+    if (is_array($chanels) && isset($chanels[$chanel])) {
+      return $this->notificate_by_url($chanels[$chanel], $message);
+    } else {
+      watchdog('dru_slack', 'Unknown chanel name as @chanel', ['@chanel' => $chanel]);
+    }
   }
 
   /**
@@ -93,22 +97,22 @@ class slackAPI {
     if ($response->code == 200) {
       $data = drupal_json_decode($response->data);
       if (!empty($data['ok'])) {
-        $message = t("Приглашение отправлено на адрес {$email}");
+        $message = t('The invite sent to email @email', ['@email' => $email]);
         $status = 'status';
       }
       else {
         $status = 'warning';
         switch ($data['error']) {
           case SLACK_INVITE_ALREADY_IN_TEAM:
-            $message = t("Пользователь с email {$email} уже является участником https://{$this->hostname}.slack.com/");
+            $message = t('User with email @email already in https://@hostname.slack.com/', ['@email' => $email, '@hostname' => $this->hostname]);
             break;
 
           case SLACK_INVITE_SENT_RECENTLY:
-            $message = t("Пользователю с email {$email} недавно уже было отправлено приглашение");
+            $message = t('The invite sent recently to email @email', ['@email' => $email]);
             break;
 
           case SLACK_INVITE_ALREADY_INVITED:
-            $message = t("Пользователь с email {$email} уже приглашён");
+            $message = t('User with email @email already invited', ['@email' => $email]);
             break;
 
           default:
@@ -119,7 +123,7 @@ class slackAPI {
       }
     }
     else {
-      $message = t("Возникла ошибка при отправке приглашения на email {$email}. За более подробной информацией обратитесь к администратору.");
+      $message = t('There was an error sending your invite. Please contact the administrator for more details.');
     }
     return ['status' => $status, 'message' => $message];
 
@@ -138,7 +142,7 @@ class slackAPI {
       'presence' => true,
     ];
     $data = drupal_http_build_query($data);
-    $response = drupal_http_request("{$url}?{$data}");
+    $response = drupal_http_request($url.'?'.$data);
     $active = 0;
     $total = 0;
     if ($response->code == 200) {
@@ -176,11 +180,10 @@ class slackAPI {
     }
     else {
       return [
-        'username' => 'Командос',
         "attachments" => [
           [
             "color" => "#ff9933",
-            "text" => t("	:radioactive_sign: Мне весьма жаль, но Вы уверены, что есть команда *{$action}*?"),
+            "text" => t(":radioactive_sign: Unknown command *@action*", ['@action' => $action]),
           ],
         ],
 
@@ -204,11 +207,10 @@ class slackAPI {
   public function invite_user($args) {
     $args_len = count($args);
     $message = [
-      'username' => 'Приглашатель 3000',
       "attachments" => []
     ];
     if ($args_len == 0) {
-      $message['attachments'][0]['pretext'] = 'Ну и чё ты ждёшь? Кому я, по-твоему, должен отправить инвайт?';
+      $message['attachments'][0]['pretext'] = 'Введите email';
     } elseif ($args_len == 1) {
         $invite = $this->invite($args[0]);
         switch ($invite['status']) {
@@ -222,11 +224,11 @@ class slackAPI {
             $color = '#390';
             break;
         }
-        $message['attachments'][0]['pretext'] = 'Отнёс лично в отделение Почты России. Во, чё сказали:';
+        $message['attachments'][0]['pretext'] = 'Отправка приглашения выполнена';
         $message['attachments'][0]['color'] = $color;
         $message['attachments'][0]['text'] = $invite['message'];
     } else {
-      $message['attachments'][0]['pretext'] = 'Помедленнее, пжлста... я записываю';
+      $message['attachments'][0]['pretext'] = 'Слишком много аргументов';
     }
     return $message;
   }

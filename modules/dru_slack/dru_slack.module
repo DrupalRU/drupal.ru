@@ -9,15 +9,18 @@ function dru_slack_menu() {
 
   $items = [];
 
-  $items['admin/config/dru_slack/settings'] = [  // Настройки модуля
-    'title' => t('Настройки Slack'),
+  // Настройки модуля
+  $items['admin/config/dru_slack/settings'] = [
+    'title' => t('Slack Settings'),
     'page callback' => 'drupal_get_form',
     'page arguments' => ['dru_slack_admin'],
     'access arguments' => ['administer settings'],
     'type' => MENU_NORMAL_ITEM,
     'file' => 'inc/admin.inc',
   ];
-  $items['slack/badge/%/badge.svg'] = [  // Страница бейджа
+
+  // Страница бейджа
+  $items['slack/badge/%/badge.svg'] = [
     'page callback' => 'dru_slack_badge',
     'page arguments' => [2],
     'access callback' => 'user_access',
@@ -25,8 +28,9 @@ function dru_slack_menu() {
     'type' => MENU_CALLBACK,
 
   ];
-  $items['slack/callback/%'] = [  // Роут для получения команд из Slack
-    'title' => 'Slack callback',
+
+  // Роут для получения команд из Slack
+  $items['slack/callback/%'] = [
     'page callback' => 'dru_slack_incoming',
     'page arguments' => [2],
     'access callback' => 'user_access',
@@ -54,13 +58,12 @@ function dru_slack_incoming($method) {
     }
     else {
       $result = [
-        "username" => variable_get('site_name', t('Машина Тьюринга')),
         "attachments" => [
           [
-            "color" => "f00",
-            "pretext" => t("Не хулюгань!!! Я всё вижу, <@{$data['user_id']}>"),
-            "title" => t("403"),
-            "text" => t("У вас нет прав на выполнение команд через данный интерфейс"),
+            "color" => "#f00",
+            "pretext" => t("You do not have the rights"),
+            "title" => "403",
+            "text" => t("You do not have permission to use this interface"),
           ],
         ],
 

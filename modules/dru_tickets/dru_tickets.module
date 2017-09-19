@@ -254,9 +254,9 @@ function dru_tickets_comment_view($comment, $view_mode) {
  * Implements hook_node_view().
  */
 function dru_tickets_node_view($node, $view_mode) {
-
   drupal_add_library('system', 'drupal.ajax');
-  
+  drupal_add_library('system', 'jquery.form');
+
   if ($node->type !== 'ticket' && user_access('moderate tickets')) {
     if ($node->status) {
       $unpublish_action = 'unpublish';

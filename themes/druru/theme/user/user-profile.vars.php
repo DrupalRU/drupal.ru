@@ -92,13 +92,21 @@ function _druru_prepare_private_message(&$elements) {
 }
 
 function _druru_prepare_user_picture(&$elements) {
-  // Change user picture size.
-  $actual_style = variable_get('user_picture_style');
-  variable_set('user_picture_style', 'avatar_profile');
-  $elements['user_picture']['#markup'] = theme('user_picture', array(
-    'account' => $elements['#account'],
-  ));
-  variable_set('user_picture_style', $actual_style);
+  $account = $elements['#account'];
+  $picture = isset($account->picture) ? $account->picture : null;
+  if (!empty($picture->uri)) {
+    $filepath = $picture->uri;
+  }
+  elseif (variable_get('user_picture_default', '')) {
+    $filepath = variable_get('user_picture_default', '');
+  }
+  if (isset($filepath)) {
+    $elements['user_picture']['#markup'] = theme('image_style', array(
+      'style_name' => 'avatar_profile',
+      'path' => $filepath,
+      'alt' => 'user-icon',
+    ));
+  }
 }
 
 function _druru_prepare_order(&$elements) {

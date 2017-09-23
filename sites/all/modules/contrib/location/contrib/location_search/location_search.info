@@ -1,0 +1,15 @@
+name = Location Search
+package = Location
+description = Advanced search page for locations.
+configure = admin/config/content/location/search
+dependencies[] = search
+dependencies[] = location
+core = 7.x
+files[] = location_search.admin.inc
+
+; Information added by Drupal.org packaging script on 2015-08-04
+version = "7.x-3.7"
+core = "7.x"
+project = "location"
+datestamp = "1438695672"
+

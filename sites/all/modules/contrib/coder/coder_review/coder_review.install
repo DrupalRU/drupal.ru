@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the coder_review module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function coder_review_uninstall() {
+  variable_del('coder_cache');
+  variable_del('coder_reviews');
+  variable_del('coder_severity');
+  variable_del('coder_active_modules');
+  variable_del('coder_core');
+  variable_del('coder_includes');
+  variable_del('coder_includes_exclusions');
+  variable_del('coder_modules');
+  variable_del('coder_themes');
+}
+
+/**
+ * Implements hook_schema().
+ */
+function coder_review_schema() {
+  // Use our own cache table because we can create lots of entries, that slow down and clutter the default cache.
+  $schema['cache_coder'] = drupal_get_schema_unprocessed('system', 'cache');
+  $schema['cache_coder']['description'] = "Coder cache table for improving display of result sets that haven't changed";
+  return $schema;
+}
+
+/**
+ * Clear the cache.
+ */
+function coder_review_update_1() {
+  $ret = array();
+  // This update adds a theming function, so we need to clear the entire cache.
+  $ret[] = update_sql("DELETE FROM {cache}");
+  return $ret;
+}
+
+/**
+ * Create the cache_coder table.
+ */
+function coder_review_update_2() {
+  $ret = array();
+  // Create the new coder_review cache table.
+  $schema = drupal_get_schema_unprocessed('system', 'cache');
+  db_create_table($ret, 'cache_coder', $schema);
+  // Clear coder_review entries from the default cache.
+  cache_clear_all('coder:', 'cache', TRUE);
+  return $ret;
+}
+
+/**
+ * Remove deprecated coder_review variables from the 'variable' table.
+ */
+function coder_review_update_3() {
+  $ret = array();
+  $ret[] = update_sql("DELETE FROM {variable} WHERE name LIKE 'coder_modules-%' OR name LIKE 'coder_themes-%'");
+  cache_clear_all('variables', 'cache');
+  return $ret;
+}

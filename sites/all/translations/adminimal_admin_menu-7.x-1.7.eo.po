@@ -1,0 +1,24 @@
+# Esperanto translation of Adminimal Administration Menu (7.x-1.7)
+# Copyright (c) 2015 by the Esperanto translation team
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Adminimal Administration Menu (7.x-1.7)\n"
+"POT-Creation-Date: 2015-12-03 22:44+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Language-Team: Esperanto\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+msgid "Save configuration"
+msgstr "Konservu agordojn"
+msgid "Administration"
+msgstr "Administrado"
+msgid "The configuration options have been saved."
+msgstr "Agordaj opcioj estas konservitaj."
+msgid "Inline"
+msgstr "en linio"
+msgid "Hidden"
+msgstr "Kaŝita"

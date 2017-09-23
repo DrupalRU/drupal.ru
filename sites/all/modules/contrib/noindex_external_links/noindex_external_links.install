@@ -1,0 +1,32 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the Noindex External Links module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function noindex_external_links_install() {
+  $t = get_t();
+  drupal_set_message(
+    $t('Module Noindex External Links was installed.') . '<br />' . $t('Site links is not protected yet.') . '<br />' . $t('Visit !link and take control of your links indexing!', array('!link' => l($t('Noindex External Links Settings page'), 'admin/config/search/noindex_external_links')))
+  );
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function noindex_external_links_uninstall() {
+  variable_del('noindex_external_links_method');
+  variable_del('noindex_external_links_noindex_format');
+  variable_del('noindex_external_links_denied_domains');
+  variable_del('noindex_external_links_allowed_domains');
+  variable_del('noindex_external_links_subdomains_enabled');
+  variable_del('noindex_external_links_top_domain_level');
+  $t = get_t();
+  drupal_set_message(
+    $t('Module Noindex External Links was uninstalled.<br />Hope you know what you\'re doing...')
+  );
+
+}

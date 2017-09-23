@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * GMap Fields install/uninstall routines.
+ */
+
+/**
+ * Implements hook_field_schema().
+ */
+function gmap_fields_field_schema($field) {
+  switch ($field['type']) {
+    case 'gmap_marker':
+      $columns = array(
+        'value' => array(
+          'type' => 'varchar',
+          'length' => !empty($field['settings']['max_length']) ? $field['settings']['max_length'] : 255,
+          'not null' => FALSE,
+        ),
+      );
+      break;
+  }
+
+  return array(
+    'columns' => $columns,
+  );
+}

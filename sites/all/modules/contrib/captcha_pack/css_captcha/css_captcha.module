@@ -1,0 +1,99 @@
+<?php
+
+// Define css captcha allowed characters
+define('CSS_CAPTCHA_DEFAULT_ALLOWED_CHARACTERS', 'aAbBcCdDeEfFgGhHijkKLmMnNpPqQrRsStTuUvVwWxXyYzZ123456789');
+
+// Load css captcha file to use some helper functions
+require_once(drupal_get_path('module', 'css_captcha') . '/../text_captcha/text_captcha.inc');
+
+/**
+ * Implements hook_help().
+ */
+function css_captcha_help($path, $arg) {
+  switch ($path) {
+    case 'admin/user/captcha/css_captcha':
+      return '<p>' . t('The CSS CAPTCHA uses CSS tricks to obfuscate a random text code for spam bots. The characters of the code are scrambled in the HTML markup but are displayed in the correct order when rendered with a CSS capable browser.') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function css_captcha_menu() {
+  $items = array();
+  $items['admin/config/people/captcha/css_captcha'] = array(
+    'title' => 'CSS CAPTCHA',
+    'file' => 'css_captcha.admin.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('css_captcha_settings_form'),
+    'access arguments' => array('administer CAPTCHA settings'),
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_captcha().
+ */
+function css_captcha_captcha($op, $captcha_type = '') {
+  switch ($op) {
+    case 'list':
+      return array("CSS CAPTCHA");
+    case 'generate':
+      if ($captcha_type == "CSS CAPTCHA") {
+        // Get settings
+        $allowed_chars = _text_captcha_utf8_split(variable_get('css_captcha_allowed_characters', CSS_CAPTCHA_DEFAULT_ALLOWED_CHARACTERS));
+        $code_length = variable_get('css_captcha_code_length', 6);
+        // Build solution and $code_struct
+        $solution = '';
+        $code_struct = array();
+        for ($i = 0; $i < $code_length; $i++) {
+          $character = $allowed_chars[array_rand($allowed_chars)];
+          $code_struct[$i] = array('content' => $character, 'size' => 1.25);
+          $solution .= $character;
+        }
+        // Generate css scrambling
+        while (count($code_struct) > 1) {
+          // pick random neighbouring items from $code_struct
+          $i = mt_rand(0, count($code_struct) - 2);
+          $item_left = $code_struct[$i];
+          $item_right = $code_struct[$i+1];
+          // merge
+          $merged_size = $item_left['size'] + $item_right['size'] + .25;
+          if (mt_rand(0, 1)) {
+            // Normal merge: $item_left first and $item_right second
+            $merged_content = "<div style=\"width:{$item_left['size']}em;float:left;\">{$item_left['content']}</div>"
+              . "<div style=\"width:{$item_right['size']}em;float:left;\">{$item_right['content']}</div>";
+          }
+          else {
+            // Mirror merge: $item_right first and $item_left second
+            $merged_content = "<div style=\"width:{$item_right['size']}em;float:right;\">{$item_right['content']}</div>"
+              . "<div style=\"width:{$item_left['size']}em;float:left;\">{$item_left['content']}</div>";
+          }
+          // Build merged item
+          $item_merged = array(
+            'content' => '<div style="width: ' . $merged_size . 'em;height:1.5em;">' . $merged_content . '</div>',
+            'size' => $merged_size,
+          );
+          // Replace the two items with the merged one
+          array_splice($code_struct, $i, 2, array($item_merged));
+          // make array indices contiguous again
+          $code_struct = array_values($code_struct);
+        }
+        // Build CAPTCHA
+        $captcha = array();
+        $captcha['solution'] = $solution;
+        $captcha['form']['captcha_response'] = array(
+          '#type' => 'textfield',
+          '#title' => t('Enter the code above'),
+          '#size' => 10,
+          '#prefix' => '<div class="css-captcha-code">' . $code_struct[0]['content'] . '</div>',
+          '#maxlength' => 10,
+          '#required' => TRUE,
+          '#description' => t('Enter the code without spaces.')
+        );
+        return $captcha;
+      }
+    break;
+  }
+}

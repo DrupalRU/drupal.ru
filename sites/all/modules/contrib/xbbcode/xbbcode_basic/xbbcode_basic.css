@@ -1,0 +1,13 @@
+.codeblock.xbbcode {
+  padding:5px;
+  padding-top:0px;
+  border:1px solid #CCC;
+  background-color:#EEE;
+  white-space:pre;
+  font-family:monospace;
+}
+
+blockquote.xbbcode {
+  padding-left:10px;
+  border-left:3px solid #74b4c7;
+}

@@ -1,0 +1,212 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the acl module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function acl_schema() {
+  $schema['acl'] = array(
+    'description'     => 'The base Access Control Lists table.',
+    'fields'          => array(
+      'acl_id'        => array(
+        'description' => 'Primary key: unique ACL ID.',
+        'type'        => 'serial',
+        'not null'    => TRUE,
+      ),
+      'module'        => array(
+        'description' => 'The name of the module that created this ACL entry.',
+        'type'        => 'varchar',
+        'length'      => 255,
+        'not null'    => TRUE,
+      ),
+      'name'          => array(
+        'description' => 'A name (or other identifying information) for this ACL entry, given by the module that created it.',
+        'type'        => 'varchar',
+        'length'      => 255,
+      ),
+      'number'        => array(
+        'description' => "A number for this ACL entry, given by the module that created it; use either 'name' or 'number'.",
+        'type'        => 'int',
+      ),
+    ),
+    'primary key'     => array('acl_id'),
+    'indexes'         => array(
+      'module_name_number' => array(array('module', 64), array('name', 64), 'number'),
+      'module_number' => array(array('module', 64), 'number'),
+    ),
+  );
+  $schema['acl_user'] = array(
+    'description'     => 'Identifies {users} to which the referenced {acl} entry applies.',
+    'fields'          => array(
+      'acl_id'        => array(
+        'description' => 'The {acl}.acl_id of the entry.',
+        'type'        => 'int',
+        'not null'    => TRUE,
+        'default'     => 0,
+      ),
+      'uid'           => array(
+        'description' => 'The {user}.uid to which this {acl} entry applies.',
+        'type'        => 'int',
+        'not null'    => TRUE,
+        'default'     => 0,
+      ),
+    ),
+    'primary key'     => array('acl_id', 'uid'),
+    'indexes'         => array(
+      'uid'           => array('uid'),
+    ),
+  );
+  $schema['acl_node'] = array(
+    'description'     => 'Identifies {node}s to which the referenced {acl} entry applies and defines the permissions granted.',
+    'fields'          => array(
+      'acl_id'        => array(
+        'description' => 'The {acl}.acl_id of the entry.',
+        'type'        => 'int',
+        'not null'    => TRUE,
+        'default'     => 0,
+      ),
+      'nid'           => array(
+        'description' => 'The {node}.nid to grant permissions for.',
+        'type'        => 'int',
+        'not null'    => TRUE,
+        'default'     => 0,
+      ),
+      'grant_view'    => array(
+        'description' => 'Whether to grant "view" permission.',
+        'type'        => 'int',
+        'size'        => 'tiny',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+        'default'     => 0,
+      ),
+      'grant_update'  => array(
+        'description' => 'Whether to grant "update" permission.',
+        'type'        => 'int',
+        'size'        => 'tiny',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+        'default'     => 0,
+      ),
+      'grant_delete'  => array(
+        'description' => 'Whether to grant "delete" permission.',
+        'type'        => 'int',
+        'size'        => 'tiny',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+        'default'     => 0,
+      ),
+      'priority'      => array(
+        'description' => 'The priority of this grant record (for hook_node_access_records()).',
+        'type'        => 'int',
+        'size'        => 'small',
+        'not null'    => TRUE,
+        'default'     => 0,
+      ),
+    ),
+    'primary key'     => array('acl_id', 'nid'),
+    'indexes'         => array(
+      'nid'           => array('nid'),
+    ),
+  );
+  return $schema;
+}
+
+
+/**
+ * Fixes primary keys
+ */
+function acl_update_2() {
+  $ret = array();
+  // drop the previously created indexes (except for acl_user.uid)
+  db_drop_index($ret, 'acl', 'acl_id');
+  db_drop_index($ret, 'acl_user', 'acl_id');
+  db_drop_index($ret, 'acl_node', 'acl_id');
+  db_drop_index($ret, 'acl_node', 'nid');
+  // create new indexes (as primary keys this time)
+  db_add_primary_key($ret, 'acl', array('acl_id'));
+  db_add_primary_key($ret, 'acl_user', array('acl_id', 'uid'));
+  db_add_primary_key($ret, 'acl_node', array('acl_id', 'nid'));
+  return $ret;
+}
+
+/**
+ * Put back acl_node(nid) index for deleting nodes and clean up {acl_node}.
+ */
+function acl_update_4() {
+  $ret = array();
+  db_add_index($ret, 'acl_node', 'nid', array('nid'));
+  $ret[] = update_sql("DELETE FROM {acl_node} WHERE nid NOT IN (SELECT nid FROM {node})");
+  return $ret;
+}
+
+/**
+ * Clean up {acl_user}.
+ */
+function acl_update_5() {
+  $ret = array();
+  $ret[] = update_sql("DELETE FROM {acl_user} WHERE uid NOT IN (SELECT uid FROM {users})");
+  return $ret;
+}
+
+/**
+ * Add 'priority' column.
+ */
+function acl_update_6() {
+  $ret = array();
+  db_add_field($ret, 'acl_node', 'priority', array('type' => 'int', 'size' => 'small', 'not null' => TRUE, 'default' => 0));
+  return $ret;
+}
+
+/**
+ * Change acl_id to auto-increment.
+ */
+function acl_update_6000() {
+  $ret = array();
+  db_change_field($ret, 'acl', 'acl_id', 'acl_id', array('type' => 'serial', 'not null' => TRUE));
+  // (Dropping and recreating the primary key on an auto_increment column would cause a MySQL failure.)
+  db_change_field($ret, 'acl', 'module', 'module', array('type' => 'varchar', 'length' => 255, 'not null' => TRUE));
+  db_change_field($ret, 'acl', 'name', 'name', array('type' => 'varchar', 'length' => 255));
+  db_add_index($ret, 'acl_node', 'nid', array('nid'));
+  return $ret;
+}
+
+/**
+ * Add index that should have been added when upgrading from D5.
+ */
+function acl_update_6001() {
+  $ret = array();
+  @db_add_index($ret, 'acl_node', 'nid', array('nid'));
+  return ($ret['success'] ? $ret : array()); // ignore possible error, if the index already exists
+}
+
+/**
+ * Add 'number' column if it's not there yet.
+ */
+function acl_update_7000() {
+  if (!db_field_exists('acl', 'number')) {
+    db_add_field('acl', 'number', array('type' => 'int', 'description' => "A number for this ACL entry, given by the module that created it; use either 'name' or 'number'."));
+  }
+}
+
+/**
+ * Install better indexes.
+ */
+function acl_update_7001() {
+  if (db_index_exists('acl', 'name')) {
+    db_drop_index('acl', 'name');
+  }
+  if (!db_index_exists('acl', 'module_name_number')) {
+    db_add_index('acl', 'module_name_number', array(array('module', 64), array('name', 64), 'number'));
+  }
+  if (db_index_exists('acl', 'number')) {
+    db_drop_index('acl', 'number');
+  }
+  if (!db_index_exists('acl', 'module_number')) {
+    db_add_index('acl', 'module_number', array(array('module', 64), 'number'));
+  }
+}
+

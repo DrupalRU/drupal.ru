@@ -1,0 +1,16 @@
+name = Gmap Style Bubbles
+description = A module that lets you add more styles to your gmap popup bubbles.
+package = Location
+core = 7.x
+
+project = gmap_style_bubbles
+dependencies[] = gmap
+dependencies[] = libraries (2.x)
+
+
+; Information added by Drupal.org packaging script on 2016-03-11
+version = "7.x-2.11"
+core = "7.x"
+project = "gmap"
+datestamp = "1457698170"
+

@@ -1,0 +1,112 @@
+
+Birthdays 7.x-1.0-beta1, 2011-01-14
+-----------------------------------
+- #1370074, #1355810: Fixed Regression: Entering a year is no longer optional.
+- #1397648: Fixed only 10 birthdays ported to D7.
+- Fixed several typos.
+- #1370074: Remove BirthdaysBirthday::fromString() tests, because the API needs
+  refactoring.
+- #1370074: Remove BirthdaysBirthday::reduceDateFormat().
+- #1364420: Default happy birthday mail uses non-existing token
+  [site:uri-brief], should use [site:url-brief].
+- #1363718 by douglaspilar: Timestamp creation error when the year is not
+  mandatory.
+- #1362948: Fixed Fatal error: Call to undefined function dsm() in
+  ../sites/all/modules/birthdays/birthdays_birthday.inc on line X.
+- #1306432 by afeijo: Fixed Datepicker widget should respect drupal date mask.
+- #1306272 by afeijo: Fixed Datepicker widget ignores first week day setting of
+  Drupal core.
+- #1301804: Fix undefined variable $instance in hook_cron().
+- #1293378: More occurences of $time instead of REQUEST_TIME.
+- #1293378: Undefined variable $time, use REQUEST_TIME.
+
+Birthdays 7.x-1.0-alpha1, 2011-09-25
+------------------------------------
+- Ported to 7.x.
+- Created a birthday field type, that can be used standalone - or, by default,
+  on user profiles.
+- Added trigger support and use triggers and actions for user mails.
+- Added Views support and replaced custom page and block with a view.
+
+Birthdays 6.x-1.0, 2009-02-09
+-----------------------------
+- Ported to 6.x.
+- Added Simpletests (not finished).
+- Separated several functions to files of their own.
+- Introduced user_mail_tokens() instead of @name for birthday mails.
+- Introduced Batch API for synchronization to help long synchronization
+  processes.
+- Created birthdays block template file, for easy customization.
+- Created birthdays page template file, for easy customization.
+- German translation (#325004 by rastatt).
+
+Birthdays 5.x-1.5, 2009-02-09
+-----------------------------
+- Dutch translation + translation template (#367973).
+- Fixed the way the checkboxes in profile forms were shown, now grouped with
+  the date field in stead of floating freely above or below the form (#358582).
+- Fixed bug that stopped e-mails from being sent.
+- Fixed untranslatable strings (#320168).
+- #320218 by BENNYSOFT: Drupal-conform more-link or Birthdays block.
+
+Birthdays 5.x-1.4, 2008-10-08
+-----------------------------
+- Block didn't display date of birth any more.
+
+
+Birthdays 5.x-1.3, 2008-10-08
+-----------------------------
+- Fixed bug in sending periodic e-mails. Always listed 7 days, independent
+  of the selected frequency.
+- Improved output of administration reminders.
+- Fixed the incompatibility of LoginToboggan and Birthdays module.
+- Fixed some tiny coding standard errors.
+
+
+Birthdays 5.x-1.2, 2008-10-01
+-----------------------------
+- CHANGELOG.txt, INSTALL.txt and README.txt are now similar to Drupal's files
+- Date field can now be empty and thus truely be required. Defaults to empty,
+  to make accidental birthdays less likely.
+- Dropped 'delete birthday' permission and 'Remove birthday' check box.
+- Introduced constants in stead of hard coded values.
+- Frequency of admin mails is now configurable (daily, weekly, monthly).
+- Birthdays field is set as global during module initiation in stead of using
+  the 'birthdays_field_name' variable all over the place.
+- Added the use of hook_requirements() and made requirement checks less
+  intrusive but more informative.
+- Added option 'hide block when no birthdays' in stead of showing the 'Nobody
+  is having their birthday soon'.
+- Fixed bug in cron excution which caused it to creep forward over time.
+- Fixed various small issues cleaned up code.
+
+
+Birthdays 5.x-1.1, 2008-04-09
+-----------------------------
+- Birthdays 5.x-1.1 released
+- Added pgsql-support
+- Implemented better compliance with Drupal coding standards
+- Fixed Sagittarius typo
+
+
+Birthdays 5.x-1.0, 2007-11-06
+-----------------------------
+- All code rewritten according to coding guidelines of Drupal
+- Integrated with Profile module
+- Added 2 user options:
+  - Hide year & age
+  - Do not send mail on birthday
+- Shortened settings page
+- Birthday field now optionally on registration form
+- Birthday field now optionally required
+- Optimized and fixed bugs in queries
+- Made queries timezone dependent
+- Made displaying of birthdays independent of timezone
+- Added synchronization between Profile module and Birthdays module
+- Temporarily removed postcard
+- Added theme functions
+- Added proper commenting
+- Blocked users are hidden in the blocks and on the user listing
+
+
+

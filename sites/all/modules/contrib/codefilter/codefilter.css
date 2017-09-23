@@ -1,0 +1,20 @@
+div.codeblock {
+  padding: 5px;
+  border: 1px solid #ccc;
+  background-color: #eee;
+}
+
+/*
+Multiclass not supported in IE6.
+*/
+div.codeblock.nowrap-expand {
+  /*
+  Not supported in IE6 or 7.
+  */
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+pre.codeblock.nowrap-expand:hover {
+  overflow-x: visible;
+}

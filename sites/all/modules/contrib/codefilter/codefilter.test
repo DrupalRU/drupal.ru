@@ -1,0 +1,123 @@
+<?php
+
+/**
+ * @file
+ * Functional and unit tests for codefilter.module.
+ */
+
+/**
+ * Contains unit tests for codefilter.module.
+ */
+class CodeFilterUnitTestCase extends DrupalUnitTestCase {
+
+  // The filter object as returned from codefilter_filter_info().
+  private $filter;
+
+  /**
+   * Implements getInfo().
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Codefilter module text filters',
+      'description' => 'Tests raw filtering functions.',
+      'group' => 'Code Filter',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+    include_once dirname(__FILE__) . '/codefilter.module';
+    $this->filter = codefilter_filter_info();
+    $this->path = drupal_get_path('module', 'codefilter') . '/tests';
+  }
+
+  /**
+   * Filters text through codefilters prepare and process callbacks.
+   *
+   * @param string $text
+   *   The text to filter.
+   *
+   * @return string
+   *   The processed text.
+   */
+  protected function filterText($text, $settings = array()) {
+    $filter =& $this->filter['codefilter'];
+    // Set up a dummy format using defaults.
+    $format = new stdClass();
+    $format->settings = array_merge($filter['default settings'], $settings);
+    $text = call_user_func($filter['prepare callback'], $text, $format);
+    $text = call_user_func($filter['process callback'], $text, $format);
+    return $text;
+  }
+
+  /**
+   * Checks that <?php tags are escaped and highlighted correctly.
+   */
+  public function testPhpFilter() {
+    $input = file_get_contents($this->path . '/codefilter.php-input.txt');
+    $expected = file_get_contents($this->path . '/codefilter.php-output.txt');
+    $result = $this->filterText($input);
+    $this->assertIdentical($expected, $result);
+  }
+
+  /**
+   * Checks that <code> tags are escaped and highlighted correctly.
+   */
+  public function testCodeFilter() {
+    $input = file_get_contents($this->path . '/codefilter.code-input.txt');
+    $expected = file_get_contents($this->path . '/codefilter.code-output.txt');
+    $result = $this->filterText($input);
+    $this->assertIdentical($expected, $result);
+  }
+
+  /**
+   * Tests <code class="..."> tags (with attributes).
+   */
+  public function testCodeFilterAttributes() {
+    $input = <<<EOD
+<code class="diff">
+line1
+line2
+</code>
+EOD;
+    $expected = <<<EOD
+<div class="codeblock"><code class="diff">line1<br />line2</code></div>
+EOD;
+    $result = $this->filterText($input);
+    $this->assertIdentical($expected, $result);
+  }
+
+  /**
+   * Checks that CSS classes are added which JS uses for hover events.
+   */
+  public function testContainerExpand() {
+    $input = file_get_contents($this->path . '/codefilter.php-input.txt');
+    $settings = array(
+      'nowrap_expand' => TRUE,
+    );
+    $result = $this->filterText($input, $settings);
+
+    $this->assertTrue(
+      strpos($result, '<div class="codeblock nowrap-expand">') !== FALSE,
+      'Expand class is added to codefilter blocks that are too long when that option is specified.'
+    );
+  }
+
+  /**
+   * Overrides DrupalTestCase::assertIdentical().
+   *
+   * Ignores $message and dump-exports $first and $second into the test result
+   * output instead.
+   */
+  protected function assertIdentical($first, $second, $message = '', $group = '') {
+    $message = format_string('<pre>@first</pre> is identical to <pre>@second</pre>', array(
+      '@first' => var_export($first, TRUE),
+      '@second' => var_export($second, TRUE),
+    ));
+    parent::assertIdentical($first, $second, $message);
+  }
+
+}

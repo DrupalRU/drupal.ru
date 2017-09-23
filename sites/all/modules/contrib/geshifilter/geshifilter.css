@@ -1,0 +1,63 @@
+
+/**
+ * CSS rules for the general GeSHi filter containers.
+ * The language specific rules are generated automatically and written to a
+ * CSS file in the files directory.
+ */
+
+
+/* Inline source code. */
+span.geshifilter {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+/* Source code block. */
+div.geshifilter {
+  display: block;
+  padding: 0.5em;
+  margin: 0.5em;
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  color: #222;
+  line-height: 1.3;
+  overflow: auto;
+}
+
+/* CSS reset for the 'pre' elements in the geshifilter code blocks. */
+div.geshifilter pre {
+  margin: 0;
+  padding: 0;
+  line-height: 1.3;
+}
+
+/* CSS resets for 'ol'-based line numbering. */
+div.geshifilter ol {
+  margin: 0;
+  /* Left padding is for keeping space for the line numbers. */
+  padding: 0 0 0 4em;
+  list-style-position: outside;
+  list-style-type: decimal;
+  line-height: 1.3;
+}
+
+div.geshifilter li {
+  margin: 0;
+  padding: 0;
+  line-height: 1.3;
+}
+
+/* CSS resets for the table elements in GESHI_HEADER_PRE_TABLE mode. */
+div.geshifilter table, div.geshifilter tbody, div.geshifilter tr, div.geshifilter td {
+  margin: 0;
+  padding: 0;
+  border-style: none;
+}
+
+div.geshifilter-title {
+  padding: 0.5ex 0.5em;
+  margin: 0.5em 0.5em -0.5em 0.5em;
+  background-color: #ccc;
+}

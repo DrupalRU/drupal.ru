@@ -1,0 +1,42 @@
+name = GMap test
+description = Some Content types and Views to test GMap
+core = 7.x
+package = Features
+version = 7.x-1.0-20130309
+project = gmap_test
+hidden = TRUE
+dependencies[] = addressfield
+dependencies[] = ctools
+dependencies[] = entityreference
+dependencies[] = features
+dependencies[] = field_sql_storage
+dependencies[] = geofield
+dependencies[] = geophp
+dependencies[] = node
+dependencies[] = options
+dependencies[] = text
+dependencies[] = views
+dependencies[] = views_ui
+dependencies[] = gmap
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:1
+features[field][] = node-gmap_person-field_mylocation
+features[field][] = node-gmapplace-body
+features[field][] = node-gmapplace-field_myaddress
+features[field][] = node-gmapplace-field_mygeofield
+features[field][] = node-gmapplace-field_mylatitude
+features[field][] = node-gmapplace-field_mylongitude
+features[node][] = gmap_person
+features[node][] = gmapplace
+features[views_view][] = gmap_test_places
+files[] = gmap_test.features.field.inc
+files[] = gmap_test.features.inc
+files[] = gmap_test.views_default.inc
+files[] = tests/gmap_test.test
+
+; Information added by Drupal.org packaging script on 2016-03-11
+version = "7.x-2.11"
+core = "7.x"
+project = "gmap"
+datestamp = "1457698170"
+

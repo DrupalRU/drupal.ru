@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the autosave module.
+ *
+ */
+
+/**
+ * Implements hook_enable().
+().
+ */
+function autosave_enable() {
+  drupal_set_message(t('Autosave module successfully installed. Please review the <a href="@settings">configuration settings</a>.', array('@settings' => url('admin/config/content/autosave'))));
+}
+
+/**
+ * Implements hook_install().
+().
+ */
+function autosave_install() {
+  // TODO The drupal_(un)install_schema functions are called automatically in D7.
+  // drupal_install_schema('autosave')
+}
+
+/**
+ * Implements hook_uninstall().
+().
+ */
+function autosave_uninstall() {
+  // TODO The drupal_(un)install_schema functions are called automatically in D7.
+  // drupal_uninstall_schema('autosave')
+}
+
+/**
+ * Implements hook_schema()
+().
+ */
+function autosave_schema() {
+  return array(
+    'autosaved_forms' => array(
+      'description' => 'Saves the input (POST) contents of partially filled forms for restoration by the autosave module.',
+      'fields' => array(
+        'form_id' => array(
+          'type'        => 'varchar',
+          'length'      => 64,
+          'not null'    => TRUE,
+        ),
+        'path' => array(
+          'type'        => 'varchar',
+          'length'      => 255,
+          'not null'    => TRUE,
+        ),
+        'uid' => array(
+          'type'        => 'int',
+          'not null'    => TRUE,
+          'default'     => 0,
+        ),
+        'timestamp' => array(
+          'type'        => 'int',
+          'not null'    => TRUE,
+          'default'     => 0,
+        ),
+        'serialized' => array(
+          'type'        => 'text',
+          'not null'    => TRUE,
+          'size'        => 'big',
+        ),
+      ),
+      'primary key' => array('form_id', 'path', 'uid'),
+    ),
+  );
+}

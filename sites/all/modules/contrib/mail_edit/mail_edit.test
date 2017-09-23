@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @file
+ * Tests for the Mail Editor module.
+ */
+
+/**
+ * Test case for Mail Editor module.
+ */
+class MailEditorWebTestCase extends DrupalWebTestCase {
+
+  /**
+   * Implements getInfo().
+   *
+   * @return array
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Mail Editor Test',
+      'description' => "This is a dummy test to keep d.o's testbot happy; real tests are welcome!",
+      'group' => 'Mail Editor',
+    );
+  }
+
+  /**
+   * Implements setUp().
+   */
+  function setUp() {
+    parent::setUp();
+  }
+
+  /**
+   * Dummy test that always succeeds.
+   */
+  function testTrue() {
+    $this->assertTrue(TRUE);
+  }
+
+
+}
+

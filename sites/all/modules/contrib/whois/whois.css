@@ -1,0 +1,31 @@
+.live-progress-panel {
+  background-color: #FBEDA5;/*#CF4342*/
+  color: #111111;
+  font-family: Arial, Helvetica, Verdana;
+  font-size: 14px;
+  padding: 3px 6px;
+  position: fixed;
+  right: 16px;
+  top: 0px;
+  z-index: 999;
+}
+
+.whois-registered {
+  color: #aa0000;
+}
+
+.whois-not-registered {
+  color: #00aa00;
+}
+
+.whois-preview {
+  clear: both;
+}
+
+#whois-whois-form .ajax-progress {
+  float: right;
+}
+
+#edit-whois-submit {
+  float: none;
+}

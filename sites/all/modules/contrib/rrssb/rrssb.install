@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Contains install and update functions.
+ */
+
+/**
+ * Implements hook_uninstall().
+*/
+function rrssb_uninstall() {
+   // Simple DB query to get the names of our variables.
+  $results = db_select('variable', 'v')
+    ->fields('v', array('name'))
+    ->condition('name', 'rrssb_%', 'LIKE')
+    ->execute();
+  // Loop through and delete each of our variables.
+  foreach ($results as $result) {
+    variable_del($result->name);
+  }
+}

@@ -1,0 +1,11 @@
+Installation
+------------
+
+1. Copy the rustemmer.module to the Drupal modules/ directory. Drupal should automatically detect it.
+
+2. Go to 'administer > modules', and enable rustemmer.
+
+3. Go to 'administer > settings > search' and click 'Re-index site'.
+
+Optionaly you could patch search.module with provoded patch to make highlight
+search results with stemming.

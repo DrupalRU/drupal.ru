@@ -1,0 +1,9 @@
+<pre class="codeblock"><code class="language-php">// Code comment is here.
+watchdog('actions', '@count orphaned actions (%orphans) exist in the actions table. !link', array('@count' => $count, '%orphans' => $orphans, '!link' => $link), WATCHDOG_INFO);
+
+/**
+ * Longer comment is here.
+ **/
+
+
+</code></pre>

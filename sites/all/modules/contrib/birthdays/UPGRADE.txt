@@ -1,0 +1,52 @@
+
+UPGRADING FROM DRUPAL 6
+-----------------------
+
+It is important you follow these steps when upgrading from Drupal 6 to
+Drupal 7. As always: Do backups to avoid data loss!
+
+ 1. Synchronize
+
+    Before you upgrading Drupal core, make sure the profile field and the
+    Birthdays table are in sync.
+
+ 2. Upgrade Drupal core
+
+    Upgrade Drupal core as usual. Your contrib modules will be disabled at that
+    point. Birthdays must be disabled, too.
+
+ 3. Remove the complete birthdays directory from sites/all/modules. Download
+    the latest release of birthdays and place it there. Make sure no old files
+    persist.
+
+ 4. Enable the required modules. If you have been using Triggers or Views
+    upgrade them first, before you continue.
+
+    * Enable the Triggers module, if you want to send users mails on their
+      birthdays.
+
+    * Enable the Birthdays module.
+
+    * If you want to use the default Birthdays page or block, enable Birthdays
+      Defaults and the Views module.
+
+ 5. Run update.php as usual.
+
+    If you encounter problems, please report them in the issue queue
+    (http://drupal.org/project/issues/birthdays) as detailed as you can. Once
+    they are fixed you can go back using your backups and try again.
+
+ 6. Remove the duplicate profile field
+
+    Your user entity type now has a birthdays field but it should still have
+    the old profile field. Go to Configuration > People > Profiles if you want
+    to delete that duplicate field.
+
+ 7. Manually deal with page / block settings and permissions
+
+    Page / block settings as well as permissions aren't upgraded automatically.
+    Configure your views manually and use the Field Permissions
+    (http://drupal.org/project/field_permissions) if you need field level
+    permissions for your birthday fields.
+
+ 8. Congrats, you're done.

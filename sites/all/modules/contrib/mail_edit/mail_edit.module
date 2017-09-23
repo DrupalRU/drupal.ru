@@ -1,0 +1,226 @@
+<?php
+
+/**
+ * @mainpage Mail Editor module
+ *
+ * This module enables administrators to alter and translate mail templates
+ * for use by supporting client modules.
+ *
+ * Support for the user emails and Logintoboggan's emails is included with
+ * Mail Editor.
+ */
+
+/**
+ * @file
+ * Mail Editor module.
+ */
+
+/**
+ * Implements hook_permission().
+ *
+ * @return array
+ */
+function mail_edit_permission() {
+  return array(
+    'administer mail templates' => array(
+      'description' => t('Change the templates used for creating mail messages to send to users.'),
+      'title' => t('Administer mail templates'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ *
+ * @return array
+ */
+function mail_edit_menu() {
+  $items['admin/config/system/mail-edit'] = array(
+    'access callback' => 'mail_edit_access',
+    'file' => 'mail_edit.admin.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mail_edit_list_form'),
+    'description' => 'Edit mails being sent out by Drupal.',
+    'title' => 'Mail templates',
+  );
+  $items['admin/config/system/mail-edit/purge/%'] = array(
+    'access callback' => 'mail_edit_access',
+    'file' => 'mail_edit.admin.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mail_edit_purge_mailkey', 5),
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/config/system/mail-edit/%/%'] = array(
+    'access callback' => 'mail_edit_access',
+    'file' => 'mail_edit.admin.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mail_edit_template_form', 4, 5),
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/config/system/mail-edit/%/%/remove'] = array(
+    'access callback' => 'mail_edit_access',
+    'file' => 'mail_edit.admin.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mail_edit_template_remove_confirm', 4, 5),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Checks the current user's access to Mail Edit's pages.
+ *
+ * @return bool
+ */
+function mail_edit_access() {
+  return user_access('administer mail templates') && user_access('access administration pages');
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * @return array
+ */
+function mail_edit_theme() {
+  return array(
+    'mail_edit_table' => array(
+      'render element' => 'form',
+      'file' => 'mail_edit.admin.inc',
+    ),
+    'mail_edit_list_filter' => array(
+      'render element' => 'form',
+      'file' => 'mail_edit.admin.inc',
+    ),
+  );
+}
+
+/**
+ * Implements hook_mail_alter().
+ *
+ * @param array $message
+ */
+function mail_edit_mail_alter(array &$message) {
+  _mail_edit_module_load_include('alter.inc');
+  _mail_edit_mail_alter($message);
+}
+
+/**
+ * Loads and returns a template.
+ *
+ * If the template has not been customized yet, then hook_mail_edit_text()
+ * is called to retrieve the default template, and if the default template's
+ * 'always' key is TRUE, then the default template is returned; otherwise NULL.
+ *
+ * @param string $module
+ *   The module requesting the template.
+ * @param string $mailkey
+ *   The key for the template.
+ * @param string|object $language
+ *   The language object or language code for the template.
+ * @param bool $force_always
+ *   Always return the default template if no custom template is stored.
+ *
+ * @return object|null
+ */
+function mail_edit_load($module, $mailkey, $language, $force_always = FALSE) {
+  _mail_edit_module_load_include('alter.inc');
+  return _mail_edit_load($module . '_' . $mailkey, $language, $force_always);
+}
+
+/**
+ * Formats a text using the supplied template, data, and options.
+ *
+ * @param string $template
+ *   The template to use.
+ * @param array $data
+ *   The data to be passed on to token_replace().
+ * @param array $options
+ *   The options to be passed on to token_replace().
+ * @param string $context
+ *   The context string that can be used to conditionally add or omit text
+ *   depending on the context. The default is 'MAIL'.
+ *
+ * @return string
+ */
+function mail_edit_format($template, $data, $options = array(), $context = NULL) {
+  _mail_edit_module_load_include('alter.inc');
+  $context = (isset($context) ? $context : 'MAIL');
+  $result = _mail_edit_preprocess($template, $data, $options, $context);
+  $result = token_replace($result, $data, $options);
+  return $result;
+}
+
+/**
+ * Implements hook_hook_info().
+ *
+ * Loads the third-party support include so that their hooks are
+ * registered.
+ */
+function mail_edit_hook_info() {
+  _mail_edit_include();
+}
+
+/**
+ * Implements hook_modules_uninstalled().
+ *
+ * Removes templates when a module is uninstalled.
+ *
+ * @param array $modules
+ */
+function mail_edit_modules_uninstalled(array $modules) {
+  _mail_edit_module_load_include('admin.inc');
+  _mail_edit_modules_uninstalled($modules);
+}
+
+/**
+ * Includes the sample third-party hook implementation files.
+ */
+function _mail_edit_include() {
+  _mail_edit_module_load_include('modules/mail_edit', 'user.inc');
+  if (module_exists('logintoboggan')) {
+    _mail_edit_module_load_include('modules/mail_edit', 'logintoboggan.inc');
+  }
+}
+
+/**
+ * Loads include files once.
+ *
+ * @param $name_or_ext
+ * @param $ext
+ *
+ * @return bool
+ */
+function _mail_edit_module_load_include($name_or_ext, $ext = NULL) {
+  static $loaded = array();
+
+  if (empty($ext)) {
+    $ext = $name_or_ext;
+    $name_or_ext = 'mail_edit';
+  }
+  $key = "$name_or_ext.$ext";
+  if (empty($loaded[$key])) {
+    $loaded[$key] = (bool) module_load_include($ext, 'mail_edit', $name_or_ext);
+  }
+  return $loaded[$key];
+}
+
+/**
+ * Implements hook_menu_breadcrumb_alter().
+ *
+ * Fixes the breadcrumb for the template edit page.
+ *
+ * @param $active_trail
+ * @param $item
+ */
+function mail_edit_menu_breadcrumb_alter(&$active_trail, $item) {
+  if (isset($item['path']) && $item['path'] == 'admin/config/system/mail-edit/%/%') {
+    $active_trail = array($active_trail[0]);
+    foreach ($item['map'] as $i) {
+      $path = (!isset($path) ? $i : $path . '/' . $i);
+      $active_trail[] = menu_get_item($path);
+    }
+    array_pop($active_trail);
+    array_pop($active_trail);
+  }
+}
+

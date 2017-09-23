@@ -1,0 +1,135 @@
+<?php
+
+/**
+ * @file
+ * GMap Fields - Fields for the GMap module, currently only a marker field.
+ */
+
+const GMAP_FIELDS_TYPE_MARKER = 'gmap_marker';
+const GMAP_FIELDS_FORMAT_MARKER_TITLE = 'gmap_marker_default';
+const GMAP_FIELDS_FORMAT_MARKER_KEY = 'gmap_marker_key';
+
+/**
+ * Implements hook_field_info().
+ */
+function gmap_fields_field_info() {
+  return array(
+    GMAP_FIELDS_TYPE_MARKER => array(
+      'label' => t('Gmap Marker'),
+      'description' => t('Choose a Gmap Marker icon.'),
+      'default_widget' => 'options_select',
+      'default_formatter' => GMAP_FIELDS_FORMAT_MARKER_TITLE,
+      'settings' => array(
+        'allowed_values' => array(),
+        'allowed_values_function' => '',
+      ),
+      'instance_settings' => array(
+        'allowed_values_function' => 'gmap_get_marker_titles',
+      ),
+      'property_type' => 'text',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_validate().
+ */
+function gmap_fields_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+  foreach ($items as $delta => $item) {
+    if (!empty($item['value'])) {
+      switch ($field['type']) {
+        case GMAP_FIELDS_TYPE_MARKER:
+          if (!array_key_exists($item['value'], gmap_get_marker_titles())) {
+            $errors[$field['field_name']][$langcode][$delta][] = array(
+              'error' => 'gmap_marker_invalid',
+              'message' => t('Invalid marker.'),
+            );
+          }
+          break;
+
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function gmap_fields_field_is_empty($item, $field) {
+  switch ($field['type']) {
+    case GMAP_FIELDS_TYPE_MARKER:
+      $empty = empty($item['value']);
+      break;
+
+  }
+  return $empty;
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function gmap_fields_field_widget_form_alter(&$element, &$form_state, $context) {
+  if ($context['field']['type'] == GMAP_FIELDS_TYPE_MARKER) {
+    $element['#options'] += gmap_get_marker_titles();
+  }
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function gmap_fields_field_formatter_info() {
+  return array(
+    GMAP_FIELDS_FORMAT_MARKER_TITLE => array(
+      'label' => t('Marker title'),
+      'field types' => array(GMAP_FIELDS_TYPE_MARKER),
+    ),
+    GMAP_FIELDS_FORMAT_MARKER_KEY => array(
+      'label' => t('Marker key'),
+      'field types' => array(GMAP_FIELDS_TYPE_MARKER),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function gmap_fields_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+  switch ($display['type']) {
+    case GMAP_FIELDS_FORMAT_MARKER_TITLE:
+      $key = $items[0]['value'];
+      $markers = gmap_get_marker_titles();
+      $element = array(
+        '#markup' => check_plain($markers[$key]),
+        '#prefix' => "<span class=\"gmap-marker gmap-marker-$key\">",
+        '#suffix' => "</span>",
+      );
+      break;
+
+    case GMAP_FIELDS_FORMAT_MARKER_KEY:
+      $element = array(
+        '#markup' => check_plain($items[0]['value']),
+      );
+      break;
+
+  }
+
+  return array($element);
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function gmap_fields_field_widget_info_alter(&$info) {
+  $info['options_select']['field types'][] = GMAP_FIELDS_TYPE_MARKER;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function gmap_fields_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id) {
+  if ($form['#field']['type'] == GMAP_FIELDS_TYPE_MARKER) {
+    $form['field']['cardinality']['#disabled'] = TRUE;
+  }
+}

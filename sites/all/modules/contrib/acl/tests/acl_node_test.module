@@ -1,0 +1,89 @@
+<?php
+
+/**
+ * @file
+ * Dummy module implementing node related hooks to test API interaction with
+ * the Node module.
+ */
+
+/**
+ * Implements hook_node_grants().
+ */
+function acl_node_test_node_grants($account, $op) {
+  // Give everyone full grants so we don't break other node tests.
+  // Our node access tests asserts three realms of access.
+  // See testGrantAlter().
+  return array(
+    'test_article_realm' => array(1),
+    'test_page_realm' => array(1),
+    'test_alter_realm' => array(2),
+  );
+}
+
+/**
+ * Implements hook_node_access_records().
+ *
+ * Implicit View by All is allowed.
+ */
+function acl_node_test_node_access_records($node) {
+  $grants = array();
+  if ($node->type == 'article') {
+    // Create grant in arbitrary article_realm for article nodes.
+    $grants[] = array(
+      'realm' => 'test_article_realm',
+      'gid' => 1,
+      'grant_view' => 1,
+      'grant_update' => 0,
+      'grant_delete' => 0,
+      'priority' => 0,
+    );
+  }
+  elseif ($node->type == 'page') {
+    // Create grant in arbitrary page_realm for page nodes.
+    $grants[] = array(
+      'realm' => 'test_page_realm',
+      'gid' => 1,
+      'grant_view' => 1,
+      'grant_update' => 0,
+      'grant_delete' => 0,
+      'priority' => 0,
+    );
+  }
+  return $grants;
+}
+
+/**
+ * Implements hook_node_access_records_alter().
+ */
+function acl_node_test_node_access_records_alter(&$grants, $node) {
+  if (!empty($grants)) {
+    foreach ($grants as $key => $grant) {
+      // Alter grant from test_page_realm to test_alter_realm and modify the gid.
+      if ($grant['realm'] == 'test_page_realm' && $node->promote) {
+        $grants[$key]['realm'] = 'test_alter_realm';
+        $grants[$key]['gid'] = 2;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_node_grants_alter().
+ *
+ * Returns an empty array of grants to prove that we can alter by reference.
+ */
+function acl_node_test_node_grants_alter(&$grants, $account, $op) {
+  $grants = array();
+}
+
+/**
+ * Implements hook_node_presave().
+ */
+function acl_node_test_node_presave($node) {
+  if ($node->title == 'testing_node_presave') {
+    // Sun, 19 Nov 1978 05:00:00 GMT
+    $node->created = 280299600;
+    // Drupal 1.0 release.
+    $node->changed = 979534800;
+  }
+}

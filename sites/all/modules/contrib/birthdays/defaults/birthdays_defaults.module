@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Defaults for the birthday module.
+ */
+
+/**
+ * Implements hook_views_api().
+ */
+function birthdays_defaults_views_api() {
+  return array(
+    'api' => 3,
+  );
+}

@@ -1,0 +1,188 @@
+<?php
+
+/**
+ * @file
+ * Primary logic for the friendly_register module that allows for checking of username and email.
+ */
+
+define('FRIENDLY_REGISTER_MAX_HITS', 300);
+define('FRIENDLY_REGISTER_EXPIRES', 86400);
+
+/**
+ * Implements hook_menu().
+ */
+function friendly_register_menu() {
+  $items['ajax/check-email'] = array(
+    'page callback' => 'friendly_register_check_email',
+    'page arguments' => array(2),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  $items['ajax/check-user'] = array(
+    'page callback' => 'friendly_register_check_user',
+    'page arguments' => array(2),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function friendly_register_permission() {
+  return array(
+    'ignore flood' =>  array(
+      'title' => t('Ignore Flood Checking'),
+      'description' => t('Allows users to have unlimited checks against friendly register.'),
+      'restrict access' => FALSE,
+    ),
+  );
+}
+
+/**
+ * Implements hook_cron().
+ */
+function friendly_register_cron() {
+  $expires = REQUEST_TIME - FRIENDLY_REGISTER_EXPIRES;
+  db_delete('friendly_register_flood')
+    ->condition('lasthit', $expires, '<=')
+    ->execute();
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function friendly_register_form_user_register_form_alter(&$form, &$form_state, $form_id) {
+  foreach (array('name', 'mail') as $field) {
+    $class = 'friendly-register-' . $field;
+    if (isset($form['account'][$field]['#attributes']['class'])) {
+      $form['account'][$field]['#attributes']['class'][] = $class;
+    }
+    elseif (isset($form['account'][$field]['#attributes'])) {
+      $form['account'][$field]['#attributes']['class'] = array(
+        $class,
+      );
+    }
+    else {
+      $form['account'][$field]['#attributes'] = array(
+        'class' => array(
+          $class,
+        ),
+      );
+    }
+  }
+
+  friendly_register_load_resources();
+}
+
+/**
+ * Utility function for load required resources.
+ */
+function friendly_register_load_resources() {
+  $path = drupal_get_path('module', 'friendly_register');
+  drupal_add_js($path . '/js/friendly_register.js', 'file');
+  drupal_add_css($path . '/css/friendly_register.css');
+}
+
+/**
+ * JSON callback to check the email address.
+ *
+ * @param $address
+ */
+function friendly_register_check_email($address) {
+  $email_is_valid = TRUE;
+  $all_email_checks = module_invoke_all('validate_email_address', $address);
+  foreach ($all_email_checks as $check) {
+    $email_is_valid = $check && $email_is_valid;
+  }
+  // Check if it is a valid email address. No need to check if it is not
+  if ($email_is_valid) {
+    drupal_json_output(_friendly_register_check_field('mail', $address));
+  }
+  else {
+    // This flag will return incomplete so the user doesn't see an error
+    // if they are just starting to enter in their email address
+    drupal_json_output(array('available' => 'incomplete'));
+  }
+}
+
+/**
+ * Implements hook_validate_email_address().
+ *
+ * @param string $address
+ *
+ * @return bool
+ */
+function friendly_register_validate_email_address($address) {
+  return valid_email_address($address);
+}
+
+/**
+ * JSON callback to check the username.
+ *
+ * @param string $username
+ */
+function friendly_register_check_user($username) {
+  $user_is_valid = TRUE;
+  $all_user_checks = module_invoke_all('validate_user_name', $username);
+  foreach ($all_user_checks as $check) {
+    $user_is_valid = $check && $user_is_valid;
+  }
+  if ($user_is_valid) {
+    drupal_json_output(_friendly_register_check_field('name', $username));
+  }
+  else {
+    drupal_json_output(array('available' => 'invalid'));
+  }
+}
+
+/**
+ * Checks the value of a field on the user table.
+ *
+ * @param string $field_name
+ * @param string $value
+ *
+ * @return array
+ */
+function _friendly_register_check_field($field_name, $value) {
+  if (_friendly_register_check_flood()) {
+    $result = db_query("SELECT uid FROM {users} WHERE " . $field_name . " = :value", array(':value' => $value))->fetchField();
+    return array('available' => ($result == NULL));
+  }
+  else {
+    return array('flood' => TRUE);
+  }
+}
+
+/**
+ * Checks to see if the user has too many requests (flood).
+ *
+ * @return bool
+ */
+function _friendly_register_check_flood() {
+  if (user_access('ignore flood')) {
+    return TRUE;
+  }
+  else {
+    $ip = ip_address();
+    $q = 'SELECT hits FROM {friendly_register_flood} WHERE ip = :ip';
+    $hits = db_query($q, array(':ip' => $ip))->fetchField();
+    if ($hits == NULL) {
+      db_insert('friendly_register_flood')
+        ->fields(array(
+            'ip' => $ip,
+            'hits' => 1,
+            'lasthit' => REQUEST_TIME,
+      ))->execute();
+    }
+    else {
+      db_update('friendly_register_flood')
+      ->expression('hits', 'hits + 1')
+      ->expression('lasthit', REQUEST_TIME)
+      ->condition('ip', $ip)
+      ->execute();
+    }
+    return $hits < FRIENDLY_REGISTER_MAX_HITS;
+  }
+}

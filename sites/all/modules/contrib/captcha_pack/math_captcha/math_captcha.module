@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function math_captcha_menu() {
+  $items = array();
+  $items['admin/config/people/captcha/math_captcha'] = array(
+    'title' => 'Math CAPTCHA',
+    'file' => 'math_captcha.admin.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('math_captcha_settings_form'),
+    'access arguments' => array('administer CAPTCHA settings'),
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+/**
+ * Function for getting the enabled challenges (e.g. for use as checkboxes default_value)
+ */
+function _math_captcha_enabled_challenges() {
+  $enabled = variable_get('math_captcha_enabled_challenges', array(
+    'addition' => 'addition',
+    'subtraction' => 'subtraction',
+    'multiplication' => 'multiplication'
+  ));
+  return $enabled;
+}
+
+/**
+ * Implements hook_captcha().
+ */
+function math_captcha_captcha($op, $captcha_type = '') {
+  switch ($op) {
+    case 'list':
+      return array('Math CAPTCHA');
+    case 'generate':
+      require_once('math_captcha.challenge.inc');
+      if ($captcha_type == 'Math CAPTCHA') {
+        // Get the available challenges
+        $enabled_challenges = _math_captcha_enabled_challenges();
+        $challenges = array_filter($enabled_challenges);
+        $challenge = $challenges[array_rand($challenges)];
+        $form_item = call_user_func("_math_captcha_{$challenge}_challenge");
+        return $form_item;
+      }
+  }
+}

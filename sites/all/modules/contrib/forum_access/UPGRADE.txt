@@ -1,0 +1,6 @@
+UPGRADING
+---------
+
+Prior to upgrading from Drupal 6, you should ensure that you've updated to the
+latest released versions of ACL and Forum Access for Drupal 6.
+

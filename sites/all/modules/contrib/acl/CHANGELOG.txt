@@ -1,0 +1,65 @@
+
+CHANGELOG for ACL for Drupal 7
+
+
+acl 7.x-1.x-dev:
+
+
+acl 7.x-1.1 (2015-08-27):
+  Enhancements:
+    - Improve minor coding nits (no functional changes).
+    - #2101809 by gisle, salvis: Improve support for the anonymous user.
+    - Revise the README.txt file.
+    - Make coder happy (no functional change).
+    - Enable the tests (no functional change).
+    - #1397828: Improve documentation of acl_edit_form() (no functional change).
+
+
+acl 7.x-1.0 (2011-11-26):
+  Enhancements:
+    - Add acl_node_add_acl_record() function to support extending the {acl_node} table.
+
+acl 7.x-1.0-rc1 (2011-08-10):
+  Bug fixes:
+    - Remove version number and file list from .info file now that it's not needed anymore.
+    - Fix typo introduced in prior commit.
+    - #1228214: Fully qualify field parameter in SelectQuery::condition() calls.
+
+acl 7.x-1.0-beta3 (2011-04-17):
+  Enhancements:
+    - Issue #852486 by salvis: Optimize acl_node_clear_acls().
+    - Add tests for acl_node_*().
+    - #968382: Install better indexes.
+  Bug fixes:
+    - Rename acl_create_new_acl() to acl_create_acl().
+    - Fix indenting, spacing, comments; remove useless helper functions. No functional changes.
+    - #1024114: Fix query in acl_get_id_by_name().
+
+acl 7.x-1.0-beta2 (2011-01-08):
+  Enhancements:
+    - Streamline code (no functional change).
+    - Add acl_get_ids_by_user() API.
+    - Add support for ACLs with name /and number/.
+
+acl 7.x-1.0-beta1 (2010-11-06):
+  Enhancements:
+    - Add $number to hook_acl_explain(), too.
+    - Add new acl_add_nodes() function to add access control to multiple nodes selected by a subquery.
+    - #936682: Add a 'number' column and some indexes to the {acl} table.
+    - #761696: Add tests (work in progress).
+    - Create new hook_acl_explain() to allow the client to explain its grant records.
+    - Add acl_has_user($acl_id, $uid) API function.
+  Port to D7:
+    - Need to pass $form_state by reference to _acl_edit_form_after_build().
+    - #946636: Fix WSOD due to core reloading the form from the cache and not loading include files.
+    - #836822: Don't anonymize 'deny' grant records.
+    - #836822: Fix some porting errors.
+    - Fix line endings (no functional change).
+    - #798106: Convert another left-over db_result() call.
+    - #824642: Avoid type conversion problems when FALSE is passed rather than 0.
+    - #798106: Fix incomplete porting (db_query).
+    - #761696: Simpletests: provide some dummy files.
+    - #798108: Remove drupal_install_schema() and drupal_uninstall_schema() calls.
+    - Port database statements.
+    - Use 6.x-1.1 and fix the applicable Coder errors.
+

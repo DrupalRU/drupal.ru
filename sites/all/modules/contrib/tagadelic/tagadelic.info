@@ -1,0 +1,20 @@
+name = Tagadelic
+description = "Tagadelic makes weighted tag clouds from any-ol' weighted list."
+core = 7.x
+dependencies[] = taxonomy
+package = "Taxonomy"
+
+files[] = tests/tagadelic.test
+files[] = tagadelic.module
+files[] = tagadelic.install
+
+files[] = TagadelicCloud.php
+files[] = TagadelicTag.php
+files[] = TagadelicDrupalWrapper.php
+
+; Information added by drupal.org packaging script on 2013-10-18
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "tagadelic"
+datestamp = "1382133977"
+

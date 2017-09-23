@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * @file
+ * Allows users to get feedback on username and email without submitting the form.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function friendly_register_schema() {
+  $schema = array();
+  $schema['friendly_register_flood'] = array(
+    'description' => 'This table is use to limit flooding of requests.',
+    'fields' => array(
+      'ip' => array(
+        'description' => 'The IP address (both IP v4 and v6)',
+        'type' => 'char',
+        'length' => 40,
+        'not null' => TRUE,
+      ),
+      'hits' => array(
+        'description' => 'Total number of hits this IP address has caused.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'lasthit' => array(
+        'description' => 'The date time (unix epoch) of the last hit.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'indexes' => array(
+      'ip' => array('ip', 'hits'),
+      'lasthit' => array('lasthit'),
+    ),
+  );
+  return $schema;
+}
+
+function friendly_register_update_7100() {
+  db_drop_index('friendly_register_flood', 'ip');
+  db_change_field('friendly_register_flood', 'ip', 'ip',
+  array('type' => 'char', 'length' => 40, 'not null' => TRUE),
+  array('indexes' => array(
+    'ip' => array(
+      'ip',
+      'hits',
+    ),
+    'lasthit' => array(
+      'lasthit',
+    )
+  )));
+}

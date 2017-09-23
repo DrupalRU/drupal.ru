@@ -1,0 +1,458 @@
+<?php
+
+function image_filter_filter_info() {
+  $filters['image_filter'] = array(
+    'title' => t('Reference images from other nodes.'),
+    'description' => t('Allow users to reference images from other nodes.'),
+    'process callback' => '_image_filter_process',
+    'tips callback' => '_image_filter_html_tips',
+    'weight' => -10,
+  );
+  return $filters;
+}
+
+function image_filter_menu() {
+  $items = array();
+
+  $items['admin/config/content/image_filter'] = array(
+    'title' => 'Image Filter',
+    'description' => 'Configuation for the Image Filter module.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('image_filter_form'),
+    'access arguments' => array('administer image filter settings'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function image_filter_permission() {
+  return array(
+    'administer image filter settings' => array(
+      'title' => t('Administer Image Filter settings'),
+    ),
+  );
+}
+
+
+function image_filter_form($form, &$form_state) {
+
+  $size_names = image_styles();
+  foreach ($size_names as $size_name => $size) {
+    $image_size_options[$size['name']] = $size['name'];
+  }
+
+  $form['dropdown_size_fieldset'] = array(
+    '#type' => 'fieldset',
+  );
+
+
+  $form['dropdown_size_fieldset']['image_filter_default_image_size'] = array(
+    '#type' => 'select',
+    '#options' => $image_size_options,
+    '#default_value' => variable_get('image_filter_default_image_size'),
+    '#title' => t('The default image size'),
+    '#required' => TRUE,
+    '#description' => 'This is the default image size used. It will be used if no size is given or if the requested size does not exist.'
+  );
+
+  /* The logic is from the example ajax module */
+
+  $entities = entity_get_info();
+  foreach ($entities as $entity_name => $entity) {
+    $entity_options[$entity_name] = $entity_name;
+  }
+
+  $selected = isset($form_state['values']['image_filter_used_entity']) ?
+              $form_state['values']['image_filter_used_entity'] :
+              variable_get('image_filter_used_entity', 'node');
+
+  $form['#attached']['css'] = array(
+    drupal_get_path('module', 'image_filter') . '/image_filter_ajax.css',
+  );
+
+  $form['#attached']['js'] = array(
+    drupal_get_path('module', 'image_filter') . '/image_filter_ajax.js',
+  );
+
+  $form['dropdown_first_fieldset'] = array(
+    '#type' => 'fieldset',
+  );
+
+  $form['dropdown_first_fieldset']['image_filter_used_entity'] = array(
+    '#type' => 'select',
+    '#options' => $entity_options,
+    '#attributes' => array('class' => array('enabled-for-ajax')),
+   /*  '#default_value' => variable_get('image_filter_used_entity','node'), */
+    '#title' => t('The entity to use'),
+    '#required' => TRUE,
+    '#description' => 'This is the entity to include your picture from. In most cases you will select \'node\'. If you select an entity with no image field you will not be able to select a bundle below.',
+    '#ajax' => array(
+      'callback' => 'image_filter_used_bundle_callback',
+      'wrapper' => 'dropdown-second-replace'
+    )
+  );
+
+  $form['dropdown_first_fieldset']['continue_to_second'] = array(
+    '#type' => 'submit',
+    '#value' => t('Choose'),
+    '#attributes' => array('class' => array('next-button')),
+  );
+
+  $form['dropdown_second_fieldset'] = array(
+    '#type' => 'fieldset',
+  );
+
+  $form['dropdown_second_fieldset']['image_filter_used_bundle'] = array(
+    '#type' => 'select',
+    '#options' => image_filter_get_bundles($selected),
+    /* '#default_value' => variable_get('image_filter_used_bundle'), */
+    '#title' => t('The bundle to use'),
+    '#attributes' => array('class' => array('enabled-for-ajax')),
+    '#description' => 'This is the bundle to include your picture from.',
+    '#prefix' => '<div id="dropdown-second-replace">',
+    '#suffix' => '</div>'
+  );
+
+  $form['dropdown_second_fieldset']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('OK'),
+    '#attributes' => array('class' => array('enabled-for-ajax')),
+  );
+
+  if (empty($form_state['values']['image_filter_used_entity'])) {
+    $form['dropdown_second_fieldset']['image_filter_used_bundle']['#disabled'] = TRUE;
+    $form['dropdown_second_fieldset']['image_filter_used_bundle']['#description'] = t('You must select a entity before changing this second one.');
+    $form['dropdown_second_fieldset']['submit']['#disabled'] = TRUE;
+  }
+  return $form;
+}
+
+function image_filter_form_submit($form, &$form_state) {
+
+  // Now handle the case of the next, previous, and submit buttons.
+  // only submit will result in actual submission, all others rebuild.
+  switch ($form_state['triggering_element']['#value']) {
+    case t('OK'): // Submit: We're done.
+      /* drupal_set_message(t('Your values have been submitted. dropdown_first=@first, dropdown_second=@second size=@size',
+         array('@first' => $form_state['values']['image_filter_used_entity'],
+         '@second' => $form_state['values']['image_filter_used_bundle'],
+         '@size' => $form_state['values']['image_filter_default_image_size'])));
+      */
+      variable_set('image_filter_used_entity',
+                  $form_state['values']['image_filter_used_entity']);
+      variable_set('image_filter_used_bundle',
+                  $form_state['values']['image_filter_used_bundle']);
+      variable_set('image_filter_default_image_size',
+                  $form_state['values']['image_filter_default_image_size']);
+      return;
+  }
+  // 'Choose' or anything else will cause rebuild of the form and present
+  // it again.
+  $form_state['rebuild'] = TRUE;
+}
+
+
+function image_filter_used_bundle_callback($form, $form_state) {
+  return $form['dropdown_second_fieldset']['image_filter_used_bundle'];
+}
+
+function image_filter_get_bundles($selected = NULL) {
+  $bundle_options = array();
+  if (isset($selected)) {
+    $entity_used = $selected;
+  }
+  else {
+    $entity_used = variable_get('image_filter_used_entity', 'node');
+  }
+  $bundles = field_info_bundles($entity_used);
+  foreach ($bundles as $bundle_name => $bundle) {
+    $fields = field_info_instances($entity_used, $bundle_name);
+    foreach ($fields as $field_type) {
+      if ($field_type['widget']['module'] == 'image') {
+        $bundle_options[$bundle_name] = $bundle_name;
+      }
+    }
+  }
+  return $bundle_options;
+}
+
+function _image_filter_short_tip_translated() {
+  return t(
+'You may link to images on this site <a href="!explanation-url">using a special syntax</a>',
+array('!explanation-url' => url('filter/tips')));
+}
+
+function _image_filter_long_tip_translated() {
+  return t(
+'<p>You may quickly link to image nodes using a special syntax. Each image code will be replaced by thumbnail linked to full size image node. Syntax:</p>
+<blockquote><code>[image:<em>node_id</em> align=<em>alignment</em> hspace=<em>n</em> vspace=<em>n</em> border=<em>n</em> size=<em>label</em> width=<em>n</em> height=<em>n</em> nolink=(0|1) class=<em>name</em> style=<em>style-data</em> node=<em>id</em>]</code></blockquote>
+<p>Every parameter except <em>node_id</em> is optional.</p>
+<p>Typically, you will specify one of <code>size</code>, <code>width</code>, or <code>height</code>, or none of them. If you use <code>size=<em>label</em></code>, where <em>label</em> is one of the image size labels specified on the image settings page, the size associated with that label will be used. The sizes "thumbnail", "preview", and "original" are always available. If you use <code>width=<em>n</em></code> or <code>height=<em>n</em></code>, the image will be scaled to fit the specified width or height. If you use none of them, the thumbnail image size will be used.</p>
+<p>If you specify <code>nolink=1</code>, no link will be created to the image node. The default is to create a link to the image.</p>
+<p>Alternatively, if you specify <code>node=id</code>, a link will be created to the node with the given id.</p>
+<p>The <code>align</code>, <code>hspace</code>, <code>vspace</code>, <code>border</code>, <code>class</code>, and <code>style</code> parameters set the corresponding attributes in the generated <code>img</code> tag.</p>');
+}
+
+function image_filter_help($path, $arg) {
+  $output = '';
+  switch ($path) {
+    case 'admin/help#image_filter':
+      $output = t('<p>Sometimes, you want to add an image to another node like a blog entry or a story. You may do this by creating an image node in Drupal for the target image, and then referencing that image in your story, blog, etc. To enable this feature and learn the proper syntax, visit the <a href="!filters">input formats configuration page</a>.</p>', array('!filters' => url('admin/settings/filters')));
+      break;
+  }
+  return $output;
+}
+
+function _image_filter_html_tips($filter, $format, $long = FALSE) {
+
+  if (!$long) {
+    return _image_filter_short_tip_translated();
+  }
+  else {
+    return _image_filter_long_tip_translated();
+  }
+}
+
+/**
+ *
+ */
+
+define("IMAGE_FILTER_WORD", 1);
+define("IMAGE_FILTER_INTEGER", 2);
+define("IMAGE_FILTER_STRING", 3);
+
+function _image_filter_attr_value($text, $value_type = IMAGE_FILTER_WORD) {
+  // Strip off initial and final quotes.
+  $first = substr($text, 0, 1);
+  if ($first == "\"" || $first == "\'") {
+    if (substr($text, -1, 1) == $first) {
+      $text = substr($text, 1, -1);
+    }
+  }
+  switch ($value_type) {
+  case IMAGE_FILTER_WORD:
+    return preg_replace("/\W/", '', $text);
+  case IMAGE_FILTER_INTEGER:
+    return preg_replace("/\D/", '', $text);
+  default:
+    return check_plain($text);
+  }
+}
+
+/**
+ * Actually execute filter on given text.
+ */
+function _image_filter_process($text, $filter, $format, $langcode, $cache, $cache_id ) {
+
+  $cache = FALSE;
+  // Find all the image codes and loop over them, replacing each with an img tag.
+  preg_match_all("/\[image:(\d+)(\s*,)?\s*(.*?)\]/i", $text, $matches, PREG_SET_ORDER);
+  foreach ($matches as $match) {
+
+    $args = array();
+    if (strlen($match[2]) > 0) {
+      // Original syntax: [image:NID,align,hspace,vspace,border]
+      $a = preg_replace('/\W/', '', preg_split("/\s*,\s*/", $match[3]));
+      $args['align']  = _image_filter_attr_value($a[0], IMAGE_FILTER_WORD);
+      $args['hspace'] = _image_filter_attr_value($a[1], IMAGE_FILTER_INTEGER);
+      $args['vspace'] = _image_filter_attr_value($a[2], IMAGE_FILTER_INTEGER);
+      $args['border'] = _image_filter_attr_value($a[3], IMAGE_FILTER_INTEGER);
+    }
+    else {
+      // New syntax: [image:node_id (left|right|top|middle|bottom|absmiddle|texttop|baseline|align=alignment) hspace=n vspace=n border=n size=label width=n height=n nolink=(0|1) class=name style=style-data node=id]
+
+      // Convert bare alignment 'X' to 'align="X"'.
+      $match[3] = preg_replace("/^(left|right|top|middle|bottom|absmiddle|texttop|baseline)\b/i",
+                               "align=\"$1\"", $match[3]);
+      preg_match_all("/(\w+)\=(\"[^\"]*\"|\S*)/", $match[3], $a, PREG_SET_ORDER);
+      foreach ($a as $arg) {
+        $args[strtolower($arg[1])] = $arg[2];
+      }
+    }
+
+    $width = isset($args['width']) ?
+      _image_filter_attr_value($args['width'], IMAGE_FILTER_INTEGER)
+      : NULL;
+    $height = isset($args['height']) ?
+      _image_filter_attr_value($args['height'], IMAGE_FILTER_INTEGER)
+      : NULL;
+    $size = isset($args['size']) ?
+      _image_filter_attr_value($args['size'], IMAGE_FILTER_WORD)
+      : NULL;
+
+    $img = array();
+    $entity_used = variable_get('image_filter_used_entity', 'node');
+    $bundle_used = variable_get('image_filter_used_bundle');
+    $nid = $match[1];
+    $node_array = entity_load($entity_used, array($nid), NULL, TRUE);
+    if (empty($node_array)) {
+      drupal_set_message(t('Entity @nid is not a valid image.',
+        array('@nid' => $nid)),'error');
+      return $text;
+    }
+    $node = $node_array[$nid];
+    $fields = field_info_fields();
+    $field_exist = FALSE;
+
+    foreach ($fields as $field_name => $field_content) {
+      $field = field_info_instance($entity_used, $field_name, $bundle_used);
+      if ($field['widget']['module'] == 'image') {
+        if (!empty($node->$field_name)) {
+          $field_exist = TRUE;
+          $node_field = $node->$field_name;
+          $filepath = $node_field['und'][0]['uri'];
+          $img['filepath'] = $filepath;
+
+          /* Get requested size */
+
+          $request_size = NULL;
+          $style_found = FALSE;
+          $presets = image_styles();
+
+          if (empty($size) || empty($presets[$size])) {
+            /* Requested doesn't exits or is not set
+               use our default */
+            $request_size = $size;
+            $size = variable_get('image_filter_default_image_size',
+                                 'thumbnail');
+          }
+
+          $dst = image_style_path($size, $filepath);
+          if (! file_exists($dst)) {
+            $result = image_style_create_derivative($presets[$size],
+                      $filepath, $dst);
+            if (! $result) {
+              drupal_set_message(
+                t('Could not create a new derivate of the image'), 'warning');
+            }
+          }
+
+          $image = image_get_info($dst);
+
+          $width = $image['width'];
+          $height = $image['height'];
+
+          $img['filename'] = $size;
+          $img['fileurl'] = image_style_url($size, $filepath);
+          $img['nid'] = $node->nid;
+          $img['title'] = $node->title;
+
+          /* Warn the user if preset wasn't found */
+          if ($size != $request_size && !empty($request_size)) {
+            drupal_set_message(
+              t('Preset %request_size unavailable - using %size.',
+                array('%request_size' => $request_size, '%size' => $size)), 'warning');
+          }
+        }
+      }
+    }
+
+    if (! $field_exist) {
+      drupal_set_message(t('The entity @nid is not a valid bundle.',
+        array('@nid' => $nid)),'error');
+    }
+
+    // If we found a matching image, replace the image code with an <img> tag.
+    if ($img) {
+      if (! $width && ! $height) {
+        $img['width'] = $image['width'];
+        $img['height'] = $image['height'];
+      }
+      elseif ($width && ! $height) {
+        $img['width'] = $width;
+        $img['height'] = round($image['height'] * $width / $image['width']);
+      }
+      elseif ($height && ! $width) {
+        $img['height'] = $height;
+        $img['width'] = round($image['width'] * $height / $image['height']);
+      }
+      else {
+        $img['width'] = $width;
+        $img['height'] = $height;
+      }
+
+      $img['align'] = isset($args['align']) ?
+          _image_filter_attr_value($args['align'], IMAGE_FILTER_WORD)
+          : NULL;
+      $img['hspace'] = isset($args['hspace']) ?
+          _image_filter_attr_value($args['hspace'], IMAGE_FILTER_INTEGER)
+          : NULL;
+      $img['vspace'] = isset($args['vspace']) ?
+          _image_filter_attr_value($args['vspace'], IMAGE_FILTER_INTEGER)
+          : NULL;
+      $img['border'] = isset($args['border']) ?
+          _image_filter_attr_value($args['border'], IMAGE_FILTER_INTEGER)
+          : NULL;
+      $img['class'] = isset($args['class']) ?
+          _image_filter_attr_value($args['class'], IMAGE_FILTER_WORD)
+          : NULL;
+      $img['style'] = isset($args['style']) ?
+          _image_filter_attr_value($args['style'], IMAGE_FILTER_STRING)
+          : NULL;
+      $linkid = isset($args['node']) ?
+          _image_filter_attr_value($args['node'], IMAGE_FILTER_INTEGER)
+          : NULL;
+      $img['link'] = isset($args['nolink'])
+        ? NULL
+        : ($linkid ? "node/$linkid" : "node/$nid");
+      $img['caption'] = isset($args['caption'])
+        ? _image_filter_attr_value($args['caption'], IMAGE_FILTER_STRING)
+        : NULL;
+
+      $img_tag = theme("image_inline_img", $img);
+      $text = str_replace($match[0], $img_tag, $text);
+    }
+  }
+
+  return $text;
+}
+
+/**
+ * Drupal 7 theme hook to declared themeable links:
+ */
+function image_filter_theme() {
+  return array(
+    'image_inline_img' => array(
+    'variables' => array('img' => FALSE))
+  );
+}
+
+
+/**
+ * Theme function to render image in a node.
+ * Displays a thumbnail with a link to the image.
+ */
+function theme_image_inline_img($img) {
+  drupal_add_css(drupal_get_path('module', 'image_filter') . '/image_filter.css');
+
+  $imgtag = "<img src=\"" . $img['fileurl'] . "\"" .
+    ($img['width'] ? " width=\"" . $img['width'] . "\"" : '') .
+    ($img['height'] ? " height=\"" . $img['height'] . "\"" : '') .
+    ($img['align'] ? " align=\"" . $img['align'] . "\"" : '') .
+    ($img['border'] ? " border=\"" . $img['border'] . "\"" : '') .
+    ($img['hspace'] ? " hspace=\"" . $img['hspace'] . "\"" : '') .
+    ($img['vspace'] ? " vspace=\"" . $img['vspace'] . "\"" : '') .
+    " alt=\"" . $img['title'] . "\"" .
+    " title=\"" . $img['title'] . "\"" .
+    ($img['class'] ? " class=\"" . $img['class'] . "\"" : '') .
+    ($img['style'] ? " style=\"" . $img['style'] . "\"" : '') . " />";
+  if ($img['link']) {
+    $imgtag = l($imgtag, $img['link'], array( 'html' => TRUE ));
+  }
+  if (isset($img['caption'])) {
+    $imgtag = "<div class=\"image_filter\">$imgtag<br />" .
+      "<div class=\"if_caption\">" . $img['caption'] . "</div></div>";
+  }
+  return $imgtag;
+}
+
+// Local Variables:
+// mode: php
+// indent-tabs-mode: nil
+// tab-width: 2
+// c-basic-offset: 2
+// End:

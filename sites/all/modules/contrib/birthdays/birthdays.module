@@ -1,0 +1,739 @@
+<?php
+
+/**
+ * @file
+ * The Birthdays module allows users to add their birthday to their
+ * profile. It lists birthdays on a seperate page and in different
+ * blocks. Users can receive an email on their birthday automatically,
+ * and the administrator can receive daily reminders of who are having
+ * their birthday.
+ */
+
+/**
+ * Admin emails disabled. Default.
+ */
+define('BIRTHDAYS_ADMIN_MAIL_DISABLED', '0');
+
+/**
+ * Admin emails should be sent dayly.
+ */
+define('BIRTHDAYS_ADMIN_MAIL_DAILY', '1');
+
+/**
+ * Admin emails should be sent weekly, on the first day of the week defined
+ * by 'admin/config/regional/settings'.
+ */
+define('BIRTHDAYS_ADMIN_MAIL_WEEKLY', '2');
+
+/**
+ * Admin emails should be sent monthly, on the first day of the month.
+ */
+define('BIRTHDAYS_ADMIN_MAIL_MONTHLY', '3');
+
+/**
+ * Require a year to be given. Default.
+ */
+define('BIRTHDAYS_HIDE_YEAR_NO', '0');
+
+/**
+ * Don't allow a year to be given.
+ */
+define('BIRTHDAYS_HIDE_YEAR_YES', '1');
+
+/**
+ * Leave it up to the user to give a year or not.
+ */
+define('BIRTHDAYS_HIDE_YEAR_USER', '2');
+
+/**
+ * Implements hook_help().
+ */
+function birthdays_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#birthdays':
+      $output = '<h3>' . t('Introduction') . '</h3>';
+      $output .= '<p>' . t('The Birthdays module allows users to add their birthday to their profile. In their profile the date of birth can be shown, as well as their age and their star sign. This is all configurable.') . '</p>';
+      $output .= '<p>' . t('You can also list the birthdays an blocks and pages using Views. You can filter by day, month and year, display only N upcoming birthdays and so on.') . '</p>';
+      $output .= '<p>' . t('It is optional to send users an email or execute another action on their birthday, and the administrator can recieve periodic reminders of who are having their birthday next day, week or month.') . '</p>';
+
+      $output .= '<h3>' . t('The birthday field type') . '</h3>';
+      $output .= '<p>' . t('Birthdays module provides a field type for birthdays. You can use birthday fields for all entity types. Use the "Manage fields" page of your content type / entity type / bundle to add the field. You can also go thee to change the field instance settings later. These are available:') . '<p>';
+      $output .= '<ul>';
+      $output .= '<li>' . t('Display during registration (if on user entity)') . '</li>';
+      $output .= '<li>' . t('Allow the user to hide the year of birth or decide to always or never hide the year of birth.') . '</li>';
+      $output .= '<li>' . t('Send regular emails reminding of upcoming birthdays.') . '</li>';
+      $output .= '</ul>';
+
+      $output .= '<h3>' . t('Birthdays defaults') . '</h3>';
+      $output .= '<p>' . t('Adds a birthday field to the user entity type, provides a default view and a default "Happy birthday mail" action.') . '</p>';
+
+      $output .= '<h3>' . t('Triggers and Actions') . '</h3>';
+      $output .= '<p>' . t('Triggers module allows you to execute actions on birthdays. Birthday module has a tab on the Triggers configuration page, where you can assign actions to execute for each field instance.') . '</p>';
+      $output .= '<p>' . t('The assigned actions are fired during cron runs.') . '</p>';
+      $output .= '<p>' . t('Note that the birthday field type has also a setting, to allow the user to opt-out of triggers.') . '</p>';
+
+      $output .= '<h3>' . t('Views') . '</h3>';
+      $output .= '<p>' . t('Birthdays defaults provides a default page and block, but you can create more custom views.') . '</p>';
+      $output .= '<p>' . t('You can use birthday fields as fields, for sorting and for filtering. The field has clicksort support. You can sort by absolute timestamp, time to next birthday or day of the year. You can filter by absolute values or offsets in days. Also day, month and year column are available as seperate integer columns.') . '</p>';
+
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_field_info().
+ */
+function birthdays_field_info() {
+  return array(
+    'birthdays_date' => array(
+      'label' => t('Birthday'),
+      'description' => t('This field stores a birthday in the database.'),
+      'default_widget' => 'birthdays_textfield',
+      'default_formatter' => 'birthdays_plaintext',
+      'instance_settings' => array(
+        'admin_mail' => BIRTHDAYS_ADMIN_MAIL_DISABLED,
+        'hide_year' => BIRTHDAYS_HIDE_YEAR_NO,
+        'triggers' => array(
+          'user' => FALSE,
+          'title' => t('Fire triggers on birthdays'),
+          'description' => '',
+        ),
+        'datepicker' => FALSE,
+        'dateformat' => 'y/m/d',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_validate().
+ */
+function birthdays_field_validate($entity_type, $entity, $field, $instance, $langcode, &$items, &$errors) {
+  foreach ($items as $delta => $item) {
+    try {
+      BirthdaysBirthday::fromArray($item);
+    }
+    catch (InvalidArgumentException $e) {
+      $errors[$field['field_name']][$langcode][$delta][] = array(
+        'error' => 'birthdays_invalid',
+        'message' => t("That is not a valid birthday."),
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function birthdays_field_is_empty($item, $field) {
+  // There is always something about the triggers, so a birthday field is never
+  // empty.
+  return FALSE;
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function birthdays_field_formatter_info() {
+  return array(
+    'birthdays_plaintext' => array(
+      'label' => t('Plaintext'),
+      'field types' => array('birthdays_date'),
+    ),
+    'birthdays_starsign' => array(
+      'label' => t('Starsign'),
+      'field types' => array('birthdays_date'),
+    ),
+    'birthdays_age' => array(
+      'label' => t('Age'),
+      'field types' => array('birthdays_date'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function birthdays_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  foreach ($items as $delta => $item) {
+    $birthday = BirthdaysBirthday::fromArray($item);
+
+    switch ($display['type']) {
+      case 'birthdays_plaintext':
+        $element[$delta] = array('#markup' => check_plain($birthday->toString($instance['settings']['dateformat'])));
+        break;
+
+      case 'birthdays_starsign':
+        if (!$birthday->isEmpty()) {
+          $element[$delta] = array(
+            '#theme' => 'image',
+            '#path' => url(drupal_get_path('module', 'birthdays') . '/starsigns/' . $birthday->getStarsign() . '.gif'),
+            '#height' => '35',
+            '#width' => '35',
+            '#alt' => $birthday->getStarsign(),
+            '#title' => $birthday->getStarsign(),
+          );
+        }
+        break;
+
+      case 'birthdays_age':
+        if ($birthday->getYear()) {
+          $element[$delta] = array('#markup' => check_plain($birthday->getCurrentAge()));
+        }
+        break;
+    }
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hoook_field_widget_info().
+ */
+function birthdays_field_widget_info() {
+  return array(
+    'birthdays_textfield' => array(
+      'label' => t('Textfield'),
+      'field types' => array('birthdays_date'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function birthdays_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  // The widget.
+  $element += array(
+    '#element_validate' => array('birthdays_field_textfield_validate'),
+    'value' => array(
+      '#type' => 'textfield',
+      '#langcode' => $langcode,
+      '#size' => 10,
+    ) + array_intersect_key($element, array_flip(array('#title', '#description', '#required'))),
+  );
+
+  // Datepicker popup.
+  if ($instance['settings']['datepicker']) {
+    drupal_add_library('system', 'ui.datepicker');
+    if ($instance['settings']['hide_year'] == BIRTHDAYS_HIDE_YEAR_YES) {
+      $element['value']['#attributes']['class'] = array('birthdays-datepicker-noyear');
+    }
+    else {
+      $element['value']['#attributes']['class'] = array('birthdays-datepicker');
+    }
+    $element['value']['#attached']['js'][] = drupal_get_path('module', 'birthdays') . '/birthdays.js';
+    $element['value']['#attached']['js'][] = array(
+      'data' => array(
+        'birthdays' => array(
+          'firstDay' => variable_get('date_first_day', 0),
+          'dateformat' => $instance['settings']['dateformat'],
+          'dateformat_noyear' => str_ireplace(array('/y', '-y', 'y-', 'y/', 'y.', 'y'), '', $instance['settings']['dateformat']),
+        ),
+      ),
+      'type' => 'setting',
+    );
+  }
+
+  // The default value.
+  if (isset($items[$delta])) {
+    $element['value']['#default_value'] = BirthdaysBirthday::fromArray($items[$delta])->toString($instance['settings']['dateformat']);
+  }
+
+  // The trigger checkbox.
+  if (!empty($instance['settings']['triggers']['user'])) {
+    $element['triggers'] = array(
+      '#type' => 'checkbox',
+      '#title' => check_plain($instance['settings']['triggers']['title']),
+      '#description' => check_plain($instance['settings']['triggers']['description']),
+      '#default_value' => isset($items[$delta]) ? $items[$delta]['triggers'] : TRUE,
+    );
+  }
+
+  return $element;
+}
+
+/**
+ * FAPI validation callback for the birthdays_field_widget_form element.
+ */
+function birthdays_field_textfield_validate($element, &$form_state) {
+  try {
+    // If user input for triggers is aloud, get the checkbox value.
+    $instance = field_info_instance($element['#entity_type'], $element['#field_name'], $element['#bundle']);
+    if ($instance['settings']['triggers']['user']) {
+      $triggers = $element['triggers']['#value'];
+    }
+    else {
+      $triggers = TRUE;
+    }
+
+    // Parse the string.
+    $birthday = BirthdaysBirthday::fromString($element['value']['#value'], FALSE, $instance['settings']['dateformat']);
+
+    // Validate against the hide_year setting.
+    if (!$birthday->isEmpty()) {
+      switch ($instance['settings']['hide_year']) {
+        case BIRTHDAYS_HIDE_YEAR_NO:
+          if (!$birthday->getYear()) {
+            form_error($element, t('Please also enter a year.'));
+          }
+          break;
+
+        case BIRTHDAYS_HIDE_YEAR_YES:
+          if ($birthday->getYear()) {
+            form_error($element, t('Please don\'t enter a year.'));
+          }
+          break;
+      }
+    }
+
+    // Make the values ready to save.
+    form_set_value($element, $birthday->toArray() + array('triggers' => $triggers), $form_state);
+  }
+  catch (InvalidArgumentException $e) {
+    form_error($element, t('That is not a valid birthday.'));
+  }
+}
+
+/**
+ * Implements hook_field_widget_error().
+ */
+function birthdays_field_widget_error($element, $error) {
+  form_error($element, $error['message']);
+}
+
+/**
+ * Implements hook_field_instance_settings_form().
+ */
+function birthdays_field_instance_settings_form($field, $instance) {
+  $settings = $instance['settings'];
+
+  // Datepicker option.
+  $form['datepicker'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use a datepicker'),
+    '#description' => t('Select to optionally use a datepicker popup to select dates.'),
+    '#default_value' => $settings['datepicker'],
+  );
+
+  // Datepicker date format.
+  $masks = array('d/m/Y', 'm/d/Y', 'Y/m/d', 'd.m.Y');
+  $form['dateformat'] = array(
+    '#type' => 'select',
+    '#title' => t('Choose the date format'),
+    '#options' => drupal_map_assoc($masks),
+    '#default_value' => $settings['dateformat'],
+  );
+
+  // Year settings.
+  $form['hide_year'] = array(
+    '#type' => 'radios',
+    '#title' => t('Year settings'),
+    '#default_value' => $settings['hide_year'],
+    '#description' => t('Make entering a year optional, required or forbidden.'),
+    '#options' => array(
+      BIRTHDAYS_HIDE_YEAR_NO => t('Require the user to enter a year'),
+      BIRTHDAYS_HIDE_YEAR_USER => t('Let the user decide, if they want to enter a year'),
+      BIRTHDAYS_HIDE_YEAR_YES => t('Don\'t allow the user to enter a year'),
+    ),
+  );
+
+  // Email notifications for administrators.
+  $form['admin_mail'] = array(
+    '#type' => 'radios',
+    '#title' => t('Birthday reminder for the administrator'),
+    '#default_value' => $settings['admin_mail'],
+    '#description' => t('The site administrator can be reminded of upcoming birthdays via email.'),
+    '#options' => array(
+      BIRTHDAYS_ADMIN_MAIL_DISABLED => t('Send <strong>no</strong> reminders'),
+      BIRTHDAYS_ADMIN_MAIL_DAILY => t('Send <strong>daily</strong> reminders'),
+      BIRTHDAYS_ADMIN_MAIL_WEEKLY => t('Send <strong>weekly</strong> reminders, on the first day of the week'),
+      BIRTHDAYS_ADMIN_MAIL_MONTHLY => t('Send <strong>monthly</strong> reminders, on the first day of the month'),
+    ),
+  );
+
+  // Whether the user checkbox is selected.
+  $user_checked = array(
+    ':input[name="instance[settings][triggers][user]"]' => array('checked' => TRUE),
+  );
+
+  // Trigger settings.
+  $form['triggers'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Triggers'),
+    '#description' => t('You can send an email or execute other actions on birthdays using the trigger module.'),
+    'user' => array(
+      '#type' => 'checkbox',
+      '#title' => t('Allow users to opt-out triggers'),
+      '#description' => t('Users will see a checkbox for the birthday field, that allows them to opt-out of triggers.'),
+      '#default_value' => $settings['triggers']['user'],
+    ),
+    'title' => array(
+      '#type' => 'textfield',
+      '#title' => t('Checkbox title'),
+      '#description' => t('The title to use for opt-out checkbox. Usually this should describe what the trigger does, for example: Send me an email on my brithday.'),
+      '#default_value' => $settings['triggers']['title'],
+      '#states' => array(
+        'visible' => $user_checked,
+        'required' => $user_checked,
+      ),
+      '#element_validate' => array('_birthdays_required_if_user_checked'),
+    ),
+    'description' => array(
+      '#type' => 'textfield',
+      '#title' => t('Checkbox description'),
+      '#description' => t('Optional. The description of the opt-out checkbox.'),
+      '#default_value' => $settings['triggers']['description'],
+      '#states' => array(
+        'visible' => $user_checked,
+      ),
+    ),
+  );
+
+  // Provide information about triggers.
+  if (module_exists('trigger')) {
+    $trigger_info = t('Trigger module is enabled. You can !configure_triggers and !actions.', array(
+      '!configure_triggers' => l('configure triggers', 'admin/structure/trigger/birthdays'),
+      '!actions' => l('actions', 'admin/config/system/actions'),
+    ));
+  }
+  else {
+    $trigger_info = t('Go to the !module_page and enable the Trigger module', array(
+      '!module_page' => l('module page', 'admin/modules'),
+    ));
+  }
+  $form['triggers']['#description'] .= ' ' . $trigger_info;
+
+  return $form;
+}
+
+/**
+ * FAPI validation for the checkbox title field, that is required, if the
+ * opt-out trigger checkbox is checked.
+ */
+function _birthdays_required_if_user_checked($element, &$form_state, $form) {
+  if (trim($element['#value']) === '') {
+    if ($form_state['values']['instance']['settings']['triggers']['user']) {
+      form_error($element, t('@title field is required.', array('@title' => $element['#title'])));
+    }
+  }
+}
+
+/**
+ * Implements hook_field_delete_instance().
+ */
+function birthdays_field_delete_instance($instance) {
+  if (db_table_exists('trigger_assignments')) {
+    db_delete('trigger_assignments')
+      ->condition('hook', _birthdays_instance_hook($instance))
+      ->execute();
+  }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function birthdays_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'birthdays') . '/views',
+  );
+}
+
+/**
+ * Implements hook_trigger_info().
+ *
+ * @todo: Find a better solution to per field instance triggers.
+ */
+function birthdays_trigger_info() {
+  $triggers = array();
+
+  foreach (_birthdays_field_instances() as $instance) {
+    // The name is supposed to be a hook name, but we want more granular hooks
+    // without implementing them all. So we generate a unique key and implement
+    // only hook_birthdays().
+    $name = _birthdays_instance_hook($instance);
+
+    // Create a localized label for the trigger.
+    $label = _birthdays_instance_description($instance) . ' ' . t('(On Birthdays)');
+
+    // Add it to the list of triggers.
+    $triggers['birthdays'][$name] = array('label' => $label);
+  };
+
+  return $triggers;
+}
+
+/**
+ * Get a human readable description of a field instance.
+ *
+ * @param $instance
+ *   The field instance.
+ *
+ * @return
+ *   A localized string.
+ */
+function _birthdays_instance_description($instance) {
+  $vars = array(
+    '@entity_type' => $instance['entity_type'],
+    '@bundle' => $instance['bundle'],
+    '@field_name' => $instance['field_name'],
+  );
+
+  if ($instance['entity_type'] == $instance['bundle']) {
+    $desc = t('@entity_type: @field_name', $vars);
+  }
+  else {
+    $desc = t('@entity_type: @bundle: @field_name', $vars);
+  }
+
+  return $desc;
+}
+
+/**
+ * Get a hook name that is unique for a field instance.
+ *
+ * @param $i
+ *   The field instance.
+ *
+ * @return
+ *   birthdays_{uuid}, maximum length is 32 characters.
+ */
+function _birthdays_instance_hook($i) {
+  $hook = 'birthdays_' . sha1($i['entity_type'] . '|' . $i['bundle'] . '|' . $i['field_name']);
+  return drupal_substr($hook, 0, 32);
+}
+
+/**
+ * Implements hook_birthdays().
+ */
+function birthdays_birthdays($entity, $instance) {
+  // Require the trigger module.
+  if (!module_exists('trigger')) {
+    return;
+  }
+
+  // Context information.
+  $context = array(
+    'group' => 'birthdays',
+    'hook' => _birthdays_instance_hook($instance),
+    $instance['entity_type'] => $entity,
+  );
+
+  // Execute the matching set of actions.
+  $aids = trigger_get_assigned_actions($context['hook']);
+  actions_do(array_keys($aids), $entity, $context, $instance);
+}
+
+/**
+ * Get all instances of birthday fields that are around.
+ */
+function _birthdays_field_instances() {
+  $result = array();
+
+  // Get the instances.
+  foreach (field_info_fields() as $field) {
+    if ($field['type'] == 'birthdays_date') {
+      foreach ($field['bundles'] as $entity_type => $bundles) {
+        foreach ($bundles as $bundle) {
+          $result[] = field_info_instance($entity_type, $field['field_name'], $bundle);
+        }
+      }
+    }
+  }
+
+  // Sort them.
+  usort($result, '_birthdays_field_instances_compare');
+
+  return $result;
+}
+
+/**
+ * Comparison callback to sort an array of field instances by entity type,
+ * bundle name and field name as humans would do.
+ *
+ * @see strnatcmp()
+ */
+function _birthdays_field_instances_compare($a, $b) {
+  // Entity types have first priority.
+  if ($result = strnatcmp($a['entity_type'], $b['entity_type'])) {
+    return $result;
+  }
+
+  // Next are bundle names.
+  if ($result = strnatcmp($a['bundle'], $b['bundle'])) {
+    return $result;
+  }
+
+  // The field name at last.
+  return strnatcmp($a['field_name'], $b['field_name']);
+}
+
+/**
+ * Query the database for birthdays.
+ *
+ * @param $trigger
+ *   TRUE, if only birthdays should be returned, that are not opted out of
+ *   triggers.
+ * @param $instance
+ *   The field instance to query for.
+ * @param $day
+ *   The day to look up. 0 for all days of a month.
+ * @param $month
+ *   The month to look up.
+ * @param $year
+ *   Optional. If that year is not a leap year and $day and $month indicate the
+ *   first of March, then February 29 will be included in the query.
+ *
+ * @return
+ *   An array where both keys and values are entity ids.
+ */
+function _birthdays_get($trigger, $instance, $day, $month, $year = NULL) {
+  $field_name = $instance['field_name'];
+
+  $query = db_select('field_data_' . $field_name, 'f')
+    ->fields('f', array('entity_id'))
+    ->condition($field_name . '_month', $month)
+    ->condition('entity_type', $instance['entity_type'])
+    ->condition('bundle', $instance['bundle']);
+
+  if ($day) {
+    $query->condition($field_name . '_day', $day);
+  }
+
+  if ($trigger && $instance['settings']['triggers']['user']) {
+    $query->condition($field_name . '_triggers', TRUE);
+  }
+
+  $result = $query
+    ->execute()
+    ->fetchAllKeyed(0, 0);
+
+  if ($year && $day == 1 && $month == 3 && !BirthdaysBirthday::isLeapYear($year)) {
+    $result += _birthdays_get($instance, 29, 2);
+  }
+
+  return $result;
+}
+
+/**
+ * Implements hook_cron().
+ */
+function birthdays_cron() {
+  $instances = _birthdays_field_instances();
+
+  // The cronjob run at most once a day.
+  $day = 24 * 60 * 60;
+  $last_cron = variable_get('birthdays_last_cron', REQUEST_TIME - $day);
+  if ($last_cron > REQUEST_TIME - $day) {
+    return;
+  }
+
+  // Prepare an admin mail.
+  $admin_mail = array();
+  foreach ($instances as $instance) {
+    // Query for birthdays.
+    $birthdays = array();
+    switch ($instance['settings']['admin_mail']) {
+      case BIRTHDAYS_ADMIN_MAIL_DAILY:
+        $birthdays = _birthdays_get(FALSE, $instance, date('d', REQUEST_TIME), date('m', REQUEST_TIME), date('Y', REQUEST_TIME));
+        $period = t('Today');
+        break;
+
+      case BIRTHDAYS_ADMIN_MAIL_WEEKLY:
+        if (variable_get('date_first_day', 0) == date('w', REQUEST_TIME)) {
+          for ($i = 0; $i++; $i < 7) {
+            $qtime = REQUEST_TIME + $i * $day;
+            $birthdays += _birthdays_get(FALSE, $instance, date('d', $qtime), date('m', $qtime), date('Y', $qtime));
+          }
+          $period = t('This week');
+        }
+        break;
+
+      case BIRTHDAYS_ADMIN_MAIL_MONTHLY:
+        if (date('d', REQUEST_TIME) == 1) {
+          $birthdays = _birthdays_get(FALSE, $instance, 0, date('m', REQUEST_TIME), date('Y', REQUEST_TIME));
+          $period = t('This month');
+        }
+        break;
+    }
+
+    // Add an entry to the mail.
+    $entities = entity_load($instance['entity_type'], $birthdays);
+    if (!empty($entities)) {
+      $admin_mail[_birthdays_instance_description($instance) . ' (' . $period . ')'] = array(
+        'instance' => $instance,
+        'entities' => $entities,
+      );
+    }
+  }
+
+  // Send the admin mail.
+  if (!empty($admin_mail)) {
+    $to = variable_get('site_mail', ini_get('sendmail_from'));
+    drupal_mail('birthdays', 'admin_mail', $to, language_default(), $admin_mail);
+  }
+
+  // Iterate over all the days that passed since the last cron run.
+  while ($last_cron <= REQUEST_TIME - $day) {
+    $last_cron += $day;
+
+    foreach ($instances as $instance) {
+      // Find the birthdays.
+      $birthdays = _birthdays_get(TRUE, $instance, date('d', $last_cron), date('m', $last_cron), date('Y', $last_cron));
+      $entities = entity_load($instance['entity_type'], $birthdays);
+
+      // Invoke hook_birthdays().
+      foreach ($entities as $entity) {
+        module_invoke_all('birthdays', $entity, $instance);
+      }
+    }
+  }
+  variable_set('birthdays_last_cron', $last_cron);
+}
+
+/**
+ * Implements hook_mail().
+ */
+function birthdays_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'admin_mail':
+      $message['subject'] = t('Upcoming birthdays');
+      foreach ($params as $category => $items) {
+        $type = $items['instance']['entity_type'];
+
+        // Category header, underlined.
+        $message['body'][] = $category;
+        $message['body'][] = str_repeat('-', drupal_strlen($category));
+        $message['body'][] = '';
+
+        foreach ($items['entities'] as $entity) {
+          $item = array();
+
+          // Entity label.
+          $label = entity_label($type, $entity);
+          if ($label) {
+            $item[] = $label;
+          }
+
+          // Actual birthday and age.
+          $date = reset(field_get_items($type, $entity, $items['instance']['field_name']));
+          $birthday = BirthdaysBirthday::fromArray($date);
+          $item[] = $birthday->toString($items['instance']['settings']['dateformat']) . ' (' . $birthday->getAge() . ')';
+
+          // Entity URL.
+          $uri = entity_uri($type, $entity);
+          if ($uri) {
+            $item[] = url($uri['path'], array('absolute' => TRUE) + $uri['options']);
+          }
+
+          $message['body'][] = join($item, ', ');
+        }
+
+        $message['body'][] = '';
+      }
+      break;
+  }
+}

@@ -1,0 +1,24 @@
+
+.advuser_warning {
+  color: #e09010;
+}
+div.advuser_warning {
+  border: 1px solid #f0c020;
+}
+div.advuser_warning, tr.advuser_warning {
+  background: #ffd;
+  color: #220;
+  padding: 2px;
+}
+
+.advuser_message {
+  color: #100f9f;
+}
+div.advuser_message {
+  border: 1px solid #00b000;
+}
+div.advuser_message, tr.advuser_message {
+  background: #cfc;
+  color: #220;
+  padding: 2px;
+}

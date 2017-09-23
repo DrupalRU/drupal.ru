@@ -1,0 +1,331 @@
+<?php
+
+/**
+ * @file
+ * Location saving test.
+ */
+
+require_once drupal_get_path('module', 'location') . '/tests/location_testcase.test';
+
+/**
+ * Class CowInstanceTest.
+ */
+class CowInstanceTest extends LocationTestCase {
+  /**
+   * A global administrative user.
+   */
+  public $admin_user;
+
+  /**
+   * A global normal user.
+   */
+  public $normal_user;
+
+  /**
+   * Simple content type using defaults.
+   */
+  public $content_type;
+
+
+  public static function getInfo() {
+    return array(
+      'name' => t('Location Copy on Write checks'),
+      'description' => t('Test corner cases of the copy on write mechanism.'),
+      'group' => t('Location', array(), array('context' => 'geolocation')),
+    );
+  }
+
+  public function setUp() {
+    parent::setUp('location', 'location_node', 'devel');
+    $web_admin = $this->drupalCreateUser(array_keys(module_invoke_all('permission')));
+    $this->drupalLogin($web_admin);
+  }
+
+  public function testCreateLocation() {
+    $settings = array();
+    $location_type = $this->addLocationContentType($settings);
+
+    $location1_name = $this->randomName();
+
+    $node = $this->drupalCreateNode(
+      array(
+        'type' => $location_type,
+        'locations' => array(
+          0 => array(
+            'name' => $location1_name,
+            'location_settings' => $settings,
+          ),
+        ),
+      )
+    );
+
+    // Reload the node.
+    $node2 = node_load($node->nid, NULL, TRUE);
+
+    $this->assertEqual($location1_name, $node2->locations[0]['name'], t('Testing basic save/load'));
+  }
+
+  public function testLocpickOnly() {
+    $settings = array();
+    $location_type = $this->addLocationContentType($settings);
+
+    $location1_name = $this->randomName();
+
+    $node = $this->drupalCreateNode(
+      array(
+        'type' => $location_type,
+        'locations' => array(
+          0 => array(
+            'locpick' => array(
+              'user_latitude' => '44.25',
+              'user_longitude' => '-10.25',
+            ),
+            'location_settings' => $settings,
+          ),
+        ),
+      )
+    );
+
+    // Reload the node.
+    $node2 = node_load($node->nid, NULL, TRUE);
+    $this->pass(var_export($node2->locations, TRUE));
+    $this->assertEqual($node2->locations[0]['latitude'], 44.25, t('Testing coordinate-only save/load'));
+  }
+
+  public function testMultipleLocationOnSingleNode() {
+    $settings = array();
+    $location_type = $this->addLocationContentType($settings, array('multiple' => array('max' => 3, 'add' => 3)));
+
+    $location1_name = $this->randomName();
+    $location2_name = $this->randomName();
+    $location3_name = $this->randomName();
+
+    $node = $this->drupalCreateNode(
+      array(
+        'type' => $location_type,
+        'locations' => array(
+          0 => array(
+            'name' => $location1_name,
+            'location_settings' => $settings,
+          ),
+          1 => array(
+            'name' => $location2_name,
+            'location_settings' => $settings,
+          ),
+          2 => array(
+            'name' => $location3_name,
+            'location_settings' => $settings,
+          ),
+        ),
+      )
+    );
+
+    // Reload the node.
+    $node2 = node_load($node->nid, NULL, TRUE);
+
+    $this->assertEqual($location1_name, $node2->locations[0]['name'], t('Testing multi location 1/3'));
+    $this->assertEqual($location2_name, $node2->locations[1]['name'], t('Testing multi location 2/3'));
+    $this->assertEqual($location3_name, $node2->locations[2]['name'], t('Testing multi location 3/3'));
+    $this->assertNotEqual(
+      $node2->locations[0]['lid'],
+      $node2->locations[1]['lid'],
+      t('Ensuring location id uniqueness')
+    );
+    $this->assertNotEqual(
+      $node2->locations[1]['lid'],
+      $node2->locations[2]['lid'],
+      t('Ensuring location id uniqueness')
+    );
+    $this->assertNotEqual(
+      $node2->locations[2]['lid'],
+      $node2->locations[0]['lid'],
+      t('Ensuring location id uniqueness')
+    );
+  }
+
+  public function testSharedLocation() {
+    $settings = array();
+    $location_type = $this->addLocationContentType($settings);
+
+    $location1_name = $this->randomName();
+
+    $node = $this->drupalCreateNode(
+      array(
+        'type' => $location_type,
+        'locations' => array(
+          0 => array(
+            'name' => $location1_name,
+            'location_settings' => $settings,
+          ),
+        ),
+      )
+    );
+
+    // Reload the node.
+    $node = node_load($node->nid, NULL, TRUE);
+
+    // Get the full location
+    $location = $node->locations[0];
+
+    $node2 = $this->drupalCreateNode(
+      array(
+        'type' => $location_type,
+        'locations' => array(
+          '0' => $location,
+        ),
+      )
+    );
+
+    // Reload second node.
+    $node2 = node_load($node2->nid, NULL, TRUE);
+
+    $this->assertNotEqual($node->nid, $node2->nid, t('Ensuring nodes are separate'));
+    $this->assertEqual($node->locations[0]['lid'], $node2->locations[0]['lid'], t('Testing shared location'));
+
+    $this->deleteNode($node->nid);
+
+    // Force another reload.
+    $node2 = node_load($node2->nid, NULL, TRUE);
+
+    $this->assertEqual(
+      $node2->locations[0]['lid'],
+      $location['lid'],
+      t('Ensuring shared location is not prematurely garbage collected')
+    );
+
+    $this->deleteNode($node2->nid);
+
+    // @todo fix this
+    $result = db_query('SELECT * FROM {location} WHERE lid = :lid', array(':lid' => $location['lid']));
+    if ($row = $result->fetch()) {
+      $this->fail(t('Ensuring shared location is garbage collected'));
+    }
+    else {
+      $this->pass(t('Ensuring shared location is garbage collected'));
+    }
+  }
+
+  public function testNodeRevisionCOW() {
+    $settings = array();
+    $location_type = $this->addLocationContentType($settings, array('multiple' => array('max' => 3, 'add' => 3)));
+
+    $location1_name = $this->randomName();
+    $location2_name = $this->randomName();
+    $location3_name = $this->randomName();
+
+    $node = $this->drupalCreateNode(
+      array(
+        'type' => $location_type,
+        'locations' => array(
+          // First.
+          0 => array(
+            'name' => $location1_name,
+            'location_settings' => $settings,
+          ),
+          // Second.
+          1 => array(
+            'name' => $location2_name,
+            'location_settings' => $settings,
+          ),
+        ),
+      )
+    );
+
+    // Reload the node.
+    $node = node_load($node->nid, NULL, TRUE);
+
+    $changes = array(
+      'revision' => TRUE,
+      'log' => $this->randomName(20),
+      'locations' => array(
+        // Delete First.
+        0 => array(
+          'delete_location' => TRUE,
+        ),
+        // Third.
+        2 => array(
+          'name' => $location3_name,
+        ),
+      ),
+    );
+    $this->flattenPostData($changes);
+    $this->drupalPost('node/' . $node->nid . '/edit', $changes, 'Save');
+
+    // Reload the node again.
+    $node1 = node_load($node->nid, $node->vid, TRUE);
+    $node2 = node_load($node->nid, NULL, TRUE);
+
+    // Ensure locations are in a consistent order.
+    $this->reorderLocations($node);
+    $this->reorderLocations($node1);
+    $this->reorderLocations($node2);
+
+    $this->assertEqual(count($node1->locations), 2, t('Ensuring second revision did not affect first revision'));
+    $this->assertEqual(
+      $node->locations[0]['lid'],
+      $node1->locations[0]['lid'],
+      t('Ensuring second revision did not affect first revision')
+    );
+    $this->assertEqual(
+      $node->locations[1]['lid'],
+      $node1->locations[1]['lid'],
+      t('Ensuring second revision did not affect first revision')
+    );
+
+    $this->assertEqual(count($node2->locations), 2, t('Ensuring second revision does not have stealth locations'));
+
+    // Delete first revision.
+    db_query(
+      "DELETE FROM {node_revision} WHERE nid = :nid AND vid = :vid",
+      array(
+        ':nid' => $node1->nid,
+        ':vid' => $node1->vid
+      )
+    );
+    $this->assertFalse(node_revision_delete($node1->vid));
+
+  }
+
+  public function testCOWConservation() {
+    $settings = array();
+    $location_type = $this->addLocationContentType($settings);
+
+    $location1_name = $this->randomName();
+
+    $node = $this->drupalCreateNode(
+      array(
+        'type' => $location_type,
+        'locations' => array(
+          0 => array(
+            'name' => $location1_name,
+            'location_settings' => $settings,
+          ),
+        ),
+      )
+    );
+
+    // Reload the node.
+    $node = node_load($node->nid, NULL, TRUE);
+
+    $changes = array(
+      'locations' => array(
+        0 => array(
+          // Update name.
+          'name' => $location1_name . '_CHANGE',
+        ),
+      ),
+    );
+    $this->flattenPostData($changes);
+    $this->drupalPost('node/' . $node->nid . '/edit', $changes, 'Save');
+
+    // Reload the node again.
+    $node1 = node_load($node->nid, NULL, TRUE);
+
+    // Ensure locations are in a consistent order.
+    $this->reorderLocations($node);
+    $this->reorderLocations($node1);
+
+    $this->assertEqual($node->locations[0]['lid'], $node1->locations[0]['lid'], t('Ensuring LIDs are conserved'));
+
+  }
+}

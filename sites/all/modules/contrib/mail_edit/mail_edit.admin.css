@@ -1,0 +1,21 @@
+#mail-edit-filter .mail-edit-filter {
+  margin-right: 3em;
+  float: left;
+}
+
+#mail-edit-filter #mail-edit-languages-selected-filter{
+  margin-left: 0;
+}
+
+#mail-edit-table {
+  clear: both;
+}
+
+#mail-edit-table .description {
+  line-height: 1.6em;
+}
+
+table.token-tree {
+  margin-left: 0;
+  margin-bottom: 0;
+}

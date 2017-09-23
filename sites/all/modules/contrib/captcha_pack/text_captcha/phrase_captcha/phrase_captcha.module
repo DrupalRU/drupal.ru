@@ -1,0 +1,248 @@
+<?php
+
+/**
+ * Implementation of a phrase based CAPTCHA, for use with the CAPTCHA module
+ *
+ * @todo: add character picking of current word, which is harder for spam bots
+ * than plain word guessing.
+ */
+
+define('PHRASE_CAPTCHA_GENERATE_NONSENSE_WORDS', 0);
+define('PHRASE_CAPTCHA_USER_DEFINED_WORDS', 1);
+
+/**
+ * Implements hook_help().
+ */
+function phrase_captcha_help($path, $arg) {
+  switch ($path) {
+    case 'admin/config/people/captcha/phrase_captcha':
+      return '<p>' . t('This phrase based CAPTCHA presents a CAPTCHA phrase of a given number of words and asks to pick the right word (based on counting, alphabetical order, etc).') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function phrase_captcha_menu() {
+  $items = array();
+  // Add an administration tab for phrase_captcha
+  $items['admin/config/people/captcha/phrase_captcha'] = array(
+    'title' => 'Phrase CAPTCHA',
+    'file' => 'phrase_captcha.admin.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('phrase_captcha_settings_form'),
+    'access arguments' => array('administer CAPTCHA settings'),
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_captcha().
+ */
+function phrase_captcha_captcha($op, $captcha_type = '') {
+  switch ($op) {
+    case 'list':
+      return array('Phrase CAPTCHA');
+    case 'generate':
+      if ($captcha_type == 'Phrase CAPTCHA') {
+        // Generate words
+        $words = _phrase_captcha_generate_words(variable_get('phrase_captcha_word_quantity', 5));
+        // Pick a random word selection challenge
+        $word_challenges = _phrase_captcha_enabled_word_challenges();
+        $key = array_rand($word_challenges);
+        $function = $word_challenges[$key];
+        list($phrase_words, $question, $solution) = call_user_func($function, $words);
+        // Build options list
+        $all_words = array_merge($words, _phrase_captcha_generate_words(variable_get('phrase_captcha_additional_word_quantity', 1)));
+        shuffle($all_words);
+        $options = array();
+        foreach ($all_words as $word) {
+          $options[$word] = $word;
+        }
+        // Store the answer and build the form elements
+        $captcha = array();
+        $captcha['solution'] = $solution;
+        $captcha['form']['captcha_phrase'] = array(
+          '#type' => 'markup',
+          '#value' => '"' . implode(' ', $phrase_words) . '"',
+          '#weight' => -2,
+        );
+        $captcha['form']['captcha_response'] = array(
+          '#type' => 'radios',
+          '#title' => $question,
+          '#options' => $options,
+          // Extra class needed for additional CSS'ing of the options
+          '#attributes' => array('class' => array('text-captcha-word-list-radios')),
+          // The following entry '#DANGEROUS_SKIP_CHECK' is needed to prevent
+          // that Drupal checks during validation phase if a submitted option
+          // is in the list of possible options. (see includes/form.inc)
+          // The options are randomly generated on each call and consequently
+          // almost never the same during the generate phase and the validation
+          // phase.
+          '#DANGEROUS_SKIP_CHECK' => TRUE, //
+          '#required' => TRUE,
+        );
+        // Add css to form
+        $captcha['#attached']['css'] = array(
+          drupal_get_path('module', 'phrase_captcha') . '/../text_captcha.css',
+        );
+        return $captcha;
+      }
+  }
+}
+
+
+/**
+ * Function for generating a random nonsense word of a given number of characters
+ */
+function _phrase_captcha_generate_nonsense_word($characters) {
+  $vowels = 'bcdfghjklmnpqrstvwxyz';
+  $consonants = 'aeiou';
+  $vowel_max = drupal_strlen($vowels) - 1;
+  $consonant_max = drupal_strlen($consonants) - 1;
+  $word = '';
+  $o = mt_rand(0, 1); // Randomly start with vowel or consonant
+  for ($i = 0; $i < $characters ; ++$i) {
+    if (($i + $o) % 2) {
+      $word .= $consonants[mt_rand(0, $consonant_max)];
+    }
+    else {
+      $word .= $vowels[mt_rand(0, $vowel_max)];
+    }
+  }
+  return $word;
+}
+
+/**
+ * Function for generating an array of words
+ */
+function _phrase_captcha_generate_words($num) {
+  $words = array();
+  if (variable_get('phrase_captcha_words', PHRASE_CAPTCHA_GENERATE_NONSENSE_WORDS) == PHRASE_CAPTCHA_USER_DEFINED_WORDS) {
+    // Use user defined words
+    $uwords = _text_captcha_word_pool_get_content('phrase_captcha_userdefined_word_pool', NULL, '', TRUE);
+    switch ($num) {
+      case 0: break;
+      case 1:
+        $words[] = $uwords[array_rand($uwords, $num)];
+        break;
+      default:
+        $keys = array_rand($uwords, $num);
+        foreach ($keys as $key) {
+          $words[] = $uwords[$key];
+        }
+        break;
+    }
+  }
+  else {
+    // Generate nonsense words
+    for ($w=0; $w < $num; ++$w) {
+      $words[] = _phrase_captcha_generate_nonsense_word(mt_rand(3, 7));
+    }
+  }
+  return $words;
+}
+
+/**
+ * Function that returns a textual represention of an ordinal
+ */
+function _phrase_captcha_ordinal($n) {
+  $ordinalmap = array(
+    1 => t('first'),
+    2 => t('second'),
+    3 => t('third'),
+    4 => t('fourth'),
+    5 => t('fifth'),
+    6 => t('sixth'),
+    7 => t('seventh'),
+    8 => t('eighth'),
+    9 => t('ninth'),
+    10 => t('tenth')
+  );
+  if (array_key_exists($n, $ordinalmap)) {
+    return $ordinalmap[$n];
+  }
+  else {
+    return "{$n}th";
+  }
+}
+
+/**
+ * Return array with availible word challenges
+ */
+function _phrase_captcha_available_word_challenges() {
+  return array(
+    '_phrase_captcha_word_question_word_index' => 'Word index',
+    '_phrase_captcha_word_question_alphabetical_misplaced' => 'Alphabetical misplacement',
+    '_phrase_captcha_word_question_double_occurence' => 'Double occurence',
+  );
+}
+
+function _phrase_captcha_enabled_word_challenges() {
+  $word_challenges = variable_get('phrase_captcha_word_selection_challenges', array());
+  if ($word_challenges) {
+    return array_keys(array_filter($word_challenges));
+  }
+  else {
+    return array_keys(_phrase_captcha_available_word_challenges());
+  }
+}
+
+function _phrase_captcha_word_question_word_index($words) {
+  $key = array_rand($words, 1);
+  $answer = $words[$key];
+  if (mt_rand(0, 1)) {
+    $description = t('What is the @nth word in the CAPTCHA phrase above?',
+      array('@nth' => _phrase_captcha_ordinal($key + 1)));
+  }
+  else {
+    $n = count($words) - $key;
+    if ($n == 1) {
+      $description = t('What is the last word in the CAPTCHA phrase above?');
+    }
+    else {
+      $description = t('What is the @nth last word in the CAPTCHA phrase above?',
+        array('@nth' => _phrase_captcha_ordinal($n)));
+    }
+  }
+  return array($words, $description, $answer);
+}
+
+function _phrase_captcha_word_question_alphabetical_misplaced($words) {
+  // Sort the words
+  mt_rand(0, 1) ? sort($words) : rsort($words);
+  // Pick a word and its new destination
+  // New destination has to be at least 2 places from the original place,
+  // otherwise it could lead to something like swapping two neighbours,
+  // in which case there is no unique answer.
+  $from = 0;
+  $to = 0;
+  while (abs($from - $to) < 2) {
+    $from = array_rand($words, 1);
+    $to = array_rand($words, 1);
+  }
+  // Get the word
+  $answer = $words[$from];
+  // Move the word from $from to $to
+  unset($words[$from]);
+  array_splice($words, $to, 0, $answer);
+  // bBuild the description
+  $description = t('Which word does not follow the alphabetical order in the CAPTCHA phrase above?');
+  return array($words, $description, $answer);
+}
+
+function _phrase_captcha_word_question_double_occurence($words) {
+  // Assure single occurence of each word
+  $words = array_unique($words);
+  // Pick a word
+  $key = array_rand($words, 1);
+  $answer = $words[$key];
+  // Replace another word with it
+  while (($pos = array_rand($words, 1)) == $key) {
+    // NOP aka NOOP aka pass
+  }
+  array_splice($words, $pos, 1, $answer);
+  $description = t('Which word occurs two times in the CAPTCHA phrase above?');
+  return array($words, $description, $answer);
+}

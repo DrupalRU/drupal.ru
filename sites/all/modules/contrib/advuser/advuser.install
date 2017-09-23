@@ -1,0 +1,162 @@
+<?php
+// $Id$
+/**
+ * @file
+ * Supply the hooks for uninstall.
+ */
+/**
+ * Implementation of hook_uninstall().
+ *
+ * Remove the variables from the variable table.
+ */
+function advuser_uninstall() {
+  /**
+   * It would be nice to use variable_del here but variable_del is expensive
+   * since it calls cache_clear_all('variables', 'cache') with each one.
+   * Therefore we'll stick with the db_delete and call the cache_clear_all once
+   * it is completed.
+   *
+   * variable_del('advuser_allow_list_uid1');
+   * variable_del('advuser_listno');
+   * variable_del('advuser_log_notifications');
+   * variable_del('advuser_modify_mail');
+   * variable_del('advuser_modify_notify');
+   * variable_del('advuser_modify_subject');
+   * variable_del('advuser_new_mail');
+   * variable_del('advuser_new_notify');
+   * variable_del('advuser_new_subject');
+   * variable_del('advuser_nobody_from_address');
+   * variable_del('advuser_notify_uid1');
+   * variable_del('advuser_profile_fields');
+   * variable_del('advuser_reset_never_access');
+   * variable_del('advuser_senders_from_address');
+   * variable_del('advuser_set_never_access');
+   * cache_clear_all('variables', 'cache');
+   */
+  db_delete('variable')
+    ->condition('name', 'advuser_%', 'LIKE')
+    ->execute();
+  cache_clear_all('variables', 'cache');
+}
+
+/**
+ * Implementation of hook_requirements().
+ */
+function advuser_requirements($phase) {
+  $requirements = array();
+  // Ensure translations don't break at install time
+  $t = get_t();
+
+  if ($phase == 'runtime') {
+    /**
+     * This check is important to catch updates from previous versions the
+     * Token module wasn't yet a dependency.
+     */
+    if (!module_exists('token')) {
+      $requirements['advuser_token'] = array(
+        'title' => $t('!module module', array('!module' => $t('Token'))),
+        'value' => $t('Disabled'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => $t(
+          'Since version 6.x-3.x the !this_module module needs the !token module for token substitution. Please install and enable it.',
+          array(
+            '!token' => l($t('Token'), 'http://drupal.org/project/token'),
+            '!this_module' => $t('Advanced User')
+          )
+        ),
+      );
+    }
+  }
+
+  return $requirements;
+}
+
+/**
+ * Updating substitution tokens from Advanced User module only tokens to Token
+ * module tokens.
+ */
+function advuser_update_6300(&$sandbox) {
+  if (empty($sandbox['step'])) {
+    $sandbox['step'] = 1;
+  }
+  $variables_to_update = array(
+    'advuser_modify_mail',
+    'advuser_modify_subject',
+    'advuser_new_mail',
+    'advuser_new_subject',
+  );
+  $token_substitutions = array(
+    '%user_name' => '[user-raw]',
+    '%site' => '[site-name]',
+    '%uri' => '[account-url]',
+    '%user_email' => '[mail]',
+    '%user_status' => '[advuser-status]',
+    '%user_theme' => '[advuser-theme]',
+    '%user_created' => '[advuser-created]',
+    '%user_language' => '[advuser-language]',
+    '%user_timezone' => '[advuser-timezone]',
+    '%user_signature' => '[advuser-signature-raw]',
+  );
+
+  foreach ($variables_to_update as $variable) {
+    $sandbox['step']++;
+    $current = variable_get($variable,"");
+    if (strlen($current) == 0) {
+      continue;
+    }
+    $new = str_replace(
+      array_keys($token_substitutions),
+      array_values($token_substitutions),
+      $current
+    );
+    variable_set($variable,$new);
+  }
+
+  return t('Advuser token module requirement updates have completed.');
+}
+
+/**
+ * Updating substitution tokens from D6 Token module to D7 tokens.
+ */
+function advuser_update_7300(&$sandbox) {
+  if (empty($sandbox['step'])) {
+    $sandbox['step'] = 1;
+  }
+  $variables_to_update = array(
+    'advuser_modify_mail',
+    'advuser_modify_subject',
+    'advuser_new_mail',
+    'advuser_new_subject',
+  );
+  $token_substitutions = array(
+    '[user-raw]' => '[user:name:raw]',
+    '[site-name]' => '[site:name]',
+    '[account-url]' => '[user:edit-url]',
+    '[mail]' => '[user:mail]',
+    '[advuser-status]' => '[user:status]',
+    '[advuser-theme]' => '[user:theme]',
+    '[advuser-created]' => '[user:created]',
+    '[advuser-language]' => '[user:language]',
+    '[advuser-timezone]' => '[user:timezone]',
+    '[advuser-signature]' => '[user:signature]',
+    '[advuser-signature-raw]' => '[user:signature:raw]',
+  );
+
+  foreach ($variables_to_update as $variable) {
+    $sandbox['step']++;
+    $current = variable_get($variable,"");
+    if (strlen($current) == 0) {
+      continue;
+    }
+    $new = str_replace(
+      array_keys($token_substitutions),
+      array_values($token_substitutions),
+      $current
+    );
+    variable_set($variable,$new);
+  }
+
+  return t('Advuser token module requirement updates have completed.');
+}
+
+// vim:ft=php:sts=2:sw=2:ts=2:et:ai:sta:ff=unix

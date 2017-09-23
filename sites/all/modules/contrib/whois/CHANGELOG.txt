@@ -1,0 +1,69 @@
+
+Whois lookup 7.x-1.x, 2011-xx-xx
+--------------------------------
+
+Whois lookup 7.x-1.2, 2011-12-02
+--------------------------------
+Improve library detection
+Remove two obsolete testcases, result of Issue #1142974
+Added installation note about unnecessary phpwhois files
+
+Whois lookup 7.x-1.1, 2011-09-12
+--------------------------------
+Issue #800894 by helmo: Integrate libraries module.
+Cleanup and added testcases
+Issue #1142974 by Sepehr Lajevardi: Fixed naming of post var
+Issue #1142974 by Sepehr Lajevardi: Added styling to whois_domain_status.tpl.php
+Issue #860262 by helmo: Prevent caching by Boost module.
+Issue #1142974 by helmo: Support for whois block live loockups, and port Drupal AHAH API usage to D7
+
+Whois lookup 7.x-1.0, 2010-11-16
+--------------------------------
+#732588 by helmo: Added some missing vars to the uninstall hook
+#800858 by helmo: Add testcases
+#800858 by helmo: Fixed two serious logic flaws, introduced with the addition of caching and tests
+#913536 by helmo: Drush_make file to include the phpwhois library.
+
+Whois lookup 7.x-1.0-beta1, 2010-04-19
+--------------------------------
+#756712 by GuyPaddock: Fixed _whois_cleanup_address() should use 'error' for drupal_set_message() 'type'.
+#732588 by helmo: Drupal 7 compatibility
+
+
+Whois lookup 6.x-1.3, 2010-01-02
+--------------------------------
+#670986 by helmo, BorisB: Fixed PHP errors.
+#670986 by helmo: Fixed another PHP error.
+
+Whois lookup 6.x-1.2, 2009-12-30
+--------------------------------
+#653156 by helmo: Fixed Unfixable whois_parse_url().
+bug report #617994 by helmo, jvieille: Fixed bug in looking up IP address
+bug report #409552 by deviantintegral, helmo: Refactor whois_get_whois()
+bug report #497686 by xyber, helmo: Change the message used when the domain is available, and make it translatable
+bug report #617994 by helmo, jvieille: Fixed a line that went missing in the previous patch
+#519952 by pebosi: Changed Split files in inc files and remove variables.
+#497696 by kiamlaluno: Changed hook_requirements() must be in the installation file.
+#558576 by helmo: Fixed Link to sourceforge.net different now.
+#519952 by helmo: Moved back the mini_form function
+Added comments to regex in whois_parse_url()
+helmo: Code cleanup.
+#490062 by helmo: Fixed looking up a domain twice.
+#657062 by helmo: Added co-maintainer info to README.txt
+#349159 by helmo: Changed ajax timeout to 10 seconds' whois.js
+#657062 by helmo: Fixed two D6.x compatibility issues
+#509952 by helmo: Added utf support.
+
+Whois lookup 6.x-1.1, 2008-Aug-12
+--------------------------------- 
+ * Minor fix in whois.install
+
+Whois lookup 6.x-1.0, 2008-Aug-12
+---------------------------------
+  New features:
+    o #224736 - Hourly threshold for whois lookup request.
+    o #151861 - Watchdog logging of lookup requests.
+    o Dynamic(AJAX) loading and viewing of whois results.
+    o Changed the form interface to look sleeker than before.
+    o Form appears on page with whois results.
+    o Default "Output method" is now set to "HTMLized".

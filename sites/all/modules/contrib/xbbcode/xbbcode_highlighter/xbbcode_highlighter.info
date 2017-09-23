@@ -1,0 +1,13 @@
+name = Syntax Highlighting
+description = Provides BBcode tags for syntax-colored code.
+package = Extensible BBCode
+dependencies[] = xbbcode
+dependencies[] = highlighter
+core = 7.x
+
+; Information added by Drupal.org packaging script on 2015-12-04
+version = "7.x-1.7"
+core = "7.x"
+project = "xbbcode"
+datestamp = "1449248334"
+

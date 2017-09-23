@@ -1,0 +1,129 @@
+<?php
+
+/**
+ * @file
+ *   Install, update and uninstall functions for the location_www module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function location_www_schema() {
+  $schema['location_www'] = array(
+    'description' => 'location_www.module {location} supplementary table.',
+    'fields' => array(
+      'lid' => array(
+        'description' => '{location}.lid',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'www' => array(
+        'description' => 'www adress',
+        'type' => 'varchar',
+        // Maximum URLs length.
+        'length' => 2048,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('lid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function location_www_install() {
+  // Change weight so we execute after location.
+  db_update('system')
+    ->fields(array(
+      'weight' => 1,
+    ))
+    ->condition('name', 'location_www')
+    ->condition('type', 'module')
+    ->execute();
+}
+
+/**
+ * Location 3.0 update 1.
+ * Fix pgsql -- The table definition was broken.
+ */
+function location_www_update_5300() {
+  if (!db_table_exists('location_www')) {
+    $schema['location_www'] = array(
+      'description' => 'location_www.module {location} supplementary table.',
+      'fields' => array(
+        'lid' => array(
+          'description' => '{location}.lid',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+        ),
+        'www' => array(
+          'description' => 'www adress',
+          'type' => 'varchar',
+          'length' => 31,
+          'not null' => TRUE,
+          'default' => '',
+        ),
+      ),
+      'primary key' => array('lid'),
+    );
+
+    db_create_table('location_www', $schema['location_www']);
+  }
+}
+
+/**
+ * Location 3.0 update 2.
+ * Change weight of module.
+ */
+function location_www_update_5301() {
+  // This update was moved to update 5302.
+}
+
+/**
+ * Location 3.0 update 2.
+ * Change weight of module.
+ */
+function location_www_update_5302() {
+  // Change weight.
+  db_update('system')
+    ->fields(array(
+      'weight' => 1,
+    ))
+    ->condition('name', 'location_www')
+    ->condition('type', 'module')
+    ->execute();
+}
+
+/**
+ * Drupal 6 updates.
+ */
+function location_www_update_6301() {
+  db_change_field('location_www', 'www', 'www', array(
+    'description' => 'www adress',
+    'type' => 'varchar',
+    'length' => 31,
+    'not null' => TRUE,
+    'default' => '',
+  ));
+}
+
+/**
+ * Increase the length of www field to maximum URLs length, 2,048 characters.
+ */
+function location_www_update_7001() {
+  db_change_field('location_www', 'www', 'www', array(
+    'description' => 'www adress',
+    'type' => 'varchar',
+    'length' => 2048,
+    'not null' => TRUE,
+    'default' => '',
+  ));
+}

@@ -1,0 +1,120 @@
+
+CHANGELOG for Forum Access for Drupal 7
+
+
+forum_access 7.x-1.x-dev:
+
+
+forum_access 7.x-1.3 (2016-08-16):
+  Bug fixed:
+    - #2783863: Remove call to non-existent _forum_access_preprocess_comment() function.
+    - #2463055 by DrCord: Fix 'Use of undefined constant uids' notice.
+    - #2276445 by Bastlynn: Avoid a notice when a comment pending for notification has been deleted.
+    - #2147183 by sadashiv: Notices in user_role_delete() when upgrading from D6 to D7.
+    - #2005352 by EAnushan: Avoid trashing the saved tid when another module calls menu_get_item() with a different $path.
+    - #1849288: Clean up the helpful information for Content Access.
+    - Avoid a notice on admin/index.
+    - #1793504 by RedRat: Fix non-translatable string.
+
+
+forum_access 7.x-1.2 (2012-09-15):
+  Bug fixed:
+    - #1775204: Avoid crashing the site if FA encounters CMA 1.x (when the upgrade instructions aren't being followed).
+
+forum_access 7.x-1.1 (2012-09-02):
+  Enhancements:
+    - Fix all Coder complaints (no functional changes).
+    - #1757616: Switch to 2.x branch of Chain Menu Access API module.
+    - Revised the README.txt file.
+    - Work around all false Coder Review positives (no functional change).
+  Bugs fixed:
+    - Increase timeout for the tests to ensure they go through on slow computers.
+    - Clean up the dependencies for testing (no functional change).
+    - #1768330: Remove the broken D5 Legacy Mode which never worked for D7.
+    - #1701504: Give moderators access to the administrative node properties and add tests.
+    - Remove the version requirement in the .info file to avoid breaking the testbot (#1768442).
+    - Avoid an E_STRICT warning (no functional change).
+    - Remove the unnecessary hook_requirements().
+    - #1706040: Avoid crashing in the presence of content_access.module.
+    - Fix forum_access_requirements() to always return an array().
+    - Replace $_GET['q'] with current_path(), for D8.
+
+forum_access 7.x-1.0 (2012-04-02):
+forum_access 7.x-1.0-rc2 (2012-03-16):
+  Bugs fixed:
+   - #1478822: Use user_roles() to allow translation of built-in roles and because it's the right way.
+   - Remove some left-over code from D6.
+   - Use node_load_multiple() for updating the permissions.
+   - #1321864 by David4514: Fix unnecessary suppression of non-standard fields on add/edit node form for moderators.
+
+forum_access 7.x-1.0-rc1 (2012-02-19):
+  Bugs fixed:
+    - #1429220: Fix extending edit/delete own forum content permissions to comments and clarify information.
+    - Show proper mouse-over hints on the forum settings pages.
+    - Fix the ForumAccessBaseTestCase.
+    - Adjust POST to the Devel Settings page to Devel change.
+
+forum_access 7.x-1.0-beta2 (2012-01-05):
+  Bugs fixed:
+    - Use url() to format links in tests to be compatible with qa.d.o.
+    - Avoid trying to enable non-existing modules in tests (especially on qa.d.o).
+    - Override the invalid inherited testEnableForumField() test in the ForumTestCase base class.
+    - #1343568: Fix reference to the test file.
+    - #1325850: Fix a left-over D6 db_result() call.
+    - #1244406: Remove ACL version requirement.
+    - #1228214: Fully qualify field parameter in SelectQuery::condition(), SelectQuery::orderBy() calls.
+
+forum_access 7.x-1.0-beta1 (2011-07-07):
+  Bugs fixed:
+    - Make template forum selection optional.
+    - #1210900 by ohnobinki, salvis: Enable caching of the 'create' case in forum_access_node_access().
+    - First attempt to handle unpublished nodes.
+    - Make Edit and Delete depend on View.
+    - #1097692 by salvis: Fix array_merge() warning on comment previews.
+    - Fix initialization of template forum selection.
+
+forum_access 7.x-1.0-alpha4 (2011-01-16):
+  Bugs fixed:
+    - Implement node and comment edit forms for moderators.
+    - Fix comment links.
+    - Disable 'edit own comments' permission and document this.
+    - Fix the tests to ignore 'edit own comments' but to account for 'edit/delete any/own forum content'.
+    - Reorder the tests to make the more difficult ones come first.
+    - In the test suite, rename the roles and users to more accurately reflect the names of the permissions they represent.
+    - #1020852: Fix "Undefined variable: node in forum_access_menu_get_item_alter() line 341".
+    - #1019572: Add '>=' operator to ACL dependency.
+
+forum_access 7.x-1.0-alpha3 (2011-01-08):
+  Bugs fixed:
+    - Major update to fix various bugs and adapt to late changes in the Form API of D7 core.
+    - Remove remaining references to {acl.name}.
+    - Clean up / enable tests.
+    - Port update 6106 to secure upgrade path from D6.
+    - #1016088: Avoid calling reset() on non-variables.
+    - #993056: Remove call-time pass-by-reference typos.
+    - #999556: Adapt to changed signature of hook_menu_view().
+    - #996130: Fix undefined index 'buttons' notice.
+    - Fix tests to install the newly required chain_menu_access.module.
+    - The D6 moderator role is removed during upgrading, no need to remove it in hook_uninstall(), too.
+
+forum_access 7.x-1.0-alpha2 (2010-12-11):
+  Enhancement:
+    - Use the Chain Menu Access API.
+  Bugs fixed:
+    - Fix some minor bugs.
+    - Add missing assertFieldEnabled()/assertFieldDisabled() function that haven't made it into core (see #882564).
+    - Remove the need for the hook_menu_get_item_alter() patch.
+    - Some code clean-up, no functional changes.
+    - Fix invalid use of t().
+    - #964762: Fix undefined variable notice for $na_modules.
+
+forum_access 7.x-1.0-alpha1 (2010-11-07):
+  Port fixes from 6.x-1.5:
+    - #745002: Fix missing 'delete comment' link for users with the 'administer comments' permission.
+    - #906430: Add a missing preg_match() call.
+    - #810422: Fix public forums not being visible to Anonymous on the overview page, due to missing default records in the {node_access} table.
+    - Always display the 'Update even if unchanged' checkbox, except for new forums/containers.
+    - Fix inability to save Create and View access for roles with the 'administer nodes' permission.
+  Porting to D7:
+    - Initial port of 6.x-1.4, add extensive tests.
+

@@ -1,0 +1,80 @@
+<?php
+
+/**
+ * @file
+ * Russian stemming algorith provided by Dr Martin Porter.
+ *
+ * http://snowball.tartarus.org/algorithms/russian/stemmer.html
+ *
+ * Algorith implementation in PHP provided by Dmitry Koterov (dklab.ru):
+ * http://forum.dklab.ru/php/advises/HeuristicWithoutTheDictionaryExtractionOfARootFromRussianWord.html
+ *
+ * Initial implementation adopted for Drupal by Algenon (4algenon@gmail.com)
+ */
+
+define('RUSTEMMER_CHARS', '_0-9a-zA-ZабвгдежзийклмнопрстуфхцчшщьыъэюяАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ');
+
+
+/**
+ * Implements hook_help().
+ */
+function rustemmer_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#rustemmer':
+      return t('Improves search of Russian words by using the stemming algorithm for Russian language.');
+  }
+}
+
+
+/**
+ * Implements hook_search_preprocess().
+ */
+function rustemmer_search_preprocess($text) {
+  $words = $text;
+  $words = str_replace('ё','е', $words);
+  $words = str_replace('Ё','Е', $words);
+
+  // Split words from noise and remove apostrophes.
+  $words = preg_split('/([^' . RUSTEMMER_CHARS . ']+)/u', str_replace("'", '', $words), -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+
+  $stemmer = new RussianStemmer();
+  // Process each word.
+  $odd = TRUE;
+  foreach ($words as $k => $word) {
+    if ($odd) {
+      $words[$k] = $stemmer->stem_word($word);
+    }
+    $odd = !$odd;
+  }
+  // Put it all back together.
+  return implode('', $words);
+}
+
+
+/**
+ * Implements hook_search_admin().
+ */
+function rustemmer_search_admin() {
+  $form = array();
+  $form['indexing_settings']['rustemmer_stemcaching'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Stem caching'),
+    '#default_value' => variable_get('rustemmer_stemcaching', 0),
+    '#description' => t('Apply stem caching while performing search phrase stemming. Warning: This could lead to additional memory consumption while indexing.'),
+  );
+  return $form;
+}
+
+
+/**
+ * Implements hook_search_api_processor_info().
+ */
+function rustemmer_search_api_processor_info() {
+  $processors['search_api_russian_stemmer'] = array(
+    'name' => t('Russian stemmer'),
+    'description' => t('This processor improves search of Russian words by using the stemming algorithm for Russian language.'),
+    'class' => 'SearchApiRussianStemmer',
+  );
+
+  return $processors;
+}

@@ -1,0 +1,246 @@
+<?php
+
+/**
+ * @file
+ * The Blog title and description module.
+ *
+  */
+
+// hook_help
+function bloginfo_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#bloginfo':
+      $output = '<p>'. t('This module allows bloggers to have a title and description for their blog that is seperate from their username.  This is similar to the title and descriptioin of blogs such as those at blogspot.com provided by blogger.') .'</p>';
+      $output .= '<p>'. t('The title and description is displayed in a block and is editable in a users \'my account\' options.') .'</p>';
+      return $output;
+  }
+}
+
+// hook_perm
+function bloginfo_perm() {
+  return array(
+    'administer bloginfo' => array(
+      'title' => t('Administer bloginfo'),
+      'description' => t('Determine if user can administer the blog information module'),
+    ),
+    'edit own bloginfo' => array(
+      'title' => t('Edit own bloginfo'),
+      'description' => t('To set if user can edit own blog information'),
+    )
+  );
+}
+
+/**
+ * Implementation of hook_user().
+ */
+function bloginfo_user_update(&$edit, &$account, $category = NULL) {
+      return bloginfo_save_bloginfo($edit, $account, $category);
+}
+function bloginfo_user_insert(&$edit, &$account, $category = NULL) {
+       return bloginfo_save_bloginfo($edit, $account, $category);
+}
+function bloginfo_user_form(&$edit, &$account, $category = NULL) {
+      return bloginfo_form_bloginfo($edit, $account, $category);
+}
+function bloginfo_user_delete(&$edit, &$account, $category = NULL) {
+  $num_deleted = db_delete('bloginfo')
+    ->condition('uid', $account->uid)
+    ->execute();
+}
+
+/**
+ * Implementation of hook_menu_alter().
+ */
+function bloginfo_menu_alter(&$callbacks) {
+  // Use wrapper function instead of blog_page_user() so the page title
+  // can be set.
+  $callbacks['blog/%user_current']['page callback'] = 'bloginfo_page_user';
+  // Use wrapper function instead of blog_feed_user() so the feed title
+  // can be set.
+  $callbacks['blog/%user/feed']['page callback'] = 'bloginfo_feed_user';
+}
+
+/**
+ * Implementation of hook_block().
+ */
+function bloginfo_block($op = 'list', $delta = 0, $edit = array()) {
+  if ($op == 'list') {
+    $blocks['bloginfo'] = array(
+        'info'       =>  t('Blog information'),
+    );
+    $blocks['blogroll'] = array(
+        'info'       =>  t('Blogroll by blog title'),
+    );
+    return $blocks;
+  }
+  else if ($op == 'view') {
+  	switch($delta) {
+  	case 'bloginfo':
+      if ($node = menu_get_object());
+      if (((arg(0) == 'blog' &&  is_numeric(arg(1))) || $node->type == 'blog')) {
+        if (arg(0) == 'blog') $authorid = arg(1);
+        else if ($node->type == 'blog') $authorid = $node->uid;
+        $count = db_query("SELECT COUNT(*) FROM {bloginfo} WHERE uid = :uid", array(':uid' => $authorid,))->fetchField();
+        if ($count == 1) {
+          $results = db_query("SELECT title, description, format FROM {bloginfo} WHERE uid = :uid", array(':uid' => $authorid,));
+          $bloginfo = $results->fetch(PDO::FETCH_OBJ);
+          $block['subject'] = check_plain($bloginfo->title);
+          $block['content'] = theme('bloginfo_block', $bloginfo->description, $bloginfo->format, $authorid);
+          return $block;
+        }
+      }
+      break;
+  	case 'blogroll':
+      $results = db_query("SELECT uid, title FROM {bloginfo} WHERE title <> :title ORDER BY title ASC", array(':title' => '',));
+      foreach ($results as $item) {
+        $output[] = l($item->title, 'blog/'. $item->uid);
+      }
+      $block['subject'] = t('Blog Listing');
+      $block['content'] = theme('item_list', $output);
+      return $block;
+  	  break;
+    }
+  }
+}
+
+/**
+ * Implementation of hook_link_alter().
+ */
+function bloginfo_link_alter(&$links, $node) {
+  foreach ($links AS $module => &$link) {
+    if ($module == 'blog_usernames_blog') {
+      $count = db_query("SELECT COUNT(*) FROM {bloginfo} WHERE uid = %d", $node->uid)->fetchField();
+      if ($count == 1) {
+        $results = db_query("SELECT title, description, format FROM {bloginfo} WHERE uid = :uid", array(':uid' => $node->uid,));
+        $bloginfo = $results->fetch(PDO::FETCH_OBJ);
+        $link['title'] = strlen($bloginfo->title) ? $bloginfo->title : $link['title'];
+      }      
+    }
+  }
+}
+
+/**
+ * Implementation of hook_theme()
+ */
+function bloginfo_theme() {
+  return array(
+    'bloginfo_block' => array(
+      'arguments' => array('description', 'format', 'author'),
+    ),
+  );
+}
+
+/**
+ * Theme Function:  Theme bloginfo block content
+ */
+function theme_bloginfo_block($description, $format, $author) {
+  return check_markup($description, $format, FALSE);
+}
+
+/**
+  * Helper function:  create the form on the user settings page
+  */
+function bloginfo_form_bloginfo($edit, $account, $category) {
+  if ($category == 'account' && is_numeric(arg(1)) && (user_access('edit own bloginfo') || user_access('administer bloginfo'))) {
+    $bloginfo = db_query("SELECT title, description, format FROM {bloginfo} WHERE uid = :uid", array(':uid' => arg(1),))->fetch(); 
+    $mybloginfo['title'] = !empty($bloginfo->title) ? $bloginfo->title : '';
+    $mybloginfo['description'] = !empty($bloginfo->description) ? $bloginfo->description : '';
+    $mybloginfo['format'] = !empty($bloginfo->format) ? $bloginfo->format : '';
+
+    $fields['bloginfo_settings'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Blog Information'),
+      '#weight' => 5);
+    $fields['bloginfo_settings']['Title'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Blog Title'),
+      '#maxlength' => 128,
+      '#default_value' => $mybloginfo['title'],
+      '#description' => t('Your blog title will display on your blog and blog posts.'));
+    $fields['bloginfo_settings']['Description'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Blog Description'),
+      '#default_value' => $mybloginfo['description'],
+      '#description' => t('Your blog description will display on your blog and blog posts.'));
+    $fields['bloginfo_settings']['desc_format'] = filter_form($mybloginfo['format']); 
+    return $fields;
+  }//end if
+}//end function bloginfo_form_bloginfo()
+
+/**
+  * Helper function:  insert bloginfo into the database
+  */
+function bloginfo_save_bloginfo(&$edit, &$user, $category) {
+  if ($category == 'account') {
+    //TODO: if (menu_get_object('user)...
+    if ( arg(0) == 'user' && is_numeric(arg(1)) && arg(1) > 0 && arg(2) == 'edit') {
+      //??$results = db_query('SELECT uid FROM {bloginfo} WHERE uid = :uid', array(':uid' => arg(1),));
+  
+      //This is to update where info already exists in the database
+      if (db_query('SELECT COUNT(uid) FROM {bloginfo} WHERE uid = %d', arg(1))->fetchField() == 1) {
+        db_update('bloginfo')
+          ->fields(array('title' => $edit['Title'], 'description' => $edit['Description'], 'format' => $edit['format'],))
+          ->condition('uid', arg(1))
+          ->execute();
+      }
+  
+      //This adds it to the database for the first time
+      else {
+        $id = db_insert('bloginfo')
+          ->fields(array(
+            'uid' => arg(1),
+            'title' => $edit['Title'],
+            'description' => $edit['Description'],
+            'format' => $edit['format'],
+          ))
+          ->execute();
+      }
+    }
+  }
+}
+
+/**
+ * Wrapper for blog_page_user(). Sets the page title if available.
+ */
+function bloginfo_page_user($account) {
+  $output = blog_page_user($account);
+
+  $count = db_query("SELECT COUNT(*) FROM {bloginfo} WHERE uid = :uid", array(':uid' => $account->uid,))->fetchField();
+  if ($count == 1) {
+    $results = db_query("SELECT title, description, format FROM {bloginfo} WHERE uid = :uid", array(':uid' => $account->uid,));
+    $bloginfo = $results->fetch(PDO::FETCH_OBJ);
+    
+    if (strlen($bloginfo->title)) {
+      drupal_set_title($bloginfo->title);
+    }
+  }
+  
+  return $output;
+}
+
+/**
+ * Menu callback; displays an RSS feed containing recent blog entries of all users.
+ *
+ * Customization of blog_feed_user().
+ */
+function bloginfo_feed_user($account) {
+  $result = db_query_range(db_rewrite_sql("SELECT n.nid, n.created FROM {node} n  WHERE n.type = 'blog' AND n.uid = %d AND n.status = 1 ORDER BY n.created DESC"), $account->uid, 0, variable_get('feed_default_items', 10));
+  $channel['title'] = $account->name ."'s blog";
+  $channel['link'] = url('blog/'. $account->uid, array('absolute' => TRUE));
+
+  $items = array();
+  foreach ($result as $row) {
+    $items[] = $row->nid;
+  }
+
+  $count = db_query("SELECT COUNT(*) FROM {bloginfo} WHERE uid = :uid", array(':uid' => $account->uid,))->fetchField();
+  if ($count == 1) {
+    $results = db_query("SELECT title, description, format FROM {bloginfo} WHERE uid = :uid", array(':uid' => $account->uid,));
+    $bloginfo = $results->fetch(PDO::FETCH_OBJ);
+
+    $channel['title'] = strlen($bloginfo->title) ? $bloginfo->title : $channel['title'];
+    $channel['description'] = $bloginfo->description;
+  }
+
+  node_feed($items, $channel);
+}

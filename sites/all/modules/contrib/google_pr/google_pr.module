@@ -1,0 +1,196 @@
+<?php
+
+/**
+ * @file
+ * Queries Google Toolbar services for this site's current PageRank.
+ */
+
+namespace google_pr {
+
+  /**
+   * Collection of functions to query for a Google PageRank.
+   */
+  class PageRank {
+    /**
+     * Create a Google Toolbar hash based on a query URL.
+     *
+     * @param string $url
+     *
+     * @return string
+     */
+    private function genhash($url) {
+      $hash = "Mining PageRank is AGAINST GOOGLE'S TERMS OF SERVICE. Yes, I'm talking to you, scammer.";
+      $c = 16909125;
+      $length = strlen($url);
+      $hashpieces = str_split($hash);
+      $urlpieces = str_split($url);
+      for ($d = 0; $d < $length; $d++) {
+        $c = $c ^ (ord($hashpieces[$d]) ^ ord($urlpieces[$d]));
+        $c = (($c >> 23) & 0x1ff) | $c << 9;
+      }
+      $c = -(~($c & 4294967295) + 1);
+      return '8' . dechex($c);
+    }
+
+    /**
+     * Request the Google Toolbar PageRank feature.
+     *
+     * @param string $googleurl
+     */
+    private function request($googleurl) {
+      if (function_exists('curl_init')) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, $googleurl);
+        $out = curl_exec($ch);
+        curl_close($ch);
+      }
+      else {
+        $out = file_get_contents($googleurl);
+      }
+      if ($out === FALSE) {
+        throw new \Exception('Request to Google failed.');
+      }
+      return $out;
+    }
+
+    /**
+     * Generate the Google PageRank value for a specified URL.
+     *
+     * @param string $url
+     *
+     * @return integer
+     */
+    public static function query($url) {
+      $googleurl = 'http://toolbarqueries.google.com/tbr?client=navclient-auto&ch=' . self::genhash($url) . '&features=Rank&q=info:' . urlencode($url);
+      try {
+        $out = self::request($googleurl);
+      } catch (\Exception $e) {
+        return 'Caught exception: ' . $e->getMessage();
+      }
+      if (strpos($out, 'Rank_') === 0) {
+        $rank = trim(substr(strrchr($out, ':'), 1));
+        return is_numeric($rank) ? $rank : 0;
+      }
+      elseif (strpos($out, 'sending automated queries')) {
+        throw new \Exception("Exceeded Google's query rate limit.");
+      }
+      else {
+        throw new \Exception('Unexpected results from Google.');
+      }
+    }
+  }
+}
+
+namespace {
+  /**
+   * Ask the PageRank class for the current site's PageRank.
+   */
+  function google_pr_query() {
+    /*
+    Without caching, Google will get upset and return:
+
+    We're sorry...
+
+    ... but your computer or network may be sending automated queries. To protect our users, we can't process your request right now.
+     */
+    $cached_rank = cache_get('google_pr_rank', 'cache');
+    if ($cached_rank === FALSE) {
+      $front_page = url('<front>', array('absolute' => TRUE));
+      try {
+        $pagerank = \google_pr\PageRank::query($front_page);
+      } catch (\Exception $e) {
+        watchdog('google_pr', '@message', array('@message' => $e->getMessage()));
+        $pagerank = FALSE;
+      }
+      if ($pagerank !== FALSE) {
+        // Cache PageRank for a week.
+        cache_set('google_pr_rank', $pagerank, 'cache', time() + 60*60*24*7);
+      }
+    }
+    else {
+      $pagerank = $cached_rank->data;
+    }
+    return $pagerank;
+  }
+
+  function google_pr_image($pagerank) {
+    $module_path = url(drupal_get_path('module', 'google_pr'), array('absolute' => TRUE));
+    $image = '<img src="' . $module_path . '/images/pr-' . $pagerank . '.gif" title="' . $pagerank . '" alt="' . $pagerank . '" />';
+    return $image;
+  }
+
+  /**
+   * Implements hook_block_info().
+   *
+   * @return array
+   */
+  function google_pr_block_info() {
+    $blocks = array();
+    $blocks['google_pr_rank']['info'] = t('Google PageRank');
+    $blocks['google_pr_rank']['cache'] = DRUPAL_CACHE_GLOBAL;
+    return $blocks;
+  }
+
+  /**
+   * Implements hook_block_configure().
+   *
+   * @param string $delta
+   *
+   * @return array
+   */
+  function google_pr_block_configure($delta = '') {
+    $form = array();
+    if ($delta == 'google_pr_rank') {
+      $form['google_pr_styling'] = array(
+        '#type' => 'radios',
+        '#title' => t('Text or image'),
+        '#default_value' => variable_get('google_pr_styling', 'image'),
+        '#options' => array(
+          'image' => t('Image'),
+          'number' => t('Number'),
+        )
+      );
+    }
+    return $form;
+  }
+
+  /**
+   * Implements hook_block_save().
+   */
+  function google_pr_block_save($delta = '', $edit = array()) {
+    if ($delta == 'google_pr_rank') {
+      variable_set('google_pr_styling', $edit['google_pr_styling']);
+    }
+  }
+
+  /**
+   * Implements hook_block_view().
+   *
+   * @param string $delta
+   *
+   * @return array
+   */
+  function google_pr_block_view($delta = '') {
+    $block = array();
+
+    if ($delta == 'google_pr_rank') {
+      $pagerank = google_pr_query();
+
+      $block['subject'] = t('Google PageRank');
+      $style = variable_get('google_pr_styling', 'image');
+      switch ($style) {
+        case 'number':
+          $block['content'] = $pagerank;
+          break;
+
+        case 'number':
+        default:
+          $block['content'] = google_pr_image($pagerank);
+          break;
+      }
+    }
+    return $block;
+  }
+}

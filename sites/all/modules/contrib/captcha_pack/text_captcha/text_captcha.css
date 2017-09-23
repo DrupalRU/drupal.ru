@@ -1,0 +1,15 @@
+
+/**
+ * @file
+ * Additional CSS rules for text captcha related layout stuff
+ */
+
+/**
+ * CSS for word lists as radios form elements
+ */
+.text-captcha-word-list-radios .form-item {
+  display: inline;
+  padding: 0 .75em;
+  margin: 0 .75em;
+  white-space: nowrap;
+}

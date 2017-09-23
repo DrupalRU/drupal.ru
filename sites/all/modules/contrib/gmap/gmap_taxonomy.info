@@ -1,0 +1,15 @@
+name = GMap Taxonomy Markers
+description = Taxonomy based markers
+package = Location
+core = 7.x
+dependencies[] = taxonomy
+dependencies[] = gmap
+files[] = gmap_taxonomy.module
+files[] = gmap_taxonomy.views.inc
+
+; Information added by Drupal.org packaging script on 2016-03-11
+version = "7.x-2.11"
+core = "7.x"
+project = "gmap"
+datestamp = "1457698170"
+

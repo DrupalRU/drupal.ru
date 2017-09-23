@@ -1,0 +1,15 @@
+name = Extensible BBCode
+description = Extensible BBCode filter, allowing custom tags.
+package = Extensible BBCode
+core = 7.x
+
+files[] = xbbcode.filter.inc
+
+configure = admin/config/content/xbbcode/settings
+
+; Information added by Drupal.org packaging script on 2015-12-04
+version = "7.x-1.7"
+core = "7.x"
+project = "xbbcode"
+datestamp = "1449248334"
+

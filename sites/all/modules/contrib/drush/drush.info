@@ -1,0 +1,8 @@
+drush_version=5.0-dev
+
+; Information added by drupal.org packaging script on 2013-09-30
+version = "7.x-5.9+49-dev"
+core = "7.x"
+project = "drush"
+datestamp = "1380571108"
+

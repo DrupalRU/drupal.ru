@@ -1,0 +1,15 @@
+name = GMap Fields
+description = GMap field types, currently only a marker field.
+core = 7.x
+package = Location
+
+dependencies[] = field
+dependencies[] = gmap
+dependencies[] = options
+
+; Information added by Drupal.org packaging script on 2016-03-11
+version = "7.x-2.11"
+core = "7.x"
+project = "gmap"
+datestamp = "1457698170"
+

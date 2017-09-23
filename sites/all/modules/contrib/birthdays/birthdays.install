@@ -1,0 +1,286 @@
+<?php
+
+/**
+ * @file
+ * Installation file for the Birthdays module.
+ */
+
+/**
+ * Implements hook_field_schema().
+ */
+function birthdays_field_schema($field) {
+  return array(
+    'columns' => array(
+      'day' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+      ),
+      'month' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+      ),
+      'year' => array(
+        'type' => 'int',
+        'size' => 'medium',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+      ),
+      'triggers' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 1,
+      ),
+    ),
+    'indexes' => array(
+      'date' => array('day', 'month', 'year'),
+      'triggers' => array('triggers'),
+    ),
+  );
+}
+
+/**
+ * Remove the variable 'birthdays_field_name'.
+ *
+ * Implements hook_update_N().
+ */
+function birthdays_update_5003() {
+  $ret[] = array('success' => TRUE, 'query' => 'Variable "birthdays_field_name" has been deleted successfully');
+  variable_del('birthdays_field_name');
+
+  return $ret;
+}
+
+/**
+ * The placeholder @name in the user birthday message has been replaced by
+ * !username, because we now can use user_mail_tokens().
+ *
+ * Implements hook_update_N().
+ */
+function birthdays_update_6000() {
+  $ret = array();
+  $current = variable_get('birthdays_send_user_message', FALSE);
+  if ($current !== FALSE) {
+    variable_set('birthdays_send_user_message', strtr($current, array('@name' => '!username')));
+    $ret[] = array('success' => TRUE, 'query' => 'Replaced @name with !username in user birthday e-mail.');
+  }
+
+  return $ret;
+}
+
+/**
+ * Upgrade the data structure to Drupal 7, creating actions, triggers and
+ * fields.
+ *
+ * Implements hook_update_N().
+ */
+function birthdays_update_7000() {
+  // Delete the D7 default action.
+  if ($default_action = actions_load(variable_get('birthdays_defaults_action', 0))) {
+    actions_delete($default_action->aid);
+  }
+
+  // Create a new email action, based on the old settings.
+  module_load_include('install', 'birthdays', 'defaults/birthdays_defaults');
+  $params = array();
+  if ($user_message = variable_get('birthdays_send_user_message')) {
+    $params['message'] = _birthdays_upgrade_tokens($user_message);
+  }
+  if ($user_subject = variable_get('birthdays_send_user_subject')) {
+    $params['subject'] = _birthdays_upgrade_tokens($user_subject);
+  }
+  $aid = actions_save(
+    'system_send_email_action',
+    'system',
+    $params + _birthdays_defaults_action_parameters(),
+    t('Happy birthday mail')
+  );
+  variable_set('birthdays_defaults_action', $aid);
+  variable_del('birthdays_send_user_message');
+  variable_del('birthdays_send_user_subject');
+
+  // Create a birthdays field on the user entity type.
+  if (!field_info_field('birthdays')) {
+    field_create_field(array(
+      'field_name' => 'birthdays',
+      'type' => 'birthdays_date',
+      'cardinality' => 1,
+      'translatable' => FALSE,
+      'entity_types' => array('user'),
+    ));
+  }
+
+  // The field instance settings with admin_mail and hide_year setting.
+  $instance = array(
+    'field_name' => 'birthdays',
+    'entity_type' => 'user',
+    'bundle' => 'user',
+    'label' => t('Birthday'),
+    'settings' => array(
+      'admin_mail' => variable_get('birthdays_remind', BIRTHDAYS_ADMIN_MAIL_DISABLED),
+      'hide_year' => variable_get('birthdays_hide_year', BIRTHDAYS_HIDE_YEAR_NO),
+    ),
+  );
+  variable_del('birthdays_remind');
+  variable_del('birthdays_hide_year');
+
+  // Upgrade user mail settings.
+  // 0 was BIRTHDAYS_USER_MAIL_NO.
+  // 1 was BIRTHDAYS_USER_MAIL_YES
+  // 2 was BIRTHDAYS_USER_MAIL_USER.
+  if (variable_get('birthdays_send_user', 0) == 2) {
+    // Use the same texts that were in the user form.
+    $instance['settings']['triggers'] = array(
+      'user' => TRUE,
+      'title' => t('Do not send birthday mail'),
+      'description' => t('Do not send me an e-mail or e-card when it\'s my birthday.'),
+    );
+  }
+  if (variable_get('birthdays_send_user', 0) != 0) {
+    if (db_table_exists('trigger_assignments')) {
+      db_insert('trigger_assignments')
+        ->fields(array(
+          'hook' => _birthdays_instance_hook($instance),
+          'aid' => variable_get('birthdays_defaults_action'),
+          'weight' => 0,
+        ))
+        ->execute();
+    }
+  }
+  variable_del('birthdays_send_user');
+
+  // Save the field instance settings.
+  if (field_info_instance('user', 'birthdays', 'user')) {
+    field_update_instance($instance);
+  }
+  else {
+    field_create_instance($instance);
+  }
+
+  // The data should be synchronized for the next step, so we don't need the
+  // field id.
+  variable_del('birthdays_field_id');
+
+  // Block, page and viewmode aren't upgraded automatically. Delete the
+  // remaining variables and leave a message.
+  variable_del('birthdays_show_starsign');
+  variable_del('birthdays_page_settings');
+  variable_del('birthdays_page_list_number');
+  variable_del('birthdays_page_show_filters');
+  variable_del('birthdays_block_number_by_days');
+  variable_del('birthdays_block_number_by_birthdays');
+  return t('Birthday block and page are now a view provided by the Birthdays defaults module and birthdays are in their own field type. Check you view and view mode settings, to make sure they are correct, because they are not upgraded automatically.');
+}
+
+/**
+ * Upgrade the field data to Drupal 7.
+ *
+ * Implements hook_update_N().
+ */
+function birthdays_update_7001(&$sandbox) {
+  if (!db_table_exists('dob')) {
+    return;
+  }
+
+  if (!isset($sandbox['progress'])) {
+    $sandbox['progress'] = 0;
+    $sandbox['last_uid_processed'] = -1;
+    $sandbox['max'] = db_query('SELECT COUNT(*) FROM {dob}')->fetchField();
+  }
+
+  $instance = field_info_instance('user', 'birthdays', 'user');
+
+  $query = db_query_range('SELECT uid, DAY(birthday) AS day, MONTH(birthday) AS month, YEAR(birthday) AS year FROM {dob} WHERE uid > :lastuid ORDER BY uid', 0, 10, array(':lastuid' => $sandbox['last_uid_processed']));
+  $i = 0;
+  foreach ($query as $row) {
+    $data = array(
+      'entity_type' => 'user',
+      'bundle' => 'user',
+      'deleted' => 0,
+      'entity_id' => $row->uid,
+      'revision_id' => NULL,
+      'language' => LANGUAGE_NONE,
+      'delta' => 0,
+      'birthdays_day' => $row->day,
+      'birthdays_month' => $row->month,
+      'birthdays_year' => $row->year,
+      'birthdays_triggers' => 1,
+    );
+
+    $account = user_load($row->uid);
+
+    if ($instance['settings']['triggers']['user']) {
+      $data['birthdays_triggers'] = !empty($account->birthdays_user_send_mail);
+    }
+    unset($account->birthdays_user_send_mail);
+
+    if ($instance['settings']['hide_year'] == BIRTHDAYS_HIDE_YEAR_USER) {
+      if ($account->birthdays_user_hide_year) {
+        $data['birthdays_year'] = 0;
+      }
+    }
+    unset($account->birthdays_user_hide_year);
+
+    user_save($account);
+
+    db_insert('field_data_birthdays')
+      ->fields($data)
+      ->execute();
+
+    $i++;
+    $sandbox['progress']++;
+    $sandbox['last_uid_processed'] = $row->uid;
+  }
+
+  if (empty($sandbox['max']) || $i < 10) {
+    db_drop_table('dob');
+    return t('Birthdays field data has been migrated.');
+  }
+  else {
+    $sandbox['#finished'] = $sandbox['progress'] / $sandbox['max'];
+  }
+}
+
+/**
+ * Upgrades D6 user tokens to new D7 tokens.
+ *
+ * @param $text
+ *   The old template.
+ *
+ * @return
+ *   The new template with upgraded tokens.
+ */
+function _birthdays_upgrade_tokens($text) {
+  // The replacements as in user_update_7017(). !password is left unchanged,
+  // because it wasn't available in birthday mails anyway.
+  $replacements = array(
+    '!username' => '[user:name]',
+    '!site' => '[site:name]',
+    '!login_url' => '[user:one-time-login-url]',
+    '!uri' => '[site:url]',
+    '!uri_brief' => '[site:url-brief]',
+    '!mailto' => '[user:mail]',
+    '!date' => '[date:medium]',
+    '!login_uri' => '[site:login-url]',
+    '!edit_uri' => '[user:edit-url]',
+  );
+
+  // Do the replacement.
+  return str_replace(array_keys($replacements), $replacements, $text);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function birthdays_uninstall() {
+  // Delete variables.
+  variable_del('birthdays_last_cron');
+}

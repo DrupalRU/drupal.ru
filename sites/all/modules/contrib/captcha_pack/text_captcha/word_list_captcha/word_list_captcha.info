@@ -1,0 +1,12 @@
+name = Word list CAPTCHA
+description = Provides CAPTCHA like 'which word does not belong in the list [green red bird blue]?'.
+package = "Spam control"
+dependencies[] = captcha
+core = 7.x
+configure = admin/config/people/captcha/word_list_captcha
+; Information added by drupal.org packaging script on 2011-10-23
+version = "7.x-1.0-alpha1"
+core = "7.x"
+project = "captcha_pack"
+datestamp = "1319362529"
+

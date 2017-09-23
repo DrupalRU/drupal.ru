@@ -1,0 +1,64 @@
+# Configuration file for running the test suite.
+language: php
+sudo: required
+dist: precise
+group: legacy
+php:
+  - 5.3
+  - 7.0
+
+before_script:
+  # Install Apache and FastCGI extension to connect to PHP-FPM.
+  - sudo apt-get update > /dev/null
+  - sudo apt-get install apache2 libapache2-mod-fastcgi > /dev/null
+  - sudo a2enmod rewrite actions fastcgi alias
+  - sudo cp -f travis-ci/vhost.conf /etc/apache2/sites-available/default
+  - sudo apachectl restart
+  - sudo chown travis:travis /var/www
+  - which php
+
+  # install drush globally
+  - composer global require drush/drush:6.*
+  # add composer's global bin directory to the path
+  # see: https://github.com/drush-ops/drush#install---composer
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  
+  # Start PHP-FPM. There is no process manager available to start PHP-FPM on
+  # Travis CI currently, so we have to locate and enable it manually.
+  - sudo cp travis-ci/php-fpm.conf $HOME/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - $HOME/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+
+  # Disable XDebug to speed up execution.
+  - phpenv config-rm xdebug.ini
+
+  # Import the PHP configuration.
+  - phpenv config-add travis-ci/php.ini
+
+  # Create a RAM disk for MySQL to improve performance.
+  - sudo mkdir /mnt/ramdisk
+  - sudo mount -t tmpfs -o size=1024m tmpfs /mnt/ramdisk
+  - sudo stop mysql
+  - sudo mv /var/lib/mysql /mnt/ramdisk
+  - sudo ln -s /mnt/ramdisk/mysql /var/lib/mysql
+  - sudo start mysql
+
+  # Set MySQL configuration and create the database.
+  - mysql -e 'SET GLOBAL wait_timeout = 5400;'
+  - mysql -e 'create database test;'
+
+
+
+  - cd /var/www
+  - drush dl drupal --destination=/var/www --default-major=7 --drupal-project-rename=drupal --y
+  - cd /var/www/drupal
+  - drush site-install -y --db-url=mysql://root@127.0.0.1/test --db-su='root' --db-su-pw=''
+  - ln -s $TRAVIS_BUILD_DIR sites/all/modules/local
+  - cd sites/all/modules 
+  - git clone https://github.com/itpatrol/altpager.git
+  - cd /var/www/drupal
+  - drush en -y simpletest alttracker
+script: php scripts/run-tests.sh --file sites/all/modules/local/alttracker.test --url http://localhost/drupal --php `which php`
+after_failure:
+  - echo "Failures detected. Outputing additional logs:"
+  - sudo cat /var/log/apache2/error.log
+  - sudo cat /var/log/mysql/error.log

@@ -1,0 +1,14 @@
+name = MetaWeblog Provider for BlogAPI
+description = Provides the MetaWeblog API for BlogAPI clients.
+package = Services
+core = 7.x
+dependencies[] = xmlrpc_server
+dependencies[] = blogapi
+files[] = blogapi_metaweblog.test
+
+; Information added by Drupal.org packaging script on 2017-03-23
+version = "7.x-2.0-rc2"
+core = "7.x"
+project = "blogapi"
+datestamp = "1490278085"
+

@@ -1,0 +1,214 @@
+<?php
+
+/**
+ * @file
+ * Location autofill routines.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function la_menu() {
+  $items['admin/config/services/la'] = array(
+    'title' => 'Autofill empty locations',
+    'description' => 'Find and fill all empty locations with latitude and longtitude data',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('la_admin'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'la.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_cron().
+ */
+function la_cron() {
+
+}
+
+
+/**
+ * Get information about non filled locations.
+ */
+function la_info() {
+  $empty_locations = db_select('location', 'l')
+    ->fields('l', array('lid'))
+    ->condition('latitude', '0.000000')
+    ->condition('longitude', '0.000000')
+    ->execute()
+    ->rowCount();
+  if ($empty_locations > 0) {
+    drupal_set_message(
+      t(
+        'There are empty locations (latitude and longitude) within your database: !count',
+        array('!count' => $empty_locations)
+      ),
+      'warning',
+      FALSE
+    );
+    return $empty_locations;
+  }
+  return NULL;
+}
+
+/**
+ * Fill all locations using google geocode.
+ */
+function la_batch() {
+  $empty_locations = db_select('location', 'l')
+    ->fields('l', array('lid'))
+    ->condition('latitude', '0.000000')
+    ->condition('longitude', '0.000000')
+    ->execute()
+    ->rowCount();
+  if ($empty_locations = 0) {
+    return;
+  }
+
+  // Reset counter for debug information.
+  $_SESSION['http_request_count'] = 0;
+  // Execute the function named la_batch_run.
+  $function = 'la_batch_run';
+  $batch = $function();
+  batch_set($batch);
+}
+
+/**
+ * Helper function for batch creation.
+ *
+ * @return array
+ *   Batch array for processing.
+ */
+function la_batch_run() {
+
+  $empty_locations = db_select('location', 'l')
+    ->fields('l', array('lid'))
+    ->condition('latitude', '0.000000')
+    ->condition('longitude', '0.000000')
+    ->execute()
+    ->fetchAll();
+
+  foreach ($empty_locations as $lid) {
+    $operations[] = array(
+      'la_geocode_worker',
+      array(
+        $lid->lid,
+        t('(Processing location: @location)', array('@location' => $lid->lid)),
+      ),
+    );
+  }
+
+  $batch = array(
+    'operations' => $operations,
+    'finished' => 'la_batch_finished',
+  );
+  return $batch;
+}
+
+/**
+ * Handler to process single location per batch run.
+ *
+ * @param $lid
+ *   Location ID to process.
+ * @param $operation_details
+ *   Details, passed to batch.
+ * @param $context
+ *   Context, that stores interbatch data.
+ */
+function la_geocode_worker($lid, $operation_details, &$context) {
+  $l = location_load_location($lid);
+  module_load_include('inc', 'location', 'geocoding/google');
+  $r = google_geocode_location($l);
+  if ($r != NULL) {
+    $l['latitude'] = $r['lat'];
+    $l['longitude'] = $r['lon'];
+    location_save($l, FALSE);
+  }
+
+  // Inform the batch engine that we are not finished,
+  // and provide an estimation of the completion level we reached.
+  if ($context['sandbox']['progress'] != $context['sandbox']['max']) {
+    $context['finished'] = ($context['sandbox']['progress'] >= $context['sandbox']['max']);
+  }
+  // Store some results for post-processing in the 'finished' callback.
+  // The contents of 'results' will be available as $results in the
+  // 'finished' function (currently, la_batch_finished()).
+  $context['results'][] = is_null(
+    $r
+  ) ? 'error' : $lid . ' : ' . $l['latitude'] . ':' . $l['longitude'];
+
+  // Optional message displayed under the progressbar.
+  $context['message'] = is_null($r) ? t(
+      'Error obtaining location: !lid',
+      array('!lid' => $lid)
+    ) . ' ' . $operation_details : t(
+      'Updating location "@lid"',
+      array('@lid' => $lid)
+    ) . ' ' . $operation_details;
+
+  la_update_http_requests();
+}
+
+/**
+ * Batch finished callback.
+ *
+ * @param bool $success
+ *   TRUE if success.
+ * @param array $results
+ *   Array of results.
+ * @param $operations
+ *   List of operations that remained unprocessed.
+ */
+function la_batch_finished($success, $results, $operations) {
+  if ($success) {
+    $counts = array_count_values($results);
+    // Here we could do something meaningful with the results.
+    // We just display the number of nodes we processed...
+    $cresults = count($results);
+    $csuccess = count($counts);
+    $cerrors = $counts['error'];
+    drupal_set_message(
+      t(
+        '@count locations processed in @requests HTTP requests with @errors errors.',
+        array(
+          '@count' => $cresults,
+          '@requests' => la_get_http_requests(),
+          '@errors' => $cerrors
+        )
+      )
+    );
+  }
+  else {
+    // An error occurred.
+    // $operations contains the operations that remained unprocessed.
+    $error_operation = reset($operations);
+    drupal_set_message(
+      t(
+        'An error occurred while processing @operation with arguments : @args',
+        array(
+          '@operation' => $error_operation[0],
+          '@args' => print_r($error_operation[0], TRUE),
+        )
+      )
+    );
+  }
+}
+
+/**
+ * Utility function to count the HTTP requests in a session variable.
+ *
+ * @return int
+ *   Number of requests.
+ */
+function la_get_http_requests() {
+  return !empty($_SESSION['http_request_count']) ? $_SESSION['http_request_count'] : 0;
+}
+
+/**
+ * Utility function to increment HTTP requests in a session variable.
+ */
+function la_update_http_requests() {
+  $_SESSION['http_request_count']++;
+}

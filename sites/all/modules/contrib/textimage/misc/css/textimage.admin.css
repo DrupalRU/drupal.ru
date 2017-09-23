@@ -1,0 +1,20 @@
+/* AHAH Preview */
+
+#textimage-preview {
+  background-image: url('../images/transparent.png');
+  border: 1px solid #999;
+  margin-right: 5%;
+  padding: 25px 25px 21px;
+  text-align: center;
+}
+
+#textimage-preview IMG {
+  margin: 0;
+  padding: 0;
+}
+
+span.textimage-colored-string {
+  border: 1px solid;
+  font-weight: bold;
+  padding: 0.1em 0.5em;
+}

@@ -1,0 +1,201 @@
+<?php
+/**
+ * @file
+ * Text filter for highlighting PHP source code.
+ *
+ * Note: This isn't really compatible with the prism module. This module is for
+ * adding prism support to the codefilter module, which is too, not compatible
+ * with the prism filter module.
+ */
+
+/**
+ * Implements hook_library().
+ */
+function codefilter_prism_library() {
+  $location = codefilter_prism_return_library_location();
+
+  $libraries['prism'] = array(
+    'title' => 'Prism',
+    'website' => 'http://prismjs.com',
+    'version' => array(),
+    'js' => array(
+      $location . 'prism.js' => array(),
+    ),
+    'css' => array(
+      $location . 'prism.css' => array(
+        'type' => 'file',
+        'media' => 'screen',
+      ),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
+ * Return appropriate library location.
+ */
+function codefilter_prism_return_library_location() {
+  $file_base = '/libraries/prism/prism.js';
+
+  // Check for a multisite installation.
+  if (file_exists(conf_path() . $file_base)) {
+    $location = conf_path() . '/libraries/prism/';
+  }
+  else {
+    // Default.
+    $location = 'sites/all/libraries/prism/';
+  }
+
+  return $location;
+}
+
+/**
+ * Implements hook_init().
+ */
+function codefilter_prism_init() {
+  drupal_add_library('codefilter_prism', 'prism');
+}
+
+/**
+ * Processes chunks of escaped PHP code into HTML.
+ *
+ * @param string $text
+ *   The text to process.
+ *
+ * @return string
+ *   HTMl encoded, highlighted PHP code.
+ */
+function codefilter_prism_process_php($text) {
+  // Undo linebreak escaping.
+  $text = str_replace('&#10;', "\n", $text);
+  // Inline or block level piece?
+  $multiline = strpos($text, "\n") !== FALSE;
+
+  // Undo the escaping in the prepare step.
+  $text = decode_entities($text);
+  // Trim first leading line break.
+  $text = preg_replace('@^[ \t]*[\n]@', '', $text);
+  $text = codefilter_fix_spaces($text);
+
+  // Highlight as PHP.
+  $text = '<code class="language-php">' . $text . '</code>';
+  $text = $multiline ? '<pre class="codeblock">' . $text . '</pre>' : $text;
+
+  return $text;
+}
+
+/**
+ * Callback to replace content of the <?php ?> elements.
+ *
+ * @param array $matches
+ *   An array of preg_matches as defined by preg_replace_callback.
+ *
+ * @return string
+ *   Processed text.
+ */
+function _codefilter_prism_process_php_callback($matches) {
+  return codefilter_prism_process_php($matches[1]);
+}
+
+/**
+ * Processes chunks of escaped code into HTML.
+ *
+ * @param string $text
+ *   Code to convert to HTML.
+ * @param string $attributes
+ *   Attributes to add to the enclosing HTML tag (eg class="myclass").
+ *
+ * @return string
+ *   HTML containing the text suitable for consumption by prism.
+ */
+function codefilter_prism_process_code($text, $attributes = '') {
+  // Undo linebreak escaping.
+  $text = str_replace('&#10;', "\n", $text);
+  // Inline or block level piece?
+  $multiline = strpos($text, "\n") !== FALSE;
+  // Trim first leading line break.
+  $text = preg_replace('@^[ \t]*[\n]@', '', $text);
+
+  $text = decode_entities($text);
+
+  // Add language class if one doesn't exist.
+  if (strpos($attributes, 'class="') !== FALSE) {
+    if (strpos($attributes, 'language-') === FALSE) {
+      $attributes = str_replace('class="', 'class="language-php ', $attributes);
+    }
+  }
+  else {
+    $attributes .= ' class="language-php"';
+  }
+
+  $text = codefilter_fix_spaces($text);
+  $text = '<code' . $attributes . '>' . $text . '</code>';
+  $text = $multiline ? '<pre class="codeblock">' . $text . '</pre>' : $text;
+
+  return $text;
+}
+
+/**
+ * Callback to replace content of the <code> elements.
+ *
+ * @param array $matches
+ *   An array of matches passed by preg_replace_callback().
+ *
+ * @return string
+ *   A formatted string.
+ */
+function _codefilter_prism_process_code_callback($matches) {
+  return codefilter_prism_process_code($matches[2], $matches[1]);
+}
+
+/**
+ * Callback to escape content of <code> elements.
+ */
+function _codefilter_prism_escape_code_tag_callback($matches) {
+  // Extract a potentially existing class HTML attribute.
+  $attributes = '';
+  if (!empty($matches[1]) && preg_match('@class="[^"]+"@', $matches[1], $class_matches)) {
+    $attributes = $class_matches[0];
+  }
+
+  return codefilter_prism_escape($matches[2], 'code', $attributes);
+}
+
+/**
+ * Callback to escape content of <?php ?>, [?php ?], <% %>, and [% %] elements.
+ */
+function _codefilter_prism_escape_php_tag_callback($matches) {
+  return codefilter_prism_escape($matches[2], 'php');
+}
+
+/**
+ * Escape code blocks during input filter 'prepare'.
+ *
+ * @param string $text
+ *   The string to escape.
+ * @param string $type
+ *   The type of code block, either 'code' or 'php'.
+ * @param string $attributes
+ *   (optional) The HTML attributes of the code block.
+ *
+ * @return string
+ *   The escaped string.
+ */
+function codefilter_prism_escape($text, $type = 'code', $attributes = '') {
+  // Note, pay attention to odd preg_replace-with-/e behaviour on slashes.
+  $text = check_plain($text);
+
+  // Protect newlines from line break converter.
+  $text = str_replace(array("\r", "\n"), array('', '&#10;'), $text);
+
+  // Prepare the class HTML attribute for the prism_code_filter tag.
+  if (!empty($attributes)) {
+    $attributes = ' ' . $attributes;
+  }
+
+  // Add prism_code_filter escape tags.
+  $text = "[codefilter_prism_{$type}{$attributes}]{$text}[/codefilter_prism_{$type}]";
+
+  return $text;
+}

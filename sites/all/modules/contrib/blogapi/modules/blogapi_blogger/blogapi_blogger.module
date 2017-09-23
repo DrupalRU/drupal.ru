@@ -1,0 +1,453 @@
+<?php
+
+/**
+ * @file
+ * Provides Blogger services for BlogAPI
+ */
+
+/**
+ * Implements hook_blogapi_info().
+ */
+function blogapi_blogger_blogapi_info() {
+  return array(
+    'api_version' => 2,
+    'type' => 'xmlrpc',
+    'name' => 'Blogger',
+  );
+}
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function blogapi_blogger_ctools_plugin_api() {
+  list($module, $api) = func_get_args();
+  if ($module == "services" && $api == "services") {
+    return array("version" => "3");
+  }
+}
+
+/**
+ * Implements hook_services_resources().
+ */
+function blogapi_blogger_services_resources() {
+  return array(
+    'blogger' => array(
+      'actions' => array(
+        'getUsersBlogs' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_blogger_get_users_blogs',
+          'enabled' => 1,
+          'help' => 'Returns a list of blogs to which an author has posting privileges.',
+          'args' => array(
+            array(
+              'name' => 'appid',
+              'type' => 'string',
+              'description' => 'appid',
+              'source' => array('data' => 'appid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'getUserInfo' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_blogger_get_user_info',
+          'enabled' => 1,
+          'help' => 'Returns information about an author in the system.',
+          'args' => array(
+            array(
+              'name' => 'appid',
+              'type' => 'string',
+              'description' => 'appid',
+              'source' => array('data' => 'appid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'newPost' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_blogger_new_post',
+          'enabled' => 1,
+          'help' => 'Creates a new post, and optionally publishes it.',
+          'args' => array(
+            array(
+              'name' => 'appid',
+              'type' => 'string',
+              'description' => 'appid',
+              'source' => array('data' => 'appid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'blogid',
+              'type' => 'string',
+              'description' => 'blogid',
+              'source' => array('data' => 'blogid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'content',
+              'type' => 'string',
+              'description' => 'content',
+              'source' => array('data' => 'content'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'publish',
+              'type' => 'boolean',
+              'description' => 'publish',
+              'source' => array('data' => 'publish'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'editPost' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_blogger_edit_post',
+          'enabled' => 1,
+          'help' => 'Updates the information about an existing post.',
+          'args' => array(
+            array(
+              'name' => 'appid',
+              'type' => 'string',
+              'description' => 'appid',
+              'source' => array('data' => 'appid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'postid',
+              'type' => 'string',
+              'description' => 'postid',
+              'source' => array('data' => 'postid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'content',
+              'type' => 'string',
+              'description' => 'content',
+              'source' => array('data' => 'content'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'publish',
+              'type' => 'boolean',
+              'description' => 'publish',
+              'source' => array('data' => 'publish'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'getPost' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_blogger_get_post',
+          'enabled' => 1,
+          'help' => 'Returns information about a specific post.',
+          'args' => array(
+            array(
+              'name' => 'appid',
+              'type' => 'string',
+              'description' => 'appid',
+              'source' => array('data' => 'appid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'postid',
+              'type' => 'string',
+              'description' => 'postid',
+              'source' => array('data' => 'postid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'deletePost' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_blogger_delete_post',
+          'enabled' => 1,
+          'help' => 'Deletes a post.',
+          'args' => array(
+            array(
+              'name' => 'appid',
+              'type' => 'string',
+              'description' => 'appid',
+              'source' => array('data' => 'appid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'postid',
+              'type' => 'string',
+              'description' => 'postid',
+              'source' => array('data' => 'postid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'publish',
+              'type' => 'boolean',
+              'description' => 'publish',
+              'source' => array('data' => 'publish'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'getRecentPosts' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_blogger_get_recent_posts',
+          'enabled' => 1,
+          'help' => 'Returns a list of the most recent posts in the system',
+          'args' => array(
+            array(
+              'name' => 'appid',
+              'type' => 'string',
+              'description' => 'appid',
+              'source' => array('data' => 'appid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'blogid',
+              'type' => 'string',
+              'description' => 'blogid',
+              'source' => array('data' => 'blogid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'number_of_posts',
+              'type' => 'int',
+              'description' => 'number_of_posts',
+              'source' => array('data' => 'number_of_posts'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'bodies',
+              'type' => 'boolean',
+              'description' => 'bodies',
+              'source' => array('data' => 'bodies'),
+              'optional' => TRUE,
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * Service callback for blogger.getUsersBlogs
+ */
+function blogapi_blogger_get_users_blogs($appid, $username, $password) {
+  // Validate the user.
+  $user = blogapi_validate_user($username, $password);
+
+  $types = blogapi_get_node_types();
+  if (empty($types)) {
+    return array();
+  }
+
+  $structs = array();
+  foreach ($types as $type) {
+    $structs[] = array('url' => url('user/' . $user->uid, array('absolute' => TRUE)), 'blogid' => $type, 'blogName' => $user->name . ": " . $type);
+  }
+
+  return $structs;
+}
+
+/**
+ * Service callback for blogger.getUserInfo
+ */
+function blogapi_blogger_get_user_info($appid, $username, $password) {
+  // Validate the user.
+  $user = blogapi_validate_user($username, $password);
+
+  // Reload user without services_remove_user_data to get email
+  $user = user_load($user->uid, TRUE);
+
+  // Try to guess the user's first and last name.
+  $name = explode(' ', !empty($user->realname) ? $user->realname : $user->name, 2);
+
+  return array(
+    'userid' => $user->uid,
+    'firstname' => $name[0],
+    'lastname' => !empty($name[1]) ? $name[1] : '',
+    'nickname' => $user->name,
+    'email' => $user->mail,
+    'url' => url('user/' . $user->uid, array('absolute' => TRUE)),
+  );
+}
+
+/**
+ * Service callback for blogger.newPost
+ */
+function blogapi_blogger_new_post($appid, $blogid, $username, $password, $content, $publish) {
+  $postdata = array(
+    'type' => $blogid,
+    'status' => $publish,
+    'title' => blogapi_blogger_extract_title($content),
+    'body' => blogapi_blogger_extract_body($content),
+  );
+
+  $node_id = blogapi_new_post($username, $password, $postdata);
+
+  if (is_numeric($node_id)) {
+    // If this operation is successful, we're supposed to return a string from
+    // blogger.newPost.
+    return (string)$node_id;
+  }
+  else {
+    // Otherwise, there is a problem, so just pass through what we got back from
+    // blogapi_new_post().
+    return $node_id;
+  }
+}
+
+/**
+ * Service callback for blogger.editPost
+ */
+function blogapi_blogger_edit_post($appid, $postid, $username, $password, $content, $publish) {
+  return blogapi_edit_post($postid, $username, $password, $content, $publish);
+}
+
+/**
+ * Service callback for blogger.getPost
+ */
+function blogapi_blogger_get_post($appid, $postid, $username, $password) {
+  // Validate the user.
+  $user = blogapi_validate_user($username, $password);
+
+  $node = node_load($postid);
+  if (!node_access('view', $node, $user) || !user_access('administer nodes')) {
+    // User does not have permission to view the node.
+    return services_error(t('You are not authorized to view post @postid', array('@postid' => $postid)), 403);
+  }
+
+  return blogapi_format_post_for_xmlrpc($node, TRUE);
+}
+
+/**
+ * Service callback for blogger.deletePost
+ */
+function blogapi_blogger_delete_post($appid, $postid, $username, $password, $publish) {
+  // Validate the user.
+  blogapi_validate_user($username, $password);
+
+  node_delete($postid);
+  return TRUE;
+}
+
+/**
+ * Service callback for blogger.getRecentPosts
+ */
+function blogapi_blogger_get_recent_posts($appkey, $blogid, $username, $password, $number_of_posts, $bodies = TRUE) {
+  return blogapi_get_recent_posts($blogid, $username, $password, $number_of_posts);
+}
+
+/**
+ * Extract the node title from the contents field.
+ */
+function blogapi_blogger_extract_title($contents) {
+  if (preg_match('/<title>(.*?)<\/title>/i', $contents, $title)) {
+    return strip_tags($title[0]);
+  }
+
+  return '';
+}
+
+/**
+ * Extract the node body from the contents field.
+ */
+function blogapi_blogger_extract_body($contents) {
+  return preg_replace('/<title>.*?<\/title>/i', '', $contents);
+}

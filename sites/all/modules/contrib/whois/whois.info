@@ -1,0 +1,18 @@
+name = Whois lookup
+description = Enables a whois lookup utility form, and depends on <a href="http://phpwhois.sf.net/">phpWhois</a> library.
+core = 7.x
+
+
+files[] = whois.admin.inc
+files[] = whois.install
+files[] = whois.module
+files[] = whois.pages.inc
+files[] = whois_domain_status.tpl.php
+files[] = tests/whois.test
+
+; Information added by drupal.org packaging script on 2011-12-06
+version = "7.x-1.2"
+core = "7.x"
+project = "whois"
+datestamp = "1323130285"
+

@@ -1,0 +1,80 @@
+<?php
+
+/**
+ * @file
+ * Add www adress fields to Location address.
+ */
+
+/**
+ * Implements hook_locationapi().
+ */
+function location_www_locationapi(&$location, $op, $a3 = NULL, $a4 = NULL) {
+  switch ($op) {
+    case 'fields':
+      return array('www' => t('www adress'));
+
+    case 'defaults':
+      return array(
+        'www' => array('default' => '', 'collect' => 0, 'weight' => 30),
+      );
+
+    case 'field_expand':
+      if ($a3 == 'www') {
+        return array(
+          '#type' => 'textfield',
+          '#title' => t('www adress'),
+          '#size' => 31,
+          '#maxlength' => 2048,
+          '#description' => NULL,
+          '#required' => ($a4 == 2),
+          '#default_value' => $location,
+        );
+      }
+      break;
+
+    case 'save':
+      db_delete('location_www')
+        ->condition('lid', $location['lid'])
+        ->execute();
+      if (!empty($location['www'])) {
+        db_insert('location_www')
+          ->fields(array(
+            'lid' => $location['lid'],
+            'www' => $location['www'],
+          ))
+          ->execute();
+      }
+      break;
+
+    case 'load':
+      $fields = array();
+      $www = db_query('SELECT www FROM {location_www} WHERE lid = :lid', array(':lid' => $location['lid']))->fetchField();
+      $fields['www'] = $www ? $www : '';
+      return $fields;
+
+    case 'delete':
+      db_delete('location_www')
+        ->condition('lid', $location['lid'])
+        ->execute();
+      break;
+  }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function location_www_views_api() {
+  return array(
+    'api' => 3,
+  );
+}
+
+/**
+ * Implements hook_token_list().
+ */
+function location_www_token_list($type = 'all') {
+  if ($type == 'node' || $type == 'user' || $type == 'all') {
+    $tokens['location']['location-www_N'] = t('Location www adress (If there are multiple locations per node, N is the iteration, starting with 0)');
+    return $tokens;
+  }
+}

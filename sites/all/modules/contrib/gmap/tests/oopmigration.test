@@ -1,0 +1,188 @@
+<?php
+
+/**
+ * @file unit tests for refactoring steps
+ */
+
+use Drupal\gmap\GmapPolylineToolbox;
+use Drupal\gmap\GmapDefaults;
+use Drupal\gmap\GmapMacroToolbox;
+
+class GmapPolylineToolboxTestCase extends DrupalUnitTestCase{
+
+  public function setUp(){
+    drupal_load('module', 'gmap');
+    parent::setUp();
+  }
+
+  public static function getInfo(){
+    return array(
+      'name' => 'GMap legacy API refactoring checks',
+      'description' => 'Test the legacy API functions.',
+      'group' => 'GMap',
+    );
+  }
+
+  public function testGmapPolylineToolbox(){
+
+    include_once(drupal_get_path('module', 'gmap') . '/tests/inc/gmap_polyutil.inc');
+    include_once(drupal_get_path('module', 'gmap') . '/lib/Drupal/gmap/GmapPolylineToolbox.php');
+    // legacy_gmap_polyutil_encode_latlon($x)
+    $check = \tests\inc\legacy_gmap_polyutil_encode_latlon(34);
+    $result = GmapPolylineToolbox::getInstance()->setLatLonNumber(34)->getEncodedLatLon();
+    $this->assertEqual($check, $result);
+
+    // legacy_gmap_polyutil_encode_latlon($x)
+    $check = \tests\inc\legacy_gmap_polyutil_encode_latlon(-34);
+    $result = GmapPolylineToolbox::getInstance()->setLatLonNumber(-34)->getEncodedLatLon();
+    $this->assertEqual($check, $result);
+
+    // legacy_gmap_polyutil_encode_levels($x)
+    $check = \tests\inc\legacy_gmap_polyutil_encode_levels(-34);
+    $result = GmapPolylineToolbox::getInstance()->setLatLonNumber(-34)->getEncodedLevels();
+    $this->assertEqual($check, $result);
+
+    // legacy__gmap_polyutil_encode($x)
+    $check = \tests\inc\legacy__gmap_polyutil_encode(500);
+    $result = GmapPolylineToolbox::getInstance()->setLatLonNumber(500)->getEncode();
+    $this->assertEqual($check, $result);
+
+    $check = \tests\inc\legacy__gmap_polyutil_encode(-500);
+    $result = GmapPolylineToolbox::getInstance()->setLatLonNumber(-500)->getEncode();
+    $this->assertEqual($check, $result);
+
+    // legacy_gmap_polyutil_dist($p1, $p2)
+    $check = \tests\inc\legacy_gmap_polyutil_dist(array(23, 45), array(123, 145));
+    $result = GmapPolylineToolbox::getInstance()->setLinePoints(array(23, 45), array(123, 145))->getDist();
+    $this->assertEqual($check, $result);
+
+    // legacy_gmap_polyutil_point_line_dist($q, $p1, $p2)
+    $check = \tests\inc\legacy_gmap_polyutil_point_line_dist(array(1, 10), array(23, 45), array(123, 145));
+    $result = GmapPolylineToolbox::getInstance()->setMeasurePoint(array(1, 10))->setLinePoints(array(23, 45), array(123, 145))->getPointLineDist();
+    $this->assertEqual($check, $result);
+
+    $check = \tests\inc\legacy_gmap_polyutil_point_line_dist(array(1, 10), array(23, 45), array(23, 45));
+    $result = GmapPolylineToolbox::getInstance()->setMeasurePoint(array(1, 10))->setLinePoints(array(23, 45), array(23, 45))->getPointLineDist();
+    $this->assertEqual($check, $result);
+
+    // legacy_gmap_polyutil_dp_encode($points)
+    $check = \tests\inc\legacy_gmap_polyutil_dp_encode(array(array(23, 45), array(123, 145)));
+    $result = GmapPolylineToolbox::getInstance()->setPoints(array(array(23, 45), array(123, 145)))->getDPEncode();
+    $this->assertEqual($check, $result);
+
+    $check = \tests\inc\legacy_gmap_polyutil_dp_encode(array(array(23, 45), array(123, 145), array(1, 10)));
+    $result = GmapPolylineToolbox::getInstance()->setPoints(array(array(23, 45), array(123, 145), array(1, 10)))->getDPEncode();
+    $this->assertEqual($check, $result);
+
+    // legacy_gmap_polyutil_polyline($points)
+    $check = \tests\inc\legacy_gmap_polyutil_polyline(array(array(23, 45), array(123, 145)));
+    $result = GmapPolylineToolbox::getInstance()->setPoints(array(array(23, 45), array(123, 145)))->getPolyline();
+    $this->assertEqual($check, $result);
+
+    $check = \tests\inc\legacy_gmap_polyutil_polyline(array(array(23, 45), array(123, 145), array(1, 10)));
+    $result = GmapPolylineToolbox::getInstance()->setPoints(array(array(23, 45), array(123, 145), array(1, 10)))->getPolyline();
+    $this->assertEqual($check, $result);
+
+    // legacy__gmap_polyutil_zoom_levels()
+    $check = \tests\inc\legacy__gmap_polyutil_zoom_levels();
+    $result = GmapPolylineToolbox::getInstance()->getZoomLevels();
+    $this->assertEqual($check, $result);
+
+    // legacy__gmap_polyutil_get_zoom_level($weight)
+    $check = \tests\inc\legacy__gmap_polyutil_get_zoom_level(12);
+    $result = GmapPolylineToolbox::getInstance()->setWeight(12)->getZoomLevel();
+    $this->assertEqual($check, $result);
+
+  }
+}
+
+class GmapDefaultsTestCase extends DrupalUnitTestCase{
+
+  public function setUp(){
+    drupal_load('module', 'gmap');
+    parent::setUp();
+  }
+
+  public static function getInfo(){
+    return array(
+      'name' => 'GMap legacy API defaults refactoring checks',
+      'description' => 'Test the legacy API defaults functions.',
+      'group' => 'GMap',
+    );
+  }
+
+  public function testGmapDefaults(){
+    include_once(drupal_get_path('module', 'gmap') . '/tests/inc/gmap_defaults.inc');
+    include_once(drupal_get_path('module', 'gmap') . '/lib/Drupal/gmap/GmapDefaults.php');
+
+    // legacy_gmap_defaults()
+    $check = \tests\inc\legacy_gmap_defaults();
+    $result = GmapDefaults::getInstance()->getDefaults();
+    $this->assertEqual($check, $result);
+
+    // legacy__gmap_base_js()
+    $check = \tests\inc\legacy__gmap_base_js();
+    $result = GmapDefaults::getInstance()->getBaseJs();
+    $this->assertEqual($check, $result);
+
+    // legacy__gmap_base_js()
+    $check = \tests\inc\legacy__gmap_base_js();
+    $result = _gmap_base_js();
+    $this->assertEqual($check, $result);
+
+
+  }
+}
+
+class GmapMacroToolboxTestCase extends DrupalUnitTestCase{
+
+  public function setUp(){
+    drupal_load('module', 'gmap');
+    parent::setUp();
+  }
+
+  public static function getInfo(){
+    return array(
+      'name' => 'GMap legacy macro API defaults refactoring checks',
+      'description' => 'Test the legacy macro API defaults functions.',
+      'group' => 'GMap',
+    );
+  }
+
+  public function testGmapMacroToolbox(){
+    include_once(drupal_get_path('module', 'gmap') . '/tests/inc/gmap_parse_macro.inc');
+    include_once(drupal_get_path('module', 'gmap') . '/gmap_parse_macro.inc');
+    include_once(drupal_get_path('module', 'gmap') . '/lib/Drupal/gmap/GmapMacroToolbox.php');
+
+    // legacy__gmap_parse_style($style)
+    $style = '#111111/1/100/#111111/1';
+    $check = \tests\inc\legacy__gmap_parse_style($style);
+    $result = GmapMacroToolbox::getInstance()->setStyle($style)->getParsedStyles();
+    $this->assertEqual($check, $result);
+
+    $check = \tests\inc\legacy__gmap_parse_style($style);
+    $result = _gmap_parse_style($style);
+    $this->assertEqual($check, $result);
+
+    // legacy__gmap_str2coord($str)
+    $coordString = '1.11111 , 2.11111 + 3.11111, 4.11111';
+    $check = \tests\inc\legacy__gmap_str2coord($coordString);
+    $result = GmapMacroToolbox::getInstance()->setCoordString($coordString)->getCoord();
+    $this->assertEqual($check, $result);
+
+    $check = \tests\inc\legacy__gmap_str2coord($coordString);
+    $result = _gmap_str2coord($coordString);
+    $this->assertEqual($check, $result);
+
+    // legacy__gmap_parse_macro($instring, $ver = 2)
+    $instring = '[gmap zoom=16 |center=50.450100000000006,30.523400000000045 |width=300px |height=200px |id=ght |control=Small |type=Map]';
+    $check = \tests\inc\legacy__gmap_parse_macro($instring, 2);
+    $result = GmapMacroToolbox::getInstance()->setMacroString($instring, 2)->getParsedMacro();
+    $this->assertEqual($check, $result);
+
+    $check = \tests\inc\legacy__gmap_parse_macro($instring, 2);
+    $result = _gmap_parse_macro($instring, 2);
+    $this->assertEqual($check, $result);
+
+  }
+}

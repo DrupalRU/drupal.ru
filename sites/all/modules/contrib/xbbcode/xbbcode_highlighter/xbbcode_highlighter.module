@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file xbbcode_highlighter.module
+ * Provides the glue code that shows highlighter languages as xbbcode tags,
+ * and invokes the highlighter when rendering.
+ */
+
+/**
+ * Implements hook_xbbcode_info().
+ */
+function xbbcode_highlighter_xbbcode_info() {
+  $languages = highlighter_languages();
+  
+  foreach ($languages as $id => $info) {
+    $tags[$id] = array(
+      'callback' => 'xbbcode_highlighter_render',
+      'description' => t('!lang syntax highlighting', array('!lang' => $info['name'])),
+      'sample' => "[$id]" . $info['sample'] . "[/$id]",
+      'plain' => TRUE,
+      'nocode' => TRUE,
+    );
+  }
+  return $tags;
+}
+
+/**
+ * Renders a given code tag by passing it to the highlighter.
+ */
+function xbbcode_highlighter_render($tag) {
+  module_load_include('inc', 'highlighter', 'highlighter.filter');
+  $tag->content = html_entity_decode($tag->content);
+  
+  $settings['language'] = $tag->name;
+  if (isset($tag->args['indent'])) {
+    $settings['tabsize'] = $tag->args['indent'];
+  }
+  $settings['numbers'] = $tag->option == 'ln';
+  return highlighter_highlight($settings, $tag->content);
+}

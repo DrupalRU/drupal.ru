@@ -1,0 +1,193 @@
+<?php
+
+function xbbcode_list_xbbcode_info() {
+  $sample = t("[*] fruit\n[**] apples\n[**] bananas\n[*] animals\n[**] cat\n[**] dog");
+  $tags['list'] = array(
+    'callback' => '_xbbcode_list_render',
+    'description' => t('Formats a list of items in the default style.'),
+    'sample' => '[list]' . $sample . '[/list]',
+  );
+  $tags['ol'] = array(
+    'callback' => '_xbbcode_list_render',
+    'description' => t('Formats a numbered list of items.'),
+    'sample' => '[ol]' . $sample . '[/ol]',
+  );
+  $tags['ul'] = array(
+    'callback' => '_xbbcode_list_render',
+    'description' => t('Formats a non-numbered list of items.'),
+    'sample' => '[ul]' . $sample . '[/ul]',
+  );
+  return $tags;
+}
+
+function xbbcode_list_init() {
+  drupal_add_css(drupal_get_path('module', 'xbbcode_list') . '/xbbcode_list.css');
+}
+
+function _xbbcode_list_render($tag) {
+  $settings = variable_get('xbbcode_list', array('type' => 'ol', 'ol' => array('style' => 'hierarchy', 'classes' => array('numeric', 'lower-alpha', 'lower-roman'))));
+  $type = $tag->name == 'list' ? $settings['type'] : $tag->name;
+  $classes = $type == 'ol' ? ($settings['ol']['style'] == 'hierarchy' ? $settings['ol']['classes'] : array('sectioned')) : array('default');
+  $tree = _xbbcode_list_tree($tag->content);
+  return _xbbcode_list_render_tree($type, $classes, $tree);
+}
+
+function _xbbcode_list_tree($text) {
+  $text = str_replace("\n", '', $text);
+  $tokens = preg_split('/\s*\[(\*+)\]\s*/', trim($text), -1, PREG_SPLIT_DELIM_CAPTURE);
+  array_shift($tokens);
+  $root = (object) array('sub' => array(), 'data' => NULL);
+  $stack = array($root);
+  if ($tokens[0] != '*') {
+    return NULL;
+  }
+  for ($i = 0; $i < count($tokens); $i += 2) {
+    if (strlen($tokens[$i] > count($stack) + 1)) {
+      return NULL;
+    }
+    elseif (strlen($tokens[$i]) == count($stack) + 1) {
+      array_push($stack, end(end($stack)->sub));
+    }
+    else {
+      while (strlen($tokens[$i]) < count($stack)) {
+        array_pop($stack);
+      }
+    }
+    end($stack)->sub[] = (object) array('sub' => array(), 'data' => $tokens[$i+1]);
+  }
+  return $root;
+}
+
+function _xbbcode_list_render_tree($type, $classes, $tree) {
+  $class = count($classes) > 1 ? array_shift($classes) : end($classes);
+  $out = $tree->data;
+  if ($tree->sub) {
+    $out .= "<$type class='$class'>";
+    foreach ($tree->sub as $item) {
+      $out .= '<li>' . _xbbcode_list_render_tree($type, $classes, $item) . '</li>';
+    }
+    $out .= "</$type>";
+  }
+  return $out;
+}
+
+function xbbcode_list_menu() {
+  $menu['admin/config/content/lists/autocomplete'] = array(
+    'title' => 'list-style-type autocomplete',
+    'page callback' => 'xbbcode_list_autocomplete',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $menu['admin/config/content/lists'] = array(
+    'title' => 'BBCode list styles',
+    'description' => 'Configure the way that BBCode-formatted lists are displayed.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('xbbcode_list_admin_settings'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $menu;
+}
+
+function xbbcode_list_admin_settings($form_state) {
+  drupal_add_js(drupal_get_path('module', 'xbbcode_list') . '/xbbcode_list.js');
+  $settings = variable_get('xbbcode_list', array('type' => 'ol', 'ol' => array('style' => 'hierarchy', 'classes' => array('numeric', 'lower-alpha', 'lower-roman'))));
+  $form['#tree'] = TRUE;
+  $form['type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Default list type'),
+    '#description' => t('Choose whether [list] is numbered or non-numbered by default. Users can override the default by using [ul] or [ol].'),
+    '#options' => array(
+      'ol' => t('Numbered'),
+      'ul' => t('Non-numbered'),
+    ),
+    '#default_value' => $settings['type'],
+  );
+
+  $form['ol'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Ordered list settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#description' => t('Configure how to display lists with numbered items.'),
+  );
+
+  $form['ul'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Unordered list settings'),
+    '#collapsible' => FALSE,
+    '#collapsed' => FALSE,
+    '#description' => t('Configure how to display lists with non-numbered items.'),
+  );
+
+  $form['ol']['style'] = array(
+    '#type' => 'radios',
+    '#title' => t('Ordered list default'),
+    '#description' => t('Ordered lists will look like this by default. The style can be overridden with [ol=sections] and [ol=levels]'),
+    '#options' => array(
+      'sections' => t('Sectioned (this works only in a browser with CSS 2.0 support!)'),
+      'hierarchy' => t('Hierarchical levels'),
+    ),
+    '#default_value' => $settings['ol']['style'],
+  );
+
+  $form['ol']['example'] = array(
+    '#markup' => '
+<ol id="xbbocde_list_sample_1" class="numeric">
+  <li>' . t('Fruit') . '
+    <ol id="xbbocde_list_sample_2" class="lower-alpha">
+      <li>' . t('Citrus') . '
+        <ol id="xbbocde_list_sample_3" class="lower-roman">
+          <li>' . t('Lemon') . '</li>
+          <li>' . t('Orange') . '</li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol>',
+  );
+
+  $form['ol']['classes'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Style levels'),
+    '#description' => t('Enter a comma-separated list of styles that will be used by nested lists. Valid styles are: %list. Deeper levels will repeat the lowest level that was defined.', array('%list' => 'upper-roman, lower-roman, numeric, upper-alpha, lower-alpha, none')),
+    '#default_value' => implode(', ', $settings['ol']['classes']),
+    '#autocomplete_path' => 'admin/config/content/lists/autocomplete',
+    '#element_validate' => array('xbbcode_list_style_validate'),
+  );
+
+  return $form;
+}
+
+function xbbcode_list_style_validate($element) {
+  $valid_styles = array('upper-alpha', 'lower-alpha', 'upper-roman', 'lower-roman', 'numeric');
+  $types = preg_split('/ *, */', $element['#value']);
+  foreach ($types as $type) {
+    if (!in_array($type, $valid_styles)) {
+      form_error($element, t('%type is not a valid style.', array('%type' => $type)));
+    }
+  }
+}
+
+function xbbcode_list_admin_settings_submit($form, &$form_state) {
+  $data = $form_state['values'];
+  $data['ol']['classes'] = preg_split('/ *, */', $element['#value']);
+  variable_set('xbbcode_list', $data);
+}
+
+function xbbcode_list_autocomplete($string) {
+  $styles = array('upper-alpha', 'lower-alpha', 'upper-roman', 'lower-roman', 'numeric');
+  $results = array();
+  if (preg_match('/^(.*,\s*)?(.*)$/', check_plain($string), $match)) {
+    list($first, $last) = array($match[1], $match[2]);
+    $length = drupal_strlen($last);
+    foreach ($styles as $style) {
+      if (drupal_substr($style, 0, $length) == $last) {
+	$results[$first.$style] = $style;
+      }
+    }
+  }
+  drupal_json_output($results);
+}

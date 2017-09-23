@@ -1,0 +1,17 @@
+div.forum-access-flowed > div.form-item {
+  display: inline;
+  margin-right: 1em;
+}
+
+div.form-item-forum-access-update-choice {
+  margin-bottom: 0;
+}
+
+div.form-item-forum-access-force-update {
+  margin-top: 0;
+}
+
+.forum-access-temporary-moderator div.form-item {
+  opacity: 0.5;
+  filter:alpha(opacity=50);
+}

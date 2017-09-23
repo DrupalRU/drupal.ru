@@ -1,0 +1,14 @@
+name = Vote Up/Down
+description = "Provides a configurable up/down voting widget for other modules to use."
+dependencies[] = votingapi
+dependencies[] = ctools
+package = Voting
+core = 7.x
+configure = admin/config/search/voteupdown
+
+; Information added by Drupal.org packaging script on 2017-04-18
+version = "7.x-2.0"
+core = "7.x"
+project = "vote_up_down"
+datestamp = "1492492751"
+

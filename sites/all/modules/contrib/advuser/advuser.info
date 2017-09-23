@@ -1,0 +1,11 @@
+name = Advanced User Management
+description = Advanced user management providing advanced filtering of users and providing mass actions of selected filtered users across multiple pages of the users list.
+core = 7.x
+dependencies[] = 'token'
+
+; Information added by drupal.org packaging script on 2013-09-26
+version = "7.x-3.0-beta1"
+core = "7.x"
+project = "advuser"
+datestamp = "1380162319"
+

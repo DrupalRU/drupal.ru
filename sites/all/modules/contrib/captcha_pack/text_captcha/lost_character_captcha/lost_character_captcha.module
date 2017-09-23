@@ -1,0 +1,110 @@
+<?php
+
+require_once(drupal_get_path('module', 'lost_character_captcha') . '/../text_captcha.inc');
+
+define('LOST_CHARACTER_CAPTCHA_DEFAULT_WORD_POOL', 'information language interesting vocabulary communication computer security presentation infrastructure videotape yesterday xylophone workforce validation supervisor standalone multimedia grapefruit friendship aboriginal alphabetical agriculture atmosphere candidature catastrophe audiovisual fingerprint keyboard testimonial supervision supermarket temperature terminology telephonist ultraviolet scholarship spaceflight shoplifting punctuation screwdriver quarterback');
+define('LOST_CHARACTER_CAPTCHA_HINTER', '_');
+
+/**
+ * Implements hook_help().
+ */
+function lost_character_captcha_help($path, $arg) {
+  switch ($path) {
+    case 'admin/config/people/captcha/lost_character_captcha':
+      return '<p>' . t('The challenge in this CAPTCHA is to determine the lost character(s) of a given word.') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function lost_character_captcha_menu() {
+  $items = array();
+  $items['admin/config/people/captcha/lost_character_captcha'] = array(
+    'title' => 'Lost characters CAPTCHA',
+    'file' => 'lost_character_captcha.admin.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('lost_character_captcha_settings_form'),
+    'access arguments' => array('administer CAPTCHA settings'),
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_captcha().
+ */
+function lost_character_captcha_captcha($op, $captcha_type = '') {
+  switch ($op) {
+    case 'list':
+      return array("Lost characters");
+    case 'generate':
+      if ($captcha_type == "Lost characters") {
+        // Get the word pool
+        $words = _text_captcha_word_pool_get_content('lost_character_captcha_word_pool', NULL, LOST_CHARACTER_CAPTCHA_DEFAULT_WORD_POOL, TRUE);
+        // Pick a random word
+        $word = $words[array_rand($words)];
+        // Split in characters
+        $characters = _text_captcha_utf8_split($word);
+        // Lose characters
+        $lost = array();
+        $lose_quantity = variable_get('lost_character_captcha_quantity', 1);
+        for ($i = 0; $i < $lose_quantity; $i++) {
+          // Pick a random character
+          $n = array_rand($characters);
+          while ($characters[$n] == LOST_CHARACTER_CAPTCHA_HINTER) {
+            $n = array_rand($characters);
+          }
+          // Save it for building the solution
+          $lost[] = $characters[$n];
+          // And lose it in the given word
+          if (variable_get('lost_character_captcha_enable_hint', TRUE)) {
+            $characters[$n] = LOST_CHARACTER_CAPTCHA_HINTER;
+          }
+          else {
+            unset($characters[$n]);
+          }
+        }
+        // Build the CAPTCHA
+        sort($lost);
+        $given_word = implode('', $characters);
+        $solution = implode('', $lost);
+        if ($lose_quantity == 1) {
+          $title = t('Enter the missing character from the following word');
+        }
+        else {
+          $title = t('Enter the @num missing characters from the following word', array('@num' => $lose_quantity));
+        }
+
+        $captcha = array();
+        $captcha['solution'] = $solution;
+        $captcha['form']['captcha_response'] = array(
+          '#type' => 'textfield',
+          '#title' => $title,
+          '#field_prefix' => "$given_word: ",
+          '#size' => 3,
+          '#maxlength' => 3,
+          '#required' => TRUE,
+          '#process' => array('lost_character_process'),
+        );
+        return $captcha;
+      }
+  }
+}
+
+/**
+ * Process the response before validation.
+ */
+function lost_character_process($element, $edit) {
+  $response = $element['#value'];
+  // Remove white spaces
+  $parts = _text_captcha_whitespace_explode($response);
+  $response = implode('', $parts);
+  // Split in utf8 characters, sort and rejoin
+  $characters = _text_captcha_utf8_split($response);
+  sort($characters);
+  $response = implode('', $characters);
+  // Put back in element and return.
+  $element['#value'] = $response;
+  return $element;
+}

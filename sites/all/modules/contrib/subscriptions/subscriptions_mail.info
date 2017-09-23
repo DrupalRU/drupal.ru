@@ -1,0 +1,16 @@
+name = Subscriptions Mail
+description = Sends out mails with drupal_mail.
+package = "Subscriptions"
+
+dependencies[] = subscriptions
+dependencies[] = mail_edit
+dependencies[] = token
+
+core = 7.x
+
+; Information added by Drupal.org packaging script on 2016-08-22
+version = "7.x-1.3"
+core = "7.x"
+project = "subscriptions"
+datestamp = "1471906141"
+

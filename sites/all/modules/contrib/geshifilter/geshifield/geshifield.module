@@ -1,0 +1,186 @@
+<?php
+/**
+ * @file
+ * Defines a CCK field for source code with GeSHi syntax highlighting.
+ *
+ * @todo: is the GeSHi CSS file always loaded when needed?
+ */
+
+/**
+ * Implementation of hook_theme().
+ */
+function geshifield_theme() {
+  return array(
+    'geshifield_textarea' => array(
+       'render element' => 'element',
+    ),
+    'geshifield_formatter_default' => array(
+       'render element' => 'element',
+    ),
+    'geshifield_formatter_nohighlighting' => array(
+       'render element' => 'element',
+    ),
+    'geshifield_formatter_trimmed' => array(
+       'render element' => 'element',
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_field_info().
+ */
+function geshifield_field_info() {
+  return array(
+    'geshifield' => array(
+      'label' => t('GeSHi field'),
+      'description' => t('This field stores long text in the database.'),
+      'default_widget' => 'geshifield_textarea',
+      'default_formatter' => 'default',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function geshifield_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $element += array(
+    '#type' => $instance['widget']['type'],
+    '#default_value' => isset($items[$delta]) ? $items[$delta] : '',
+  );
+  return $element;
+}
+
+/**
+ * Implementation of hook_content_is_empty().
+ */
+function geshifield_field_is_empty($item, $field) {
+  return empty($item['sourcecode']);
+}
+
+/**
+ * Implementation of hook_widget_info().
+ */
+function geshifield_field_widget_info() {
+  return array(
+    'geshifield_textarea' => array(
+      'label' => t('Source code text area'),
+      'field types' => array('geshifield'),
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+    ),
+  );
+
+  return array(
+    'geshifield_textarea' => array(
+      'label' => t('Source code text area'),
+      'field types' => array('geshifield'),
+      // Let CCK core handle multiple values.
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+      'callbacks' => array(),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_elements_info().
+*/
+function geshifield_element_info() {
+  $elements = array(
+    'geshifield_textarea' => array(
+      '#input' => TRUE,
+      '#process' => array('geshifield_textarea_process' ),
+    ),
+  );
+  return $elements;
+}
+
+/**
+ * Process callback for geshifield_textarea widget.
+ */
+function geshifield_textarea_process($element, $form_state, $complete_form) {
+  module_load_include('inc', 'geshifilter');
+
+
+  $defaults = $element['#value'];
+  #$field = content_fields($element['#field_name'], $element['#type_name']);
+  $field = field_widget_instance($element, $form_state);
+
+  $enabled_languages = _geshifilter_get_enabled_languages();
+  // @todo: also add "no highlighting" options.
+
+  $element['sourcecode'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Source code'),
+    '#default_value' => isset($defaults['sourcecode']) ? $defaults['sourcecode'] : '',
+    '#required' => $element['#required'],
+    '#rows' => isset($field['widget']['rows']) ? $field['widget']['rows'] : 5, // TODO: do we need this row field?
+    '#description' => filter_xss($field['description']),
+  );
+
+  $element['language'] = array(
+    '#type' => 'select',
+    '#title' => t('Syntax highlighting mode'),
+    '#default_value' => isset($defaults['language']) ? $defaults['language'] : '',
+    '#options' => $enabled_languages,
+    '#description' => t('Select the syntax highlighting mode to use for the source code.'),
+  );
+
+  return $element;
+}
+
+/**
+ * Implementation of hook_field_formatter_info().
+ */
+function geshifield_field_formatter_info() {
+  return array(
+    'default' => array(
+      'label' => t('Default'),
+      'field types' => array('geshifield'),
+    ),
+    'nohighlighting' => array(
+      'label' => t('No syntax highlighting'),
+      'field types' => array('geshifield'),
+    ),
+    'trimmed' => array(
+      'label' => t('Trimmed'),
+      'field types' => array('geshifield'),
+    ),
+  );
+}
+
+function geshifield_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $elements = array();
+  foreach ($items as $delta => $item) {
+    $elements[$delta] = array(
+      '#markup' => theme('geshifield_formatter_'. $display['type'], array('element' => $item, 'field' => $instance)),
+    );
+  }
+  return $elements;
+}
+
+function theme_geshifield_formatter_default($variables) {
+  $output = '';
+  module_load_include('inc', 'geshifilter', 'geshifilter.pages');
+  if (isset($variables['element']['sourcecode'])) {
+    $output .= geshifilter_geshi_process($variables['element']['sourcecode'], $variables['element']['language']);
+  }
+  return $output;
+}
+
+function theme_geshifield_formatter_nohighlighting($variables) {
+  $output = '';
+  module_load_include('inc', 'geshifilter', 'geshifilter.pages');
+  if (isset($variables['element']['sourcecode'])) {
+    $output .= geshifilter_geshi_process($variables['element']['sourcecode'], 'text');
+  }
+  return $output;
+}
+
+function theme_geshifield_formatter_trimmed($variables) {
+  $output = '';
+  module_load_include('inc', 'geshifilter', 'geshifilter.pages');
+  if (isset($variables['element']['sourcecode'])) {
+    $output .= geshifilter_geshi_process(truncate_utf8($variables['element']['sourcecode'], 200), $variables['element']['language']);
+  }
+  return $output;
+}

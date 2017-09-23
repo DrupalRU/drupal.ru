@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * Implements hook_help().
+ */
+function foo_captcha_help($path, $arg) {
+  switch ($path) {
+    case 'admin/config/people/captcha/foo_captcha':
+      return '<p>' . t('This is a very simple CAPTCHA, which requires users to enter "foo" in a textfield.') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function foo_captcha_menu() {
+  $items = array();
+  $items['admin/config/people/captcha/foo_captcha'] = array(
+    'title' => 'Foo CAPTCHA',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('foo_captcha_settings_form'),
+    'access arguments' => array('administer CAPTCHA settings'),
+    'file' => 'foo_captcha.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_captcha().
+ */
+function foo_captcha_captcha($op, $captcha_type = '') {
+  switch ($op) {
+    case 'list':
+      return array('Foo CAPTCHA');
+    case 'generate':
+      if ($captcha_type == 'Foo CAPTCHA') {
+        $captcha = array();
+        $captcha['solution'] = 'foo';
+        $captcha['form']['captcha_response'] = array(
+          '#type' => 'textfield',
+          '#title' => t('Enter "foo"'),
+          '#required' => TRUE,
+          '#process' => array('foo_captcha_process'),
+        );
+        return $captcha;
+      }
+      break;
+  }
+}
+
+/**
+ * Process the response to the foo CAPTCHA before validation.
+ */
+function foo_captcha_process($element, $edit) {
+  if (variable_get('foo_captcha_ignore_spaces', FALSE)) {
+    $element['#value'] = preg_replace('/\s*/', '', $element['#value']);
+  }
+  return $element;
+}

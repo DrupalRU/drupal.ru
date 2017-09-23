@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * @file
+ * Insert the PageRank value on the status report.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function google_pr_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+  if ($phase == 'runtime') {
+    $pagerank = google_pr_query();
+
+    if ($pagerank !== FALSE) {
+      $image = google_pr_image($pagerank);
+
+      $requirements['google_pr_rank'] = array(
+        'title' => $t('Google PageRank'),
+        'value' => $image,
+        'severity' => REQUIREMENT_INFO,
+      );
+    }
+  }
+  return $requirements;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function google_pr_uninstall() {
+  variable_del('google_pr_styling');
+}
+
+/**
+ * 7.x doesn't use a custom table anymore.
+ */
+function google_pr_update_7000() {
+  variable_del('google_pr_max');
+  variable_del('google_pr_description');
+  variable_del('google_pr_watchdog');
+
+  db_query("DROP TABLE {google_pr}");
+  return array();
+}

@@ -1,0 +1,372 @@
+<?php
+
+/**
+ * @file
+ * Endpoint tests for BlogAPI Blogger
+ */
+class BlogapiBloggerEndpointTestCase extends BlogapiTestCase {
+
+  /**
+   * Test info.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => t('Blogger Endpoint Tests'),
+      'description' => t('Run tests for Blogger endpoints') ,
+      'group' => t('BlogAPI'),
+    );
+  }
+
+  /**
+   * Set up test.
+   */
+  public function setUp() {
+    parent::setUp();
+  }
+
+  /**
+   * Test blogger.getUsersBlogs().
+   */
+  public function testGetUsersBlogs() {
+    // Restrict all content types, because article is allowed by default
+    variable_set('blogapi_node_types', array());
+
+    // Test blog type retrieval before creating and configuring node types.
+    $blog_types = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.getUsersBlogs' => array(
+        '1234567890',
+        $this->privilegedUser->name,
+        $this->privilegedUser->pass_raw
+      ),
+    ));
+
+    $this->assertEqual(count($blog_types), 0, 'No blog types exist and none were returned');
+
+    // Create a content type and re-test. No types should be returned
+    // because the content type is not configured for use with BlogAPI.
+    $type = $this->drupalCreateContentType();
+
+    $blog_types = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.getUsersBlogs' => array(
+        '1234567890',
+        $this->privilegedUser->name,
+        $this->privilegedUser->pass_raw
+      ),
+    ));
+
+    $this->assertEqual(count($blog_types), 0, 'No blog types are configured and none were returned');
+
+    // Add the new content type to the blog list and make sure that it's
+    // returned correctly.
+    variable_set('blogapi_node_types', array($type->type));
+
+    $blog_types = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.getUsersBlogs' => array(
+        '1234567890',
+        $this->privilegedUser->name,
+        $this->privilegedUser->pass_raw
+      ),
+    ));
+
+    $this->assertEqual(count($blog_types), 1, 'One blog type is configured and one was returned');
+    $this->assertEqual($blog_types[0]['blogid'], $type->type, 'The configured blog type is the one that was returned');
+    $this->assertEqual($blog_types[0]['blogName'], $this->privilegedUser->name . ': ' . $type->name, 'The blogName is returned correctly.');
+  }
+
+  /**
+   * Test blogger.getUserInfo().
+   */
+  public function testGetUserInfo() {
+    $user_info = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.getUserInfo' => array(
+        '1234567890',
+        $this->privilegedUser->name,
+        $this->privilegedUser->pass_raw
+      ),
+    ));
+
+    // Get firstname and lastname
+    $name = explode(' ', !empty($this->privilegedUser->realname) ? $this->privilegedUser->realname : $this->privilegedUser->name, 2);
+
+    // Check other retrieved pieces of data
+    $this->assertEqual($user_info['userid'], $this->privilegedUser->uid, 'Returned data has correct userid');
+    $this->assertEqual($user_info['firstname'], $name[0], 'Returned data has correct username');
+    $this->assertEqual($user_info['lastname'], (!empty($name[1]) ? $name[1] : ''), 'Returned data has correct lastname');
+    $this->assertEqual($user_info['nickname'], $this->privilegedUser->name, 'Returned data has correct nickname');
+    $this->assertEqual($user_info['email'], $this->privilegedUser->mail, 'Returned data has correct email.');
+    $this->assertEqual($user_info['url'], url('user/' . $this->privilegedUser->uid, array('absolute' => TRUE)), 'Returned data has correct URL');
+  }
+
+  /**
+   * Test blogger.newPost()
+   */
+  public function testNewPost() {
+    // Prepare data for nodes
+    $node_title = $this->randomString();
+    $node_body = $this->randomString();
+    $content = '<title>' . $node_title . '</title>' . $node_body;
+    $missed_type = '_arcticle';
+
+    // Try to create the node. This should fail because the user does not have
+    // permission to create this content type.
+    $nid = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.newPost' => array(
+        '1234567890',
+        $missed_type,
+        $this->privilegedUser->name,
+        $this->privilegedUser->pass_raw,
+        $content,
+        TRUE
+      ),
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), 'You do not have permission to create this type of post.',
+      'Node access is being respected.');
+
+
+    // Try to create the node. This should fail because the user does not have
+    // permission to create this content type.
+    $nid = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.newPost' => array(
+        '1234567890',
+        $missed_type,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+        $content,
+        TRUE
+      ),
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), format_string('BlogAPI is not configured to support the @type content type.', array('@type' => $missed_type)),
+      $missed_type . ' type is missed.');
+
+    // Create a content type.
+    $type = $this->drupalCreateContentType();
+    // Test with existing content type but not allowed for BlogAPI
+    $nid = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.newPost' => array(
+        '1234567890',
+        $type->type,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+        $content,
+        TRUE
+      ),
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), format_string('BlogAPI is not configured to support the @type content type.', array('@type' => $type->type)),
+      $type->type . ' is not allowed for BlogAPI yet.');
+
+    // Allow to user our content type with BlogAPI
+    variable_set('blogapi_node_types', array($type->type));
+    // Create the node. This should work because the user has administer nodes.
+    $nid = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.newPost' => array(
+        '1234567890',
+        $type->type,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+        $content,
+        TRUE,
+      ),
+    ));
+
+    // Load the node and validate the data.
+    $node = node_load($nid);
+    $this->assertEqual($node->title, $node_title, 'New node title is set correctly.');
+    $this->assertEqual($node->body[LANGUAGE_NONE][0]['value'], $node_body, 'New node body is set correctly.');
+    $this->assertEqual($node->status, 1, 'New node is published');
+  }
+
+  /**
+   * Test blogger.editPost().
+   */
+  public function testEditPost() {
+    // Prepare data for nodes
+    $node_title = $this->randomString();
+    $node_body = $this->randomString();
+    $content = '<title>' . $node_title . '</title>' . $node_body;
+    $allowed_type = $this->drupalCreateContentType();
+    $disallowed_type = $this->drupalCreateContentType();
+
+    // Allow to user our content type with BlogAPI
+    variable_set('blogapi_node_types', array($allowed_type->type));
+
+    $wrong_node = $this->drupalCreateNode(array('type' => $disallowed_type->type));
+    $correct_node = $this->drupalCreateNode(array('type' => $allowed_type->type, 'title' => $node_title, 'body' => array(LANGUAGE_NONE => array(array('value' => $node_body)))));
+
+    // Test edit unexisting node
+    $nid = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.editPost' => array(
+        '1234567890',
+        0,
+        $this->privilegedUser->name,
+        $this->privilegedUser->pass_raw,
+        $content,
+        TRUE,
+      ),
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), format_string('Node @nid not found', array('@nid' => 0)), 'Not found error returned');
+
+    // Try to update node with unprevileged user
+    $nid = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.editPost' => array(
+        '1234567890',
+        $correct_node->nid,
+        $this->privilegedUser->name,
+        $this->privilegedUser->pass_raw,
+        $content,
+        TRUE,
+      ),
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), 'You do not have permission to update this post.', 'User must have node edit permissions');
+
+    $node_title .= ' modified title';
+    $node_body .= ' modified body';
+
+    $result = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.editPost' => array(
+        '1234567890',
+        $correct_node->nid,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+        '<title>' . $node_title . '</title>' . $node_body,
+        TRUE
+      )
+    ));
+
+    $new_node = node_load($correct_node->nid, NULL, TRUE);
+    $this->assertTrue($result && $new_node->title != $correct_node->title, 'Node was updated');
+
+    $this->assertTrue($new_node->title == $node_title, 'Title was updated');
+
+    $this->assertTrue(!empty($new_node->body[LANGUAGE_NONE][0]['value']) && $new_node->body[LANGUAGE_NONE][0]['value'] == $node_body, 'Body was updated');
+  }
+
+  /**
+   * Test blogger.getPost().
+   */
+  public function testGetPost() {
+    $type = $this->drupalCreateContentType();
+
+    // Allow to user our content type with BlogAPI
+    variable_set('blogapi_node_types', array($type->type));
+
+    $node = $this->drupalCreateNode(array('type' => $type->type, 'uid' => $this->privilegedUser2->uid));
+
+    // Test user without node view permission.
+    $result = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.getPost' => array(
+        '1234567890',
+        $node->nid,
+        $this->privilegedUser->name,
+        $this->privilegedUser->pass_raw,
+      ),
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), format_string('You are not authorized to view post @postid',
+      array('@postid' => $node->nid)), 'User must node view permissions');
+
+    // Normal test
+    $result = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.getPost' => array(
+        '1234567890',
+        $node->nid,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+      ),
+    ));
+
+    $this->assertTrue($result['userid'] == $this->privilegedUser2->name, 'Author name is correct');
+    $this->assertTrue($result['dateCreated'] == xmlrpc_date($node->created), 'Created date is correct');
+    $this->assertTrue($result['title'] == $node->title, 'Post title is correct');
+    $this->assertTrue($result['postid'] == $node->nid, 'Post ID is correct');
+    $node_body = !empty($node->body[LANGUAGE_NONE][0]['value']) ? $node->body[LANGUAGE_NONE][0]['value'] : '';
+    $this->assertTrue($result['content'] == '<title>' . $node->title . '</title>' . $node_body, 'Post content is correct');
+    $this->assertTrue($result['link'] == url('node/' . $node->nid, array('absolute' => TRUE)), 'Post link is correct');
+  }
+
+  /**
+   * Test blogger.deletePost().
+   */
+  public function testDeletePost() {
+    $type = $this->drupalCreateContentType();
+
+    // Allow to user our content type with BlogAPI
+    variable_set('blogapi_node_types', array($type->type));
+
+    $node = $this->drupalCreateNode(array('type' => $type->type, 'uid' => $this->privilegedUser2->uid));
+
+    // Test user without blogAPI permission.
+    $result = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.deletePost' => array(
+        '1234567890',
+        $node->nid,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+        TRUE
+      ),
+    ));
+
+    $deleted_node = node_load($node->nid, NULL, TRUE);
+
+    $this->assertTrue($result && !$deleted_node, 'Node was deleted');
+  }
+
+  /**
+   * Test blogger.getRecentPosts().
+   */
+  public function testGetRecentPosts() {
+    $type = $this->drupalCreateContentType();
+    $number_of_posts = 9;
+    $nodes = array();
+
+    for ($i = 0; $i < 11; $i++) {
+      $nodes[] = $this->drupalCreateNode(array('type' => $type->type, 'uid' => $this->privilegedUser2->uid));
+    }
+
+    // Test user without node view permission.
+    $result = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.getRecentPosts' => array(
+        '1234567890',
+        $type->type,
+        $this->privilegedUser->name,
+        $this->privilegedUser->pass_raw,
+        $number_of_posts,
+      ),
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), format_string('BlogAPI is not configured to support the @type content type.',
+        array('@type' => $type->type)), $type->type . ' is not allowed for BlogAPI yet.');
+
+    // Allow to user our content type with BlogAPI
+    variable_set('blogapi_node_types', array($type->type));
+
+    // Test user without node view permission.
+    $results = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.getRecentPosts' => array(
+        '1234567890',
+        $type->type,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+        $number_of_posts,
+      ),
+    ));
+
+    $this->assertTrue(is_array($results) && count($results) == $number_of_posts, 'Service returned correct posts number');
+    $success = TRUE;
+
+    foreach ($results as $post) {
+      $node = node_load($post['postid']);
+
+      if (empty($node) || $node->title != $post['title']
+        || (!empty($node->body[LANGUAGE_NONE][0]['value']) && $node->body[LANGUAGE_NONE][0]['value'] != $post['description'])) {
+        $success = FALSE;
+      }
+    }
+
+    $this->assertTrue($success, 'All nodes were retrieved properly');
+  }
+}

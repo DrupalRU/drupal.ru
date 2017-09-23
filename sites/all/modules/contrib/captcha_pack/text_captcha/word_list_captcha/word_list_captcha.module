@@ -1,0 +1,99 @@
+<?php
+
+require_once(drupal_get_path('module', 'word_list_captcha') . '/../text_captcha.inc');
+
+define('WORD_LIST_CAPTCHA_WORD_POOL1', 'green red blue yellow black white magenta cyan orange violet purple gold brown pink');
+define('WORD_LIST_CAPTCHA_WORD_POOL2', 'bird elephant dog cat crocodile lion fish cow horse sheep frog beetle worm spider bat giraffe lizard goat monkey rabbit chimpanzee');
+
+/**
+ * Implements hook_help().
+ */
+function word_list_captcha_help($path, $arg) {
+  switch ($path) {
+    case 'admin/config/people/captcha/word_list_captcha':
+      return '<p>' . t('The unrelated word CAPTCHA consists of a list of closely related words with one non-related word, which the user has to select. To generate this list, two word pools are needed: one for the related words and one for the non-related word.') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function word_list_captcha_menu() {
+  $items = array();
+  // Add an administration tab for phrase_captcha
+  $items['admin/config/people/captcha/word_list_captcha'] = array(
+    'title' => 'Unrelated word',
+    'file' => 'word_list_captcha.admin.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('word_list_captcha_settings_form'),
+    'access arguments' => array('administer CAPTCHA settings'),
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+/**
+ * Helper function for generating a word list CAPTCHA
+ */
+function _word_list_captcha_get_word_list_captcha($list_size) {
+  if (mt_rand(0, 1)) {
+    $normal_words = _text_captcha_word_pool_get_content('word_list_captcha_word_pool_1', NULL, WORD_LIST_CAPTCHA_WORD_POOL1, TRUE);
+    $other_words = _text_captcha_word_pool_get_content('word_list_captcha_word_pool_2', NULL, WORD_LIST_CAPTCHA_WORD_POOL2, TRUE);
+  }
+  else {
+    $normal_words = _text_captcha_word_pool_get_content('word_list_captcha_word_pool_2', NULL, WORD_LIST_CAPTCHA_WORD_POOL2, TRUE);
+    $other_words = _text_captcha_word_pool_get_content('word_list_captcha_word_pool_1', NULL, WORD_LIST_CAPTCHA_WORD_POOL1, TRUE);
+  }
+  shuffle($normal_words);
+  $word_list = array_slice($normal_words, 0, $list_size - 1);
+  $wrong_word = $other_words[array_rand($other_words)];
+  $word_list[] = $wrong_word;
+  shuffle($word_list);
+  return array($word_list, $wrong_word);
+}
+
+/**
+ * Implements hook_captcha().
+ */
+function word_list_captcha_captcha($op, $captcha_type = '') {
+  switch ($op) {
+    case 'list':
+      return array('Pick the unrelated word');
+      break;
+    case 'generate':
+      if ($captcha_type == 'Pick the unrelated word') {
+        $list_size = variable_get('word_list_captcha_list_size', 5);
+        list($word_list, $wrong_word) = _word_list_captcha_get_word_list_captcha($list_size);
+        // Build options list
+        $options = array();
+        foreach ($word_list as $word) {
+          $options[$word] = $word;
+        }
+        $captcha = array();
+        $captcha['solution'] = $wrong_word;
+        $captcha['form']['captcha_response'] = array(
+          '#type' => 'radios',
+          '#title' => t('Which word does not belong to the list?'),
+          '#options' => $options,
+          // Extra class needed for additional CSS'ing of the options
+          '#attributes' => array('class' => array('text-captcha-word-list-radios')),
+          // TODO: the following needs to be ported to Drupal 6, which does not
+          // Support DANGEROUS_SKIP_CHECK anymore
+          //
+          // The following entry '#DANGEROUS_SKIP_CHECK' is needed to prevent
+          // that Drupal checks during validation phase if a submitted option
+          // is in the list of possible options. (see includes/form.inc)
+          // The options are randomly generated on each call and consequently
+          // almost never the same during the generate phase and the validation
+          // phase.
+          '#DANGEROUS_SKIP_CHECK' => TRUE, //
+          '#required' => TRUE,
+        );
+        // Add css to form
+        $captcha['#attached']['css'] = array(
+          drupal_get_path('module', 'word_list_captcha') . '/../text_captcha.css',
+        );
+        return $captcha;
+      }
+  }
+}

@@ -1,0 +1,397 @@
+<?php
+
+/**
+* Implements hook_permission().
+*/
+function blocker_permission() {
+  return array(
+    'administer blocker' => array(
+      'title' => t('Administer Blocker'),
+      'description' => t('Choose which blocks and regions can be managed using Blocker module.')
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function blocker_menu() {
+  $items = array();
+
+  // Config Page.
+  $items['admin/config/user-interface/blocker'] = array(
+    'title' => t('Blocker'),
+    'description' => t('Settings for Blocker module'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('blocker_admin_settings'),
+    'access arguments' => array('administer blocker'),
+    'file' => 'blocker.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Helper function to get blocks for a region on a path for a user.
+ */
+function blocker_get_blocks_list($region, $object, $account) {
+  global $user;
+  // No clean way to pass in url or user so override system and reset.
+  $orig_q = $_GET['q'];
+//  $orig_user = $user;
+  
+  $entity_uri = entity_uri($object->entity_type, $object);
+  $_GET['q'] = $entity_uri['path'];
+//  $user = $account;
+  
+  $blocks = block_list($region);
+  
+//  $user = $orig_user;
+  $_GET['q'] = $orig_q;
+
+  // Unset static cache as it is storing the wrong results.
+  drupal_static_reset('block_list');
+
+  // Get block_class version
+  $bc_version = variable_get('blocker_block_class_version',blocker_block_class_version());
+  
+  // Now add in blocks from this module.
+  // We only want to display the blocks on the main entity page.
+  $theme = variable_get('theme_default', 'bartik');
+  $object_ids = entity_extract_ids($object->entity_type, $object);
+  $blockers = blocker_get_blocks($object->entity_type, $object_ids[0], $theme);
+  foreach($blockers as $brid => $blocker) {
+    if ($blocker->region == $region) {
+      $block = block_load($blocker->module, $blocker->delta);
+      $block->weight = $blocker->weight;
+      if ($blocker->title) {
+        $block->title = $blocker->title;
+      }
+      
+      // Append existing block_class if checked.
+      if ($blocker->block_class_check) {
+        if ($bc_version < 2) {
+          // If using version 1, use the function.
+          $block->css_class = blocker_block_class($block, $blocker);
+        } else {
+          // Or just append the classes.
+          $block_class = (isset($block->css_class)) ? $block->css_class : '';
+          $block->css_class = trim($block_class.' '.$blocker->css_class);
+        }
+      } else {
+        // Replace the class. In block_class 7x-1.x, it will add it's block class regardless.
+        $block->css_class = $blocker->css_class;
+      }
+
+      $block->row = $blocker->row;
+      $block->row_class = $blocker->row_class;
+      $block->brid = $blocker->brid; // Save off brid to use later for edit link.
+      $blocks[$block->module . '_' . $block->delta] = $block;
+    }
+  }
+  return $blocks;
+}
+
+/**
+ * Implements hook_entity_info_alter()
+ */
+//function blocker_entity_info_alter(&$entity_info) {
+  // Should do something here to add edit pages for each entity type.
+//}
+
+/**
+ * Get a list of regions that have editing enabled.
+ * 
+ * @param type $theme
+ * @return type
+ */
+function blocker_regions($theme = FALSE) {
+  if (!$theme) {
+    $theme = variable_get('theme_default', 'bartik');
+  }
+  return array_filter(variable_get('blocker_regions', array_keys(system_region_list($theme, REGIONS_VISIBLE))));
+}
+
+/**
+ * Implements hook__page_build()
+ */
+function blocker_page_build(&$page) {
+  // Set the blocker on entity pages.
+  if ($object = menu_get_object()) { // This only works for nodes. Need a way to generalize it.
+    $menu_uri = entity_uri($object->entity_type, $object);
+    // We only want to display the blocks on the main entity page.
+    if ($menu_uri['path'] == $_GET['q']) {
+      $theme = variable_get('theme_default', 'bartik');
+      $object_ids = entity_extract_ids($object->entity_type, $object);
+      $blockers = blocker_get_blocks($object->entity_type, $object_ids[0], $theme);
+      // Get block_class version
+      $bc_version = variable_get('blocker_block_class_version',blocker_block_class_version());
+      // Load in the block information by region.
+      $blocks = array();
+      foreach($blockers as $brid => $blocker) {
+        $block = block_load($blocker->module, $blocker->delta);
+        $block->weight = $blocker->weight;
+        $block->row = $blocker->row;
+        $block->row_class = $blocker->row_class;
+        
+        // Append existing block_class if checked.
+        if ($blocker->block_class_check) {
+          if ($bc_version < 2) {
+            // If using version 1, use the function.
+            $block->css_class = blocker_block_class($block, $blocker);
+          } else {
+            // Or just append the classes.
+            $block_class = (isset($block->css_class)) ? $block->css_class : '';
+            $block->css_class = trim($block_class.' '.$blocker->css_class);
+          }
+        } else {
+          // Replace the class. In block_class 7x-1.x, it will add it's block class regardless.
+          $block->css_class = $blocker->css_class;
+        }
+
+        if ($blocker->title == '<none>') {
+          $block->title = '';
+        }
+        elseif ($blocker->title) {
+          $block->title = $blocker->title;
+        }
+        $blocks[$blocker->region][$block->module . '_' . $block->delta] = $block;
+      }
+      // Render and add to page.
+      foreach($blocks as $region => $block_list) {
+        if ($block_list) {
+          // Shouldn't use _ functions but context does as well and there is no other way.
+          $block_list = _block_render_blocks($block_list);
+          $block_list = _block_get_renderable_array($block_list);
+
+          $blocks_sorted = TRUE;
+
+          // If blocks have already been placed in this region (most likely by
+          // Block module), then merge in blocks from Context.
+          if (isset($page[$region])) {
+            $page[$region] = array_merge($page[$region], $block_list);
+            // Restore the weights that Block module manufactured
+            // @see _block_get_renderable_array()
+            foreach ($page[$region] as &$block) {
+              if (isset($block['#block']->weight)) {
+                $block['#weight'] = $block['#block']->weight;
+                $blocks_sorted = FALSE;
+              }
+              // Without setting this, region becomes -1.
+              // Actual region names are useful for themers.
+              if (isset($block['#block']->region)) {
+                $block['#block']->region = $region;
+              }
+            }
+          }
+          else {
+            $page[$region] = $block_list;
+          }
+
+          $page[$region]['#sorted'] = $blocks_sorted;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Load entity_blocsk by entity_type, id and theme.
+ * 
+ * @param type $entity_type
+ * @param type $entity_id
+ * @param type $theme
+ * @return type
+ */
+function blocker_load($brid) {
+  $result = db_select('blocker', 'eb')
+    ->fields('eb')
+    ->condition('brid', $brid)
+    ->execute()
+    ->fetchObject();
+  return $result;
+}
+
+/**
+ * Load entity_blocks by entity_type, id and theme.
+ * 
+ * @param type $entity_type
+ * @param type $entity_id
+ * @param type $theme
+ * @return type
+ */
+function blocker_get_blocks($entity_type, $entity_id, $theme) {
+  $result = db_select('blocker', 'eb')
+    ->fields('eb')
+    ->condition('entity_type', $entity_type)
+    ->condition('entity_id', $entity_id)
+    ->condition('theme', $theme)
+    ->execute()
+    ->fetchAllAssoc('brid');
+  return $result;
+}
+
+/**
+ * Load entity_blocsk by entity_type, id and theme.
+ * 
+ * @param type $entity_type
+ * @param type $entity_id
+ * @param type $theme
+ * @return type
+ */
+function blocker_get_block_pages($module, $delta) {
+  $result = db_select('blocker', 'eb')
+    ->fields('eb')
+    ->condition('module', $module)
+    ->condition('delta', $delta)
+    ->execute()
+    ->fetchAllAssoc('brid');
+  return $result;
+}
+
+/**
+ * Implements hook_entity_load
+ */
+function blocker_entity_load($entities, $type) {
+  // We need to know the type of the entity as it isn't passed in to some functions so add it here.
+  foreach ($entities as $entity) {
+    $entity->entity_type = $type;
+  }
+}
+
+/**
+ * Get a list of all blocks ready for a multiselect form element.
+ */
+function blocker_blocks() {
+  $modules = system_list('module_enabled');
+  $block_list = blocker_list();
+  $options = array('' => '');
+  foreach($block_list as $module_key => $blocks) {
+    foreach($blocks as $block_key => $block) {
+      $options[$module_key . ':' . $block_key] = '(' . $modules[$module_key]->info['name'] . ') ' . $block['info'];
+    }
+  }
+  return $options;
+}
+
+/**
+ * Load in all blocks in the system. This is a simplified version of _block_rehash
+ */
+function blocker_list($theme = null) {
+  if (!isset($theme)) {
+    // If theme is not specifically set get current theme.
+    $theme = variable_get('theme_default', 'bartik');
+  }
+  $or = db_or();
+  // Gather the blocks defined by modules.
+  foreach (module_implements('block_info') as $module) {
+    $module_blocks = module_invoke($module, 'block_info');
+    foreach ($module_blocks as $delta => $block) {
+      // Compile a condition to retrieve this block from the database.
+      $condition = db_and()
+        ->condition('module', $module)
+        ->condition('delta', $delta);
+      $or->condition($condition);
+      // Add identifiers.
+      $block['module'] = $module;
+      $block['delta']  = $delta;
+      $block['theme']  = $theme;
+      $current_blocks[$module][$delta] = $block;
+    }
+  }
+  // Save the blocks defined in code for alter context.
+  $code_blocks = $current_blocks;
+  $database_blocks = db_select('block', 'b')
+    ->fields('b')
+    ->condition($or)
+    ->condition('theme', $theme)
+    ->execute();
+  foreach ($database_blocks as $block) {
+    // Preserve info which is not in the database.
+    $block->info = $current_blocks[$block->module][$block->delta]['info'];
+    // The cache mode can only by set from hook_block_info(), so that has
+    // precedence over the database's value.
+    if (isset($current_blocks[$block->module][$block->delta]['cache'])) {
+      $block->cache = $current_blocks[$block->module][$block->delta]['cache'];
+    }
+    // Blocks stored in the database override the blocks defined in code.
+    $current_blocks[$block->module][$block->delta] = get_object_vars($block);
+  }
+  drupal_alter('block_info', $current_blocks, $theme, $code_blocks);
+  return $current_blocks;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter()
+ */
+function blocker_form_block_admin_configure_alter(&$form, &$form_state, $form_id) {
+  $blockers = blocker_get_block_pages($form['module']['#value'], $form['delta']['#value']);
+  // Per-entity visibility.
+  $form['visibility']['blocker'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Blocker'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#group' => 'visibility',
+    '#weight' => 20,
+  );
+  
+  $paths = '<ul>';
+  
+  if (count($blockers)) {
+    foreach($blockers as $blocker) {
+      $entities = entity_load($blocker->entity_type, array($blocker->entity_id));
+
+      // Check if entities exist and have been loaded
+      if(count($entities)) {
+        $entity = reset($entities);
+        $uri = entity_uri($blocker->entity_type, $entity);
+        $paths .= '<li>' . $uri['path'] . '</li>';
+      }
+    }
+  }
+  else {
+    $paths .= '<li>' . t('NONE') .'</li>';
+  }
+  
+  $paths .= '</ul>';
+
+  $form['visibility']['blocker']['paths'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div><b>' . t('This block is included on the following pages with the Blocker module:') . '</b></div>' . $paths,
+  );
+}
+
+/**
+ * Implements hook_preprocess_block().
+ * Add any necessary CSS classes to the block.
+ */
+function blocker_preprocess_block(&$variables, $hook) {
+  $block = &$variables['block'];
+  // Use class application from block_class module
+  if (isset($block->css_class) && $block->css_class != '') {
+    $variables['classes_array'] = array_merge($variables['classes_array'], explode(' ', $block->css_class));
+  }
+}
+
+/**
+ * Get current major version of the block_class module.
+ */
+function blocker_block_class_version() {
+  if (module_exists('block_class')) {
+    // Get current major version of block_class
+    $info = drupal_parse_info_file(drupal_get_path('module', 'block_class') . '/block_class.info');
+    $version = explode('-', $info['version']);
+    $current_version = intval($version[1]);
+    variable_set('blocker_block_class_version', $current_version);
+    return $current_version;
+  }
+}
+
+/**
+ * Helper function for adding classes depending on the version of block_class.
+ */
+function blocker_block_class(&$block, &$blocker) {
+    module_load_include('module', 'block_class');
+    return trim(block_class($block).' '.$blocker->css_class);
+}

@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * Ping module functions.
+ */
+
+define('PING_DEFAULT_RESPONSE', 'OK');
+
+/**
+ * Implements hook_menu().
+ */
+function ping_menu() {
+  $items = array();
+
+  $items['ping'] = array(
+    'page callback' => 'ping_page',
+    'access arguments' => array('access ping'),
+  );
+
+  $items['admin/config/system/ping'] = array(
+    'title' => 'Ping',
+    'description' => 'Configure the status message.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ping_settings'),
+    'access arguments' => array('administer ping'),
+    'file' => 'ping.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function ping_permission() {
+  $perms = array();
+  $perms['access ping'] = array(
+    'title' => t('Access Ping Page'),
+    'description' => t('Check if the site is up'),
+  );
+  $perms['administer ping'] = array(
+    'title' => t('Administer Ping'),
+    'description' => t('Manage configuration options for ping.'),
+  );
+  return $perms;
+}
+
+/**
+ * Display the ping status message.
+ */
+function ping_page() {
+  // Ensure the output isn't cached.
+  drupal_add_http_header('CacheControl', 'no-cache');
+  drupal_add_http_header('Pragma', 'no-cache');
+  drupal_add_http_header('Expires', -1);
+
+  $response = variable_get('ping_response', PING_DEFAULT_RESPONSE);
+  echo filter_xss_admin($response);
+
+  // Exit gracefully.
+  drupal_exit();
+}

@@ -1,0 +1,273 @@
+<?php
+/**
+ * @file
+ * Tests for Forum Access module.
+ */
+
+require_once(drupal_get_path('module', 'forum') . '/forum.test');
+
+/**
+ * Functional tests for the Forum module, with Forum Access (and ACL) installed.
+ */
+class ForumAccess00PlainTestCase extends ForumTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => '0. Forum functionality (with FA and ACL)',
+      'description' => 'Run the Forum (!) module tests with Forum Access (and ACL) installed.',
+      'group' => 'Forum Access',
+    );
+  }
+
+  /**
+   * Implements setUp().
+   */
+  function setUp($modules = array()) {
+    parent::setUp();
+    $modules = array('devel') + $modules;
+    $files = system_rebuild_module_data();
+    $available_modules = array();
+    foreach ($modules as $module) {
+      if (!empty($files[$module]) && !module_exists($module)) {
+        $available_modules[] = $module;
+      }
+    }
+    if (!empty($available_modules)) {
+      module_enable($available_modules);
+    }
+    parent::resetAll();
+  }
+
+  /**
+   * This test checks whether the Forum checkbox is enabled in the forum list.
+   * With Forum Access enabled, the Forum checkbox necessarily gets disabled
+   * and the test would fail.
+   *
+   * @see ForumTestCase::testEnableForumField()
+   */
+  function testEnableForumField() {
+    $this->assertTrue(TRUE, 'Skip the testEnableForumField() test.');
+  }
+
+  /**
+   * This test assumes that the node/add/forum page is accessible if there
+   * are no forums defined. FA checks whether $user has Post access in any
+   * forum, and if none is found, it returns a 403. This fulfills the
+   * intention of the test.
+   *
+   * @see ForumTestCase::testAddOrphanTopic()
+   */
+  function testAddOrphanTopic() {
+    $this->assertTrue(TRUE, 'Skip the testAddOrphanTopic() test.');
+  }
+
+}
+
+
+require_once(drupal_get_path('module', 'forum_access') . '/tests/forum_access_test_base.php');
+
+
+/**
+ * Initial configuration tests for the Forum Access module.
+ */
+class ForumAccess11InitialConfigurationTestCase extends ForumAccessBaseTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => '1. Forum Access Initial Configuration',
+      'description' => 'Display and verify the initial configuration for all ensuing tests (roles, permissions, users, Forum Access default settings in a new forum).',
+      'group' => 'Forum Access',
+    );
+  }
+
+  function testInitialConfiguration() {
+    $this->setUp2();
+    $this->pass('#########################<br />#1 - START test initial configuration @' . (time() - $this->time), '######');
+
+    // Show permissions grid.
+    $this->drupalGet('admin/people/permissions/list');
+    $this->assertResponse(200, '^^^ Permissions');
+    // Show list of users.
+    $this->drupalGet('admin/people');
+    $this->assertResponse(200);
+    // Show list of users.
+    $this->drupalGet('admin/people', array('query' => array('sort' => 'asc', 'order' => drupal_encode_path(t('Username')))));
+    $this->assertResponse(200, '^^^ Users');
+    // Show list of forums aka Forum Overview (only 'General discussion' at this point).
+    $this->drupalGet('forum');
+    $this->assertResponse(200, '^^^ Forums');
+    // Show administrative list of forums.
+    $this->drupalGet('admin/structure/forum');
+    $this->assertResponse(200, '^^^ Forum Administration Overview');
+
+    // Show default forum settings after installation of FA.
+    $this->drupalGet('admin/structure/forum/edit/forum/1');
+    $this->assertResponse(200, '^^^ Forum 1 Administration');
+
+    // Verify the checked state of the checkboxes.
+    foreach (array($this->webmaster_rid, $this->forum_admin_rid, $this->edit_any_content_rid, $this->edit_own_content_rid, $this->create_content_rid) as $rid) {
+      foreach ($this->accesses as $access) {
+        $this->assertNoFieldChecked("edit-forum-access-grants-checkboxes-$access-$rid", "Role $rid does NOT have '$access'.");
+      }
+    }
+    $this->assertNoFieldChecked("edit-forum-access-grants-checkboxes-view-3", "administrator does NOT have 'view'.");
+    $this->assertNoFieldChecked("edit-forum-access-grants-checkboxes-create-3", "administrator does NOT have 'create'.");
+    $this->assertFieldChecked(  "edit-forum-access-grants-checkboxes-update-3", "administrator has 'update'.");
+    $this->assertFieldChecked(  "edit-forum-access-grants-checkboxes-delete-3", "administrator has 'delete'.");
+    $this->assertFieldChecked(  "edit-forum-access-grants-checkboxes-view-1", "anonymous has 'view'.");
+    $this->assertNoFieldChecked("edit-forum-access-grants-checkboxes-create-1", "anonymous does NOT have 'create'.");
+    $this->assertNoFieldChecked("edit-forum-access-grants-checkboxes-update-1", "anonymous does NOT have 'update'.");
+    $this->assertNoFieldChecked("edit-forum-access-grants-checkboxes-delete-1", "anonymous does NOT have 'delete'.");
+    $this->assertFieldChecked(  "edit-forum-access-grants-checkboxes-view-2", "authenticated has 'view'.");
+    $this->assertFieldChecked(  "edit-forum-access-grants-checkboxes-create-2", "authenticated has 'create'.");
+    $this->assertNoFieldChecked("edit-forum-access-grants-checkboxes-update-2", "authenticated does NOT have 'update'.");
+    $this->assertNoFieldChecked("edit-forum-access-grants-checkboxes-delete-2", "authenticated does NOT have 'delete'.");
+
+    // Verify the enabled/disabled state of the checkboxes.
+    foreach ($this->rids as $rid) {
+      foreach ($this->accesses as $access) {
+        $key = "$access-$rid";
+        if (array_search($key, array('update-3', 'delete-3')) !== FALSE) {
+          $this->assertFieldDisabled("edit-forum-access-grants-checkboxes-$key"/* , "Role $rid's '$access' checkbox is disabled." */);
+        }
+        else {
+          $this->assertFieldEnabled("edit-forum-access-grants-checkboxes-$key"/* , "Role $rid's '$access' checkbox is enabled." */);
+        }
+      }
+    }
+
+    // Remove the Drupal default forum.
+    $this->drupalGet('forum/1');
+    $this->assertResponse(200);
+    taxonomy_term_delete(1);
+    $this->drupalGet('forum/1');
+    $this->assertResponse(404);
+    $this->drupalGet('forum');
+    $this->assertResponse(200);
+    $this->assertText(t('No forums defined'), 'Drupal default forum removed.');
+
+    $this->pass('#########################<br />#1 - END test initial configuration @' . (time() - $this->time), '######');
+  }
+
+}
+
+
+/**
+ * Default configuration test for the Forum Access module.
+ */
+class ForumAccess12DefaultConfigurationTestCase extends ForumAccessBaseTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => '2. Forum Access Default Configuration',
+      'description' => 'Test access for the default forum configuration.',
+      'group' => 'Forum Access',
+    );
+  }
+
+  function testAccess2() {
+    $this->setUp2();
+    taxonomy_term_delete(1);
+    $this->pass('#########################<br />#2 - START Default Configuration test @' . (time() - $this->time), '<a id="jump1" href="#jump2">/\<br />######<br />\/</a>');
+
+    // Create a forum with default settings.
+    //$this->drupalGet('admin/structure/forum/add/forum');
+    //$this->assertResponse(200);
+    $edit = array(
+      'name' => 'Forum 2 (Default)',
+      'description' => 'Default settings',
+      'parent[0]' => 0,
+      'weight' => '0',
+    );
+    $forum = (object) ($edit + array('tid' => 2));
+    // Create forum.
+    $this->drupalPost('admin/structure/forum/add/forum', $edit, t('Save'));
+    $this->assertResponse(200, "$forum->name added.");
+    $this->drupalGet("admin/structure/forum/edit/forum/$forum->tid");
+    $this->assertResponse(200, "^^^ $forum->name exists, with these settings.");
+    $this->drupalGet('forum');
+    $this->assertResponse(200, 'Forum Overview');
+    $this->checkForum($forum, TRUE);
+    $this->pass('#########################<br />#2 - END Default Configuration test @' . (time() - $this->time), '<a id="jump2" href="#jump3">/\<br />######<br />\/</a>');
+  }
+
+}
+
+
+/**
+ * Read-Only configuration test for the Forum Access module.
+ */
+class ForumAccess13ReadOnlyConfigurationTestCase extends ForumAccessBaseTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => '3. Forum Access Read-Only',
+      'description' => 'Test access for the configuration with only View access given.',
+      'group' => 'Forum Access',
+    );
+  }
+
+  function testAccess3() {
+    $this->createAndCheckForum(3, 'Read-Only', 'All View checkboxes checked', array('view'));
+  }
+}
+
+
+/**
+ * All-OFF configuration test for the Forum Access module.
+ */
+class ForumAccess14AllOffConfigurationTestCase extends ForumAccessBaseTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => '4. Forum Access All-OFF Configuration',
+      'description' => 'Test access for the configuration with all access withheld.',
+      'group' => 'Forum Access',
+    );
+  }
+
+  function testAccess4() {
+    $this->createAndCheckForum(4, 'All-OFF', 'All checkboxes cleared', array());
+  }
+}
+
+
+/**
+ * All-ON configuration test for the Forum Access module.
+ */
+class ForumAccess15AllOnConfigurationTestCase extends ForumAccessBaseTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => '5. Forum Access All-ON Configuration',
+      'description' => 'Test access for the configuration with all access given.',
+      'group' => 'Forum Access',
+    );
+  }
+
+  function testAccess5() {
+    $this->createAndCheckForum(5, 'All-ON', 'All checkboxes checked', $this->accesses);
+  }
+}
+
+
+/**
+ * No-View configuration test for the Forum Access module.
+ */
+class ForumAccess16NoViewConfigurationTestCase extends ForumAccessBaseTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => '6. Forum Access No-View',
+      'description' => 'Test access for the configuration without View access (blocks all other access!).',
+      'group' => 'Forum Access',
+    );
+  }
+
+  function testAccess6() {
+    $accesses = $this->accesses;
+    array_shift($accesses);
+    $this->createAndCheckForum(6, 'No-View', 'All checkboxes checked except View column', $accesses);
+  }
+}
+

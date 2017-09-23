@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * @file
+ * CacheRouter module
+ *
+ * @author Steve Rude <steve@slantview.com>
+ */
+ 
+/**
+ * Implementation of hook_user
+ *
+ * When logged in you don't want to hit the page_fast_cache or else you will serve
+ * a cached page to a logged in user.
+ */
+function cacherouter_user($op, &$edit, &$account, $category = NULL) {
+  switch ($op) {
+    case 'login':
+      setcookie('DRUPAL_UID', TRUE, REQUEST_TIME + (60 * 60 * 24 * 30), '/');
+      break;
+    case 'logout':
+      //Set in past to delete cookie
+      setcookie('DRUPAL_UID', TRUE, REQUEST_TIME - 3600, '/');
+      break;
+  }
+}
+
+function cacherouter_menu() {
+  $items = array();
+  
+  $items['admin/settings/cacherouter'] = array(
+    'title' => t('CacheRouter Admin'),
+    'description' => t("View CacheRouter Usage Information."),
+    'page callback' => 'cacherouter_admin_stats_page',
+    'page arguments' => array(3),
+    'access arguments' => array('view cacherouter stats'),
+    'file' => 'cacherouter.admin.inc',
+  );
+  
+  return $items;
+}
+
+function cacherouter_perm() {
+  return array('view cacherouter stats');
+}
+
+function cacherouter_theme() {
+  return array(
+    'cacherouter_admin_stats_page' => array(
+      'arguments' => array('cache_name' => NULL, 'stats' => array()),
+    ),
+    'cacherouter_admin_stats_key' => array(
+      'arguments' => array('key1' => '', 'value1' => '', 'key2' => '', 'value2' => ''),
+    ),
+  );
+}

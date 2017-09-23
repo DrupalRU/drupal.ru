@@ -1,0 +1,186 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the forum_access module.
+ *
+ */
+
+/**
+ * Implements hook_install().
+ */
+function forum_access_install() {
+  db_update('system')
+    ->fields(array('weight' => 2))
+    ->condition('name', 'forum_access')
+    ->execute();
+
+  if ($vid = variable_get('forum_nav_vocabulary', FALSE)) {
+    $result = db_query("SELECT t.tid FROM {taxonomy_term_data} t LEFT JOIN {forum_access} fa ON t.tid = fa.tid WHERE fa.tid IS NULL AND t.vid = :vid", array(
+      ':vid' => $vid
+    ));
+    $grant_create_by_rid = array(
+      DRUPAL_ANONYMOUS_RID => 0,
+      DRUPAL_AUTHENTICATED_RID => 1,
+    );
+    foreach ($result as $td) {
+      foreach ($grant_create_by_rid as $rid => $grant_create) {
+        db_insert('forum_access')
+          ->fields(array(
+            'tid'          => $td->tid,
+            'rid'          => $rid,
+            'grant_view'   => 1,
+            'grant_update' => 0,
+            'grant_delete' => 0,
+            'grant_create' => $grant_create,
+            'priority'     => 0,
+          ))
+          ->execute();
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_schema().
+ */
+function forum_access_schema() {
+  $schema['forum_access'] = array(
+    'description'     => 'The Forum Access control table.',
+    'fields'          => array(
+      'tid'           => array(
+        'description' => 'The {taxonomy_term_data}.tid to which this {forum_access} entry applies.',
+        'type'        => 'int',
+        'not null'    => TRUE,
+        'default'     => 0),
+      'rid'           => array(
+        'description' => 'The {role}.rid to which this {forum_access} entry applies.',
+        'type'        => 'int',
+        'not null'    => TRUE,
+        'default'     => 0),
+      'grant_view'    => array(
+        'description' => 'Whether to grant "view" permission.',
+        'type'        => 'int',
+        'size'        => 'tiny',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+        'default'     => 0),
+      'grant_update'  => array(
+        'description' => 'Whether to grant "update" permission.',
+        'type'        => 'int',
+        'size'        => 'tiny',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+        'default'     => 0),
+      'grant_delete'  => array(
+        'description' => 'Whether to grant "delete" permission.',
+        'type'        => 'int',
+        'size'        => 'tiny',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+        'default'     => 0),
+      'grant_create'  => array(
+        'description' => 'Whether to grant "create" permission.',
+        'type'        => 'int',
+        'size'        => 'tiny',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+        'default'     => 0),
+      'priority'  => array(
+        'description' => 'The priority of this grant.',
+        'type'        => 'int',
+        'size'        => 'small',
+        'not null'    => TRUE,
+        'default'     => 0)),
+    'indexes'         => array(
+      'tid'           => array('tid'),
+      'rid'           => array('rid')),
+    'foreign keys'    => array(
+      'tid'           => array('taxonomy_term_data' => 'tid'),
+      'rid'           => array('role' => 'rid')),
+  );
+  return $schema;
+}
+
+/**
+ * Implements hook_enable().
+ */
+function forum_access_enable() {
+  variable_del('forum_access_rids'); // clear cache
+  _forum_access_update_table();
+}
+
+/**
+ * Adds missing default records to the {forum_acces} table.
+ */
+function _forum_access_update_table() {
+  $tids = db_query("SELECT td.tid FROM {taxonomy_term_data} td LEFT JOIN {forum_access} fa ON td.tid = fa.tid WHERE td.vid = :vid AND fa.tid IS NULL", array(
+    'vid' => _forum_access_get_vid(),
+  ))->fetchCol();
+  foreach ($tids as $tid) {
+    $record = array(
+      'tid' => $tid,
+      'rid' => DRUPAL_ANONYMOUS_RID,
+      'grant_view' => 1,
+    );
+    drupal_write_record('forum_access', $record);
+    $record['rid'] = DRUPAL_AUTHENTICATED_RID;
+    $record['grant_create'] = 1;
+    drupal_write_record('forum_access', $record);
+  }
+}
+
+/**
+ * Implements hook_disable().
+ */
+function forum_access_disable() {
+  forum_access_enabled(FALSE);
+}
+
+/*
+ * Implements hook_uninstall().
+ */
+function forum_access_uninstall() {
+  variable_del('forum_access_allowed_comment_edit_administration_elements');
+  variable_del('forum_access_allowed_comment_links_for_create');
+  variable_del('forum_access_allowed_comment_links_for_udpate');
+  variable_del('forum_access_allowed_comment_links_for_delete');
+  variable_del('forum_access_allowed_node_edit_elements');
+  variable_del('forum_access_allowed_node_edit_options');
+  variable_del('forum_access_batch_threshold');
+  variable_del('forum_access_default_template_tid');
+  variable_del('forum_access_new_template_tid');
+  variable_del('forum_access_provide_moderators_template_variable');
+  variable_del('forum_access_rids');
+  variable_del('forum_access_update_limit');
+}
+
+function forum_access_update_last_removed() {
+  return 6105;
+}
+
+/**
+ * Change our {acl} table records from 'name' to 'number' (D6 legacy).
+ */
+function forum_access_update_6106() {
+  db_update('acl')->expression('number', 'name')->condition('module', 'forum_access')->isNotNull('name')->execute();
+  db_update('acl')->fields(array('name' => NULL))->condition('module', 'forum_access')->isNotNull('name')->execute();
+}
+
+/**
+ * Remove the D6 Forum Moderator role which is not needed anymore.
+ */
+function forum_access_update_7001() {
+  // We don't need the Forum Moderator temporary role anymore.
+  if ($moderator_rid = (int) variable_get('forum_access_moderator_rid', NULL)) {
+    user_role_delete($moderator_rid);
+    variable_del('forum_access_moderator_rid');
+  }
+}
+
+/**
+ * Remove the obsolete 'forum_access_D5_legacy_mode' variable.
+ */
+function forum_access_update_7002() {
+  variable_del('forum_access_D5_legacy_mode');
+}

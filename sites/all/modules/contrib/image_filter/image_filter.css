@@ -1,0 +1,12 @@
+div.image_filter {
+    display: table;
+    background-color: #fff;
+    padding: 6px;
+    margin: 0px;
+    border: 2px solid #aaa;
+}
+
+div.image_filter span.if_caption {
+    text-align: left;
+    font-size: 90%;
+}

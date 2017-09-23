@@ -1,0 +1,12 @@
+
+README file for geshi-extra directory
+-------------------------------------
+
+This directory is meant to store custom GeSHi language definition files that
+are not part of the default GeSHi library. Separating custom files from a
+pristine GeSHi library eases upgrading and maintenance of the GeSHi library.
+
+If you add/remove language definition files, you need to flush the cache
+of available languages before the GeSHi filter module will pick these up.
+You'll find a link for this on the "Languages" tab of the GeSHi filter
+module settings.

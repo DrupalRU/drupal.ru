@@ -1,0 +1,11 @@
+name = Autosave
+description = Saves node edits in the background in case browser dies while editing.
+core = 7.x
+configure = admin/config/content/autosave
+
+; Information added by drupal.org packaging script on 2013-04-09
+version = "7.x-2.2"
+core = "7.x"
+project = "autosave"
+datestamp = "1365542416"
+

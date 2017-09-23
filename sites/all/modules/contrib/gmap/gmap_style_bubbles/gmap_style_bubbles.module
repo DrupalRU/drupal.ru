@@ -1,0 +1,241 @@
+<?php
+
+/**
+ * @file
+ * Adds the more options for theming the gmap popup bubble.
+ */
+
+/**
+ * @defgroup gmap_style_bubbles Gmap Bubble Styles
+ * @{
+ * Adds more options for theming the Gmap popup bubble.
+ *
+ * By default, @link http://drupal.org/project/gmap the Gmap module @endlink
+ * allows themers to style the information inside the popup bubble, but allows
+ * very few custom styles for the bubble itself. With Google MAPS API v3, a
+ * themer can now use the custom javascript class "Infobubble" to style the
+ * popup itself. This includes background styles, arrow placement, border color,
+ * etc. A full list of changeable options can be found here:
+ * @link http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobubble/examples/example.html @endlink
+ */
+
+/**
+ * Adds "infobubble" custom library on map pages via the #pre_render callback.
+ */
+function _gmap_style_bubbles_gmap_pre_render_map($element) {
+  $infobubble_library = libraries_detect('infobubble');
+  if ($infobubble_library['installed']) {
+    drupal_add_js(libraries_get_path('infobubble') . '/src/infobubble.js');
+    drupal_add_js(drupal_get_path('module', 'gmap_style_bubbles') . '/js/infobubble_extended.js', array('weight' => '1'));
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Adds a new fieldset to the gmap settings form so we can enable and save
+ * custom popup bubble styles.
+ */
+function gmap_style_bubbles_form_gmap_admin_settings_alter(&$form, &$form_state, $form_id) {
+  $bubble_styles = variable_get('gmap_bubble_styles', array());
+  $disable_infobubble = FALSE;
+
+  $infobubble_library = libraries_detect('infobubble');
+
+  $form['gmap_bubble_styles'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Bubble styles'),
+    '#tree' => TRUE,
+  );
+
+  if (!$infobubble_library['installed']) {
+    $form['gmap_bubble_styles']['error'] = array(
+      '#type' => 'markup',
+      '#markup' => '<div class="messages error">' . _gmap_style_bubbles_format_error($infobubble_library) . '</div>',
+    );
+
+    $disable_infobubble = TRUE;
+  }
+
+  $form['gmap_bubble_styles']['enable_bubble_style'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use custom bubble?'),
+    '#description' => t('If you don\'t intend to style your popup bubble, leave this unchecked.'),
+    '#default_value' => isset($bubble_styles['enable_bubble_style']) ? $bubble_styles['enable_bubble_style'] : 0,
+    '#disabled' => $disable_infobubble,
+  );
+
+  $form['gmap_bubble_styles']['style_bubble_options'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Bubble styles to apply'),
+    '#description' => t('Styles to apply to your popup bubble. One style per line with a colon between the style and value.<br />Example:<br />shadowStyle:1<br />arrowPosition : 25'),
+    '#default_value' => isset($bubble_styles['style_bubble_options']) ? $bubble_styles['style_bubble_options'] : '',
+    '#disabled' => $disable_infobubble,
+  );
+
+  $form['gmap_bubble_styles']['help_text'] = array(
+    '#collapsed' => TRUE,
+    '#collapsible' => TRUE,
+    '#type' => 'fieldset',
+    '#title' => t('Bubble styles help'),
+    '#value' => _gmap_style_bubbles_help_text(),
+  );
+}
+
+/**
+ * Enables hook_gmap().
+ *
+ * Adds the bubble styles to the drupal map settings json at the top of the
+ * rendered map page.
+ */
+function gmap_style_bubbles_gmap($op, &$map) {
+  if ($op == 'pre_theme_map') {
+    $bubble_styles_old = variable_get('gmap_bubble_styles');
+    $bubble_styles['enableBubbleStyle'] = $bubble_styles_old['enable_bubble_style'];
+    $bubble_styles['styleBubbleOptions'] = _gmap_style_bubbles_validate_for_json($bubble_styles_old['style_bubble_options']);
+    $map['styleBubble'] = $bubble_styles;
+  }
+}
+
+/**
+ * A helper function that breaks a string up into an array based on line breaks.
+ *
+ * Anything before the first colon in each line is considered an array key, and
+ * anything following the first colon is that key's value.
+ *
+ * An example string would be:
+ *   Color : #cccccc
+ *   minWidth: '250',
+ *
+ * This function would output the following:
+ *   array ( "Color" => "#cccccc", "minWidth" => "250" )
+ *
+ * Trims whitespace, single and double quotes, semicolons and commas.
+ */
+function _gmap_style_bubbles_validate_for_json($string) {
+  $string_lines = explode("\n", $string);
+  $clean_lines = array();
+
+  foreach ($string_lines as $setting) {
+    $this_line = explode(':', $setting, 2);
+    if (isset($this_line[1])) {
+      $clean_lines[trim($this_line[0])] = trim($this_line[1], "'\",; \r\n\t");
+    }
+  }
+
+  return $clean_lines;
+}
+
+/**
+ * Implements hook_libraries_info().
+ *
+ * Information for the infobubble plugin provided as part of the google maps
+ * contributed utility libraries.
+ */
+function gmap_style_bubbles_libraries_info() {
+  $libraries['infobubble'] = array(
+    'name' => 'Infobubble plugin',
+    'vendor url' => 'http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobubble/',
+    'download url' => 'http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobubble/',
+    'version' => '.8',
+    'files' => array(
+      'src' => array(
+        'infobubble-compiled.js',
+      ),
+    ),
+    'variants' => array(
+      'minified' => array(
+        'files' => array(
+          'src' => array(
+            'infobubble-compiled.js',
+          ),
+        ),
+      ),
+      'source' => array(
+        'files' => array(
+          'js' => array(
+            'infobubble.js',
+          ),
+        ),
+      ),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
+ * Implements hook_element_info_alter().
+ *
+ * Adds a second pre_render function to add the infobubble javascript to the
+ * page.
+ */
+function gmap_style_bubbles_element_info_alter(&$type) {
+  if (isset($type['gmap']) && is_array($type['gmap']['#pre_render'])) {
+    $type['gmap']['#pre_render'][] = '_gmap_style_bubbles_gmap_pre_render_map';
+  }
+}
+
+/**
+ * A helper function to format the missing library error message.
+ *
+ * This message is called during install and when loading the gmap configurarion
+ * page in the case that the infobubble/src/infobubble-compiled.js file isn't
+ * found.
+ */
+function _gmap_style_bubbles_format_error($library) {
+  $t = get_t();
+
+  return $t(
+    'You need to download the !infobubble and extract the entire contents of the archive into the %path directory on your server. Only the src folder is required. Final path should be %path/infobubble/src/infobubble-compiled.js',
+    array(
+      '!infobubble' => l($t('infobubble plugin'), $library['download url']),
+      '%path' => 'sites/all/libraries',
+    )
+  );
+}
+
+/**
+ * A helper function to display help text.
+ *
+ * Provides more detailed instructions on the "Bubble styles to apply" textarea.
+ */
+function _gmap_style_bubbles_help_text() {
+  $text = t(
+    'See !link for examples.',
+    array('!link' => l(t('the infobubble documentation'), 'http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobubble/'))
+  );
+
+  $options = array(
+    "shadowStyle" => t('Options: 0 (no shadow), 1 (default shadow), 2 (sharp shadow)'),
+    "padding" => t('Like the css property, the padding of the bubble.'),
+    "borderRadius" => t('Like the css property, the radius of the bubble\'s corners.'),
+    "borderWidth" => t('Like the css property, the width in pixels of the border.'),
+    "borderColor" => t('Like the css property, the hex or rgb color of the border.'),
+    "backgroundColor" => t('This is the background of the content of the bubble, but NOT the entire bubble itself.'),
+    "bubbleBackgroundClassName" => t('A css class for the entire bubble.'),
+    "minWidth" => t('Like the css property, the minimum width of the bubble.'),
+    "maxWidth" => t('Like the css property, the maximum width of the bubble.'),
+    "minHeight" => t('Like the css property, the maximum height of the bubble.'),
+    "arrowSize" => t('The width of the pointer arrow. NOTE: if you choose an arrow style that only uses half of the arrow, this number will be twice as wide as your arrow at its widest point.'),
+    "arrowPosition" => t('The percent from the left of the bubble where the arrow will appear.'),
+    "arrowStyle" => t('Options: 0 (full triangle), 1 (half triangle leaning left), 2 (half triangle leaning right)'),
+    "closeImage" => t('The url of the image to use as the close button for the bubble'),
+    "closeCursor" => t('Like the css property, the style of the cursor as it hovers over your close image. Default is pointer.'),
+    "closeZIndex" => t('Like the css property, the z-index of the close image. Default is 0.'),
+    "closeBorder" => t('Like the css property, the border style of the close image. Default is none.'),
+    "closeHeight" => t('The height of the close image. Default is 12px.'),
+    "closeWidth" => t('The width of the close image. Default is 12px.'),
+    "closePosition" => t("Like the css property, the position the close image. Default is absolute."),
+  );
+
+  foreach ($options as $title => $info) {
+    $text .= "<br /><b>$title</b> - $info";
+  }
+  return $text;
+}
+/**
+ * @} End of "defgroup gmap_style_bubbles".
+ */

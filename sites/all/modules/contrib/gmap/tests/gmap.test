@@ -1,0 +1,337 @@
+<?php
+
+/**
+ * @file
+ * Unit tests for gmap.module.
+ */
+
+class GMapSimpleAPITest extends DrupalUnitTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'GMap API sanity checks',
+      'description' => 'Test the simple API functions in the public GMap API.',
+      'group' => 'GMap',
+    );
+  }
+
+  public function setUp() {
+    drupal_load('module', 'gmap');
+    parent::setUp();
+  }
+
+  /**
+   * Verify gmap_todim().
+   */
+  public function testGMapToDim() {
+    // Valid stuff
+    $this->assertEqual(gmap_todim('500PX'), '500px', t('Testing case normalization'));
+    $this->assertEqual(gmap_todim('   500    px   '), '500px', t('Testing spaces'));
+    $this->assertEqual(gmap_todim('1.5em'), '1.5em', t('Testing em'));
+    $this->assertEqual(gmap_todim('1.5ex'), '1.5ex', t('Testing ex'));
+    $this->assertEqual(gmap_todim('1.5in'), '1.5in', t('Testing in'));
+    $this->assertEqual(gmap_todim('1.5cm'), '1.5cm', t('Testing cm'));
+    $this->assertEqual(gmap_todim('1.5mm'), '1.5mm', t('Testing mm'));
+    $this->assertEqual(gmap_todim('1.5pt'), '1.5pt', t('Testing pt'));
+    $this->assertEqual(gmap_todim('1.5pc'), '1.5pc', t('Testing pc'));
+    $this->assertEqual(gmap_todim('150%'), '150%', t('Testing %'));
+
+    // Invalid stuff
+    $this->assertEqual(gmap_todim('500pxBLUE SMURFpx'), FALSE, t('Testing invalid data'));
+    $this->assertEqual(gmap_todim('500'), FALSE, t('Testing missing dimension type'));
+    $this->assertEqual(gmap_todim(500), FALSE, t('Testing raw number'));
+
+    // REALLY invalid stuff
+    $this->assertEqual(gmap_todim(NULL), FALSE, t('Testing invalid data (NULL)'));
+    $this->assertEqual(gmap_todim(array()), FALSE, t('Testing invalid data (Array)'));
+  }
+}
+
+class GMapMacroTest extends DrupalUnitTestCase {
+  public static function getInfo() {
+    return array(
+      'name' => 'GMap Macro checks',
+      'description' => 'Test the ability to parse macros into map arrays.',
+      'group' => 'GMap',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp();
+    require_once(dirname(__FILE__) . '/../gmap.module');
+  }
+
+  public function testEmptyMacro() {
+    $macro = '';
+    $map = gmap_parse_macro($macro);
+    $this->assertEqual(preg_match('/^auto\d+map$/', $map['id']), 1, t('Testing ID injection'));
+    $this->assertEqual(count($map), 1, t('Testing contents of map array.'));
+
+    $macro = '[gmap]';
+    $map = gmap_parse_macro($macro);
+    $this->assertEqual(preg_match('/^auto\d+map$/', $map['id']), 1, t('Testing ID injection'));
+    $this->assertEqual(count($map), 1, t('Testing contents of map array.'));
+
+    $macro = '[gmap ]';
+    $map = gmap_parse_macro($macro);
+    $this->assertEqual(preg_match('/^auto\d+map$/', $map['id']), 1, t('Testing ID injection'));
+    $this->assertEqual(count($map), 1, t('Testing contents of map array.'));
+  }
+
+  public function testMacroBehaviorFlags() {
+    $macro = '[gmap |behavior=+foobehavior +barbehavior -bazbehavior]';
+    $map = gmap_parse_macro($macro);
+    $b = $map['behavior'];
+    $this->assertEqual($b['foobehavior'], TRUE, t('Testing +behavior'));
+    $this->assertEqual($b['barbehavior'], TRUE, t('Testing another +behavior'));
+    $this->assertEqual($b['bazbehavior'], FALSE, t('Testing -behavior'));
+    // NOT passing through default flags was a bug.
+    //$this->assertEqual(count($b), 3, t('Testing for leaked default flags'));
+  }
+
+  public function testMacroRenamedDirectives() {
+    $macro = '[gmap |type=Foo |control=Bar |behaviour=+baz |tcontrol=on]';
+    $map = gmap_parse_macro($macro);
+    $this->assertEqual($map['maptype'], 'Foo', t('Testing type -> maptype conversion'));
+    $this->assertEqual($map['controltype'], 'Bar', t('Testing control -> controltype conversion'));
+    $this->assertEqual($map['behavior']['baz'], TRUE, t('Testing behaviour -> behavior conversion'));
+    $this->assertEqual($map['mtc'], 'standard', t('Testing tcontrol -> mtc=standard'));
+  }
+}
+
+// wrapper for gmap.module web testing
+class testGmapFormsTestCase extends DrupalWebTestCase {
+  protected $privileged_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'GMAP Forms',
+      'description' => 'GMAP Forms WebTesting.',
+      'group' => 'GMap',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp('gmap'); // Enable any modules required for the test
+    // Create and log in our user. The user has the arbitrary privilege
+    // 'extra special edit any simpletest_example' which the code uses
+    // to grant access.
+    $this->privileged_user = $this->drupalCreateUser(array('administer site configuration'));
+    $this->drupalLogin($this->privileged_user);
+  }
+
+  // gmap_menu() test initial wrapper
+  public function testGmapSaveConfig() {
+
+    $edit = array();
+
+    $this->drupalPost('admin/config/services/gmap', $edit, t('Save configuration'));
+    $this->assertText(t('The configuration options have been saved.'));
+  }
+
+
+  /**
+   * Detect if we're running on PIFR testbot; skip intentional failure in that
+   * case. It happens that on the testbot the site under test is in a directory
+   * named 'checkout' or 'site_under_test'.
+   *
+   * @return boolean
+   *   TRUE if running on testbot.
+   */
+  public function runningOnTestbot() {
+    return (file_exists("../checkout") || file_exists("../site_under_test"));
+  }
+}
+
+// wrapper test for gmap_macro_builder module
+class testGmapMacroFormsTestCase extends DrupalWebTestCase {
+  protected $privileged_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'GMAP Macro Forms',
+      'description' => 'GMAP Macro Forms WebTesting.',
+      'group' => 'GMap',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp('gmap_macro_builder'); // Enable any modules required for the test
+    drupal_load('module', 'gmap');
+    drupal_load('module', 'gmap_macro_builder');
+
+    // Create and log in our user. The user has the arbitrary privilege
+    // 'extra special edit any simpletest_example' which the code uses
+    // to grant access.
+    $this->privileged_user = $this->drupalCreateUser(array('create gmap macro'));
+    $this->drupalLogin($this->privileged_user);
+  }
+
+  // gmap_macro_builder_menu() test initial wrapper
+  public function testMacroMenuExampleCreate() {
+    $this->privileged_user = $this->drupalCreateUser(array('create gmap macro'));
+    $this->drupalLogin($this->privileged_user);
+
+    $edit = array();
+
+    $this->drupalGet('map/macro', $edit);
+    $this->assertText(t('You can use this interface to create a map macro suitable for pasting into a node or any other place that accepts a GMap macro.'));
+  }
+
+
+  /**
+   * Detect if we're running on PIFR testbot; skip intentional failure in that
+   * case. It happens that on the testbot the site under test is in a directory
+   * named 'checkout' or 'site_under_test'.
+   *
+   * @return boolean
+   *   TRUE if running on testbot.
+   */
+  public function runningOnTestbot() {
+    return (file_exists("../checkout") || file_exists("../site_under_test"));
+  }
+}
+
+// wrapper test for gmap_taxonomy module
+class testGmapTaxonomyFormsTestCase extends DrupalWebTestCase {
+  protected $privileged_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'GMAP Taxonomy',
+      'description' => 'GMAP Taxonomy WebTesting.',
+      'group' => 'GMap',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp('gmap_taxonomy'); // Enable any modules required for the test
+    drupal_load('module', 'gmap');
+    drupal_load('module', 'gmap_taxonomy');
+
+    // Create and log in our user. The user has the arbitrary privilege
+    // 'extra special edit any simpletest_example' which the code uses
+    // to grant access.
+    $this->privileged_user = $this->drupalCreateUser(array('administer taxonomy'));
+    $this->drupalLogin($this->privileged_user);
+  }
+
+  // gmap_macro_builder_menu() test initial wrapper
+  public function testMacroMenuExampleCreate() {
+    // Create node to edit.
+    $rname = $this->randomName();
+    $edit = array(
+      'name' => $rname,
+      'machine_name' => 'gmap_taxonomy_test_voc',
+      'gmap_taxonomy_enable' => 1,
+    );
+
+    // create taxonomy vocabulary with gmap markers
+    $this->drupalPost('admin/structure/taxonomy/add', $edit, t('Save'));
+    $this->assertText(t('Created new vocabulary'));
+
+    // add taxonomy term with "small red" marker
+
+    $edit2 = array(
+      'name' => $this->randomName(),
+      'gmap_taxonomy_marker' => 'small red',
+
+    );
+
+    $this->drupalGet('admin/structure/taxonomy/gmap_taxonomy_test_voc/add', $edit);
+    $this->assertText(t('GMap Marker'));
+
+    $this->drupalPost('admin/structure/taxonomy/gmap_taxonomy_test_voc/add', $edit2, t('Save'));
+    $this->assertText(t('Created new term'));
+
+  }
+
+
+  /**
+   * Detect if we're running on PIFR testbot; skip intentional failure in that
+   * case. It happens that on the testbot the site under test is in a directory
+   * named 'checkout' or 'site_under_test'.
+   *
+   * @return boolean
+   *   TRUE if running on testbot.
+   */
+  public function runningOnTestbot() {
+    return (file_exists("../checkout") || file_exists("../site_under_test"));
+  }
+}
+
+/**
+ * WebTest tests for location_gmap_find_address.module.
+ */
+
+class LGFATestCase extends DrupalWebTestCase {
+
+  protected $privileged_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Location Gmap Find Address button checks',
+      'description' => 'Test the Location Gmap Find Address button checks.',
+      'group' => 'GMap',
+    );
+  }
+
+  public function setUp() {
+
+    parent::setUp('location', 'gmap', 'location_cck', 'field_ui', 'location_gmap_find_address');
+  }
+
+  public function testGmapSaveConfig() {
+
+    // login with user
+    $this->privileged_user = $this->drupalCreateUser(array(
+      'administer site configuration',
+      'administer content types',
+      'bypass node access',
+    ));
+    $this->drupalLogin($this->privileged_user);
+
+    // array for form
+    $edit = array(
+      'location_usegmap' => 1,
+      'location_default_country' => 'ua',
+    );
+
+    // change location default option
+    $this->drupalPost('admin/config/content/location', $edit, t('Save configuration'));
+    $this->assertText(t('The configuration options have been saved.'));
+
+    // change gmap API key
+    // array for form
+    $edit2 = array(
+      'gmap_api_key' => 'AIzaSyAe2PAkh_qvTq-3WkXQrVwVwh3Lo9FDvkk',
+    );
+
+    $this->drupalPost('admin/config/services/gmap', $edit2, t('Save configuration'));
+    $this->assertText(t('The configuration options have been saved.'));
+
+    // add location field to Basic page type
+    $edit3 = array(
+      'fields[_add_new_field][label]' => 'Location',
+      'fields[_add_new_field][field_name]' => 'location',
+      'fields[_add_new_field][type]' => 'location',
+      'fields[_add_new_field][widget_type]' => 'location',
+    );
+
+    $this->drupalPost('admin/structure/types/manage/page/fields', $edit3, t('Save'));
+    $this->assertText(t('These settings apply to the Location field everywhere it is used. These settings impact the way that data is stored in the database and cannot be changed once data has been created.'));
+
+    // admin/structure/types/manage/page/fields/field_location
+    $edit4 = array(
+      'field_location[und][0][country]' => 'ua',
+      'field[settings][gmap_marker]' => 'small red',
+    );
+
+    $this->drupalPost('admin/structure/types/manage/page/fields/field_location', $edit4, t('Save settings'));
+    $this->assertText(t('Saved Location configuration.'));
+
+    // check $form["#after_build"][] = "location_gmap_find_address_after_build";
+    $this->drupalGet('node/add/page');
+    $this->assertText(t('Find Address on Map'));
+  }
+}

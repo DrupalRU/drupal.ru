@@ -1,0 +1,11 @@
+#edit-name-check, 
+#edit-mail-check {
+  padding-left: 20px;
+  background: transparent url(../img/status.png) no-repeat;
+  height: 16px;
+}
+
+#edit-name-check.error, 
+#edit-mail-check.error {
+  background-position: 0 -16px;
+}

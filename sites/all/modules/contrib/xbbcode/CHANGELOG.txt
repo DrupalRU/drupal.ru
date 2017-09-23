@@ -1,0 +1,112 @@
+2012-02-19
+
+ - Repository finally moved to drupal.org
+ - Using PHP in custom tags now requires the PHP module, and the correct permission.
+   This follows the core pattern of isolating the ability to evaluate PHP code
+   into a separate permission from normal administrative access.
+
+2012-02-18 - 2.1.0
+
+ - Repository migrated from SVN on ermarian.net to GitHub.
+ - Changed the rendering algorithm to render tags even inside nocode, and then
+   discard the result when the nocode tag is closed successfully. This replaces
+   the old behavior of blocking all rendering, and then retroactively do it
+   if the nocode tag breaks. This code was vulnerable to input that used quadratic time.
+ - Stopped injecting tag content and arguments into evaluated PHP code. Instead,
+   the code must access the $tag variable to get these arguments.
+ - xbbcode currently has branches compatible with 7.x and 8.x.
+
+2010-10-26 - 2.0.4-r495
+
+ - Ported xbbcode_table and xbbcode_list.
+ - Compatibility upgrade for Drupal 7: As of issue #934050, text formats use an 
+   alphanumeric key instead of an integer. Global constant switched from 0 to
+   GLOBAL, to avoid colliding with lowercase text format IDs.
+ - Allowed using the format-level settings form for unsaved formats. The new UI
+   for Drupal expects settings to work even before an actual format ID exists.
+ - The long filter tips have been converted to a table to match the HTML help.
+ - More generic and better samples in the xbbcode_basic module.
+ - Many other small codestyle fixes and bug fixes.
+
+2010-04-16 - 2.0.0-r462
+
+ - Completely rewrote the parsing algorithm for BBCode. Tags are now required to be nested correctly.
+   Tag weights are gone, and so is the "pairing" process.
+
+2010-04-12 - 1.1.0-r453
+
+ - Several significant bugs and regressions were fixed.
+ - Restored compatibility with the new development version of Drupal 7 core.
+ - The tag discovery process was streamlined and greatly improved.
+ - Minor improvements were made to the administrative interface and help texts.
+
+2009-12-10 - 1.0.0-r393
+
+ - XBBCode is now compatible with Drupal 7.
+ - Greatly improved the administration interface.
+ - Refactored and cleaned up the code.
+
+2008-12-26 - 1.1.1-r326
+
+ - Fixed a bug that broke [quote] tags.
+ - Fixed a bug that broke multiple-argument tags.
+ - Set 0 instead of NULL defaults throughout the tables.
+ - Codestyle fixes.
+
+2008-11-16 - 1.1.0-r314
+
+ - XBBCode is now compatible with Drupal 6.
+ - The highlighter module is now standalone. It is required to use xbbcode_highlighter.
+   It can be downloaded from http://ermarian.net/downloads/drupal-addons/highlighter
+ - Numerous bug fixes.
+ - Several UI improvements when adding custom tags: Automatic lower-case, better labels.
+ - Instead of requiring sub-modules to call xbbcode_add_tags(), xbbcode discovers new tags on its own.
+
+2008-01-20 - 0.3.1:
+
+ - Code style of xbbcode module is now conforming to Drupal standards at last.
+ - Several globals have been gotten rid of by placing them as statics into designated functions.
+   This keeps the global namespace uncluttered while still allowing the caching of such variables.
+ - The tags of a filter are now cached better, using static and Drupal's own caching system.
+ - A bug in the parsing of arguments was fixed, which unexpectedly converted spaces to &nbsp; and
+   also lost values that were surrounded by single quotes.
+   
+This is the LAST VERSION of xbbcode that marks a JOINT development. After the last commit, the present trunk
+was branched for a DRUPAL-5 version. The trunk will now be upgraded to Drupal 6.x compatibility.
+
+2007-07-07 - 0.3:
+
+ - Code-style cleanup everywhere
+ - Removed the static XBBCode class as counter to Drupal structure, replaced with _xbbcode_%s functions.
+ - Removed a MySQL version incompatibility that messed up a Natural Join
+ - Removed a MySQL version incompatibility (and Drupal style incongruence) by replacing BOOLEAN with INT(1)
+ - Filter is now cacheable, automatically resets cache on tag changes.
+
+2007-07-06 - 0.2.2:
+
+ - Modules now register their tags on installation
+ - highlighter now tries to detect the PEAR libraries on installation
+ - XBBCode can now autoclose tags left open at the end of text (optional)
+ - XBBCode now works in PHP 4, thanks to the removal of several foreach($a as &$b) constructs
+
+2007-07-01 - 0.2:
+
+ - Refactored most of the module code, fixing the install system in the process
+ - Renamed all the modules to conform with standards.
+ 
+
+2007-02-16 - 0.1.2:
+
+ - Tags can now be weighted. Parsing follows first weight, then text order.
+ - The same tag name can be registered by different modules. Conflicts in the tag namespace 
+   can be resolved by the admin, on a per-format basis.
+ - Unified the infrastructure; *all* tags are now provided by modules. Admin-created tags 
+   are provided through this module's own _xbbcode hook.
+
+2007-02-12 - 0.1.1:
+
+ - Fixed a bug that broke self-closing tags.
+ - Fixed a bug that caused strings of form "$name" to disappear from dynamically parsed tags.
+ - Fixed a bug that added backslashes to quote characters in dynamic tags.
+ 
+ - Added multiple-arguments functionality for static tags.

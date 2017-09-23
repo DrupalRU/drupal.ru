@@ -1,0 +1,590 @@
+<?php
+/**
+ * @file
+ * Textimage - web test case script.
+ */
+
+/**
+ * This class provides methods for testing Textimage.
+ */
+abstract class TextimageTestCase extends DrupalWebTestCase {
+  protected $textimageAdmin = 'admin/config/media/textimage';
+
+  /**
+   * Set up.
+   */
+  public function setUp() {
+    // Enable required modules.
+    $modules = array(
+      'textimage',
+    );
+    parent::setUp($modules);
+
+    // Create a user and log it in.
+    $this->admin_user = $this->drupalCreateUser(array(
+      'access content',
+      'create article content',
+      'edit any article content',
+      'delete any article content',
+      'administer image styles',
+      'generate textimage url derivatives',
+    ));
+    $this->drupalLogin($this->admin_user);
+
+    // Change Textimage font directory.
+    $this->drupalGet($this->textimageAdmin . '/settings');
+    $edit = array(
+      'fonts_path' => drupal_get_path('module', 'textimage') . '/tests/fonts',
+    );
+    $this->drupalPostAJAX(NULL, $edit, 'fonts_path');
+    $edit = array(
+      'default_font_name' => 'Old Standard TT Regular',
+    );
+    $this->drupalPost(NULL, $edit, t('Save configuration'));
+
+    // Create a test image style.
+    $edit = array(
+      'name' => 'textimage_test',
+      'label' => 'Textimage Test',
+    );
+    $this->drupalPost('admin/config/media/image-styles/add', $edit, t('Create new style'));
+
+    // Create a test textimage_text effect.
+    $this->drupalPost('admin/config/media/image-styles/edit/textimage_test/add/textimage_text', array(), t('Add effect'));
+
+    // Set image storage to 'public' wrapper.
+    $edit = array(
+      'textimage_options[uri_scheme]' => 'public',
+    );
+    $this->drupalPost('admin/config/media/image-styles/edit/textimage_test', $edit, t('Update style'));
+
+  }
+
+  /**
+   * Create a new field for Textimage formatter.
+   *
+   * @param string $name
+   *   The name of the new field (all lowercase), exclude the "field_" prefix.
+   * @param string $type_name
+   *   The node type that this field will be added to.
+   * @param array $field_settings
+   *   A list of field settings that will be added to the defaults.
+   * @param array $instance_settings
+   *   A list of instance settings that will be added to the instance defaults.
+   * @param array $widget_settings
+   *   A list of widget settings that will be added to the widget defaults.
+   */
+  protected function createTextimageField($name, $type_name, $field_settings = array(), $instance_settings = array(), $widget_settings = array()) {
+    $field = array(
+      'field_name' => $name,
+      'type' => 'text',
+      'settings' => array(),
+      'cardinality' => !empty($field_settings['cardinality']) ? $field_settings['cardinality'] : 1,
+    );
+    $field['settings'] = array_merge($field['settings'], $field_settings);
+    field_create_field($field);
+
+    $instance = array(
+      'field_name' => $field['field_name'],
+      'entity_type' => 'node',
+      'label' => $name,
+      'bundle' => $type_name,
+      'required' => !empty($instance_settings['required']),
+      'settings' => array(),
+      'widget' => array(
+        'type' => 'text_textfield',
+        'settings' => array(),
+      ),
+    );
+    $instance['settings'] = array_merge($instance['settings'], $instance_settings);
+    $instance['widget']['settings'] = array_merge($instance['widget']['settings'], $widget_settings);
+    return field_create_instance($instance);
+  }
+
+  /**
+   * Create a node.
+   *
+   * @param string $field_name
+   *   Name of the field formatted by Textimage.
+   * @param string $field_value
+   *   Value of the field formatted by Textimage.
+   * @param string $type
+   *   The type of node to create.
+   */
+  protected function createTextimageNode($field_name, $field_value, $type) {
+    $edit = array(
+      'title' => $field_value,
+      'body[' . LANGUAGE_NONE . '][0][value]' => $field_value,
+      $field_name . '[' . LANGUAGE_NONE . '][0][value]' => $field_value,
+    );
+    $this->drupalPost('node/add/' . $type, $edit, t('Save'));
+
+    // Retrieve ID of the newly created node from the current URL.
+    $matches = array();
+    preg_match('/node\/([0-9]+)/', $this->getUrl(), $matches);
+    return isset($matches[1]) ? $matches[1] : FALSE;
+  }
+
+  /**
+   * Asserts a Textimage.
+   */
+  protected function assertTextimage($path, $width, $height) {
+    $image = image_load($path);
+    $w_error = abs($image->info['width'] - $width);
+    $h_error = abs($image->info['height'] - $height);
+    $tolerance = 0.1;
+    $this->assertTrue(
+      $w_error < $width * $tolerance && $h_error < $height * $tolerance,
+      t(
+        'Textimage width and height (@act_wx@act_h) approximate expected results (@exp_wx@exp_h)',
+        array(
+          '@act_w' => $image->info['width'],
+          '@act_h' => $image->info['height'],
+          '@exp_w' => $width,
+          '@exp_h' => $height,
+        )
+      )
+    );
+  }
+
+}
+
+/**
+ * Functional tests for Textimage.
+ */
+class TextimageTest extends TextimageTestCase {
+
+  /**
+   * Get info.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Textimage functionality',
+      'description' => 'Basic functionality of the Textimage module',
+      'group' => 'Textimage',
+    );
+  }
+
+  /**
+   * Test functionality of the module.
+   */
+  public function testTextimage() {
+
+    $stream_wrapper = file_stream_wrapper_get_instance_by_scheme(variable_get('file_default_scheme', 'public'));
+    $directory_path = $stream_wrapper->getDirectoryPath();
+
+    // Generate a few derivative images via theme.
+    theme(
+      'textimage_style_image',
+      array(
+        'style_name' => 'textimage_test',
+        'text' => array('preview text image'),
+      )
+    );
+    theme(
+      'textimage_style_image',
+      array(
+        'style_name' => 'textimage_test',
+        'text' => array('Предварительный просмотр текста'),
+      )
+    );
+    theme(
+      'textimage_style_image',
+      array(
+        'style_name' => 'textimage_test',
+        'text' => array('προεπισκόπηση της εικόνας κείμενο'),
+      )
+    );
+    theme(
+      'textimage_formatter',
+      array(
+        'style_name' => 'textimage_test',
+        'text' => array('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+      )
+    );
+
+    // Check files were generated.
+    $files_count = count(file_scan_directory($directory_path . '/textimage/textimage_test', '/.*/'));
+    $this->assertTrue($files_count == 4, t('Textimage generation via theme.'));
+    $this->assertTextimage($directory_path . '/textimage/textimage_test/preview text image.png', 177, 28);
+    $this->assertTextimage($directory_path . '/textimage/textimage_test/Предварительный просмотр текста.png', 331, 28);
+    $this->assertTextimage($directory_path . '/textimage/textimage_test/προεπισκόπηση της εικόνας κείμενο.png', 328, 28);
+
+    // Build and display a URL derivative.
+    variable_set('clean_url', 1);
+    $this->drupalGet($directory_path . '/textimage/textimage_test/url_preview_text_image');
+    $this->assertResponse(200);
+
+    // Check file was generated.
+    $files_count = count(file_scan_directory($directory_path . '/textimage/textimage_test', '/.*/'));
+    $this->assertTrue($files_count == 5, t('Textimage generation via request URL.'));
+    $this->assertTextimage($directory_path . '/textimage/textimage_test/url_preview_text_image.png', 225, 28);
+
+    // Build a textimage at target URI via API.
+    $uri = TextimageImager::getImageUri(
+      'textimage_test',
+      NULL,
+      array('test'),
+      'png',
+      FALSE,
+      NULL,
+      NULL,
+      'public://textimage-testing/bingo-bongo.png'
+    );
+
+    // Check file was generated.
+    $files_count = count(file_scan_directory('public://textimage-testing', '/.*/'));
+    $this->assertTrue($files_count == 1, t('Textimage generation at target URI via API.'));
+    $this->assertTextimage('public://textimage-testing/bingo-bongo.png', 35, 28);
+
+    // Build another textimage at same target URI.
+    $uri = TextimageImager::getImageUri(
+      'textimage_test',
+      NULL,
+      array('another test'),
+      'png',
+      FALSE,
+      NULL,
+      NULL,
+      'public://textimage-testing/bingo-bongo.png'
+    );
+
+    // Check file was replaced.
+    $files_count = count(file_scan_directory('public://textimage-testing', '/.*/'));
+    $this->assertTrue($files_count == 1, t('Textimage replaced at target URI via API.'));
+    $this->assertTextimage('public://textimage-testing/bingo-bongo.png', 113, 28);
+
+    // Build a textimage at target URI via theme.
+    $textimage = theme(
+      'textimage_formatter',
+      array(
+        'style_name' => 'textimage_test',
+        'text' => array('Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'),
+        'target_uri' => 'public://textimage-testing/ut-enim.png',
+      )
+    );
+
+    // Check file was generated.
+    $files_count = count(file_scan_directory('public://textimage-testing', '/.*/'));
+    $this->assertTrue($files_count == 2, t('Textimage generation at target URI via theme.'));
+
+    // Test token resolution.
+    //
+    // Create a text field for Textimage test.
+    $field_name = strtolower($this->randomName());
+    $this->createTextimageField($field_name, 'article');
+
+    // Create a new node.
+    $field_value = $this->randomName(20);
+    $nid = $this->createTextimageNode($field_name, $field_value, 'article');
+
+    // Set the textimage formatter - no link.
+    $instance = field_info_instance('node', $field_name, 'article');
+    $instance['display']['default']['type'] = 'textimage';
+    $instance['display']['default']['settings']['image_style'] = 'textimage_test';
+    field_update_instance($instance);
+    $this->drupalGet('node/' . $nid);
+
+    // Check token.
+    $node = node_load($nid, NULL, TRUE);
+    $uri = token_replace('[textimage:uri:' . $field_name . ']', array('node' => $node));
+    $this->assertEqual('public://textimage/textimage_test/' . $field_value . '.png', $uri);
+  }
+
+}
+
+/**
+ * Test class to check that Textimage formatter is working.
+ */
+class TextimageFieldFormatterTest extends TextimageTestCase {
+
+  /**
+   * Get info.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Textimage field formatter',
+      'description' => 'Test Textimage display formatter.',
+      'group' => 'Textimage',
+    );
+  }
+
+  /**
+   * Test Textimage formatter on node display.
+   */
+  public function testTextimageFieldFormatter() {
+
+    // Create a text field for Textimage test.
+    $field_name = strtolower($this->randomName());
+    $this->createTextimageField($field_name, 'article');
+
+    // Create a new node.
+    $field_value = $this->randomName(20);
+    $nid = $this->createTextimageNode($field_name, $field_value, 'article');
+    $node = node_load($nid, NULL, TRUE);
+
+    // Get Textimage URL.
+    $textimage_url = TextimageImager::getImageUrl(
+      'textimage_test',
+      NULL,
+      array($field_value),
+      'png',
+      TRUE,
+      $node
+    );
+
+    // Test the textimage formatter - no link.
+    $instance = field_info_instance('node', $field_name, 'article');
+    $instance['display']['default']['type'] = 'textimage';
+    $instance['display']['default']['settings']['image_style'] = 'textimage_test';
+    $instance['display']['default']['settings']['image_link'] = '';
+    $instance['display']['default']['settings']['image_alt'] = 'Alternate text: [node:title]';
+    $instance['display']['default']['settings']['image_title'] = 'Title: [node:title]';
+    field_update_instance($instance);
+    $this->drupalGet('node/' . $nid);
+    $elements = $this->xpath(
+      '//img[@src = :src]',
+      array(
+        ':src' => $textimage_url,
+      )
+    );
+    $this->assertTrue(!empty($elements), 'Unlinked Textimage displaying on full node view.');
+    $this->assertEqual($elements[0]['alt'], 'Alternate text: ' . $field_value, 'Textimage has expected alt attribute.');
+    $this->assertEqual($elements[0]['title'], 'Title: ' . $field_value, 'Textimage has expected title attribute.');
+
+    // Test the textimage formatter - linked to content.
+    $instance['display']['default']['settings']['image_link'] = 'content';
+    field_update_instance($instance);
+    $this->drupalGet('node/' . $nid);
+    $elements = $this->xpath(
+      '//a[contains(@href, :href)]/img[@src = :src]',
+      array(
+        ':href' => 'node/' . $nid,
+        ':src' => $textimage_url,
+      )
+    );
+    $this->assertTrue(!empty($elements), 'Textimage linked to content displaying on full node view.');
+    $this->assertEqual($elements[0]['alt'], 'Alternate text: ' . $field_value, 'Textimage has expected alt attribute.');
+    $this->assertEqual($elements[0]['title'], 'Title: ' . $field_value, 'Textimage has expected title attribute.');
+
+    // Test the textimage formatter - linked to Textimage file.
+    $instance['display']['default']['settings']['image_link'] = 'file';
+    $instance['display']['default']['settings']['image_alt'] = 'Alternate text: [node:author]';
+    $instance['display']['default']['settings']['image_title'] = 'Title: [node:author]';
+    field_update_instance($instance);
+    $this->drupalGet('node/' . $nid);
+    $elements = $this->xpath(
+      '//a[@href = :href]/img[@src = :src]',
+      array(
+        ':href' => $textimage_url,
+        ':src' => $textimage_url,
+      )
+    );
+    $this->assertTrue(!empty($elements), 'Textimage linked to image file displaying on full node view.');
+    $this->assertEqual($elements[0]['alt'], 'Alternate text: ' . $this->admin_user->name, 'Textimage has expected alt attribute.');
+    $this->assertEqual($elements[0]['title'], 'Title: ' . $this->admin_user->name, 'Textimage has expected title attribute.');
+
+  }
+}
+
+/**
+ * Functional tests for Textimage API.
+ */
+class TextimageApiTest extends TextimageTestCase {
+
+  /**
+   * Get info.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Textimage API',
+      'description' => 'Functionality of the Textimage API',
+      'group' => 'Textimage',
+    );
+  }
+
+  /**
+   * Test functionality of the API.
+   */
+  public function testTextimageApi() {
+
+    // Add more effects to the style.
+    $effect_edits = array();
+    $effect_edits[] = array(
+      'effect' => 'textimage_text',
+      'data' => array(
+        'data[settings][font][angle]' => '90',
+        'data[settings][font][color][container][hex]' => '#FF0000',
+        'data[settings][text_default][text_string]' => 'Eff 1',
+      ),
+    );
+    $effect_edits[] = array(
+      'effect' => 'textimage_text',
+      'data' => array(
+        'data[settings][font][angle]' => '-90',
+        'data[settings][font][color][container][hex]' => '#00FF00',
+        'data[settings][text_default][text_string]' => 'Eff 2',
+      ),
+    );
+    $effect_edits[] = array(
+      'effect' => 'textimage_text',
+      'data' => array(
+        'data[settings][font][angle]' => '45',
+        'data[settings][font][color][container][hex]' => '#0000FF',
+        'data[settings][text_default][text_string]' => 'Eff 3',
+      ),
+    );
+    $effect_edits[] = array(
+      'effect' => 'image_desaturate',
+      'data' => array(),
+    );
+    $effect_edits[] = array(
+      'effect' => 'image_scale_and_crop',
+      'data' => array(
+        'data[width]' => 120,
+        'data[height]' => 121,
+      ),
+    );
+    foreach ($effect_edits as $effect) {
+      if (empty($effect['data'])) {
+        $this->drupalPost('admin/config/media/image-styles/edit/textimage_test/edit', array('new' => $effect['effect']), t('Add'));
+      }
+      else {
+        $this->drupalPost('admin/config/media/image-styles/edit/textimage_test/add/' . $effect['effect'], $effect['data'], t('Add effect'));
+      }
+    }
+
+    // Test Textimage API.
+    $textimage = new Textimage();
+
+    // Check API is accepting input, but not providing output, before process.
+    $this->assertTextimageException(FALSE, array($textimage, 'styleByName'), array('textimage_test'));
+    $this->assertTextimageException(FALSE, array($textimage, 'setCaching'), array(TRUE));
+    $this->assertNull($textimage->id(), 'ID is not available');
+    $this->assertNull($textimage->getUri(), 'URI is not available');
+    $this->assertNull($textimage->getUrl(), 'URL is not available');
+    $returned_text = $textimage->getText();
+    $this->assertTrue(empty($returned_text), 'Processed text is not available');
+
+    // Process Textimage.
+    $text_array = array('bingo', 'bongo', 'tengo', 'tango');
+    $expected_text_array = array('bingo', 'bongo', 'tengo', 'tango');
+    $textimage->process($text_array);
+
+    // Check API is providing output after processing.
+    $this->assertNotNull($textimage->id(), 'ID is available');
+    $this->assertNotNull($textimage->getUri(), 'URI is available');
+    $this->assertNotNull($textimage->getUrl(), 'URL is available');
+    $this->assertTrue($textimage->getText() == $expected_text_array, 'Processed text is available');
+
+    // Check API is not allowing changes after processing.
+    $this->assertTextimageException(TRUE, array($textimage, 'styleByName'), array('textimage_test'));
+    $this->assertTextimageException(TRUE, array($textimage, 'effects'), array(array()));
+    $this->assertTextimageException(TRUE, array($textimage, 'extension'), array('png'));
+    $this->assertTextimageException(TRUE, array($textimage, 'setCaching'), array(FALSE));
+    $this->assertTextimageException(TRUE, array($textimage, 'setTargetUri'), array('public://textimage-testing/bingo-bongo.png'));
+    $this->assertTextimageException(TRUE, array($textimage, 'setHashedFilename'), array(TRUE));
+
+    // Check URI.
+    $this->assertTrue(strpos($textimage->getUri(), implode('-+-', $expected_text_array)) > 0, 'Human readable filename');
+
+    // Get textimage_store entry.
+    $stored_image = db_select('textimage_store', 'ic')
+        ->fields('ic')
+        ->condition('tiid', $textimage->id(), '=')
+        ->execute()
+        ->fetchAssoc();
+    $image_data = unserialize($stored_image['image_data']);
+    $effects_outline = unserialize($stored_image['effects_outline']);
+
+    // Check processed text is stored in image data.
+    $this->assertTrue($expected_text_array == $image_data['text'], 'Processed text stored in image data');
+
+    // Check dummy textimage_background effect is not stored in the outline.
+    $this->assertTrue(count($effects_outline) == 6, 'Expected number of effects in the outline');
+    $is_background = FALSE;
+    foreach ($effects_outline as $effect) {
+      if ($effect['name'] == 'textimage_background') {
+        $is_background = TRUE;
+      }
+    }
+    $this->assertFalse($is_background, 'Dummy textimage_background effect is not stored in the outline');
+
+    // Check processed text is not stored in the effects outline.
+    foreach ($effects_outline as $effect) {
+      if ($effect['name'] == 'textimage_text') {
+        $this->assertTrue(!isset($effect['data']['text_string']), 'Processed text not stored in the effects outline');
+      }
+    }
+
+    // Test forced hashed filename.
+    $textimage = new Textimage();
+    $text_array = array('bingox', 'bongox', 'tengox', 'tangox');
+    $expected_text_array = array('bingox', 'bongox', 'tengox', 'tangox');
+    $textimage
+      ->styleByName('textimage_test')
+      ->setHashedFilename(TRUE)
+      ->process($text_array);
+    // Check URI and Textimage.
+    $this->assertTrue(strpos($textimage->getUri(), $textimage->id()) > 0, 'Hashed filename');
+    $this->assertTextimage($textimage->getUri(), 120, 121);
+
+    // Test loading the Textimage metadata.
+    $id = $textimage->id();
+    $uri = $textimage->getUri();
+    $textimage = new Textimage();
+    $textimage
+      ->load($id);
+    // Check loaded data.
+    $this->assertEqual($textimage->id(), $id, 'Load - ID correct');
+    $this->assertEqual($textimage->getUri(), $uri, 'Load - URI correct');
+    $this->assertEqual($textimage->getText(), $expected_text_array, 'Load - Text correct');
+    $this->assertTextimageException(TRUE, array($textimage, 'styleByName'), array('textimage_test'));
+    // File exists.
+    $this->assertTrue(file_exists($uri), 'Load - file exixts');
+    // File deletion.
+    $this->assertTrue(file_unmanaged_delete($uri), 'Load - file was deleted');
+    // Reload and rebuild.
+    $textimage = new Textimage();
+    $textimage
+      ->load($id);
+    $this->assertTrue(file_exists($uri), 'Load - file exixts');
+
+    // Test output of theme textimage_formatter.
+    $output = theme(
+      'textimage_formatter',
+      array(
+        'textimage' => $textimage,
+        'alt' => 'Alternate text',
+        'title' => 'Textimage title',
+        'attributes' => array('class' => 'textimage-test'),
+        'image_container_attributes' => array('class' => 'textimage-container-test'),
+        'href' => $textimage->getUrl(),
+      )
+    );
+    $this->drupalSetContent($output);
+    $elements = $this->xpath(
+      '//a[@href = :href]/div[@class = :container_class]/img[@src = :src]',
+      array(
+        ':href' => $textimage->getUrl(),
+        ':container_class' => 'textimage-container-test',
+        ':src' => $textimage->getUrl(),
+      )
+    );
+    $this->assertTrue(!empty($elements), 'Textimage formatted correctly.');
+  }
+
+  /**
+   * Assert throwing of a TextimageException.
+   */
+  protected function assertTextimageException($expected, $callback, $param_arr) {
+    try {
+      call_user_func_array($callback, $param_arr);
+      $this->assertTrue(!$expected, 'Exception not raised.');
+    }
+    catch (TextimageException $e) {
+      $this->assertTrue($expected, $e->getMessage());
+    }
+  }
+
+}

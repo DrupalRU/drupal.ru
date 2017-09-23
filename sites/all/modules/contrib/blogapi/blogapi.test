@@ -1,0 +1,170 @@
+<?php
+
+/**
+ * @file
+ * Test for general BlogAPI functionality
+ */
+
+class BlogapiTestCase extends DrupalWebTestCase {
+  protected $unPrivilegedUser;
+  protected $privilegedUser;
+  protected $privilegedUser2;
+  protected $xmlrpcUrl;
+
+  /**
+   * Test info.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => t('BlogAPI Parent Test class'),
+      'description' => t('Prepare endpoints testing') ,
+      'group' => t('BlogAPI'),
+    );
+  }
+
+  /**
+   * Set up test.
+   */
+  public function setUp() {
+    $args = func_get_args();
+
+    $modules = array();
+    $modules = $args;
+    // Add the required module dependencies.
+    array_unshift($modules, 'blogapi', 'services', 'xmlrpc_server', 'blogapi_blogger', 'filter', 'taxonomy');
+
+    parent::setUp($modules);
+
+    // Get the URL of the XML-RPC endpoint.
+    $this->xmlrpcUrl = url('blogapi/xmlrpc', array('absolute' => TRUE));
+
+    // Create a user with appropriate permissions.
+    $this->unPrivilegedUser = $this->drupalCreateUser(array('access content'));
+    $this->unPrivilegedUser->mail = 'test1@example.com';
+    $this->unPrivilegedUser->name = 'Test user 1';
+    user_save($this->unPrivilegedUser);
+
+    // Create a user with appropriate permissions.
+    $this->privilegedUser = $this->drupalCreateUser(array('manage content with blogapi'));
+    $this->privilegedUser->mail = 'test2@example.com';
+    $this->privilegedUser->name = 'Test user 2';
+    user_save($this->privilegedUser);
+
+    // Create another user with more permissions.
+    $this->privilegedUser2 = $this->drupalCreateUser(array('manage content with blogapi', 'bypass node access', 'administer nodes', 'administer taxonomy'));
+    $this->privilegedUser2->mail = 'test3@example.com';
+    $this->privilegedUser2->name = 'Test user 3';
+    user_save($this->privilegedUser2);
+  }
+
+  /**
+   * Test main validation functions via blogger.getUsersBlogs().
+   */
+  public function testGetUsersBlogs() {
+    // Test invalid params
+    $result = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.getUsersBlogs' => array(
+      ),
+    ));
+
+    $this->assertTrue(strpos(xmlrpc_error_msg(), 'Missing required argument') !== FALSE, 'Needs corect arguments');
+
+    // Test authantication with wrong username/password
+    $blog_types = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.getUsersBlogs' => array(
+        '1234567890',
+        $this->randomName(),
+        $this->randomString()
+      ),
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), 'Invalid username or password', 'Access only for logged in users');
+
+    // Test user without blogAPI permission.
+    $blog_types = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.getUsersBlogs' => array(
+        '1234567890',
+        $this->unPrivilegedUser->name,
+        $this->unPrivilegedUser->pass_raw
+      ),
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), 'You do not have permission to edit this blog', 'User must have blogAPI permissions');
+
+    // Restrict all content types, because article is allowed by default
+    variable_set('blogapi_node_types', array());
+
+    // Test blog type retrieval before creating and configuring node types.
+    $blog_types = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.getUsersBlogs' => array(
+        '1234567890',
+        $this->privilegedUser->name,
+        $this->privilegedUser->pass_raw
+      ),
+    ));
+
+    $this->assertEqual(count($blog_types), 0, 'No blog types exist and none were returned');
+
+    // Create a content type and re-test. No types should be returned
+    // because the content type is not configured for use with BlogAPI.
+    $type = $this->drupalCreateContentType();
+
+    $blog_types = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.getUsersBlogs' => array(
+        '1234567890',
+        $this->privilegedUser->name,
+        $this->privilegedUser->pass_raw
+      ),
+    ));
+
+    $this->assertEqual(count($blog_types), 0, 'No blog types are configured and none were returned');
+
+    // Add the new content type to the blog list and make sure that it's
+    // returned correctly.
+    variable_set('blogapi_node_types', array($type->type));
+
+    // Test valid process
+    $blog_types = xmlrpc($this->xmlrpcUrl, array(
+      'blogger.getUsersBlogs' => array(
+        '1234567890',
+        $this->privilegedUser->name,
+        $this->privilegedUser->pass_raw
+      ),
+    ));
+
+    $this->assertEqual(count($blog_types), 1, 'One blog type is configured and one was returned');
+    $this->assertEqual($blog_types[0]['blogid'], $type->type, 'The configured blog type is the one that was returned');
+    $this->assertEqual($blog_types[0]['blogName'], $this->privilegedUser->name . ': ' . $type->name, 'The blogName is returned correctly.');
+  }
+
+
+  /**
+   * Returns a new vocabulary with random properties.
+   */
+  function createVocabulary() {
+    // Create a vocabulary.
+    $vocabulary = new stdClass();
+    $vocabulary->name = $this->randomName();
+    $vocabulary->description = $this->randomName();
+    $vocabulary->machine_name = drupal_strtolower($this->randomName());
+    $vocabulary->help = '';
+    $vocabulary->nodes = array('article' => 'article');
+    $vocabulary->weight = mt_rand(0, 10);
+    taxonomy_vocabulary_save($vocabulary);
+    return $vocabulary;
+  }
+
+  /**
+   * Returns a new term with random properties in vocabulary $vid.
+   */
+  function createTerm($vocabulary) {
+    $term = new stdClass();
+    $term->name = $this->randomName();
+    $term->description = $this->randomName();
+    // Use the first available text format.
+    $term->format = db_query_range('SELECT format FROM {filter_format}', 0, 1)->fetchField();
+    $term->vid = $vocabulary->vid;
+    taxonomy_term_save($term);
+    return $term;
+  }
+}

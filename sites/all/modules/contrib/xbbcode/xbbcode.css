@@ -1,0 +1,22 @@
+#xbbcode-handlers .xbbcode-description-invisible {
+  display: none;
+}
+
+#xbbcode-handlers div.form-type-checkbox {
+  display: inline;
+}
+
+#xbbcode-handlers td:not(.xbbcode-tag-td) {
+  min-width: 5em;
+}
+
+#xbbcode-handlers tr:not(.selected) td {
+  background: none;
+  color: #aaa;
+}
+
+#xbbcode-handlers tr.selected td {
+  background: none;
+  color: #555;
+}
+

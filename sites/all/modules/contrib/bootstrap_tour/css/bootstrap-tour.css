@@ -1,0 +1,4 @@
+.popover.tour-tour {
+  min-width: 260px;
+  z-index: 10000;
+}

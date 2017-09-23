@@ -1,0 +1,94 @@
+
+CHANGELOG.txt for Mail Editor for Drupal 7
+
+
+mail_edit 7.x-1.x-dev:
+
+
+mail_edit 7.x-1.2 (2017-04-10):
+  Enhancement:
+   - Add a dummy test to accommodate the testbot.
+  Bug fixed:
+   - #2185909 by GaëlG: Remove newline character introduced by _drupal_wrap_mail_line().
+   - #2533318 by Eluchel: Typo in Dynamic Text Information.
+
+
+mail_edit 7.x-1.1 (2015-07-05):
+  Bug fixed:
+    - #2165875 by miiimooo: Fix the mail_edit_load() API function.
+    - #1826220 by acrollet: Fix a notice in mail_edit_menu_breadcrumb_alter().
+    - Provide a 'Purge' operation for all template records, especially orphaned ones.
+    - #1806944: Require the 'Use the administration pages and help' permission to access our pages.
+    - Force a refresh of the registry after purging a template.
+    - Add missing parameter checking.
+  Enhancements:
+    - Minor code refactoring, no functional changes.
+    - #2456719 by DamienMcKenna: Change token tree to use the new dialog.
+    - Fix Coder issues (no functional changes).
+
+mail_edit 7.x-1.0 (2012-06-21):
+  Bug fixed:
+    - Fix the breadcrumb one last time...
+
+
+mail_edit 7.x-1.0-rc1 (2012-06-12):
+  Bugs fixed:
+    - Really set the breadcumb on the template edit page now.
+    - #1606954: Fix timely rebuilding of the registry by using the cache system.
+  Enhancements:
+    - Further improve the 'Purge'/'Purge All' logic.
+    - Display the 'Purge'/'Purge All' operation only for keys that have a custom template.
+
+mail_edit 7.x-1.0-beta3 (2012-05-27):
+  Bugs fixed:
+    - Replace $_GET['q'] with current_path(), for D8.
+    - #1488896 by Les Lim: Fix the previous fix.
+    - #1488896: Work around problems between drupal_html_to_text() and some hosts (see also #234403).
+    - Set the breadcumbs on the template edit page.
+
+mail_edit 7.x-1.0-beta2 (2011-12-05):
+  Bugs fixed:
+    - Fix passing on the context received from drupal_mail() to mail_edit_format().
+    - Fix context evaluation (dynamic text).
+    - #1323452: Fix the inability to save templates on PHP 5.3.5.
+
+mail_edit 7.x-1.0-beta1 (2011-10-30):
+  Enhancements:
+    - Change the Subject textfield into a textarea for easier editing.
+  Bugs fixed:
+    - Tune the text of the Remove button.
+    - Fix a notice that was generated when sending a password reset email.
+    - Ask for confirmation before removing a template.
+    - Fix evaluation of dynamic text binary conditions.
+    - Fix PHPDoc blocks and type hinting.
+
+mail_edit 7.x-1.0-alpha2 (2011-10-03):
+  Porting to D7:
+    - Major overhaul (dynamic text including array iteration, improved modularization, purge and auto-purge).
+    - Fix line endings (no functional change).
+    - Some code refactoring and renaming (no functional change).
+    - Implement conditional text (and extract the hook_mail_alter() implementation into an .inc file).
+    - Add update_7001 to upgrade D6 Mail Editor tokens to D7 Core tokens. Client modules must implement a similar function to update their tokens!
+    - Add README.txt and clarify description in .info file.
+
+mail_edit 7.x-1.0-alpha1 (2011-09-01):
+  Porting to D7:
+    - Implement core token replacement and Token module support.
+    - Make user.module template replacement work.
+    - Fix the missing user templates (failed to include the .inc files).
+    - Move .inc files for other modules to new modules directory.
+    - Make it work with the old Subscriptions module (old !variables).
+
+
+mail_edit 6.x-1.1 (2011-08-28):
+  Enhancements:
+    - More clean-up (no functional change).
+    - Further tune the template list.
+    - #1238416 by Pasqualle, salvis: Implement nicely-formatted and filterable template list.
+    - Move admin code to mail_edit.admin.inc to reduce the footprint (no functional change).
+    - More clean-up (no functional change).
+    - #916560 by jaydub, salvis: Coding standards cleanup.
+
+mail_edit 6.x-1.0 (2011-08-24):
+  (no changes since 2010-12-28)
+

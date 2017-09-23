@@ -1,0 +1,378 @@
+<?php
+
+/**
+ * @file
+ * Provides MovableType services for BlogAPI
+ */
+
+/**
+ * Implements hook_blogapi_info().
+ */
+function blogapi_movabletype_blogapi_info() {
+  return array(
+    'api_version' => 2,
+    'type' => 'xmlrpc',
+    'name' => 'MovableType',
+  );
+}
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function blogapi_movabletype_ctools_plugin_api() {
+  list($module, $api) = func_get_args();
+  if ($module == "services" && $api == "services") {
+    return array("version" => "3");
+  }
+}
+
+/**
+ * Implements hook_services_resources().
+ */
+function blogapi_movabletype_services_resources() {
+  return array(
+    'mt' => array(
+      'actions' => array(
+        'publishPost' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_movabletype_publish_post',
+          'enabled' => 1,
+          'help' => 'Publish (rebuild) all of the static files related to an entry from your blog. Equivalent to saving an entry in the system (but without the ping).',
+          'args' => array(
+            array(
+              'name' => 'postid',
+              'type' => 'int',
+              'description' => 'PostID',
+              'source' => array('data' => 'postid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'getRecentPostTitles' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_movabletype_get_recent_post_titles',
+          'enabled' => 1,
+          'help' => 'Returns a bandwidth-friendly list of the most recent posts in the system.',
+          'args' => array(
+            array(
+              'name' => 'blogid',
+              'type' => 'string',
+              'description' => 'blogid',
+              'source' => array('data' => 'blogid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'number_of_posts',
+              'type' => 'int',
+              'description' => 'Number of posts',
+              'source' => array('data' => 'number_of_posts'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'getCategoryList' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_movabletype_get_category_list',
+          'enabled' => 1,
+          'help' => 'Returns a list of all categories defined in the blog.',
+          'args' => array(
+            array(
+              'name' => 'blogid',
+              'type' => 'string',
+              'description' => 'blogid',
+              'source' => array('data' => 'blogid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'getPostCategories' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_movabletype_get_post_categories',
+          'enabled' => 1,
+          'help' => 'Returns a list of all categories to which the post is assigned.',
+          'args' => array(
+            array(
+              'name' => 'blogid',
+              'type' => 'string',
+              'description' => 'blogid',
+              'source' => array('data' => 'blogid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'setPostCategories' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_movabletype_set_post_categories',
+          'enabled' => 1,
+          'help' => 'Sets the categories for a post.',
+          'args' => array(
+            array(
+              'name' => 'postid',
+              'type' => 'int',
+              'description' => 'postid',
+              'source' => array('data' => 'postid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'categories',
+              'type' => 'array',
+              'description' => 'categories',
+              'source' => array('data' => 'categories'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'supportedMethods' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_movabletype_supported_methods',
+          'enabled' => 1,
+          'help' => 'Retrieve information about the XML-RPC methods supported by the server.',
+        ),
+        'supportedTextFilters' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_movabletype_supported_text_filters',
+          'enabled' => 1,
+          'help' => 'Retrieve information about the text formatting plugins supported by the server.',
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * Service callback for mt.publishPost
+ */
+function blogapi_movabletype_publish_post($postid, $username, $password) {
+  return blogapi_edit_post($postid, $username, $password, NULL, 1);
+}
+
+/**
+ * Service callback for mt.getRecentPostTitles
+ */
+function blogapi_movabletype_get_recent_post_titles($blogid, $username, $password, $number_of_posts) {
+  return blogapi_get_recent_posts($blogid, $username, $password, $number_of_posts, FALSE);
+}
+
+/**
+ * Service callback for mt.getCategoryList
+ */
+function blogapi_movabletype_get_category_list($blogid, $username, $password) {
+  return blogapi_get_categories($blogid, $username, $password);
+}
+
+/**
+ * Service callback for mt.getPostCategories
+ */
+function blogapi_movabletype_get_post_categories($postid, $username, $password) {
+  return blogapi_get_node_categories($postid, $username, $password);
+}
+
+/**
+ * Service callback for mt.setPostCategories
+ *  @TODO rewrite this callback, because I'm afraid it's too complicated now :(
+ */
+function blogapi_movabletype_set_post_categories($postid, $username, $password, $categories) {
+  $node = node_load($postid);
+
+  if (!$node) {
+    return services_error(t('Node @nid not found', array('@nid' => $postid)), 404);
+  }
+
+  $not_found_errors = array();
+  $wrong_vocabulary_errors = array();
+  $terms_data = $node_data = array();
+  $taxonomy_fields = blogapi_get_taxonomy_term_reference_fields_with_vocabularies(array($node->type));
+
+  if (!empty($taxonomy_fields) && !empty($categories)) {
+    foreach ($categories as $category) {
+      $term = taxonomy_term_load($category['categoryId']);
+
+      if (!$term) {
+        $not_found_errors[] = $category['categoryName'];
+        continue;
+      }
+
+      $success = FALSE;
+
+      foreach ($taxonomy_fields as $field_name => $field_settings) {
+        if ($field_settings['settings']['allowed_values'][0]['vocabulary'] == $term->vocabulary_machine_name) {
+          $terms_data[$field_name][] = $category['categoryId'];
+          $success = TRUE;
+          break;
+        }
+      }
+
+      if (!$success) {
+        $wrong_vocabulary_errors[] = $category['categoryName'];
+        continue;
+      }
+    }
+
+    if (!empty($not_found_errors)) {
+      return services_error(t('@terms are not found', array('@terms' => implode(' ', $not_found_errors))), 406);
+    }
+    elseif (!empty($wrong_vocabulary_errors)) {
+      return services_error(t('@terms can\'be added to this post', array('@terms' => implode(' ', $wrong_vocabulary_errors))), 406);
+    }
+    else {
+      foreach ($terms_data as $field_name => $terms) {
+        $node_data[$field_name] = array(LANGUAGE_NONE => $terms);
+
+        if (!empty($node->{$field_name})) {
+          foreach ($node->{$field_name}[LANGUAGE_NONE] as $value) {
+            $node_data[$field_name][LANGUAGE_NONE][] = $value['tid'];
+          }
+        }
+
+        array_unique($node_data[$field_name]);
+      }
+
+      return blogapi_edit_post($postid, $username, $password, array('taxonomies' => $node_data));
+    }
+  }
+
+  return services_error(t('This post doesn\'t have any category'), 406);
+}
+
+/**
+ * Service callback for mt.supportedMethods
+ *
+ * @todo: Implement this function? system.getMethods returns the same thing,
+ *        so we may not need to bother with this.
+ */
+function blogapi_movabletype_supported_methods() {
+  return services_error(t('Not implemented'), 501);
+}
+
+/**
+ * Service callback for mt.supportedTextFilters
+ */
+function blogapi_movabletype_supported_text_filters() {
+  // NOTE: we're only using anonymous' formats because the MT spec
+  // does not allow for per-user formats.
+  $formats = filter_formats();
+
+  $filters = array();
+  foreach ($formats as $format) {
+    $filter['key'] = $format->format;
+    $filter['label'] = $format->name;
+    $filters[] = $filter;
+  }
+
+  return $filters;
+}
+
+/**
+ * Handles extra information sent by clients according to MovableType's spec.
+ */
+function _blogapi_mt_extra(&$node, $struct) {
+  $was_array = FALSE;
+  if (is_array($node)) {
+    $was_array = TRUE;
+    $node = (object)$node;
+  }
+
+  if (array_key_exists('mt_allow_comments', $struct)) {
+    switch ($struct['mt_allow_comments']) {
+      case 0:
+        $node->comment = COMMENT_NODE_HIDDEN;
+        break;
+      case 1:
+        $node->comment = COMMENT_NODE_OPEN;
+        break;
+      case 2:
+        $node->comment = COMMENT_NODE_CLOSED;
+        break;
+    }
+  }
+
+  // Merge the 3 body sections (description, mt_excerpt, mt_text_more) into one body.
+  if (isset($struct['mt_excerpt'])) {
+    $node->body[LANGUAGE_NONE][0]['value'] = $struct['mt_excerpt'] . '<!--break-->' . $node->body[LANGUAGE_NONE][0]['value'];
+  }
+  if (isset($struct['mt_text_more'])) {
+    $node->body[LANGUAGE_NONE][0]['value'] = $node->body[LANGUAGE_NONE][0]['value'] . '<!--extended-->' . $struct['mt_text_more'];
+  }
+
+  if (isset($struct['mt_convert_breaks'])) {
+    $node->body[LANGUAGE_NONE][0]['format'] = $struct['mt_convert_breaks'];
+  }
+
+  if (isset($struct['dateCreated'])) {
+    $node->date = format_date(mktime($struct['dateCreated']->hour, $struct['dateCreated']->minute, $struct['dateCreated']->second, $struct['dateCreated']->month, $struct['dateCreated']->day, $struct['dateCreated']->year), 'custom', 'Y-m-d H:i:s O');
+  }
+
+  if ($was_array) {
+    $node = (array)$node;
+  }
+}

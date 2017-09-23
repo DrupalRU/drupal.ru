@@ -1,0 +1,131 @@
+<?php
+
+/**
+ * @file
+ * Installation actions and database schema.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function xbbcode_schema() {
+  $schema['xbbcode_custom_tag'] = array(
+    'description' => 'Custom tags created manually',
+    'fields' => array(
+      // Key
+      'name' => array(
+        'description' => 'Identifies the tag, and serves also to recognize it in text',
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'default' => '',
+        'length' => 32,
+      ),
+      // Data
+      'markup' => array(
+        'description' => 'The markup that this tag should be replaced with when filtering',
+        'type' => 'text',
+        'size' => 'normal',
+      ),
+      'description' => array(
+        'description' => 'Describes the use of this tag for the help text',
+        'type' => 'text',
+        'size' => 'normal',
+      ),
+      'sample' => array(
+        'description' => 'A sample of how this tag is to be used',
+        'type' => 'text',
+        'size' => 'normal',
+      ),
+      // Options
+      'options' => array(
+        'description' => 'The settings chosen for this tag in serialized form.',
+        'type' => 'text',
+        'size' => 'normal',
+      ),
+    ),
+    'primary key' => array('name'),
+  );
+
+  $schema['xbbcode_handler'] = array(
+    'description' => 'The module that each tag will be handled by, per-format',
+    'fields' => array(
+      // Key
+      'name' => array(
+        'description' => 'Identifies the tag, and serves also to recognize it in text',
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'default' => '',
+        'length' => 32,
+      ),
+      'format' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => 'GLOBAL',
+        'description' => 'Foreign key: The {filter_format}.format to which the handler settings belong. GLOBAL for the global settings.',
+      ),
+      // Options
+      'module' => array(
+        'description' => 'The system name of the module that handles this tag',
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'default' => '',
+        'length' => 32,
+      ),
+      'enabled' => array(
+        'description' => 'Whether this tag is currently enabled',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+    ),
+    'primary key' => array('name', 'format'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_enable().
+ */
+function xbbcode_enable() {
+  // Check if a format with a different internal name is already called BBCode.
+  $bbcode_exists = db_query_range('SELECT 1 FROM {filter_format} WHERE name = :name AND format != :format', 0, 1, array(':name' => 'BBCode', ':format' => 'xbbcode'))->fetchField();
+
+  $format = (object) array(
+    'format' => 'xbbcode',
+    'name' => $bbcode_exists ? 'Extensible BBCode' : 'BBCode',
+    'weight' => -10,
+    'filters' => array(
+      'filter_html_escape' => array(
+        'weight' => 0,
+        'status' => 1,
+      ),
+      'xbbcode' => array(
+        'weight' => 1,
+        'status' => 1,
+      ),
+      'filter_autop' => array(
+        'weight' => 2,
+        'status' => 1,
+      ),
+    ),
+  );
+  filter_format_save($format);
+  $permission = filter_permission_name($format);
+  user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array($permission));
+  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array($permission));
+  drupal_set_message(t('A <a href="@url">BBCode</a> text format has been created. All users have access to it.', array('@url' => url('admin/config/content/formats/' . $format->format))));
+}
+
+/**
+ * Implements hook_disable().
+ */
+function xbbcode_disable() {
+  $bbcode = filter_format_load('xbbcode');
+  if ($bbcode) {
+    filter_format_disable($bbcode);
+    drupal_set_message(t('The <a href="@url">BBCode</a> text format has been disabled.', array('@url' => url('admin/config/content/formats/' . $bbcode->format))), 'warning');
+  }
+}

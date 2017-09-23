@@ -1,0 +1,148 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Mail Editor module.
+ */
+
+/**
+ * Implements hook_schema().
+ *
+ * @return array
+ */
+function mail_edit_schema() {
+
+  $schema['mail_edit'] = array(
+    'description' => '',
+    'fields' => array(
+      'id' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'language' => array(
+        'type' => 'varchar',
+        'length' => '10',
+        'not null' => TRUE,
+      ),
+      'description' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'subject' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'body' => array(
+        'type' => 'text',
+        'size' => 'normal',
+      ),
+    ),
+    'primary key' => array('id', 'language'),
+    'indexes' => array(
+      'language' => array('language'),
+    ),
+  );
+
+  $schema['mail_edit_registry'] = array(
+    'description' => '',
+    'fields' => array(
+      'id' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => '',
+      ),
+      'module' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => '',
+      ),
+      'mailkey' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => '',
+      ),
+      'description' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => '',
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
+
+function mail_edit_update_last_removed() {
+  return 6000;
+}
+
+/**
+ * Updates the '!tokens' in the stored templates to the new D7 '[tokens]'.
+ *
+ * Additionally, in Drupal 7 we no longer e-mail plain text passwords to users,
+ * and there is no token for a plain text password in the new token system.
+ * Therefore, it also modifies any saved templates using the old '!password'
+ * token such that the token is removed, and displays a warning to users that
+ * they may need to go and modify the wording of their templates.
+ * Note: Client modules must implement a similar function to update their
+ * tokens!
+ *
+ * @return string|null
+ */
+function mail_edit_update_7001() {
+  $tokens = array(
+    '!username_themed' => '[user:name]',
+    '!username'        => '[user:name]',
+    '!site'            => '[site:name]',
+    '!login_url'       => '[user:one-time-login-url]',
+    '!uri_brief'       => '[site:url-brief]',
+    '!uri'             => '[site:url]',
+    '!mailto'          => '[user:mail]',
+    '!date'            => '[current-date:medium]',
+    '!login_uri'       => '[site:login-url]',
+    '!edit_uri'        => '[user:edit-url]',
+    '!password'        => '[### The password is not exposed anymore! ###]',
+  );
+  $templates_with_passwords = array();
+  $result = db_select('mail_edit', 'me', array('fetch' => PDO::FETCH_ASSOC))
+    ->fields('me')
+    ->execute();
+  foreach ($result as $row) {
+    $id = $row['id'];
+    $langcode = $row['language'];
+    unset($row['id']);
+    unset($row['language']);
+    if ((strpos($row['body'], '!password') !== FALSE)) {
+      $templates_with_passwords[$id][$langcode] = $row['description'];
+    }
+    $row['subject'] = strtr($row['subject'], $tokens);
+    $row['body'] = strtr($row['body'], $tokens);
+    db_update('mail_edit')
+      ->fields($row)
+      ->condition('id', $id)
+      ->condition('language', $langcode)
+      ->execute();
+  }
+
+  if (!empty($templates_with_passwords)) {
+    $message = t('The ability to send users their passwords in plain text has been removed in Drupal 7. Your existing email templates have been modified to remove it. You should <a href="@template-url">review these templates</a> to make sure they read properly.', array('@template-url' => url('admin/config/system/mail-edit')));
+    $message .= '<br />' . t('The following templates are affected:') . '<br />';
+    $message .= "\n<table>\n";
+    foreach ($templates_with_passwords as $id => $record) {
+      foreach ($record as $langcode => $description) {
+        $message .= "<tr><td>$id</td> <td>$langcode</td> <td>" . drupal_placeholder($description) . "</td> <td>" . l(t('edit'), "admin/config/system/mail-edit/$id/$langcode") . "</td></tr>\n";
+      }
+    }
+    $message .= "\n</table>\n";
+    return $message;
+  }
+  return NULL;
+}

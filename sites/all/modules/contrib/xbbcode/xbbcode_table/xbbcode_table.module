@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * @file xbbcode_table.module
+ * The module file, containing hook implementations.
+ */
+
+/**
+ * Implements hook_xbbcode_info().
+ */
+function xbbcode_table_xbbcode_info() {
+  $tags['table'] = array(
+    'callback' => '_xbbcode_table_render',
+    'description' => t('Create a table from comma-separated data. The tag option contains an optional caption and column headers; a prefix of ! or # aligns the column to the center or the right, respectively.'),
+    'sample' => t("[table=Caption;!Item,Color,#Amount]\nFish,Red,1\nFish,Blue,2\n[/table]"),
+  );
+  return $tags;
+}
+
+/**
+ * Renders a table tag.
+ */
+function _xbbcode_table_render($tag) {
+  $alignment = array('' => 'left', '#' => 'right', '!' => 'center');
+  if ($tag->option) {
+    // Look for an optional caption;header syntax.
+    preg_match('/^(?:(.*);)?(.*)$/', $tag->option, $match);
+    list($_, $caption, $headers) = $match;
+  }
+  else {
+    $caption = $tag->attr('caption');
+    $headers = $tag->attr('headers');
+  }
+  if ($headers) {
+    $headers = explode(',', $headers);
+    foreach ($headers as $i => $header) {
+      // !<name> is aligned right, #<name> is centered, otherwise aligned left.
+      preg_match('/^([#!]?)(.+)$/', $header, $match);
+      $headers[$i] = $match[2];
+      $align[$i] = $alignment[$match[1]];
+    }
+  }
+  else {
+    $headers = array();
+  }
+
+  $rows = explode("\n", trim($tag->content));
+  foreach ($rows as $row) {
+    $row = explode(',', $row);
+    if ($headers) {
+      foreach ($row as $i => $cell) {
+        $row[$i] = array(
+          'data' => $cell,
+          'style' => 'text-align:' . $align[$i],
+        );
+      }
+    }
+    $cells[] = $row;
+  }
+  // Strip linebreaks, in case this text passes through a linebreak converter.
+  return str_replace("\n", '', theme('table', array('header' => $headers, 'rows' => $cells, 'caption' => $caption)));
+}
+

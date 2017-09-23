@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the RANDOM CAPTCHA module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ * On uninstall: remove module variables and clear variables cache
+ */
+function random_captcha_type_uninstall() {
+  db_query("DELETE FROM {variable} WHERE name LIKE 'random_captcha_type_%'");
+  cache_clear_all('variables', 'cache');
+}

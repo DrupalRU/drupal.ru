@@ -1,0 +1,19 @@
+deploy:
+  master:
+    server: test
+    username: test
+    dir: '{home}/test'
+    env_vars:
+    scripts:
+      init: '{depoloy_dir}/init_deploy.sh '
+test:
+  php5:
+    master:
+      box: 
+        machine: dual
+        image: 'backdrop-php53'
+        disk:
+          type: HDD
+          size: 10
+      dir: '{home}/test'
+    

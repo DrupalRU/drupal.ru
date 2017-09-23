@@ -1,0 +1,554 @@
+<?php
+
+/**
+ * @file
+ * Tests for the GeSHi filter module.
+ */
+
+
+// @todo: test the tag style widget, both on general settings form and format specific form:  at least one tag style should be selected.
+
+/**
+* Funcional tests for the GeSHi filter administration.
+*/
+class GeshiFilterAdministrationTest extends DrupalWebTestCase {
+
+  /**
+   * A global filter adminstrator
+   */
+  protected $filter_admin_user;
+
+  /**
+   * The id of the text format with only GeSHi filter in it
+   */
+  protected $input_format_id;
+
+  /**
+   * Drupal SimpleTest method: return metadata about the test.
+   */
+  public static function getInfo() {
+    return array(
+      'name'  => t('GeSHi filter administration'),
+      'description'  => t('Test the GeSHi filter administration.'),
+      'group' => t('GeSHi filter module'),
+    );
+  }
+
+  /**
+   * SimpleTest core method: code run before each and every test method.
+   *
+   * Optional. You only need this if you have setup tasks.
+   */
+  function setUp() {
+    // Make sure the GeSHi filter module is enabled.
+    parent::setUp('geshifilter');
+    // And set the path to the geshi library.
+    variable_set('geshifilter_geshi_dir','sites/all/libraries/geshi');
+
+    // Create a filter admin user
+    $permissions = array('administer filters', 'administer site configuration');
+    $this->filter_admin_user = $this->drupalCreateUser($permissions);
+
+    // log in with filter admin user
+    $this->drupalLogin($this->filter_admin_user);
+
+    // add an text format with only geshi filter
+    $edit = array(
+      'name' => $this->randomName(10, 'inputformat_'),
+      'filters[geshifilter/0]' => TRUE,
+      'roles[2]' => TRUE,
+    );
+    $this->drupalPost('admin/config/content/formats/add', $edit, t('Save configuration'));
+    // store the format id of the created text format
+    $this->input_format_id = db_result(db_query("SELECT format FROM {filter_format} WHERE name = '%s'", $edit['name']));
+    $this->assertTrue($this->input_format_id, t('Input format id (%s)'));
+
+    // set some default GeSHi filter admin settings
+    variable_set('geshifilter_format_specific_options', FALSE);
+    variable_set('geshifilter_tag_styles', array(
+      GESHIFILTER_BRACKETS_ANGLE => GESHIFILTER_BRACKETS_ANGLE,
+      GESHIFILTER_BRACKETS_SQUARE => GESHIFILTER_BRACKETS_SQUARE,
+    ));
+    variable_set('geshifilter_default_line_numbering', GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE);
+
+  }
+
+  /**
+   * SimpleTest core method: code run after each and every test method.
+   *
+   * Optional. You only need this if you have setup tasks.
+   */
+  function tearDown() {
+    // Remove text format.
+    $this->drupalPost('admin/config/content/formats/delete/'. $this->input_format_id, array(), t('Delete'));
+
+    // Always call the tearDown() function from the parent class.
+    parent::tearDown();
+  }
+
+  /**
+   * Check tag unicity: tags should differ between languages and from generic tags
+   */
+  function test_tag_unicity() {
+    // enable some languages first
+    variable_set('geshifilter_language_enabled_php', TRUE);
+    variable_set('geshifilter_language_enabled_python', TRUE);
+
+    // first round: without format specific tag options
+    variable_set('geshifilter_format_specific_options', FALSE);
+    variable_set('geshifilter_tags', 'code blockcode generictag');
+
+    // a language tag should differ from the generic tags
+    $form_values = array(
+      'geshifilter_language_tags_php' => 'php generictag',
+    );
+    $this->drupalPost('admin/settings/geshifilter/languages', $form_values, t('Save configuration'));
+    $this->assertText(t('The language tags should differ between languages and from the generic tags.'), t('Language tags should differ from generic tags (with generic tag options)'));
+
+    // language tags should differ between languages
+    $form_values = array(
+      'geshifilter_language_tags_php' => 'php languagetag',
+      'geshifilter_language_tags_python' => 'languagetag python',
+    );
+    $this->drupalPost('admin/settings/geshifilter/languages/all', $form_values, t('Save configuration'));
+    $this->assertText(t('The language tags should differ between languages and from the generic tags.'), t('Language tags should differ between languages (with generic tag options)'));
+
+    // second round: with format specific tag options
+    variable_set('geshifilter_format_specific_options', TRUE);
+    variable_set('geshifilter_tags_' . $this->input_format_id, 'code blockcode generictag');
+
+    // a language tag should differ from the generic tags
+    $form_values = array(
+      'geshifilter_language_tags_php_' . $this->input_format_id => 'php generictag',
+    );
+    $this->drupalPost('admin/config/content/formats/' . $this->input_format_id . '/configure', $form_values, t('Save configuration'));
+    $this->assertText(t('The language tags should differ between languages and from the generic tags.'), t('Language tags should differ from generic tags (with format specific tag options)'));
+
+    // language tags should differ between languages
+    $form_values = array(
+      'geshifilter_language_tags_php_' . $this->input_format_id => 'php languagetag',
+      'geshifilter_language_tags_python_' . $this->input_format_id => 'languagetag python',
+    );
+    $this->drupalPost('admin/config/content/formats/' . $this->input_format_id . '/configure', $form_values, t('Save configuration'));
+    $this->assertText(t('The language tags should differ between languages and from the generic tags.'), t('Language tags should differ between languages (with format specific tag options)'));
+
+  }
+
+}
+
+
+
+
+
+class GeshiFilterTest extends DrupalWebTestCase {
+
+  /**
+   * A global filter adminstrator
+   */
+  protected $filter_admin_user;
+
+  /**
+   * A global user for adding pages
+   */
+  protected $normal_user;
+
+  /**
+   * The id of the text format with only GeSHi filter in it
+   */
+  protected $input_format_id;
+
+  /**
+   * Drupal SimpleTest method: return metadata about the test.
+   */
+  public static function getInfo() {
+    return array(
+      'name'  => t('GeSHi input filter'),
+      'description'  => t('Test the input filter capabilities of the GeSHi filter.'),
+      'group' => t('GeSHi filter module'),
+    );
+  }
+
+  /**
+   * SimpleTest core method: code run before each and every test method.
+   *
+   * Optional. You only need this if you have setup tasks.
+   */
+  function setUp() {
+    // Make sure that Geshi filter module is enabled.
+    parent::setUp('geshifilter');
+    // And set the path to the geshi library.
+    variable_set('geshifilter_geshi_dir','sites/all/libraries/geshi');
+
+    // Create a filter admin user
+    $permissions = array(
+      'administer filters',
+    );
+    $this->filter_admin_user = $this->drupalCreateUser($permissions);
+    // Create a normal user for page creation
+    $permissions = array(
+      'edit own page content',
+      'create page content'
+    );
+    $this->normal_user = $this->drupalCreateUser($permissions);
+
+    // log in with filter admin user
+    $this->drupalLogin($this->filter_admin_user);
+
+    // add an text format with only geshi filter
+    $edit = array(
+      'name' => $this->randomName(10, 'inputformat_'),
+      'filters[geshifilter/0]' => TRUE,
+      'filters[filter/0]' => FALSE,
+      'filters[filter/1]' => FALSE,
+      'filters[filter/2]' => FALSE,
+      'filters[filter/3]' => FALSE,
+      'roles[2]' => TRUE,
+    );
+    $this->drupalPost('admin/config/content/formats/add', $edit, t('Save configuration'));
+    // store the format id of the created text format
+    $this->input_format_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = '%s'", $edit['name']));
+    $this->assertTrue($this->input_format_id, t('Valid text format id'));
+
+    // set some default GeSHi filter admin settings
+        // Set default highlighting mode to "do nothing".
+    variable_set('geshifilter_default_highlighting', GESHIFILTER_DEFAULT_PLAINTEXT);
+    variable_set('geshifilter_format_specific_options', FALSE);
+    variable_set('geshifilter_tag_styles', array(
+      GESHIFILTER_BRACKETS_ANGLE => GESHIFILTER_BRACKETS_ANGLE,
+      GESHIFILTER_BRACKETS_SQUARE => GESHIFILTER_BRACKETS_SQUARE,
+    ));
+    variable_set('geshifilter_default_line_numbering', GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE);
+
+    // log out as filter admin
+    $this->drupalGet('logout');
+
+    // log in as the normal user for adding pages
+    $this->drupalLogin($this->normal_user);
+
+    // include GeSHi filtering functions
+    require_once(drupal_get_path('module', 'geshifilter') .'/geshifilter.pages.inc');
+
+  }
+
+  /**
+   * SimpleTest core method: code run after each and every test method.
+   *
+   * Optional. You only need this if you have setup tasks.
+   */
+  function tearDown() {
+    // log in as filter admin
+    $this->drupalGet('logout');
+    $this->drupalLogin($this->filter_admin_user);
+
+    // remove text format
+    $this->drupalPost('admin/config/content/formats/delete/'. $this->input_format_id, array(), t('Delete'));
+
+    // Always call the tearDown() function from the parent class.
+    parent::tearDown();
+  }
+
+  /**
+   * Assert function for testing if GeSHi highlighting works
+   * @param string $body the body text of the node
+   * @param array $check_list list of items that should be in rendered output (assertRaw)
+   *     an item is something like array($source_code, $lang, $line_numbering, $linenumbers_start, $inline_mode)
+   *     if $lang is set, GeSHifilter syntax highlighting is applied to $sourcecode
+   *     if $lang is false, $sourcecode is directly looked for
+   * @param string $description description of the assertion
+   * @param boolean $invert if assertNoRaw should be used instead of assertRaw
+   */
+  function assertGeshiFilterHighlighting($body, $check_list, $description, $invert=false) {
+    // Create content.
+    $edit = array(
+      'title' => $this->randomName(32, 'simpletest_pagetitle_'),
+      'body' => $body ."\n". $this->randomName(100),
+      'format' => $this->input_format_id,
+    );
+    // Post node
+    $this->drupalPost('node/add/page', $edit, t('Save'));
+    // check posted node
+    $node = node_load(array('title' => $edit['title']));
+    $this->assertTrue($node, 'Node found in database. %s');
+    // check if highlighting succeeded
+    foreach ($check_list as $fragment) {
+      list($source_code, $lang, $line_numbering, $linenumbers_start, $inline_mode) = $fragment;
+      if ($lang) {
+        // apply syntax highlighting
+        $source_code = geshifilter_geshi_process($source_code, $lang, $line_numbering, $linenumbers_start, $inline_mode);
+      }
+      if ($invert) {
+        $this->assertNoRaw($source_code, $description);
+      }
+      else {
+        $this->assertRaw($source_code, $description);
+      }
+    }
+  }
+
+  /**
+   * Test the standard functionality of the generic tags
+   */
+  function testGenericTags() {
+    variable_set('geshifilter_tags', 'code');
+    variable_set('geshifilter_language_enabled_c', TRUE);
+    variable_set('geshifilter_language_enabled_cpp', TRUE);
+    variable_set('geshifilter_language_enabled_csharp', TRUE);
+    variable_set('geshifilter_language_enabled_java', TRUE);
+
+    // body material
+    $source_code = "//C++-ish source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
+
+    // check language argument
+    $this->assertGeshiFilterHighlighting('<code type="cpp">'. $source_code .'</code>',
+      array(array($source_code, 'cpp', 0, 1, FALSE)),
+      t('Checking type="..." argument'));
+    $this->assertGeshiFilterHighlighting('<code lang="cpp">'. $source_code .'</code>',
+      array(array($source_code, 'cpp', 0, 1, FALSE)),
+      t('Checking lang="..." argument'));
+    $this->assertGeshiFilterHighlighting('<code language="cpp">'. $source_code .'</code>',
+      array(array($source_code, 'cpp', 0, 1, FALSE)),
+      t('Checking language="..." argument'));
+
+    // check some languages
+    $languages = array('c', 'cpp', 'java');
+    foreach ($languages as $lang) {
+      $this->assertGeshiFilterHighlighting('<code language="'. $lang .'">'. $source_code .'</code>',
+        array(array($source_code, $lang, 0, 1, FALSE)),
+        t('Checking language="@lang"', array('@lang' => $lang)));
+    }
+
+    // check line_numbering argument
+    $this->assertGeshiFilterHighlighting('<code type="cpp" linenumbers="off">'. $source_code .'</code>',
+      array(array($source_code, 'cpp', 0, 1, FALSE)),
+      t('Checking linenumbers="off" argument'));
+    $this->assertGeshiFilterHighlighting('<code type="cpp" linenumbers="normal">'. $source_code .'</code>',
+      array(array($source_code, 'cpp', 1, 1, FALSE)),
+      t('Checking linenumbers="normal" argument'));
+    $this->assertGeshiFilterHighlighting('<code type="cpp" start="27">'. $source_code .'</code>',
+      array(array($source_code, 'cpp', 1, 27, FALSE)),
+      t('Checking start="27" argument'));
+    $this->assertGeshiFilterHighlighting('<code type="cpp" linenumbers="fancy">'. $source_code .'</code>',
+      array(array($source_code, 'cpp', 5, 1, FALSE)),
+      t('Checking linenumbers="fancy" argument'));
+    $this->assertGeshiFilterHighlighting('<code type="cpp" fancy="3">'. $source_code .'</code>',
+      array(array($source_code, 'cpp', 3, 1, FALSE)),
+      t('Checking fancy="3" argument'));
+  }
+
+
+  function testBracketsOnlyAngle() {
+    variable_set('geshifilter_tags', 'code');
+    variable_set('geshifilter_language_enabled_cpp', TRUE);
+    $source_code = "//C++ source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
+    // Enable only angle brackets
+    variable_set('geshifilter_tag_styles', array(
+      GESHIFILTER_BRACKETS_ANGLE => GESHIFILTER_BRACKETS_ANGLE,
+    ));
+    // This should be filtered.
+    $this->assertGeshiFilterHighlighting('<code language="cpp">'. $source_code .'</code>',
+      array(array($source_code, 'cpp', 0, 1, FALSE)),
+      t('Checking angle brackets style in GESHIFILTER_BRACKETS_ANGLE mode'));
+    // This should not be filtered.
+    $this->assertGeshiFilterHighlighting('[code language="cpp"]'. $source_code .'[/code]',
+      array(array($source_code, NULL, 0, 1, FALSE)),
+      t('Checking [foo] brackets style in GESHIFILTER_BRACKETS_ANGLE mode'));
+    $this->assertGeshiFilterHighlighting('[[code language="cpp"]]'. $source_code .'[[/code]]',
+      array(array($source_code, NULL, 0, 1, FALSE)),
+      t('Checking [[foo]] brackets style in GESHIFILTER_BRACKETS_ANGLE mode'));
+    $this->assertGeshiFilterHighlighting('<?php'. $source_code .'?>',
+      array(array($source_code, NULL, 0, 1, FALSE)),
+      t('Checking php code blocks in GESHIFILTER_BRACKETS_ANGLE mode'));
+  }
+
+  function testBracketsOnlySquare() {
+    variable_set('geshifilter_tags', 'code');
+    variable_set('geshifilter_language_enabled_cpp', TRUE);
+    $source_code = "//C++ source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
+    // Enable only square brackets
+    variable_set('geshifilter_tag_styles', array(
+      GESHIFILTER_BRACKETS_SQUARE => GESHIFILTER_BRACKETS_SQUARE,
+    ));
+    // This should be filtered.
+    $this->assertGeshiFilterHighlighting('[code language="cpp"]'. $source_code .'[/code]',
+      array(array($source_code, 'cpp', 0, 1, FALSE)),
+      t('Checking [foo] brackets style in GESHIFILTER_BRACKETS_SQUARE mode'));
+    // This should not be filtered.
+    $this->assertGeshiFilterHighlighting('<code language="cpp">'. $source_code .'</code>',
+      array(array($source_code, NULL, 0, 1, FALSE)),
+      t('Checking angle brackets style in GESHIFILTER_BRACKETS_SQUARE mode'));
+    $this->assertGeshiFilterHighlighting('[[code language="cpp"]]'. $source_code .'[[/code]]',
+      array(array($source_code, NULL, 0, 1, FALSE)),
+      t('Checking [[foo]] brackets style in GESHIFILTER_BRACKETS_SQUARE mode'));
+    $this->assertGeshiFilterHighlighting('<?php'. $source_code .'?>',
+      array(array($source_code, NULL, 0, 1, FALSE)),
+      t('Checking php code blocks in GESHIFILTER_BRACKETS_SQUARE mode'));
+  }
+
+  function testBracketsOnlyDoubleSquare() {
+    variable_set('geshifilter_tags', 'code');
+    variable_set('geshifilter_language_enabled_cpp', TRUE);
+    $source_code = "//C++ source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
+    // Enable only double square brackets
+    variable_set('geshifilter_tag_styles', array(
+      GESHIFILTER_BRACKETS_DOUBLESQUARE => GESHIFILTER_BRACKETS_DOUBLESQUARE,
+    ));
+    // This should be filtered.
+    $this->assertGeshiFilterHighlighting('[[code language="cpp"]]'. $source_code .'[[/code]]',
+      array(array($source_code, 'cpp', 0, 1, FALSE)),
+      t('Checking [[foo]] brackets style in GESHIFILTER_BRACKETS_DOUBLESQUARE mode'));
+    // This should not be filtered.
+    $this->assertGeshiFilterHighlighting('<code language="cpp">'. $source_code .'</code>',
+      array(array($source_code, NULL, 0, 1, FALSE)),
+      t('Checking angle brackets style in GESHIFILTER_BRACKETS_DOUBLESQUARE mode'));
+    $this->assertGeshiFilterHighlighting('[code language="cpp"]'. $source_code .'[/code]',
+      array(array($source_code, NULL, 0, 1, FALSE)),
+      t('Checking [foo] brackets style in GESHIFILTER_BRACKETS_DOUBLESQUARE mode'));
+    $this->assertGeshiFilterHighlighting('<?php'. $source_code .'?>',
+      array(array($source_code, NULL, 0, 1, FALSE)),
+      t('Checking php code blocks in GESHIFILTER_BRACKETS_DOUBLESQUARE mode'));
+  }
+
+  function testBracketsOnlyPhpCodeBlock() {
+    variable_set('geshifilter_tags', 'code');
+    variable_set('geshifilter_language_enabled_cpp', TRUE);
+    $source_code = "//C++ source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
+    // Enable only double square brackets
+    variable_set('geshifilter_tag_styles', array(
+      GESHIFILTER_BRACKETS_PHPBLOCK => GESHIFILTER_BRACKETS_PHPBLOCK,
+    ));
+    // This should be filtered.
+    $this->assertGeshiFilterHighlighting('<?php'. $source_code .'?>',
+      array(array($source_code, 'php', 0, 1, FALSE)),
+      t('Checking php code blocks in GESHIFILTER_BRACKETS_PHPBLOCK mode'));
+    // This should not be filtered.
+    $this->assertGeshiFilterHighlighting('<code language="cpp">'. $source_code .'</code>',
+      array(array($source_code, NULL, 0, 1, FALSE)),
+      t('Checking angle brackets style in GESHIFILTER_BRACKETS_PHPBLOCK mode'));
+    $this->assertGeshiFilterHighlighting('[code language="cpp"]'. $source_code .'[/code]',
+      array(array($source_code, NULL, 0, 1, FALSE)),
+      t('Checking [foo] brackets style in GESHIFILTER_BRACKETS_PHPBLOCK mode'));
+    $this->assertGeshiFilterHighlighting('[[code language="cpp"]]'. $source_code .'[[/code]]',
+      array(array($source_code, NULL, 0, 1, FALSE)),
+      t('Checking [[foo]] brackets style in GESHIFILTER_BRACKETS_PHPBLOCK mode'));
+  }
+
+
+  /**
+   * Check if tags like [c++] and [c#] work
+   * Problem described in http://drupal.org/node/208720
+   */
+  function testSpecialTags() {
+    // Enabled the tags
+    variable_set('geshifilter_language_enabled_cpp', TRUE);
+    variable_set('geshifilter_language_tags_cpp', 'c++');
+    variable_set('geshifilter_language_enabled_csharp', TRUE);
+    variable_set('geshifilter_language_tags_csharp', 'c#');
+    // body material
+    $source_code = "//C++-ish source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
+    // Test the tags
+    $this->assertGeshiFilterHighlighting('<c++>'. $source_code .'</c++>',
+      array(array($source_code, 'cpp', 0, 1, FALSE)),
+      t('Checking <c++>..</c++>'));
+    $this->assertGeshiFilterHighlighting('<c#>'. $source_code .'</c#>',
+      array(array($source_code, 'csharp', 0, 1, FALSE)),
+      t('Checking <c#>..</c#>'));
+  }
+
+  /**
+   * Test if tags like [cpp], [css], [csharp] aren't highjacked by [c]
+   */
+  function testPrefixTags() {
+    // enabled the tags
+    variable_set('geshifilter_language_enabled_c', TRUE);
+    variable_set('geshifilter_language_tags_c', 'c');
+    variable_set('geshifilter_language_enabled_cpp', TRUE);
+    variable_set('geshifilter_language_tags_cpp', 'cpp');
+    variable_set('geshifilter_language_enabled_csharp', TRUE);
+    variable_set('geshifilter_language_tags_csharp', 'csharp');
+    // body material
+    $source_code = "//C++-ish source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
+    // Test the tags
+    $this->assertGeshiFilterHighlighting('<cpp>'. $source_code .'</cpp>',
+      array(array($source_code, 'cpp', 0, 1, FALSE)),
+      t('Source code in <cpp>...</cpp> should work when <c>...</c> is also enabled'));
+    $this->assertGeshiFilterHighlighting('<csharp>'. $source_code .'</csharp>',
+      array(array($source_code, 'csharp', 0, 1, FALSE)),
+      t('Source code in <csharp>...</csharp> should work when <c>...</c> is also enabled'));
+  }
+
+  function testDoNothingMode() {
+    // Enable C++.
+    variable_set('geshifilter_language_enabled_cpp', TRUE);
+    variable_set('geshifilter_language_tags_cpp', 'cpp');
+    // Set default highlighting mode to "do nothing".
+    variable_set('geshifilter_default_highlighting', GESHIFILTER_DEFAULT_DONOTHING);
+    // Body material with some characters ('<' and '&') that would be escaped
+    // except in "do nothing" mode
+    $source_code = "//C++-ish source code\nfor (int i=0; i!=10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n}";
+    // Tests
+    $this->assertGeshiFilterHighlighting('<code>'. $source_code .'</code>',
+      array(array('<code>'. $source_code .'</code>', FALSE, 0, 1, FALSE)),
+      t('Do nothing mode should not touch given source code')
+    );
+    $this->assertGeshiFilterHighlighting('<code language="cpp">'. $source_code .'</code>',
+      array(array($source_code, 'cpp', 0, 1, FALSE)),
+      t('Highlighting with language="cpp" should work when default is "do nothing"')
+    );
+    $this->assertGeshiFilterHighlighting('<cpp>'. $source_code .'</cpp>',
+      array(array($source_code, 'cpp', 0, 1, FALSE)),
+      t('Highlighting with <cpp>...</cpp> should work when default is "do nothing"')
+    );
+  }
+
+  function testTitleAttributeOnCodeBlock(){
+    $source_code = "for (int i=0; i!=10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n}";
+    // No title set
+    $this->assertGeshiFilterHighlighting('<code language="cpp">'. $source_code .'</code>',
+      array(array('geshifilter-title', False, 0, 0, 0)),
+      t('Setting the title attritbute on code block.'),
+      true
+    );
+    // Title set.
+    $this->assertGeshiFilterHighlighting('<code language="cpp" title="Foo the bar!">'. $source_code .'</code>',
+      array(array('<div class="geshifilter-title">Foo the bar!</div>', False, 0, 0, 0)),
+      t('Setting the title attritbute on code block.')
+    );
+  }
+
+  function testTitleAttributeOnInlineCode(){
+    $source_code = "for (int i=0; i!=10; ++i) { fun(i); }";
+    // No title set.
+    $this->assertGeshiFilterHighlighting('<code language="cpp">'. $source_code .'</code>',
+      array(array('<span class="geshifilter">', False, 0, 0, 0)),
+      t('Setting the title attritbute on inline code.')
+    );
+    // Title set.
+    $this->assertGeshiFilterHighlighting('<code language="cpp" title="Foo the bar!">'. $source_code .'</code>',
+      array(array('<span class="geshifilter" title="Foo the bar!">', False, 0, 0, 0)),
+      t('Setting the title attritbute on inline code.')
+    );
+  }
+
+
+  /**
+   * Issue http://drupal.org/node/1010216
+   */
+  function testSquareBracketConfusion() {
+    variable_set('geshifilter_tags', 'code');
+    variable_set('geshifilter_language_enabled_ini', TRUE);
+    $source_code = "[section]\nserver=192.0.2.62  ; IP address\nport=12345";
+    // Enable square brackets
+    variable_set('geshifilter_tag_styles', array(
+      GESHIFILTER_BRACKETS_SQUARE => GESHIFILTER_BRACKETS_SQUARE,
+    ));
+    // This should be filtered.
+    $this->assertGeshiFilterHighlighting('[code]'. $source_code .'[/code]',
+      array(array($source_code, 'text', 0, 1, FALSE)),
+      t('Checking if [code][section]...[/code] works'));
+    $this->assertGeshiFilterHighlighting('[code language="ini"]'. $source_code .'[/code]',
+      array(array($source_code, 'ini', 0, 1, FALSE)),
+      t('Checking if [code language="ini"][section]...[/code] works'));
+  }
+
+}
+

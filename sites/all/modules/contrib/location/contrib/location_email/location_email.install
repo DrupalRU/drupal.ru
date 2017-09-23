@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the location_email module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function location_email_schema() {
+  $schema['location_email'] = array(
+    'description' => 'location_email.module {location} supplementary table.',
+    'fields' => array(
+      'lid' => array(
+        'description' => '{location}.lid',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'email' => array(
+        'description' => 'Email address',
+        'type' => 'varchar',
+        'length' => 254,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('lid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function location_email_install() {
+  // Change weight.
+  db_update('system')
+    ->fields(
+      array(
+        'weight' => 1,
+      )
+    )
+    ->condition('name', 'location_email')
+    ->condition('type', 'module')
+    ->execute();
+}

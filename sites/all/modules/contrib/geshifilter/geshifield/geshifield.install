@@ -1,0 +1,27 @@
+<?php
+/**
+ * @file
+ * Install and unistall related function for the GeSHi Field module.
+ */
+
+/**
+ * Implements hook_field_schema().
+ */
+function geshifield_field_schema($field) {
+  return array(
+    'columns' => array(
+      'sourcecode' => array(
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => FALSE,
+        'sortable' => TRUE
+      ),
+      'language' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'sortable' => TRUE
+      ),
+    ),
+  );
+}

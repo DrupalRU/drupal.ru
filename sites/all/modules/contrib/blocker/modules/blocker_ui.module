@@ -1,0 +1,260 @@
+<?php
+
+define('BLOCKER_UI_URL', 'admin/config/user-interface/blocker');
+
+/**
+* Implements hook_permission().
+*/
+function blocker_ui_permission() {
+  return array(
+    'manage blocker blocks' => array(
+      'title' => t('Manage Blocker blocks'),
+      'description' => t('Access Blocker block management page and associated settings.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function blocker_ui_menu() {
+  $items = array();
+
+  $items['admin/config/user-interface/blocker/add/%/%/%'] = array(
+    'title' => t('Place a block'),
+    'description' => t('Settings for Blocker module'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('blocker_ui_add_form', 5, 6, 7),
+    'access callback' => 'blocker_ui_add_access',
+    'access arguments' => array(5, 6),
+    'file' => 'blocker_ui.admin.inc',
+  );
+
+  $items['admin/config/user-interface/blocker/edit/%blocker'] = array(
+    'title' => t('Edit a block'),
+    'description' => t('Settings for Blocker module'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('blocker_ui_edit_form', 5),
+    'access callback' => 'blocker_ui_access',
+    'access arguments' => array(5),
+    'file' => 'blocker_ui.admin.inc',
+  );
+
+  $items['admin/config/user-interface/blocker/delete/%blocker'] = array(
+    'title' => t('Remove a block'),
+    'description' => t('Delete a Blocker instance'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('blocker_ui_block_delete', 5),
+    'access callback' => 'blocker_ui_access',
+    'access arguments' => array(5),
+    'file' => 'blocker_ui.admin.inc',
+  );
+
+  $items['node/%node/blocks'] = array(
+    'title' => t('Manage blocks'),
+    'description' => t('Manage blocks with Blocker on this content.'),
+    'page callback' => 'blocker_ui_blocks_page',
+    'page arguments' => array(1, 'node'),
+    'access callback' => 'blocker_ui_blocks_page_access',
+    'access arguments' => array('update', 1),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+//  $items['user/%user/blocks'] = array(
+//    'title' => 'Regions',
+//    'description' => 'Manage blocks on this user profile.',
+//    'page callback' => 'blocker_ui_blocks_page',
+//    'page arguments' => array(1, 'user'),
+//    'access arguments' => array('administer users'),
+//    'type' => MENU_LOCAL_TASK,
+//  );
+//
+//  if (module_exists('taxonomy')) {
+//    $items['taxonomy/term/%taxonomy_term/blocks'] = array(
+//      'title' => 'Regions',
+//      'description' => 'Manage blocks on this term.',
+//      'page callback' => 'blocker_ui_blocks_page',
+//      'page arguments' => array(2, 'taxonomy_term'),
+//      'access arguments' => array('administer taxonomy'),
+//      'type' => MENU_LOCAL_TASK,
+//      'weight' => 12,
+//    );
+//  }
+
+  return $items;
+}
+
+function blocker_ui_blocks_page_access($op, $node) {
+  if (!user_access('manage blocker blocks')) {
+    return false;
+  }
+  return node_access($op, $node);
+}
+
+/**
+ * Access callback for adding blockers
+ */
+function blocker_ui_add_access($entity_type, $entity_id) {
+  if (!user_access('manage blocker blocks')) {
+    return false;
+  }
+  $entities = entity_load($entity_type, array($entity_id));
+  return blocker_ui_entity_access_check(reset($entities), 'update');
+}
+
+/**
+ * Access callback for blocker
+ * 
+ * @param type $blocker
+ */
+function blocker_ui_access($blocker) {
+  if (!user_access('manage blocker blocks')) {
+    return false;
+  }
+  $entities = entity_load($blocker->entity_type, array($blocker->entity_id));
+  return blocker_ui_entity_access_check(reset($entities), 'update');
+}
+
+/**
+ * Function to actually check the entity access
+ */
+function blocker_ui_entity_access_check($entity, $op) {
+  // Need to make this more generic for all entities (Entity API module supports
+  // this but not going to make a dependency yet.
+  if ($entity->entity_type == 'node') {
+    return node_access($op, $entity);
+  }
+  elseif(function_exists($entity->entity_type . '_access')) {
+    $function = $entity->entity_type . '_access';
+    return $function($op, $entity);
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Page callback for setting blocks in regions.
+ */
+function blocker_ui_blocks_page($entity, $entity_type) {
+  $block_info = array();
+  $region_blocks = &drupal_static('entity_page_region_blocks');
+  $blocker_info = &drupal_static('entity_page_blocker_info');
+  $blocker_info['entity_type'] = $entity_type;
+  $entity_ids = entity_extract_ids($entity->entity_type, $entity);
+  $blocker_info['entity_id'] = $entity_ids[0];
+
+  $output = '<div class="demo-content">' . t('Demonstation of the main content area.') . '</div>';
+  $theme = variable_get('theme_default', 'bartik');
+
+  $block_regions = blocker_regions($theme);
+  
+  foreach($block_regions as $region) {
+    $region_blocks[$region] = array(); // Set it so we know what to do on page_build.
+    $object = menu_get_object();
+    $blocks = blocker_get_blocks_list($region, $object, drupal_anonymous_user());
+    foreach($blocks as $id => $block) {
+      // Need to load in info which is not stored in the database.
+      if (!isset($block_info[$block->module])) {
+        $block_info[$block->module] = module_invoke($block->module, 'block_info');
+      }
+      $blocker_block = new stdClass();
+      $blocker_block->module = 'blocker';
+      $blocker_block->delta = $block->delta;
+      $blocker_block->region = FALSE;
+      $blocker_block_vars = array(
+        '#children' => '',
+      );
+      $markup = '';
+      if (isset($block->brid)) {
+        // Assign descriptive image.
+        if (!empty($block->title) && $block->title !== '<none>') {
+          $blocker_block->subject = $block->title;
+        } else {
+          $blocker_block->subject = $block_info[$block->module][$block->delta]['info'];
+        }
+        $blocker_block->css_class = $block->css_class;
+        $blocker_block->row = $block->row;
+        $blocker_block->row_class = $block->row_class;
+        $blocker_block_vars['elements']['#block'] = $blocker_block;
+        $blocker_block_vars['elements']['#children'] = _blocker_ui_button($block);
+        $markup = theme('block', $blocker_block_vars);
+      }
+      else {
+        $blocker_block->blocker_ui_classes = array('blocker-ui-global');
+        $blocker_block->subject = $block_info[$block->module][$block->delta]['info'];
+        $blocker_block_vars['elements']['#block'] = $blocker_block;
+        $blocker_block_vars['elements']['#children'] = t('This is a global block.');
+        $markup = theme('block', $blocker_block_vars);
+      }
+      $region_blocks[$region][$id] = array(
+        '#block' => $blocker_block,
+        '#markup' => $markup,
+        '#weight' => $block->weight,
+      );
+    }
+  }
+  return $output;
+}
+
+/**
+ * Implements hook_preprocess_block().
+ * Add any necessary CSS classes to the block.
+ */
+function blocker_ui_preprocess_block(&$variables, $hook) {
+  $block = &$variables['block'];
+  if (isset($block->blocker_ui_classes)) {
+    foreach($block->blocker_ui_classes as $class) {
+      if (!in_array($class, $variables['classes_array'])) {
+        $variables['classes_array'][] = $class;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_page_build()
+ */
+function blocker_ui_page_build(&$page) {
+  // This is for region edit pages.
+  if ($region_blocks = &drupal_static('entity_page_region_blocks')) {
+    $blocker_info = &drupal_static('entity_page_blocker_info');
+    $theme = variable_get('theme_default', 'bartik');
+    $all_regions = system_region_list($theme);
+    foreach($region_blocks as $region => $blocks) {
+      unset($page[$region]); // First clear out any existing blocks.
+      $page[$region]['description'] = array(
+        '#markup' => '<h2 class="block-region">' . $all_regions[$region] . '</h2>',
+        '#weight' => -100,
+      );
+      foreach($blocks as $block_id => $block) {
+        $page[$region][$block_id] = $block;
+      }
+      $page[$region]['add'] = array(
+        '#markup' => l(t('Place a block'), 'admin/config/user-interface/blocker/add/' . $blocker_info['entity_type'] . '/' . $blocker_info['entity_id'] . '/' . $region, array('query' => drupal_get_destination(), 'attributes' => array('class' => array('btn', 'place-block')))),
+        '#weight' => 100,
+      );
+      $page[$region]['#sorted'] = FALSE;
+    }
+  }
+}
+
+function _blocker_ui_button($block) {
+  $output = '';
+  $edit_options = array(
+    'query' => drupal_get_destination(),
+    'attributes' => array('class' => 'button edit'),
+  );
+  $remove_options = array(
+    'query' => drupal_get_destination(),
+    'attributes' => array('class' => 'button remove'),
+  );
+
+  $output .= '<div class="blocker-ui-actions">';
+  $output .= l(t('Edit'), BLOCKER_UI_URL . '/edit/' . $block->brid, $edit_options);
+  $output .= ' ';
+  $output .= l(t('Remove'), BLOCKER_UI_URL . '/delete/' . $block->brid, $remove_options);
+  $output .= '</div>';
+
+  return $output;
+}

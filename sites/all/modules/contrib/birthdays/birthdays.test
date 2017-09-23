@@ -1,0 +1,119 @@
+<?php
+
+/**
+ * @file
+ * Unit tests for the Birthdays module.
+ */
+
+/**
+ * Unit tests for the BirthdaysBirthday class.
+ */
+class BirthdaysBirthdayTestCase extends DrupalUnitTestCase {
+
+  /**
+   * Implements getInfo().
+   */
+  public static function getInfo() {
+    return array(
+      'name' => t('BirthdaysBirthday unit tests'),
+      'description' => t('Unit tests for the BirthdaysBirthday class.'),
+      'group' => t('Birthdays'),
+    );
+  }
+
+  /**
+   * Implements setUp().
+   */
+  public function setUp() {
+    parent::setUp();
+    module_load_include('inc', 'birthdays', 'birthdays_birthday');
+  }
+
+  /**
+   * Test empty values.
+   */
+  public function testFromEmpty() {
+    $this->assertEqual(BirthdaysBirthday::fromEmpty()->toArray(), array('year' => 0, 'month' => 0, 'day' => 0));
+    $this->assertIdentical(BirthdaysBirthday::fromEmpty()->toString(), '');
+    $this->assertIdentical(BirthdaysBirthday::fromEmpty()->toUnixtime(), NULL);
+    $this->assertIdentical(BirthdaysBirthday::fromEmpty()->isEmpty(), TRUE);
+  }
+
+  /**
+   * Test conversion from array.
+   */
+  public function testFromArray() {
+    $this->assertIdentical(BirthdaysBirthday::fromArray(array('month' => 0, 'day' => 0))->toString(), '');
+
+    date_default_timezone_set('UTC');
+    $this->assertIdentical(BirthdaysBirthday::fromArray(array('year' => 1970, 'day' => 1, 'month' => 1))->toUnixtime(), 0);
+
+    $this->assertEqual(BirthdaysBirthday::fromArray(array('month' => 3, 'day' => 7))->toArray(), array('month' => 3, 'day' => 7, 'year' => 0));
+
+    try {
+      BirthdaysBirthday::fromArray(array('foo' => 'bar'));
+      $this->fail(t('Exception expected.'));
+    }
+    catch (InvalidArgumentException $e) {
+      $this->pass($e->getMessage());
+    }
+
+    try {
+      BirthdaysBirthday::fromArray(NULL);
+      $this->fail(t('Exception expected.'));
+    }
+    catch (InvalidArgumentException $e) {
+      $this->pass($e->getMessage());
+    }
+  }
+
+  /**
+   * Test conversion directily given values.
+   */
+  public function testFromDate() {
+    $this->assertIdentical(BirthdaysBirthday::fromDate(0, 0, 0)->isEmpty(), TRUE);
+    $this->assertIdentical(BirthdaysBirthday::fromDate(0, 1, 1)->isEmpty(), FALSE);
+
+    try {
+      BirthdaysBirthday::fromDate(0, 2, 0);
+      $this->fail(t('Exception expected.'));
+    }
+    catch (InvalidArgumentException $e) {
+      $this->pass($e->getMessage());
+    }
+  }
+}
+
+/**
+ * Test utility functions.
+ */
+class BirthdaysUtilityTestCase extends DrupalUnitTestCase {
+
+  /**
+   * Implements getInfo().
+   */
+  public static function getInfo() {
+    return array(
+      'name' => t('Birthdays utility tests'),
+      'description' => t('Unit tests for various utility functions.'),
+      'group' => t('Birthdays'),
+    );
+  }
+
+  /**
+   * Implements setUp().
+   */
+  public function setUp() {
+    parent::setUp();
+    module_load_include('install', 'birthdays', 'birthdays');
+  }
+
+  /**
+   * Test _birthdays_upgrade_tokens().
+   */
+  public function testUpgradeTokens() {
+    $this->assertEqual(_birthdays_upgrade_tokens('Happy birthday !username!'), 'Happy birthday [user:name]!');
+    $this->assertEqual(_birthdays_upgrade_tokens('[site:name] !password'), '[site:name] !password');
+    $this->assertEqual(_birthdays_upgrade_tokens('!date !uri !mailto'), '[date:medium] [site:url] [user:mail]');
+  }
+}

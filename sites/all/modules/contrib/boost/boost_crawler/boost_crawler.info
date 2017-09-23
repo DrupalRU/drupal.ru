@@ -1,0 +1,16 @@
+name = Boost Crawler
+description = Minimal crawler to regenerate the cache as pages are expired.
+package = Performance and scalability
+core = 7.x
+files[] = boost_crawler.module
+recommends[] = boost
+dependencies[] = httprl
+dependencies[] = expire
+configure = admin/config/system/boost/crawler
+
+; Information added by Drupal.org packaging script on 2016-11-14
+version = "7.x-1.2"
+core = "7.x"
+project = "boost"
+datestamp = "1479152632"
+

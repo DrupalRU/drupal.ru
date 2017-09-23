@@ -1,0 +1,16 @@
+name = Vote Up/Down field
+description = Defines field type which contains a voting widget.
+core = 7.x
+dependencies[] = vud
+dependencies[] = field
+package = Fields
+
+files[] = vud_field.module
+files[] = vud_field.install
+
+; Information added by Drupal.org packaging script on 2017-04-18
+version = "7.x-2.0"
+core = "7.x"
+project = "vote_up_down"
+datestamp = "1492492751"
+

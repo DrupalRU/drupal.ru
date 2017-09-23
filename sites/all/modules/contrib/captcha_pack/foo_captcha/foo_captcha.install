@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the FOO CAPTCHA module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ * On uninstall: remove module variables and clear variables cache
+ */
+function foo_captcha_uninstall() {
+  db_query("DELETE FROM {variable} WHERE name LIKE 'foo_captcha_%'");
+  cache_clear_all('variables', 'cache');
+}

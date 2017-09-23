@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the blogapi module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function blogapi_uninstall() {
+  // Remove variables.
+  variable_del('blogapi_node_types');
+  variable_del('blogapi_extensions_default');
+  variable_del('blogapi_uploadsize_default');
+  variable_del('blogapi_usersize_default');
+
+  foreach (user_roles(FALSE, 'administer content with blog api') as $rid => $role) {
+    variable_del('blogapi_extensions_' . $rid);
+    variable_del('blogapi_uploadsize_' . $rid);
+    variable_del('blogapi_usersize_' . $rid);
+  }
+}
+
+
+/**
+ * Implements hook_schema().
+ */
+function blogapi_schema() {
+  $schema['blogapi_files'] = array(
+    'description' => 'Stores information for files uploaded via the blogapi.',
+    'fields' => array(
+      'fid' => array(
+        'description' => 'Primary Key: Unique file ID.',
+        'type' => 'serial',
+      ),
+      'dfid' => array(
+        'description' => 'The {file_manage}.fid of the file that is associated with the file.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'description' => 'The {users}.uid of the user who is associated with the file.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'filepath' => array(
+        'description' => 'Path of the file relative to Drupal root.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'filesize' => array(
+        'description' => 'The size of the file in bytes.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('fid'),
+    'indexes' => array(
+      'uid' => array('uid'),
+    ),
+    'foreign keys' => array(
+      'uid' => array('users' => 'uid'),
+    ),
+  );
+
+  return $schema;
+}

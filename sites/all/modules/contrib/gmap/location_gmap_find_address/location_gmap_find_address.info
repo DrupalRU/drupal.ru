@@ -1,0 +1,14 @@
+name = Location + Gmap 'Find Address' button
+description = "Adds a 'Find Address' button to all location fields that use gmap"
+core = 7.x
+package = Location
+dependencies[] = location_cck
+dependencies[] = location
+dependencies[] = gmap
+
+; Information added by Drupal.org packaging script on 2016-03-11
+version = "7.x-2.11"
+core = "7.x"
+project = "gmap"
+datestamp = "1457698170"
+

@@ -1,0 +1,16 @@
+name = Ridiculously Responsive Social Share Buttons
+description = Adds the ability to use the Riduculously Responsive Social Share Buttons to your Drupal site.
+core = 7.x
+package = RRSSB
+configure = admin/config/content/rrssb
+
+dependencies[] = libraries
+dependencies[] = jquery_update
+files[] = includes/rrssb.drush.inc
+
+; Information added by Drupal.org packaging script on 2016-10-19
+version = "7.x-1.0"
+core = "7.x"
+project = "rrssb"
+datestamp = "1476886268"
+

@@ -1,0 +1,160 @@
+<?php
+/**
+ * @file tagadelic.module
+ * Library to build tagclouds.
+ * @author Bèr Kessels <ber@webschuur.com>
+ * @link http://berk.es
+ */
+
+/**
+ * Implements hook_menu().
+ * @see hook_menu()
+ */
+function tagadelic_taxonomy_menu() {
+  $items['tagadelic_taxonomy'] = array(
+    'title' => 'Tag Cloud',
+    'page callback' => 'tagadelic_taxonomy_cloud',
+    'page arguments' => array('60'),
+    'access arguments' => array("access content"),
+    'expanded' => TRUE,
+  );
+  # Admin pages
+  $items['admin/structure/tagadelic_taxonomy'] = array(
+    'title' => 'Tag Cloud',
+    'page callback' => 'tagadelic_taxonomy_admin',
+    'access arguments' => array("administer site configuration"),
+  );
+  return $items;
+}
+
+/**
+ * Constructs a simple page.
+ * Callback from the menu.
+ */
+function tagadelic_taxonomy_cloud() {
+  return theme("tagadelic_taxonomy_cloud", array("tags" => tagadelic_taxonomy_get_cloud(60)));
+}
+
+function tagadelic_taxonomy_get_cloud($max_amount) {
+  drupal_add_css(drupal_get_path('module', 'tagadelic') . '/tagadelic.css');
+
+  $cloud = new TagadelicCloud("tagadalic_taxonomy");
+
+  foreach (tagadelic_taxonomy_tags_from_db($max_amount) as $term) {
+    $tag = new TagadelicTag($term->tid, $term->name, $term->count);
+    $tag->set_link("taxonomy/term/{$term->tid}");
+
+    $cloud->add_tag($tag);
+  }
+
+  # Because now here wer're returning an array, not HTML.
+  return $cloud->get_tags();
+}
+
+function tagadelic_taxonomy_theme($existing, $type, $theme, $path) {
+  return array(
+    "tagadelic_taxonomy_cloud" => array(
+      "variables" => array(
+        "tags" => array(),
+        "name" => "",
+      ),
+      "path" => "{$path}/templates",
+      "template" => "tagadelic_taxonomy_cloud"
+    ), // tagadelic_taxonomy_cloud
+
+  );
+}
+
+function tagadelic_taxonomy_tags_from_db($max_amount) {
+  $tags = array();
+
+  $query = db_select('taxonomy_index', 'i');
+
+  $alias = $query->leftjoin('taxonomy_term_data', 't', '%alias.tid = i.tid');
+
+  $query->addExpression('COUNT(i.nid)', 'count');
+  $query->addField($alias, 'tid');
+  $query->addField($alias, 'name');
+  $query->addField($alias, 'description');
+  $query->orderBy('count', 'DESC');
+
+  foreach(variable_get("tagadelic_taxonomy_vocabularies", array()) as $vid => $state) {
+    if ($state != $vid) { //Disabled
+      $query->condition('t.vid', $vid, '<>');
+    }
+  }
+
+  $query->range(0, $max_amount)
+    ->groupBy("i.tid");
+
+  return $query->execute();
+}
+
+/********************************************************************
+ *                      Admin pages methods                         *
+ *******************************************************************/
+
+/**
+ * tagadelic_taxonomy_admin Renders admin page
+ *
+ * @returns String $html The Contents of the page, as HTML
+ */
+function tagadelic_taxonomy_admin() {
+  $html = "";
+
+  $form = drupal_get_form("tagadelic_taxonomy_admin_form");
+  $html .= drupal_render($form);
+
+  return $html;
+}
+
+function tagadelic_taxonomy_admin_form($form, &$form_state) {
+  $form    = array();
+  $options = array();
+
+  foreach(taxonomy_get_vocabularies() as $vocabulary) {
+    $options[$vocabulary->vid] = $vocabulary->name;
+  }
+
+  $form["tagadelic_taxonomy_vocabularies"] = array(
+    "#type"          => "checkboxes",
+    "#title"         => "Vocabularies used in Tag Cloud",
+    "#options"       => $options,
+    "#default_value" => variable_get('tagadelic_taxonomy_vocabularies', array()),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Implementation of hook_block_info
+ *
+ * @returns array $blocks
+ */
+function tagadelic_taxonomy_block_info() {
+  return array(
+    'tagadelic_taxonomy' => array(
+      'info' => t('Tagadelic Tag cloud'),
+      'cache' => DRUPAL_NO_CACHE,
+    )
+  );
+}
+
+/**
+ * Implementation of hook_block_view
+ *
+ * @param String $delta name key for the block
+ *
+ * @return array $block renderable array of terms cloud
+ */
+function tagadelic_taxonomy_block_view($delta = '') {
+  $body = theme("tagadelic_taxonomy_cloud", array("tags" => tagadelic_taxonomy_get_cloud(12)));
+  $body .= l(t("More tags"), "tagadelic_taxonomy", array("attributes" => array("class" => array("more"))));
+  return array(
+    'subject' => t('Tag cloud'),
+    'content' => array(
+      '#type'   => 'markup',
+      '#markup' => $body,
+    )
+  );
+}

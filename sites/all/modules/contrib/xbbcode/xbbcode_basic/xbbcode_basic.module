@@ -1,0 +1,278 @@
+<?php
+
+function xbbcode_basic_init() {
+  drupal_add_css(drupal_get_path('module', 'xbbcode_basic') . '/xbbcode_basic.css');
+}
+
+function xbbcode_basic_xbbcode_info() {
+  // Basic emphasis.
+  $tags['i'] = array(
+    'markup' => '<em>{content}</em>',
+    'description' => t('Italic text'),
+    'sample' => t('[i]italic[/i]'),
+  );
+  $tags['b'] = array(
+    'markup' => '<strong>{content}</strong>',
+    'description' => t('Bold text'),
+    'sample' => t('[b]bold[/b]'),
+  );
+  $tags['u'] = array(
+    'markup' => '<span style="text-decoration:underline">{content}</span>',
+    'description' => t('Underlined text'),
+    'sample' => t('[u]underlined[/u]'),
+  );
+  $tags['s'] = array(
+    'markup' => '<del>{content}</del>',
+    'description' => t('Stricken-through text'),
+    'sample' => t('[s]this sentence is false[/s]'),
+  );
+
+  // Font style.
+  $tags['font'] = array(
+    'markup' => '<span style="font-family:{option}">{content}</span>',
+    'description' => t('Changes the font of the text.'),
+    'sample' => t('[font=arial]Text[/font]'),
+  );
+  $tags['size'] = array(
+    'markup' => '<span style="font-size:{option}">{content}</span>',
+    'description' => t('Changes the text size. This requires the <em>unit</em> (pt, px, em) of the size.'),
+    'sample' => t('[size=16pt]Text[/size]'),
+  );
+  $tags['color'] = array(
+    'markup' => '<span style="color:{option}">{content}</span>',
+    'description' => t('Changes the color. You may enter a color word (red) or a hex code <em>with hash sign</em> (#ff0)'),
+    'sample' => t('[color=#f80]Orange text[/color]'),
+  );
+  $tags['sup'] = array(
+    'markup' => '<sup>{content}</sup>',
+    'sample' => 'x[sup]2[/sup]',
+    'description' => t('Sets text to be set smaller and above the line.'),
+  );
+  $tags['sub'] = array(
+    'markup' => '<sub>{content}</sub>',
+    'sample' => 'a[sub]i,j[/sub]',
+    'description' => t('Sets text to be smaller and below the line.'),
+  );
+
+  // Alignment.
+  $tags['left'] = array(
+    'markup' => '<object><p style="text-align:left">{content}</p></object>',
+    'description' => t('Aligns text on the left side.'),
+    'sample' => t('[left]Left-aligned text[/left]'),
+  );
+  $tags['right'] = array(
+    'markup' => '<object><p style="text-align:right">{content}</p></object>',
+    'description' => t('Aligns text on the right side.'),
+    'sample' => t('[right]Right-aligned text[/right]'),
+  );
+  $tags['center'] = array(
+    'markup' => '<object><p style="text-align:center">{content}</p></object>',
+    'description' => t('Aligns text in the center.'),
+    'sample' => t('[center]Centered text[/center]'),
+  );
+  $tags['justify'] = array(
+    'markup' => '<object><p style="text-align:justify">{content}</p></object>',
+    'description' => t('Aligns text as a justified block.'),
+    'sample' => '[justify]Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.[/justify]',
+  );
+
+
+  // Hyperlinks and resources.
+  $tags['url'] = array(
+    'markup' => '<a href="{option}" title="{option}">{content}</a>',
+    'description' => t('Formats a Hyperlink.'),
+    'sample' => t('[url=http://drupal.org]Drupal.org[/url]'),
+  );
+  $tags['img'] = array(
+    'callback' => 'xbbcode_basic_render_img',
+    'sample' => t('[img=65x73]
+@url
+[/img]', array('@url' => url('themes/bartik/logo.png'))),
+    'description' => t('Displays a picture. The size may be set by entering widthxheight as the only option.'),
+  );
+  $tags['node'] = array(
+    'callback' => 'xbbcode_basic_render_nodelink',
+    'sample' => t('[node=1]Node #1[/node]'),
+    'description' => t('Links to a certain node. Unlike a [url] tag, this is passed through the linking function and returns the alias of the node.'),
+  );
+  $tags['wikipedia'] = array(
+    'markup' => '<a title="{content} on Wikipedia" href="http://www.wikipedia.org/wiki/{content}">{content}</a>',
+    'sample' => t('[wikipedia]Drupal[/wikipedia]'),
+    'description' => t('Formats a link to Wikipedia, the free encyclopedia.'),
+  );
+  $tags['youtube'] = array(
+    'callback' => 'xbbcode_basic_render_youtube',
+    'sample' => '[youtube=224x126]rF1X12PE6PY[/youtube]',
+    'description' => t('Embed a Youtube video.'),
+  );
+
+  // Section headings, dividers.
+  $tags['h1'] = array(
+    'markup' => '<h1>{content}</h1>',
+    'description' => t('Level 1 heading. <em>You may want to restrict access to the level 1 and level 2 headings for ordinary users.</em>'),
+    'sample' => t('[h1]Title[/h1]'),
+  );
+  $tags['h2'] = array(
+    'markup' => '<h2>{content}</h2>',
+    'description' => t('Level 2 heading. Use this as the top level on non-node content, as level 1 is used by the site header.'),
+    'sample' => t('[h2]Volume[/h2]'),
+  );
+  $tags['h3'] = array(
+    'markup' => '<h3>{content}</h3>',
+    'description' => t('Level 3 heading. Use this as the top level within nodes as levels 1 and 2 are used by the site and node title.'),
+    'sample' => t('[h3]Chapter[/h3]'),
+  );
+  $tags['h4'] = array(
+    'markup' => '<h4>{content}</h4>',
+    'description' => t('Level 4 heading.'),
+    'sample' => t('[h4]Section[/h4]'),
+  );
+  $tags['h5'] = array(
+    'markup' => '<h5>{content}</h5>',
+    'description' => t('Level 5 heading.'),
+    'sample' => t('[h5]Sub-section[/h5]'),
+  );
+  $tags['h6'] = array(
+    'markup' => '<h6>{content}</h6>',
+    'description' => t('Level 6 heading.'),
+    'sample' => t('[h6]Sub-sub-section[/h6]'),
+  );
+  $tags['hr'] = array(
+    'markup' => '<hr />',
+    'description' => t('Horizontal divider.'),
+    'sample' => '[hr]',
+    'options' => array(
+      'selfclosing' => TRUE,
+    ),
+  );
+
+  // Text objects.
+  $tags['code'] = array(
+    'callback' => 'xbbcode_basic_render_code',
+    'description' => t('Formats the content text as code, in Monospace and with a grey box around it. BBCode tags within this tag will <em>not</em> be parsed.'),
+    'sample' => t("[code]def fib (n):\n  a, b = 0, 1\n  for i in xrange(n):\n    a, b = b, a + 1\n  return a[/code]"),
+    'options' => array(
+      'plain' => TRUE,
+      'nocode' => TRUE,
+    ),
+  );
+  $tags['php'] = array(
+    'callback' => 'xbbcode_basic_render_code',
+    'description' => t('This colors the syntax of PHP code using the in-built PHP highlighting library.'),
+    'sample' => t("[php]<?php\n echo 'Hello World' . 5 . \$variable;\n?>[/php]"),
+    'options' => array(
+      'nocode' => TRUE,
+    ),
+  );
+  $tags['quote'] = array(
+    'markup' => '<blockquote class="xbbcode">{content}</blockquote>',
+    'description' => t('Formats a quote.'),
+    'sample' => t('[quote]This text is quoted.[/quote]'),
+  );
+  $tags['list'] = array(
+    'callback' => 'xbbcode_basic_render_list',
+    'description' => t('Formats a list. ol and ul may be entered as an option, making the list items numbered or non-numbered.'),
+    'sample' => t("[list=ol]\n  [*]Apples\n  [*]Oranges\n  [*]Bananas\n  [/list]"),
+  );
+  $tags['define'] = array(
+    'callback' => 'xbbcode_basic_render_define',
+    'description' => t("Formats a definition list."),
+    'sample' => t("[define]\n  --verbose:This will start the program with full debug messages.\n  --in=IN:This will set the input file to IN.\n  --out=OUT:This will write output to OUT.\n[/define]"),
+  );
+
+  // Semantic meaning.
+  $tags['acronym'] = array(
+    'markup' => '<acronym title="{option}">{content}</acronym>',
+    'sample' => t('[acronym=PHP: Hypertext Preprocessor]PHP[/acronym]'),
+    'description' => t('Puts a tooltip over the contained text, which displays the full meaning of the acronym.'),
+  );
+  $tags['abbr'] = array(
+    'markup' => '<abbr title="{option}">{content}</abbr>',
+    'sample' => t('[abbr=et cetera]etc.[/abbr]'),
+    'description' => t('Identifies the content as an abbreviation and displays the full meaning in a tooltip.'),
+  );
+
+  return $tags;
+}
+
+function xbbcode_basic_render_img($tag) {
+  if ($tag->option) {
+    list($width, $height) = explode('x', $tag->option);
+  }
+  elseif (isset($tag->args['width'], $tag->args['height'])) {
+    list($width, $height) = array($tag->args['width'], $tag->args['height']);
+  }
+  else {
+    list($width, $height) = array(0, 0);
+  }  
+  $scale = $width && $height ? "style='width:{$width}px;height:{$height}px;'" : '';
+  $alt = isset($tag->args['alt']) ? $tag->args['alt'] : "IMAGE($tag->content)";
+
+  return "<img $scale src='$tag->content' alt='$alt' />";
+}
+
+function xbbcode_basic_render_youtube($tag) {
+  list($width, $height) = array(560, 315);
+  if (preg_match('/^(\d+)x(\d+)$/', $tag->option, $match)) {
+    list($width, $height) = array($match[1], $match[2]);
+  }
+  else {
+    $width = $tag->attr('width') ? $tag->attr('width') : $width;
+    $height = $tag->attr('height') ? $tag->attr('height') : $height;
+  }
+  if (preg_match('/(\/v\/|((\?|&amp;|&)v=))(?<id>.*?)(&|$)/', $tag->content, $match)) {
+    $id = $match['id'];
+  }
+  else {
+    $id = $tag->content;
+  }
+  return "<iframe width=\"$width\" height=\"$height\" src=\"http://www.youtube.com/embed/$id\" frameborder=\"0\" allowfullscreen></iframe>";
+}
+
+function xbbcode_basic_render_nodelink($tag) {
+  return l($tag->content, "node/$tag->option", array('html' => TRUE));
+}
+
+function xbbcode_basic_render_list($tag) {
+  $items = explode('[*]', $tag->content);
+  array_shift($items);
+  $text = '<li>' . implode('</li><li>', $items) . '</li>';
+  switch ($tag->option) {
+    case 'ol':
+      return "<ol>$text</ol>";
+
+    case 'ul':
+    default:
+      return "<ul>$text</ul>";
+  }
+}
+
+function xbbcode_basic_render_code($tag) {
+  $text = $tag->content;
+  // Code tags without linebreaks are rendered inline.
+  if ($tag->name == 'code' && !strpos("-$text-", "\n") && !strpos("-$text-", "<br")) {
+    return "<code>$text</code>";
+  }
+
+  $text = trim($text);
+  if ($tag->name == 'php') {
+    $text = preg_replace('/<\/?code>/', '', highlight_string(html_entity_decode($text), TRUE));
+  }
+  $text = '<object><div class="codeblock xbbcode">' . trim($text) . '</div></object>';
+  return $text;
+}
+
+
+function xbbcode_basic_render_define($tag) {
+  $items = explode("\n", $tag->content);
+  $out = '<dl>';
+  foreach ($items as $item) {
+    preg_match('/^((.*?):)?(.*)$/', $item, $match);
+    if ($match[1]) {
+      $out .= "<dt>$match[2]</dt>";
+    }
+    $out .= "<dd>$match[3]</dd>";
+  }
+  $out .= '</dl>';
+  return $out;
+}

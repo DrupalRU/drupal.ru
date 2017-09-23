@@ -1,0 +1,12 @@
+
+Originally developed and implemented by:
+  Ankur Rishi  (user name 'ankur':  http://drupal.org/user/11703 )
+
+
+Old maintainers of the module:
+  Brandon Bergren (user name 'Bdragon' http://drupal.org/user/53801 )
+  Rebecca White (user name 'bec' http://drupal.org/user/81067)
+
+Current module maintainer
+  Andriy Podanenko (user name 'podarok' https://drupal.org/user/116002)
+  

@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * Tests for the Subscriptions module.
+ */
+
+/**
+ * Test case for Subscriptions module.
+ */
+class SubscriptionsWebTestCase extends DrupalWebTestCase {
+
+  /**
+   * Implements getInfo().
+   *
+   * @return array
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Subscriptions Test',
+      'description' => "This is a dummy test to keep d.o's testbot happy; real tests are welcome!",
+      'group' => 'Subscriptions',
+    );
+  }
+
+  /**
+   * Implements setUp().
+   */
+  function setUp() {
+    parent::setUp('token', 'mail_edit', 'subscriptions', 'subscriptions_mail', 'subscriptions_content', 'subscriptions_taxonomy', 'subscriptions_ui', 'subscriptions_blog_ui');
+    $web_user = $this->drupalCreateUser(array('create page content'));
+    $this->drupalLogin($web_user);
+  }
+
+  /**
+   * Dummy test that always succeeds.
+   */
+  function testTrue() {
+    $this->assertTrue(TRUE);
+  }
+
+
+}
+

@@ -1,0 +1,413 @@
+<?php
+
+/**
+ * @file
+ * Provides MetaWeblog services for BlogAPI
+ */
+
+/**
+ * Implements hook_blogapi_info().
+ */
+function blogapi_metaweblog_blogapi_info() {
+  return array(
+    'api_version' => 2,
+    'type' => 'xmlrpc',
+    'name' => 'MetaWeblog',
+    'provides_file_handling' => TRUE,
+  );
+}
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function blogapi_metaweblog_ctools_plugin_api() {
+  list($module, $api) = func_get_args();
+  if ($module == "services" && $api == "services") {
+    return array("version" => "3");
+  }
+}
+
+/**
+ * Implements hook_services_resources().
+ */
+function blogapi_metaweblog_services_resources() {
+  return array(
+    'metaWeblog' => array(
+      'actions' => array(
+        'newPost' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_metaweblog_new_post',
+          'enabled' => 1,
+          'help' => 'Creates a new post, and optionally publishes it.',
+          'args' => array(
+            array(
+              'name' => 'blogid',
+              'type' => 'string',
+              'description' => 'blogid',
+              'source' => array('data' => 'blogid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'content',
+              'type' => 'array',
+              'description' => 'content',
+              'source' => array('data' => 'content'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'publish',
+              'type' => 'boolean',
+              'description' => 'publish',
+              'source' => array('data' => 'publish'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'editPost' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_metaweblog_edit_post',
+          'enabled' => 1,
+          'help' => 'Updates information about an existing post.',
+          'args' => array(
+            array(
+              'name' => 'postid',
+              'type' => 'int',
+              'description' => 'postid',
+              'source' => array('data' => 'postid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'content',
+              'type' => 'array',
+              'description' => 'content',
+              'source' => array('data' => 'content'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'publish',
+              'type' => 'boolean',
+              'description' => 'publish',
+              'source' => array('data' => 'publish'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'getPost' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_metaweblog_get_post',
+          'enabled' => 1,
+          'help' => 'Returns information about a specific post.',
+          'args' => array(
+            array(
+              'name' => 'postid',
+              'type' => 'int',
+              'description' => 'postid',
+              'source' => array('data' => 'postid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'newMediaObject' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_metaweblog_new_media_object',
+          'enabled' => 1,
+          'help' => 'Uploads a file to your webserver.',
+          'args' => array(
+            array(
+              'name' => 'blogid',
+              'type' => 'string',
+              'description' => 'blogid',
+              'source' => array('data' => 'blogid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'file',
+              'type' => 'array',
+              'description' => 'file',
+              'source' => array('data' => 'file'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'getCategories' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_metaweblog_get_categories',
+          'enabled' => 1,
+          'help' => 'Returns a list of all categories to which the post is assigned.',
+          'args' => array(
+            array(
+              'name' => 'blogid',
+              'type' => 'string',
+              'description' => 'blogid',
+              'source' => array('data' => 'blogid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'getRecentPosts' => array(
+          'access callback' => 'services_access_menu',
+          'callback' => 'blogapi_metaweblog_get_recent_posts',
+          'enabled' => 1,
+          'help' => 'Returns a list of the most recent posts in the system.',
+          'args' => array(
+            array(
+              'name' => 'blogid',
+              'type' => 'string',
+              'description' => 'blogid',
+              'source' => array('data' => 'blogid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'postid',
+              'type' => 'int',
+              'description' => 'postid',
+              'source' => array('data' => 'postid'),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * Service callback for metaWeblog.newPost
+ */
+function blogapi_metaweblog_new_post($blogid, $username, $password, $content, $publish) {
+  $postdata = array(
+    'type' => $blogid,
+    'status' => $publish,
+    'title' => $content['title'],
+    'body' => $content['description'],
+  );
+
+  if (module_exists('comment') && array_key_exists('mt_allow_comments', $content)) {
+    switch ($content['mt_allow_comments']) {
+      case 0:
+        $postdata['comment'] = COMMENT_NODE_HIDDEN;
+        break;
+      case 1:
+        $postdata['comment'] = COMMENT_NODE_OPEN;
+        break;
+      case 2:
+        $postdata['comment'] = COMMENT_NODE_CLOSED;
+        break;
+    }
+  }
+
+  $body = $postdata['body'];
+  if (isset($content['mt_excerpt'])) {
+    $body = $content['mt_excerpt'] . '<!--break-->' . $body;
+  }
+  if (isset($content['mt_text_more'])) {
+    $body = $body . '<!--extended-->' . $content['mt_text_more'];
+  }
+
+  $node_id = blogapi_new_post($username, $password, $postdata);
+
+  if (is_numeric($node_id)) {
+    // If this operation is successful, we're supposed to return a string from
+    // metaweblog.newPost.
+    return (string)$node_id;
+  }
+  else {
+    // Otherwise, there is a problem, so just pass through what we got back from
+    // blogapi_new_post().
+    return $node_id;
+  }
+}
+
+/**
+ * Service allback for metaWeblog.editPost
+ */
+function blogapi_metaweblog_edit_post($postid, $username, $password, $content, $publish) {
+  return blogapi_edit_post($postid, $username, $password, $content, $publish);
+}
+
+/**
+ * Service callback for metaWeblog.getPost
+ */
+function blogapi_metaweblog_get_post($postid, $username, $password) {
+  // Validate the user.
+  $user = blogapi_validate_user($username, $password);
+
+  $node = node_load($postid);
+  if (!node_access('view', $node, $user) || !user_access('administer nodes')) {
+    // User does not have permission to view the node.
+    return services_error(t('You are not authorized to view post @postid', array('@postid' => $postid)), 403);
+  }
+
+  return blogapi_format_post_for_xmlrpc($node, TRUE);
+}
+
+/**
+ * Service callback for metaWeblog.newMediaObject
+ */
+function blogapi_metaweblog_new_media_object($blogid, $username, $password, $file) {
+  // Validate the user.
+  $user = blogapi_validate_user($username, $password);
+
+  $extensions = '';
+  $usersize = 0;
+  $uploadsize = 0;
+
+  $roles = array_intersect(user_roles(FALSE, 'manage content with blogapi'), $user->roles);
+
+  foreach ($roles as $rid => $name) {
+    $extensions .= ' ' . strtolower(variable_get("blogapi_extensions_$rid", variable_get('blogapi_extensions_default', 'jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp')));
+    $usersize = max($usersize, variable_get("blogapi_usersize_$rid", variable_get('blogapi_usersize_default', 1)) * 1024 * 1024);
+    $uploadsize = max($uploadsize, variable_get("blogapi_uploadsize_$rid", variable_get('blogapi_uploadsize_default', 1)) * 1024 * 1024);
+  }
+
+  $filesize = strlen($file['bits']);
+
+  if ($filesize > $uploadsize) {
+    return services_error(t('It is not possible to upload the file, because it exceeded the maximum filesize of @maxsize.', array('@maxsize' => format_size($uploadsize))), 413);
+  }
+
+  if (blogapi_space_used($user->uid) + $filesize > $usersize) {
+    return services_error(t('The file can not be attached to this post, because the disk quota of @quota has been reached.', array('@quota' => format_size($usersize))), 413);
+  }
+
+  // Only allow files with whitelisted extensions and convert remaining dots to
+  // underscores to prevent attacks via non-terminal executable extensions with
+  // files such as exploit.php.jpg.
+  $whitelist = array_unique(explode(' ', trim($extensions)));
+
+  $name = basename($file['name']);
+
+  if ($extension_position = strrpos($name, '.')) {
+    $filename = drupal_substr($name, 0, $extension_position);
+    $final_extension = drupal_substr($name, $extension_position + 1);
+
+    if (!in_array(strtolower($final_extension), $whitelist)) {
+      return services_error(t('It is not possible to upload the file, because it is only possible to upload files with the following extensions: @extensions', array('@extensions' => implode(' ', $whitelist))), 403);
+    }
+
+    $filename = str_replace('.', '_', $filename);
+    $filename .= '.' . $final_extension;
+  }
+
+  else {
+    $filename = $name;
+  }
+  $uri = file_build_uri($filename);
+  $data = $file['bits'];
+
+  if (!$data) {
+    return services_error(t('No file sent.'), 400);
+  }
+
+  if (!$file = file_save_data($data, $uri)) {
+    return services_error(t('Error storing file.'), 500);
+  }
+
+  // Store Drupal file ID in separate dfid column and unset fid to use own blogapi serial value
+  $file->dfid = $file->fid;
+  unset($file->fid);
+
+  drupal_write_record('blogapi_files', $file);
+
+  // Return the successful result.
+  return array('url' => file_create_url($file->uri), 'struct');
+}
+
+/**
+ * Service callback for metaWeblog.getCategories
+ * @TODO simplify this callback
+ */
+function blogapi_metaweblog_get_categories($blogid, $username, $password) {
+  return blogapi_get_categories($blogid, $username, $password);
+}
+
+/**
+ * Service callback for metaWeblog.getRecentPosts
+ */
+function blogapi_metaweblog_get_recent_posts($blogid, $username, $password, $number_of_posts) {
+  return blogapi_get_recent_posts($blogid, $username, $password, $number_of_posts);
+}

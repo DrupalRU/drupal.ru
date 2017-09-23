@@ -1,0 +1,582 @@
+<?php
+
+/**
+ * @file
+ * Tests for comment_mover module.
+ */
+
+class CommentMoverTestCase extends DrupalWebTestCase {
+
+  protected $adminUser;
+  protected $webUser;
+  protected $node1;
+  protected $node2;
+  protected $comment1;
+  protected $comment2;
+
+  /**
+   * Returns information about test case.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => t('Comment mover'),
+      'description' => t('Tests for ability to move comments and nodes around.'),
+      'group' => 'Comment Mover',
+    );
+  }
+
+  /**
+   * Test case presets.
+   */
+  public function setUp() {
+    // Install the comment_mover module.
+    parent::setUp(array('comment_mover'));
+
+    $this->adminUser = $this->drupalCreateUser(array(
+      'administer comments',
+      'create article content',
+      'edit own article content',
+    ));
+    $this->webUser = $this->drupalCreateUser(array(
+      'access comments',
+      'post comments',
+    ));
+    $this->drupalLogin($this->adminUser);
+
+    // Enable a 'Clipboard' block in the default theme and place it
+    // to the sidebar.
+    db_merge('block')
+      ->key(array(
+        'module' => 'comment_mover',
+        'delta' => 'comment_mover_clipboard',
+        'theme' => variable_get('theme_default', 'stark'),
+      ))
+      ->fields(array(
+        'status' => 1,
+        'region' => 'sidebar_first',
+        'cache' => DRUPAL_NO_CACHE,
+      ))
+      ->execute();
+
+    // Create 3 article nodes.
+    $this->node1 = $this->drupalCreateNode(array('type' => 'article', 'promote' => 1));
+    $this->node2 = $this->drupalCreateNode(array('type' => 'article', 'promote' => 1));
+    $this->node3 = $this->drupalCreateNode(array('type' => 'article', 'promote' => 1));
+
+    // Create a nested comments tree, only in the node1.
+    $this->comment1 = $this->addCommentTo($this->node1);
+    $this->comment2 = $this->addCommentTo($this->node1);
+    $this->comment2_1 = $this->addCommentTo($this->comment2);
+    $this->comment2_1_1 = $this->addCommentTo($this->comment2_1);
+    $this->comment3 = $this->addCommentTo($this->node1);
+  }
+
+
+  /**
+   * Tests common situations.
+   */
+  public function testMoveCommentBasic() {
+    // Open a node with comments.
+    $this->drupalGet('node/' . $this->node1->nid);
+    $this->cut('comment', $this->comment1->cid);
+    // The page will be updated because the Simpletest is testing our site
+    // without javascript.
+    // Try to cut it again and get the error message.
+    $this->cut('comment', $this->comment1->cid, $error = TRUE);
+
+    // Check for the added record to the clipboard block
+    // Our subject is only 8 characters long, so the link will be
+    // uncutted and without '...'.
+    $this->assertLinkIn('clipboard_list', $this->comment1->subject, 'There is a record in the clipboard');
+    // Check for deleting the record from the clipboard.
+    $this->clickLinkByHref('/comment_mover/remove_from_clipboard/comment/' . $this->comment1->cid . '/nojs');
+    // Check that the clipboard is empty.
+    $this->assertText(t('There are no comments yet'));
+
+    // Ok, now we need to cut it again for pasting.
+    $this->cut('comment', $this->comment1->cid);
+    // Check that the record was created in the clipboard block again.
+    $this->assertLinkIn('clipboard_list', $this->comment1->subject, 'There is a record again in the clipboard');
+    $this->assertLinkByHref('/comment_mover/remove_from_clipboard/comment/' . $this->comment1->cid . '/nojs');
+
+    // Ok, now we can paste the cutted comment.
+    // Open the second node.
+    $this->drupalGet('node/' . $this->node2->nid);
+    $this->clickLink(t('paste'));
+
+    // Check the present of the pasted comment.
+    $this->assertTextIn('comment-wrapper', $this->comment1->subject, 'The comment1 subject exists in the comments');
+    $this->assertTextIn('comment-wrapper', $this->comment1->comment_body[LANGUAGE_NONE][0]['value'], 'The comment1 body exists in the comments');
+    // Try to paste it again.
+    $this->clickLink(t('paste'));
+    $this->assertText(t('Sorry, the clipboard is empty'));
+
+    // Now we need to check that the comment was deleted from the original node.
+    $this->drupalGet('node/' . $this->node1->nid);
+    // Check the absence of the pasted comment.
+    $this->assertTextIn('comment-wrapper', $this->comment1->subject, 'The comment1 subject was removed from the comments', $not_exists = TRUE);
+    $this->assertTextIn('comment-wrapper', $this->comment1->comment_body[LANGUAGE_NONE][0]['value'], 'The comment1 body was removed from the comments', $not_exists = TRUE);
+  }
+
+  /**
+   * Tests when the user tries to cut the comment andpaste it to it's child.
+   */
+  public function testMoveParentToChild() {
+    $this->drupalGet('node/' . $this->node1->nid);
+    $this->cut('comment', $this->comment2->cid);
+    // Try to paste to it's child, for comment2 children are 2_1 and 2_1_1.
+    $this->pasteTo('comment', $this->comment2_1_1->cid);
+    $this->assertText(t("You are trying to paste a parent entity to it's child. We cannot proceed that request"));
+
+    // Check that the comments are in the same places.
+    $comments = $this->getFirstLevelComments();
+    // The [1] (second) comment in the thread should be the same.
+    if (isset($comments[1]['about'])) {
+      $this->assertCommentIdIs($comments[1], $this->comment2->cid);
+    }
+    else {
+      $this->fail("The comment is not on it's place");
+    }
+
+    // Check that the parent comment is in the same place too.
+    $cid = $this->comment2_1_1->cid;
+    // This means "find a comment wich is in the third level of
+    // the comment's hierarhy and it's cid is 4".
+    $comments = $this->xpath("//div[@class='comment-wrapper']/div[@class='indented']/div[@class='indented']/div[@about=:about]", array(':about' => '/comment/' . $cid . '#comment-' . $cid));
+    $this->assertTRUE(isset($comments[0]));
+  }
+
+  /**
+   * Tests converting a cutted node to a comment.
+   */
+  public function testConvertNodeToComment() {
+    // We need a few more child comments to move along with the node.
+    $this->comment4 = $this->addCommentTo($this->node3);
+    $this->comment4_1 = $this->addCommentTo($this->comment4);
+    // Remember the next cid, it will be the id of the newly converted comment.
+    $next_cid = $this->comment4_1->cid + 1;
+    $this->drupalGet('node/' . $this->node3->nid);
+    // Cutting the node which has child comments.
+    $this->cut('node', $this->node3->nid);
+    $this->drupalGet('node/' . $this->node1->nid);
+    $this->pasteTo('comment', $this->comment1->cid);
+
+    // Check the node was converted to the comment at the right place.
+    $comments = $this->getAllComments();
+    // The node was pasted as a child to the first comment, so it should be on
+    // the second ([1]) place now and on the second level in the comment tree.
+    if ($this->checkItIsNextCommentLevel($comments[1])) {
+      $converted_comment = $comments[1]->xpath("div[contains(@class,'comment')]");
+      if (isset($converted_comment[0])) {
+        $this->assertCommentIdIs($converted_comment[0], $next_cid);
+        // Check the child comments of the node was moved under the converted
+        // comment.
+        if ($first_child_comment = $this->assertAndGetChildCommentAtLevel($comments[1], $this->comment4->cid, $level = 1)) {
+          // Check that the child of the child was moved under the converted
+          // comment too.
+          if ($second_level_child_comment = $this->assertAndGetChildCommentAtLevel($comments[1], $this->comment4_1->cid, $level = 2)) {
+            $this->pass('All child comments were moved successfully');
+          }
+          else {
+            $this->fail('The second level child comment of the converted comment was not found');
+          }
+        }
+        else {
+          $this->fail('The first child comment of the converted comment was not found');
+        }
+      }
+      else {
+        $this->fail('The converted comment was not found');
+      }
+    }
+    else {
+      $this->fail('The converted comment was not found');
+    }
+
+    // Check the node was deleted from the site.
+    $this->drupalGet('node/' . $this->node3->nid);
+    $this->assertResponse(404);
+  }
+
+  /**
+   * Tests converting a cutted comment to a node.
+   */
+  public function testConvertCommentToNode() {
+    $next_nid = $this->node3->nid + 1;
+    $this->drupalGet('node/' . $this->node1->nid);
+    // Cutting the node which has child comments.
+    $this->cut('comment', $this->comment2->cid);
+
+    // Submit the converting form.
+    $edit = array();
+    $edit['node_type'] = 'article';
+    $this->drupalPost(NULL, $edit, t('Submit'));
+    $this->assertText(t('All comments were converted succesfully!'));
+    // Check that comment was removed from the node.
+    $comments = $this->getFirstLevelComments();
+    // The [1] (second) comment in the thread should be changed.
+    if (isset($comments[1]['about'])) {
+      $this->assertCommentIdIs($comments[1], $this->comment2->cid, $not = TRUE);
+    }
+
+    // Check that a new node was created on the site.
+    $this->drupalGet('node/' . $next_nid);
+    $this->assertResponse(200);
+    // Check that child comments were moved along with the converted comment.
+    $comments = $this->getAllComments();
+    if (isset($comments[0]) && isset($comments[0]['about'])) {
+      $this->assertCommentIdIs($comments[0], $this->comment2_1->cid);
+    }
+    else {
+      $this->fail('The first level childs were not moved to a new node');
+    }
+    // $comments[1] in our case is the childs of the first comment, because
+    // the first level of comments has a strange structure of divs:
+    // comment, indented(it's child), comment, indented(it's child) etc.
+    if ($this->checkItIsNextCommentLevel($comments[1])) {
+      $childs = $comments[1]->xpath("div[contains(@class,'comment')]");
+      $this->assertCommentIdIs($childs[0], $this->comment2_1_1->cid);
+    }
+    else {
+      $this->fail('The second level childs were not moved to a new node');
+    }
+  }
+
+  /**
+   * Tests converting comment -> node, with fields.
+   */
+  public function testConvertCommentToNodeWithFields() {
+    $next_nid = $this->node3->nid + 1;
+    // Create a field and add it to the 'article' content type and to
+    // it's own comments too.
+    $this->createSimilarTestFields('article', 'field_test_text');
+    // Add a value to this field.
+    $this->comment2->field_test_text['und'][0]['value'] = 'TestTest';
+    comment_save($this->comment2);
+    $this->testConvertCommentToNode();
+    // Check the existent of the new field's value.
+    $node = node_load($next_nid);
+    $this->assertEqual($node->field_test_text['und'][0]['value'], 'TestTest');
+  }
+
+  /**
+   * Tests converting node -> comment, with fields.
+   */
+  public function testConvertNodeToCommentWithFields() {
+    // Create a field and add it to the 'article' content type and to
+    // it's own comments too.
+    $this->createSimilarTestFields('article', 'field_test_text');
+    // Add a value to this field.
+    $this->node3->field_test_text['und'][0]['value'] = 'TestTestTest';
+    node_save($this->node3);
+    $this->testConvertNodeToComment();
+    // Check the existent of the new field's value.
+    $this->drupalGet('node/' . $this->node1->nid);
+    // Our converted node was pasted to a first comment as a child.
+    $comments = $this->getAllComments();
+    if ($this->checkItIsNextCommentLevel($comments[1])) {
+      $converted_comment = $comments[1]->xpath("div[contains(@class,'comment')]");
+      if (isset($converted_comment[0])) {
+        $added_field = $comments[1]->xpath("div[contains(@class,'comment')]//div[contains(@class,'field-name-field-test-text')]//div[contains(@class,'field-item ')]");
+        if (isset($added_field[0])) {
+          $this->assertEqual(strip_tags($added_field[0]->asXML()), 'TestTestTest');
+        }
+        else {
+          $this->fail("The converted comment has no additional field values");
+        }
+      }
+    }
+  }
+
+  /**
+   * Tests the 'change date for flat comments' setting.
+   *
+   * Read more: https://www.drupal.org/node/2269753.
+   */
+  public function testChangeDateForFlatComments() {
+    // Change comments settings to flat_comments for 'article' node type.
+    variable_set('comment_default_mode_article', 0);
+    // We need a few more child comments to move along with the node.
+    $this->comment4 = $this->addCommentTo($this->node3);
+    $this->comment5 = $this->addCommentTo($this->node3);
+    $this->comment5_1 = $this->addCommentTo($this->comment5);
+    // We want to test the complex situation - some nodes in the thread we
+    // moving our comments in were added later the the moved comments.
+    // Therefore, inserted comments will be showing in the middle of thread.
+    // In that case the 'change_date_flat_comments' setting should help.
+    $this->comment2->subject = 'moving comment 2';
+    comment_save($this->comment2);
+    $this->comment2_1->subject = 'moving comment 2_1';
+    comment_save($this->comment2_1);
+    // We don't need third-level comment for this test.
+    comment_delete($this->comment2_1_1->cid);
+    // Open a node and cut this comments.
+    $this->drupalGet('node/' . $this->node1->nid);
+    $this->cut('comment', $this->comment2->cid);
+    // Open another node with a 'flat' comments style.
+    $this->drupalGet('node/' . $this->node3->nid);
+    $this->pasteTo('comment', $this->comment4->cid);
+
+    // The pasted comments should be on the bottom of the thread.
+    // Before the inserting the thread had 3 comments.
+    $comments = $this->getFirstLevelComments();
+    if (isset($comments[3]['about'])) {
+      // We can't assert cids because it was changed.
+      $this->assertCommentTitleIs($comments[3], $this->comment2->subject);
+    }
+    else {
+      $this->fail("The pasted comment in flat style is not on the bottom of the thread");
+    }
+    if (isset($comments[4]['about'])) {
+      $this->assertCommentTitleIs($comments[4], $this->comment2_1->subject);
+    }
+    else {
+      $this->fail("The child of the pasted comment in flat style is not on the bottom of the thread");
+    }
+  }
+
+
+  /**
+   * Tests correct node comment statistics.
+   */
+  public function testNodeCommentStatistics() {
+    // Open a node with comments.
+    $this->drupalGet('node/' . $this->node1->nid);
+    $this->cut('comment', $this->comment2->cid);
+
+    // Paste the cutted comments.
+    $this->drupalGet('node/' . $this->node2->nid);
+    $this->clickLink(t('paste'));
+
+    $nodes_stats = db_select('node_comment_statistics', 'stat')
+      ->fields('stat', array('nid', 'cid', 'comment_count'))
+      ->condition('stat.nid', array($this->node1->nid, $this->node2->nid), 'IN')
+      ->execute()->fetchAllAssoc('nid');
+
+    // From node1 we moved 2, 2_1 and 2_1_1 comments, 1 and 3 only left.
+    $this->assertEqual($nodes_stats[$this->node1->nid]->cid, $this->comment3->cid);
+    $this->assertEqual($nodes_stats[$this->node1->nid]->comment_count, 2);
+
+    // From node1 we moved 2, 2_1 and 2_1_1 comments, 1 and 3 only left.
+    $this->assertEqual($nodes_stats[$this->node2->nid]->cid, $this->comment2_1_1->cid);
+    $this->assertEqual($nodes_stats[$this->node2->nid]->comment_count, 3);
+  }
+
+  /**
+   * Helper functions.
+   */
+
+  /**
+   * Adds a comment to an entity.
+   */
+  private function addCommentTo($entity) {
+    if (isset($entity->type)) {
+      // If it is a node, the comment will have pid = 0
+      $pid = 0;
+    }
+    else {
+      // Otherwise the comment will have pid of his parent comment.
+      $pid = $entity->cid;
+    }
+    $comment_subject = $this->randomName();
+    $comment_body = $this->randomName() . ' ' . $this->randomName() . ' ' . $this->randomName();
+    $comment = (object) array(
+      'cid' => NULL,
+      'nid' => $entity->nid,
+      'pid' => $pid,
+      'uid' => $entity->uid,
+      'status' => COMMENT_PUBLISHED,
+      'subject' => $comment_subject,
+      'language' => LANGUAGE_NONE,
+    );
+    $comment->comment_body[LANGUAGE_NONE][0]['value'] = $comment_body;
+    comment_save($comment);
+    return $comment;
+  }
+
+  /**
+   * Follows a link by the given href (or a part of it).
+   */
+  protected function clickLinkByHref($label, $index = 0) {
+    $url_before = $this->getUrl();
+    $urls = $this->xpath('//a[contains(@href, :href)]', array(':href' => $label));
+    if (isset($urls[$index])) {
+      $url_target = $this->getAbsoluteUrl($urls[$index]['href']);
+      $this->pass(
+        t('Clicked link %label (@url_target) from @url_before', array(
+          '%label' => $label,
+          '@url_target' => $url_target,
+          '@url_before' => $url_before,
+        )
+      ),
+      'Browser');
+      return $this->drupalGet($url_target);
+    }
+    $this->fail(t('Link %label does not exist on @url_before', array('%label' => $label, '@url_before' => $url_before)), 'Browser');
+    return FALSE;
+  }
+
+  /**
+   * Checks that the link is present in div with the given $div_class.
+   */
+  protected function assertLinkIn($div_class, $label, $message = '', $index = 0, $group = 'Other') {
+    $links = $this->xpath('//div[@class=:div_class]//a[normalize-space(text())=:label]', array(':div_class' => $div_class, ':label' => $label));
+    $message = ($message ? $message : t('Link with label %label found.', array('%label' => $label)));
+    return $this->assert(isset($links[$index]), $message, $group);
+  }
+
+  /**
+   * Helper function for looking by your own eyes on the testing screen.
+   */
+  protected function debug($number = '') {
+    file_put_contents('output' . $number . '.html', $this->drupalGetContent());
+  }
+
+  /**
+   * Checks that the text is present in div with the given $div_class.
+   */
+  protected function assertTextIn($div_class, $text, $message = '', $not_exists = FALSE) {
+    $content = $this->xpath('//div[@class=:div_class]', array(':div_class' => $div_class));
+    if (isset($content) && count($content) > 0) {
+      $content = filter_xss($content[0]->asXML(), array());
+    }
+    if (!$message) {
+      $message = !$not_exists ? t('"@text" found', array('@text' => $text)) : t('"@text" not found', array('@text' => $text));
+    }
+    $text = filter_xss($text, array());
+    return $this->assert($not_exists == (strpos($content, $text) === FALSE), $message, $group = 'Other');
+  }
+
+  /**
+   * Checks that the given SimpleXML object is the comment with given cid.
+   */
+  protected function assertCommentIdIs($comment, $cid, $not = FALSE) {
+    if (!$not) {
+      $this->assertEqual($comment['about'], '/comment/' . $cid . '#comment-' . $cid);
+    }
+    else {
+      $this->assertNotEqual($comment['about'], '/comment/' . $cid . '#comment-' . $cid);
+    }
+  }
+
+  /**
+   * Checks that the given SimpleXML object is the comment with given title.
+   */
+  protected function assertCommentTitleIs($comment, $title, $not = FALSE) {
+    if (!$not) {
+      $this->assertEqual(strip_tags($comment->xpath("div[@class='comment-text']/h3/a")[0]->asXML()), strip_tags($title));
+    }
+    else {
+      $this->assertNotEqual(strip_tags($comment->xpath("div[@class='comment-text']/h3/a")[0]->asXML()), strip_tags($title));
+    }
+  }
+
+  /**
+   * Clicks on the 'Cut' link under the given entity.
+   *
+   * @param string $entity_type
+   *   Type of the entity for cutting.
+   * @param in $entity_id
+   *   Id of the cutting entity.
+   * @param bool $error
+   *   A flag for assertion alter - if we expect an error message, then
+   *   this flag should be TRUE.
+   */
+  protected function cut($entity_type, $entity_id, $error = FALSE) {
+    // Don't forget that the page is updating every time we clicking
+    // on some link, no ajax link used!
+    $this->clickLinkByHref('/comment_mover/cut/' . $entity_type . '/' . $entity_id . '/nojs');
+    if (!$error) {
+      $this->assertText(t('The @entity_type was cutted to the clipboard', array('@entity_type' => $entity_type)));
+    }
+    else {
+      $this->assertText(t('Sorry, this @entity_type is already in the clipboard', array('@entity_type' => $entity_type)));
+    }
+  }
+
+  /**
+   * Clicks on the 'Paste' link under the given entity.
+   */
+  protected function pasteTo($entity_type, $entity_id) {
+    $this->clickLinkByHref('/comment_mover/paste/' . $entity_type . '/' . $entity_id);
+  }
+
+  /**
+   * Gets an array of SimpleXML objects only from top level of comments.
+   */
+  protected function getFirstLevelComments() {
+    return $this->xpath("//div[@class='comment-wrapper']/div[contains(@class,'comment')]");
+  }
+
+  /**
+   * Gets an array of SimpleXML objects with comments on top and second level.
+   */
+  protected function getAllComments() {
+    return $this->xpath("//div[@class='comment-wrapper']/div");
+  }
+
+  /**
+   * Checks that the SimpleXMLObject of comment has a next level attribute.
+   */
+  protected function checkItIsNextCommentLevel($comment) {
+    return isset($comment['class']) && $comment['class'] == 'indented';
+  }
+
+  /**
+   * Checks that the comment with $cid is exists under $parent on the $level.
+   *
+   * Note: the level starts from 0, but 0 equals the parent itself, so the first
+   * child comment will be at level 1.
+   */
+  protected function assertAndGetChildCommentAtLevel($parent, $cid, $level = 0) {
+    $prefix = '';
+    for ($i = 0; $i < $level; $i++) {
+      $prefix .= "div[@class='indented']/";
+    }
+    $prefix .= "div[contains(@class,'comment')]";
+    $child = $parent->xpath($prefix);
+    if (isset($child[0]) && isset($child[0]['about'])) {
+      if ($child[0]['about'] == '/comment/' . $cid . '#comment-' . $cid) {
+        return $child;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
+   * Creates a text field and two field instances in node and in it's comments.
+   */
+  protected function createSimilarTestFields($node_type, $field_name) {
+    if (!field_info_field($field_name)) {
+      $field = array(
+        'field_name' => $field_name,
+        'type' => 'text',
+      );
+      field_create_field($field);
+
+      // Create the instance on the bundle.
+      $instance = array(
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'label' => $field_name,
+        'bundle' => $node_type,
+        'widget' => array(
+          'type' => 'textfield',
+        ),
+      );
+      field_create_instance($instance);
+
+      // Create the instance on the bundle.
+      $instance = array(
+        'field_name' => $field_name,
+        'entity_type' => 'comment',
+        'label' => $field_name,
+        'bundle' => 'comment_node_' . $node_type,
+        'widget' => array(
+          'type' => 'textfield',
+        ),
+      );
+      field_create_instance($instance);
+    }
+  }
+}

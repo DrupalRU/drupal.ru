@@ -1,0 +1,15 @@
+name = Comment mover
+description = This module enables you to move comments and nodes around.
+dependencies[] = node
+dependencies[] = comment
+core = 7.x
+configure = admin/config/system/comment_mover
+files[] = tests/comment_mover.test
+testing_api = 2.x
+
+; Information added by Drupal.org packaging script on 2015-04-11
+version = "7.x-1.2"
+core = "7.x"
+project = "comment_mover"
+datestamp = "1428790386"
+

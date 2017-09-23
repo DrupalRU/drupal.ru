@@ -1,0 +1,306 @@
+<?php
+/**
+ * @file
+ * Contains the drupal hooks implementations and calls to included objects.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function comment_mover_menu() {
+  $items['comment_mover/cut/%/%/%'] = array(
+    'title' => 'Cut the comment',
+    'page callback' => 'comment_mover_cut_comment_controller',
+    'page arguments' => array(2, 3, 4),
+    'delivery callback' => 'ajax_deliver',
+    'access arguments' => array('administer comments'),
+    'file' => 'comment_mover.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['comment_mover/remove_from_clipboard/%/%/%'] = array(
+    'title' => 'Remove the comment from the clipboard',
+    'page callback' => 'comment_mover_remove_from_clipboard_controller',
+    'page arguments' => array(2, 3, 4),
+    'delivery callback' => 'ajax_deliver',
+    'access arguments' => array('administer comments'),
+    'file' => 'comment_mover.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['comment_mover/clear_clipboard'] = array(
+    'title' => 'Clear the clipboard',
+    'page callback' => 'comment_mover_clear_clipboard_controller',
+    'access arguments' => array('administer comments'),
+    'file' => 'comment_mover.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['comment_mover/paste/%/%'] = array(
+    'title' => 'Paste comments from the clipboard',
+    'page callback' => 'comment_mover_paste_from_clipboard_controller',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('administer comments'),
+    'file' => 'comment_mover.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['admin/config/system/comment_mover'] = array(
+    'title' => 'Comment mover',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('comment_mover_settings_form'),
+    'access arguments' => array('administer comments'),
+    'file' => 'comment_mover.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function comment_mover_theme() {
+  return array(
+    'comment_mover_clipboard_list' => array(
+      'variables' => array('clipboard_comments' => array()),
+    ),
+    'comment_mover_clipboard_block' => array(
+      'variables' => array(
+        'clipboard_list' => NULL,
+        'convert_form' => NULL,
+        'clear_link' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_comment_view().
+ *
+ * Adds 'cut' and 'paste' links to every comment.
+ * The css class 'comment-id-##' is necessary to print the result messages
+ * after ajax processing.
+ */
+function comment_mover_comment_view($comment) {
+  if (empty($comment->in_preview) && user_access('administer comments')) {
+    $comment->content['links']['#attributes']['class'][] = 'comment-id-' . $comment->cid;
+    $comment->content['links']['comment']['#links']['cut'] = array(
+      'title' => t('cut'),
+      'attributes' => array(
+        'class' => array('use-ajax'),
+      ),
+      'href' => "comment_mover/cut/comment/$comment->cid/nojs",
+      'query' => array('destination' => $_GET['q']),
+    );
+    $comment->content['links']['comment']['#links']['paste'] = array(
+      'title' => t('paste'),
+      'href' => "comment_mover/paste/comment/$comment->cid",
+      'query' => array('destination' => $_GET['q']),
+    );
+    // This needed for the ajax processing - scripts will be attached
+    // to every page with comments.
+    drupal_add_library('system', 'drupal.ajax');
+    drupal_add_library('system', 'jquery.form');
+  }
+}
+
+/**
+ * Implements hook_node_view().
+ *
+ * Adds 'paste' link to every node.
+ */
+function comment_mover_node_view($node, $view_mode) {
+  if (empty($node->in_preview) && user_access('administer comments')) {
+    $node->content['links']['node']['#links']['cut'] = array(
+      'title' => t('cut'),
+      'attributes' => array(
+        'class' => array('use-ajax'),
+      ),
+      'href' => "comment_mover/cut/node/$node->nid/nojs",
+      'query' => array('destination' => $_GET['q']),
+    );
+    $node->content['links']['node']['#links']['paste'] = array(
+      'title' => t('paste'),
+      'href' => "comment_mover/paste/node/$node->nid",
+      'query' => array('destination' => $_GET['q']),
+    );
+  }
+}
+
+
+/**
+ * Moves comment to a new parent node or comment, children of comment along.
+ *
+ * @param int $cids
+ *   An array of comments ids for moving.
+ * @param object $parent_entity
+ *   An entity will be parent for moving comment itself (not for his children).
+ * @param int $change_pid
+ *   When we move first level of comments (comments themselves), we should
+ *   change their pid for an id of parent entity, and then $change_pid = TRUE.
+ *   But when we move children of moved comment, we shouldn't change their pid
+ *   and then $change_pid = FALSE.
+ */
+function comment_mover_move_multiple($cids, $parent_entity, $change_pid = FALSE) {
+  module_load_include('inc', 'comment_mover', 'includes/clipboard');
+  $clipboard = new CommentMoverClipboard();
+  module_invoke_all('comment_mover_prepare_to_move_comments', $cids, $parent_entity);
+  // The clipboard should contains only the first upper parent of each cutted
+  // comment's thread.
+  $cids = $clipboard->getCidsCleanedFromConflicts($cids);
+  // Check the edge situation - when we try to paste a comment to it's child.
+  if ($clipboard->checkEdgeParentIsChild($cids, $parent_entity)) {
+    drupal_set_message(t("You are trying to paste a parent entity to it's child. We cannot proceed that request"), "error");
+    return FALSE;
+  }
+  module_load_include('inc', 'comment_mover', 'includes/moving_bundle');
+  $bundle = new CommentMoverMovingBundle($cids);
+  $bundle->move($parent_entity, $change_pid);
+}
+
+/**
+ * Converts nodes to comments and moves them to a new parent comment.
+ *
+ * @param int $nids
+ *   An array of comments ids for moving.
+ * @param object $parent_entity
+ *   An entity will be parent for moving comment itself (not for his children).
+ */
+function comment_mover_move_nodes($nids, $parent_entity) {
+  module_invoke_all('comment_mover_prepare_to_move_nodes', $nids, $parent_entity);
+  module_load_include('inc', 'comment_mover', 'includes/moving_bundle');
+  $bundle = new CommentMoverMovingBundle(NULL, $nids);
+  $bundle->convertNodesToCommentsAndMove($parent_entity);
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function comment_mover_block_info() {
+  $blocks['comment_mover_clipboard'] = array(
+    'info' => t('Comment mover clipboard'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function comment_mover_block_view($delta = '') {
+  $block = array();
+  if ($delta == 'comment_mover_clipboard' && user_access('administer comments')) {
+    module_load_include('inc', 'comment_mover', 'includes/clipboard');
+    $clipboard = new CommentMoverClipboard();
+    $block['subject'] = t('Comments clipboard');
+    $block['content'] = $clipboard->renderClipboardBlock();
+  }
+  return $block;
+}
+
+
+/**
+ * Renders a list of comments in the clipboard.
+ */
+function theme_comment_mover_clipboard_list($variables) {
+  $output = '';
+  $cross_image = theme('image',
+    array(
+      'path' => drupal_get_path('module', 'comment_mover') . '/images/cross.png',
+      'alt' => t('Remove'),
+      'title' => t('Remove from clipboard'),
+    )
+  );
+  foreach ($variables['clipboard_comments'] as $clipboard_comment) {
+    if (isset($clipboard_comment['cid'])) {
+      $entity_type = 'comment';
+      $entity_id = $clipboard_comment['cid'];
+    }
+    else {
+      $entity_type = 'node';
+      $entity_id = $clipboard_comment['nid'];
+    }
+    $delete_link = l(
+      $cross_image,
+      "comment_mover/remove_from_clipboard/" . $entity_type . '/' . $entity_id . "/nojs",
+      array(
+        'attributes' => array(
+          'class' => array('use-ajax', 'cross-image'),
+        ),
+        'html' => TRUE,
+        'query' => array('destination' => $_GET['q']),
+      )
+    );
+    $output .= $delete_link;
+    $output .= l($clipboard_comment['title'], $entity_type . '/' . $entity_id, array('attributes' => array('target' => '_blank')));
+    $output .= '<br/>';
+  }
+  return $output;
+}
+
+/**
+ * Renders the 'Comments clipboard' block.
+ */
+function theme_comment_mover_clipboard_block($variables) {
+  return '<div class="clipboard_list">' . $variables['clipboard_list'] . '</div>'
+       . render($variables['convert_form'])
+       . '<div class="clear_clipboard">' . $variables['clear_link'] . '</div>';
+}
+
+
+/**
+ * Implements hook_form().
+ *
+ * The form to convert comments into nodes.
+ */
+function comment_mover_convert_form($form, $form_state) {
+  $types = array_keys(node_type_get_types());
+  $types = array_combine($types, $types);
+  $form['node_type'] = array(
+    '#title' => t('Convert to:'),
+    '#type' => 'select',
+    '#options' => $types,
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+
+  if (module_exists('ctools')) {
+    $form['node_type']['#attributes'] = array('class' => array('ctools-auto-submit'));
+    $form['submit']['#attributes'] = array(
+      'class' => array('ctools-auto-submit-click', 'ctools-use-ajax'),
+      'style' => 'display:none;',
+    );
+    ctools_add_js('auto-submit');
+    $form['node_type']['#options'] = array('<none>' => t('<none>')) + $form['node_type']['#options'];
+  }
+
+  return $form;
+}
+
+/**
+ * Implements hook_submit().
+ *
+ * Converts all comments from clipboard to a node with selected node type.
+ */
+function comment_mover_convert_form_submit($form, &$form_state) {
+  $node_type = $form_state['values']['node_type'];
+  module_load_include('inc', 'comment_mover', 'includes/clipboard');
+  $clipboard = new CommentMoverClipboard();
+  if ($cids = $clipboard->getCuttedCids()) {
+    module_load_include('inc', 'comment_mover', 'includes/moving_bundle');
+    $bundle = new CommentMoverMovingBundle($cids);
+    if ($bundle->convertCommentsToNodes($node_type)) {
+      drupal_set_message(t('All comments were converted succesfully!'));
+      $clipboard->clearTheClipboard();
+    }
+    else {
+      drupal_set_message(t('There was an unknown error upon converting the comments.'), 'error');
+    }
+  }
+  else {
+    drupal_set_message(t('There are no comments in the clipboard!'), 'error');
+  }
+}

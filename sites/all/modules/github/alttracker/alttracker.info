@@ -1,0 +1,10 @@
+name = Alternative Tracker
+description = Enables tracking of recent content for users.
+dependencies[] = comment
+dependencies[] = altpager
+;dependencies[] = fontawesome
+version = 7.x-dev
+core = 7.x
+files[] = tracker.test
+
+

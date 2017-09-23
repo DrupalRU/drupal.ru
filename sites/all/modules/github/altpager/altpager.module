@@ -1,0 +1,221 @@
+<?php
+
+/**
+ * @file
+ * Alternative Pager.
+ *
+ * API for alternative pager. It is alternative view point on
+ * Pager functionality.
+ */
+
+/**
+ * Implementation of hook_views_api().
+ */
+function altpager_views_api() {
+  return array(
+    'api' => '3',
+    'path' => drupal_get_path('module', 'altpager') . '/includes/views',
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function altpager_theme() {
+  return array(
+    'altpager' => array(
+      'variables' => array(
+        'total' => 0,
+        'items' => '',
+      ),
+      'template' => 'altpager',
+    ),
+    'altpager_link' => array(
+      'variables' => array(
+        'count' => 0,
+        'title' => '',
+      ),
+    ),
+  );
+}
+
+/**
+ * Default items count pager.
+ *
+ * @return array
+ *   Array list items.
+ */
+function altpager_default_items() {
+  $max_count = altpager_count_all_items();
+
+  $items = altpager_items_elements();
+  $items[$max_count] = $max_count;
+
+  return $items;
+}
+
+/**
+ * Get/Set default values ​​for the number output node.
+ *
+ * @param array $items
+ *   Array with options amount of output nodes.
+ *
+ * @return array
+ *   List elements.
+ */
+function altpager_items_elements($items = array()) {
+  static $my_items;
+
+  if ($items) {
+    $my_items = $items;
+  }
+
+  if (!$my_items) {
+    $my_items = array(
+      10 => 10,
+      20 => 20,
+      50 => 50,
+      100 => 100,
+      200 => 200,
+      400 => 400,
+      600 => 600,
+    );
+  }
+
+  return $my_items;
+}
+
+/**
+ * Get/Set count all items.
+ *
+ * @param mixed $count
+ *   Count all items.
+ *
+ * @return int
+ *   Count items.
+ */
+function altpager_count_all_items($count = FALSE) {
+  static $items_count;
+
+  if ($count) {
+    $items_count = $count;
+  }
+
+  return $items_count;
+}
+
+/**
+ * Count items viewed in current page.
+ *
+ * @return int|mixed
+ *   Count items viewed.
+ */
+function altpager_count_items_viewed() {
+  $max_count = altpager_count_all_items();
+
+  $default_items = altpager_default_items();
+  $min_count_items = key($default_items);
+
+  $apcount = altpager_apcount();
+  $count = $apcount ? $apcount : $min_count_items;
+
+  if ($count > $max_count || $count < 0) {
+    $count = $max_count;
+  }
+
+  if (!in_array($count, $default_items)) {
+    $count = $min_count_items;
+  }
+
+  return $count;
+}
+
+/**
+ * Get/Set count output items.
+ *
+ * @param int $count
+ *   Set count node output.
+ *
+ * @return int
+ *   Count node output.
+ */
+function altpager_apcount($count = 0) {
+  static $apcount;
+
+  if ($count) {
+    $apcount = $count;
+  }
+
+  if (!$apcount) {
+    $apcount = isset($_GET['apcount']) ? (int) $_GET['apcount'] : FALSE;
+  }
+
+  return $apcount;
+}
+
+/**
+ * Process variables for altpager.tpl.php.
+ *
+ * The $variables array contains the following arguments:
+ * - $total: Count all items.
+ * - $items: Items for output.
+ *
+ * @see altpager.tpl.php
+ */
+function template_preprocess_altpager(&$variables) {
+  $max_count = altpager_count_all_items();
+
+  drupal_add_css(drupal_get_path('module', 'altpager') . '/altpager.css');
+
+  $variables['items'] = '';
+  $items = altpager_default_items();
+  $min_count = key($items);
+
+  if ($max_count > $min_count) {
+    foreach ($items as $count => $title) {
+      if ($count <= $max_count) {
+        $variables['items'] .= theme('altpager_link', array(
+          'count' => $count,
+          'title' => $title,
+        ));
+      }
+    }
+  }
+
+  $variables['total'] = $max_count;
+}
+
+/**
+ * Link theme.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - count: Count items viewed.
+ *   - text: Item title.
+ *
+ * @return string
+ *   Link.
+ */
+function theme_altpager_link($variables) {
+  $query = array();
+  $query['apcount'] = $variables['count'];
+  $cookie = isset($_COOKIE) ? $_COOKIE : array();
+
+  $exclude = array_merge(array('q', 'apcount', 'pass'), array_keys($cookie));
+  $querystring = drupal_get_query_parameters($_GET, $exclude);
+
+  if (!empty($querystring)) {
+    $query = array_merge($querystring, $query);
+  }
+
+  $count_items = altpager_count_items_viewed();
+
+  if ($count_items == $variables['count']) {
+    $output = '<li class="active">' . $variables['title'] . '</li>';
+  }
+  else {
+    $output = '<li>' . l($variables['title'], $_GET['q'], array('query' => $query)) . '</li>';
+  }
+
+  return $output;
+}

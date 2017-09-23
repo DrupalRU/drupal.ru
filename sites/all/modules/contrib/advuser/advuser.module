@@ -1,0 +1,909 @@
+<?php
+// $Id$
+/**
+ * @file
+ * Advanced user module allows you to select users based on an advanced set of
+ * filtering and apply actions to block, unblock, delete or email the selected
+ * users.
+ *
+ **/
+
+/**
+ * @defgroup advuser_constants Advanced User constants
+ * @{
+ */
+define('ADVUSER_SUBSTITUTION_TEXT', '<strong>Substitution variables</strong> available in subject and email body:<br/>!tokens');
+
+define('ADVUSER_DEFAULT_NEW_SUBJECT', '[[site:name]] On [user:created] a new user registered as [user:name:raw].');
+
+define('ADVUSER_DEFAULT_NEW_MAIL', "=====  New User Information:  =====
+    User: [user:name:raw]
+    Mail: [user:mail]
+ Created: [user:created]
+  Status: [user:status]
+Timezone: [user:timezone]
+Language: [user:language]
+   Theme: [user:theme]
+
+User account administration page at [user:edit-url] for [site:name]");
+
+define('ADVUSER_DEFAULT_MODIFY_SUBJECT', '[[site:name]] User [user:name:raw] has modified their account.');
+
+define('ADVUSER_DEFAULT_MODIFY_MAIL', "=====  Updated User Information:  =====
+    User: [user:name:raw]
+    Mail: [user:mail]
+ Created: [user:created]
+  Status: [user:status]
+Timezone: [user:timezone]
+Language: [user:language]
+   Theme: [user:theme]
+
+User account administration page at [account-url] for [site-name]");
+
+/**
+ * @} End of "defgroup advuser_constants".
+ */
+
+/**
+ * @defgroup advuser_hook Advanced User hook implementations
+ * @{
+ * Functions in this group are implementations of Drupal hooks.  Each function
+ * should provide it's \@ingroup advuser_hook.
+ * @} End of "defgroup advuser_hook".
+ */
+
+/**
+ * @ingroup advuser_hook
+ * Implementation of hook_init().
+ */
+function advuser_init() {
+  if (user_access('administer advuser') || user_access('receive email advuser')
+      || user_access('send email advuser') || user_access('access advuser')) {
+    drupal_add_css(drupal_get_path('module', 'advuser') . '/css/advuser.css', 'module');
+
+    // The persistent data for the module is stored in the session.
+    $advuser = &$_SESSION['advuser'];
+    if (!isset($advuser)) {
+      $advuser = array(
+        'accounts' => array(),
+        'deselected' => array(),
+        'filters' => array(),
+        'phase' => array('id' => 0),
+        'return' => FALSE,
+        'selectall' => FALSE,
+      );
+    }
+  }
+}
+
+/**
+ * @ingroup advuser_hook
+ * Implementation of hook_help().
+ */
+function advuser_help($path, $arg) {
+  $output = NULL;
+  switch ($path) {
+    case 'admin/help#advuser': {
+      $output = '<p>';
+      $output .= t('This module provides greater control of filtering of the
+users and allows for persistent selection of users between multiple pages of
+user data.  Besides the normal actions of block, unblock, delete, role
+assignment and role unassignment you can also select all filtered users,
+deselect all users and email the selected users.');
+      $output .= '</p><p>';
+      $output .= t('The filtering selection is a multipart form where you
+first select the field you want to filter by.  Lets use the mail address for
+example as the selected field.  You then press Continue and you choose the
+operator for the data that you enter then you click Filter.  If you chose the
+wrong field you can go back to the field selection by clicking the Back button.
+Once you have one filter in place you can refine the filter with and/or
+conjunctors and another field type or the same field type.');
+      $output .= '</p>';
+    } break;
+    case 'admin/people/advuser': {
+      $output = '<p>';
+      $output .= t('Advanced User module provides filtering of users with
+persistent selections of users between mulitple pages of the users list.  The
+module also adds an action for email to be sent to the selected user set as
+well as the normal actions already available.');
+      $output .= '</p>';
+    } break;
+  }
+  return $output;
+}
+
+/**
+ * @ingroup advuser_hook
+ * Implementation of hook_permission().
+ */
+function advuser_permission() {
+  return array(
+    'administer advuser' => array('title' => t('Administer advuser')),
+    'access advuser' => array('title' => t('Access advuser')),
+    'send email advuser' => array('title' => t('Send advuser email')),
+    'receive email advuser' => array('title' => t('Receive advuser email')),
+  );
+}
+
+/**
+ * @ingroup advuser_hook
+ * Implementation of hook_menu().
+ */
+function advuser_menu() {
+
+  $items['admin/config/people/advuser'] = array(
+    'title' => 'Advanced User',
+    'description' => 'Advanced User Settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('advuser_settings'),
+    'access arguments' => array('administer advuser'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'forms/advuser_settings.inc',
+  );
+
+  $items['admin/people/advuser'] = array(
+    'title' => 'Advanced',
+    'description' => 'List, add, edit and email users.',
+    'page callback' => 'advuser_admin',
+    'page arguments' => array('list'),
+    'access callback' => 'advuser_admin_access_',
+    'access arguments' => array('access advuser', 'administer users'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'forms/advuser_admin.inc',
+  );
+
+  $items['admin/people/advuser/confirm/email'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('advuser_multiple_email_confirm'),
+    'access callback' => 'advuser_admin_access_',
+    'access arguments' => array('access advuser', 'administer users', 'send email advuser'),
+    'type' => MENU_CALLBACK,
+    'file' => 'forms/advuser_multiple_email_confirm.inc'
+  );
+
+  $items['admin/people/advuser/confirm/delete'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('advuser_multiple_delete_confirm'),
+    'access callback' => 'advuser_admin_access_',
+    'access arguments' => array('access advuser', 'administer users'),
+    'type' => MENU_CALLBACK,
+    'file' => 'forms/advuser_multiple_delete_confirm.inc'
+  );
+
+  return $items;
+}
+
+/**
+ * Access callback for menu items.
+ */
+function advuser_admin_access_() {
+  $accesses = func_get_args();
+  if (empty($accesses)) {
+    $accesses = array('access advuser');
+  }
+  foreach ($accesses as $access) {
+    $ret = user_access($access);
+    if (!$ret) {
+      break;
+    }
+  }
+  return $ret;
+}
+
+/**
+ * @ingroup advuser_advuser_hook
+ * Implement a hook_advuser_operations function.
+ */
+function advuser_advuser_operations($form_state = array()) {
+  $operations = array(
+    'saveselect' => array(
+      'label' => t('Save selection criteria'),
+    ),
+    'selectall' => array(
+      'label' => t('Select all filtered users'),
+    ),
+    'deselectall' => array(
+      'label' => t('Deselect all users'),
+    ),
+    'email' => array(
+      'label' => t('Email selected users'),
+    ),
+    'delete' => array(
+      'label' => t('Delete the selected users'),
+    ),
+  );
+
+  return $operations;
+}
+
+/**
+ * @ingroup advuser_hook
+ * Implementation of hook_mail
+ */
+function advuser_mail($key, &$message, $params) {
+  $message = array_merge($message, $params);
+}
+
+/**
+ * @private
+ * Return a list of users to send notification of user changes.
+ *
+ * @return resource         // The result of the query.
+ */
+function _advuser_dbquery_users_to_notify() {
+  $user_where = users_by_access_('receive email advuser');
+  return empty($user_where)
+    ? FALSE
+    : db_select('users', 'u')
+      ->fields('u')
+      ->condition('uid', $user_where, 'IN')
+      ->execute();
+}
+
+/**
+ * @public
+ * List of users for given roles
+ *
+ * @param string $perm                  // The string permission.
+ * @return array                        // An array of uid.
+ */
+function users_by_access_($perm) {
+  $ret = array();
+  $result = db_query("SELECT ur.uid from {role_permission} rp LEFT OUTER JOIN {users_roles} ur ON ur.rid = rp.rid WHERE rp.permission LIKE '%$perm%'");
+  $result->execute();
+  foreach ($result as $data) {
+    if (isset($data->uid)) {
+      $ret[] = (int)$data->uid;
+    }
+  }
+  if (!in_array(1, $ret, TRUE)) {
+    if (variable_get('advuser_notify_uid1', FALSE)) {
+      $ret[] = 1;
+    }
+  }
+  return $ret;
+}
+
+/**
+ * @private
+ * Notify account registrations and modifications for the given users of a role.
+ *
+ * @param string $op
+ * @param object $account
+ */
+function _advuser_receive_notification_by_role($op, $account) {
+  static $accounts = array();
+
+  $from = variable_get("site_mail", ini_get("sendmail_from"));
+
+  switch ($op) {
+    case 'insert': {
+      $notify = variable_get('advuser_new_notify', FALSE) &&
+              ! user_access('administer users');
+      $body = variable_get('advuser_new_mail', t(ADVUSER_DEFAULT_NEW_MAIL));
+      $subject = variable_get('advuser_new_subject', t(ADVUSER_DEFAULT_NEW_SUBJECT));
+    } break;
+    case 'update': {
+      $notify = variable_get('advuser_modify_notify', FALSE) &&
+              ! user_access('administer users');
+      $body = variable_get('advuser_modify_mail', t(ADVUSER_DEFAULT_NEW_MAIL));
+      $subject = variable_get('advuser_modify_subject', t(ADVUSER_DEFAULT_NEW_SUBJECT));
+    } break;
+  }
+
+  $types = array('user' => $account);
+  $subject = token_replace($subject, $types);
+  $body = token_replace($body, $types);
+  unset($types);
+
+  if ($notify) {
+    if (variable_get('advuser_log_notifications', FALSE)) {
+      watchdog('advuser', "Sending notification mail: from='$from' subj='$subject' body='$body'");
+    }
+
+    if (empty($accounts)) {
+      $result = _advuser_dbquery_users_to_notify();
+      foreach ($result as $row) {
+        $accounts[] = $row;
+      }
+    }
+
+    foreach ($accounts as $account) {
+      drupal_mail('advuser', 'advanced-user-mail', $account->mail, user_preferred_language($account), array('subject' => $subject, 'body' => array($body)), $from, TRUE);
+    }
+  }
+}
+
+/**
+ * @ingroup advuser_hook
+ * hook_user implementation
+ *
+ * On 'form' (indicates user edit form) save the account data in a static cache.
+ * On 'insert' call the registration notification function.
+ * On 'after_update' call the profile update notification function.
+ */
+function advuser_user_($type, &$edit, &$account, $category = NULL) {
+  static $account_before_edit;
+  static $insert = FALSE;
+  $return = NULL;
+  switch ($type) {
+    case 'load': {
+      if ($insert) {
+        // Now the record exists and we can update it.
+        if (variable_get('advuser_set_never_access', FALSE)) {
+          if ($account->login == 0) {
+            $account->access = 0;
+            _advuser_update_never_accessed($account->uid);
+          }
+        }
+        $insert = FALSE;
+      }
+    } // continue into the 'form' case.
+    case 'form': {
+      // Need to remove the form identification data!
+      // Why does it need to be stored in the data serialized array?!
+      $account_before_edit = $account;
+      $account_before_edit->form_build_id = '';
+      if (isset($account->data) && is_string($account->data)) {
+        $account_before_edit->data = unserialize($account->data);
+      }
+      unset($account_before_edit->data['form_build_id']);
+    } break;
+    case 'insert': {
+      // Flag that we've seen the insert operation. The insert hasn't occurred
+      // but is being readied for insert.
+      $insert = TRUE;
+      // Notify those that need to be.
+      $return = _advuser_receive_notification_by_role('insert', $account);
+    } break;
+    case 'after_update': {
+      // Need to remove the form identification data!
+      // Why does it need to be stored in the data serialized array?!
+      $account_after_edit = $account;
+      $account_after_edit->form_build_id = '';
+      if (is_string($account_after_edit->data)) {
+        $account_after_edit->data = unserialize($account->data);
+      }
+      unset($account_after_edit->data['form_build_id']);
+      if ($account_after_edit->login == 0) {
+        if (variable_get('advuser_reset_never_access', FALSE)) {
+          $account_after_edit->access = 0;
+          _advuser_update_never_accessed($account_after_edit->uid);
+        }
+      }
+      if ($account_after_edit != $account_before_edit) {
+        $return = _advuser_receive_notification_by_role('update', $account);
+      }
+    } break;
+  }
+  return $return;
+}
+
+function advuser_user_load($users) {
+  foreach ($users as $account) {
+    advuser_user_('load', $nullp, $account);
+  }
+}
+
+function advuser_user_presave(&$edit, $account, $category) {
+  advuser_user_load(array($account));
+  return advuser_user_('form', $edit, $account, $category);
+}
+
+function advuser_user_insert(&$edit, $account, $category) {
+  return advuser_user_('insert', $edit, $account, $category);
+}
+
+function advuser_user_update(&$edit, $account, $category) {
+  return advuser_user_('after_update', $edit, $account, $category);
+}
+
+function _advuser_update_never_accessed($uid) {
+  global $user;
+  if ($user->uid != $uid && user_access('administer users')) {
+    return db_update('users')
+      ->fields(array('access' => 0))
+      ->condition('uid', $uid, '=')
+      ->execute();
+  }
+}
+
+/**
+ * Selected Profile Fields
+ * @return array
+ */
+function advuser_profile_fields() {
+  static $ret = array();
+  if (!count($ret) && module_exists('profile')) {
+    $fields = variable_get('advuser_profile_fields', NULL);
+    if (is_array($fields)) {
+      foreach ($fields as $fid => $value) {
+        if ( $value ) {
+          $result = db_select('profile_field', 'pf')
+            ->fields('pf')
+            ->condition('fid', $fid, '=')
+            ->execute();
+          foreach($result as $ret);
+        }
+      }
+    }
+  }
+  return $ret;
+}
+
+/**
+ * Profile Field Values
+ *
+ * @param int $fid
+ * @param int $uid
+ * @return mixed
+ */
+function advuser_profile_value($fid, $uid) {
+  $ret = db_select('profile_value', 'pv')
+    ->fields('pv', array('value'))
+    ->condition('pv.fid', $fid, '=')
+    ->condition('pv.uid', $uid, '=')
+    ->execute()
+    ->fetchField();
+  if ($ret === FALSE) {
+    $ret = NULL;
+  }
+  return $ret;
+}
+
+/**
+ * User Roles for use in ADVUSER.
+ *
+ * @return array
+ */
+function advuser_user_roles() {
+  static $roles = array();
+  if (empty($roles)) {
+    $roles = user_roles(TRUE);
+    unset($roles[DRUPAL_AUTHENTICATED_RID]);
+  }
+  return $roles;
+}
+
+/**
+ * Get the sql query string.
+ *
+ * @param $type
+ * @return The sql string.
+ * - $type = 'users' returns a select string that include uid, name, mail,
+ *   status, created and access.
+ * - $type = 'name' returns a select string that includes uid and name.
+ * - $type = 'count' returns a select string for the count for the list.
+ * - $type = 'uid' returns a select string that includes the uid.
+ */
+function advuser_build_query($type = 'users') {
+  $filter = advuser_build_filter_query();
+
+  switch ($type) {
+    case 'users': {
+      $query = db_select('users', 'u')
+        ->fields('u', array('uid', 'name', 'mail', 'status', 'created', 'access'))
+        ->distinct();
+    } break;
+    case 'uid': {
+      $query = db_select('users', 'u')
+        ->fields('u', array('uid'))
+        ->distinct();
+    } break;
+    case 'name': {
+      $query = db_select('users', 'u')
+        ->fields('u', array('uid', 'name'))
+        ->distinct();
+    } break;
+    case 'count': {
+      $sql = 'SELECT COUNT(DISTINCT u.uid) FROM {users} u LEFT JOIN {users_roles} ur ON u.uid = ur.uid '. $filter['join'];
+      $query = db_select('users', 'u');
+      $query->addExpression('COUNT(u.uid)');
+      $query->distinct();
+    } break;
+  }
+  $users_roles_alias = $query->leftJoin('users_roles', 'ur', '%alias.uid = u.uid');
+
+  foreach (advuser_profile_fields() as $field) {
+    if (isset($field->name)) {
+      $query->leftJoin('profile_value', $field->name, "%alias.fid = :{$field->name}_fid AND %alias.uid = u.uid", array(":{$field->name}_fid" => $field->fid));
+    }
+  }
+
+  if (!empty($filter['where'])) {
+    $query->where($filter['where'], $filter['args']);
+  }
+
+  return $query;
+
+  return $sql . (empty($filter['where']) ? '' : ' WHERE ' . $filter['where']);
+}
+
+/**
+ * Build query for advuser administration filters based on session.
+ *
+ * @param $reset Resets the static cached array.
+ * @return array containing 'join' clauses, 'where' clauses and replacement
+ *   'args' for the variable sections of the clauses.
+ */
+function advuser_build_filter_query($reset = FALSE) {
+  $advuser = &$_SESSION['advuser'];
+  static $filter_array = array();
+
+  if (empty($filter_array) || $reset) {
+    $filters = &$advuser['filters'];
+
+    $advuser_filters = advuser_filters();
+
+    // Build query
+    $where = $args = $join = array();
+
+    foreach ($filters as $filter) {
+      list($key, $op, $qop, $value) = array_values($filter);
+      // This checks to see if this permission filter is an enabled permission
+      // for the authenticated role.  If so, then all users would be listed, and
+      // we can skip adding it to the filter query.
+      switch ($key) {
+        case 'permission': {
+          $account = new stdClass();
+          $account->uid = 'advuser_filter';
+          $account->roles = array(DRUPAL_AUTHENTICATED_RID => 1);
+          if (user_access($value, $account)) {
+            continue;
+          }
+        } break;
+        case 'created':
+        case 'last_access': {
+          // Convert the string date to a unix time value.
+          $value = strtotime($value);
+        } break;
+        case 'user_roles': {
+          // Allow for filtering for users where no role is set.
+          if (ord($value) === 0) {
+            $qop = 'IS NULL';
+            $value = NULL;
+          }
+        } break;
+      }
+
+      // Provide for '%%%s%%', '%%%s' and '%s%%' as needed.
+      $arg_prefix = $arg_suffix = NULL;
+      switch ($qop) {
+        case 'NOT LIKE':
+        case 'LIKE': {
+          $arg_prefix = $arg_suffix = '%';
+        } break;
+        case 'BEGINS WITH': {
+          $qop = 'LIKE';
+          $arg_suffix = '%';
+        } break;
+        case 'ENDS WITH': {
+          $qop = 'LIKE';
+          $arg_prefix = '%';
+        } break;
+      }
+
+      // Provide operator symbol to SQL translation.
+      switch ($qop) {
+        case '!=':
+        case 'NOT LIKE': {
+          $in = 'NOT IN';
+          $eq = '!=';
+          $andor = 'AND';
+        } break;
+        default: {
+          $in = 'IN';
+          $eq = '=';
+          $andor = 'OR';
+        }
+      }
+
+      $pkey = ":{$key}";
+      $pkey_replace = "%{$key}_pkey";
+      $ph[$pkey] = isset($ph[$pkey]) ? $ph[$pkey] + 1 : 0;
+      $placeholder = "{$pkey}_{$ph[$pkey]}";
+
+      // Build the 'where' clauses.
+      $_where = $op.' '.str_ireplace("%op", $qop, $advuser_filters[$key]['where']);
+      $_where = str_ireplace("%eq", $eq, $_where);
+      $_where = str_ireplace("%andor", $andor, $_where);
+      $_where = str_ireplace("%in", $in, $_where);
+      $_where = str_ireplace($pkey_replace, $placeholder, $_where);
+      if ($qop == 'IS NULL') {
+        $_where = str_ireplace($placeholder, '', $_where);
+      }
+      $where[] = $_where;
+
+      // Build the argument values.
+      if ($qop != 'IS NULL') {
+        $args[$placeholder] = $arg_prefix . $value . $arg_suffix;
+      }
+    }
+
+    $where = count($where) ? '('. implode(' ', $where) . ')' : '';
+    $join = count($join) ? ' '. implode(' ', array_unique($join)) : '';
+
+    $filter_array = array(
+      'where' => $where,
+      'join' => $join,
+      'args' => $args,
+    );
+  }
+
+  return $filter_array;
+}
+
+/**
+ * List advuser administration filters that can be applied.
+ */
+function advuser_filters() {
+  // Regular filters
+  static $filters = array();
+
+  if (empty($filters)) {
+    $options = array();
+    foreach (module_implements('permission') as $module) {
+      if ($permissions = module_invoke($module, 'permission')) {
+        asort($permissions);
+        foreach ($permissions as $permission => $pattr) {
+          $options[t("@module module", array('@module' => $module))][$permission] = t($permission);
+        }
+      }
+    }
+
+    ksort($options);
+    $filters['permission'] = array(
+      'title' => t('Permission'),
+      'where' => " ((u.uid %in (SELECT ur.uid FROM {users_roles} ur WHERE ur.rid %in (SELECT rp.rid FROM {role_permission} rp WHERE rp.permission %op %permission_pkey))) %andor u.uid %eq 1)",
+      'options' => $options,
+      'form_type' => 'select',
+    );
+
+    $filters['status'] = array(
+      'title' => t('Status'),
+      'where' => "u.status %op %status_pkey",
+      'options' => array(1 => t('active'), 0 => t('blocked')),
+      'form_type' => 'select',
+    );
+
+    $filters['created'] = array(
+      'title' => t('Created'),
+      'where' => "u.created %op %created_pkey",
+      'form_type' => 'date',
+    );
+
+    $filters['last_access'] = array(
+      'title' => t('Last Accessed'),
+      'where' => "u.access %op %last_access_pkey",
+      'form_type' => 'date',
+    );
+
+    $filters['email'] = array(
+      'title' => t('Email'),
+      'where' => "u.mail %op %email_pkey",
+      'form_type' => 'textfield',
+    );
+
+    $filters['uid'] = array(
+      'title' => t('User Id'),
+      'where' => "u.uid %op %uid_pkey",
+      'form_type' => 'id',
+    );
+
+    $filters['username'] = array(
+      'title' => t('Username'),
+      'where' => "u.name %op %username_pkey",
+      'form_type' => 'textfield',
+    );
+
+    $roles = advuser_user_roles();
+    if (count($roles)) {
+      $filters['user_roles'] = array(
+        'title' => t('Role'),
+        'where' => "ur.rid %op %user_roles_pkey",
+        'form_type' => 'select',
+        'options' => $roles,
+      );
+    }
+
+    $profile_fields = advuser_profile_fields();
+    foreach ($profile_fields as $field) {
+      // Build array of options if they exist
+      $opts = NULL;
+      if ( ! empty($field->options) ) {
+        $opts = array();
+        foreach ( explode("\n", $field->options) as $opt ) {
+          $opt = trim($opt);
+          $opts[$opt] = $opt;
+        }
+      }
+      // Each user defined profile field needs a unique table identifier for the
+      //  JOIN and WHERE clauses.
+      // TODO: Make sure the $field->name contains valid information for a table
+      //  identifier.  This comment is to identify the source of a problem yet
+      //  to be discovered.
+      $pv = $field->name;
+      $filters[$field->name] = array(
+        'title' => check_plain($field->title),
+        'type' => $field->type,
+        'class' => $field->name,
+        'where' => "$pv.value %op %{$field->name}_pkey AND $pv.uid = u.uid",
+        'options' => $opts,
+        'autocomplete' => $field->autocomplete ? $field->fid : FALSE,
+      );
+    }
+  }
+  return $filters;
+}
+
+/**
+ * Callback function for admin mass adding/deleting a user role.
+ *
+ * @param $accounts - Not used
+ * @param $operation - add_role or remove_role
+ * @param $rid - the requested role id.
+ */
+function advuser_multiple_role_edit($accounts, $operation, $rid) {
+  // The role name is not necessary as user_save() will reload the user
+  // object, but some modules' hook_user() may look at this first.
+  $advuser = &$_SESSION['advuser'];
+
+  $accounts = &$advuser['accounts'];
+  $selectall = &$advuser['selectall'];
+  $deselected = &$advuser['deselected'];
+
+  $filter = advuser_build_filter_query();
+
+  $role_name = db_select('role', 'r')
+    ->fields('r', array('name'))
+    ->condition('r.rid', $rid, '=')
+    ->execute()
+    ->fetchField();
+
+  switch ($operation) {
+    case 'add_role': {
+      if ($selectall) {
+        $sql = advuser_build_query('uid');
+        $result = db_query($sql, $filter['args']);
+        while ($user = $result->fetchAssoc()) {
+          $account = user_load((int)$user['uid'], TRUE);
+          if ($account !== FALSE && !isset($account->roles[$rid])) {
+            $roles = $account->roles + array($rid => $role_name);
+            user_save($account, array('roles' => $roles));
+          }
+        }
+        $selectall = FALSE;
+      }
+      else {
+        foreach ($accounts as $uid) {
+          $account = user_load((int)$uid, TRUE);
+          // Skip adding the role to the user if they already have it.
+          if ($account !== FALSE && !isset($account->roles[$rid])) {
+            $roles = $account->roles + array($rid => $role_name);
+            user_save($account, array('roles' => $roles));
+          }
+          unset($accounts[$uid]);
+        }
+      }
+    } break;
+    case 'remove_role': {
+      if ($selectall) {
+        $sql = advuser_build_query('uid');
+        $result = db_query($sql, $filter['args']);
+        while ($user = $result->fetchAssoc()) {
+          $account = user_load((int)$user['uid'], TRUE);
+          if ($account !== FALSE && isset($account->roles[$rid])) {
+            $roles = array_diff($account->roles, array($rid => $role_name));
+            user_save($account, array('roles' => $roles));
+          }
+        }
+        $selectall = FALSE;
+      }
+      else {
+        foreach ($accounts as $uid) {
+          $account = user_load((int)$uid, TRUE);
+          // Skip removing the role from the user if they already don't have it.
+          if ($account !== FALSE && isset($account->roles[$rid])) {
+            $roles = array_diff($account->roles, array($rid => $role_name));
+            user_save($account, array('roles' => $roles));
+          }
+          unset($accounts[$uid]);
+        }
+      }
+    } break;
+  }
+}
+
+/**
+ * Reset the session persistent variables except 'filters'.
+ */
+function advuser_reset_variables() {
+  $advuser = &$_SESSION['advuser'];
+  $advuser['accounts'] = array();
+  $advuser['selectall'] = FALSE;
+  $advuser['deselected'] = array();
+}
+
+/**
+ * Implementation of hook_tokens().
+ */
+function advuser_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+  if ($type == 'user') {
+    $user =& $data['user'];
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'status':
+          $replacements[$original] = $user->status ? t('Active') : t('Blocked');
+          break;
+        case 'theme':
+          $replacements[$original] = empty($user->theme) ? t('DEFAULT') : $user->theme;
+          break;
+        case 'language':
+          $replacements[$original] = empty($user->languange) ? t('DEFAULT') : $user->language;
+          break;
+        case 'timezone':
+          $replacements[$original] = empty($user->timezone) ? '0' : $user->timezone;
+          break;
+        case 'signature':
+          $replacements[$original] = check_plain($user->signature);
+          break;
+        case 'signature:raw':
+          $replacements[$original] = $user->signature;
+          break;
+        case 'name:raw':
+          $replacements[$original] = $user->name;
+          break;
+      }
+    }
+    return $replacements;
+  }
+}
+
+/**
+ * Implementation of hook_token_info().
+ */
+function advuser_token_info() {
+  $tokens = array();
+  $this_module = t('Advanced User');
+  $tokens['user']['status'] = array(
+    'name' => t('Status'),
+    'description' => t(
+      "The user's status (either '!active' or '!blocked').",
+      array(
+        '!active' => t('Active'),
+        '!blocked' => t('Blocked'),
+    )));
+  $tokens['user']['theme'] = array(
+    'name' => t('Theme'),
+    'description' => t(
+      "The user's theme (or '!default' if not defined).",
+      array('!default' => t('DEFAULT'),
+    )));
+  $tokens['user']['language'] = array(
+    'name' => t('Language'),
+    'description' => t(
+      "The user's language (or '!default' if not defined).",
+      array('!default' => t('DEFAULT'),
+    )));
+  $tokens['user']['timezone'] = array(
+    'name' => t('Timezone'),
+    'description' => t(
+      "The user's timezone (or '0' if not defined).")
+  );
+  $tokens['user']['signature'] = array(
+    'name' => t('Signature'),
+    'description' => t("The user's signature.")
+  );
+  $tokens['user']['signature:raw'] = array(
+    'name' => t('Signature (raw)'),
+    'description' => t("The unfiltered user's signature. WARNING - raw user input.")
+  );
+  $tokens['user']['name:raw'] = array(
+    'name' => t('Name (raw)'),
+    'description' => t("The unfiltered user's name. WARNING - raw user input.")
+  );
+  return array('tokens' => $tokens);
+}
+
+// vim:ft=php:sts=2:sw=2:ts=2:et:ai:sta:ff=unix

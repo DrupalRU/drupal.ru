@@ -1,0 +1,134 @@
+<?php
+
+/**
+ * @file
+ * Tests for altpager.module.
+ */
+
+/**
+ * Test the module functions.
+ */
+class AltpagerTestCase extends DrupalWebTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Functional testing',
+      'description' => 'Test functions altpager.module.',
+      'group' => 'Altpager',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp(array('altpager'));
+  }
+
+  /**
+   * The main test module.
+   */
+  public function testAltpager() {
+    $query = db_select('node', 'n')->extend('AltPager');
+    $nids_count = $query
+      ->fields('n', array('nid'))
+      ->orderBy('created', 'DESC')
+      ->execute()
+      ->rowCount();
+
+    $default_items = altpager_default_items();
+    $min_count_items = key($default_items);
+
+    $this->assertTrue($nids_count <= $min_count_items);
+
+    next($default_items);
+    $min_count_items = key($default_items);
+
+    for ($i = 0; $i <= $min_count_items; ++$i) {
+      $this->drupalCreateNode();
+    }
+
+    altpager_apcount($min_count_items);
+
+    $query = db_select('node', 'n')->extend('AltPager');
+    $nids_count = $query
+      ->fields('n', array('nid'))
+      ->orderBy('created', 'DESC')
+      ->execute()
+      ->rowCount();
+
+    $this->assertEqual($min_count_items, $nids_count);
+  }
+
+  /**
+   * Testing the standard list of the quantity limitations output nodes.
+   */
+  public function testAltpagerDefaultItems() {
+    $max_items = 1000;
+
+    altpager_count_all_items($max_items);
+    $items = altpager_default_items();
+
+    $this->assertEqual(end($items), $max_items);
+  }
+
+  /**
+   * Testing count items viewed in current page.
+   */
+  public function testAltpagerCountItemsViewed() {
+    altpager_count_all_items(1000);
+
+    $count = altpager_count_items_viewed();
+
+    $default_items = altpager_default_items();
+    next($default_items);
+    $min_count_items = key($default_items);
+
+    $this->assertEqual($min_count_items, $count);
+
+    // No such values​​, the minimum value is selected.
+    altpager_apcount(25);
+    $count = altpager_count_items_viewed();
+
+    // The first value in the list.
+    prev($default_items);
+    $min_count_items = key($default_items);
+
+    $this->assertEqual($min_count_items, $count);
+
+    // Change the value "apcount".
+    altpager_apcount(10);
+    $count = altpager_count_items_viewed();
+    $this->assertEqual($min_count_items, $count);
+  }
+
+  /**
+   * Testing function get count node viewed.
+   */
+  public function testAltpagerApcount() {
+    altpager_apcount(25);
+    $this->assertEqual(altpager_apcount(), 25);
+  }
+
+  /**
+   * Testing function altpager_items_elements().
+   */
+  public function testAltpagerItemsElements() {
+    altpager_items_elements(array(
+      1 => 1,
+      2 => 2,
+      5 => 5,
+    ));
+
+    $this->drupalCreateNode();
+
+    $default_items = altpager_default_items();
+
+    $query = db_select('node', 'n')->extend('AltPager');
+    $nids_count = $query
+      ->fields('n', array('nid'))
+      ->execute()
+      ->rowCount();
+
+    $min_count_items = key($default_items);
+
+    $this->assertEqual($min_count_items, $nids_count);
+  }
+}

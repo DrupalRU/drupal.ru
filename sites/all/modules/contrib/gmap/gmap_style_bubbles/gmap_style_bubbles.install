@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the gmap_style_bubbles module.
+ */
+
+/**
+ * Verifies that the infobubble gmap plugin has is installed.
+ *
+ * The infobubble plugin library for gmap can be found here:
+ * @link http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobubble/examples/example.html @endlink
+ *
+ * This module assumes you download the entire folder, including the "examples"
+ * and "docs" folders, and put all of them in a folder called "infobubble" in
+ * your libraries folder. If it fails to find the src/infobubble-compiled.js
+ * file, the site will let you know on your status report screen.
+ *
+ * @ingroup gmap_style_bubbles
+ */
+
+/**
+ * Implements hook_requirements().
+ *
+ * Ensures the infobubble library is installed.
+ */
+function gmap_style_bubbles_requirements($phase) {
+  $requirements = array();
+
+  if ($phase == 'runtime') {
+    $t = get_t();
+    $library = libraries_detect('infobubble');
+
+    if (empty($library['installed'])) {
+      $requirements['infobubble_plugin'] = array(
+        'title' => $t('Infobubble Plugin Required'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => _gmap_style_bubbles_format_error($library),
+        'value' => '',
+      );
+    }
+  }
+
+  return $requirements;
+}

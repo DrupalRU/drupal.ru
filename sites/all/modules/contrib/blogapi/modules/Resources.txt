@@ -1,0 +1,1 @@
+http://docs.openlinksw.com/virtuoso/fn_mt.publishPost.html (BlogAPI references)

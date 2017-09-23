@@ -1,0 +1,496 @@
+<?php
+
+/**
+ * @file
+ * Endpoint tests for BlogAPI MovableType
+ */
+class BlogapiMovabletypeEndpointTestCase extends BlogapiTestCase {
+  /**
+   * Test info.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => t('MovableType Endpoint Tests'),
+      'description' => t('Run tests for MovableType endpoints') ,
+      'group' => t('BlogAPI'),
+    );
+  }
+
+  /**
+   * Set up test.
+   */
+  public function setUp() {
+    parent::setUp(
+      'blogapi_movabletype'
+    );
+  }
+
+  /**
+   * Test mt.publishPost().
+   */
+  public function testPublishPost() {
+    $type = $this->drupalCreateContentType();
+
+    // Allow to user our content type with BlogAPI
+    variable_set('blogapi_node_types', array($type->type));
+
+    $node = $this->drupalCreateNode(array('status' => 0, 'type' => $type->type, 'uid' => $this->privilegedUser2->uid));
+
+    // Test user without node view permission.
+    $result = xmlrpc($this->xmlrpcUrl, array(
+      'mt.publishPost' => array(
+        $node->nid,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+      ),
+    ));
+
+    $updated_node = node_load($node->nid, NULL, TRUE);
+
+    $this->assertTrue($result && $updated_node->status, 'Node was published');
+  }
+
+  /**
+   * Test mt.getRecentPostTitles().
+   */
+  public function testGetRecentPostTitles() {
+    $type = $this->drupalCreateContentType();
+    $number_of_posts = 9;
+    $nodes = array();
+
+    for ($i = 0; $i < 11; $i++) {
+      $node = $this->drupalCreateNode(array('type' => $type->type, 'uid' => $this->privilegedUser2->uid));
+      $nodes[$node->nid] = $node;
+    }
+
+    // Test user without node view permission.
+    $result = xmlrpc($this->xmlrpcUrl, array(
+      'mt.getRecentPostTitles' => array(
+        $type->type,
+        $this->privilegedUser->name,
+        $this->privilegedUser->pass_raw,
+        $number_of_posts,
+      ),
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), format_string('BlogAPI is not configured to support the @type content type.',
+        array('@type' => $type->type)), $type->type . ' is not allowed for BlogAPI yet.');
+
+    // Allow to user our content type with BlogAPI
+    variable_set('blogapi_node_types', array($type->type));
+
+    $results = xmlrpc($this->xmlrpcUrl, array(
+      'mt.getRecentPostTitles' => array(
+        $type->type,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+        $number_of_posts,
+      )
+    ));
+
+    $this->assertTrue(is_array($results) && count($results) == $number_of_posts, 'Service returned correct posts number');
+    $success = TRUE;
+
+    foreach ($results as $post) {
+      $node = node_load($post['postid']);
+
+      if (empty($node) || $node->title != $nodes[$post['postid']]->title) {
+        $success = FALSE;
+      }
+    }
+
+    $this->assertTrue($success, 'All nodes were retrieved properly');
+  }
+
+  /**
+   * Test mt.getCategoryList().
+   */
+  public function testGetCategoryList() {
+    $this->admin_user = $this->drupalCreateUser(
+      array('administer content types',
+        'administer taxonomy',
+        'bypass node access',
+        'administer services'
+      ));
+
+    $this->drupalLogin($this->admin_user);
+    $this->vocabulary = $this->createVocabulary();
+    $type = $this->drupalCreateContentType();
+
+    $field = array(
+      'field_name' => 'taxonomy_' . $this->vocabulary->machine_name,
+      'type' => 'taxonomy_term_reference',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      'settings' => array(
+        'allowed_values' => array(
+          array(
+            'vocabulary' => $this->vocabulary->machine_name,
+            'parent' => 0,
+          ),
+        ),
+      ),
+    );
+
+    field_create_field($field);
+
+    $this->instance = array(
+      'field_name' => 'taxonomy_' . $this->vocabulary->machine_name,
+      'bundle' => $type->type,
+      'entity_type' => 'node',
+      'widget' => array(
+        'type' => 'options_select',
+      ),
+      'display' => array(
+        'default' => array(
+          'type' => 'taxonomy_term_reference_link',
+        ),
+      ),
+    );
+
+    field_create_instance($this->instance);
+
+    $terms = array();
+
+    for ($i = 0; $i < 5; $i++) {
+      $terms[] = $this->createTerm($this->vocabulary);
+    }
+
+    $testNode = array(
+      'type' => $type->type,
+      $field['field_name'] => array(
+        LANGUAGE_NONE => array(
+          array(
+            'tid' => $terms[0]->tid
+          )
+        )
+      ),
+      'uid' => $this->privilegedUser2->uid,
+    );
+
+    // Allow to user our content type with BlogAPI
+    variable_set('blogapi_node_types', array($type->type));
+
+    $node = $this->drupalCreateNode($testNode);
+
+    $results = xmlrpc($this->xmlrpcUrl, array(
+      'mt.getCategoryList' => array(
+        $type->type,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+      )
+    ));
+
+    $this->assertTrue(is_array($results) && count($results) == count($terms), 'Service returned correct terms number');
+
+    $success = TRUE;
+
+    foreach ($results as $category) {
+      $term = taxonomy_term_load($category['categoryId']);
+      if (empty($term) || $term->name != $category['categoryName']) {
+        $success = FALSE;
+      }
+    }
+
+    $this->assertTrue($success, 'All terms were retrieved properly');
+  }
+
+  /**
+   * Test mt.getPostCategories().
+   */
+  public function testGetPostCategories() {
+    $this->admin_user = $this->drupalCreateUser(array(
+      'administer content types',
+      'administer taxonomy',
+      'bypass node access',
+      'administer services'
+    ));
+
+    $this->drupalLogin($this->admin_user);
+    $this->vocabulary = $this->createVocabulary();
+    $type = $this->drupalCreateContentType();
+
+    $field = array(
+      'field_name' => 'taxonomy_' . $this->vocabulary->machine_name,
+      'type' => 'taxonomy_term_reference',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      'settings' => array(
+        'allowed_values' => array(
+          array(
+            'vocabulary' => $this->vocabulary->machine_name,
+            'parent' => 0,
+          ),
+        ),
+      ),
+    );
+
+    field_create_field($field);
+
+    $this->instance = array(
+      'field_name' => 'taxonomy_' . $this->vocabulary->machine_name,
+      'bundle' => $type->type,
+      'entity_type' => 'node',
+      'widget' => array(
+        'type' => 'options_select',
+      ),
+      'display' => array(
+        'default' => array(
+          'type' => 'taxonomy_term_reference_link',
+        ),
+      ),
+    );
+
+    field_create_instance($this->instance);
+
+    $terms = array();
+
+    for ($i = 0; $i < 5; $i++) {
+      $terms[] = $this->createTerm($this->vocabulary);
+    }
+
+    $testNode = array(
+      'type' => $type->type,
+      $field['field_name'] => array(
+        LANGUAGE_NONE => array(
+          array(
+            'tid' => $terms[0]->tid
+          ),
+          array(
+            'tid' => $terms[1]->tid
+          )
+        )
+      ),
+      'uid' => $this->privilegedUser2->uid,
+    );
+
+    // Allow to user our content type with BlogAPI
+    variable_set('blogapi_node_types', array($type->type));
+
+    $node = $this->drupalCreateNode($testNode);
+
+    // Test wrong nid.
+    $result = xmlrpc($this->xmlrpcUrl, array(
+      'mt.getPostCategories' => array(
+        0,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+      )
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), format_string('Node @nid not found', array('@nid' => 0)), 'Node was not found');
+
+    $results = xmlrpc($this->xmlrpcUrl, array(
+      'mt.getPostCategories' => array(
+        $node->nid,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+      )
+    ));
+
+    $this->assertTrue(is_array($results) && count($results) == count($testNode[$field['field_name']][LANGUAGE_NONE]),
+      'Service returned correct terms number');
+
+    $success = TRUE;
+
+    foreach ($results as $category) {
+      $term = taxonomy_term_load($category['categoryId']);
+      if (empty($term) || $term->name != $category['categoryName']) {
+        $success = FALSE;
+      }
+    }
+
+    $this->assertTrue($success, 'All terms were retrieved properly');
+  }
+
+  /**
+   * Test mt.setPostCategories().
+   */
+  public function testSetPostCategories() {
+    $this->admin_user = $this->drupalCreateUser(array(
+      'administer content types',
+      'administer taxonomy',
+      'bypass node access',
+      'administer services'
+    ));
+
+    $this->drupalLogin($this->admin_user);
+    $this->vocabulary = $this->createVocabulary();
+    $this->wrongVocabulary = $this->createVocabulary();
+    $type = $this->drupalCreateContentType();
+
+    $terms = array();
+    $term_count = 5;
+
+    for ($i = 0; $i < $term_count; $i++) {
+      $terms[] = $this->createTerm($this->vocabulary);
+    }
+
+    $wrongTerm = $this->createTerm($this->wrongVocabulary);
+
+    $field = array(
+      'field_name' => 'taxonomy_' . $this->vocabulary->machine_name,
+      'type' => 'taxonomy_term_reference',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      'settings' => array(
+        'allowed_values' => array(
+          array(
+            'vocabulary' => $this->vocabulary->machine_name,
+            'parent' => 0,
+          ),
+        ),
+      ),
+    );
+
+    field_create_field($field);
+
+    $this->instance = array(
+      'field_name' => 'taxonomy_' . $this->vocabulary->machine_name,
+      'bundle' => $type->type,
+      'entity_type' => 'node',
+      'widget' => array(
+        'type' => 'options_select',
+      ),
+      'display' => array(
+        'default' => array(
+          'type' => 'taxonomy_term_reference_link',
+        ),
+      ),
+    );
+
+    field_create_instance($this->instance);
+
+    $testNode = array(
+      'type' => $type->type,
+      $field['field_name'] => array(
+        LANGUAGE_NONE => array(
+          array(
+            'tid' => $terms[0]->tid
+          ),
+        )
+      ),
+      'uid' => $this->privilegedUser2->uid,
+    );
+
+    // Allow to user our content type with BlogAPI
+    variable_set('blogapi_node_types', array($type->type));
+
+    $node = $this->drupalCreateNode($testNode);
+
+    $correct_categories = array(
+      array(
+        'categoryId' => $terms[1]->tid,
+        'categoryName' => $terms[1]->name,
+      ),
+      array(
+        'categoryId' => $terms[2]->tid,
+        'categoryName' => $terms[2]->name,
+      ),
+    );
+
+    // Test wrong nid.
+    $result = xmlrpc($this->xmlrpcUrl, array(
+      'mt.setPostCategories' => array(
+        0,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+        $correct_categories
+      )
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), format_string('Node @nid not found', array('@nid' => 0)), 'Node was not found');
+
+    // Test with empty Categories.
+    $result = xmlrpc($this->xmlrpcUrl, array(
+      'mt.setPostCategories' => array(
+        $node->nid,
+        $this->unPrivilegedUser->name,
+        $this->unPrivilegedUser->pass_raw,
+        array(),
+      )
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), 'This post doesn\'t have any category', 'Categories are required');
+
+    // Test wrong tid.
+    $result = xmlrpc($this->xmlrpcUrl, array(
+      'mt.setPostCategories' => array(
+        $node->nid,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+        array(
+          array(
+            'categoryId' => 0,
+            'categoryName' => $wrongTerm->name,
+          )
+        )
+      )
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), format_string('@terms are not found', array('@terms' => $wrongTerm->name)),
+      'Term was not found');
+
+    // Test taxonomy from wrong vocabulary.
+    $result = xmlrpc($this->xmlrpcUrl, array(
+      'mt.setPostCategories' => array(
+        $node->nid,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+        array(
+          array(
+            'categoryId' => $wrongTerm->tid,
+            'categoryName' => $wrongTerm->name,
+          )
+        )
+      )
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), format_string('@terms can\'be added to this post',
+      array('@terms' => $wrongTerm->name)), 'Term belogs to wrong vocabulary');
+
+    // Correct test
+    $result = xmlrpc($this->xmlrpcUrl, array(
+      'mt.setPostCategories' => array(
+        $node->nid,
+        $this->privilegedUser2->name,
+        $this->privilegedUser2->pass_raw,
+        $correct_categories,
+      )
+    ));
+
+    $updated_node = node_load($node->nid, NULL, TRUE);
+
+    $this->assertTrue($result, 'Correct service answer');
+    $this->assertTrue(array_search(array('tid' => $terms[0]->tid), $updated_node->{$field['field_name']}[LANGUAGE_NONE]) !== FALSE, 'First term was saved');
+    $this->assertTrue(array_search(array('tid' => $terms[1]->tid), $updated_node->{$field['field_name']}[LANGUAGE_NONE]) !== FALSE, 'Second term was saved');
+    $this->assertTrue(array_search(array('tid' => $terms[2]->tid), $updated_node->{$field['field_name']}[LANGUAGE_NONE]) !== FALSE, 'Third term was saved');
+  }
+
+  /**
+   * Test mt.supportedMethods().
+   */
+  public function testSupportedMethods() {
+    $results = xmlrpc($this->xmlrpcUrl, array(
+      'mt.supportedMethods' => array(
+      )
+    ));
+
+    $this->assertEqual(xmlrpc_error_msg(), t('Not implemented'), 'mt.supportedMethods is not implemented');
+  }
+
+  /**
+   * Test mt.supportedTextFilters().
+   */
+  public function testSupportedTextFilters() {
+    // Add a text format with minimum data only.
+    $format = new stdClass();
+    $format->format = $this->randomString();
+    $format->name = $this->randomString();
+    filter_format_save($format);
+
+    $results = xmlrpc($this->xmlrpcUrl, array(
+      'mt.supportedTextFilters' => array(
+      )
+    ));
+    
+    $this->assertTrue(!empty($results) && array_search(array('key' => $format->format, 'label' => $format->name), $results) !== FALSE, 'Created format was retreived');
+  }
+}

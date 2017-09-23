@@ -1,0 +1,3 @@
+Inline <?php $test = TRUE ?> text for PHP
+Inline <code> $test = TRUE </code> text for code
+Inline <code class="language-css">.test { color: red; }</code> text for CSS code

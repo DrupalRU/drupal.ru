@@ -1,0 +1,13 @@
+name = CSS CAPTCHA
+description = Provides a CSS based CAPTCHA type.
+package = "Spam control"
+dependencies[] = captcha
+core = 7.x
+configure = admin/config/people/captcha/css_captcha
+
+; Information added by drupal.org packaging script on 2011-10-23
+version = "7.x-1.0-alpha1"
+core = "7.x"
+project = "captcha_pack"
+datestamp = "1319362529"
+

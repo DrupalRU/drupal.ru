@@ -1,0 +1,131 @@
+<?php
+
+/**
+ * @file
+ * Tests for location_cck.module.
+ */
+
+require_once drupal_get_path('module', 'location') . '/tests/location_testcase.test';
+
+/**
+ * Class LocationCCKTest.
+ */
+class LocationCCKTest extends LocationCCK2Test {
+  /**
+   * A global administrative user.
+   */
+  public $admin_user;
+
+  /**
+   * A global normal user.
+   */
+  public $normal_user;
+
+  /**
+   * A default content type.
+   */
+  public $content_type;
+
+  public static function getInfo() {
+    return array(
+      'name' => t('Location CCK checks(broken!!!)'),
+      'description' => t('Test corner cases of the CCK Location module.'),
+      'group' => t('Location', array(), array('context' => 'geolocation')),
+    );
+  }
+
+  public function setUp() {
+    parent::setUp('location', 'location_cck', 'devel', 'field_ui');
+    $this->admin_user = $this->drupalCreateUser(array_keys(module_invoke_all('permission')));
+    $this->normal_user = $this->drupalCreateUser(array('access content'));
+
+    $this->drupalLogin($this->admin_user);
+  }
+
+  /**
+   * @deprecated @see addLocationContentType2()
+   * @param $settings
+   * @param array $add
+   * @return string
+   */
+  protected function addLocationContentType(&$settings, $add = array()) {
+
+    $field_name = 'loctest';
+
+    // Let the caller mess with some relevant cck stuff.
+    $required = isset($add['cck_required']) ? $add['cck_required'] : FALSE;
+    $multiple = isset($add['cck_multiple']) ? $add['cck_multiple'] : 0;
+    unset($add['cck_required']);
+    unset($add['cck_multiple']);
+
+    // find a non-existent random type name.
+
+    $name = strtolower($this->randomName(8));
+
+    $form = array(
+      'name' => $name,
+      'type' => $name,
+    );
+
+    $this->flattenPostData($form);
+
+    $this->drupalPost('admin/structure/types/add', $form, 'Save content type');
+    $this->refreshVariables();
+
+    $form = array(
+      'fields[_add_new_field][label]' => 'Location',
+      'fields[_add_new_field][field_name]' => $field_name,
+      'fields[_add_new_field][type]' => 'location',
+      'fields[_add_new_field][widget_type]' => 'location',
+    );
+
+    $this->drupalPost('admin/structure/types/manage/' . $name . '/fields', $form, 'Save');
+
+    $this->refreshVariables();
+    drupal_get_schema(NULL, TRUE);
+
+    $form = array();
+    $this->drupalPost(NULL, $form, 'Save field settings');
+
+    return $name;
+  }
+
+  /**
+   * @
+   */
+  public function testCreateLocation() {
+    // @todo fixme
+    return TRUE;
+  }
+
+  public function testLocpickOnly() {
+    // @todo fixme
+    return TRUE;
+  }
+
+  public function testMultipleLocationOnSingleNode() {
+    // @todo fixme
+    return TRUE;
+  }
+
+  public function testSharedLocation() {
+    // @todo fixme
+    return TRUE;
+  }
+
+  public function testNodeRevisionCOW() {
+    // @todo fixme
+    return TRUE;
+  }
+
+  public function testNodeRevisionCleanup() {
+    // @todo fixme
+    return TRUE;
+  }
+
+  public function testCOWConservation() {
+    // @todo fixme
+    return TRUE;
+  }
+
+}

@@ -1,0 +1,65 @@
+<?php
+/**
+ * @file
+ * Textimage - unit test case script.
+ */
+
+/**
+ * Checks that drupal_preg_match() function works as expected.
+ */
+class TextimagePregMatchTestCase extends DrupalUnitTestCase {
+
+  /**
+   * Get info.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'UTF-8 character-based variant of preg_match()',
+      'description' => 'Unit tests for the UTF-8 character-based wrapper of the preg_match() function.',
+      'group' => 'Textimage',
+    );
+  }
+
+  /**
+   * Sets up unit test environment.
+   *
+   * Includes the file with drupal_preg_match() function.
+   */
+  protected function setUp() {
+    parent::setUp();
+    module_load_include('inc', 'textimage', 'effects/textimage_text');
+  }
+
+  /**
+   * Performs the tests for the offset argument.
+   */
+  public function testOffsetArgument() {
+
+    $matches = array();
+
+    // Character 'п' is 2 bytes long and preg_match() would start from the
+    // second 'п' character and not from the first 'z'.
+    $result = drupal_preg_match('/п/u', 'ппzz', $matches, NULL, 2);
+    $this->assertFalse($result, t('String was skipped using character-based offset.'));
+
+    // Again, character 'п' is 2 bytes long and we skip 1 character, so
+    // preg_match() would fail, because the string with byte offset 1 is not a
+    // valid UTF-8 string.
+    $result = drupal_preg_match('/.*$/u', 'пzz', $matches, NULL, 1);
+    $this->assertTrue($result && $matches[0] === 'zz', t('String was matched using character-based offset.'));
+  }
+
+  /**
+   * Performs the tests for the captured offset.
+   */
+  public function testCapturedOffset() {
+
+    $matches = array();
+
+    // Character 'п' is 2 bytes long and non-unicode preg_match would return
+    // 2 here.
+    $result = drupal_preg_match('/z/u', 'пz', $matches, PREG_OFFSET_CAPTURE);
+    $this->assertTrue($result && $matches[0][1] === 1, t('Returned offset is character-based.'));
+  }
+
+}

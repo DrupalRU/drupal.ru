@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * @file
+ * Add Email address fields to Location address.
+ */
+
+/**
+ * Implements hook_locationapi().
+ */
+function location_email_locationapi(&$location, $op, $a3 = NULL, $a4 = NULL) {
+  switch ($op) {
+    case 'fields':
+      return array('email' => t('Email address'));
+
+    // @codingStandardsIgnoreStart
+    case 'defaults':
+      return array(
+        'email' => array('default' => '', 'collect' => 0, 'weight' => 25),
+      );
+    // @codingStandardsIgnoreEnd
+
+    case 'field_expand':
+      if ($a3 == 'email') {
+        return array(
+          '#type' => 'textfield',
+          '#title' => t('Email address'),
+          '#size' => 31,
+          '#maxlength' => 254,
+          '#description' => NULL,
+          '#required' => ($a4 == 2),
+          '#default_value' => $location,
+        );
+      }
+      break;
+
+    case 'save':
+      db_delete('location_email')
+        ->condition('lid', $location['lid'])
+        ->execute();
+      if (!empty($location['email'])) {
+        db_insert('location_email')
+          ->fields(
+            array(
+              'lid' => $location['lid'],
+              'email' => $location['email'],
+            )
+          )
+          ->execute();
+      }
+      break;
+
+    case 'load':
+      $fields = array();
+      $email = db_query(
+        'SELECT email FROM {location_email} WHERE lid = :lid',
+        array(':lid' => $location['lid'])
+      )->fetchField();
+      $fields['email'] = $email ? $email : '';
+
+      return $fields;
+
+    case 'delete':
+      db_delete('location_email')
+        ->condition('lid', $location['lid'])
+        ->execute();
+      break;
+  }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function location_email_views_api() {
+  return array(
+    'api' => 3,
+  );
+}
+
+/**
+ * Implements hook_token_list().
+ */
+function location_email_token_list($type = 'all') {
+  if ($type == 'node' || $type == 'user' || $type == 'all') {
+    $tokens['location']['location-email_N'] = t(
+      'Location Email address (If there are multiple locations per node, N is the iteration, starting with 0)'
+    );
+
+    return $tokens;
+  }
+}

@@ -2,14 +2,17 @@
 
 COMMIT=$(git log -n1 --abbrev-commit|grep commit|awk '{print $2}')
 TIMESTAMP=$(date +%Y.%m.%d_%H:%M:%S)
-SCRIPTS_PATH="$ZENCI_DEPLOY_DIR/scripts/zen.ci"
 ENVIRONMENT=${ENVIRONMENT:-dev}
-VERSIONS_PATH="$HOME/github/environments/$ENVIRONMENT"
-VERSION_PATH="$VERSIONS_PATH/$TIMESTAMP.$COMMIT"
 SITE_NAME=${SITE:-$ENVIRONMENT.drupal.ru}
-SITE_PATH="$HOME/domains/$SITE_NAME"
-PROFILES_PATH="$SITE_PATH/profiles"
-header() {
+SITE_DIR="$HOME/domains/$SITE_NAME"
+SCRIPTS_DIR="$ZENCI_DEPLOY_DIR/profiles/drupalru/scripts/zen.ci"
+ENVIRONMENT_DIR="$HOME/envs/$ENVIRONMENT"
+VERSION="$TIMESTAMP.$COMMIT"
+VERSIONS_DIR="$ENVIRONMENT_DIR/versions"
+VERSION_DIR="$VERSIONS_DIR/$VERSION"
+PREVIOUS_VERSION=$(ls | tail -n 1)
+
+print_status() {
   echo "";
   echo "\033[0;32m$@\033[0m"
 }
@@ -30,21 +33,36 @@ if [ ! -d "$VERSION_PATH" ]; then
   echo "Создание выполнено"
 fi
 
-header "Деплоймент новой $ENVIRONMENT версии $TIMESTAMP.$COMMIT"
-rsync -am --stats "$ZENCI_DEPLOY_DIR/" "$VERSION_PATH" --exclude=".git"
-cd "$PROFILES_PATH"
-if [ -h "./$PROFILE" ]; then
-  rm "./$PROFILE"
+print_status "Создание новой версии $VERSION"
+if [ ! -d "$VERSION_DIR" ]; then
+  mkdir -p "$VERSION_DIR"
+  echo "Создание версии $VERSION выполнено"
 fi
-ln -s "$VERSION_PATH" "$PROFILE"
-echo "Деплоймент выполнен"
 
-header "Запуск обновлений"
-drush updb -y
+print_status "Деплоймент новой $ENVIRONMENT версии $VERSION"
+rsync -am --stats "$ENVIRONMENT_DIR/etalon/" "$VERSION_DIR"
+print_status "Эталон скопирован"
+rsync -am --stats --inplace "$ZENCI_DEPLOY_DIR/" "$VERSION_DIR" --exclude=".git"
+print_status "Новый коммит \"$COMMIT\" задеплоен"
+ln -sfn "$VERSION_DIR" "$SITE_DIR"
+print_status "Ссылка на новую версию \"$VERSION\" создана"
 
-header "Очистка кэша"
-drush cc all
+print_status "Запуск обновлений"
+#drush updb -y
 
-header "Удаление устаревших версий"
-cd $VERSIONS_PATH
-sh $SCRIPTS_PATH/clean.sh
+print_status "Очистка кэша"
+#drush cc all
+
+cd $VERSIONS_DIR
+if [ $(ls -l | grep -c ^d) -gt $STORE_VERSIONS ] ; then
+    print_status "Удаление устаревших версий"
+    while [ $(ls -l | grep -c ^d) -gt $STORE_VERSIONS ]
+    do
+        DEPRECATED_VERSION=$(ls -r | tail -n 1)
+        rm -rf ./$DEPRECATED_VERSION
+        print_status "Версия \"$DEPRECATED_VERSION\" удалена"
+    done
+else
+    print_status "Устаревших версий не найдено"
+fi;
+print_status "Деплоймент завершён"

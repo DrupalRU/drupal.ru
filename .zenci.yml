@@ -10,23 +10,23 @@ deploy:
       profile: drupalru
     scripts:
       after: '{deploy_dir}/scripts/zen.ci/deploy.sh'
-  stage:
-    server: 85.143.172.161
-    username: drupal
-    dir: '{home}/github/repository'
-    env_vars:
-      environment: stage
-      store_versions: 13
-      profile: drupalru
-    scripts:
-      after: '{deploy_dir}/scripts/zen.ci/deploy.sh'
   dev:
-    server: 85.143.172.161
+    server: 89.223.31.105
     username: drupal
-    dir: '{home}/github/repository'
+    dir: '{home}/repo'
     env_vars:
       environment: dev
-      store_versions: 13
-      profile: drupalru
+      store_versions: 5
     scripts:
-      after: '{deploy_dir}/scripts/zen.ci/deploy.sh'
+      after: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/deploy.sh'
+      fail_deploy: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/rollback.sh'
+  stage:
+    server: 89.223.31.105
+    username: drupal
+    dir: '{home}/repo'
+    env_vars:
+      environment: stage
+      store_versions: 5
+    scripts:
+      after: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/deploy.sh'
+      fail_deploy: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/rollback.sh'

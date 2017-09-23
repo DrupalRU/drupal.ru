@@ -1,6 +1,7 @@
 # Drupal
 sites/**/*settings.php
 sites/*/files
+sites/local
 
 /*.txt
 !/robots.txt

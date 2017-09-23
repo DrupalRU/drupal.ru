@@ -59,3 +59,11 @@
 $sites['dev.drupal.ru'] = 'dev';
 $sites['stage.drupal.ru'] = 'stage';
 $sites['drupal.ru'] = 'prod';
+
+
+// Try to search file with list of local sites.
+if (file_exists(__DIR__ . '/local.sites.php')) {
+  // "require_once" is not used due the fact
+  // that with Drush it doesn't works properly.
+  require __DIR__ . '/local.sites.php';
+}

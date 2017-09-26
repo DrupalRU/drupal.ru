@@ -39,7 +39,7 @@
           border-color: transparent @well-border transparent transparent;
           position: absolute;
           left: -40px;
-          top:1.6em;
+          top: 1.6em;
         }
       }
     }
@@ -69,16 +69,20 @@
       background: #444;
       border-color: #343434;
     }
-    .terms-wrapper:after{
+    .terms-wrapper:after {
       color: rgba(0, 0, 0, .2);
     }
   }
   .content {
     clear: both;
   }
+
+  &.node-unpublished {
+    background-color: @unpublished-bg;
+  }
 }
 
-body.not-front{
+body.not-front {
   div:not(.alttracker.list-group) {
     .user-picture {
       float: left;

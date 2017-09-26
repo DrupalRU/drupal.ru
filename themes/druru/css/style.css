@@ -7945,7 +7945,7 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
   margin-left: 0;
 }
 .main-content .node .comment.comment-unpublished {
-  background-color: #fbe3e7;
+  background-color: #f2dede;
 }
 .main-content .node .comment .dropdown {
   opacity: .5;
@@ -8927,7 +8927,10 @@ ul.li-accent > *:before {
   clear: both;
 }
 .node.node-unpublished {
-  background-color: #fbe3e7;
+  background-color: #f2dede;
+}
+.node .unpublished-item {
+  color: #b94a48;
 }
 body.not-front div:not(.alttracker.list-group) .user-picture {
   float: left;

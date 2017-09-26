@@ -1,0 +1,98 @@
+.bue-ui {
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+
+  .bue-button {
+    font-size: @font-size-h3;
+    padding: @padding-base-vertical @padding-base-horizontal;
+    display: inline-block;
+    height: auto;
+    margin: 0 0 2px 0;
+    border: 1px solid @input-border;
+    border-right: none;
+    background-color: lighten(@body-bg, @tone);
+    .transition(all @transition-speed);
+
+    + .bue-button {
+      border-left: none;
+    }
+
+    + span.separator {
+      border-left: 1px solid @input-border;
+    }
+    &:last-of-type {
+      border-right: 1px solid @input-border;
+    }
+    &.stay-clicked {
+      background: darken(@body-bg, @tone);
+      border-color: @input-border;
+      border-top-color: lighten(@brand-primary, @tone);
+      .box-shadow(0 2px 0 -1px lighten(@brand-primary, @tone) inset);
+      color: @brand-primary;
+    }
+    &:not(:disabled) {
+      &:focus, &:hover {
+        &:extend(.bue-ui .bue-button.stay-clicked);
+      }
+    }
+  }
+  span.separator {
+    height: (@font-size-h3 * @line-height-base) + (@padding-base-vertical * 2) + 2;
+    display: inline-block;
+    width: 1px;
+    vertical-align: top;
+    background: @body-bg;
+    margin: 0 0 -1px 0;
+    padding: 0 @padding-base-horizontal / 2;
+    border: none;
+  }
+}
+
+/*Popup dialogs*/
+.bue-popup {
+  z-index: 10;
+  position: absolute;
+  width: auto;
+  //background: @body-bg;
+  padding: 10px;
+
+  .bue-popup-head {
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+
+    &.grabbing {
+      cursor: grabbing;
+      cursor: -moz-grabbing;
+      cursor: -webkit-grabbing;
+    }
+  }
+
+  .table {
+    td {
+      border: none;
+    }
+  }
+
+  label {
+    width: auto;
+  }
+
+  .bue-popup-content {
+    table td {
+      padding: 0 10px;
+    }
+    // For popup with select. E.g. header.
+    ul.tag-chooser {
+      .li-select();
+      code {
+        background: none;
+        color: @text-color;
+      }
+    }
+  }
+
+}

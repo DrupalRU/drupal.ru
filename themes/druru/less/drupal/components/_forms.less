@@ -1,0 +1,71 @@
+.form-type-file, .form-file {
+  position: relative;
+  width: auto;
+}
+
+.form-type-textarea {
+  margin-bottom: 0;
+}
+
+.form-textarea {
+  resize: vertical;
+}
+
+.text-format-wrapper {
+  .form-type-select, .bootstrap-select.btn-group {
+    &:extend(.form-type-textarea);
+  }
+}
+
+#user-register-form {
+  .form-item-name, .form-item-mail {
+    position: relative;
+
+    #edit-name-check, #edit-mail-check {
+      height: 16px;
+      position: absolute;
+      right: 5px;
+      top: 32px;
+
+      .text {
+        display: none;
+      }
+    }
+  }
+  #edit-captcha-response {
+    font-size: 60px;
+    height: auto;
+    font-weight: bold;
+    letter-spacing: 5px;
+  }
+  .password-field, input.password-confirm {
+    width: 50%;
+  }
+  .password-strength, div.password-confirm {
+    margin-right: 1em;
+  }
+}
+
+.help-switcher {
+  position: absolute;
+  display: block;
+  z-index: @zindex-navbar + 1;
+  right: @grid-gutter-width / 2;
+  top: @grid-gutter-width / 2;
+  .rounded(50%);
+
+  &.fixed {
+    position: fixed;
+    .transition(text-shadow @transition-speed);
+    .text-shadow(0 0 2px rgba(0,0,0,.6));
+  }
+}
+
+
+#blog-node-form {
+  #edit-type-version, #edit-keys {
+    &, & > div {
+      margin-bottom: 0;
+    }
+  }
+}

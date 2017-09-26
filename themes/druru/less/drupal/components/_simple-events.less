@@ -1,0 +1,84 @@
+.node-simple_event-form {
+
+  .container-inline-date {
+    .make-sm-column(6);
+  }
+  .form-item-address {
+    clear: both;
+  }
+  input[name="enable_time_to"]:checked {
+    + label {
+      display: none;
+    }
+  }
+
+}
+
+.node-simple-event {
+  .attributes {
+    margin-right: @padding-base-horizontal;
+    width:100%;
+    float: none;
+    .well();
+
+    @media @tablet {
+      width: auto;
+      float: left;
+    }
+
+    .image {
+      margin-bottom: @padding-base-vertical;
+    }
+    > * {
+      margin-bottom: @padding-small-vertical;
+
+      &:not(.image) {
+        text-align: left;
+
+        > * {
+          display: inline;
+        }
+
+        &:before {
+          width: 15px;
+          margin-right: 5px;
+          display: inline-block;
+          font-family: FontAwesome;
+          font-size: inherit;
+          text-rendering: auto;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
+      }
+      &.image {
+        margin-bottom: @padding-large-vertical;
+      }
+      &.website:before {
+        content: "\f0c1";
+      }
+      &.address:before {
+        content: "\f041";
+      }
+      &.event-type {
+        &:before {
+          content: "\f05a";
+        }
+        > * > * {
+          display: inline;
+        }
+      }
+      &.date_time {
+        &:before {
+          content: "\f073";
+        }
+        a > * {
+          margin-right: @padding-small-horizontal;
+          display: inline;
+        }
+      }
+    }
+  }
+  .details {
+    margin-left: 0;
+  }
+}

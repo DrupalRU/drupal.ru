@@ -1,0 +1,174 @@
+#navbar {
+  font-weight: 300;
+}
+
+.navbar {
+
+  .navbar-header {
+    padding:       0 1em;
+    background:    rgba(0, 0, 0, .1);
+    height:        88px;
+    margin-bottom: -100%;
+
+    .brand-link {
+      margin: 0;
+      height: 100%;
+
+      .navbar-brand {
+        height:       100%;
+        padding-left: 0;
+        @media @phone-only {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+
+  &.navbar-default {
+    text-align:    right;
+    border-bottom: none;
+
+    // button for toggle menu in little displays
+    .navbar-toggle {
+      border:     none;
+      background: none;
+      margin:     0;
+      padding:    15px;
+
+      .whistle-blower {
+        position: absolute;
+        top:      7px;
+        right:    10px;
+        color:    saturate(lighten(@brand-success, @tone*2), @tone);
+      }
+
+      &:hover, &:focus {
+        .icon-bar {
+          background: @much-lighter;
+        }
+      }
+
+      .icon-bar {
+        width:      32px;
+        height:     3px;
+        background: @lighter;
+        + .icon-bar {
+          margin-top: 6px;
+        }
+      }
+      &.collapsed {
+        .icon-bar {
+          background: @lighter;
+        }
+      }
+    }
+
+    .nav {
+      float:   none;
+      display: inline-block;
+      margin:  0;
+      width:   100%;
+
+      @media @tablet {
+        width: auto;
+      }
+
+      &.secondary {
+        > li {
+          > a {
+            position: relative;
+            z-index:  999;
+            // because it hovered by darker layout
+            color:    #fff;
+
+            @media @tablet {
+              border-top: 2px solid @little-darker;
+            }
+            &:after {
+              z-index:    -1;
+              background: @little-darker;
+            }
+          }
+        }
+      }
+
+      > li {
+        background: none;
+        display:    block;
+        text-align: left;
+
+        @media @tablet {
+          float:      none;
+          display:    inline-block;
+          text-align: right;
+        }
+
+        > a {
+          color:       @navbar-default-link-color;
+          position:    relative;
+          z-index:     1;
+          border-left: 2px solid transparent;
+          .menu-item-animation('to-bottom');
+
+          img {
+            vertical-align: bottom;
+          }
+
+          &:hover, &:focus, &.active {
+            color:             @navbar-default-link-hover-color;
+            border-left-color: @nav-item-active-border;
+          }
+
+          @media @tablet {
+            border-left: none;
+            border-top:  2px solid transparent;
+            .menu-item-animation('to-right');
+
+            &.active, &.active-trail, &:hover, &:focus {
+              border-top-color: @nav-item-hover-border;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .navbar-second {
+    background: rgba(0, 0, 0, .1);
+    .nav {
+      > li {
+        display: inline-block;
+        a {
+          .lighter(color, @brand-info, 3);
+          &, &:hover, &:focus, &:before, &:after {
+            border:     none;
+            background: none;
+          }
+          &:hover, &:focus {
+            color: #fff;
+          }
+          &.type-heart {
+            .lighter(color, @brand-success, 1);
+            &:hover, &:active {
+              .lighter(color, @brand-accent, 1);
+            }
+          }
+
+          @media @phone-only {
+            padding:   .5em .7em;
+            font-size: 1.4em;
+          }
+        }
+      }
+    }
+  }
+}
+
+.navbar-collapse {
+  border:  none;
+  clear:   left;
+  padding: 0;
+  @media @very-smalld {
+    clear: none;
+  }
+}

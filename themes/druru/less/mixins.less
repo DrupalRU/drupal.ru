@@ -1,0 +1,458 @@
+.inline-user-login-block-links(@size-of-links:'default', @centered:true) {
+
+  #user-login-form ul {
+    padding-left: 0;
+    text-align: left;
+
+    & when (@centered = true) {
+      text-align: center;
+    }
+
+    li {
+      display: inline-block;
+      font-size: @font-size-base;
+      margin-right: 5px;
+      padding-right: 8px;
+      border-right: 1px solid @gray-light;
+
+      & when (@size-of-links = 'small') {
+        font-size: @font-size-small;
+      }
+
+      & when (@centered = false) {
+        border-right: none;
+        margin-right: 0;
+        padding-right: 0;
+      }
+
+      &.last {
+        padding-right: 0;
+        margin-right: 0;
+        border-right: none;
+      }
+    }
+  }
+}
+
+/*---------------------------------------------------
+    LESS Elements 0.9
+  ---------------------------------------------------
+    A set of useful LESS mixins
+    More info at: http://lesselements.com
+  ---------------------------------------------------*/
+
+.gradient(@color: #F5F5F5, @start: #EEE, @stop: #FFF) {
+  background: @color;
+  background: -webkit-gradient(linear,
+  left bottom,
+  left top,
+  color-stop(0, @start),
+  color-stop(1, @stop));
+  background: -ms-linear-gradient(bottom, @start, @stop);
+  background: -moz-linear-gradient(center bottom,
+  @start 0%,
+  @stop 100%);
+  background: -o-linear-gradient(@stop,
+  @start);
+  filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)", @stop, @start));
+}
+
+.bw-gradient(@color: #F5F5F5, @start: 0, @stop: 255) {
+  background: @color;
+  background: -webkit-gradient(linear,
+  left bottom,
+  left top,
+  color-stop(0, rgb(@start, @start, @start)),
+  color-stop(1, rgb(@stop, @stop, @stop)));
+  background: -ms-linear-gradient(bottom,
+  rgb(@start, @start, @start) 0%,
+  rgb(@stop, @stop, @stop) 100%);
+  background: -moz-linear-gradient(center bottom,
+  rgb(@start, @start, @start) 0%,
+  rgb(@stop, @stop, @stop) 100%);
+  background: -o-linear-gradient(rgb(@stop, @stop, @stop),
+  rgb(@start, @start, @start));
+  filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)", rgb(@stop, @stop, @stop), rgb(@start, @start, @start)));
+}
+
+.gradient-image(@image, @start, @stop) {
+  background-image: url(@image);
+  background-image: url(@image), -moz-linear-gradient(top, @start 0%, @stop 100%); /* FF3.6+ */
+  background-image: url(@image), -webkit-gradient(linear, left top, left bottom, color-stop(0%, @start), color-stop(100%, @stop)); /* Chrome,Safari4+ */
+  background-image: url(@image), -webkit-linear-gradient(top, @start 0%, @stop 100%); /* Chrome10+,Safari5.1+ */
+  background-image: url(@image), -o-linear-gradient(top, @start 0%, @stop 100%); /* Opera 11.10+ */
+  background-image: url(@image), -ms-linear-gradient(top, @start 0%, @stop 100%); /* IE10+ */
+  background-image: url(@image), linear-gradient(to bottom, @start 0%, @stop 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@start', endColorstr='@stop', GradientType=0); /* IE6-9 */
+}
+
+.bordered(@top-color: #EEE, @right-color: #EEE, @bottom-color: #EEE, @left-color: #EEE) {
+  border-top: solid 1px @top-color;
+  border-left: solid 1px @left-color;
+  border-right: solid 1px @right-color;
+  border-bottom: solid 1px @bottom-color;
+}
+
+.drop-shadow(@x-axis: 0, @y-axis: 1px, @blur: 2px, @alpha: 0.1) {
+  -webkit-box-shadow: @x-axis @y-axis @blur rgba(0, 0, 0, @alpha);
+  -moz-box-shadow: @x-axis @y-axis @blur rgba(0, 0, 0, @alpha);
+  box-shadow: @x-axis @y-axis @blur rgba(0, 0, 0, @alpha);
+}
+
+.rounded(@radius: 2px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+}
+
+.border-radius(@topright: 0, @bottomright: 0, @bottomleft: 0, @topleft: 0) {
+  -webkit-border-top-right-radius: @topright;
+  -webkit-border-bottom-right-radius: @bottomright;
+  -webkit-border-bottom-left-radius: @bottomleft;
+  -webkit-border-top-left-radius: @topleft;
+  -moz-border-radius-topright: @topright;
+  -moz-border-radius-bottomright: @bottomright;
+  -moz-border-radius-bottomleft: @bottomleft;
+  -moz-border-radius-topleft: @topleft;
+  border-top-right-radius: @topright;
+  border-bottom-right-radius: @bottomright;
+  border-bottom-left-radius: @bottomleft;
+  border-top-left-radius: @topleft;
+  .background-clip(padding-box);
+}
+
+.opacity(@opacity: 0.5) {
+  -moz-opacity: @opacity;
+  -khtml-opacity: @opacity;
+  -webkit-opacity: @opacity;
+  opacity: @opacity;
+  @opperc: @opacity * 100;
+  -ms-filter: ~"progid:DXImageTransform.Microsoft.Alpha(opacity=@{opperc})";
+  filter: ~"alpha(opacity=@{opperc})";
+}
+
+.transition-duration(@duration: @transition-speed) {
+  -moz-transition-duration: @duration;
+  -webkit-transition-duration: @duration;
+  -o-transition-duration: @duration;
+  transition-duration: @duration;
+}
+
+.transform(...) {
+  -webkit-transform: @arguments;
+  -moz-transform: @arguments;
+  -o-transform: @arguments;
+  -ms-transform: @arguments;
+  transform: @arguments;
+}
+
+.rotation(@deg:5deg) {
+  .transform(rotate(@deg));
+}
+
+.scale(@ratio:1.5) {
+  .transform(scale(@ratio));
+}
+
+.transition(@duration: @transition-speed, @ease:ease-out) {
+  -webkit-transition: all @duration @ease;
+  -moz-transition: all @duration @ease;
+  -o-transition: all @duration @ease;
+  transition: all @duration @ease;
+}
+
+.inner-shadow(@horizontal:0, @vertical:1px, @blur:2px, @alpha: 0.4) {
+  -webkit-box-shadow: inset @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
+  -moz-box-shadow: inset @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
+  box-shadow: inset @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
+}
+
+.box-shadow(@shadow) {
+  -webkit-box-shadow: @shadow;
+  -moz-box-shadow: @shadow;
+  box-shadow: @shadow;
+}
+
+.text-shadow(@shadow) {
+  -webkit-text-shadow: @shadow;
+  -moz-text-shadow: @shadow;
+  -ms-text-shadow: @shadow;
+  -o-text-shadow: @shadow;
+  text-shadow: @shadow;
+}
+
+.box-sizing(@sizing: border-box) {
+  -ms-box-sizing: @sizing;
+  -moz-box-sizing: @sizing;
+  -webkit-box-sizing: @sizing;
+  box-sizing: @sizing;
+}
+
+.user-select(@argument: none) {
+  -webkit-user-select: @argument;
+  -moz-user-select: @argument;
+  -ms-user-select: @argument;
+  user-select: @argument;
+}
+
+.columns(@colwidth: 250px, @colcount: 0, @colgap: 50px, @columnRuleColor: #EEE, @columnRuleStyle: solid, @columnRuleWidth: 1px) {
+  -moz-column-width: @colwidth;
+  -moz-column-count: @colcount;
+  -moz-column-gap: @colgap;
+  -moz-column-rule-color: @columnRuleColor;
+  -moz-column-rule-style: @columnRuleStyle;
+  -moz-column-rule-width: @columnRuleWidth;
+  -webkit-column-width: @colwidth;
+  -webkit-column-count: @colcount;
+  -webkit-column-gap: @colgap;
+  -webkit-column-rule-color: @columnRuleColor;
+  -webkit-column-rule-style: @columnRuleStyle;
+  -webkit-column-rule-width: @columnRuleWidth;
+  column-width: @colwidth;
+  column-count: @colcount;
+  column-gap: @colgap;
+  column-rule-color: @columnRuleColor;
+  column-rule-style: @columnRuleStyle;
+  column-rule-width: @columnRuleWidth;
+}
+
+.translate(@x:0, @y:0) {
+  .transform(translate(@x, @y));
+}
+
+.background-clip(@argument: padding-box) {
+  -moz-background-clip: @argument;
+  -webkit-background-clip: @argument;
+  background-clip: @argument;
+}
+
+.grey-border-top() {
+  border-top: 1px solid @grey-border-color;
+}
+
+.grey-border-bottom() {
+  border-bottom: 1px solid @grey-border-color;
+}
+
+.grey-border-right() {
+  border-right: 1px solid @grey-border-color;
+}
+
+.grey-border-bottom-right() {
+  border-right: 1px solid @grey-border-color;
+  border-bottom: 1px solid @grey-border-color;
+}
+
+.grey-border-bottom-right-box() {
+  border: 1px solid @grey-border-color;
+}
+
+.menu-item-animation(@dir:'to-bottom') {
+  background: none;
+  &:before, &:after {
+    z-index: -1;
+    display: block;
+    content: ' ';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  & when (@dir='to-bottom') {
+    &:before {
+      width: 0;
+      background: @little-lighter;
+    }
+    &.active, &.active-trail, &:hover, &:focus {
+      background: none;
+      &:before {
+        width: 100%;
+      }
+      &:after {
+        width: 0;
+      }
+    }
+  }
+
+  & when (@dir="to-right") {
+
+    &:before, &:after {
+      left: 0;
+      top: 0;
+    }
+
+    &:before {
+      height: 0;
+      width: 100%;
+    }
+
+    &.active, &.active-trail, &:hover, &:focus {
+      &:before, &:after {
+        width: 100%;
+      }
+      &:before {
+        height: 100%;
+      }
+      &:after {
+        height: 0;
+      }
+    }
+  }
+
+}
+
+.loader-circle(@size: 'middle') {
+
+  .ajax-progress {
+    padding: 0 5px;
+    margin: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99;
+
+    .icon {
+      font-size: 42px;
+      margin: 0;
+      color: @brand-accent;
+      .text-shadow(0 0 25px @body-bg);
+      .rounded(50%);
+      left: 45%;
+      top: 45%;
+      left: calc(~"50% - 21px");
+      top: calc(~"50% - 21px");
+      position: absolute;
+
+      & when (@size = 'large') {
+        font-size: 77px;
+        left: calc(~"50% - 38px");
+        top: calc(~"50% - 38px");
+      }
+
+      & when (@size = 'gt-small') {
+        font-size: 42px;
+        left: calc(~"50% - 21px");
+        top: calc(~"50% - 21px");
+      }
+
+      & when (@size = 'small') {
+        font-size: 22px;
+        left: calc(~"50% - 11px");
+        top: calc(~"50% - 11px");
+      }
+    }
+  }
+}
+
+/**
+ * Examples to use:
+ *   .li();
+ *   .li(li);
+ *   .li(div);
+ *   .li(~"*"; {color: red});
+ *   .li(li; {color: red});
+ *   .li(li; {color: red; font-size: 2em;});
+ *
+ * One full example:
+ * ul {
+ *   .li(li; {
+ *     color: red;
+ *     font-size: 2em;
+ *   });
+ * }
+ *
+ * The las example will generate css like:
+ * ul {
+ *   padding-left: 20px;
+ *   li {
+ *     list-style: none;
+ *     color: red;
+ *     font-size: 2em;
+ *
+ *     &:before {
+ *       content: '−';
+ *       color: #ccc; // This will be some color, which set in @site-primary
+ *       float: left;
+ *       margin-left: -16px;
+ *       font-size: 1.2em;
+ *       line-height: .9em;
+ *     }
+ *   }
+ * }
+ */
+.li-select(@tag: ~"*", @rules: "") {
+  padding-left: 2px;
+
+  > @{tag} {
+    list-style: none;
+    display: block;
+    position: relative;
+    z-index: 2;
+
+    a:first-of-type {
+      border-left: 1px solid transparent;
+      line-height: @line-height-large;
+      display: block;
+      text-decoration: none;
+      padding: @padding-base-vertical @padding-base-horizontal;
+
+      //&:before {
+      //  content: '';
+      //  border-width: @padding-large-vertical 0 @padding-large-vertical 7px;
+      //  border-color: transparent;
+      //  display: block;
+      //  left: 0;
+      //  top: ~'calc(50% - 10px)';
+      //  position: absolute;
+      //  z-index: -2;
+      //  border-style: solid;
+      //}
+
+      &:hover, &:focus, &.active {
+        // For true overriden a.active:hover of other places.
+        &, &.active{
+          border-left-color: @brand-accent;
+          border-left-width: 2px;
+          padding-left: @padding-base-horizontal - 1px;
+          background: rgba(0,0,0,.05);
+          font-weight: normal;
+          color: lighten(@brand-primary, @tone);
+
+          &:before {
+            border-color: transparent transparent transparent lighten(@brand-accent, @tone);
+          }
+        }
+      }
+    }
+
+    & when not (@rules = '') {
+      @rules();
+    }
+  }
+}
+
+
+.li-accent(@tag: ~"*", @rules: "") {
+  padding-left: 20px;
+  > @{tag} {
+    list-style: none;
+    display: block;
+    & when not (@rules = '') {
+      @rules();
+    }
+
+    &:before {
+      content: '−';
+      font-weight: normal;
+      color: @brand-accent;
+      float: left;
+      margin-left: -16px;
+      font-size: 1.2em;
+      line-height: .9em;
+    }
+  }
+}

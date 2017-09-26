@@ -1,0 +1,189 @@
+name = Drupal.ru Theme
+description = Drupal.ru Theme it's a special theme builded for drupal.ru
+core = 7.x
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Regions
+;;;;;;;;;;;;;;;;;;;;;
+
+regions[navigation]     = 'Navigation'
+regions[between_menus]  = 'Between menus'
+regions[header]         = 'Top Bar'
+regions[highlighted]    = 'Highlighted'
+regions[help]           = 'Help'
+regions[content]        = 'Content'
+regions[sidebar_first]  = 'Primary'
+regions[sidebar_second] = 'Secondary'
+regions[footer]         = 'Footer'
+regions[page_top]       = 'Page top'
+regions[page_bottom]    = 'Page bottom'
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Theme Settings
+;;;;;;;;;;;;;;;;;;;;;
+
+; Breadcrumbs
+; --------------
+settings[druru_breadcrumb] = 0
+settings[druru_breadcrumb_home] = 0
+settings[druru_breadcrumb_title] = 1
+
+; Navbar
+; --------------
+settings[druru_navbar_position] = 'static-top'
+settings[druru_navbar_inverse] = 0
+
+; Region Wells
+; --------------
+settings[druru_region_well-navigation] = ''
+settings[druru_region_well-header] = ''
+settings[druru_region_well-highlighted] = ''
+settings[druru_region_well-help] = ''
+settings[druru_region_well-content] = ''
+settings[druru_region_well-sidebar_first] = 'well well-sm'
+settings[druru_region_well-sidebar_second] = ''
+settings[druru_region_well-footer] = ''
+
+
+; Anchors
+; --------------
+settings[druru_anchors_fix] = 1
+settings[druru_anchors_smooth_scrolling] = 1
+
+; Popovers
+; --------------
+settings[druru_popover_enabled] = 1
+settings[druru_popover_animation] = 1
+settings[druru_popover_html] = 0
+settings[druru_popover_placement] = 'right'
+settings[druru_popover_selector] = ''
+settings[druru_popover_trigger]['hover'] = 0
+settings[druru_popover_trigger]['focus'] = 0
+settings[druru_popover_trigger]['click'] = 'click'
+settings[druru_popover_title] = ''
+settings[druru_popover_content] = ''
+settings[druru_popover_delay] = 0
+settings[druru_popover_container] = 'body'
+
+; Tooltips
+; --------------
+settings[druru_tooltip_enabled] = 1
+settings[druru_tooltip_descriptions] = 1
+settings[druru_tooltip_animation] = 1
+settings[druru_tooltip_html] = 0
+settings[druru_tooltip_placement] = 'auto left'
+settings[druru_tooltip_selector] = ''
+settings[druru_tooltip_trigger]['hover'] = 'hover'
+settings[druru_tooltip_trigger]['focus'] = 'focus'
+settings[druru_tooltip_trigger]['click'] = 0
+settings[druru_tooltip_delay] = 0
+settings[druru_tooltip_container] = 'body'
+
+; Advanced
+; --------------
+settings[druru_bootstrap_cdn] = ''
+settings[druru_bootswatch] = ''
+
+; Global
+; --------------
+settings[toggle_name] = 0
+settings[toggle_slogan] = 0
+settings[toggle_search] = 1
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Excludes
+;;;;;;;;;;;;;;;;;;;;;
+
+; JavaScript
+; --------------
+; exclude[js][] = 'modules/contextual/contextual.js'
+
+; CSS
+; --------------
+exclude[css][] = 'misc/vertical-tabs.css'
+exclude[css][] = 'modules/aggregator/aggregator.css'
+; Necessary administrative block CSS.
+; exclude[css][] = 'modules/block/block.css'
+exclude[css][] = 'modules/book/book.css'
+exclude[css][] = 'bueditor/bueditor.css'
+exclude[css][] = 'modules/comment/comment.css'
+exclude[css][] = 'modules/dblog/dblog.css'
+exclude[css][] = 'modules/file/file.css'
+exclude[css][] = 'modules/filter/filter.css'
+exclude[css][] = 'modules/forum/forum.css'
+exclude[css][] = 'modules/help/help.css'
+exclude[css][] = 'modules/menu/menu.css'
+exclude[css][] = 'modules/node/node.css'
+exclude[css][] = 'modules/openid/openid.css'
+exclude[css][] = 'modules/poll/poll.css'
+exclude[css][] = 'modules/search/search.css'
+exclude[css][] = 'modules/statistics/statistics.css'
+exclude[css][] = 'modules/syslog/syslog.css'
+exclude[css][] = 'modules/system/maintenance.css'
+exclude[css][] = 'modules/system/system.maintenance.css'
+exclude[css][] = 'modules/system/system.menus.css'
+exclude[css][] = 'modules/system/system.messages.css'
+exclude[css][] = 'modules/system/system.theme.css'
+exclude[css][] = 'modules/taxonomy/taxonomy.css'
+exclude[css][] = 'modules/tracker/tracker.css'
+exclude[css][] = 'modules/update/update.css'
+exclude[css][] = 'modules/user/user.css'
+;exclude[css][] = 'modules/system/admin.css'
+;exclude[css][] = 'modules/system/system.css'
+;exclude[css][] = 'modules/system/system.admin.css'
+;exclude[css][] = 'modules/system/system.base.css'
+
+exclude[css][] = 'jquery.chosen/chosen.min.css'
+exclude[css][] = 'marketplace/marketplace.css'
+exclude[css][] = 'privatemsg/styles/privatemsg-list.css'
+exclude[css][] = 'date/date_api/date.css'
+exclude[css][] = 'date/date_popup/themes/datepicker.1.7.css'
+exclude[css][] = 'jquery_update/replace/ui/themes/base/minified/jquery.ui.datepicker.min.css'
+exclude[css][] = 'altpager/altpager.css'
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; SimplyTest.me
+;;;;;;;;;;;;;;;;;;;;;
+
+simplytest_dependencies[] = jquery_update
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Scripts
+;;;;;;;;;;;;;;;;;;;;;
+
+; Subnavigation
+scripts[] = bootstrap/js/affix.js
+; Drupal set message (notices)
+scripts[] = bootstrap/js/alert.js
+; Active button, can be in several states, e.g. 'loading'
+scripts[] = bootstrap/js/button.js
+; Just slider
+;scripts[] = bootstrap/js/carousel.js
+; Collapse/expande fieldsets
+scripts[] = bootstrap/js/collapse.js
+; Selects, second level of menu
+scripts[] = bootstrap/js/dropdown.js
+; Modal (pop up) windows
+scripts[] = bootstrap/js/modal.js
+; Descriptions by hover on form item
+scripts[] = bootstrap/js/tooltip.js
+; Popup with some html openning by hover (for example). More like a tooltip
+scripts[] = bootstrap/js/popover.js
+; Handle link to anchor in div with overflow = scroll.
+;scripts[] = bootstrap/js/scrollspy.js
+; vertical tabs
+scripts[] = bootstrap/js/tab.js
+; Exists in bootstrap core
+;scripts[] = bootstrap/js/transition.js
+; Stylizing select form element
+scripts[] = js/bootstrap-plugins/selectpicker.js
+; Stylizing file form element
+scripts[] = js/bootstrap-plugins/filestyle.min.js
+
+
+stylesheets[all][] = css/jquery.ui.theme.css
+stylesheets[all][] = css/style.css

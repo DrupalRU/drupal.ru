@@ -1,0 +1,40 @@
+.region {
+  &.region-between-menus {
+    display: inline-block;
+    vertical-align: bottom;
+    width: 100%;
+
+    @media @tablet {
+      width: auto;
+    }
+  }
+}
+
+body {
+  &:not(.front) {
+    section {
+      padding: 0;
+
+      .main-content {
+        background: #fff;
+        padding: (@grid-gutter-width / 2);
+        border: 1px solid #eee;
+      }
+    }
+    #navbar {
+      margin: 0;
+    }
+    @media @tablet {
+      #navbar {
+        margin-bottom: @navbar-margin-bottom;
+      }
+      section.main {
+        padding: 0 @grid-gutter-width / 2;
+
+        .main-content {
+          //padding: (@grid-gutter-width / 2) 0;
+        }
+      }
+    }
+  }
+}

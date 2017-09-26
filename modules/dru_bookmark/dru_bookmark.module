@@ -1,0 +1,165 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function dru_bookmark_menu() {
+  $items = array();
+  
+  $items['bookmark/node/%node/%'] = array(
+    'page callback'     => 'dru_bookmark_page',
+    'page arguments'    => array(1, 2, 3),
+    'access callback'   => 'user_is_logged_in',
+    'type'              => MENU_CALLBACK,
+    'delivery callback' => 'ajax_deliver',
+  );
+  
+  $items['user/bookmarks'] = array(
+    'title'            => 'My bookmarks',
+    'page callback'    => 'dru_bookmarks_page',
+    'access arguments' => array('access content'),
+    'weight'           => -100,
+    'menu_name'        => 'user-menu',
+    'file'             => 'dru_bookmark.pages.inc',
+  );
+  
+  return ($items);
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function dru_bookmark_node_view($node, $view_mode) {
+  global $user;
+  
+  if ($user->uid) {
+    drupal_add_library('system', 'drupal.ajax');
+    drupal_add_css(drupal_get_path('module', 'dru_bookmark') . '/' . 'dru_bookmark.css');
+    
+    $in_bookmark = dru_check_node_in_bookmark($node, $user);
+    
+    $node->content['links']['comment']['#links']['bookmark'] = dru_get_bookmark_link($node,$user, $in_bookmark);
+  }
+}
+
+/**
+ *
+ */
+function dru_check_node_in_bookmark($node, $user) {
+  $query = db_query(
+      'SELECT bookmarked 
+       FROM {dru_bookmarks} 
+       WHERE nid = :nid AND uid = :uid',
+    array(
+      ':nid' => $node->nid,
+      ':uid' => $user->uid,
+  ))->fetchField();
+  
+  return $query;
+}
+
+/**
+ *
+ */
+function dru_get_bookmark_link($node, $user, $in_bookmark) {
+  
+  $token = & drupal_static(__FUNCTION__);
+  if (!isset($token)) {
+    $token = drupal_get_token('dru_bookmark');
+  }
+  
+  if ($in_bookmark) {
+    $name   = t('Bookmark Out');
+    $title  = t('Delete from bookmarks');
+    $action = 'out';
+  }
+  else {
+    $name   = t('Bookmark In');
+    $title  = t('Add to bookmarks');
+    $action = 'in';
+  }
+    
+  $link = array(
+    'title'      => $name,
+    'href'       => 'bookmark/node/' . $node->nid . '/' . $token,
+    'query'      => drupal_get_destination(),
+    'attributes' => array(
+      'title' => $title,
+      'class' => array(
+        'use-ajax',
+        'dru-bookmark',
+        'dru-bookmark-' . $action,
+      ),
+    ),
+  );
+  
+  return $link;
+}
+
+/**
+ *
+ */
+function dru_bookmark_page($content_type, $content, $token) {
+  
+  if (!drupal_valid_token($token, 'dru_bookmark')) {
+    return;
+  }
+  
+  $callback = 'dru_bookmark_' . $content_type;
+  
+  return dru_bookmark_node($content);
+}
+
+/**
+ *
+ */
+function dru_bookmark_node($node) {
+  
+  global $user;
+  
+  $in_bookmark = dru_check_node_in_bookmark($node, $user);
+  
+  $in_bookmark ? dru_bookmark_node_remove_bookmark($node, $user) : dru_bookmark_node_add_bookmark($node, $user);
+  
+  $commands = array();
+  
+  $sb_link = dru_get_bookmark_link($node, $user, !$in_bookmark);
+  $link    = l($sb_link['title'], $sb_link['href'], array(
+    'query'      => $sb_link['query'],
+    'attributes' => $sb_link['attributes'],
+  ));
+  
+  $commands[] = ajax_command_replace('.dru-bookmark', $link);
+  
+  return array(
+    '#type'     => 'ajax',
+    '#commands' => $commands,
+  );
+}
+
+/**
+ *
+ */
+function dru_bookmark_node_add_bookmark($node, $user) {
+  $result = db_merge('dru_bookmarks')
+    ->key(array('uid' => $user->uid, 'nid' => $node->nid))
+    ->insertFields(array(
+      'uid'        => $user->uid,
+      'nid'        => $node->nid,
+      'vid'        => $node->vid,
+      'bookmarked' => TRUE,
+    ))
+    ->updateFields(array(
+      'bookmarked' => TRUE,
+    ))->execute();
+}
+
+/**
+ *
+ */
+function dru_bookmark_node_remove_bookmark($node, $user) {
+  $result = db_delete('dru_bookmarks')
+    ->condition('uid', $user->uid)
+    ->condition('nid', $node->nid)
+    ->execute();
+}

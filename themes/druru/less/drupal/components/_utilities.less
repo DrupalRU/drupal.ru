@@ -1,0 +1,17 @@
+.indent {
+  padding-left: 2em;
+}
+
+.text-muted {
+  a {
+    color: lighten(@link-color, @tone * 3);
+    &:hover, &:focus {
+      color: lighten(@link-hover-color, @tone * 3);
+    }
+  }
+}
+
+.actions {
+  float: right;
+  margin: @line-height-computed 0 0 0;
+}

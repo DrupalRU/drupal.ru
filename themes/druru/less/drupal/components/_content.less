@@ -1,0 +1,206 @@
+.description {
+  font-size: .9em;
+  color: lighten(@text-color, 30%);
+}
+
+// Page header.
+.page-header {
+  margin-top: 0;
+  word-wrap: break-word;
+  border: none;
+  line-height: 1em;
+  padding-bottom: 0;
+
+  i {
+    color: darken(@gray-light, @tone * 2);
+  }
+}
+
+.page-events,
+.node-type-organization,
+.node-type-blog,
+.node-type-ticket,
+.page-alttracker,
+.page-forum,
+.page-messages:not(.page-messages-view),
+.page-user,
+.page-blog,
+.node-type-simple-event {
+  // Page header.
+  .page-header {
+
+    + h2 + .nav {
+      margin-bottom: 0;
+    }
+
+    @media @tablet {
+      max-width: ~'calc(100% - 180px)';
+      float: left;
+      + .alert {
+        clear: both;
+      }
+    }
+  }
+}
+
+a {
+
+  &:focus, &:hover, &:active {
+    outline: none;
+  }
+
+  // Links with hash inside should have usual behavior.
+  &.active:not([href~=#]) {
+    cursor: default;
+  }
+}
+
+table {
+  a {
+
+    &.active {
+      cursor: pointer;
+    }
+  }
+}
+
+.content {
+
+  img {
+    max-width: 100%;
+  }
+
+  .field {
+    margin-top: 5px;
+
+    &.field-name-body {
+      margin-top: 0;
+    }
+  }
+}
+
+span.cke_top, span.cke_bottom {
+  .gradient(#cfd1cf, #cfd1cf, #dfe1df);
+
+  a, span {
+    cursor: pointer;
+
+    &.cke_button_disabled {
+
+      &, a, span {
+        cursor: default;
+      }
+    }
+  }
+}
+
+span.cke_toolgroup, a.cke_combo_button {
+  .gradient(#e4e4e4, #e4e4e4, #f4f4f4);
+
+  a, span {
+    cursor: pointer;
+
+    &.cke_button_disabled {
+
+      &, a, span {
+
+        cursor: default;
+      }
+    }
+  }
+}
+
+.region.region-content {
+  word-wrap: break-word;
+  margin-bottom: 10px;
+  clear: left;
+}
+
+.more-link {
+  text-align: right;
+  margin-top: 6px;
+}
+
+.node-type-list {
+
+  dd {
+    padding: 0 0 5px 15px;
+  }
+
+  dt {
+    padding: 5px;
+    margin-top: 10px;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+}
+
+.main-container {
+  margin-bottom: 30px;
+}
+
+.field-type-taxonomy-term-reference {
+  &.field-label-inline {
+    .field-label {
+      margin-right: @padding-base-horizontal;
+    }
+  }
+  .field-items > div {
+    display: inline-block;
+    margin-right: @padding-small-horizontal;
+    &:after {
+      display: inline-block;
+      content: ', ';
+    }
+
+    &:last-of-type {
+      &:after {
+        content: '';
+      }
+    }
+  }
+}
+
+.list-group {
+  .list-group-item {
+    .h3 {
+      margin: 0;
+      padding-right: @padding-base-horizontal;
+    }
+  }
+}
+
+.terms-wrapper {
+  margin-top: @padding-large-vertical;
+  position: relative;
+
+  &:after {
+    color: @little-darker;
+    content: "\f02c";
+    font-family: "fa", "FontAwesome";
+    position: absolute;
+    font-size: @font-size-h2;
+    top: @padding-base-vertical;
+    right: @padding-base-horizontal;
+    z-index: 0;
+  }
+  .field:first-of-type {
+    margin: 0;
+  }
+  @media @phone {
+
+    .field-label {
+      .text-ellipsis();
+      float: left;
+      width: 200px;
+      text-align: right;
+      font-weight: 400;
+    }
+    .field-items {
+      padding-left: 212px;
+      float: none;
+    }
+  }
+}

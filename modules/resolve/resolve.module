@@ -11,45 +11,84 @@
 define('RESOLVE_CAN', 'resolve_can');
 
 /**
+ * Mark content as resolved.
+ */
+define('RESOLVE_IS_RESOLVED', 0x01);
+
+/**
+ * Mark content as not resolved.
+ */
+define('RESOLVE_IS_NOT_RESOLVED', 0x00);
+
+/**
  * Implements hook_menu().
  */
 function resolve_menu() {
   $items['node/%node/resolve/%comment/%resolve_token'] = array(
-    'title'             => 'Resolve',
-    'page callback'     => 'resolve_node_ajax_callback',
-    'page arguments'    => array(1, 3, 4),
-    'access callback'   => 'resolve_access',
-    'access arguments'  => array(1, 3, 4),
-    'type'              => MENU_CALLBACK,
+    'title' => 'Resolve',
+    'page callback' => 'resolve_node_ajax_callback',
+    'page arguments' => array(1, 3, 4),
+    'access callback' => 'resolve_access',
+    'access arguments' => array(1, 3, 4),
+    'type' => MENU_CALLBACK,
+    'delivery callback' => 'ajax_deliver',
+  );
+  $items['node/%node/unsolved/%comment/%resolve_token'] = array(
+    'title' => 'Unsolved',
+    'page callback' => 'resolve_unsolved_node_ajax_callback',
+    'page arguments' => array(1, 3, 4),
+    'access callback' => 'resolve_access',
+    'access arguments' => array(1, 3, 4),
+    'type' => MENU_CALLBACK,
     'delivery callback' => 'ajax_deliver',
   );
   return $items;
 }
 
 /**
+ * Helper function, which performs attaching js files to page.
+ */
+function resolve_attach_js() {
+  static $attached;
+  if (!isset($attached)) {
+    drupal_add_library('system', 'drupal.ajax');
+    drupal_add_js(drupal_get_path('module', 'resolve') . '/resolve.js');
+    $attached = TRUE;
+  }
+}
+
+/**
  * Implements hook_comment_view().
  */
 function resolve_comment_view($comment, $view_mode, $langcode) {
-  // Get setting.
   $node = node_load($comment->nid);
-  if (empty($node->resolved)) {
-    $can_resolved = variable_get(RESOLVE_CAN . '_' . $node->type);
-    $token        = resolve_token_to_arg();
-    if ($can_resolved && resolve_access($node, $comment, $token)) {
-      drupal_add_library('system', 'ajax');
-      $links = &$comment->content['links']['comment']['#links'];
+  // Attach js files.
+  resolve_attach_js();
+  $can_resolved = variable_get(RESOLVE_CAN . '_' . $node->type);
+  $token = resolve_token_to_arg();
+  if ($can_resolved && resolve_access($node, $comment, $token)) {
+    $links = &$comment->content['links']['comment']['#links'];
+    if (!empty($node->resolved_cid) && $node->resolved_cid == $comment->cid) {
+      // Add link to comment for resolve the question (node).
+      $links['comment-unsolved'] = array(
+        'title' => t('Unsolved'),
+        'href' => _resolve_unsolved_path($comment->nid, $comment->cid),
+        'attributes' => array(
+          'class' => array('use-ajax'),
+        ),
+      );
+      $comment->best = TRUE;
+    }
+    else {
       // Add link to comment for resolve the question (node).
       $links['comment-resolve'] = array(
-        'title'      => t('resolve'),
-        'href'       => _resolve_path($comment->nid, $comment->cid),
+        'title' => t('resolve'),
+        'href' => _resolve_path($comment->nid, $comment->cid),
         'attributes' => array(
           'class' => array('use-ajax'),
         ),
       );
     }
-  }
-  elseif (!empty($node->resolved_cid) && $node->resolved_cid == $comment->cid) {
-    $comment->best = TRUE;
   }
 }
 
@@ -59,7 +98,7 @@ function resolve_comment_view($comment, $view_mode, $langcode) {
  * @param object $node
  *   Object of checked node.
  *
- * @param mixed  $comment
+ * @param mixed $comment
  *   Object or array of comment which is initiator.
  *
  * @param string $token
@@ -77,8 +116,8 @@ function resolve_access($node, $comment, $token) {
   }
   // Checks that the comment belongs to the node.
   return $nid == $node->nid
-  && (user_access('bypass node access') || $GLOBALS['user']->uid == $node->uid)
-  && drupal_valid_token($token, 'resolve');
+    && (user_access('bypass node access') || $GLOBALS['user']->uid == $node->uid)
+    && drupal_valid_token($token, 'resolve');
 }
 
 /**
@@ -102,11 +141,11 @@ function resolve_query_alttracker_nodes_load_alter(QueryAlterableInterface &$que
  */
 function resolve_form_node_type_form_alter(&$form, &$form_state, $form_id) {
   if (isset($form['type']) && module_exists('comment')) {
-    $type                         = $form['#node_type']->type;
+    $type = $form['#node_type']->type;
     $form['comment'][RESOLVE_CAN] = array(
-      '#type'          => 'checkbox',
-      '#title'         => t('The questions can be resolved by comments.'),
-      '#description'   => t('Any node of the content type can be resolved by a comment.'),
+      '#type' => 'checkbox',
+      '#title' => t('The questions can be resolved by comments.'),
+      '#description' => t('Any node of the content type can be resolved by a comment.'),
       '#default_value' => variable_get(RESOLVE_CAN . '_' . $type),
     );
   }
@@ -125,14 +164,16 @@ function resolve_preprocess_comment(&$variables) {
  * Implements hook_preprocess_HOOK().
  */
 function resolve_preprocess_node(&$variables) {
-  $is_resolved  = !empty($variables['resolved']);
+  $is_resolved = !empty($variables['resolved']);
   $correct_mode = $variables['view_mode'] == 'full';
-  resolve_add_mark($variables['title'], $is_resolved);
+  if (resolved_node_can_be_resolved($variables['node'])) {
+    $variables['title'] = resolve_add_mark($variables['node'], $is_resolved) . $variables['title'];
+  }
 
   // Adding best comment to bottom of the node.
   if ($correct_mode && $is_resolved && isset($variables['content'])) {
     $content = &$variables['content'];
-    if($comment = comment_load($variables['resolved_cid'])){
+    if ($comment = comment_load($variables['resolved_cid'])) {
       $content['resolved_comment'] = comment_view($comment, $variables['node']);
 
       // Get max weight of the page.
@@ -142,17 +183,17 @@ function resolve_preprocess_node(&$variables) {
           $weight = $item['#weight'];
         }
       }
-  
+
       // If weight not found.
       if ($weight < count($content)) {
         $weight = count($content) + 1;
       }
-  
+
       $content['best-comment-header'] = array(
         '#markup' => '<h3>' . t('Best reply') . '</h3>',
         '#weight' => ++$weight,
       );
-  
+
       $content['resolved_comment']['#weight'] = ++$weight;
     }
   }
@@ -169,11 +210,10 @@ function resolve_preprocess_alttracker(&$variables) {
  * Implements hook_preprocess_HOOK().
  */
 function resolve_preprocess_page(&$variables) {
-  if (isset($variables['node']) && is_object($variables['node'])) {
-    $node = &$variables['node'];
-    resolve_add_mark($node->title, !empty($node->resolved));
-    drupal_set_title($node->title);
-  }
+  //  if (isset($variables['node']) && is_object($variables['node'])) {
+  //    $node = &$variables['node'];
+  //    $node->title = resolve_add_mark($node, !empty($node->resolved)) . $node->title;
+  //  }
 }
 
 /**
@@ -186,27 +226,67 @@ function resolve_preprocess_page(&$variables) {
  */
 function resolve_node_ajax_callback($node, $comment, $token) {
   $commands = array();
-  $keys     = array();
-  $record   = array(
-    'nid'      => $node->nid,
-    'cid'      => $comment->cid,
+  $keys = array();
+  $record = array(
+    'nid' => $node->nid,
+    'cid' => $comment->cid,
     'resolved' => TRUE,
   );
 
   // If the node has mark resolved, then we should just update his.
-  if (isset($node->resolved) && $node->resolved == 0) {
+  if (isset($node->resolved)) {
     $keys[] = 'nid';
-    $keys[] = 'cid';
   }
   drupal_write_record('resolved', $record, $keys);
-  $node       = node_load($node->nid, NULL, TRUE);
-  $node_view  = node_view($node);
-  $commands[] = ajax_command_html('.node', drupal_render($node_view));
+  resolve_update_page_state($node, $commands);
   $commands[] = resolve_ajax_command_resolve();
   return array(
-    '#type'     => 'ajax',
+    '#type' => 'ajax',
     '#commands' => $commands,
   );
+}
+
+/**
+ * Ajax callback for mark a node as resolved.
+ *
+ * @param object $node
+ *   Object of a node.
+ *
+ * @return array
+ */
+function resolve_unsolved_node_ajax_callback($node, $comment, $token) {
+  $commands = array();
+  $transaction = db_transaction(__FUNCTION__);
+  try {
+    db_delete('resolved')
+      ->condition('nid', $node->nid)
+      ->condition('cid', $comment->cid)
+      ->execute();
+  } catch (Exception $e) {
+    $transaction->rollback();
+    watchdog_exception('resolve', $e, 'The comment can not be unsolved.', array(), WATCHDOG_ERROR);
+  }
+  resolve_update_page_state($node, $commands);
+  $commands[] = resolve_ajax_command_unsolved();
+  return array(
+    '#type' => 'ajax',
+    '#commands' => $commands,
+  );
+}
+
+/**
+ * Performs tasks after resolve question (node).
+ *
+ * @param object $node
+ *   Node which should be rendered as page.
+ *
+ * @param array $commands
+ *   List of commands witch should be updated.
+ */
+function resolve_update_page_state($node, &$commands) {
+  $node = node_load($node->nid, NULL, TRUE);
+  $node_view = node_view($node);
+  $commands[] = ajax_command_replace('.node', drupal_render($node_view));
 }
 
 /**
@@ -215,6 +295,15 @@ function resolve_node_ajax_callback($node, $comment, $token) {
 function resolve_ajax_command_resolve() {
   return array(
     'command' => 'resolve',
+  );
+}
+
+/**
+ * Performs resolve a node.
+ */
+function resolve_ajax_command_unsolved() {
+  return array(
+    'command' => 'unsolved',
   );
 }
 
@@ -237,11 +326,13 @@ function resolve_token_to_arg() {
  *
  * @param string $title
  *   Some title of node or page.
- * @param bool   $resolved
+ * @param bool $resolved
  *   If set to TRUE, then the flag says: "Hey, the node is resolved!"
  */
-function resolve_add_mark(&$title, $resolved) {
-  $title = ($resolved ? '[' . t('Resolved') . '] ' : '') . $title;
+function resolve_add_mark($node, $resolved) {
+  return theme('resolved', array(
+    'context' => $node,
+  ));
 }
 
 /**
@@ -268,6 +359,21 @@ function _resolve_path($nid, $cid) {
 }
 
 /**
+ * Helper for generate page to unsolve a node.
+ *
+ * @param int $nid
+ *   Node ID.
+ * @param int $cid
+ *   Comment ID.
+ *
+ * @return string
+ *   Path to resolve the node, which will be received by nid.
+ */
+function _resolve_unsolved_path($nid, $cid) {
+  return 'node/' . $nid . '/unsolved/' . $cid . '/' . resolve_token_to_arg();
+}
+
+/**
  * Helper for array_walk.
  *
  * @param object $node
@@ -276,5 +382,34 @@ function _resolve_path($nid, $cid) {
  * @see resolve_preprocess_alttracker()
  */
 function _resolve_alttraker(&$node) {
-  resolve_add_mark($node->title, !empty($node->resolved));
+  $node->resolved_status = resolve_add_mark($node, !empty($node->resolved));
+}
+
+/**
+ * Implements hook_theme().
+ */
+function resolve_theme($existing, $type, $theme, $path) {
+  return array(
+    'resolved' => array(
+      'variables' => array(
+        'resolved' => RESOLVE_IS_RESOLVED,
+      ),
+    ),
+  );
+}
+
+/**
+ * Returns HTML for a marker for resolved content.
+ *
+ * @param $variables
+ *   An associative array containing:
+ *   - type: Number representing the marker type to display.
+ *     See RESOLVE_IS_RESOLVED, RESOLVE_IS_NOT_RESOLVED.
+ */
+function theme_resolved($variables) {
+  return $variables['resolved'] == RESOLVE_IS_RESOLVED ? '[' . t('Resolved') . '] ' : '';
+}
+
+function resolved_node_can_be_resolved($node) {
+  return isset($node->type) ? variable_get(RESOLVE_CAN . '_' . $node->type) : FALSE;
 }

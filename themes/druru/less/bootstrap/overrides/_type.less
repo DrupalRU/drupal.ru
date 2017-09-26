@@ -1,0 +1,82 @@
+// Headings
+// -------------------------
+
+h1, .h1 {
+  font-weight: 100;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  a {
+    &:hover, &:focus {
+      small, .small {
+        color: darken(@headings-small-color, @tone);
+      }
+    }
+  }
+}
+
+.help-block, .control-group .help-inline {
+  font-size: @font-size-small;
+  margin: 5px 0 10px;
+  padding: 0;
+}
+
+.text-primary {
+  .text-emphasis-variant(@brand-primary);
+}
+
+.text-accent {
+  .text-emphasis-variant(darken(@brand-accent, @tone));
+}
+
+.text-default {
+  .text-emphasis-variant(@text-muted);
+}
+
+.bg-accent {
+  .bg-variant(@state-accent-bg);
+}
+
+.bg-primary {
+  .help-block {
+    color: @much-lighter;
+  }
+}
+
+.bg-success, .bg-info, .bg-warning, .bg-accent, .bg-danger {
+  .help-block {
+    color: @much-darker;
+  }
+}
+
+blockquote {
+  font-size: @font-size-base;
+  border-left-color: @gray-light;
+}
+
+.bb-quote {
+  > b {
+    margin-bottom: -35px;
+    display: block;
+    margin-left: 15px;
+    color: @gray-light;
+    text-transform: capitalize;
+    font-weight: 400;
+    font-size: 17px;
+  }
+  blockquote {
+    font-size: 15px;
+    border-left-color: @gray-lighter;
+    padding-top: 26px;
+    &.bb-quote-body {
+      > b {
+        &:extend(.bb-quote > b);
+      }
+    }
+  }
+}
+
+strong {
+  font-weight: bolder;
+}

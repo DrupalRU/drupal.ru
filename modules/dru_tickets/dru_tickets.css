@@ -54,23 +54,6 @@ li.moderate-help a:before {
   padding-right: 5px;
 }
 
-li.unpublish a:before {
-  font-family: "fa", "FontAwesome";
-  padding-right: 5px;
-}
-
-li.unpublish a.moderate-publish:before {
-  content: "\f01e";
-}
-
-li.unpublish a.moderate-unpublish:before {
-  content: "\f014";
-}
-
-.dru-verdict-process {
-  /*background: #fff6ed;*/
-}
-
 #verdict-add {
   background: rgba(0, 0, 0, 0.7) none repeat scroll 0 0;
   height: 100%;

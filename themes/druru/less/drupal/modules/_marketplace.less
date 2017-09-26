@@ -1,0 +1,40 @@
+.node.node-organization {
+  margin-top: @line-height-computed;
+  padding-top: @line-height-computed;
+  border-top: 1px solid @little-darker;
+
+  &:first-of-type {
+    border-top: none;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .media-heading {
+    margin-bottom: 0;
+  }
+
+  dl {
+    margin: 0;
+    font-weight: 300;
+    dt {
+      font-weight: 300;
+      font-size: @font-size-h4;
+      margin-top: @padding-large-vertical;
+      @media @very-smalld {
+        font-size: @font-size-base;
+        margin-top: 0;
+      }
+    }
+    dd {
+      * {
+        margin: 0;
+      }
+    }
+  }
+}
+
+.block-marketplace .node-organization, .node-teaser.node-organization {
+  h2, h3 {
+    margin: 0;
+  }
+}

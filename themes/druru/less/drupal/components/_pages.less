@@ -1,0 +1,230 @@
+body {
+  &.page-user {
+    #profile {
+      .user-picture {
+        .caption {
+          padding-top: @padding-large-vertical;
+          h3 {
+            margin-top: 0;
+            small {
+              display: block;
+            }
+          }
+        }
+      }
+      .user-info {
+        h3 {
+          margin-top: 0;
+          border-bottom: 1px solid @brand-info;
+          color: @brand-primary;
+        }
+        dt {
+          text-align: left;
+          font-weight: normal;
+        }
+        dd {
+          margin-left: 33%;
+        }
+        @media @tablet {
+          dt {
+            width: 30%;
+          }
+        }
+      }
+    }
+    #blog {
+      .node {
+        .content {
+          &, > .field-name-body {
+            clear: none;
+          }
+        }
+      }
+      &.short-view {
+        .node {
+          > *:not(h2) {
+            display: none;
+          }
+
+          > h2 {
+            padding-left: @padding-large-horizontal;
+            i {
+              padding-right: @padding-base-horizontal;
+            }
+          }
+          &:not(:first-child) {
+            h2 {
+              margin-top: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+  &.front {
+    @front-bg: #1D3E5A;
+    @spec-regions-bg: saturate(darken(@front-bg, @tone/2), @tone);
+    @spec-regions-border: darken(@spec-regions-bg, @tone/2);
+
+    background: @front-bg;
+    color: #c8dce5;
+
+    .navbar-second {
+      background: transparent;
+    }
+
+    .region-content {
+      section {
+        margin-top: 25px;
+
+        &:first-child {
+          margin-top: 0;
+        }
+        h2 {
+          margin-top: 0;
+        }
+      }
+    }
+
+    h1, h2, h3, .h1, .h2, .h3 {
+      @text-color: desaturate(lighten(@brand-accent, @tone*2), @tone);
+      &, small, .small {
+        color: @text-color;
+      }
+      a {
+        &, small, .small {
+          color: @text-color;
+        }
+
+        &:hover, &:focus {
+          &, small, .small {
+            color: lighten(@text-color, @tone);
+          }
+        }
+      }
+    }
+
+    .navbar {
+      margin: 0;
+    }
+
+    .jumbotron {
+      .gradient-image("../img/front-bg.svg", @brand-primary, #71afdc);
+      background-position: center   101%;
+      background-repeat: repeat-x;
+      color: @navbar-default-link-color;
+      padding-bottom: 260px;
+      padding-top: 60px;
+      position: relative;
+      z-index: 2;
+
+      .download-drupal-front {
+        color: #e2b674;
+
+        &:hover, &:focus {
+          color: lighten(#e2b674, @tone);
+          text-decoration: none;
+        }
+
+        i {
+          .text-shadow(0 0 80px);
+        }
+      }
+    }
+
+    .block-simple-events {
+      .event-list {
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+
+        -webkit-flex-flow: row;
+        flex-wrap: nowrap;
+        overflow: auto;
+
+        .thumbnail {
+          background: @spec-regions-bg;
+          border: 1px solid @spec-regions-border;
+          width: 32%;
+          margin-right: 2%;
+          margin-bottom: 0;
+          min-width: 292px;
+
+          display: inline-flex;
+          flex-direction: column;
+          -ms-flex-direction: column;
+          justify-content: space-between;
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          &.add-more-link {
+            display: block;
+            border-width: 3px;
+            border-style: dashed;
+            font-size: 5em;
+            text-align: center;
+            line-height: 5em;
+            color: @spec-regions-border;
+            .transition();
+            &:hover, &:focus {
+              border-color: darken(@spec-regions-border, @tone/2);
+              color: darken(@spec-regions-border, @tone/2);
+            }
+          }
+          .caption {
+            font-weight: 300;
+            color: #c8dce5;
+          }
+        }
+      }
+    }
+
+    .frontpage-list + {
+      background-color: @spec-regions-bg;
+      border: 1px solid @spec-regions-border;
+      padding: @padding-large-vertical @padding-large-horizontal;
+
+      .list-group {
+        margin-left: -@padding-large-horizontal;
+        margin-right: -@padding-large-horizontal;
+
+        &, .list-group-item {
+          background: none;
+          border: none;
+        }
+        .list-group-item {
+          border-bottom: 1px solid @little-darker;
+
+          &:last-child {
+            border-bottom: none;
+          }
+          &:focus, &:hover{
+            background: @little-darker;
+          }
+        }
+      }
+      .h4 {
+        margin: 0;
+        padding-right: @padding-large-horizontal;
+        .icon {
+          color: @brand-accent;
+          width: 20px;
+        }
+      }
+    }
+
+    aside {
+      ul:not(.pager) > * a:first-of-type i {
+        color: @much-lighter;
+      }
+    }
+  }
+
+  .main-content {
+    position: relative;
+  }
+}

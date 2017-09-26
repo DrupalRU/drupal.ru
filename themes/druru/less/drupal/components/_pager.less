@@ -1,0 +1,86 @@
+//
+// Pager pagination
+// --------------------------------------------------
+
+.pager-wrapper {
+  clear: left;
+}
+
+.pager {
+  margin: 0;
+  li {
+    display: inline;
+    cursor: default;
+    > a,
+    > span {
+      padding: 5px 1em;
+      line-height: 1.1em;
+      cursor: pointer;
+    }
+
+  }
+
+  .pager-previous {
+    margin-right: 5px;
+    width: 80px;
+  }
+
+  .pager-next {
+    margin-left: 5px;
+    width: 50px;
+  }
+}
+
+.region-sidebar-first,
+.region-sidebar-second {
+
+  .block {
+
+    .pager {
+      margin: 6px 0;
+      li {
+        display: inline-block;
+        &.pager-next, &.pager-prev {
+          width: auto;
+        }
+        > a,
+        > span {
+          &, &.progress-disabled {
+            padding: 5px 5px;
+            line-height: 1.1em;
+            background: none;
+            border: none;
+          }
+        }
+      }
+
+      .ajax-progress.ajax-progress-throbber {
+        background: @ajax-loading-bg;
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        cursor: progress;
+
+        i {
+          position: absolute;
+          top: 50%;
+          top: calc(50% - 7px);
+          left: 50%;
+          left: calc(50% - 7px);
+        }
+      }
+    }
+  }
+}
+
+.pagination {
+  margin: 0;
+  a, span {
+
+    &, &.progress-disabled {
+      float: left;
+    }
+  }
+}

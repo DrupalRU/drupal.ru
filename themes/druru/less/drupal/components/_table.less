@@ -1,0 +1,39 @@
+.table {
+  thead {
+    th {
+      font-weight: 300;
+      font-size: 1.2em;
+    }
+  }
+  > tbody {
+    > tr.selected {
+      > td {
+        background-color: @table-bg-active;
+      }
+    }
+  }
+}
+
+table {
+  &.sticky-header {
+    z-index: 1;
+  }
+}
+
+form {
+  table {
+    th {
+      a {
+        img {
+          vertical-align: top;
+          margin-left: 5px;
+        }
+      }
+    }
+    input {
+      &.form-checkbox, &.form-radio {
+        opacity: 0;
+      }
+    }
+  }
+}

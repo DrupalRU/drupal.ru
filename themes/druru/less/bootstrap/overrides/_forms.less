@@ -1,0 +1,227 @@
+/* Customized Checkbox and Radios */
+.form-type-checkbox,
+.form-type-radio {
+  position: relative;
+}
+
+input {
+  &.form-checkbox, &.form-radio {
+    + label {
+      padding-left: 23px; /* LTR */
+      cursor: pointer;
+      position: relative;
+      min-height: 1em;
+    }
+  }
+}
+
+label {
+  font-weight: @font-weight-base;
+}
+
+/* Using "foo" to make unsupporting browsers ignore */
+#foo:checked::before,
+input.form-checkbox,
+input.form-radio {
+  opacity: 0;
+  width: 20px;
+  height: 20px;
+}
+
+#foo:checked,
+input.form-checkbox + label::before,
+input.form-radio + label::before {
+  content: "";
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0; /* LTR */
+  height: 17px;
+  width: 17px;
+  border: 1px solid #a1a1a1;
+  .border-radius(3px, 3px, 3px, 3px);
+  .gradient(#ffffff, #ffffff, #eaeaea);
+}
+
+#foo:checked,
+input.form-checkbox:focus + label::before,
+input.form-radio:focus + label::before {
+  outline: 0;
+  .box-shadow(0 0 3px @brand-primary);
+}
+
+// Make the radios more round.
+#foo:checked,
+input.form-radio + label::before {
+  height: 16px;
+  width: 16px;
+  .border-radius(14px, 14px, 14px, 14px);
+}
+
+#foo:checked,
+.form-disabled input.form-checkbox + label::before {
+  opacity: .4;
+}
+
+#foo:checked,
+body.in-maintenance input.form-radio + label::before {
+  top: 4px;
+}
+
+#foo:checked,
+input.form-checkbox:checked + label::before {
+  .gradient-image("../img/check.png", #ffffff, #eaeaea);
+}
+
+input.form-radio:checked + label::before {
+  .gradient-image("../img/radio.png", #ffffff, #eaeaea);
+}
+
+form table {
+  input.form-checkbox,
+  input.form-radio {
+    opacity: 1;
+    height: auto;
+    width: auto;
+  }
+  .form-disabled input.form-checkbox {
+    opacity: .4;
+  }
+}
+
+/* Form Fixes for Webkit Browsers. */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  form table {
+    input {
+      &.form-checkbox, &.form-radio {
+        -webkit-appearance: none;
+        display: inline-block;
+        appearance: none;
+        opacity: 1;
+        cursor: pointer;
+        top: 4px;
+        left: 2px; /* LTR */
+        height: 17px;
+        width: 17px;
+        border: 1px solid #a1a1a1;
+        border-radius: 3px;
+        .gradient(#ffffff, #ffffff, #eaeaea);
+        &:focus {
+          outline: 0;
+          box-shadow: 0 0 3px @brand-primary;
+        }
+      }
+      &.form-checkbox:checked {
+        .gradient-image("../img/check.png", #ffffff, #eaeaea);
+      }
+      &.form-radio {
+        height: 16px;
+        width: 16px;
+        border-radius: 16px;
+        &:checked {
+          .gradient-image("../img/radio.png", #ffffff, #eaeaea);
+        }
+      }
+      .form-disabled input.form-checkbox {
+        opacity: 0.4;
+      }
+    }
+  }
+}
+
+a.tabledrag-handle {
+  .handle {
+    background-position: 6px 12px;
+  }
+}
+
+.form-actions {
+  text-align: right;
+}
+
+// Autocomplete and throbber
+.form-autocomplete {
+  .glyphicon {
+    color: @gray-light;
+    font-size: 100%;
+    &.glyphicon-spin {
+      color: @brand-primary;
+    }
+  }
+  .input-group-addon {
+    background-color: rgb(255, 255, 255);
+  }
+}
+
+// AJAX "Throbber".
+.loader-circle();
+
+.glyphicon-spin {
+  display: inline-block;
+  .animation(spin 1s infinite linear);
+}
+
+a .glyphicon-spin {
+  display: inline-block;
+  text-decoration: none;
+}
+
+@-moz-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(359deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+  }
+}
+
+@-o-keyframes spin {
+  0% {
+    -o-transform: rotate(0deg);
+  }
+  100% {
+    -o-transform: rotate(359deg);
+  }
+}
+
+@-ms-keyframes spin {
+  0% {
+    -ms-transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(359deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+
+.glyphicon-refresh {
+  .transform-origin(50%);
+}
+
+.btn-accent {
+  .button-variant(@btn-accent-color; @btn-accent-bg; @btn-accent-border);
+}
+
+.form-control {
+  &, &:focus, &:hover {
+    .box-shadow(none);
+    .transition(none);
+  }
+}

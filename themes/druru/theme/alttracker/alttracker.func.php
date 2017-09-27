@@ -41,7 +41,6 @@ function druru_alttracker($variables) {
       '#value'      => $node_icon . check_plain($node->title),
       '#attributes' => array(
         'class' => array(
-          'text-capitalize',
           'text-primary',
           'participants',
           'title',

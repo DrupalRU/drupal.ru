@@ -75,10 +75,9 @@
       <small class="text-muted media-header-item">
         <?php isset($timeago) ? print $timeago : print $changed; ?>
       </small>
-      <?php if($status == COMMENT_NOT_PUBLISHED): ?>
-        <small class="media-header-item unpublished-item">
-          <i class="fa fa-eye-slash" aria-hidden="true"></i>
-          <?php print t('Unpublished'); ?>
+      <?php if (isset($unpublished)): ?>
+        <small class="media-header-item">
+          <?php print $unpublished; ?>
         </small>
       <?php endif; ?>
       <?php if(isset($tnx)): ?>

@@ -14,7 +14,7 @@ function druru_preprocess_node(&$vars) {
 
   if (!$vars['status']) {
     $vars['submitted'] .= ' <span class="unpublished-item">';
-    $vars['submitted'] .= druru_icon('eye-close') . t('Unpublished');
+    $vars['submitted'] .= druru_get_icon_by_title(t('Unpublished'));
     $vars['submitted'] .= '</span>';
   }
 

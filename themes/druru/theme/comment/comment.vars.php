@@ -32,7 +32,7 @@ function druru_preprocess_comment(&$vars) {
   // Check published status
   if ($vars['status'] == COMMENT_NOT_PUBLISHED) {
     $vars['unpublished'] .= ' <span class="unpublished-item">';
-    $vars['unpublished'] .= druru_icon('eye-close') . t('Unpublished');
+    $vars['unpublished'] .= druru_get_icon_by_title(t('Unpublished'));
     $vars['unpublished'] .= '</span>';
   }
 

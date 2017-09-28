@@ -7759,6 +7759,10 @@ body .region-sidebar-first .block#block-drurum-new h2 a:focus,
 body .region-sidebar-second .block#block-drurum-new h2 a:focus {
   color: #3D76A0;
 }
+body .region-sidebar-first li i.fa-check-circle-o,
+body .region-sidebar-second li i.fa-check-circle-o {
+  color: #df9b10;
+}
 body .col-sm-3 #user-login-form ul {
   padding-left: 0;
   text-align: left;

@@ -11,6 +11,13 @@ function druru_preprocess_node(&$vars) {
   $date = druru_icon('calendar') . $vars['date'];
   $user = druru_icon('user') . $vars['name'];
   $vars['submitted'] = $date . ', ' . $user;
+
+  if (!$vars['status']) {
+    $vars['submitted'] .= ' <span class="unpublished-item">';
+    $vars['submitted'] .= druru_get_icon_by_title(t('Unpublished'));
+    $vars['submitted'] .= '</span>';
+  }
+
   if (isset($vars['content']['datetime']['#markup']) && $view_mode == 'teaser') {
     $event_time = $vars['node']->event->time_from;
     $vars['content']['datetime']['#markup'] = format_date($event_time, 'medium');

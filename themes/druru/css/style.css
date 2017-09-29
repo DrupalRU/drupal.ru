@@ -7759,6 +7759,10 @@ body .region-sidebar-first .block#block-drurum-new h2 a:focus,
 body .region-sidebar-second .block#block-drurum-new h2 a:focus {
   color: #3D76A0;
 }
+body .region-sidebar-first li i.fa-check-circle-o,
+body .region-sidebar-second li i.fa-check-circle-o {
+  color: #df9b10;
+}
 body .col-sm-3 #user-login-form ul {
   padding-left: 0;
   text-align: left;
@@ -7944,6 +7948,9 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
   border-left: 10px solid #6ab7dd;
   margin-left: 0;
 }
+.main-content .node .comment.comment-unpublished {
+  background-color: #f2dede;
+}
 .main-content .node .comment .dropdown {
   opacity: .5;
   -webkit-transition: opacity 0.2s;
@@ -8087,7 +8094,7 @@ a:hover,
 a:active {
   outline: none;
 }
-a.active:not([href~=#]) {
+a.active:not([href~='#']) {
   cursor: default;
 }
 table a.active {
@@ -8922,6 +8929,12 @@ ul.li-accent > *:before {
 }
 .node .content {
   clear: both;
+}
+.node.node-unpublished {
+  background-color: #f2dede;
+}
+.node .unpublished-item {
+  color: #b94a48;
 }
 body.not-front div:not(.alttracker.list-group) .user-picture {
   float: left;

@@ -29,6 +29,13 @@ function druru_preprocess_comment(&$vars) {
     '@time' => format_interval(time() - $vars['comment']->changed, 1),
   ));
 
+  // Check published status
+  if ($vars['status'] == COMMENT_NOT_PUBLISHED) {
+    $vars['unpublished'] .= ' <span class="unpublished-item">';
+    $vars['unpublished'] .= druru_get_icon_by_title(t('Unpublished'));
+    $vars['unpublished'] .= '</span>';
+  }
+
   // Delete class 'inline" and
   // "list-inline" (will added automatically) from links.
   if (!empty($link_attrs['class'])) {

@@ -449,6 +449,13 @@ function druru_get_icon_by_title($text) {
  */
 function druru_icons_libraries() {
   $base_icons = array(
+    'ban-circle'  => array(
+      t('Discard'),
+      t('Ban'),
+    ),
+    'check'       => array(
+      t('Checked'),
+    ),
     'cog'         => array(
       t('Manage'),
       t('Configure'),
@@ -456,11 +463,34 @@ function druru_icons_libraries() {
     'download'    => array(
       t('Download'),
     ),
+    'envelope'    => array(
+      t('New email'),
+      t('E-mail new password'),
+      t('Create new email'),
+      t('Create new message'),
+    ),
     'export'      => array(
       t('Export'),
     ),
+    'eye-open'    => array(
+      t('Preview'),
+      t('See'),
+      t('Show'),
+    ),
+    'eye-close'    => array(
+      t('Unpublished'),
+    ),
+    'floppy-disk' => array(
+      t('Save'),
+      t('Complete'),
+      t('Done'),
+    ),
     'import'      => array(
       t('Import'),
+    ),
+    'ok'          => array(
+      t('Ok'),
+      t('Check'),
     ),
     'pencil'      => array(
       t('Edit'),
@@ -470,41 +500,10 @@ function druru_icons_libraries() {
       t('Create'),
       t('Write'),
     ),
-    'trash'       => array(
-      t('Delete'),
-      t('Remove'),
-    ),
-    'upload'      => array(
-      t('Upload'),
-    ),
-    'eye-open'    => array(
-      t('Preview'),
-      t('See'),
-      t('Show'),
-    ),
-    'floppy-disk' => array(
-      t('Save'),
-      t('Complete'),
-      t('Done'),
-    ),
-    'ban-circle'  => array(
-      t('Discard'),
-      t('Ban'),
-    ),
-    'ok'          => array(
-      t('Ok'),
-      t('Check'),
-    ),
     'remove'      => array(),
     'search'      => array(
       t('Search'),
       t('Find'),
-    ),
-    'check'       => array(
-      t('Checked'),
-    ),
-    'unchecked'   => array(
-      t('Unchecked'),
     ),
     'send'        => array(
       t('Send'),
@@ -512,11 +511,15 @@ function druru_icons_libraries() {
     'sign-in'     => array(
       t('Log in'),
     ),
-    'envelope'    => array(
-      t('New email'),
-      t('E-mail new password'),
-      t('Create new email'),
-      t('Create new message'),
+    'trash'       => array(
+      t('Delete'),
+      t('Remove'),
+    ),
+    'upload'      => array(
+      t('Upload'),
+    ),
+    'unchecked'   => array(
+      t('Unchecked'),
     ),
   );
   $icons = array(

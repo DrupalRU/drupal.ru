@@ -75,6 +75,11 @@
       <small class="text-muted media-header-item">
         <?php isset($timeago) ? print $timeago : print $changed; ?>
       </small>
+      <?php if (isset($unpublished)): ?>
+        <small class="media-header-item">
+          <?php print $unpublished; ?>
+        </small>
+      <?php endif; ?>
       <?php if(isset($tnx)): ?>
         <small class="media-header-item"><?php print $tnx; ?></small>
       <?php endif; ?>

@@ -8094,7 +8094,7 @@ a:hover,
 a:active {
   outline: none;
 }
-a.active:not([href~='#']) {
+a.active:not([href*='#']) {
   cursor: default;
 }
 table a.active {

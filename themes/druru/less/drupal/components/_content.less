@@ -49,8 +49,7 @@ a {
     outline: none;
   }
 
-  // Links with hash inside should have usual behavior.
-  &.active:not([href~='#']) {
+  &.active:not([href*='#']) {
     cursor: default;
   }
 }

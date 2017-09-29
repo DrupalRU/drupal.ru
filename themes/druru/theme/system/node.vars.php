@@ -13,7 +13,7 @@ function druru_preprocess_node(&$vars) {
   $vars['submitted'] = $date . ', ' . $user;
 
   if (!$vars['status']) {
-    $vars['submitted'] .= ' <span class="unpublished-item">';
+    $vars['submitted'] = ' <span class="unpublished-item">';
     $vars['submitted'] .= druru_get_icon_by_title(t('Unpublished'));
     $vars['submitted'] .= '</span>';
   }

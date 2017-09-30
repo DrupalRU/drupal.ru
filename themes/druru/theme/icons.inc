@@ -539,6 +539,7 @@ function druru_icons_libraries() {
         'floppy-o'       => $base_icons['floppy-disk'],
         'ban'            => $base_icons['ban-circle'],
         'eye'            => $base_icons['eye-open'],
+        'eye-slash'      => $base_icons['eye-close'],
         'check'          => $base_icons['ok'],
         'check-square-o' => $base_icons['check'],
         'square-o'       => $base_icons['unchecked'],

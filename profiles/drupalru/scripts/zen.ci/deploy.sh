@@ -16,20 +16,13 @@ print_status() {
   echo "";
   echo "\033[0;32m$@\033[0m"
 }
-header "Стягивание кода"
-echo "Статус репозитрия"
-echo ""
-git status
-git add .
-git checkout -f HEAD
-git pull
-git status
-echo "Статус репозитрия после стягивания"
-echo ""
 
-header "Создание новой версии $TIMESTAMP.$COMMIT"
-if [ ! -d "$VERSION_PATH" ]; then
-  mkdir -p "$VERSION_PATH"
+print_status "Статус репозитрия"
+git status
+
+print_status "Создание новой версии $TIMESTAMP.$COMMIT"
+if [ ! -d "$VERSION_DIR" ]; then
+  mkdir -p "$VERSION_DIR"
   echo "Создание выполнено"
 fi
 

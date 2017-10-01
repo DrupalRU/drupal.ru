@@ -20,12 +20,6 @@ print_status() {
 print_status "Статус репозитрия"
 git status
 
-print_status "Создание новой версии $TIMESTAMP.$COMMIT"
-if [ ! -d "$VERSION_DIR" ]; then
-  mkdir -p "$VERSION_DIR"
-  echo "Создание выполнено"
-fi
-
 print_status "Создание новой версии $VERSION"
 if [ ! -d "$VERSION_DIR" ]; then
   mkdir -p "$VERSION_DIR"

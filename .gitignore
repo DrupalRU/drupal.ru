@@ -2,6 +2,7 @@
 sites/**/*settings.php
 sites/*/files
 sites/local
+sites/local.sites.php
 
 /*.txt
 !/robots.txt

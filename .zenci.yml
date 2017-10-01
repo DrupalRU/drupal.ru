@@ -1,15 +1,15 @@
 deploy:
   master:
-    server: 85.143.172.161
+    server: 89.223.31.105
     username: drupal
-    dir: '{home}/github/repository'
+    dir: '{home}/repo'
     env_vars:
       environment: prod
       site: drupal.ru
       store_versions: 3
-      profile: drupalru
     scripts:
-      after: '{deploy_dir}/scripts/zen.ci/deploy.sh'
+      after: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/deploy.sh'
+      fail_deploy: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/rollback.sh'
   dev:
     server: 89.223.31.105
     username: drupal

@@ -41,10 +41,10 @@ ln -sfn "$VERSION_DIR" "$SITE_DIR"
 print_status "Ссылка на новую версию \"$VERSION\" создана"
 
 print_status "Запуск обновлений"
-drush updb -y
+drush @dru.${ENVIRONMENT} updb -y
 
 print_status "Очистка кэша"
-drush cc all
+drush @dru.${ENVIRONMENT} cc all
 
 cd $VERSIONS_DIR
 if [ $(ls -l | grep -c ^d) -gt $STORE_VERSIONS ] ; then

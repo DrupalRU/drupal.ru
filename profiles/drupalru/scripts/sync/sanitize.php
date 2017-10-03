@@ -59,26 +59,26 @@ $clean_variables = array(
     'token' => sprintf('s:32:"%s";', substr($hash, 0, 32)),
   ),
   'drop' => array(
-    'abuse_%',
-    'birthdays_%',
-    'color_garland_%',
-    'druid_%',
-    'googleajaxsearch_%',
-    'googleanalytics_%',
-    'googlemap_%',
-    'listhandler_%',
-    'mibbit_%',
-    'mysite_%',
-    'pearwiki_%',
-    'postcard_%',
-    'recaptcha_%',
-    'relativity_%',
-    'reptag_%',
-    'signature_%',
-    'site_user_%',
-    'user_relationship_%',
-    'user_relationships_%',
-    'xtemplate_%',
+    'abuse_',
+    'birthdays_',
+    'color_garland_',
+    'druid_',
+    'googleajaxsearch_',
+    'googleanalytics_',
+    'googlemap_',
+    'listhandler_',
+    'mibbit_',
+    'mysite_',
+    'pearwiki_',
+    'postcard_',
+    'recaptcha_',
+    'relativity_',
+    'reptag_',
+    'signature_',
+    'site_user_',
+    'user_relationship_',
+    'user_relationships_',
+    'xtemplate_',
   ),
 );
 
@@ -109,19 +109,20 @@ foreach (db_find_tables('%') as $table) {
   }
 }
 
-
+print PHP_EOL;
 print '####### Clean Variables #######' . PHP_EOL;
 foreach ($clean_variables['drop'] as $variable => $value) {
-  $query = db_delete('variable')->condition('name', $variable, 'LIKE');
-  $query->execute();
+  $query = db_delete('variable')->condition('name', db_like($variable).'%', 'LIKE');
   print str_replace(PHP_EOL, '', $query->__toString()) . PHP_EOL;
+  $query->execute();
 }
 
+print PHP_EOL;
 print '####### Change sensitive data #######' . PHP_EOL;
 foreach ($clean_variables['values'] as $variable => $value) {
   $query = db_update('variable')
     ->fields(array('value' => $value))
     ->condition('name', $variable);
-  $query->execute();
   print str_replace(PHP_EOL, '', $query->__toString()) . PHP_EOL;
+  $query->execute();
 }

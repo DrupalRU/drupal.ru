@@ -111,7 +111,7 @@ foreach (db_find_tables('%') as $table) {
 
 print PHP_EOL;
 print '####### Clean Variables #######' . PHP_EOL;
-foreach ($clean_variables['drop'] as $variable => $value) {
+foreach ($clean_variables['drop'] as $variable) {
   $query = db_delete('variable')->condition('name', db_like($variable).'%', 'LIKE');
   print str_replace(PHP_EOL, '', $query->__toString()) . PHP_EOL;
   $query->execute();

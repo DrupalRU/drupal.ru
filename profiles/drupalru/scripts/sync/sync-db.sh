@@ -15,7 +15,7 @@ if [ -z $(which drush) ]; then
 fi
 
 DRUSH_ALIAS=$1
-PROJECT=$(drush $DRUSH_ALIAS status | grep "Drupal root" | awk -F: '{ gsub(/[ \s ]+/, "", $2); print $2 }')
+PROJECT=$(drush $DRUSH_ALIAS status | grep "Drupal root" | awk -F: '{ gsub(/\s+/, "", $2); print $2 }')
 DUMP_DIR=$PROJECT/sites/default/files/update/$(date +%Y%m%d%H%M%S)
 DUMP_URL="http://drupal.ru/sites/default/files/drupalru-dump.sql.gz"
 DUMP_FILE_STATUS=$(curl --head --silent $DUMP_URL | head -n 1)

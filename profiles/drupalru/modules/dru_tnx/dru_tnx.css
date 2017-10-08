@@ -1,3 +1,54 @@
+.tnx-counter {
+  position: relative;
+  padding-left: 1.5em;
+  display: inline;
+}
+
 .tnx-counter.counter-0 {
   display: none;
+}
+
+.tnx-counter i {
+  font-size: 1em;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -.5em;
+  will-change: transform, font-size, opacity;
+}
+
+.tnx-counter.plus i {
+  animation-name: tnx-plus;
+  animation-duration: .8s;
+}
+
+.tnx-counter.minus i {
+  animation-name: tnx-minus;
+  animation-duration: .8s;
+}
+
+@keyframes tnx-plus {
+  from {
+    transform: scale(1.8);
+    opacity: .1;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes tnx-minus {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  20% {
+    transform: scale(1.4) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0) rotate(-720deg);
+    opacity: 0;
+  }
 }

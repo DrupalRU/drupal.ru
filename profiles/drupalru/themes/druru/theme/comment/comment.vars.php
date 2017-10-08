@@ -1,7 +1,7 @@
 <?php
 
 function druru_preprocess_comment(&$vars) {
-  $links = array();
+  $links      = array();
   $link_attrs = array();
 
   if (isset($vars['content']['links'])) {
@@ -15,8 +15,8 @@ function druru_preprocess_comment(&$vars) {
 
   // Generate bautiful permanent link to comment which
   // includes path to node instead of path to comment.
-  $node_url = entity_uri('node', $vars['node']);
-  $comment_fragment = 'comment-' . $vars['comment']->cid;
+  $node_url          = entity_uri('node', $vars['node']);
+  $comment_fragment  = 'comment-' . $vars['comment']->cid;
   $vars['permalink'] = l(druru_icon('anchor'), $node_url['path'], array(
     'html'       => TRUE,
     'fragment'   => $comment_fragment,
@@ -25,7 +25,7 @@ function druru_preprocess_comment(&$vars) {
       'title' => t('Anchor for this comment'),
     ),
   ));
-  $vars['timeago'] = t('@time ago', array(
+  $vars['timeago']   = t('@time ago', array(
     '@time' => format_interval(time() - $vars['comment']->changed, 1),
   ));
 
@@ -67,8 +67,8 @@ function druru_preprocess_comment(&$vars) {
       'title' => '&nbsp;',
       'html'  => TRUE,
     );
-    $icons1['divider'] = 'divider';
-    $sort = array_merge($icons1, $icons2);
+    $icons1['divider']                     = 'divider';
+    $sort                                  = array_merge($icons1, $icons2);
   }
   else {
     $sort = $icons1;
@@ -90,7 +90,7 @@ function druru_preprocess_comment(&$vars) {
       }
       // This is like ucfirst for cyrillic symbols.
       $first_letter = mb_strtoupper(mb_substr($link['title'], 0, 1));
-      $other_name = mb_substr($link['title'], 1);
+      $other_name   = mb_substr($link['title'], 1);
 
       $icon = '';
       if (isset($sort[$key])) {
@@ -98,7 +98,7 @@ function druru_preprocess_comment(&$vars) {
       }
 
       $link['title'] = $icon . $first_letter . $other_name;
-      $link['html'] = TRUE;
+      $link['html']  = TRUE;
 
       $weight = array_search($key, array_keys($sort));
       if ($weight !== FALSE) {
@@ -110,11 +110,27 @@ function druru_preprocess_comment(&$vars) {
     uasort($links['comment']['#links'], 'drupal_sort_weight');
   }
 
-  if (!empty($vars['comment']->tnx)) {
-    unset($vars['content']['tnx']);
-    $vars['tnx'] = druru_icon('heart', FALSE, array(
-      'class' => array('text-danger')
-    )) . $vars['comment']->tnx;
+  if (isset($vars['comment']->tnx)) {
+
+    $vars['tnx'] = dru_tnx_view($vars['comment'], 'comment');
+
+    /*//$vars['tnx'] = array(
+    //  '#type'       => 'container',
+    //  '#attributes' => array(
+    //    'class' => array(
+    //      'tnx-counter',
+    //      'counter-' . (isset($vars['comment']->tnx) ? $vars['comment']->tnx : 0),
+    //      'dru-tnx-comment-' . $vars['comment']->cid . '-counter',
+    //    ),
+    //  ),
+    //  'tnx'         => array(
+    //    '#markup' => druru_icon('heart', FALSE, array(
+    //        'class' => array(
+    //          'text-danger',
+    //        ),
+    //      )) . $vars['comment']->tnx,
+    //  ),
+    //);*/
   }
 
   if (!_druru_links_access($vars['content'])) {
@@ -124,6 +140,6 @@ function druru_preprocess_comment(&$vars) {
 
 function _druru_links_access($content) {
   return (!empty($content['links']) && empty($content['links']['#printed']) && (
-    !isset($content['links']['#access']) || $content['links']['#access'])
-  ) && $GLOBALS['user']->uid;
+        !isset($content['links']['#access']) || $content['links']['#access'])
+    ) && $GLOBALS['user']->uid;
 }

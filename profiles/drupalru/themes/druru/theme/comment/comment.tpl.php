@@ -81,7 +81,7 @@
         </small>
       <?php endif; ?>
       <?php if(isset($tnx)): ?>
-        <small class="media-header-item"><?php print $tnx; ?></small>
+        <small class="media-header-item"><?php print render($tnx); ?></small>
       <?php endif; ?>
 
       <?php if(!empty($content['links'])

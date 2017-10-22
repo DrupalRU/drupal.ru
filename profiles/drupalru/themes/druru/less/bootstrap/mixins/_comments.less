@@ -1,0 +1,42 @@
+.comment-variant(@color, @dropdown) {
+  @dropdown-icon-bg: @dropdown;
+
+  background: lighten(@color, @tone);
+  border-color: @color;
+
+  &.hovered {
+    background: @color;
+    border-color: darken(@color, @tone);
+  }
+
+  .dropdown {
+
+    &.open {
+      .dropdown-toggle {
+        &, &:hover, &:focus, &:active {
+          background: transparent;
+          border-color: @dropdown-toggle-active-border;
+
+          .icon-bar {
+            background: @dropdown-icon-active-bg;
+          }
+        }
+      }
+    }
+
+    .dropdown-toggle {
+      border-color: @dropdown-toggle-border;
+
+      &:hover, &:focus, &:active {
+        border-color: @dropdown-toggle-hover-border;
+
+        .icon-bar {
+          background: @dropdown-icon-hover-bg;
+        }
+      }
+      .icon-bar {
+        background: @dropdown-icon-bg;
+      }
+    }
+  }
+}

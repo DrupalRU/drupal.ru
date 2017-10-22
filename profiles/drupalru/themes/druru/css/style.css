@@ -7839,119 +7839,119 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
 .media-header-item {
   margin-right: 10px;
 }
-.main-content .node .comment {
+.main-content .comment {
   border: 1px solid transparent;
   position: relative;
   margin-top: 6px;
 }
-.main-content .node .comment div.user-picture {
+.main-content .comment div.user-picture {
   margin-bottom: 0;
   margin-right: 0;
 }
-.main-content .node .comment div.user-picture img {
+.main-content .comment div.user-picture img {
   max-width: inherit;
 }
-.main-content .node .comment:hover .dropdown,
-.main-content .node .comment:focus .dropdown {
+.main-content .comment:hover .dropdown,
+.main-content .comment:focus .dropdown {
   opacity: 1;
 }
-.main-content .node .comment.darkmatter {
+.main-content .comment.darkmatter {
   background: #545454;
   border-color: #444;
 }
-.main-content .node .comment.darkmatter.hovered {
+.main-content .comment.darkmatter.hovered {
   background: #444;
   border-color: #343434;
 }
-.main-content .node .comment.darkmatter .dropdown.open .dropdown-toggle,
-.main-content .node .comment.darkmatter .dropdown.open .dropdown-toggle:hover,
-.main-content .node .comment.darkmatter .dropdown.open .dropdown-toggle:focus,
-.main-content .node .comment.darkmatter .dropdown.open .dropdown-toggle:active {
+.main-content .comment.darkmatter .dropdown.open .dropdown-toggle,
+.main-content .comment.darkmatter .dropdown.open .dropdown-toggle:hover,
+.main-content .comment.darkmatter .dropdown.open .dropdown-toggle:focus,
+.main-content .comment.darkmatter .dropdown.open .dropdown-toggle:active {
   background: transparent;
   border-color: #282828;
 }
-.main-content .node .comment.darkmatter .dropdown.open .dropdown-toggle .icon-bar,
-.main-content .node .comment.darkmatter .dropdown.open .dropdown-toggle:hover .icon-bar,
-.main-content .node .comment.darkmatter .dropdown.open .dropdown-toggle:focus .icon-bar,
-.main-content .node .comment.darkmatter .dropdown.open .dropdown-toggle:active .icon-bar {
+.main-content .comment.darkmatter .dropdown.open .dropdown-toggle .icon-bar,
+.main-content .comment.darkmatter .dropdown.open .dropdown-toggle:hover .icon-bar,
+.main-content .comment.darkmatter .dropdown.open .dropdown-toggle:focus .icon-bar,
+.main-content .comment.darkmatter .dropdown.open .dropdown-toggle:active .icon-bar {
   background: #080808;
 }
-.main-content .node .comment.darkmatter .dropdown .dropdown-toggle {
+.main-content .comment.darkmatter .dropdown .dropdown-toggle {
   border-color: transparent;
 }
-.main-content .node .comment.darkmatter .dropdown .dropdown-toggle:hover,
-.main-content .node .comment.darkmatter .dropdown .dropdown-toggle:focus,
-.main-content .node .comment.darkmatter .dropdown .dropdown-toggle:active {
+.main-content .comment.darkmatter .dropdown .dropdown-toggle:hover,
+.main-content .comment.darkmatter .dropdown .dropdown-toggle:focus,
+.main-content .comment.darkmatter .dropdown .dropdown-toggle:active {
   border-color: #383838;
 }
-.main-content .node .comment.darkmatter .dropdown .dropdown-toggle:hover .icon-bar,
-.main-content .node .comment.darkmatter .dropdown .dropdown-toggle:focus .icon-bar,
-.main-content .node .comment.darkmatter .dropdown .dropdown-toggle:active .icon-bar {
+.main-content .comment.darkmatter .dropdown .dropdown-toggle:hover .icon-bar,
+.main-content .comment.darkmatter .dropdown .dropdown-toggle:focus .icon-bar,
+.main-content .comment.darkmatter .dropdown .dropdown-toggle:active .icon-bar {
   background: #181818;
 }
-.main-content .node .comment.darkmatter .dropdown .dropdown-toggle .icon-bar {
+.main-content .comment.darkmatter .dropdown .dropdown-toggle .icon-bar {
   background: #383838;
 }
-.main-content .node .comment.darkmatter:not(.best-comment) {
+.main-content .comment.darkmatter:not(.best-comment) {
   color: #e6e6e6;
 }
-.main-content .node .comment.darkmatter.darkmatter-unaccessed .media-body {
+.main-content .comment.darkmatter.darkmatter-unaccessed .media-body {
   padding: 5px 12px;
 }
-.main-content .node .comment.darkmatter.best-comment {
+.main-content .comment.darkmatter.best-comment {
   border-color: #bbb;
 }
-.main-content .node .comment.best-comment {
+.main-content .comment.best-comment {
   background: #f2f9ef;
   border-color: #dff0d8;
 }
-.main-content .node .comment.best-comment.hovered {
+.main-content .comment.best-comment.hovered {
   background: #dff0d8;
   border-color: #cce7c1;
 }
-.main-content .node .comment.best-comment .dropdown.open .dropdown-toggle,
-.main-content .node .comment.best-comment .dropdown.open .dropdown-toggle:hover,
-.main-content .node .comment.best-comment .dropdown.open .dropdown-toggle:focus,
-.main-content .node .comment.best-comment .dropdown.open .dropdown-toggle:active {
+.main-content .comment.best-comment .dropdown.open .dropdown-toggle,
+.main-content .comment.best-comment .dropdown.open .dropdown-toggle:hover,
+.main-content .comment.best-comment .dropdown.open .dropdown-toggle:focus,
+.main-content .comment.best-comment .dropdown.open .dropdown-toggle:active {
   background: transparent;
   border-color: #acc7a1;
 }
-.main-content .node .comment.best-comment .dropdown.open .dropdown-toggle .icon-bar,
-.main-content .node .comment.best-comment .dropdown.open .dropdown-toggle:hover .icon-bar,
-.main-content .node .comment.best-comment .dropdown.open .dropdown-toggle:focus .icon-bar,
-.main-content .node .comment.best-comment .dropdown.open .dropdown-toggle:active .icon-bar {
+.main-content .comment.best-comment .dropdown.open .dropdown-toggle .icon-bar,
+.main-content .comment.best-comment .dropdown.open .dropdown-toggle:hover .icon-bar,
+.main-content .comment.best-comment .dropdown.open .dropdown-toggle:focus .icon-bar,
+.main-content .comment.best-comment .dropdown.open .dropdown-toggle:active .icon-bar {
   background: #8ca980;
 }
-.main-content .node .comment.best-comment .dropdown .dropdown-toggle {
+.main-content .comment.best-comment .dropdown .dropdown-toggle {
   border-color: transparent;
 }
-.main-content .node .comment.best-comment .dropdown .dropdown-toggle:hover,
-.main-content .node .comment.best-comment .dropdown .dropdown-toggle:focus,
-.main-content .node .comment.best-comment .dropdown .dropdown-toggle:active {
+.main-content .comment.best-comment .dropdown .dropdown-toggle:hover,
+.main-content .comment.best-comment .dropdown .dropdown-toggle:focus,
+.main-content .comment.best-comment .dropdown .dropdown-toggle:active {
   border-color: #bcd7b1;
 }
-.main-content .node .comment.best-comment .dropdown .dropdown-toggle:hover .icon-bar,
-.main-content .node .comment.best-comment .dropdown .dropdown-toggle:focus .icon-bar,
-.main-content .node .comment.best-comment .dropdown .dropdown-toggle:active .icon-bar {
+.main-content .comment.best-comment .dropdown .dropdown-toggle:hover .icon-bar,
+.main-content .comment.best-comment .dropdown .dropdown-toggle:focus .icon-bar,
+.main-content .comment.best-comment .dropdown .dropdown-toggle:active .icon-bar {
   background: #9bbc8d;
 }
-.main-content .node .comment.best-comment .dropdown .dropdown-toggle .icon-bar {
+.main-content .comment.best-comment .dropdown .dropdown-toggle .icon-bar {
   background: #bcd7b1;
 }
-.main-content .node .comment.hovered {
+.main-content .comment.hovered {
   background: rgba(0, 0, 0, 0.06);
 }
-.main-content .node .comment.hovered .dropdown {
+.main-content .comment.hovered .dropdown {
   opacity: 1;
 }
-.main-content .node .comment.new-comment {
+.main-content .comment.new-comment {
   border-left: 10px solid #6ab7dd;
   margin-left: 0;
 }
-.main-content .node .comment.comment-unpublished {
+.main-content .comment.comment-unpublished {
   background-color: #f2dede;
 }
-.main-content .node .comment .dropdown {
+.main-content .comment .dropdown {
   opacity: .5;
   -webkit-transition: opacity 0.2s;
   -o-transition: opacity 0.2s;
@@ -7961,36 +7961,36 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
   -o-transition: all opacity 0.2s ease-out;
   transition: all opacity 0.2s ease-out;
 }
-.main-content .node .comment .dropdown.open .dropdown-toggle,
-.main-content .node .comment .dropdown.open .dropdown-toggle:hover,
-.main-content .node .comment .dropdown.open .dropdown-toggle:focus,
-.main-content .node .comment .dropdown.open .dropdown-toggle:active {
+.main-content .comment .dropdown.open .dropdown-toggle,
+.main-content .comment .dropdown.open .dropdown-toggle:hover,
+.main-content .comment .dropdown.open .dropdown-toggle:focus,
+.main-content .comment .dropdown.open .dropdown-toggle:active {
   background: transparent;
   border-color: #c9c9c9;
 }
-.main-content .node .comment .dropdown.open .dropdown-toggle .icon-bar,
-.main-content .node .comment .dropdown.open .dropdown-toggle:hover .icon-bar,
-.main-content .node .comment .dropdown.open .dropdown-toggle:focus .icon-bar,
-.main-content .node .comment .dropdown.open .dropdown-toggle:active .icon-bar {
+.main-content .comment .dropdown.open .dropdown-toggle .icon-bar,
+.main-content .comment .dropdown.open .dropdown-toggle:hover .icon-bar,
+.main-content .comment .dropdown.open .dropdown-toggle:focus .icon-bar,
+.main-content .comment .dropdown.open .dropdown-toggle:active .icon-bar {
   background: #a9a9a9;
 }
-.main-content .node .comment .dropdown .dropdown-toggle {
+.main-content .comment .dropdown .dropdown-toggle {
   border-color: transparent;
   background: transparent;
   padding: 8px;
 }
-.main-content .node .comment .dropdown .dropdown-toggle:hover,
-.main-content .node .comment .dropdown .dropdown-toggle:focus,
-.main-content .node .comment .dropdown .dropdown-toggle:active {
+.main-content .comment .dropdown .dropdown-toggle:hover,
+.main-content .comment .dropdown .dropdown-toggle:focus,
+.main-content .comment .dropdown .dropdown-toggle:active {
   border-color: #d9d9d9;
   outline: none;
 }
-.main-content .node .comment .dropdown .dropdown-toggle:hover .icon-bar,
-.main-content .node .comment .dropdown .dropdown-toggle:focus .icon-bar,
-.main-content .node .comment .dropdown .dropdown-toggle:active .icon-bar {
+.main-content .comment .dropdown .dropdown-toggle:hover .icon-bar,
+.main-content .comment .dropdown .dropdown-toggle:focus .icon-bar,
+.main-content .comment .dropdown .dropdown-toggle:active .icon-bar {
   background: #b9b9b9;
 }
-.main-content .node .comment .dropdown .dropdown-toggle .icon-bar {
+.main-content .comment .dropdown .dropdown-toggle .icon-bar {
   background: #d9d9d9;
   width: 20px;
   height: 3px;
@@ -7999,18 +7999,18 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
   -moz-border-radius: 1px;
   border-radius: 1px;
 }
-.main-content .node .comment .dropdown .dropdown-toggle .icon-bar + .icon-bar {
+.main-content .comment .dropdown .dropdown-toggle .icon-bar + .icon-bar {
   margin-top: 3px;
 }
-.main-content .node .comment .dropdown .dropdown-menu .darkmatter-link > span {
+.main-content .comment .dropdown .dropdown-menu .darkmatter-link > span {
   color: #999999;
 }
-.main-content .node .comment .dropdown .dropdown-menu a,
-.main-content .node .comment .dropdown .dropdown-menu .darkmatter-link > span {
+.main-content .comment .dropdown .dropdown-menu a,
+.main-content .comment .dropdown .dropdown-menu .darkmatter-link > span {
   padding-left: 12px;
 }
-.main-content .node .comment .dropdown .dropdown-menu a .fa,
-.main-content .node .comment .dropdown .dropdown-menu .darkmatter-link > span .fa {
+.main-content .comment .dropdown .dropdown-menu a .fa,
+.main-content .comment .dropdown .dropdown-menu .darkmatter-link > span .fa {
   width: 21px;
   text-align: center;
   margin-right: 3px;

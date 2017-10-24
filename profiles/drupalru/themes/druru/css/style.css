@@ -7583,7 +7583,7 @@ body.admin-menu {
   padding-right: 0;
   padding-bottom: 0;
   margin-left: 15px;
-  background-position: 155px 8px;
+  background-position: 135px 8px;
 }
 .navbar > .container .navbar-brand:hover,
 .navbar > .container .navbar-brand:focus {
@@ -7591,13 +7591,13 @@ body.admin-menu {
 }
 .navbar > .container .navbar-brand .site-name {
   font-size: 2.5em;
-  line-height: 1.3em;
+  line-height: 1em;
   font-family: 'Segoe UI', Frutiger, 'Frutiger Linotype', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
-  margin-bottom: 6px;
+  margin-bottom: 16px;
 }
 .navbar > .container .navbar-brand .site-slogan {
   margin-left: 4px;
-  font-size: .9em;
+  font-size: .8em;
 }
 @media screen and (min-width: 748px) {
   .navbar > .container .navbar-brand {

@@ -7841,8 +7841,11 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
 }
 .main-content .comment {
   border: 1px solid transparent;
+  border-top-color: #e6e6e6;
   position: relative;
-  margin-top: 6px;
+  margin-top: 0;
+  background: #fff;
+  padding-top: 6px;
 }
 .main-content .comment div.user-picture {
   margin-bottom: 0;
@@ -7892,7 +7895,7 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
 .main-content .comment.darkmatter .dropdown .dropdown-toggle .icon-bar {
   background: #383838;
 }
-.main-content .comment.darkmatter:not(.best-comment) {
+.main-content .comment.darkmatter:not(.best-comment):not(.comment-unpublished) {
   color: #e6e6e6;
 }
 .main-content .comment.darkmatter.darkmatter-unaccessed .media-body {
@@ -7939,17 +7942,51 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
   background: #bcd7b1;
 }
 .main-content .comment.hovered {
-  background: rgba(0, 0, 0, 0.06);
+  background: #f7f7f7;
 }
 .main-content .comment.hovered .dropdown {
   opacity: 1;
 }
 .main-content .comment.new-comment {
-  border-left: 10px solid #6ab7dd;
+  border-left: 7px solid #6ab7dd;
   margin-left: 0;
 }
 .main-content .comment.comment-unpublished {
-  background-color: #f2dede;
+  background: #fbf5f5;
+  border-color: #f2dede;
+}
+.main-content .comment.comment-unpublished.hovered {
+  background: #f2dede;
+  border-color: #e9c7c7;
+}
+.main-content .comment.comment-unpublished .dropdown.open .dropdown-toggle,
+.main-content .comment.comment-unpublished .dropdown.open .dropdown-toggle:hover,
+.main-content .comment.comment-unpublished .dropdown.open .dropdown-toggle:focus,
+.main-content .comment.comment-unpublished .dropdown.open .dropdown-toggle:active {
+  background: transparent;
+  border-color: #caa7a7;
+}
+.main-content .comment.comment-unpublished .dropdown.open .dropdown-toggle .icon-bar,
+.main-content .comment.comment-unpublished .dropdown.open .dropdown-toggle:hover .icon-bar,
+.main-content .comment.comment-unpublished .dropdown.open .dropdown-toggle:focus .icon-bar,
+.main-content .comment.comment-unpublished .dropdown.open .dropdown-toggle:active .icon-bar {
+  background: #ab8585;
+}
+.main-content .comment.comment-unpublished .dropdown .dropdown-toggle {
+  border-color: transparent;
+}
+.main-content .comment.comment-unpublished .dropdown .dropdown-toggle:hover,
+.main-content .comment.comment-unpublished .dropdown .dropdown-toggle:focus,
+.main-content .comment.comment-unpublished .dropdown .dropdown-toggle:active {
+  border-color: #d9b7b7;
+}
+.main-content .comment.comment-unpublished .dropdown .dropdown-toggle:hover .icon-bar,
+.main-content .comment.comment-unpublished .dropdown .dropdown-toggle:focus .icon-bar,
+.main-content .comment.comment-unpublished .dropdown .dropdown-toggle:active .icon-bar {
+  background: #be9393;
+}
+.main-content .comment.comment-unpublished .dropdown .dropdown-toggle .icon-bar {
+  background: #d9b7b7;
 }
 .main-content .comment .dropdown {
   opacity: .5;
@@ -8016,7 +8053,11 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
   margin-right: 3px;
 }
 .main-content .indented {
-  padding-left: 16px;
+  padding-left: 12px;
+  background: rgba(61, 118, 160, 0.13);
+}
+.main-content .indented .comment.new-comment {
+  margin-left: -7px;
 }
 .main-content #comment-form #edit-author--2 {
   margin-bottom: 0;

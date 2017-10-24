@@ -6,8 +6,11 @@
 
   .comment {
     border: 1px solid transparent;
+    border-top-color: @gray-lighter;
     position: relative;
-    margin-top: @padding-base-vertical;
+    margin-top: 0;
+    background: @main-content-bg;
+    padding-top: @padding-base-vertical;
 
     div.user-picture {
       margin-bottom: 0;
@@ -25,7 +28,7 @@
     &.darkmatter {
       .comment-variant(#444, #383838);
 
-      &:not(.best-comment) {
+      &:not(.best-comment):not(.comment-unpublished) {
         color: @gray-lighter;
       }
 
@@ -43,19 +46,19 @@
     }
 
     &.hovered {
-      background: rgba(0, 0, 0, 0.06);
+      background: darken(@main-content-bg, @tone/2);
 
       .dropdown {
         opacity: 1;
       }
     }
     &.new-comment {
-      border-left: 10px solid @brand-info;
+      border-left: 7px solid @brand-info;
       margin-left: 0;
     }
 
     &.comment-unpublished {
-      background-color: @state-danger-bg;
+      .comment-variant(@state-danger-bg, desaturate(darken(@state-danger-bg, @tone * 2), @tone * 2));
     }
 
     .dropdown {
@@ -116,7 +119,12 @@
   }
 
   .indented {
-    padding-left: @padding-large-horizontal;
+    padding-left: @padding-base-horizontal;
+    background: @comment-intend-background;
+
+    .comment.new-comment {
+      margin-left: -7px;
+    }
   }
 
   #comment-form {

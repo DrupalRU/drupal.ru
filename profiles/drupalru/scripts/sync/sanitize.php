@@ -47,8 +47,8 @@ $rules = array(
 $hash = hash('sha256', microtime() . '' . rand());
 $clean_variables = array(
   'values' => array(
-    'abuse_warn_bcc' => 's:19:"mail@drupal.loc";',
-    'site_mail' => 's:19:"mail@drupal.loc";',
+    'abuse_warn_bcc' => 's:15:"mail@drupal.loc";',
+    'site_mail' => 's:15:"mail@drupal.loc";',
     'pm_email_notify_from' => 's:15:"mail@drupal.loc";',
 
     'captcha_token' => sprintf('s:32:"%s";', substr($hash, 0, 32)),

@@ -1,0 +1,69 @@
+<?php
+
+/**
+ * @file Stores hooks for install and update the module.
+ */
+
+
+/**
+ * Add link to create content into User Menu.
+ */
+function drurum_update_7001() {
+  $tree = menu_load_links('user-menu');
+  $x = $right_weight = -50;
+  foreach ($tree as $item) {
+    if (!$item['plid']) {
+      $item['weight'] = $x++;
+      menu_link_save($item, $item);
+      // Finding place between link to Messages and Logout.
+      if ($item['link_path'] == 'messages') {
+        $right_weight = $x++;
+      }
+    }
+  }
+  $parent = array(
+    'link_path' => 'node/add',
+    'link_title' => 'Создать',
+    'menu_name' => 'user-menu',
+    'weight' => $right_weight,
+    'expanded' => 1,
+    'has_children' => 0,
+    'customized' => 1,
+    'language' => LANGUAGE_NONE,
+    'plid' => 0,
+    'module' => 'menu',
+  );
+  $plid = menu_link_save($parent);
+  $items = array(
+    array(
+      'link_path' => 'node/add/blog',
+      'link_title' => 'Запись в блог',
+      'menu_name' => 'user-menu',
+      'weight' => 0,
+      'language' => LANGUAGE_NONE,
+      'plid' => $plid,
+      'module' => 'menu',
+    ),
+    array(
+      'link_path' => 'node/add/simple-event',
+      'link_title' => 'Событие',
+      'menu_name' => 'user-menu',
+      'weight' => 1,
+      'language' => LANGUAGE_NONE,
+      'plid' => $plid,
+      'module' => 'menu',
+    ),
+    array(
+      'link_path' => 'node/add/organization',
+      'link_title' => 'Компания',
+      'menu_name' => 'user-menu',
+      'weight' => 2,
+      'language' => LANGUAGE_NONE,
+      'plid' => $plid,
+      'module' => 'menu',
+    ),
+  );
+  foreach ($items as $item) {
+    menu_link_save($item);
+  }
+}

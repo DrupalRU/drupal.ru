@@ -8726,13 +8726,21 @@ body .main-content {
   top: calc(50% - 11px);
 }
 nav .dropdown-menu.dropdown-menu-right {
-  background: #5184aa;
-  border: 1px solid #376a90;
+  background: #3D76A0;
+  border: 1px solid #3D76A0;
   border-top: 0;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
   margin-right: -1px;
   padding: 0;
   width: 200px;
+}
+nav .dropdown-menu.dropdown-menu-right:before {
+  display: block;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
 }
 nav .dropdown-menu.dropdown-menu-right li.leaf a {
   padding: .6em 1.2em;
@@ -8740,7 +8748,7 @@ nav .dropdown-menu.dropdown-menu-right li.leaf a {
 }
 nav .dropdown-menu.dropdown-menu-right li.leaf a:hover,
 nav .dropdown-menu.dropdown-menu-right li.leaf a:focus {
-  background: #376a90;
+  background: #3D76A0;
 }
 .field.field-name-field-admin-message {
   background: #dff0d8;

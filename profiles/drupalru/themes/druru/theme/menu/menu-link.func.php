@@ -21,7 +21,11 @@ function druru_menu_link(array $variables) {
     elseif ((!empty($element['#original_link']['depth'])) && ($element['#original_link']['depth'] == 1)) {
       // Add our own wrapper.
       unset($element['#below']['#theme_wrappers']);
-      $sub_menu = '<ul class="dropdown-menu">' . drupal_render($element['#below']) . '</ul>';
+      $second_calss = '';
+      if($element['#theme'] == 'menu_link__user_menu') {
+        $second_calss = 'dropdown-menu-right';
+      }
+        $sub_menu = "<ul class=\"dropdown-menu $second_calss\">" . drupal_render($element['#below']) . '</ul>';
       // Generate as standard dropdown.
       $element['#title'] .= ' <span class="caret"></span>';
       $element['#attributes']['class'][] = 'dropdown';
@@ -92,6 +96,9 @@ function _druru_menu_link_fill_icons(&$element) {
 
     case 'user/register':
       _druru_menu_link_fill_icon($element, 'user-plus');
+
+    case 'node/add':
+      _druru_menu_link_fill_icon($element, 'plus');
       break;
 
     default:

@@ -6909,7 +6909,8 @@ fieldset[disabled] .btn-accent.focus {
 }
 .navbar.navbar-default .nav > li > a:hover,
 .navbar.navbar-default .nav > li > a:focus,
-.navbar.navbar-default .nav > li > a.active {
+.navbar.navbar-default .nav > li > a.active,
+.navbar.navbar-default .nav > li > a.open {
   color: #fff;
   border-left-color: #df9b10;
 }
@@ -6965,6 +6966,25 @@ fieldset[disabled] .btn-accent.focus {
   .navbar.navbar-default .nav > li > a.active-trail,
   .navbar.navbar-default .nav > li > a:hover,
   .navbar.navbar-default .nav > li > a:focus {
+    border-top-color: #df9b10;
+  }
+}
+.navbar.navbar-default .nav > li.open > a {
+  color: #fff;
+  border-left-color: #df9b10;
+}
+.navbar.navbar-default .nav > li.open > a:before,
+.navbar.navbar-default .nav > li.open > a:after {
+  width: 100%;
+}
+.navbar.navbar-default .nav > li.open > a:before {
+  height: 100%;
+}
+.navbar.navbar-default .nav > li.open > a:after {
+  height: 0;
+}
+@media screen and (min-width: 748px) {
+  .navbar.navbar-default .nav > li.open > a {
     border-top-color: #df9b10;
   }
 }
@@ -8704,6 +8724,23 @@ body .main-content {
   font-size: 22px;
   left: calc(50% - 11px);
   top: calc(50% - 11px);
+}
+nav .dropdown-menu.dropdown-menu-right {
+  background: #5184aa;
+  border: 1px solid #376a90;
+  border-top: 0;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+  margin-right: -1px;
+  padding: 0;
+  width: 200px;
+}
+nav .dropdown-menu.dropdown-menu-right li.leaf a {
+  padding: .6em 1.2em;
+  color: #fff;
+}
+nav .dropdown-menu.dropdown-menu-right li.leaf a:hover,
+nav .dropdown-menu.dropdown-menu-right li.leaf a:focus {
+  background: #376a90;
 }
 .field.field-name-field-admin-message {
   background: #dff0d8;

@@ -1014,11 +1014,6 @@ function theme_inner_poll_vote_form($variables) {
           }
         }
 
-        $width = variable_get('inner_poll_div_width', 300);
-        if (!is_numeric($width)) {
-          $width = 300;
-        }
-
         $results = array();
         $i = 0;
         $sum = 0;
@@ -1031,19 +1026,16 @@ function theme_inner_poll_vote_form($variables) {
           ->condition('n.nid', $variables['nid'])
           ->execute();
 
+        $max = $max_i = 0;
         // Загрузка ответов и голосов за них.
         foreach ($result_answers as $row_answers) {
           $sum += $row_answers->chvotes;
           $results[$i]['text'] = $row_answers->chtext;
           $results[$i]['votes'] = $row_answers->chvotes;
 
-          if ($i == 0) {
-            $max = $i;
-          }
-          else {
-            if ($results[$i]['votes'] > $results[$i - 1]['votes']) {
-              $max = $i;
-            }
+          if ($max < $results[$i]['votes']) {
+            $max = $results[$i]['votes'];
+            $max_i = $i;
           }
 
           $i++;
@@ -1053,15 +1045,7 @@ function theme_inner_poll_vote_form($variables) {
 
         // Отображаем ответы и количество голосов за них.
         for ($i = 0; $i <= count($results) - 1; $i++) {
-          if ($sum != 0) {
-            $width_results = ($width * $results[$i]['votes'] / $sum);
-            $percent = round(($results[$i]['votes'] / $sum) * 100, 2);
-          }
-          else {
-            $width_results = 1;
-            $percent = 0;
-          }
-
+          $percent = $sum ? round(($results[$i]['votes'] / $sum) * 100, 2) : 0;
           $res .= "<div class=\"inner_poll_line\">
                      <div class=\"inner_poll_result\">
                        <div class=\"percent\">" . $percent . "%</div>
@@ -1069,7 +1053,7 @@ function theme_inner_poll_vote_form($variables) {
                      </div>
                      <div class=\"inner_poll_answer_wrapper\">
                        <div class=\"inner_poll_answer\">" . $results[$i]['text'] . "</div>
-                       <div class=\"inner_poll_grafic" . ($max == $i ? " inner_poll_max_result" : "") . "\" style=\"width: " . $width_results . "px\"></div>
+                       <div class=\"inner_poll_grafic" . ($max_i == $i ? " inner_poll_max_result" : "") . "\" style=\"width: " . $percent . "%\"></div>
                      </div>
                    </div>
                    <div style=\"clear: both;\"></div>\n";
@@ -1111,7 +1095,7 @@ function theme_inner_poll_vote_form($variables) {
         // Итоговый результат.
         $output = "<div class=\"inner_poll jumbotron\" id=\"inner_poll_" . $variables['nid'] . "\">
                      " . $variables['message'] . "
-                     <h2>" . t('Attached poll') . " «" . $chtext_ipc . "»:</h2>";
+                     <h2>" . $chtext_ipc . ":</h2>";
 
         if ($active_ip) {
           $output .= "<div class=\"alredy_vote\">" . $text . "</div>";

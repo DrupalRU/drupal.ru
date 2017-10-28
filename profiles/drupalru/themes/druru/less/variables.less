@@ -263,9 +263,9 @@
 // Navbar links
 @navbar-default-link-hover-color: #fff;
 @navbar-default-link-color: darken(@navbar-default-link-hover-color, @tone);
-@navbar-default-link-hover-bg: transparent;
+@navbar-default-link-hover-bg: desaturate(lighten(@navbar-default-bg, @tone), @tone);
 @navbar-default-link-active-color: #555;
-@navbar-default-link-active-bg: darken(@navbar-default-bg, @tone);
+@navbar-default-link-active-bg: desaturate(lighten(@navbar-default-bg, @tone), @tone);
 @navbar-default-link-disabled-color: #ccc;
 @navbar-default-link-disabled-bg: transparent;
 

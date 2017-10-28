@@ -6858,7 +6858,7 @@ fieldset[disabled] .btn-accent.focus {
 .navbar.navbar-default .nav.secondary > li > a {
   position: relative;
   color: #fff;
-  background-color: #3a6483;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 .navbar.navbar-default .nav > li {
   background: none;
@@ -9427,7 +9427,7 @@ body:not(.front) #navbar {
   background: #4e86af;
 }
 #block-advanced-sphinx-searchbox .search-sphinx {
-  height: 38px;
+  height: 100%;
   border: none;
   position: absolute;
   right: 0;
@@ -9442,9 +9442,29 @@ body:not(.front) #navbar {
   -o-transition: all width 0.2s, background 0.2s ease-out;
   transition: all width 0.2s, background 0.2s ease-out;
 }
+#block-advanced-sphinx-searchbox .search-sphinx::-moz-placeholder {
+  color: transparent;
+  opacity: 1;
+}
+#block-advanced-sphinx-searchbox .search-sphinx:-ms-input-placeholder {
+  color: transparent;
+}
+#block-advanced-sphinx-searchbox .search-sphinx::-webkit-input-placeholder {
+  color: transparent;
+}
 #block-advanced-sphinx-searchbox .search-sphinx:focus {
   background: #fafafa;
   border-top-color: #df9b10;
+}
+#block-advanced-sphinx-searchbox .search-sphinx:focus::-moz-placeholder {
+  color: #999999;
+  opacity: 1;
+}
+#block-advanced-sphinx-searchbox .search-sphinx:focus:-ms-input-placeholder {
+  color: #999999;
+}
+#block-advanced-sphinx-searchbox .search-sphinx:focus::-webkit-input-placeholder {
+  color: #999999;
 }
 #block-advanced-sphinx-searchbox .search-sphinx:focus + button {
   color: #fafafa;
@@ -9514,7 +9534,7 @@ fieldset[disabled] #block-advanced-sphinx-searchbox .search-sphinx:focus + butto
 }
 #block-advanced-sphinx-searchbox .btn {
   border: none;
-  background: #3a6483;
+  background: rgba(0, 0, 0, 0.1);
   z-index: 2;
   position: relative;
   -webkit-transition: background 0.2s;
@@ -9625,11 +9645,6 @@ fieldset[disabled] #block-advanced-sphinx-searchbox .search-sphinx:focus + butto
   }
   #block-advanced-sphinx-searchbox label {
     left: 100%;
-  }
-}
-@media screen and (min-width: 1004px) {
-  #block-advanced-sphinx-searchbox .search-sphinx {
-    height: 50px;
   }
 }
 @media screen and (min-width: 748px) {

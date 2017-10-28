@@ -17,7 +17,7 @@
 
   .search-sphinx {
     &:extend(.navbar-nav > li > a);
-    height: 38px;
+    height: 100%;
     border: none;
     position: absolute;
     right: 0;
@@ -25,10 +25,12 @@
     max-width: initial;
     width: 100%;
     .transition(~'width @{transition-speed}, background @{transition-speed}');
+    .placeholder(transparent);
 
     &:focus {
       background: @body-bg;
       border-top-color: @brand-accent;
+      .placeholder(@gray-light);
       + button {
         .button-variant(@body-bg, @brand-accent, darken(@brand-accent, @tone));
 
@@ -46,7 +48,7 @@
   .btn {
     &:extend(.navbar-nav > li > a);
     border: none;
-    background: desaturate(darken(@navbar-default-bg, @tone), @tone);
+    background: @little-darker;
     z-index: 2;
     position: relative;
     .transition(background @transition-speed);
@@ -93,12 +95,6 @@
 
     label {
       left: 100%;
-    }
-  }
-
-  @media @very-smalld {
-    .search-sphinx {
-      height: 50px;
     }
   }
 

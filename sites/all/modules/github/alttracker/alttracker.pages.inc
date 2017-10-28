@@ -17,6 +17,7 @@ function alttracker_page_my(){
  * the render array that will be used to render the page.
  */
 function alttracker_page($account = NULL, $set_title = FALSE) {
+  global $user;
 
   altpager_items_elements(array(
     60 => 60,
@@ -56,12 +57,16 @@ function alttracker_page($account = NULL, $set_title = FALSE) {
       $query->condition('n.type', $in_types, 'IN');
     }
   }
-
   $query
     ->addTag('alttracker_nodes_condition')
     ->fields('t', array('nid', 'changed'))
     ->condition('t.published', 1)
     ->orderBy('t.changed', 'DESC');
+
+    $hide_dark_matter = (isset($user->darkmatter) ? $user->darkmatter == 1 : false);
+    if (!$hide_dark_matter) {
+      $query->condition('n.darkmatter', 0);
+    }
 
   if($ignore_terms = variable_get('alttracker_ignore_terms')){
     $query->condition('n.nid', db_select('taxonomy_index', 't')

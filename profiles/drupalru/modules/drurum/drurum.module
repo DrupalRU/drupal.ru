@@ -40,6 +40,16 @@ function drurum_menu() {
 }
 
 /**
+ * Implements hook_help().
+ */
+function drurum_help($path, $arg) {
+  $help = variable_get('drurum_add_organization_help');
+  if($path == 'node/add/organization' && $help) {
+    return $help;
+  }
+}
+
+/**
  * Implements hook_menu_alter().
  */
 function drurum_preprocess_menu_local_action(&$link) {

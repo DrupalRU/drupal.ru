@@ -11,6 +11,11 @@
     .search-sphinx:not(:focus) {
       +button {
         background: @navbar-default-link-hover-bg;
+
+        @media @tablet {
+          .box-shadow(inset 0 2px 0 0 @nav-item-active-border);
+          .transition(box-shadow @transition-speed);
+        }
       }
     }
   }
@@ -25,7 +30,6 @@
     max-width: initial;
     width: 100%;
     .transition(~'width @{transition-speed}, background @{transition-speed}');
-    .placeholder(transparent);
 
     &:focus {
       background: @body-bg;
@@ -41,7 +45,7 @@
     }
     @media @tablet {
       background: transparent;
-      border-top: 2px solid transparent;
+      .placeholder(transparent);
     }
   }
 
@@ -54,10 +58,14 @@
     .transition(background @transition-speed);
 
     // Disallow overlay of label at the button in next states.
-    &:focus, &:hover, &:active {
+    &:focus{
       background-color: @navbar-default-link-hover-bg;
+      outline: none;
       + label {
         display: none;
+      }
+      @media @tablet {
+        .box-shadow(inset 0 2px 0 0 @nav-item-active-border);
       }
     }
   }
@@ -73,15 +81,10 @@
     cursor: pointer;
     max-width: initial;
     .transition(all @transition-speed);
-
-    &:hover, &:focus {
-      .box-shadow(inset 0 2px 0 0 @nav-item-active-border);
-    }
   }
 
-  @media screen and (max-width: @screen-sm-min) {
+  @media @phone-only {
     .search-sphinx {
-      border-left: 2px solid @navbar-default-bg;
       &:focus {
         + .btn {
           .button-variant(@body-bg, @brand-accent, darken(@brand-accent, @tone));

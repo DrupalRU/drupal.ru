@@ -25,7 +25,9 @@ var Drupal = Drupal || {};
         return window.location.pathname != $(this).attr('href');
       });
       // stylizing the select
-      $('.selectpicker').selectpicker();
+      $('.selectpicker').selectpicker({
+        noneSelectedText: 'Ничего не выбрано'
+      });
       // stylizing the file input
       $(":file").filestyle();
       

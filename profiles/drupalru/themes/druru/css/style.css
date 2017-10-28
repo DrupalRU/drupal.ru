@@ -10369,7 +10369,7 @@ html.js .node div.ctools-dropdown .ctools-dropdown-container {
 }
 /*Popup dialogs*/
 .bue-popup {
-  z-index: 10;
+  z-index: 1000;
   position: absolute;
   width: auto;
   padding: 10px;

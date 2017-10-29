@@ -8291,7 +8291,7 @@ body footer.footer {
   padding-top: 15px;
   padding-bottom: 15px;
   color: #e6e6e6;
-  font-weight: 100;
+  font-weight: 300;
   text-align: center;
 }
 @media screen and (min-width: 748px) {
@@ -8315,6 +8315,33 @@ body footer.footer .age-limit > span {
   font-size: 21px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.15);
+}
+body footer.footer .site-links ul {
+  list-style: disc;
+}
+body footer.footer .site-links ul li {
+  display: inline;
+  margin-right: 20px;
+}
+@media screen and (max-width: 1003px) {
+  body footer.footer .site-links ul {
+    padding-left: 0;
+    margin-top: 10px;
+  }
+}
+@media screen and (min-width: 1004px) {
+  body footer.footer .site-links ul {
+    padding-left: 2em;
+    padding-top: .7em;
+    padding-bottom: .7em;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: inset 1px 0 0 0 rgba(255, 255, 255, 0.1);
+    -moz-box-shadow: inset 1px 0 0 0 rgba(255, 255, 255, 0.1);
+    box-shadow: inset 1px 0 0 0 rgba(255, 255, 255, 0.1);
+  }
+  body footer.footer .site-links ul li {
+    display: list-item;
+  }
 }
 body footer.footer a:hover,
 body footer.footer a:focus {

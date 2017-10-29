@@ -90,3 +90,29 @@ function drurum_update_7002() {
     node_type_save($type);
   }
 }
+
+/**
+ * Add links into footer.
+ */
+function drurum_update_7003(){
+  db_update('block_custom')
+    ->fields(array('body' => '<div class="logo-footer col-sm-2 col-vsd-1">
+  <img src="/profiles/drupalru/themes/druru/img/logos/72.png"></div>
+<div class="copyright col-sm-8 col-vsd-7">
+<p>Содержимое сайта публикуется на условиях <a href="/license#content">CreativeCommons Attribution-ShareAlike 3.0</a> или более поздней версии<br>
+    Программные коды в тексте статей — на условиях <a href="/license#code">GNU GPL v2</a> или более поздней версии.<br><strong>Drupal</strong> - торговая марка <a href="/about/dries_buytaert">Дриса Байтаерта</a>
+  </p>
+</div>
+<div class="age-limit col-sm-2 col-vsd-1">
+  <span class="alert-danger">16+</span>
+</div>
+<div class="site-links col-sm-10 col-sm-offset-2 col-vsd-3 col-vsd-offset-0">
+  <ul>
+<li><a href="/ru_team" target="blank">Команда сайта</a></li>
+<li><a href="/contact" target="blank">Обратная связь</a></li>
+<li><a href="/rules" target="blank">Правила сайта</a></li>
+</ul>
+</div>'))
+    ->condition('bid', 95)
+    ->execute();
+}

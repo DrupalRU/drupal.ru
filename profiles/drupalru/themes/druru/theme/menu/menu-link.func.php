@@ -96,6 +96,7 @@ function _druru_menu_link_fill_icons(&$element) {
 
     case 'user/register':
       _druru_menu_link_fill_icon($element, 'user-plus');
+      break;
 
     case 'node/add':
       _druru_menu_link_fill_icon($element, 'plus');

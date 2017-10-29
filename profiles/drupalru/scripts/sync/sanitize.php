@@ -126,3 +126,11 @@ foreach ($clean_variables['values'] as $variable => $value) {
   print str_replace(PHP_EOL, '', $query->__toString()) . PHP_EOL;
   $query->execute();
 }
+
+print PHP_EOL;
+print '####### Cleaning of blocks #######' . PHP_EOL;
+$query = db_update('block_custom')
+  ->fields(array('body' => ''))
+  ->condition('bid', 46); // Block with counters
+print str_replace(PHP_EOL, '', $query->__toString()) . PHP_EOL;
+$query->execute();

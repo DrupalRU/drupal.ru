@@ -311,14 +311,12 @@ function marketplace_view($node, $view_mode, $langcode = NULL) {
     '#weight' => 1,
   );
 
-  if (0 === strpos("http", $node->website)) {
-    $urlpath = check_plain($node->website);
-  }
-  else {
-    $urlpath = 'http://' . check_plain($node->website);
+  $website = $node->website;
+  if (!valid_url($node->website, true)) {
+    $website = 'http://' . $website;
   }
   $node->content['website'] = array(
-    '#markup' => l($node->website, $urlpath, array('attributes' => array('rel' => 'nofollow'))),
+    '#markup' => l($node->website, $website, array('attributes' => array('rel' => 'nofollow'))),
     '#weight' => 1,
   );
 

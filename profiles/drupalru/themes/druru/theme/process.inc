@@ -49,6 +49,10 @@ function _druru_process_input(&$element, &$form_state) {
     'urlfield',
   );
   if (!empty($element['#type']) && (in_array($element['#type'], $types) || ($element['#type'] === 'file' && empty($element['#managed_file'])))) {
+    if (!is_array($element['#attributes'])) {
+      $element['#attributes'] = array();
+    }
+
     $element['#attributes']['class'][] = 'form-control';
   }
   return $element;

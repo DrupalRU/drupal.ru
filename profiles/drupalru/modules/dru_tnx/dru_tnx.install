@@ -4,76 +4,76 @@
  * Implements hook_schema().
  */
 function dru_tnx_schema() {
-  
+
   // Tnx's table
-  $schema['tnx'] = array(
+  $schema['tnx'] = [
     'description' => 'Thanks',
-    'fields' => array(
-      'id' => array(
+    'fields'      => [
+      'id'          => [
         'description' => 'Thanks ID.',
         'type'        => 'serial',
         'unsigned'    => TRUE,
         'not null'    => TRUE,
-      ),
-      'entity_id' => array(
+      ],
+      'entity_id'   => [
         'description' => 'Entity ID.',
         'type'        => 'int',
         'unsigned'    => TRUE,
         'not null'    => TRUE,
-      ),
-      'entity_type' => array(
+      ],
+      'entity_type' => [
         'description' => 'Entity type.',
         'type'        => 'varchar',
         'length'      => 255,
         'not null'    => TRUE,
-      ),
-      'uid' => array(
+      ],
+      'uid'         => [
         'description' => 'User ID.',
         'type'        => 'int',
         'unsigned'    => TRUE,
         'not null'    => TRUE,
-      ),
-    ),
-    'primary key' => array('id'),
-  );
-  
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
   // Statistic table
-  $schema['tnx_stat'] = array(
+  $schema['tnx_stat'] = [
     'description' => 'Thanks statistic',
-    'fields' => array(
-      'uid' => array(
+    'fields'      => [
+      'uid'         => [
         'type'        => 'serial',
         'not null'    => TRUE,
         'description' => 'User ID.',
-      ),
-      'node' => array(
+      ],
+      'node'        => [
         'type'        => 'int',
         'not null'    => TRUE,
         'default'     => 0,
         'description' => 'Node count',
-      ),
-      'comment' => array(
+      ],
+      'comment'     => [
         'type'        => 'int',
         'not null'    => TRUE,
         'default'     => 0,
         'description' => 'Comment count',
-      ),
-      'tnx_node' => array(
+      ],
+      'tnx_node'    => [
         'type'        => 'int',
         'not null'    => TRUE,
         'default'     => 0,
         'description' => 'Node count',
-      ),
-      'tnx_comment' => array(
+      ],
+      'tnx_comment' => [
         'type'        => 'int',
         'not null'    => TRUE,
         'default'     => 0,
         'description' => 'Comment count',
-      ),
-    ),
-    'primary key' => array('uid'),
-  );
-  
+      ],
+    ],
+    'primary key' => ['uid'],
+  ];
+
   return $schema;
 }
 
@@ -81,48 +81,184 @@ function dru_tnx_schema() {
  * Implements hook_install().
  */
 function dru_tnx_install() {
-    
+
   // Add tnx field to node.
-  db_add_field('node', 'tnx', array(
+  db_add_field('node', 'tnx', [
     'type'        => 'int',
     'not null'    => TRUE,
     'default'     => 0,
     'description' => 'Thanks count.',
-  )); 
-  db_add_index('node', 'tnx', array('tnx'));
-  
+  ]);
+  db_add_index('node', 'tnx', ['tnx']);
+
   // Add tnx field to comment.
-  db_add_field('comment', 'tnx', array(
+  db_add_field('comment', 'tnx', [
     'type'        => 'int',
     'not null'    => TRUE,
     'default'     => 0,
     'description' => 'Thanks count.',
-  )); 
-  db_add_index('comment', 'tnx', array('tnx'));
-  
+  ]);
+  db_add_index('comment', 'tnx', ['tnx']);
+
 }
 
 /**
  * Implements hook_schema_alter().
  */
 function dru_tnx_schema_alter(&$schema) {
-    
-  // Add tnx field to node.
-  $schema['node']['fields']['tnx'] = array(
-    'description' => 'Thanks count.',
-    'type'        => 'int',
-    'not null'    => TRUE,
-    'default'     => 0,
-  );
-  
-  // Add tnx field to comment.
-  $schema['comment']['fields']['tnx'] = array(
-    'description' => 'Thanks count.',
-    'type'        => 'int',
-    'not null'    => TRUE,
-    'default'     => 0,
-  );
 
+  // Add tnx field to node.
+  $schema['node']['fields']['tnx'] = [
+    'description' => 'Thanks count.',
+    'type'        => 'int',
+    'not null'    => TRUE,
+    'default'     => 0,
+  ];
+
+  // Add tnx field to comment.
+  $schema['comment']['fields']['tnx'] = [
+    'description' => 'Thanks count.',
+    'type'        => 'int',
+    'not null'    => TRUE,
+    'default'     => 0,
+  ];
+
+}
+
+/**
+ * Recount thanks statistic.
+ */
+function dru_tnx_update_7000(&$sandbox) {
+
+  $data = [];
+  $users = [];
+  $delete = [];
+  $nodes = [];
+  $comments = [];
+
+  if (!isset($sandbox['total'])) {
+    $query = db_select('tnx', 't')
+      ->fields('t', [])
+      ->execute();
+
+    $results = $query->fetchAll();
+
+    foreach ($results as $item) {
+
+      if (isset($data[$item->entity_type][$item->entity_id][$item->uid])) {
+        $delete[] = $item->id;
+        continue;
+      }
+
+      $data[$item->entity_type][$item->entity_id][$item->uid] = $item->id;
+      $users[$item->uid]['tnx_node'] = 0;
+      $users[$item->uid]['tnx_comment'] = 0;
+      $users[$item->uid][$item->entity_type][$item->entity_id] = $item->id;
+    }
+
+    if (count($delete)) {
+      try {
+        db_query("DELETE FROM tnx WHERE id IN (" . implode(",", $delete) . ")");
+      } catch (\Exception $exception) {
+        throw new \Exception('Can\'t delete doubles!');
+      }
+    }
+
+    if (count($data['node'])) {
+      try {
+        $nodes = db_query(
+          "SELECT nid, uid FROM node WHERE nid IN (" . implode(",",
+            array_keys($data['node'])) . ")"
+        )->fetchAllKeyed();
+      } catch (\Exception $exception) {
+        throw new \Exception('Can\'t load all nodes!');
+      }
+    }
+
+    if (count($data['comment'])) {
+      try {
+        $comments = db_query("SELECT cid, uid FROM comment WHERE cid IN (" . implode(",",
+            array_keys($data['comment'])) . ")"
+        )->fetchAllKeyed();
+      } catch (\Exception $exception) {
+        throw new \Exception('Can\'t load all nodes!');
+      }
+    }
+
+    if ($nodes) {
+      foreach ($nodes as $id => $uid) {
+        if (!isset($users[$uid])) {
+          $users[$uid] = [
+            'tnx_node'    => 0,
+            'tnx_comment' => 0,
+            'comment'     => [],
+            'node'        => [],
+          ];
+        }
+
+        $users[$uid]['tnx_node']++;
+      }
+    }
+
+    if ($comments) {
+      foreach ($comments as $id => $uid) {
+        if (!isset($users[$uid])) {
+          $users[$uid] = [
+            'tnx_node'    => 0,
+            'tnx_comment' => 0,
+            'comment'     => [],
+            'node'        => [],
+          ];
+        }
+
+        $users[$uid]['tnx_comment']++;
+      }
+    }
+
+    $sandbox['total'] = count($users) + count($data['node']) + count($data['comment']);
+    $sandbox['current'] = 0;
+  }
+
+  foreach ($users as $uid => $user) {
+    $fields = [
+      'node'        => $user['tnx_node'],
+      'comment'     => $user['tnx_comment'],
+      'tnx_node'    => is_array($user) ? count($user['node']) : 0,
+      'tnx_comment' => is_array($user) ? count($user['comment']) : 0,
+    ];
+
+    db_update('tnx_stat')
+      ->fields($fields)
+      ->condition('uid', $uid)
+      ->execute();
+
+    $sandbox['current']++;
+  }
+
+  foreach ($data['node'] as $nid => $node) {
+    db_update('node')
+      ->fields(['tnx' => count($node)])
+      ->condition('nid', $nid)
+      ->execute();
+
+    $sandbox['current']++;
+  }
+
+  foreach ($data['comment'] as $cid => $comment) {
+    db_update('comment')
+      ->fields(['tnx' => count($comment)])
+      ->condition('cid', $cid)
+      ->execute();
+
+    $sandbox['current']++;
+  }
+
+  $sandbox['#finished'] = ($sandbox['current'] / $sandbox['total']);
+
+  if ($sandbox['#finished'] === 1) {
+    drupal_set_message(t('Processed @items items.',
+      ['@items' => $sandbox['total']]));
+  }
 }
 
 /**
@@ -130,9 +266,9 @@ function dru_tnx_schema_alter(&$schema) {
  */
 function dru_tnx_uninstall() {
   drupal_uninstall_schema('dru_tnx');
-  
+
   db_drop_field('node', 'tnx');
   db_drop_field('comment', 'tnx');
-  
+
   cache_clear_all();
 }

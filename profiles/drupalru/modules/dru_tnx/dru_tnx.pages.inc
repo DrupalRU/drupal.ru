@@ -2,27 +2,44 @@
 
 /**
  * Callback dru_tnx_entity
+ *
+ * @param string $tnx_type
+ * @param string $entity_type
+ * @param string $ajax
+ * @param string $entity
+ * @param string $token
+ *
+ * @return array
  */
-function dru_tnx_entity($entity_type, $ajax, $entity, $token) {
+function dru_tnx_entity($tnx_type, $entity_type, $ajax, $entity, $token) {
 
   if (!drupal_valid_token($token, 'dru_tnx')) {
-    return;
+    return NULL;
   }
 
-  global $user;
+  $user = $GLOBALS['user'];
 
   $id  = $entity_type == 'node' ? $entity->nid : $entity->cid;
   $tnx = get_user_tnx($entity_type, $id, $user->uid);
 
-  $vars = array(
-    'type'   => $entity_type,
-    'id'     => $id,
-    'entity' => $entity,
-    'tnx'    => $tnx,
-    'user'   => $user,
-  );
+  if ($tnx === ($tnx_type == 'tnx')) {
+    $vars = [
+      'type'     => $entity_type,
+      'id'       => $id,
+      'entity'   => $entity,
+      'tnx_type' => $tnx_type,
+      'tnx'      => $tnx,
+      'user'     => $user,
+    ];
 
-  return dru_tnx_callback($ajax, $vars);
+    return dru_tnx_callback($ajax, $vars);
+  }
+
+  drupal_set_message(
+    $tnx ?
+      t('You can\'t unthanks twice!') : t('You can\'t thanks twice!')
+  );
+  drupal_goto();
 }
 
 /**
@@ -32,45 +49,56 @@ function dru_tnx_callback($ajax, $vars) {
 
   dru_tnx_data($vars);
 
+  $entity = dru_tnx_entity_prepare($vars);
+
   if ($ajax == 'ajax') {
 
-    $tnx = get_user_tnx($vars['type'], $vars['id'], $vars['user']->uid);
+    $animate = ['plus', 'minus'];
 
-    $vars['entity']->tnx = $vars['entity']->tnx + ($tnx ? -1 : 1);
+    $selector = "*[data-{$vars['type']}-id=\"{$vars['id']}\"]";
 
-    $tnx_link = dru_tnx_link($vars['type'], $vars['id'], $tnx);
+    $commands   = [];
+    $commands[] = ajax_command_replace($selector, drupal_render($entity));
+    $commands[] = ajax_command_invoke(
+      $selector . " .dru-tnx-{$vars['type']}-{$vars['id']}-counter",
+      'addClass',
+      [$animate[($vars['tnx_type'] == 'untnx')]]
+    );
 
-    $link = l($tnx_link['title'], $tnx_link['href'],
-      array(
-        'attributes' => $tnx_link['attributes'],
-      ));
-
-    $counter = dru_tnx_view($vars['entity'], $vars['type']);
-
-    $animate = array('plus', 'minus');
-
-    $counter['#attributes']['class'][] = $animate[$tnx];
-
-    $link_selector = '.dru-tnx-';
-    $link_selector .= $vars['type'];
-    $link_selector .= '-';
-    $link_selector .= $vars['id'];
-
-    $counter_selector = $link_selector . '-counter';
-
-    $commands   = array();
-    $commands[] = ajax_command_replace($counter_selector, render($counter));
-    $commands[] = ajax_command_replace($link_selector, $link);
-
-    return array(
+    return [
       '#type'     => 'ajax',
       '#commands' => $commands,
-    );
+    ];
   }
-  else {
-    drupal_set_message($vars['tnx'] == 'tnx' ? t('Your Thank Accepted') : t('Your Thank Deleted'));
-    drupal_goto();
+
+  drupal_set_message($vars['tnx'] == 'tnx' ? t('Your Thank Accepted') : t('Your Thank Deleted'));
+  drupal_goto();
+}
+
+/**
+ * Render entity.
+ *
+ * @param array $vars
+ *
+ * @return array
+ */
+function dru_tnx_entity_prepare($vars) {
+  $entity = [];
+
+  if ($vars['type'] == 'node') {
+    $node                                   = node_load($vars['id'], NULL,
+      TRUE);
+    $entity                                 = node_view($node);
+    $entity['comments']                     = comment_node_page_additions($node);
+    $entity['#node']->dru_tnx_set_page_true = TRUE;
   }
+  elseif ($vars['type'] == 'comment') {
+    $comment = comment_load($vars['id'], TRUE);
+    $node    = node_load($comment->nid);
+    $entity  = comment_view($comment, $node);
+  }
+
+  return $entity;
 }
 
 /**
@@ -86,26 +114,26 @@ function dru_tnx_data($vars) {
 
     // Add tnx
     db_insert('tnx')->fields(
-      array(
+      [
         'entity_id'   => $vars['id'],
         'entity_type' => $vars['type'],
         'uid'         => $vars['user']->uid,
-      )
+      ]
     )->execute();
 
     // Count tnx
     db_merge('tnx_stat')
-      ->key(array('uid' => $vars['entity']->uid))
-      ->fields(array($vars['type'] => 1))
-      ->expression($vars['type'], $vars['type'] . ' + :inc', array(':inc' => 1))
+      ->key(['uid' => $vars['entity']->uid])
+      ->fields([$vars['type'] => 1])
+      ->expression($vars['type'], $vars['type'] . ' + :inc', [':inc' => 1])
       ->execute();
 
     // Count user tnx
     db_merge('tnx_stat')
-      ->key(array('uid' => $vars['user']->uid))
-      ->fields(array('tnx_' . $vars['type'] => 1))
+      ->key(['uid' => $vars['user']->uid])
+      ->fields(['tnx_' . $vars['type'] => 1])
       ->expression('tnx_' . $vars['type'], 'tnx_' . $vars['type'] . ' + :inc',
-        array(':inc' => 1))
+        [':inc' => 1])
       ->execute();
   }
   else {
@@ -121,17 +149,17 @@ function dru_tnx_data($vars) {
     if ($vars['entity']->tnx) {
       // Count tnx
       db_merge('tnx_stat')
-        ->key(array('uid' => $vars['entity']->uid))
-        ->fields(array($vars['type'] => 0))
+        ->key(['uid' => $vars['entity']->uid])
+        ->fields([$vars['type'] => 0])
         ->expression($vars['type'], $vars['type'] . ' - :inc',
-          array(':inc' => 1))
+          [':inc' => 1])
         ->execute();
       // Count user tnx
       db_merge('tnx_stat')
-        ->key(array('uid' => $vars['user']->uid))
-        ->fields(array('tnx_' . $vars['type'] => 0))
+        ->key(['uid' => $vars['user']->uid])
+        ->fields(['tnx_' . $vars['type'] => 0])
         ->expression('tnx_' . $vars['type'], 'tnx_' . $vars['type'] . ' - :inc',
-          array(':inc' => 1))
+          [':inc' => 1])
         ->execute();
     }
   }
@@ -139,6 +167,6 @@ function dru_tnx_data($vars) {
   // Write tnx count to entity
   $query = db_update($vars['type']);
   $query->condition($vars['type'] == 'node' ? 'nid' : 'cid', $vars['id'])
-        ->fields(array('tnx' => $tnx_count))
+        ->fields(['tnx' => $tnx_count])
         ->execute();
 }

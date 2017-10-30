@@ -4,37 +4,59 @@
  * Implements hook_permission().
  */
 function dru_tnx_permission() {
-  return array(
-    'tnx' => array(
+  return [
+    'tnx' => [
       'title'       => t('Thank'),
       'description' => t('Allow users thank content'),
-    ),
-  );
+    ],
+  ];
 }
 
 /**
  * Implements hook_menu().
  */
 function dru_tnx_menu() {
-  $items['tnx/node/nojs/%node/%'] = array(
-    'page callback'    => 'dru_tnx_entity',
-    'file'             => 'dru_tnx.pages.inc',
-    'page arguments'   => array(1, 2, 3, 4),
-    'access arguments' => array('tnx'),
-    'type'             => MENU_CALLBACK,
-  );
+  $items['tnx/node/nojs/%node/%'] = [
+    'page callback'     => 'dru_tnx_entity',
+    'file'              => 'dru_tnx.pages.inc',
+    'page arguments'    => [0, 1, 2, 3, 4],
+    'access arguments'  => ['tnx'],
+    'type'              => MENU_CALLBACK,
+    'delivery callback' => 'ajax_deliver',
+  ];
 
-  $items['tnx/node/ajax/%node/%'] = array(
+  $items['tnx/node/ajax/%node/%'] = [
       'delivery callback' => 'ajax_deliver',
       'type'              => MENU_CALLBACK,
-    ) + $items['tnx/node/nojs/%node/%'];
+    ] + $items['tnx/node/nojs/%node/%'];
+
+  $items['untnx/node/nojs/%node/%'] = [
+    'page callback'     => 'dru_tnx_entity',
+    'file'              => 'dru_tnx.pages.inc',
+    'page arguments'    => [0, 1, 2, 3, 4],
+    'access arguments'  => ['tnx'],
+    'type'              => MENU_CALLBACK,
+    'delivery callback' => 'ajax_deliver',
+  ];
+
+  $items['untnx/node/ajax/%node/%'] = [
+      'delivery callback' => 'ajax_deliver',
+      'type'              => MENU_CALLBACK,
+    ] + $items['tnx/node/nojs/%node/%'];
 
   $items['tnx/comment/nojs/%comment/%'] = $items['tnx/node/nojs/%node/%'];
 
-  $items['tnx/comment/ajax/%comment/%'] = array(
+  $items['tnx/comment/ajax/%comment/%'] = [
       'delivery callback' => 'ajax_deliver',
       'type'              => MENU_CALLBACK,
-    ) + $items['tnx/comment/nojs/%comment/%'];
+    ] + $items['tnx/comment/nojs/%comment/%'];
+
+  $items['untnx/comment/nojs/%comment/%'] = $items['untnx/node/nojs/%node/%'];
+
+  $items['untnx/comment/ajax/%comment/%'] = [
+      'delivery callback' => 'ajax_deliver',
+      'type'              => MENU_CALLBACK,
+    ] + $items['untnx/comment/nojs/%comment/%'];
 
   return $items;
 }
@@ -44,7 +66,7 @@ function dru_tnx_menu() {
  */
 function dru_tnx_node_view($node, $view_mode) {
 
-  global $user;
+  $user = $GLOBALS['user'];
 
   if (isset($node->tnx)) {
 
@@ -55,8 +77,9 @@ function dru_tnx_node_view($node, $view_mode) {
 
       $tnx = get_user_tnx('node', $node->nid, $user->uid);
 
-      $node->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link('node',
-        $node->nid, $tnx);
+      $node->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link(
+        'node', $node->nid, $tnx
+      );
     }
 
     $node->content['tnx']            = dru_tnx_view($node, 'node');
@@ -65,11 +88,23 @@ function dru_tnx_node_view($node, $view_mode) {
 }
 
 /**
+ * Implements hook_preprocess_HOOK().
+ */
+function dru_tnx_preprocess_node(&$vars) {
+  if (
+    (isset($vars['dru_tnx_set_page_true']) && $vars['dru_tnx_set_page_true']) &&
+    (isset($vars['page']) && !$vars['page'])
+  ) {
+    $vars['page'] = TRUE;
+  }
+}
+
+/**
  * Implements hook_comment_view().
  */
 function dru_tnx_comment_view($comment, $view_mode) {
 
-  global $user;
+  $user = $GLOBALS['user'];
 
   // Add comment links
   if (user_access('tnx') && $comment->uid !== $user->uid) {
@@ -78,8 +113,9 @@ function dru_tnx_comment_view($comment, $view_mode) {
 
     $tnx = get_user_tnx('comment', $comment->cid, $user->uid);
 
-    $comment->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link('comment',
-      $comment->cid, $tnx);
+    $comment->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link(
+      'comment', $comment->cid, $tnx
+    );
   }
 }
 
@@ -97,23 +133,23 @@ function dru_tnx_view($entity, $type) {
 
   $count = (isset($entity->tnx) && $entity->tnx > 0) ? $entity->tnx : 0;
 
-  $counter = array(
+  $counter = [
     '#type'       => 'container',
-    '#attributes' => array(
-      'class' => array(
+    '#attributes' => [
+      'class' => [
         'tnx-counter',
         'counter-' . $count,
         'dru-tnx-' . $type . '-' . $entity->$id . '-counter',
-      ),
-    ),
-    'counter'     => array(
-      '#markup' => druru_icon('heart', FALSE, array(
-          'class' => array(
+      ],
+    ],
+    'counter'     => [
+      '#markup' => druru_icon('heart', FALSE, [
+          'class' => [
             'text-danger',
-          ),
-        )) . $count,
-    ),
-  );
+          ],
+        ]) . $count,
+    ],
+  ];
 
   return $counter;
 }
@@ -130,34 +166,41 @@ function dru_tnx_view($entity, $type) {
  * @return array
  */
 function dru_tnx_link($entity_type, $entity_id, $tnx) {
-  $type  = $entity_type;
-  $token = drupal_get_token('dru_tnx');
+  $type     = $entity_type;
+  $token    = drupal_get_token('dru_tnx');
+  $tnx_link = $tnx ? 'tnx' : 'untnx';
 
-  return array(
+  return [
     'title'      => $tnx ? t('Thank you') : t('Revoke thank you'),
-    'href'       => 'tnx/' . $type . '/nojs/' . $entity_id . '/' . $token,
+    'href'       => "$tnx_link/" . $type . '/nojs/' . $entity_id . '/' . $token,
     'query'      => drupal_get_destination(),
-    'attributes' => array(
-      'class' => array(
+    'attributes' => [
+      'class' => [
         'use-ajax',
         'dru-thanks',
-        'dru-' . ($tnx ? 'tnx' : 'untnx'),
+        'dru-' . $tnx_link,
         'dru-tnx-' . $type,
         'dru-tnx-' . $type . '-' . $entity_id,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 }
 
 /**
  * Implementation get_user_tnx().
  *
  * Return Boolean TRUE if user already have thanked.
+ *
+ * @param string $entity_type Entity type ("node" or "comment").
+ * @param int    $entity_id   Entity ID (NID or CID).
+ * @param int    $uid         Thanked user ID (UID).
+ *
+ * @return bool
  */
 function get_user_tnx($entity_type, $entity_id, $uid) {
 
   $tnx = db_select('tnx', 't')
-    ->fields('t', array('id'))
+    ->fields('t', ['id'])
     ->condition('t.entity_type', $entity_type)
     ->condition('t.entity_id', $entity_id)
     ->condition('t.uid', $uid)
@@ -175,7 +218,7 @@ function get_user_tnx($entity_type, $entity_id, $uid) {
 function get_tnx_by_id($entity_type, $entity_id) {
 
   $users = db_select('tnx', 't')
-    ->fields('t', array('uid'))
+    ->fields('t', ['uid'])
     ->condition('t.entity_type', $entity_type)
     ->condition('t.entity_id', $entity_id)
     ->execute()
@@ -192,7 +235,7 @@ function get_tnx_by_id($entity_type, $entity_id) {
 function get_tnx_by_uid($entity_type, $uid) {
 
   $tnxs = db_select('tnx', 't')
-    ->fields('t', array('entity_id'))
+    ->fields('t', ['entity_id'])
     ->condition('t.entity_type', $entity_type)
     ->condition('t.uid', $uid)
     ->execute()
@@ -209,44 +252,44 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
   $tnx_stats = get_user_tnx_statistic($account->uid);
 
   // User tnx
-  $account->content['summary']['user_tnx'] = array(
+  $account->content['summary']['user_tnx'] = [
     '#type'       => 'user_profile_item',
     '#title'      => t('User tnx'),
-    '#attributes' => array(
-      'class' => array(
+    '#attributes' => [
+      'class' => [
         'dru-tnx-user-stat',
         'user-tnx-stat',
-      ),
-    ),
+      ],
+    ],
     '#weight'     => 1,
     '#markup'     => t(
       'Nodes: @nodes, Comments: @comment',
-      array(
+      [
         '@nodes'   => $tnx_stats->tnx_node,
         '@comment' => $tnx_stats->tnx_comment,
-      )
+      ]
     ),
-  );
+  ];
 
   // Users tnx
-  $account->content['summary']['users_tnx'] = array(
+  $account->content['summary']['users_tnx'] = [
     '#type'       => 'user_profile_item',
     '#title'      => t('Users tnx'),
-    '#attributes' => array(
-      'class' => array(
+    '#attributes' => [
+      'class' => [
         'dru-tnx-user-stat',
         'users-tnx-stat',
-      ),
-    ),
+      ],
+    ],
     '#weight'     => 2,
     '#markup'     => t(
       'Nodes: @nodes, Comments: @comment',
-      array(
+      [
         '@nodes'   => $tnx_stats->node,
         '@comment' => $tnx_stats->comment,
-      )
+      ]
     ),
-  );
+  ];
 }
 
 /**

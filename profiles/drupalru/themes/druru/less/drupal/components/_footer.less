@@ -11,7 +11,7 @@ body {
     padding-top: 15px;
     padding-bottom: 15px;
     color: @footer-color;
-    font-weight: 100;
+    font-weight: 300;
     text-align: center;
 
     @media @tablet {
@@ -36,10 +36,33 @@ body {
         border: 1px solid fade(@little-lighter, 15);
       }
     }
+    .site-links {
+      ul {
+        list-style: disc;
+
+        li {
+          display: inline;
+          margin-right: 20px;
+        }
+        @media screen and (max-width: @screen-sm-max) {
+          padding-left: 0;
+          margin-top: 10px;
+        }
+        @media @very-smalld {
+          padding-left: 2em;
+          padding-top: .7em;
+          padding-bottom: .7em;
+          border-left: 1px solid @little-darker;
+          .box-shadow(inset 1px 0 0 0 @little-lighter);
+          li {
+            display: list-item;
+          }
+        }
+      }
+    }
     a {
-      &:hover, &:focus{
+      &:hover, &:focus {
         color: lighten(@link-color, @tone *2);
-        //text-decoration: none;
       }
     }
   }

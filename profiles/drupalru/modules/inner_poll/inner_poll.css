@@ -15,6 +15,7 @@
 
 .inner_poll_answer_wrapper {
   float: left;
+  width: calc(100% - 50px);
 }
 
 .inner_poll_result .percent {
@@ -24,16 +25,21 @@
 
 .inner_poll_result .points {
   text-align: center;
-  color: #ccc;
+  font-weight: 400;
+  font-size: .8em;
+  color: rgba(0,0,0,.5);
 }
-
+.inner_poll_answer {
+  font-size: 1.1em;
+}
 .inner_poll_grafic {
-  height: 5px;
-  background-color: #ddd;
+  height: 9px;
+  background-color: rgba(0,0,0,0.3);
+  margin-top: .2em;
 }
 
 .inner_poll_max_result {
-  background-color: #aaa;
+  background-color: rgba(0,0,0,0.5);
 }
 
 .question {
@@ -44,5 +50,11 @@
 .alredy_vote,
 .inner_poll_container,
 .cancel_votes {
-  margin: 10px 0px 10px 0px;
+  margin: 10px 0 10px 0;
+}
+.inner_poll_line {
+  margin-top: .7em;
+}
+.inner_poll .total_votes, .inner_poll .abs_votes {
+  text-align: right;
 }

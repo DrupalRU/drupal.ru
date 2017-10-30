@@ -5,7 +5,8 @@
  * @Author Romka <mne@romka.eu>.
  * @Copyright Romka <mne@romka.eu>.
  * @License GPL v2.
- * @Port in drupal 7: Kasikhin Vyacheslav aka Irbis <sonwol@yandex.ru>, www.aquanther.ru.
+ * @Port in drupal 7: Kasikhin Vyacheslav aka Irbis <sonwol@yandex.ru>,
+ *   www.aquanther.ru.
  */
 
 // Номер вопроса в БД в таблице вопросов и ответов: inner_poll_choices, в столбце chorder.
@@ -41,7 +42,8 @@ function inner_poll_permission() {
 /**
  * Implements hook_menu().
  *
- * Программно создаём URL и задаём функции генерации страниц при запросе данных URL.
+ * Программно создаём URL и задаём функции генерации страниц при запросе данных
+ * URL.
  */
 function inner_poll_menu() {
   $items = array();
@@ -66,7 +68,7 @@ function inner_poll_menu() {
     'description' => 'Configure inner poll.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('inner_poll_settings'),
-    'access arguments' => array('administer site configuration')
+    'access arguments' => array('administer site configuration'),
   );
 
   return $items;
@@ -75,7 +77,8 @@ function inner_poll_menu() {
 /**
  * Admin interface.
  *
- * Обработка логики и отображение страницы настройки модуля по URL: /admin/config/user-interface/inner-poll, заданного в hook_menu().
+ * Обработка логики и отображение страницы настройки модуля по URL:
+ * /admin/config/user-interface/inner-poll, заданного в hook_menu().
  */
 function inner_poll_settings() {
   $options = array();
@@ -126,7 +129,8 @@ function inner_poll_settings() {
 /**
  * Implements hook_form_alter().
  *
- * Вносим изменения в форму создания ноды перед её показом, для отображения формы создания опроса.
+ * Вносим изменения в форму создания ноды перед её показом, для отображения
+ * формы создания опроса.
  */
 function inner_poll_form_alter(&$form, $form_state, $form_id) {
   global $user;
@@ -302,21 +306,21 @@ function inner_poll_form_alter(&$form, $form_state, $form_id) {
         '#weight' => 35,
         '#default_value' => isset($inr_pl->active) ? $inr_pl->active : 1,
         '#options' => $inr_pl_active,
-        '#description' => t('When the poll is closed, visitors can not longer vote for it.')
+        '#description' => t('When the poll is closed, visitors can not longer vote for it.'),
       );
 
       // Продолжительность опроса.
       $inr_pl_duration = array(0 => t('Unlimited')) + drupal_map_assoc(array(
-        86400,
-        172800,
-        345600,
-        604800,
-        1209600,
-        2419200,
-        4838400,
-        9676800,
-        31536000
-      ), "format_interval");
+          86400,
+          172800,
+          345600,
+          604800,
+          1209600,
+          2419200,
+          4838400,
+          9676800,
+          31536000,
+        ), "format_interval");
       $form['inner_poll']['runtime'] = array(
         '#type' => 'select',
         '#title' => t('Poll duration:'),
@@ -330,21 +334,10 @@ function inner_poll_form_alter(&$form, $form_state, $form_id) {
 }
 
 /**
- * Implements hook_node_insert().
- *
- * Обработка события создания ноды.
+ * Implements hook_node_validate().
  */
-function inner_poll_node_insert($node) {
-  _add_new_poll($node);
-}
-
-/**
- * Implements hook_node_update().
- *
- * Обработка события обновления ноды.
- */
-function inner_poll_node_update($node) {
-  _update_poll($node);
+function inner_poll_node_validate($node, $form, &$form_state) {
+  empty($node->nid) ? _add_new_poll($node) : _update_poll($node);
 }
 
 /**
@@ -373,7 +366,7 @@ function inner_poll_node_view($node, $view_mode) {
       '#markup' => theme('inner_poll_vote_form', array(
         'nid' => $node->nid,
         'ip_tiser_view' => 0,
-        'message' => ''
+        'message' => '',
       )),
       '#weight' => 100,
     );
@@ -384,7 +377,7 @@ function inner_poll_node_view($node, $view_mode) {
       '#markup' => theme('inner_poll_vote_form', array(
         'nid' => $node->nid,
         'ip_tiser_view' => 1,
-        'message' => ''
+        'message' => '',
       )),
       '#weight' => 100,
     );
@@ -442,66 +435,46 @@ function _add_new_poll($node) {
     if ($counter != 0) {
       if ($counter < 2 || strlen($question) < variable_get('inner_poll_question_length', 1)) {
         form_set_error("question", 'If you want to create poll you must enter question and minimum @counter answers to choice.', array('@counter' => 2));
-        exit();
       }
       else {
-        if (isset($_POST['multi'])) {
-          $type = 1;
-        }
-        else {
-          $type = 0;
-        }
-
-        if (isset($_POST['cancel'])) {
-          $cancel = 1;
-        }
-        else {
-          $cancel = 0;
-        }
-
-        if (isset($_POST['active'])) {
-          $active = trim(check_plain($_POST['active']));
-        }
-        else {
-          $active = 0;
-        }
+        $type = isset($_POST['multi']) * 1;
+        $cancel = isset($_POST['cancel']) * 1;
+        $active = isset($_POST['active']) ? trim(check_plain($_POST['active'])) : 0;
 
         db_insert('inner_poll')
           ->fields(array(
-          'nid' => $node->nid,
-          'runtime' => trim(check_plain($_POST['runtime'])),
-          'active' => $active,
-          'type' => $type,
-          'cancel' => $cancel
-        ))
+            'nid' => $node->nid,
+            'runtime' => trim(check_plain($_POST['runtime'])),
+            'active' => $active,
+            'type' => $type,
+            'cancel' => $cancel,
+          ))
           ->execute();
 
         for ($i = 0; $i <= count($choices) - 1; $i++) {
           db_insert('inner_poll_choices')
             ->fields(array(
-            'nid' => $node->nid,
-            'chtext' => $choices[$i],
-            'chvotes' => 0,
-            'chorder' => $i
-          ))
+              'nid' => $node->nid,
+              'chtext' => $choices[$i],
+              'chvotes' => 0,
+              'chorder' => $i,
+            ))
             ->execute();
         }
 
         db_insert('inner_poll_choices')
           ->fields(array(
-          'nid' => $node->nid,
-          'chtext' => $question,
-          'chvotes' => 0,
-          'chorder' => ANSWER_PROPERTY
-        ))
+            'nid' => $node->nid,
+            'chtext' => $question,
+            'chvotes' => 0,
+            'chorder' => ANSWER_PROPERTY,
+          ))
           ->execute();
       }
     }
   }
-  else {
-    if ($node->moderate) {
-      drupal_set_message(t('The post is queued for approval. The editors will decide whether it should be published.'));
-    }
+  elseif ($node->moderate) {
+    drupal_set_message(t('The post is queued for approval. The editors will decide whether it should be published.'));
   }
 }
 
@@ -513,26 +486,9 @@ function _update_poll($node) {
 
   if (user_access('edit all inner polls') || $node->uid == $user->uid && user_access('edit own inner poll')) {
 
-    if (isset($_POST['multi'])) {
-      $type = 1;
-    }
-    else {
-      $type = 0;
-    }
-
-    if (isset($_POST['cancel'])) {
-      $cancel = 1;
-    }
-    else {
-      $cancel = 0;
-    }
-
-    if (isset($_POST['active'])) {
-      $active = trim(check_plain($_POST['active']));
-    }
-    else {
-      $active = 0;
-    }
+    $type = isset($_POST['multi']) * 1;
+    $cancel = isset($_POST['cancel']) * 1;
+    $active = isset($_POST['active']) ? trim(check_plain($_POST['active'])) : 0;
 
     $choices = array();
     $counter = 0;
@@ -639,7 +595,7 @@ function _update_poll($node) {
               'runtime' => trim(check_plain($_POST['runtime'])),
               'active' => $active,
               'type' => $type,
-              'cancel' => $cancel
+              'cancel' => $cancel,
             ))
             ->execute();
         }
@@ -649,7 +605,7 @@ function _update_poll($node) {
               'type' => $type,
               'cancel' => $cancel,
               'active' => $active,
-              'runtime' => trim(check_plain($_POST['runtime']))
+              'runtime' => trim(check_plain($_POST['runtime'])),
             ))
             ->condition('nid', $node->nid)
             ->execute();
@@ -662,7 +618,8 @@ function _update_poll($node) {
 /**
  * Page AJAX callback.
  *
- * Обработка логики и отображение страницы по URL: /inner_poll/vote_js, заданного в hook_menu().
+ * Обработка логики и отображение страницы по URL: /inner_poll/vote_js,
+ * заданного в hook_menu().
  */
 function inner_poll_vote_js() {
   if (!isset($_POST['n'])) {
@@ -731,17 +688,17 @@ function inner_poll_vote_js() {
     if ($post_abst == TRUE) {
       db_insert('inner_poll_votes')
         ->fields(array(
-        'nid' => $nid,
-        'uid' => $user->uid,
-        'chorder' => ANSWER_PROPERTY,
-        'hostname' => ip_address()
-      ))
+          'nid' => $nid,
+          'uid' => $user->uid,
+          'chorder' => ANSWER_PROPERTY,
+          'hostname' => ip_address(),
+        ))
         ->execute();
 
       $output = theme('inner_poll_vote_form', array(
         'nid' => $nid,
         'ip_tiser_view' => 0,
-        'message' => t('You abstain')
+        'message' => t('You abstain'),
       ));
     }
     else {
@@ -758,11 +715,11 @@ function inner_poll_vote_js() {
       for ($i = 1; $i <= count($votes) - 1; $i++) {
         db_insert('inner_poll_votes')
           ->fields(array(
-          'nid' => $nid,
-          'uid' => $user->uid,
-          'chorder' => $votes[$i],
-          'hostname' => ip_address()
-        ))
+            'nid' => $nid,
+            'uid' => $user->uid,
+            'chorder' => $votes[$i],
+            'hostname' => ip_address(),
+          ))
           ->execute();
 
         db_update('inner_poll_choices')
@@ -775,7 +732,7 @@ function inner_poll_vote_js() {
       $output = theme('inner_poll_vote_form', array(
         'nid' => $nid,
         'ip_tiser_view' => 0,
-        'message' => t('Your vote accepted')
+        'message' => t('Your vote accepted'),
       ));
     }
   }
@@ -789,7 +746,8 @@ function inner_poll_vote_js() {
 /**
  * AJAX callback for cancel vote.
  *
- * Обработка логики и отображение страницы по URL: /inner_poll/cancel_vote, заданного в hook_menu().
+ * Обработка логики и отображение страницы по URL: /inner_poll/cancel_vote,
+ * заданного в hook_menu().
  */
 function inner_poll_cancel_vote() {
   if (!isset($_POST['n'])) {
@@ -861,7 +819,7 @@ function inner_poll_cancel_vote() {
     $output = theme('inner_poll_vote_form', array(
       'nid' => $nid,
       'ip_tiser_view' => 0,
-      'message' => t('Your vote was deleted')
+      'message' => t('Your vote was deleted'),
     ));
 
   }
@@ -880,12 +838,11 @@ function inner_poll_theme() {
       'variables' => array(
         'nid' => NULL,
         'ip_tiser_view' => NULL,
-        'message' => NULL
+        'message' => NULL,
       ),
     ),
   );
 }
-
 
 /**
  * Rendering of vote form..
@@ -1014,11 +971,6 @@ function theme_inner_poll_vote_form($variables) {
           }
         }
 
-        $width = variable_get('inner_poll_div_width', 300);
-        if (!is_numeric($width)) {
-          $width = 300;
-        }
-
         $results = array();
         $i = 0;
         $sum = 0;
@@ -1031,19 +983,16 @@ function theme_inner_poll_vote_form($variables) {
           ->condition('n.nid', $variables['nid'])
           ->execute();
 
+        $max = $max_i = 0;
         // Загрузка ответов и голосов за них.
         foreach ($result_answers as $row_answers) {
           $sum += $row_answers->chvotes;
           $results[$i]['text'] = $row_answers->chtext;
           $results[$i]['votes'] = $row_answers->chvotes;
 
-          if ($i == 0) {
-            $max = $i;
-          }
-          else {
-            if ($results[$i]['votes'] > $results[$i - 1]['votes']) {
-              $max = $i;
-            }
+          if ($max < $results[$i]['votes']) {
+            $max = $results[$i]['votes'];
+            $max_i = $i;
           }
 
           $i++;
@@ -1053,15 +1002,7 @@ function theme_inner_poll_vote_form($variables) {
 
         // Отображаем ответы и количество голосов за них.
         for ($i = 0; $i <= count($results) - 1; $i++) {
-          if ($sum != 0) {
-            $width_results = ($width * $results[$i]['votes'] / $sum);
-            $percent = round(($results[$i]['votes'] / $sum) * 100, 2);
-          }
-          else {
-            $width_results = 1;
-            $percent = 0;
-          }
-
+          $percent = $sum ? round(($results[$i]['votes'] / $sum) * 100, 2) : 0;
           $res .= "<div class=\"inner_poll_line\">
                      <div class=\"inner_poll_result\">
                        <div class=\"percent\">" . $percent . "%</div>
@@ -1069,7 +1010,7 @@ function theme_inner_poll_vote_form($variables) {
                      </div>
                      <div class=\"inner_poll_answer_wrapper\">
                        <div class=\"inner_poll_answer\">" . $results[$i]['text'] . "</div>
-                       <div class=\"inner_poll_grafic" . ($max == $i ? " inner_poll_max_result" : "") . "\" style=\"width: " . $width_results . "px\"></div>
+                       <div class=\"inner_poll_grafic" . ($max_i == $i ? " inner_poll_max_result" : "") . "\" style=\"width: " . $percent . "%\"></div>
                      </div>
                    </div>
                    <div style=\"clear: both;\"></div>\n";
@@ -1111,7 +1052,7 @@ function theme_inner_poll_vote_form($variables) {
         // Итоговый результат.
         $output = "<div class=\"inner_poll jumbotron\" id=\"inner_poll_" . $variables['nid'] . "\">
                      " . $variables['message'] . "
-                     <h2>" . t('Attached poll') . " «" . $chtext_ipc . "»:</h2>";
+                     <h2>" . $chtext_ipc . ":</h2>";
 
         if ($active_ip) {
           $output .= "<div class=\"alredy_vote\">" . $text . "</div>";
@@ -1152,13 +1093,13 @@ function theme_inner_poll_vote_form($variables) {
         $res .= $row->chtext;
         $res .= ' ';
         $res .= t('%votes', array(
-          '%votes' => format_plural($row->chvotes, '1 vote', '@count votes')
-          ));
+          '%votes' => format_plural($row->chvotes, '1 vote', '@count votes'),
+        ));
         $res .= '</li>';
       }
       $res .= '</ul>';
 
-        // Итоговый результат.
+      // Итоговый результат.
       $output = "<div class='inner_poll jumbotron' id='inner_poll_{$variables['nid']}'>{$variables['message']}";
       $output .= "<h2>" . t('Attached poll') . " «" . $chtext_ipc . "»:</h2>";
 
@@ -1166,7 +1107,7 @@ function theme_inner_poll_vote_form($variables) {
 
       $output .= "<div class='inner-poll-unauthorized'>";
       $output .= t('<a href="@login">Log in</a> or <a href="@register">register</a> to vote', array(
-        '@login'    => url('user/login'),
+        '@login' => url('user/login'),
         '@register' => url('user/register'),
       ));
       $output .= "</div>";

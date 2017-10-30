@@ -1,0 +1,118 @@
+<?php
+
+/**
+ * @file Stores hooks for install and update the module.
+ */
+
+/**
+ * Implements hook_delete().
+ */
+function drurum_delete() {
+  variable_del('drurum_add_organization_help');
+}
+
+/**
+ * Add link to create content into User Menu.
+ */
+function drurum_update_7001() {
+  $tree = menu_load_links('user-menu');
+  $x = $right_weight = -50;
+  foreach ($tree as $item) {
+    if (!$item['plid']) {
+      $item['weight'] = $x++;
+      menu_link_save($item, $item);
+      // Finding place between link to Messages and Logout.
+      if ($item['link_path'] == 'messages') {
+        $right_weight = $x++;
+      }
+    }
+  }
+  $parent = [
+    'link_path' => 'node/add',
+    'link_title' => 'Создать',
+    'menu_name' => 'user-menu',
+    'weight' => $right_weight,
+    'expanded' => 1,
+    'has_children' => 0,
+    'customized' => 1,
+    'language' => LANGUAGE_NONE,
+    'plid' => 0,
+    'module' => 'menu',
+  ];
+  $plid = menu_link_save($parent);
+  $items = [
+    [
+      'link_path' => 'node/add/blog',
+      'link_title' => 'Запись в блог',
+      'menu_name' => 'user-menu',
+      'weight' => 0,
+      'language' => LANGUAGE_NONE,
+      'plid' => $plid,
+      'module' => 'menu',
+    ],
+    [
+      'link_path' => 'node/add/simple-event',
+      'link_title' => 'Событие',
+      'menu_name' => 'user-menu',
+      'weight' => 1,
+      'language' => LANGUAGE_NONE,
+      'plid' => $plid,
+      'module' => 'menu',
+    ],
+    [
+      'link_path' => 'node/add/organization',
+      'link_title' => 'Компания',
+      'menu_name' => 'user-menu',
+      'weight' => 2,
+      'language' => LANGUAGE_NONE,
+      'plid' => $plid,
+      'module' => 'menu',
+    ],
+  ];
+  foreach ($items as $item) {
+    menu_link_save($item);
+  }
+}
+
+/**
+ * Adding info for
+ */
+function drurum_update_7002() {
+  variable_set('drurum_add_organization_help', '<p class="lead text-success text-center">Вы можете поддержать развитие проекта, в связи с чем информацию о вашей компании увидит большее количество пользователей!</p>
+<div class="text-center">
+<iframe src="https://money.yandex.ru/quickpay/shop-widget?writer=seller&targets=%D0%9D%D0%B0%20%D1%80%D0%B0%D0%B7%D0%B2%D0%B8%D1%82%D0%B8%D0%B5%20%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0&targets-hint=&default-sum=2900&button-text=12&payment-type-choice=on&mobile-payment-type-choice=on&comment=on&hint=%D0%9E%D1%81%D1%82%D0%B0%D0%B2%D1%8C%D1%82%D0%B5%20%D1%81%D0%B2%D0%BE%D0%B9%20%D0%BD%D0%B8%D0%BA%D0%BD%D0%B5%D0%B9%D0%BC%2C%20%D1%87%D1%82%D0%BE%D0%B1%D1%8B%20%D0%BC%D1%8B%20%D0%BC%D0%BE%D0%B3%D0%BB%D0%B8%20%D0%BF%D0%BE%D0%B1%D0%BB%D0%B0%D0%B3%D0%BE%D0%B4%D0%B0%D1%80%D0%B8%D1%82%D1%8C&successURL=&quickpay=shop&account=410015352318249" width="450" height="282" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
+</div>');
+
+  $type = node_type_load('organization');
+  if ($type) {
+    $type->help = '<p>Раздел "Компании" - включает в себя список компаний, предоставляющих услуги связанные с CMS Drupal: разработка, поддержка, хостинг, тренинги, проведение мероприятий. А также делают вклад в Drupal сообщество!</p>
+<p><em>Материалы проходят проверку перед публикацией</em></p>';
+    node_type_save($type);
+  }
+}
+
+/**
+ * Add links into footer.
+ */
+function drurum_update_7003(){
+  db_update('block_custom')
+    ->fields(array('body' => '<div class="logo-footer col-sm-2 col-vsd-1">
+  <img src="/profiles/drupalru/themes/druru/img/logos/72.png"></div>
+<div class="copyright col-sm-8 col-vsd-7">
+<p>Содержимое сайта публикуется на условиях <a href="/license#content">CreativeCommons Attribution-ShareAlike 3.0</a> или более поздней версии<br>
+    Программные коды в тексте статей — на условиях <a href="/license#code">GNU GPL v2</a> или более поздней версии.<br><strong>Drupal</strong> - торговая марка <a href="/about/dries_buytaert">Дриса Байтаерта</a>
+  </p>
+</div>
+<div class="age-limit col-sm-2 col-vsd-1">
+  <span class="alert-danger">16+</span>
+</div>
+<div class="site-links col-sm-10 col-sm-offset-2 col-vsd-3 col-vsd-offset-0">
+  <ul>
+<li><a href="/ru_team" target="blank">Команда сайта</a></li>
+<li><a href="/contact" target="blank">Обратная связь</a></li>
+<li><a href="/rules" target="blank">Правила сайта</a></li>
+</ul>
+</div>'))
+    ->condition('bid', 95)
+    ->execute();
+}

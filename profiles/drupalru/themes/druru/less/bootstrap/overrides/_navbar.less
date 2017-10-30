@@ -5,9 +5,9 @@
 .navbar {
 
   .navbar-header {
-    padding:       0 1em;
-    background:    rgba(0, 0, 0, .1);
-    height:        88px;
+    padding: 0 1em;
+    background: rgba(0, 0, 0, .1);
+    height: 88px;
     margin-bottom: -100%;
 
     .brand-link {
@@ -15,7 +15,7 @@
       height: 100%;
 
       .navbar-brand {
-        height:       100%;
+        height: 100%;
         padding-left: 0;
         @media @phone-only {
           margin-left: 0;
@@ -25,21 +25,21 @@
   }
 
   &.navbar-default {
-    text-align:    right;
+    text-align: right;
     border-bottom: none;
 
     // button for toggle menu in little displays
     .navbar-toggle {
-      border:     none;
+      border: none;
       background: none;
-      margin:     0;
-      padding:    15px;
+      margin: 0;
+      padding: 15px;
 
       .whistle-blower {
         position: absolute;
-        top:      7px;
-        right:    10px;
-        color:    saturate(lighten(@brand-success, @tone*2), @tone);
+        top: 7px;
+        right: 10px;
+        color: saturate(lighten(@brand-success, @tone*2), @tone);
       }
 
       &:hover, &:focus {
@@ -49,8 +49,8 @@
       }
 
       .icon-bar {
-        width:      32px;
-        height:     3px;
+        width: 32px;
+        height: 3px;
         background: @lighter;
         + .icon-bar {
           margin-top: 6px;
@@ -64,71 +64,95 @@
     }
 
     .nav {
-      float:   none;
+      float: none;
       display: inline-block;
-      margin:  0;
-      width:   100%;
+      margin: 0;
+      width: 100%;
 
-      @media @tablet {
-        width: auto;
+      .dropdown-menu.dropdown-menu-right {
+        border: none;
+        padding: 0;
+
+        li.leaf {
+          background: @navbar-default-bg;
+          a {
+            background-color: @navbar-default-link-hover-bg;
+            padding: .6em 1.2em;
+            color: #fff;
+            &:hover, &:focus, &.active{
+              background-color: @little-darker;
+            }
+          }
+        }
+        @media @tablet {
+          position: absolute;
+          width: 200px;
+          .box-shadow(0 4px 4px rgba(0, 0, 0, .3));
+        }
       }
 
+      // Must be here, before >li
       &.secondary {
         > li {
           > a {
             position: relative;
-            z-index:  999;
-            // because it hovered by darker layout
-            color:    #fff;
-
-            @media @tablet {
-              border-top: 2px solid @little-darker;
-            }
-            &:after {
-              z-index:    -1;
-              background: @little-darker;
-            }
+            color: #fff;
+            background-color: @little-darker;
           }
         }
       }
 
       > li {
         background: none;
-        display:    block;
+        display: block;
         text-align: left;
 
-        @media @tablet {
-          float:      none;
-          display:    inline-block;
-          text-align: right;
-        }
-
         > a {
-          color:       @navbar-default-link-color;
-          position:    relative;
-          z-index:     1;
-          border-left: 2px solid transparent;
-          .menu-item-animation('to-bottom');
+          color: @navbar-default-link-color;
+          position: relative;
+          z-index: 1;
+          .transition(all @transition-speed);
 
           img {
             vertical-align: bottom;
           }
 
           &:hover, &:focus, &.active {
-            color:             @navbar-default-link-hover-color;
-            border-left-color: @nav-item-active-border;
+            color: @navbar-default-link-hover-color;
+            background-color: @navbar-default-link-hover-bg;
+            .box-shadow(inset 2px 0 0 0 @nav-item-active-border);
           }
 
           @media @tablet {
-            border-left: none;
-            border-top:  2px solid transparent;
-            .menu-item-animation('to-right');
-
             &.active, &.active-trail, &:hover, &:focus {
-              border-top-color: @nav-item-hover-border;
+              background-color: @navbar-default-link-hover-bg;
+              .box-shadow(inset 0 2px 0 0 @nav-item-active-border);
             }
           }
         }
+
+        &.open {
+          > a {
+            color: @navbar-default-link-hover-color;
+            background-color: @navbar-default-link-hover-bg;
+            .box-shadow(inset 2px 0 0 0 @nav-item-active-border);
+
+            @media @tablet {
+              background-color: @navbar-default-link-hover-bg;
+              .box-shadow(inset 0 2px 0 0 @nav-item-active-border);
+            }
+          }
+        }
+
+        @media @tablet {
+          float: none;
+          display: inline-block;
+          text-align: right;
+        }
+      }
+
+      @media @tablet {
+        width: auto;
       }
     }
   }
@@ -140,9 +164,10 @@
         display: inline-block;
         a {
           .lighter(color, @brand-info, 3);
-          &, &:hover, &:focus, &:before, &:after {
-            border:     none;
+          &, &:hover, &:focus {
+            border: none;
             background: none;
+            .box-shadow(none);
           }
           &:hover, &:focus {
             color: #fff;
@@ -155,7 +180,7 @@
           }
 
           @media @phone-only {
-            padding:   .5em .7em;
+            padding: .5em .7em;
             font-size: 1.4em;
           }
         }
@@ -165,9 +190,16 @@
 }
 
 .navbar-collapse {
-  border:  none;
-  clear:   left;
+  border: none;
+  clear: left;
   padding: 0;
+  .box-shadow(none);
+
+  @media @tablet {
+    &.in {
+      overflow: visible;
+    }
+  }
   @media @very-smalld {
     clear: none;
   }

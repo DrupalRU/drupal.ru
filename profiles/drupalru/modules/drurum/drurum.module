@@ -40,6 +40,16 @@ function drurum_menu() {
 }
 
 /**
+ * Implements hook_help().
+ */
+function drurum_help($path, $arg) {
+  $help = variable_get('drurum_add_organization_help');
+  if($path == 'node/add/organization' && $help) {
+    return $help;
+  }
+}
+
+/**
  * Implements hook_menu_alter().
  */
 function drurum_preprocess_menu_local_action(&$link) {
@@ -139,6 +149,7 @@ function druru_block_save($delta = '', $edit = array()) {
  * Implements hook_block_view().
  */
 function drurum_block_view($delta = '') {
+  global $user;
   $query = db_select('forum_index', 'f')->fields('f')->addTag('node_access');
   $query->leftJoin('node', 'n', 'f.nid = n.nid');
   $query->fields('n', array('type', 'changed'));
@@ -153,6 +164,10 @@ function drurum_block_view($delta = '') {
     case 'new':
       $title = t('New forum topics');
       $count = drupal_is_front_page() ? 30 : variable_get('forum_block_num_new', 5);
+      $hide_dark_matter = (isset($user->darkmatter) ? $user->darkmatter == 1 : false);
+      if (!$hide_dark_matter) {
+        $query->condition('n.darkmatter', 0);
+      }
       $query->orderBy('f.created', 'DESC')
         ->range(0, $count);
       break;

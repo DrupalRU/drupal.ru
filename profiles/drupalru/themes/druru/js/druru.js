@@ -9,29 +9,31 @@ var Drupal = Drupal || {};
 
 (function ($, Drupal) {
   "use strict";
-  
+
   Drupal.behaviors.druru = {
     attach: function (context, settings) {
-      
+
       // Improvement for bootstrap-filestyle plugin.
       $.fn.filestyle.defaults.buttonText = 'Выбрать файл';
       $.fn.filestyle.defaults.iconName = 'fa fa-folder-open';
       this.improveBootstrapTabIntegration(context, settings);
       this.improveBootstrapDropdowns(context, settings);
       this.initContextMenu(context, settings);
-      
+
       // disallow click by link with path to this page
       $('a.active').click(function () {
         return window.location.pathname != $(this).attr('href');
       });
       // stylizing the select
-      $('.selectpicker').selectpicker();
+      $('.selectpicker').selectpicker({
+        noneSelectedText: 'Ничего не выбрано'
+      });
       // stylizing the file input
       $(":file").filestyle();
-      
-      
+
+
     },
-    
+
     improveBootstrapTabIntegration: function (context, settings) {
       // We need to wait when drupal perform wrapping for the vertical tabs.
       // After it, we can execute the handler for the tabs (wrapper).
@@ -74,7 +76,7 @@ var Drupal = Drupal || {};
         });
       }, 200);
     },
-    
+
     improveBootstrapDropdowns: function (context, settings) {
       var checkCommentSelection = function () {
         var $dropdown = $(this).closest('.dropdown'),
@@ -88,9 +90,9 @@ var Drupal = Drupal || {};
           .on('hidden.bs.dropdown', checkCommentSelection);
       });
     },
-    
+
     excludeTags    : ['a', 'button'],
-    
+
     initContextMenu: function (context, settings) {
       // Build links expanded by showing of context menu.
       var comments = $('.comment'), $comment, hasComments = false;
@@ -104,16 +106,16 @@ var Drupal = Drupal || {};
         }
         if (hasComments) {
           $(window).on('blur', Drupal.behaviors.druru.hideContextMenu);
-          $(document).on('click', Drupal.behaviors.druru.hideContextMenu);
+          $(document).on('mousedown', Drupal.behaviors.druru.hideContextMenu);
         }
       }
     },
-    
+
     showContextMenu: function (e) {
-  
+
       // Hide all previously showed menus.
-      Drupal.behaviors.druru.hideContextMenu();
-      
+      Drupal.behaviors.druru.hideContextMenu
+
       // Don't triggering the event at excluded tags.
       var excludeTags = Drupal.behaviors.druru.excludeTags,
         $target = $(e.target),
@@ -128,22 +130,22 @@ var Drupal = Drupal || {};
       if (tagIsExcluded || childOfExcludedTags) {
         return true;
       }
-      
+
       e.defaultPrevented = true;
-      
+
       // Hide all bootstrap dropdowns, showed by bootstrap event.
       $(document).trigger('click.bs.dropdown.data-api');
-  
+
       var $comment = $(this),
         $dropdown = $comment.find('.dropdown'),
         $menu = $dropdown.find('.dropdown-menu'),
         menuWidth = $menu.outerWidth();
-      
+
       // Fix for IE. He incorrectly detected offset left inside code.
       if ($target.closest('.geshifilter').length) {
         $target = $target.closest('.geshifilter > div');
       }
-      
+
       $comment.addClass('hovered').addClass('context-menu-showed');
       $dropdown.css('position', 'static');
       $menu.css({
@@ -153,11 +155,11 @@ var Drupal = Drupal || {};
         top     : e.offsetY + $target.position().top,
         width   : menuWidth
       });
-      
+
       // Disallow to show default context menu.
       return false;
     },
-    
+
     hideContextMenu: function () {
       $('.context-menu-showed').each(function (idx, obj) {
         var $comment = $(this);
@@ -177,7 +179,7 @@ var Drupal = Drupal || {};
       });
     }
   };
-  
+
   /**
    * Bootstrap Popovers.
    */
@@ -193,7 +195,7 @@ var Drupal = Drupal || {};
       }
     }
   };
-  
+
   /**
    * Bootstrap Tooltips.
    */
@@ -209,7 +211,7 @@ var Drupal = Drupal || {};
       }
     }
   };
-  
+
   /**
    * Anchor fixes.
    */
@@ -289,7 +291,7 @@ var Drupal = Drupal || {};
       };
     }
   };
-  
+
   Drupal.behaviors.druruHelpBlocks = {
     showed: false,
     $switcher: null,
@@ -319,11 +321,11 @@ var Drupal = Drupal || {};
           $('.main-content').prepend($switcher);
           $switcher = $('.help-switcher');
           self.$switcher = $switcher;
-          
+
           // Fixation logic.
           position.top = $switcher.offset().top;
           position.left = $switcher.offset().left;
-          
+
           self.setPosition();
           $(window).on('scroll', function (event) {
             self.setPosition();
@@ -331,7 +333,7 @@ var Drupal = Drupal || {};
         });
       }
     },
-    
+
     /**
      * Set position of helper switcher.
      */
@@ -357,7 +359,7 @@ var Drupal = Drupal || {};
       }
     }
   };
-  
+
   Drupal.behaviors.druruBueditor = {
     attach: function (context, settings) {
       if (typeof BUE != 'undefined') {
@@ -384,7 +386,7 @@ var Drupal = Drupal || {};
       }
     }
   };
-  
+
   Drupal.behaviors.druruBlogTeaserViewSwitcher = {
     attach: function (context, settings) {
       $('.view-switcher').on('click', function () {
@@ -400,7 +402,7 @@ var Drupal = Drupal || {};
         });
     }
   };
-  
+
   // Make parallax effect on front page.
   // Drupal.behaviors.druruParallax = {
   //   attach: function (context, settings) {
@@ -413,10 +415,10 @@ var Drupal = Drupal || {};
   //     });
   //   }
   // };
-  
+
   Drupal.theme.prototype.attributes = function (attributes) {
     var parsedAttrs = '', attr = null;
-    
+
     //set attributes
     for (var attribute in attributes) {
       if (attributes.hasOwnProperty(attribute)) {
@@ -427,11 +429,11 @@ var Drupal = Drupal || {};
         parsedAttrs += attribute + '="' + attr + '" ';
       }
     }
-    
+
     return ' ' + parsedAttrs + ' ';
-    
+
   };
-  
+
   /**
    * Theme for icon.
    *
@@ -448,7 +450,7 @@ var Drupal = Drupal || {};
     if (typeof attributes.class == 'undefined') {
       attributes.class = [];
     }
-    
+
     if (typeof attributes.class == 'object' && attributes.class != null) {
       attributes.class.push('fa');
       attributes.class.push('fa-' + icon);
@@ -458,7 +460,7 @@ var Drupal = Drupal || {};
     }
     return '<i ' + Drupal.theme('attributes', attributes) + '"></i>';
   };
-  
+
   // Inner poll.
   window.addFormField = function () {
     if (!window.id_chose) {
@@ -470,18 +472,18 @@ var Drupal = Drupal || {};
         choseHtml = '';
       choseHtml += '<div id="edit-choice-' + id + '-wrapper" class="form-group input-group">';
       choseHtml += '<input type="text" class="form-text form-control" value="" size="" id="edit-choice-' + id + '" name="choice_' + id + '" maxlength="128"/>';
-      
+
       choseHtml += '<span class="input-group-btn">';
       choseHtml += '<button class="btn btn-default" onclick="removeFormField(\'#edit-choice-' + id + '-wrapper\'); return false;" type="button">';
       choseHtml += '<i class="fa fa-times"></i>';
       choseHtml += '</button>';
       choseHtml += '</span>';
-      
+
       choseHtml += '</div>';
-      
+
       jQuery("#inner_poll_new_fields").append(choseHtml);
       document.getElementById("edit-inner-poll-new-id").value = id;
     }
   };
-  
+
 })(jQuery, Drupal);

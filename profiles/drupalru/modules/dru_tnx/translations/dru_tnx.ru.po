@@ -3,7 +3,7 @@
 # Russian translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  dru_tnx.pages.inc: n/a
+#  includes/dru_tnx.pages.inc: n/a
 #  dru_tnx.module: n/a
 #  dru_tnx.info: n/a
 #
@@ -21,11 +21,19 @@ msgstr ""
 "Language: ru\n"
 "X-Generator: Poedit 1.8.6\n"
 
-#: dru_tnx.pages.inc:68
+#: includes/dru_tnx.pages.inc:41
+msgid "You can't unthanks twice!"
+msgstr "Нельзя отменить благодарность дважды!"
+
+#: includes/dru_tnx.pages.inc:41
+msgid "You can't thanks twice!"
+msgstr "Нельзя благодарить больше одного раза!"
+
+#: includes/dru_tnx.pages.inc:68
 msgid "Your Thank Accepted"
 msgstr "Благодарность добавлена"
 
-#: dru_tnx.pages.inc:68
+#: includes/dru_tnx.pages.inc:68
 msgid "Your Thank Deleted"
 msgstr "Благодарность удалена"
 

@@ -1,6 +1,21 @@
 <?php
 
 /**
+ * @file
+ *   Main module file
+ */
+
+/**
+ * Globals.
+ */
+define('DRU_TNX_PATH', drupal_get_path('module', 'dru_tnx'));
+
+/**
+ * Includes.
+ */
+module_load_include('inc', 'dru_tnx', 'includes/dru_tnx.crud');
+
+/**
  * Implements hook_permission().
  */
 function dru_tnx_permission() {
@@ -18,7 +33,7 @@ function dru_tnx_permission() {
 function dru_tnx_menu() {
   $items['tnx/node/nojs/%node/%'] = [
     'page callback'     => 'dru_tnx_entity',
-    'file'              => 'dru_tnx.pages.inc',
+    'file'              => 'includes/dru_tnx.pages.inc',
     'page arguments'    => [0, 1, 2, 3, 4],
     'access arguments'  => ['tnx'],
     'type'              => MENU_CALLBACK,
@@ -32,7 +47,7 @@ function dru_tnx_menu() {
 
   $items['untnx/node/nojs/%node/%'] = [
     'page callback'     => 'dru_tnx_entity',
-    'file'              => 'dru_tnx.pages.inc',
+    'file'              => 'includes/dru_tnx.pages.inc',
     'page arguments'    => [0, 1, 2, 3, 4],
     'access arguments'  => ['tnx'],
     'type'              => MENU_CALLBACK,
@@ -72,17 +87,14 @@ function dru_tnx_node_view($node, $view_mode) {
 
     // Add node links
     if (user_access('tnx') && $node->uid !== $user->uid) {
-
       drupal_add_library('system', 'drupal.ajax');
-
       $tnx = get_user_tnx('node', $node->nid, $user->uid);
-
       $node->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link(
         'node', $node->nid, $tnx
       );
     }
 
-    $node->content['tnx']            = dru_tnx_view($node, 'node');
+    $node->content['tnx'] = dru_tnx_show($node, 'node');
     $node->content['tnx']['#weight'] = count($node->content) + 1;
   }
 }
@@ -108,11 +120,8 @@ function dru_tnx_comment_view($comment, $view_mode) {
 
   // Add comment links
   if (user_access('tnx') && $comment->uid !== $user->uid) {
-
     drupal_add_library('system', 'drupal.ajax');
-
     $tnx = get_user_tnx('comment', $comment->cid, $user->uid);
-
     $comment->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link(
       'comment', $comment->cid, $tnx
     );
@@ -127,10 +136,9 @@ function dru_tnx_comment_view($comment, $view_mode) {
  *
  * @return array
  */
-function dru_tnx_view($entity, $type) {
+function dru_tnx_show($entity, $type) {
 
   $id = $type == 'node' ? 'nid' : 'cid';
-
   $count = (isset($entity->tnx) && $entity->tnx > 0) ? $entity->tnx : 0;
 
   $counter = [
@@ -166,8 +174,8 @@ function dru_tnx_view($entity, $type) {
  * @return array
  */
 function dru_tnx_link($entity_type, $entity_id, $tnx) {
-  $type     = $entity_type;
-  $token    = drupal_get_token('dru_tnx');
+  $type = $entity_type;
+  $token = drupal_get_token('dru_tnx');
   $tnx_link = $tnx ? 'tnx' : 'untnx';
 
   return [
@@ -184,64 +192,6 @@ function dru_tnx_link($entity_type, $entity_id, $tnx) {
       ],
     ],
   ];
-}
-
-/**
- * Implementation get_user_tnx().
- *
- * Return Boolean TRUE if user already have thanked.
- *
- * @param string $entity_type Entity type ("node" or "comment").
- * @param int    $entity_id   Entity ID (NID or CID).
- * @param int    $uid         Thanked user ID (UID).
- *
- * @return bool
- */
-function get_user_tnx($entity_type, $entity_id, $uid) {
-
-  $tnx = db_select('tnx', 't')
-    ->fields('t', ['id'])
-    ->condition('t.entity_type', $entity_type)
-    ->condition('t.entity_id', $entity_id)
-    ->condition('t.uid', $uid)
-    ->execute()
-    ->fetchAll();
-
-  return !$tnx;
-}
-
-/**
- * Implementation get_tnx_by_id().
- *
- * Return UID list.
- */
-function get_tnx_by_id($entity_type, $entity_id) {
-
-  $users = db_select('tnx', 't')
-    ->fields('t', ['uid'])
-    ->condition('t.entity_type', $entity_type)
-    ->condition('t.entity_id', $entity_id)
-    ->execute()
-    ->fetchAssoc();
-
-  return $users;
-}
-
-/**
- * Implementation get_tnx_by_uid().
- *
- * Return Entity ID list.
- */
-function get_tnx_by_uid($entity_type, $uid) {
-
-  $tnxs = db_select('tnx', 't')
-    ->fields('t', ['entity_id'])
-    ->condition('t.entity_type', $entity_type)
-    ->condition('t.uid', $uid)
-    ->execute()
-    ->fetchAssoc();
-
-  return $tnxs;
 }
 
 /**
@@ -293,33 +243,8 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
 }
 
 /**
- * Implementation get_user_tnx_statistic().
- *
- * Return user statistic object
- */
-function get_user_tnx_statistic($uid) {
-  $statistic = db_select('tnx_stat', 't')
-    ->fields('t')
-    ->condition('t.uid', $uid)
-    ->execute()
-    ->fetchObject();
-
-  // If user has no statistic.
-  if (!$statistic) {
-    $statistic              = new stdClass();
-    $statistic->uid         = $uid;
-    $statistic->tnx_node    = 0;
-    $statistic->tnx_comment = 0;
-    $statistic->node        = 0;
-    $statistic->comment     = 0;
-  }
-
-  return $statistic;
-}
-
-/**
  * Implements hook_init().
  */
 function dru_tnx_init() {
-  drupal_add_css(drupal_get_path('module', 'dru_tnx') . '/dru_tnx.css');
+  drupal_add_css(DRU_TNX_PATH . '/css/dru_tnx.css');
 }

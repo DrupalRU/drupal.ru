@@ -368,3 +368,19 @@ function dru_tickets_mail($key, &$message, $params) {
 function dru_tickets_init() {
   drupal_add_css(drupal_get_path('module', 'dru_tickets') . '/dru_tickets.css');
 }
+
+/**
+ * Implements hook_delete().
+ */
+function dru_tickets_delete($node) {
+  if($node->type == 'ticket') {
+    db_update('node')
+      ->fields(array('claim' => 0))
+      ->condition('claim', $node->nid)
+      ->execute();
+    db_update('comment')
+      ->fields(array('claim' => 0))
+      ->condition('claim', $node->nid)
+      ->execute();
+  }
+}

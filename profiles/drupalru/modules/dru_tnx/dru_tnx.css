@@ -44,11 +44,11 @@
     opacity: 1;
   }
   20% {
-    transform: scale(1.4) rotate(0deg);
+    transform: scale(1.4);
     opacity: 1;
   }
   100% {
-    transform: scale(0) rotate(-720deg);
+    transform: scale(0);
     opacity: 0;
   }
 }

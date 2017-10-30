@@ -90,7 +90,3 @@ printf "<?php
 " >> "$SITE/sites/local.sites.php"
 echo "Конфигурационный файл настроен на адрес сайта \"$SITE_NAME\""
 
-echo ""
-echo "Подготовка скриптов"
-cd "$SITE/profiles/drupalru/scripts/sync"
-chmod +x "./sync-db.sh"

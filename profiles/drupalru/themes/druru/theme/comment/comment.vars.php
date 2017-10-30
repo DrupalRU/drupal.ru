@@ -112,7 +112,7 @@ function druru_preprocess_comment(&$vars) {
 
   if (isset($vars['comment']->tnx)) {
 
-    $vars['tnx'] = dru_tnx_view($vars['comment'], 'comment');
+    $vars['tnx'] = dru_tnx_show($vars['comment'], 'comment');
 
     /*//$vars['tnx'] = array(
     //  '#type'       => 'container',

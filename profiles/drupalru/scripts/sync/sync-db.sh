@@ -55,6 +55,10 @@ exe "drush $DRUSH_ALIAS genu 10"
 exe "drush $DRUSH_ALIAS genc 100 5 --types=blog"
 exe "drush $DRUSH_ALIAS dis devel_generate -y"
 exe "drush $DRUSH_ALIAS pm-uninstall devel_generate -y"
-exe "drush $DRUSH_ALIAS vset site_mail $GIT_EMAIL"
+
+if [ -z "$GIT_EMAIL" ]; then
+  exe "drush $DRUSH_ALIAS vset site_mail $GIT_EMAIL"
+fi
+
 exe "drush $DRUSH_ALIAS cc all"
 exe "drush $DRUSH_ALIAS uli"

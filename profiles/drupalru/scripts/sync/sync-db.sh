@@ -48,7 +48,6 @@ exe "cd $DUMP_DIR"
 exe "wget $DUMP_URL"
 sm "zcat \"$DUMP_DIR/drupalru-dump.sql.gz\" | drush $DRUSH_ALIAS sqlc"
 zcat "$DUMP_DIR/drupalru-dump.sql.gz" | drush $DRUSH_ALIAS sqlc
-exe "drush $DRUSH_ALIAS en devel -y"
 exe "drush $DRUSH_ALIAS en devel_generate -y"
 exe "drush $DRUSH_ALIAS genu 10"
 exe "drush $DRUSH_ALIAS genc 100 5 --types=blog"

@@ -31,6 +31,8 @@ function druru_preprocess_node(&$vars) {
   if ($vars['view_mode'] == 'frontpage') {
     $vars['name'] = $vars['node']->name;
   }
+
+  $vars['attributes_array']['data-node-id'] = $vars['node']->nid;
 }
 
 /**

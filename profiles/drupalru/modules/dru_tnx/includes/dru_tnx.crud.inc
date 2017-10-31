@@ -6,11 +6,11 @@
  */
 
 /**
- * Implementation get_user_tnx_statistic().
+ * Implementation dru_tnx_get_user_statistic().
  *
  * Return user statistic object
  */
-function get_user_tnx_statistic($uid) {
+function dru_tnx_get_user_statistic($uid) {
   $statistic = db_select('tnx_stat', 't')
     ->fields('t')
     ->condition('t.uid', $uid)
@@ -31,7 +31,7 @@ function get_user_tnx_statistic($uid) {
 }
 
 /**
- * Implementation get_user_tnx().
+ * Implementation dru_tnx_get_user_tnx().
  *
  * Return Boolean TRUE if user already have thanked.
  *
@@ -41,14 +41,14 @@ function get_user_tnx_statistic($uid) {
  *
  * @return bool
  */
-function get_user_tnx($entity_type, $entity_id, $uid) {
+function dru_tnx_get_user_tnx($entity_type, $entity_id, $uid) {
   $tnx = db_select('tnx', 't')
-    ->fields('t', ['id'])
     ->condition('t.entity_type', $entity_type)
     ->condition('t.entity_id', $entity_id)
     ->condition('t.uid', $uid)
+    ->countQuery()
     ->execute()
-    ->fetchAll();
+    ->fetchField();
 
   return !$tnx;
 }

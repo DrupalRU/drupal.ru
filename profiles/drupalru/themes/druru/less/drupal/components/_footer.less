@@ -38,11 +38,12 @@ body {
     }
     .site-links {
       ul {
-        list-style: disc;
+        list-style: square;
 
         li {
           display: inline;
           margin-right: 20px;
+          .lighter(color, @brand-primary, 3);
         }
         @media screen and (max-width: @screen-sm-max) {
           padding-left: 0;

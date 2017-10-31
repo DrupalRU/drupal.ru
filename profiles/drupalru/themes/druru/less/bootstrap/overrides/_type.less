@@ -80,3 +80,41 @@ blockquote {
 strong {
   font-weight: bolder;
 }
+
+ol.with-parent {
+  counter-reset: first-lvl;
+  li {
+    &:before {
+      display: inline;
+      margin-left: -2em;
+    }
+  }
+  > li {
+    list-style-type: none;
+    &:before {
+      margin-left: -1.5em;
+      counter-increment: first-lvl;
+      content: counter(first-lvl) ". ";
+    }
+    ol {
+      counter-reset: second-lvl;
+      > li {
+        list-style-type: none;
+        &:before {
+          counter-increment: second-lvl;
+          content: counter(first-lvl) "." counter(second-lvl) ". ";
+        }
+        ol {
+          counter-reset: third-lvl;
+          > li {
+            list-style-type: none;
+            &:before {
+              counter-increment: third-lvl;
+              content: counter(first-lvl) "." counter(second-lvl) "." counter(third-lvl) ". " ;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * @file
+ * Main file for hooks and custom functions.
+ * This module is provide integration with entityforms for fz152 module.
+ */
+
+/**
+ * Implements hook_fz152_info().
+ */
+function fz152_webform_fz152_info() {
+  return array(
+    'webform' => array(
+      'title' => 'Webform',
+      'weight' => 10,
+      'form callback' => 'fz152_webform_get_forms',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('variable_group_form', 'fz152_webform'),
+    ),
+  );
+}
+
+/**
+ * Return information about all entityforms on site, their machine name and
+ * label.
+ */
+function fz152_webform_get_webform_info() {
+  $result = &drupal_static(__FUNCTION__);
+  if (!isset($result)) {
+    $query = db_select('webform', 'w');
+    $query->join('node', 'n', 'w.nid = n.nid');
+    $query->fields('n');
+    $webforms = $query->execute()->fetchAllAssoc('nid');
+    $result = array();
+    foreach ($webforms as $webform) {
+      $result[] = array(
+        'id' => $webform->nid,
+        'label' => $webform->title,
+      );
+    }
+  }
+
+  return $result;
+}
+
+/**
+ * Return forms to alter.
+ */
+function fz152_webform_get_forms() {
+  $webforms = fz152_webform_get_webform_info();
+  $result = array();
+  if (!empty($webforms)) {
+    foreach ($webforms as $webform) {
+      $webform_id = $webform['id'];
+      if (variable_get_value('fz152_webform_form_' . $webform_id . '_enable')) {
+        $result[] = array(
+          'form_id' => 'webform_client_form_' . $webform_id,
+          'weight' => '',
+        );
+      }
+    }
+  }
+  return $result;
+}

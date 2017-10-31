@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Installation and deinstallation hooks.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function fz152_webform_uninstall() {
+  variable_del('fz152_webform_*');
+}

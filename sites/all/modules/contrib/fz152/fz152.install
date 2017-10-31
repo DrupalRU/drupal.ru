@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Installation and deinstallation hooks.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function fz152_uninstall() {
+  // It will also remove all submodules info, for sure.
+  variable_del('fz152_*');
+}

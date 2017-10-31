@@ -1,0 +1,15 @@
+name = FZ152
+description = Module helps to pass federal law 152 in Russian Federation.
+core = 7.x
+
+package = FZ152
+configure = admin/config/system/fz152
+
+dependencies[] = variable
+
+; Information added by Drupal.org packaging script on 2017-05-11
+version = "7.x-1.0"
+core = "7.x"
+project = "fz152"
+datestamp = "1494514731"
+

@@ -1,0 +1,85 @@
+<?php
+
+/**
+ * @file
+ * Main file for hooks and custom functions.
+ * This module is provide integration with entityforms for fz152 module.
+ */
+
+/**
+ * Implements hook_fz152_info().
+ */
+function fz152_entityform_fz152_info() {
+  return array(
+    'entityform' => array(
+      'title' => 'Entityform',
+      'weight' => 10,
+      'form callback' => 'fz152_entityform_get_forms',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('variable_group_form', 'fz152_entityform'),
+    ),
+  );
+}
+
+/**
+ * Return information about all entityforms on site, their machine name and
+ * label.
+ */
+function fz152_entityform_get_entityform_bundle_info() {
+  $result = &drupal_static(__FUNCTION__);
+  if (!isset($result)) {
+    $entityform_info = entity_get_info('entityform');
+    $result = array();
+    if (!empty($entityform_info['bundles'])) {
+      foreach ($entityform_info['bundles'] as $bundle => $bundle_info) {
+        $result[] = array(
+          'name' => $bundle,
+          'label' => $bundle_info['label'],
+        );
+      }
+    }
+  }
+
+  return $result;
+}
+
+/**
+ * Return forms to alter.
+ */
+function fz152_entityform_get_forms() {
+  $entityforms = fz152_entityform_get_entityform_bundle_info();
+  $result = array();
+  if (!empty($entityforms)) {
+    foreach ($entityforms as $entityform) {
+      $entityform_name = $entityform['name'];
+      if (variable_get_value('fz152_entityform_form_' . $entityform_name . '_enable')) {
+        $result[] = array(
+          'form_id' => $entityform_name . '_entityform_edit_form',
+          'weight' => variable_get_value('fz152_entityform_form_' . $entityform_name . '_weight'),
+        );
+      }
+    }
+  }
+  return $result;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function fz152_entityform_form_variable_group_form_alter(&$form, &$form_state, $form_id) {
+  // Alter only for current module variable group settings.
+  // We will hide weight fields before form will be selected.
+  if (!empty($form['#variable_group_form']) && $form['#variable_group_form'] == 'fz152_entityform') {
+    $entityforms = fz152_entityform_get_entityform_bundle_info();
+    if (!empty($entityforms)) {
+      foreach ($entityforms as $entityform) {
+        $entityform_name = $entityform['name'];
+        $form['fz152_entityform_form_' . $entityform_name . '_weight']['#states']['visible'] = array(
+          'input[name="fz152_entityform_form_' . $entityform_name . '_enable"]' => array(
+            'checked' => TRUE,
+          ),
+        );
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+name = FZ152 — Webform
+description = Integration with webforms.
+core = 7.x
+
+package = FZ152
+
+dependencies[] = fz152
+dependencies[] = webform
+; Information added by Drupal.org packaging script on 2017-05-11
+version = "7.x-1.0"
+core = "7.x"
+project = "fz152"
+datestamp = "1494514731"
+

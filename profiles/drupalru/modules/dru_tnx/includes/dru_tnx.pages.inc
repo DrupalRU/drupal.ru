@@ -21,7 +21,7 @@ function dru_tnx_entity($tnx_type, $entity_type, $ajax, $entity, $token) {
 
   $id_type = ($entity_type == 'node') ? 'nid' : 'cid';
   $id = $entity->$id_type;
-  $tnx = get_user_tnx($entity_type, $id, $user->uid);
+  $tnx = dru_tnx_get_user_tnx($entity_type, $id, $user->uid);
 
   if ($tnx === ($tnx_type == 'tnx')) {
     $vars = [

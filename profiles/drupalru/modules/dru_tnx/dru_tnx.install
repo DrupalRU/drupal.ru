@@ -128,137 +128,279 @@ function dru_tnx_schema_alter(&$schema) {
 /**
  * Recount thanks statistic.
  */
-function dru_tnx_update_7000(&$sandbox) {
+function dru_tnx_update_7001(&$sandbox) {
 
-  $data = [];
-  $users = [];
-  $delete = [];
-  $nodes = [];
-  $comments = [];
+  if (!isset($sandbox['phases'])) {
+    $sandbox['last'] = 0;
+    $sandbox['phases'] = 10;
+    $sandbox['max_execution'] = 1;
+  }
 
-  if (!isset($sandbox['total'])) {
+
+  // Phase #1
+  if (!isset($sandbox['#finished']) && !isset($sandbox['results'])) {
+
     $query = db_select('tnx', 't')
-      ->fields('t', [])
+      ->fields('t')
       ->execute();
 
-    $results = $query->fetchAll();
+    $sandbox['results'] = $query->fetchAll();
 
-    foreach ($results as $item) {
 
-      if (isset($data[$item->entity_type][$item->entity_id][$item->uid])) {
-        $delete[] = $item->id;
+    $sandbox['last']++;
+    $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
+  }
+
+
+  // Phase #2
+  if (!isset($sandbox['#finished']) && !isset($sandbox['data'])) {
+
+    $sandbox['data'] = [];
+    $sandbox['delete'] = [];
+    $sandbox['users'] = [];
+
+    foreach ($sandbox['results'] as $item) {
+
+      if (isset($sandbox['data'][$item->entity_type][$item->entity_id][$item->uid])) {
+        $sandbox['delete'][] = $item->id;
         continue;
       }
 
-      $data[$item->entity_type][$item->entity_id][$item->uid] = $item->id;
-      $users[$item->uid]['tnx_node'] = 0;
-      $users[$item->uid]['tnx_comment'] = 0;
-      $users[$item->uid][$item->entity_type][$item->entity_id] = $item->id;
+      $sandbox['data'][$item->entity_type][$item->entity_id][$item->uid] = $item->id;
+      $sandbox['users'][$item->uid]['tnx_node'] = 0;
+      $sandbox['users'][$item->uid]['tnx_comment'] = 0;
+      $sandbox['users'][$item->uid][$item->entity_type][$item->entity_id] = $item->id;
     }
 
-    if (count($delete)) {
-      try {
-        db_query("DELETE FROM tnx WHERE id IN (" . implode(",", $delete) . ")");
-      } catch (\Exception $exception) {
-        throw new \Exception('Can\'t delete doubles!');
-      }
-    }
 
-    if (count($data['node'])) {
-      try {
-        $nodes = db_query(
-          "SELECT nid, uid FROM node WHERE nid IN (" . implode(",",
-            array_keys($data['node'])) . ")"
-        )->fetchAllKeyed();
-      } catch (\Exception $exception) {
-        throw new \Exception('Can\'t load all nodes!');
-      }
-    }
-
-    if (count($data['comment'])) {
-      try {
-        $comments = db_query("SELECT cid, uid FROM comment WHERE cid IN (" . implode(",",
-            array_keys($data['comment'])) . ")"
-        )->fetchAllKeyed();
-      } catch (\Exception $exception) {
-        throw new \Exception('Can\'t load all nodes!');
-      }
-    }
-
-    if ($nodes) {
-      foreach ($nodes as $id => $uid) {
-        if (!isset($users[$uid])) {
-          $users[$uid] = [
-            'tnx_node'    => 0,
-            'tnx_comment' => 0,
-            'comment'     => [],
-            'node'        => [],
-          ];
-        }
-
-        $users[$uid]['tnx_node']++;
-      }
-    }
-
-    if ($comments) {
-      foreach ($comments as $id => $uid) {
-        if (!isset($users[$uid])) {
-          $users[$uid] = [
-            'tnx_node'    => 0,
-            'tnx_comment' => 0,
-            'comment'     => [],
-            'node'        => [],
-          ];
-        }
-
-        $users[$uid]['tnx_comment']++;
-      }
-    }
-
-    $sandbox['total'] = count($users) + count($data['node']) + count($data['comment']);
-    $sandbox['current'] = 0;
+    $sandbox['last']++;
+    $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
 
-  foreach ($users as $uid => $user) {
-    $fields = [
-      'node'        => $user['tnx_node'],
-      'comment'     => $user['tnx_comment'],
-      'tnx_node'    => is_array($user) ? count($user['node']) : 0,
-      'tnx_comment' => is_array($user) ? count($user['comment']) : 0,
-    ];
 
-    db_update('tnx_stat')
-      ->fields($fields)
-      ->condition('uid', $uid)
-      ->execute();
+  // Phase #3
+  if (
+    !isset($sandbox['#finished']) &&
+    is_array($sandbox['delete']) &&
+    !empty($sandbox['delete'])
+  ) {
 
-    $sandbox['current']++;
+    try {
+      db_query("DELETE FROM tnx WHERE id IN (" . implode(",",
+          $sandbox['delete']) . ")");
+    } catch (\Exception $exception) {
+      throw new \Exception('Can\'t delete doubles!');
+    }
+
+
+    $sandbox['last']++;
+    $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
+  }
+  elseif (
+    !isset($sandbox['#finished']) &&
+    empty($sandbox['delete']) &&
+    $sandbox['delete'] !== -1
+  ) {
+
+    $sandbox['delete'] = -1;
+
+
+    $sandbox['last']++;
+    $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
 
-  foreach ($data['node'] as $nid => $node) {
-    db_update('node')
-      ->fields(['tnx' => count($node)])
-      ->condition('nid', $nid)
-      ->execute();
 
-    $sandbox['current']++;
+  // Phase #4
+  if (!isset($sandbox['#finished']) && !isset($sandbox['nodes'])) {
+
+    try {
+      $sandbox['nodes'] = db_query(
+        "SELECT nid, uid FROM node WHERE nid IN (" . implode(",",
+          array_keys($sandbox['data']['node'])) . ")"
+      )->fetchAllKeyed();
+    } catch (\Exception $exception) {
+      throw new \Exception('Can\'t load all nodes!');
+    }
+
+
+    $sandbox['last']++;
+    $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
 
-  foreach ($data['comment'] as $cid => $comment) {
-    db_update('comment')
-      ->fields(['tnx' => count($comment)])
-      ->condition('cid', $cid)
-      ->execute();
 
-    $sandbox['current']++;
+  // Phase #5
+  if (!isset($sandbox['#finished']) && !isset($sandbox['comments'])) {
+
+    try {
+      $sandbox['comments'] = db_query("SELECT cid, uid FROM comment WHERE cid IN (" . implode(",",
+          array_keys($sandbox['data']['comment'])) . ")"
+      )->fetchAllKeyed();
+    } catch (\Exception $exception) {
+      throw new \Exception('Can\'t load all nodes!');
+    }
+
+
+    $sandbox['last']++;
+    $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
 
-  $sandbox['#finished'] = ($sandbox['current'] / $sandbox['total']);
 
-  if ($sandbox['#finished'] === 1) {
-    drupal_set_message(t('Processed @items items.',
-      ['@items' => $sandbox['total']]));
+  // Phase #6
+  if (!isset($sandbox['#finished']) && !isset($sandbox['nodes_complete'])) {
+
+    foreach ($sandbox['nodes'] as $id => $uid) {
+      if (!isset($sandbox['users'][$uid])) {
+        $sandbox['users'][$uid] = [
+          'tnx_node'    => 0,
+          'tnx_comment' => 0,
+          'comment'     => [],
+          'node'        => [],
+        ];
+      }
+
+      $sandbox['users'][$uid]['tnx_node']++;
+    }
+
+    $sandbox['nodes_complete'] = TRUE;
+
+
+    $sandbox['last']++;
+    $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
+
+
+  // Phase #7
+  if (!isset($sandbox['#finished']) && !isset($sandbox['comments_complete'])) {
+
+    foreach ($sandbox['comments'] as $id => $uid) {
+      if (!isset($sandbox['users'][$uid])) {
+        $sandbox['users'][$uid] = [
+          'tnx_node'    => 0,
+          'tnx_comment' => 0,
+          'comment'     => [],
+          'node'        => [],
+        ];
+      }
+
+      $sandbox['users'][$uid]['tnx_comment']++;
+    }
+
+    $sandbox['comments_complete'] = TRUE;
+
+
+    $sandbox['last']++;
+    $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
+  }
+
+
+  // Phase #8
+  if (!isset($sandbox['#finished']) && !isset($sandbox['users_update'])) {
+
+    if (!isset($sandbox['users_update_phases'])) {
+
+      $sandbox['phases'] += (ceil(count($sandbox['users']) / $sandbox['max_execution']) - 1);
+      $sandbox['users_update_phases'] = TRUE;
+    }
+
+    $i = 0;
+    foreach ($sandbox['users'] as $uid => $user) {
+      if ($i == $sandbox['max_execution']) {
+        break;
+      }
+
+      $fields = [
+        'node'        => $user['tnx_node'],
+        'comment'     => $user['tnx_comment'],
+        'tnx_node'    => is_array($user) ? count($user['node']) : 0,
+        'tnx_comment' => is_array($user) ? count($user['comment']) : 0,
+      ];
+
+      db_update('tnx_stat')
+        ->fields($fields)
+        ->condition('uid', $uid)
+        ->execute();
+
+      unset($sandbox['users'][$uid]);
+
+      $i++;
+
+      $sandbox['last']++;
+      $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
+    }
+
+    if (count($sandbox['users']) == 0) {
+      $sandbox['users_update'] = TRUE;
+    }
+  }
+
+
+  // Phase #9
+  if (!isset($sandbox['#finished']) && !isset($sandbox['data_nodes_complete'])) {
+
+    if (!isset($sandbox['data_nodes_complete_phases'])) {
+
+      $sandbox['phases'] += (ceil(count($sandbox['data']['node']) / $sandbox['max_execution']) - 1);
+      $sandbox['data_nodes_complete_phases'] = TRUE;
+    }
+
+    $i = 0;
+    foreach ($sandbox['data']['node'] as $nid => $node) {
+      if ($i == $sandbox['max_execution']) {
+        break;
+      }
+
+      db_update('node')
+        ->fields(['tnx' => count($node)])
+        ->condition('nid', $nid)
+        ->execute();
+
+      unset($sandbox['data']['node'][$nid]);
+
+      $i++;
+
+      $sandbox['last']++;
+      $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
+    }
+
+    if (count($sandbox['data']['node']) == 0) {
+      $sandbox['data_nodes_complete'] = TRUE;
+    }
+  }
+
+
+  // Phase #10
+  if (!isset($sandbox['#finished']) && !isset($sandbox['data_comment_complete'])) {
+
+    if (!isset($sandbox['data_comment_complete_phases'])) {
+
+      $sandbox['phases'] += (ceil(count($sandbox['data']['comment']) / $sandbox['max_execution']) - 1);
+      $sandbox['data_comment_complete_phases'] = TRUE;
+    }
+
+    $i = 0;
+    foreach ($sandbox['data']['comment'] as $cid => $comment) {
+      if ($i == $sandbox['max_execution']) {
+        break;
+      }
+
+      db_update('comment')
+        ->fields(['tnx' => count($comment)])
+        ->condition('cid', $cid)
+        ->execute();
+
+      unset($sandbox['data']['comment'][$cid]);
+
+      $i++;
+
+      $sandbox['last']++;
+      $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
+    }
+
+    if (count($sandbox['data']['comment']) == 0) {
+      $sandbox['data_comment_complete'] = TRUE;
+    }
+  }
+
 }
 
 /**

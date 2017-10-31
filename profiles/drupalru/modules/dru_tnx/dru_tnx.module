@@ -88,7 +88,7 @@ function dru_tnx_node_view($node, $view_mode) {
     // Add node links
     if (user_access('tnx') && $node->uid !== $user->uid) {
       drupal_add_library('system', 'drupal.ajax');
-      $tnx = get_user_tnx('node', $node->nid, $user->uid);
+      $tnx = dru_tnx_get_user_tnx('node', $node->nid, $user->uid);
       $node->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link(
         'node', $node->nid, $tnx
       );
@@ -121,7 +121,7 @@ function dru_tnx_comment_view($comment, $view_mode) {
   // Add comment links
   if (user_access('tnx') && $comment->uid !== $user->uid) {
     drupal_add_library('system', 'drupal.ajax');
-    $tnx = get_user_tnx('comment', $comment->cid, $user->uid);
+    $tnx = dru_tnx_get_user_tnx('comment', $comment->cid, $user->uid);
     $comment->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link(
       'comment', $comment->cid, $tnx
     );
@@ -199,7 +199,7 @@ function dru_tnx_link($entity_type, $entity_id, $tnx) {
  */
 function dru_tnx_user_view($account, $view_mode, $langcode) {
 
-  $tnx_stats = get_user_tnx_statistic($account->uid);
+  $tnx_stats = dru_tnx_get_user_statistic($account->uid);
 
   // User tnx
   $account->content['summary']['user_tnx'] = [

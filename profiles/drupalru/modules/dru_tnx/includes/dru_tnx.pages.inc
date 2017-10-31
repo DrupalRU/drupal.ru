@@ -12,13 +12,11 @@
  * @return array
  */
 function dru_tnx_entity($tnx_type, $entity_type, $ajax, $entity, $token) {
-
   if (!drupal_valid_token($token, 'dru_tnx')) {
     return NULL;
   }
 
   $user = $GLOBALS['user'];
-
   $id_type = ($entity_type == 'node') ? 'nid' : 'cid';
   $id = $entity->$id_type;
   $tnx = dru_tnx_get_user_tnx($entity_type, $id, $user->uid);
@@ -49,15 +47,12 @@ function dru_tnx_entity($tnx_type, $entity_type, $ajax, $entity, $token) {
 function dru_tnx_callback($ajax, $vars) {
 
   dru_tnx_data($vars);
-
   $entity = dru_tnx_entity_prepare($vars);
 
   if ($ajax == 'ajax') {
-
+    $commands = [];
     $animate = ['plus', 'minus'];
     $selector = "*[data-{$vars['type']}-id=\"{$vars['id']}\"]";
-
-    $commands = [];
     $commands[] = ajax_command_replace($selector, drupal_render($entity));
     $commands[] = ajax_command_invoke(
       $selector . " .dru-tnx-{$vars['type']}-{$vars['id']}-counter",

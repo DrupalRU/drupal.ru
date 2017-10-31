@@ -136,17 +136,13 @@ function dru_tnx_update_7001(&$sandbox) {
     $sandbox['max_execution'] = 10;
   }
 
-
   // Phase #1
   if (!isset($sandbox['#finished']) && !isset($sandbox['results'])) {
-
     $query = db_select('tnx', 't')
       ->fields('t')
       ->execute();
 
     $sandbox['results'] = $query->fetchAll();
-
-
     $sandbox['last']++;
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
@@ -154,13 +150,11 @@ function dru_tnx_update_7001(&$sandbox) {
 
   // Phase #2
   if (!isset($sandbox['#finished']) && !isset($sandbox['data'])) {
-
     $sandbox['data'] = [];
     $sandbox['delete'] = [];
     $sandbox['users'] = [];
 
     foreach ($sandbox['results'] as $item) {
-
       if (isset($sandbox['data'][$item->entity_type][$item->entity_id][$item->uid])) {
         $sandbox['delete'][] = $item->id;
         continue;
@@ -171,7 +165,6 @@ function dru_tnx_update_7001(&$sandbox) {
       $sandbox['users'][$item->uid]['tnx_comment'] = 0;
       $sandbox['users'][$item->uid][$item->entity_type][$item->entity_id] = $item->id;
     }
-
 
     $sandbox['last']++;
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
@@ -201,10 +194,7 @@ function dru_tnx_update_7001(&$sandbox) {
     empty($sandbox['delete']) &&
     $sandbox['delete'] !== -1
   ) {
-
     $sandbox['delete'] = -1;
-
-
     $sandbox['last']++;
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
@@ -212,7 +202,6 @@ function dru_tnx_update_7001(&$sandbox) {
 
   // Phase #4
   if (!isset($sandbox['#finished']) && !isset($sandbox['nodes'])) {
-
     try {
       $sandbox['nodes'] = db_query(
         "SELECT nid, uid FROM node WHERE nid IN (" . implode(",",
@@ -222,7 +211,6 @@ function dru_tnx_update_7001(&$sandbox) {
       throw new \Exception('Can\'t load all nodes!');
     }
 
-
     $sandbox['last']++;
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
@@ -230,7 +218,6 @@ function dru_tnx_update_7001(&$sandbox) {
 
   // Phase #5
   if (!isset($sandbox['#finished']) && !isset($sandbox['comments'])) {
-
     try {
       $sandbox['comments'] = db_query("SELECT cid, uid FROM comment WHERE cid IN (" . implode(",",
           array_keys($sandbox['data']['comment'])) . ")"
@@ -239,7 +226,6 @@ function dru_tnx_update_7001(&$sandbox) {
       throw new \Exception('Can\'t load all nodes!');
     }
 
-
     $sandbox['last']++;
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
@@ -247,7 +233,6 @@ function dru_tnx_update_7001(&$sandbox) {
 
   // Phase #6
   if (!isset($sandbox['#finished']) && !isset($sandbox['nodes_complete'])) {
-
     foreach ($sandbox['nodes'] as $id => $uid) {
       if (!isset($sandbox['users'][$uid])) {
         $sandbox['users'][$uid] = [
@@ -262,8 +247,6 @@ function dru_tnx_update_7001(&$sandbox) {
     }
 
     $sandbox['nodes_complete'] = TRUE;
-
-
     $sandbox['last']++;
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
@@ -271,7 +254,6 @@ function dru_tnx_update_7001(&$sandbox) {
 
   // Phase #7
   if (!isset($sandbox['#finished']) && !isset($sandbox['comments_complete'])) {
-
     foreach ($sandbox['comments'] as $id => $uid) {
       if (!isset($sandbox['users'][$uid])) {
         $sandbox['users'][$uid] = [
@@ -286,8 +268,6 @@ function dru_tnx_update_7001(&$sandbox) {
     }
 
     $sandbox['comments_complete'] = TRUE;
-
-
     $sandbox['last']++;
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
@@ -295,9 +275,7 @@ function dru_tnx_update_7001(&$sandbox) {
 
   // Phase #8
   if (!isset($sandbox['#finished']) && !isset($sandbox['users_update'])) {
-
     if (!isset($sandbox['users_update_phases'])) {
-
       $sandbox['phases'] += (ceil(count($sandbox['users']) / $sandbox['max_execution']) - 1);
       $sandbox['users_update_phases'] = TRUE;
     }
@@ -323,7 +301,6 @@ function dru_tnx_update_7001(&$sandbox) {
       unset($sandbox['users'][$uid]);
 
       $i++;
-
       $sandbox['last']++;
       $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
     }
@@ -336,9 +313,7 @@ function dru_tnx_update_7001(&$sandbox) {
 
   // Phase #9
   if (!isset($sandbox['#finished']) && !isset($sandbox['data_nodes_complete'])) {
-
     if (!isset($sandbox['data_nodes_complete_phases'])) {
-
       $sandbox['phases'] += (ceil(count($sandbox['data']['node']) / $sandbox['max_execution']) - 1);
       $sandbox['data_nodes_complete_phases'] = TRUE;
     }
@@ -357,7 +332,6 @@ function dru_tnx_update_7001(&$sandbox) {
       unset($sandbox['data']['node'][$nid]);
 
       $i++;
-
       $sandbox['last']++;
       $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
     }
@@ -370,9 +344,7 @@ function dru_tnx_update_7001(&$sandbox) {
 
   // Phase #10
   if (!isset($sandbox['#finished']) && !isset($sandbox['data_comment_complete'])) {
-
     if (!isset($sandbox['data_comment_complete_phases'])) {
-
       $sandbox['phases'] += (ceil(count($sandbox['data']['comment']) / $sandbox['max_execution']) - 1);
       $sandbox['data_comment_complete_phases'] = TRUE;
     }
@@ -391,7 +363,6 @@ function dru_tnx_update_7001(&$sandbox) {
       unset($sandbox['data']['comment'][$cid]);
 
       $i++;
-
       $sandbox['last']++;
       $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
     }
@@ -408,9 +379,7 @@ function dru_tnx_update_7001(&$sandbox) {
  */
 function dru_tnx_uninstall() {
   drupal_uninstall_schema('dru_tnx');
-
   db_drop_field('node', 'tnx');
   db_drop_field('comment', 'tnx');
-
   cache_clear_all();
 }

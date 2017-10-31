@@ -150,7 +150,10 @@ function dru_tnx_update_7001(&$sandbox) {
 
   // Phase #2
   if (!isset($sandbox['#finished']) && !isset($sandbox['data'])) {
-    $sandbox['data'] = [];
+    $sandbox['data'] = [
+      'node' => [],
+      'comment' => [],
+    ];
     $sandbox['delete'] = [];
     $sandbox['users'] = [];
 

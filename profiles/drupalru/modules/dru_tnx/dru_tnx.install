@@ -133,7 +133,7 @@ function dru_tnx_update_7001(&$sandbox) {
   if (!isset($sandbox['phases'])) {
     $sandbox['last'] = 0;
     $sandbox['phases'] = 10;
-    $sandbox['max_execution'] = 1;
+    $sandbox['max_execution'] = 10;
   }
 
 

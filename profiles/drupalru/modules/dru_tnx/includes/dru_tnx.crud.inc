@@ -42,15 +42,13 @@ function dru_tnx_get_user_statistic($uid) {
  * @return bool
  */
 function dru_tnx_get_user_tnx($entity_type, $entity_id, $uid) {
-  $tnx = db_select('tnx', 't')
+  return !db_select('tnx', 't')
     ->condition('t.entity_type', $entity_type)
     ->condition('t.entity_id', $entity_id)
     ->condition('t.uid', $uid)
     ->countQuery()
     ->execute()
     ->fetchField();
-
-  return !$tnx;
 }
 
 /**
@@ -61,14 +59,12 @@ function dru_tnx_get_user_tnx($entity_type, $entity_id, $uid) {
  * @return \DatabaseStatementInterface|int
  */
 function dru_tnx_insert_tnx($vars) {
-  $query = db_insert('tnx')
+  return db_insert('tnx')
     ->fields([
       'entity_id'   => $vars['id'],
       'entity_type' => $vars['type'],
       'uid'         => $vars['user']->uid,
-    ]);
-
-  return $query->execute();
+    ])->execute();
 }
 
 /**
@@ -80,18 +76,12 @@ function dru_tnx_insert_tnx($vars) {
  * @return int
  */
 function dru_tnx_counting_tnx_statistic($vars, $add = 1) {
-  $op = $add ? ' +' : ' -';
-
-  $query = db_merge('tnx_stat')
+  $act = $add ? '+' : '-';
+  return db_merge('tnx_stat')
     ->key(['uid' => $vars['entity']->uid])
     ->fields([$vars['type'] => $add])
-    ->expression(
-      $vars['type'],
-      $vars['type'] . $op . ' :inc',
-      [':inc' => 1]
-    );
-
-  return $query->execute();
+    ->expression($vars['type'], "{$vars['type']} $act 1")
+    ->execute();
 }
 
 /**
@@ -103,18 +93,12 @@ function dru_tnx_counting_tnx_statistic($vars, $add = 1) {
  * @return int
  */
 function dru_tnx_counting_user_statistic($vars, $add = 1) {
-  $op = $add ? ' +' : ' -';
-
-  $query = db_merge('tnx_stat')
+  $act = $add ? '+' : '-';
+  return db_merge('tnx_stat')
     ->key(['uid' => $vars['user']->uid])
     ->fields(['tnx_' . $vars['type'] => $add])
-    ->expression(
-      'tnx_' . $vars['type'],
-      'tnx_' . $vars['type'] . $op . ' :inc',
-      [':inc' => 1]
-    );
-
-  return $query->execute();
+    ->expression('tnx_' . $vars['type'], "tnx_{$vars['type']} $act 1")
+    ->execute();
 }
 
 /**
@@ -125,12 +109,11 @@ function dru_tnx_counting_user_statistic($vars, $add = 1) {
  * @return \DatabaseStatementInterface|int
  */
 function dru_tnx_delete_tnx($vars) {
-  $query = db_delete('tnx')
+  return db_delete('tnx')
     ->condition('entity_id', $vars['id'])
     ->condition('entity_type', $vars['type'])
-    ->condition('uid', $vars['user']->uid);
-
-  return $query->execute();
+    ->condition('uid', $vars['user']->uid)
+    ->execute();
 }
 
 /**

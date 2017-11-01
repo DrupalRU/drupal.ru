@@ -38,6 +38,10 @@ function druru_menu_link(array $variables) {
       $element['#localized_options']['attributes']['data-toggle'] = 'dropdown';
     }
   }
+  // Add target=_blank for social links
+  if ($element['#original_link']['menu_name'] == 'menu-social-links') {
+    $element['#localized_options']['attributes']['target'][] = '_blank';
+  }
   // On primary navigation menu, class 'active' is not set on active menu item.
   // @see https://drupal.org/node/1896674
   $is_front_page = ($element['#href'] == '<front>' && drupal_is_front_page());

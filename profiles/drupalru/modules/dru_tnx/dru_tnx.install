@@ -131,6 +131,8 @@ function dru_tnx_schema_alter(&$schema) {
 function dru_tnx_update_7001(&$sandbox) {
 
   if (!isset($sandbox['phases'])) {
+    $sandbox['nodes'] = [];
+    $sandbox['comments'] = [];
     $sandbox['last'] = 0;
     $sandbox['phases'] = 10;
     $sandbox['max_execution'] = 10;
@@ -151,7 +153,7 @@ function dru_tnx_update_7001(&$sandbox) {
   // Phase #2
   if (!isset($sandbox['#finished']) && !isset($sandbox['data'])) {
     $sandbox['data'] = [
-      'node' => [],
+      'node'    => [],
       'comment' => [],
     ];
     $sandbox['delete'] = [];
@@ -177,8 +179,8 @@ function dru_tnx_update_7001(&$sandbox) {
   // Phase #3
   if (
     !isset($sandbox['#finished']) &&
-    is_array($sandbox['delete']) &&
-    !empty($sandbox['delete'])
+    !empty($sandbox['delete']) &&
+    is_array($sandbox['delete'])
   ) {
 
     try {
@@ -187,7 +189,6 @@ function dru_tnx_update_7001(&$sandbox) {
     } catch (\Exception $exception) {
       throw new \Exception('Can\'t delete doubles!');
     }
-
 
     $sandbox['last']++;
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
@@ -205,13 +206,15 @@ function dru_tnx_update_7001(&$sandbox) {
 
   // Phase #4
   if (!isset($sandbox['#finished']) && !isset($sandbox['nodes'])) {
-    try {
-      $sandbox['nodes'] = db_query(
-        "SELECT nid, uid FROM node WHERE nid IN (" . implode(",",
-          array_keys($sandbox['data']['node'])) . ")"
-      )->fetchAllKeyed();
-    } catch (\Exception $exception) {
-      throw new \Exception('Can\'t load all nodes!');
+    if (!empty($sandbox['data']['node'])) {
+      try {
+        $sandbox['nodes'] = db_query(
+          "SELECT nid, uid FROM node WHERE nid IN (" . implode(",",
+            array_keys($sandbox['data']['node'])) . ")"
+        )->fetchAllKeyed();
+      } catch (\Exception $exception) {
+        throw new \Exception('Can\'t load all nodes!');
+      }
     }
 
     $sandbox['last']++;
@@ -221,12 +224,15 @@ function dru_tnx_update_7001(&$sandbox) {
 
   // Phase #5
   if (!isset($sandbox['#finished']) && !isset($sandbox['comments'])) {
-    try {
-      $sandbox['comments'] = db_query("SELECT cid, uid FROM comment WHERE cid IN (" . implode(",",
-          array_keys($sandbox['data']['comment'])) . ")"
-      )->fetchAllKeyed();
-    } catch (\Exception $exception) {
-      throw new \Exception('Can\'t load all nodes!');
+    if (!empty($sandbox['data']['comment'])) {
+      try {
+        $sandbox['comments'] = db_query(
+          "SELECT cid, uid FROM comment WHERE cid IN (" . implode(",",
+            array_keys($sandbox['data']['comment'])) . ")"
+        )->fetchAllKeyed();
+      } catch (\Exception $exception) {
+        throw new \Exception('Can\'t load all nodes!');
+      }
     }
 
     $sandbox['last']++;

@@ -7626,8 +7626,8 @@ body.admin-menu {
 .navbar > .container .navbar-brand .site-name {
   font-size: 2.5em;
   line-height: 1em;
-  font-family: 'Roboto', Frutiger, 'Frutiger Linotype', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  padding-top: 4px;
 }
 .navbar > .container .navbar-brand .site-slogan {
   margin-left: 4px;

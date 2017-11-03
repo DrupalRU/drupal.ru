@@ -9,6 +9,8 @@
  * Globals.
  */
 define('DRU_TNX_PATH', drupal_get_path('module', 'dru_tnx'));
+define('DRU_TNX_ICON', 'heart');
+define('DRU_TNX_ICON_COLOR', 'text-danger');
 
 /**
  * Includes.
@@ -151,15 +153,43 @@ function dru_tnx_show($entity, $type) {
       ],
     ],
     'counter'     => [
-      '#markup' => druru_icon('heart', FALSE, [
-          'class' => [
-            'text-danger',
-          ],
-        ]) . $count,
+      '#markup' => dru_tnx_get_icon() . $count,
     ],
   ];
 
   return $counter;
+}
+
+/**
+ * Return tnx icon.
+ *
+ * @return string
+ */
+function dru_tnx_get_icon() {
+
+  // Require theme icon generator
+  $file = DRUPAL_ROOT . '/';
+  $file .= drupal_get_path('theme', 'druru');
+  $file .= '/theme/icons.inc';
+
+  if (is_file($file)) {
+    require_once $file;
+
+    $icon = druru_icon(DRU_TNX_ICON, FALSE, [
+      'class' => [
+        DRU_TNX_ICON_COLOR,
+      ],
+    ]);
+  }
+  else {
+    $icon = '<i class="';
+    $icon .= DRU_TNX_ICON_COLOR;
+    $icon .= ' icon fa fa-';
+    $icon .= DRU_TNX_ICON;
+    $icon .= '" aria-hidden="true"></i>';
+  }
+
+  return $icon;
 }
 
 /**

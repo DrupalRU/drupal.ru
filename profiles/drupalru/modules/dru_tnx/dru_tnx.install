@@ -179,8 +179,8 @@ function dru_tnx_update_7001(&$sandbox) {
   // Phase #3
   if (
     !isset($sandbox['#finished']) &&
-    is_array($sandbox['delete']) &&
-    !empty($sandbox['delete'])
+    !empty($sandbox['delete']) &&
+    is_array($sandbox['delete'])
   ) {
 
     try {

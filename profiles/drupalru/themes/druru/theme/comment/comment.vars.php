@@ -111,26 +111,7 @@ function druru_preprocess_comment(&$vars) {
   }
 
   if (isset($vars['comment']->tnx)) {
-
     $vars['tnx'] = dru_tnx_show($vars['comment'], 'comment');
-
-    /*//$vars['tnx'] = array(
-    //  '#type'       => 'container',
-    //  '#attributes' => array(
-    //    'class' => array(
-    //      'tnx-counter',
-    //      'counter-' . (isset($vars['comment']->tnx) ? $vars['comment']->tnx : 0),
-    //      'dru-tnx-comment-' . $vars['comment']->cid . '-counter',
-    //    ),
-    //  ),
-    //  'tnx'         => array(
-    //    '#markup' => druru_icon('heart', FALSE, array(
-    //        'class' => array(
-    //          'text-danger',
-    //        ),
-    //      )) . $vars['comment']->tnx,
-    //  ),
-    //);*/
   }
 
   if (!_druru_links_access($vars['content'])) {

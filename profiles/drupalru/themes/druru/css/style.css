@@ -7617,7 +7617,7 @@ body.admin-menu {
   padding-right: 0;
   padding-bottom: 0;
   margin-left: 15px;
-  background-position: 135px 8px;
+  background-position: 131px 8px;
 }
 .navbar > .container .navbar-brand:hover,
 .navbar > .container .navbar-brand:focus {
@@ -7626,8 +7626,9 @@ body.admin-menu {
 .navbar > .container .navbar-brand .site-name {
   font-size: 2.5em;
   line-height: 1em;
-  margin-bottom: 12px;
-  padding-top: 4px;
+  margin-bottom: 10px;
+  padding-top: 6px;
+  margin-left: -1px;
 }
 .navbar > .container .navbar-brand .site-slogan {
   margin-left: 4px;

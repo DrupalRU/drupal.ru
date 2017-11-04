@@ -85,7 +85,7 @@ var Drupal = Drupal || {};
       };
       $('.comment .dropdown').once('dropdown-events').each(function (idx, obj) {
         $(this)
-          .on('show.bs.dropdown', Drupal.behaviors.druru.hideContextMenu)
+          .on('show.bs.dropdown', Drupal.behaviors.druru.hideContextMenus)
           .on('shown.bs.dropdown', checkCommentSelection)
           .on('hidden.bs.dropdown', checkCommentSelection);
       });
@@ -94,6 +94,8 @@ var Drupal = Drupal || {};
     excludeTags    : ['a', 'button'],
 
     contextMenuId: null,
+
+    initContextMenuClicks: 0,
 
     initContextMenu: function (context, settings) {
       // Build links expanded by showing of context menu.
@@ -107,88 +109,111 @@ var Drupal = Drupal || {};
           }
         }
         if (hasComments) {
-          $(window).on('blur', Drupal.behaviors.druru.hideContextMenu);
-          $(document).on('click', Drupal.behaviors.druru.hideContextMenu);
+          $(window).on('blur', Drupal.behaviors.druru.hideContextMenus);
+          $(document).on('click', Drupal.behaviors.druru.hideContextMenus);
         }
       }
+    },
+
+    clearContextMenuData: function() {
+      this.initContextMenuClicks = 0;
+      this.contextMenuId = null;
     },
 
     showContextMenu: function (e) {
 
-      // Hide all previously showed menus.
-      Drupal.behaviors.druru.hideContextMenu(e);
+      var $target = $(e.target),
+        $targetId = $target.closest('.comment').data('comment-id');
 
-      // Don't triggering the event at excluded tags.
-      var excludeTags = Drupal.behaviors.druru.excludeTags,
-        $target = $(e.target),
-        childOfExcludedTags = false,
-        targetTagName = $target.prop("tagName").toString().toLowerCase(),
-        tagIsExcluded = excludeTags.indexOf(targetTagName) !== -1;
-      for (var tag in excludeTags) {
-        if (excludeTags.hasOwnProperty(tag)) {
-          childOfExcludedTags = childOfExcludedTags || !!$target.closest(excludeTags[tag]).length;
+      if (Drupal.behaviors.druru.initContextMenuClicks > 0) {
+        // Hide all previously showed menus.
+        Drupal.behaviors.druru.hideContextMenus(e);
+      }
+
+      Drupal.behaviors.druru.initContextMenuClicks++;
+
+      if (Drupal.behaviors.druru.initContextMenuClicks === 1) {
+        // Don't triggering the event at excluded tags.
+        var excludeTags = Drupal.behaviors.druru.excludeTags,
+          childOfExcludedTags = false,
+          targetTagName = $target.prop("tagName").toString().toLowerCase(),
+          tagIsExcluded = excludeTags.indexOf(targetTagName) !== -1;
+        for (var tag in excludeTags) {
+          if (excludeTags.hasOwnProperty(tag)) {
+            childOfExcludedTags = childOfExcludedTags || !!$target.closest(excludeTags[tag]).length;
+          }
         }
+        if (tagIsExcluded || childOfExcludedTags) {
+          return true;
+        }
+
+        e.defaultPrevented = true;
+
+        // Hide all bootstrap dropdowns, showed by bootstrap event.
+        $(document).trigger('click.bs.dropdown.data-api');
+
+        var $comment = $(this),
+          $dropdown = $comment.find('.dropdown'),
+          $menu = $dropdown.find('.dropdown-menu'),
+          menuWidth = $menu.outerWidth();
+
+        // Fix for IE. He incorrectly detected offset left inside code.
+        if ($target.closest('.geshifilter').length) {
+          $target = $target.closest('.geshifilter > div');
+        }
+
+        $comment.addClass('hovered').addClass('context-menu-showed');
+        $dropdown.css('position', 'static');
+        $menu.css({
+          display : 'block',
+          position: 'absolute',
+          left    : e.offsetX + $target.position().left,
+          top     : e.offsetY + $target.position().top,
+          width   : menuWidth
+        });
+
+        Drupal.behaviors.druru.contextMenuId = $targetId;
+
+        // Disallow to show default context menu.
+        return false;
       }
-      if (tagIsExcluded || childOfExcludedTags) {
-        return true;
+      else {
+        Drupal.behaviors.druru.hideContextMenu($target.closest('.comment'));
+
+        Drupal.behaviors.druru.clearContextMenuData();
       }
-
-      e.defaultPrevented = true;
-
-      // Hide all bootstrap dropdowns, showed by bootstrap event.
-      $(document).trigger('click.bs.dropdown.data-api');
-
-      var $comment = $(this),
-        $dropdown = $comment.find('.dropdown'),
-        $menu = $dropdown.find('.dropdown-menu'),
-        menuWidth = $menu.outerWidth();
-
-      // Fix for IE. He incorrectly detected offset left inside code.
-      if ($target.closest('.geshifilter').length) {
-        $target = $target.closest('.geshifilter > div');
-      }
-
-      $comment.addClass('hovered').addClass('context-menu-showed');
-      $dropdown.css('position', 'static');
-      $menu.css({
-        display : 'block',
-        position: 'absolute',
-        left    : e.offsetX + $target.position().left,
-        top     : e.offsetY + $target.position().top,
-        width   : menuWidth
-      });
-
-      Drupal.behaviors.druru.contextMenuId = $target.closest('.comment').data('comment-id');
-
-      // Disallow to show default context menu.
-      return false;
     },
 
-    hideContextMenu: function (e) {
+    hideContextMenu: function (comment) {
+      comment
+        .removeClass('context-menu-showed')
+        .removeClass('hovered')
+        .find('.dropdown')
+        .css('position', '')
+        .find('.dropdown-menu')
+        .css({
+          display: '',
+          position: '',
+          left: '',
+          top: '',
+          width: ''
+        });
+    },
+
+    hideContextMenus: function (e) {
       if (typeof e === 'undefined') {e = {which: 3};}
 
-      $('.context-menu-showed').each(function (idx, obj) {
-        var $comment = $(this);
+      if (
+        Drupal.behaviors.druru.contextMenuId !== $(e.target).closest('.comment').data('comment-id') ||
+        e.which !== 3
+      ) {
+        $('.context-menu-showed').each(function (idx, obj) {
+          var $comment = $(this);
+          Drupal.behaviors.druru.hideContextMenu($comment);
+        });
 
-        if (
-          Drupal.behaviors.druru.contextMenuId !== $(e.target).closest('.comment').data('comment-id') ||
-          e.which !== 3
-        ) {
-          $comment
-            .removeClass('context-menu-showed')
-            .removeClass('hovered')
-            .find('.dropdown')
-            .css('position', '')
-            .find('.dropdown-menu')
-            .css({
-              display : '',
-              position: '',
-              left    : '',
-              top     : '',
-              width   : ''
-            });
-        }
-      });
+        Drupal.behaviors.druru.clearContextMenuData();
+      }
     }
   };
 

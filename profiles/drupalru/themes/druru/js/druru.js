@@ -93,6 +93,8 @@ var Drupal = Drupal || {};
 
     excludeTags    : ['a', 'button'],
 
+    initContextMenuClicks: 0,
+
     initContextMenu: function (context, settings) {
       // Build links expanded by showing of context menu.
       var comments = $('.comment'), $comment, hasComments = false;
@@ -107,6 +109,7 @@ var Drupal = Drupal || {};
         if (hasComments) {
           $(window).on('blur', Drupal.behaviors.druru.hideContextMenu);
           $(document).on('mousedown', Drupal.behaviors.druru.hideContextMenu);
+          Drupal.behaviors.druru.initContextMenuClicks = 0;
         }
       }
     },
@@ -114,53 +117,65 @@ var Drupal = Drupal || {};
     showContextMenu: function (e) {
 
       // Hide all previously showed menus.
-      Drupal.behaviors.druru.hideContextMenu
+      Drupal.behaviors.druru.hideContextMenu();
 
-      // Don't triggering the event at excluded tags.
-      var excludeTags = Drupal.behaviors.druru.excludeTags,
-        $target = $(e.target),
-        childOfExcludedTags = false,
-        targetTagName = $target.prop("tagName").toString().toLowerCase(),
-        tagIsExcluded = excludeTags.indexOf(targetTagName) !== -1;
-      for (var tag in excludeTags) {
-        if (excludeTags.hasOwnProperty(tag)) {
-          childOfExcludedTags = childOfExcludedTags || !!$target.closest(excludeTags[tag]).length;
+      // Add click to context menu clicks
+      Drupal.behaviors.druru.initContextMenuClicks++;
+
+      if (Drupal.behaviors.druru.initContextMenuClicks === 1) {
+
+        // Don't triggering the event at excluded tags.
+        var excludeTags = Drupal.behaviors.druru.excludeTags,
+          $target = $(e.target),
+          childOfExcludedTags = false,
+          targetTagName = $target.prop("tagName").toString().toLowerCase(),
+          tagIsExcluded = excludeTags.indexOf(targetTagName) !== -1;
+        for (var tag in excludeTags) {
+          if (excludeTags.hasOwnProperty(tag)) {
+            childOfExcludedTags = childOfExcludedTags || !!$target.closest(excludeTags[tag]).length;
+          }
         }
+        if (tagIsExcluded || childOfExcludedTags) {
+          return true;
+        }
+
+        e.defaultPrevented = true;
+
+        // Hide all bootstrap dropdowns, showed by bootstrap event.
+        $(document).trigger('click.bs.dropdown.data-api');
+
+        var $comment = $(this),
+          $dropdown = $comment.find('.dropdown'),
+          $menu = $dropdown.find('.dropdown-menu'),
+          menuWidth = $menu.outerWidth();
+
+        // Fix for IE. He incorrectly detected offset left inside code.
+        if ($target.closest('.geshifilter').length) {
+          $target = $target.closest('.geshifilter > div');
+        }
+
+        $comment.addClass('hovered').addClass('context-menu-showed');
+        $dropdown.css('position', 'static');
+        $menu.css({
+          display: 'block',
+          position: 'absolute',
+          left: e.offsetX + $target.position().left,
+          top: e.offsetY + $target.position().top,
+          width: menuWidth
+        });
+
+        // Disallow to show default context menu.
+        return false;
       }
-      if (tagIsExcluded || childOfExcludedTags) {
-        return true;
-      }
-
-      e.defaultPrevented = true;
-
-      // Hide all bootstrap dropdowns, showed by bootstrap event.
-      $(document).trigger('click.bs.dropdown.data-api');
-
-      var $comment = $(this),
-        $dropdown = $comment.find('.dropdown'),
-        $menu = $dropdown.find('.dropdown-menu'),
-        menuWidth = $menu.outerWidth();
-
-      // Fix for IE. He incorrectly detected offset left inside code.
-      if ($target.closest('.geshifilter').length) {
-        $target = $target.closest('.geshifilter > div');
-      }
-
-      $comment.addClass('hovered').addClass('context-menu-showed');
-      $dropdown.css('position', 'static');
-      $menu.css({
-        display : 'block',
-        position: 'absolute',
-        left    : e.offsetX + $target.position().left,
-        top     : e.offsetY + $target.position().top,
-        width   : menuWidth
-      });
-
-      // Disallow to show default context menu.
-      return false;
     },
 
     hideContextMenu: function () {
+
+      if (Drupal.behaviors.druru.initContextMenuClicks === 2) {
+        // Reset context menu clicks
+        Drupal.behaviors.druru.initContextMenuClicks = 0;
+      }
+
       $('.context-menu-showed').each(function (idx, obj) {
         var $comment = $(this);
         $comment

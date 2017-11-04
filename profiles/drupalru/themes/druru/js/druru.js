@@ -93,6 +93,8 @@ var Drupal = Drupal || {};
 
     excludeTags    : ['a', 'button'],
 
+    contextMenuId: null,
+
     initContextMenu: function (context, settings) {
       // Build links expanded by showing of context menu.
       var comments = $('.comment'), $comment, hasComments = false;
@@ -106,7 +108,7 @@ var Drupal = Drupal || {};
         }
         if (hasComments) {
           $(window).on('blur', Drupal.behaviors.druru.hideContextMenu);
-          $(document).on('contextmenu', Drupal.behaviors.druru.hideContextMenu);
+          $(document).on('click', Drupal.behaviors.druru.hideContextMenu);
         }
       }
     },
@@ -114,7 +116,7 @@ var Drupal = Drupal || {};
     showContextMenu: function (e) {
 
       // Hide all previously showed menus.
-      Drupal.behaviors.druru.hideContextMenu();
+      Drupal.behaviors.druru.hideContextMenu(e);
 
       // Don't triggering the event at excluded tags.
       var excludeTags = Drupal.behaviors.druru.excludeTags,
@@ -156,26 +158,36 @@ var Drupal = Drupal || {};
         width   : menuWidth
       });
 
+      Drupal.behaviors.druru.contextMenuId = $target.closest('.comment').data('comment-id');
+
       // Disallow to show default context menu.
       return false;
     },
 
-    hideContextMenu: function () {
+    hideContextMenu: function (e) {
+      if (typeof e === 'undefined') {e = {which: 3};}
+
       $('.context-menu-showed').each(function (idx, obj) {
         var $comment = $(this);
-        $comment
-          .removeClass('context-menu-showed')
-          .removeClass('hovered')
-          .find('.dropdown')
-          .css('position', '')
-          .find('.dropdown-menu')
-          .css({
-            display : '',
-            position: '',
-            left    : '',
-            top     : '',
-            width   : ''
-          });
+
+        if (
+          Drupal.behaviors.druru.contextMenuId !== $(e.target).closest('.comment').data('comment-id') ||
+          e.which !== 3
+        ) {
+          $comment
+            .removeClass('context-menu-showed')
+            .removeClass('hovered')
+            .find('.dropdown')
+            .css('position', '')
+            .find('.dropdown-menu')
+            .css({
+              display : '',
+              position: '',
+              left    : '',
+              top     : '',
+              width   : ''
+            });
+        }
       });
     }
   };
@@ -402,7 +414,7 @@ var Drupal = Drupal || {};
           $this.closest('#blog').removeClass('short-view');
         }
         $this.addClass('active');
-        });
+      });
     }
   };
 

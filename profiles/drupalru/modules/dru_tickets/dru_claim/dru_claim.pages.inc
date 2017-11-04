@@ -8,53 +8,37 @@
  * Callback dru_claim_node.
  */
 function dru_claim_node($ajax, $node, $token) {
-
-  if (!drupal_valid_token($token, 'dru_claim')) {
-    return;
-  }
-
-  $vars = array(
-    'type'   => 'node',
-    'id'     => $node->nid,
+  return !drupal_valid_token($token, 'dru_claim') ?: dru_claim_callback($ajax, [
+    'type' => 'node',
+    'id' => $node->nid,
     'entity' => $node,
-  );
-
-  return dru_claim_callback($ajax, $vars);
-
+  ]);
 }
 
 /**
  * Callback dru_claim_comment.
  */
 function dru_claim_comment($ajax, $comment, $token) {
-
-  if (!drupal_valid_token($token, 'dru_claim')) {
-    return;
-  }
-
-  $vars = array(
-    'type'   => 'comment',
-    'id'     => $comment->cid,
+  return !drupal_valid_token($token, 'dru_claim') ?: dru_claim_callback($ajax, [
+    'type' => 'comment',
+    'id' => $comment->cid,
     'entity' => $comment,
-  );
-
-  return dru_claim_callback($ajax, $vars);
-
+  ]);
 }
 
 /**
  * Dru_claim_callback.
  */
 function dru_claim_callback($ajax, $vars) {
+  $output = NULL;
   $is_ajax = $ajax === 'ajax';
 
   if ($is_ajax) {
-    $form = drupal_get_form('dru_claim_form', $vars);
+    $form = drupal_get_form('dru_claim_report_form', $vars);
+    $commands = [];
 
-    $commands = array();
-
-    $render_form  = '<div id="verdict-add-form">';
-    $render_form .= '<div id="close-form"><i class="fa fa-times"></i></div>';
+    $render_form = '<div id="verdict-add-form">';
+    $render_form .= '<div id="close-form">×</div>';
     $render_form .= '<h2>';
     $render_form .= t('Add claim');
     $render_form .= '</h2>';
@@ -62,53 +46,53 @@ function dru_claim_callback($ajax, $vars) {
     $render_form .= '</div>';
 
     $commands[] = ajax_command_append('body', '<div id="verdict-add">' . $render_form . '</div>');
-
-    return array(
+    $output = [
       '#type' => 'ajax',
       '#commands' => $commands,
-    );
+    ];
   }
   else {
-    return drupal_get_form('dru_claim_form', $vars);
+    $output = drupal_get_form('dru_claim_report_form', $vars);
   }
+  return $output;
 }
 
 /**
- * Dru_claim_form.
+ * Form builder for report a claim.
  */
-function dru_claim_form($form, &$form_state, $vars) {
+function dru_claim_report_form($form, &$form_state, $vars) {
+  $options = [];
+  $voc = taxonomy_vocabulary_machine_name_load('claim_category');
+  $terms = taxonomy_get_tree($voc->vid);
 
-  $options = array();
-  $voc     = taxonomy_vocabulary_machine_name_load('claim_category');
-  $terms   = taxonomy_get_tree($voc->vid);
   foreach ($terms as $term) {
     $options[$term->tid] = $term->name;
   }
 
-  $form['dru_claim_category'] = array(
-    '#type'        => 'radios',
-    '#title'       => t('Select a category claim'),
-    '#description' => t('Select a category claim'),
-    '#options'     => $options,
-    '#required'    => TRUE,
-  );
+  $form['dru_claim_category'] = [
+    '#type' => 'select',
+    '#title' => t('Category of claim'),
+    '#options' => $options,
+    '#required' => TRUE,
+  ];
+  $form['dru_claim_description'] = [
+    '#type' => 'textarea',
+    '#title' => t('Claim description'),
+    '#rows' => 4,
+  ];
 
-  $form['dru_claim_description'] = array(
-    '#type'        => 'textarea',
-    '#title'       => t('Claim description'),
-    '#description' => t('Claim description'),
-    '#rows'        => 2,
-  );
-
-  $form['dru_claim_submit'] = array(
-    '#type'  => 'submit',
+  $form['actions'] = [
+    '#type' => 'actions',
+  ];
+  $form['actions']['dru_claim_submit'] = [
+    '#type' => 'submit',
     '#value' => t('Send'),
-    '#ajax'  => array(
+    '#ajax' => [
       'callback' => 'dru_claim_submit_js',
-      'method'   => 'remove',
-      'effect'   => 'fade',
-    ),
-  );
+      'method' => 'remove',
+      'effect' => 'fade',
+    ],
+  ];
 
   $form_state['dru_claim_entity'] = $vars;
 
@@ -116,30 +100,20 @@ function dru_claim_form($form, &$form_state, $vars) {
 }
 
 /**
- * Callback dru_claim_form_validate.
- */
-function dru_claim_form_validate($form, &$form_state) {
-}
-
-/**
- * Callback dru_claim_form_submit.
- */
-function dru_claim_form_submit($form_id, &$form_state) {
-}
-
-/**
  * Callback dru_claim_submit_js.
  */
 function dru_claim_submit_js($form_id, $form_state) {
-
-  $entity = $form_state['dru_claim_entity']['entity'];
-  global $user;
+  $user = $GLOBALS['user'];
+  $commands = [];
 
   // Create ticket.
   $ticket = new stdClass();
   $ticket->type = 'ticket';
   node_object_prepare($ticket);
-  $ticket->title = t('Claim @type = @id', array('@type' => $form_state['dru_claim_entity']['type'], '@id' => $form_state['dru_claim_entity']['id']));
+  $ticket->title = t('Claim @type = @id', [
+    '@type' => $form_state['dru_claim_entity']['type'],
+    '@id' => $form_state['dru_claim_entity']['id'],
+  ]);
   $ticket->language = LANGUAGE_NONE;
   $ticket->body[$ticket->language][0]['value'] = $form_state['values']['dru_claim_description'];
   $ticket->field_claim_category[$ticket->language][0]['tid'] = $form_state['values']['dru_claim_category'];
@@ -153,60 +127,66 @@ function dru_claim_submit_js($form_id, $form_state) {
 
   // Create claim.
   db_insert('ticket_claim')
-    ->fields(array(
-      'ticket_id'    => $ticket->nid,
+    ->fields([
+      'ticket_id' => $ticket->nid,
       'content_type' => $form_state['dru_claim_entity']['type'],
-      'content_id'   => $form_state['dru_claim_entity']['id'],
-      'init_uid'     => $user->uid,
-    ))
+      'content_id' => $form_state['dru_claim_entity']['id'],
+      'init_uid' => $user->uid,
+    ])
     ->execute();
 
   // Update entity.
   switch ($form_state['dru_claim_entity']['type']) {
     case 'node':
-        $id_type = 'nid';
+      $id_type = 'nid';
       break;
 
     case 'comment':
-        $id_type = 'cid';
+      $id_type = 'cid';
       break;
   }
   if (isset($id_type)) {
     $query = db_update($form_state['dru_claim_entity']['type']);
-    $query->fields(array(
+    $query->fields([
       'claim' => $ticket->nid,
-    ));
+    ]);
     $query->condition($id_type, $form_state['dru_claim_entity']['id'], '=');
-    $num_updated = $query->execute();
+    $query->execute();
   }
-  
-  // 
 
   $entity_link = $form_state['dru_claim_entity'];
-  switch ($entity_link['type']) {
+  $type = $entity_link['type'];
+  $id = $entity_link['id'];
+  switch ($type) {
     case 'node':
-        $body = 'field-name-body';
+      $body = 'field-name-body';
       break;
 
     case 'comment':
-        $body = 'field-name-comment-body';
+      $body = 'field-name-comment-body';
       break;
   }
 
   if (isset($body)) {
-    $verdict .= '<div class="field-item">';
-    $verdict = dru_claim_get_ticket_info($ticket, $entity_link['entity'], $entity_link['type']);
-    $verdict .= '</div>';
-
-    $commands = array();
-    $commands[] = ajax_command_remove('.claim-' . $entity_link['type'] . '-' . $entity_link['id']);
-    $commands[] = ajax_command_before('.body-' . $entity_link['id'] . ' .field-item', $verdict);
+    switch ($type) {
+      case 'node':
+        $node = node_load($id, NULL, TRUE);
+        $node_view = node_view($node);
+        $commands[] = ajax_command_replace('.node', drupal_render($node_view));
+        break;
+      case 'comment':
+        $comment = comment_load($id, TRUE);
+        $node = node_load($comment->nid, NULL, TRUE);
+        $comment_view = comment_view($comment, $node);
+        $commands[] = ajax_command_replace('[data-' . $type . '-id="' . $id . '"]', drupal_render($comment_view));
+        break;
+    }
+    $commands[] = ajax_command_remove('.claim-' . $type . '-' . $id);
     $commands[] = ajax_command_remove('#verdict-add');
-
-    return array(
-      '#type'     => 'ajax',
-      '#commands' => $commands,
-    );
   }
 
+  return [
+    '#type' => 'ajax',
+    '#commands' => $commands,
+  ];
 }

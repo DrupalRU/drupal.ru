@@ -4,6 +4,7 @@
  * Implements hook_preprocess_node().
  */
 function druru_preprocess_node(&$vars) {
+  $content = &$vars['content'];
   $vars['content_attributes_array']['class'][] = 'content';
   $view_mode = $vars['view_mode'];
   _druru_wrap_terms($vars['content']);
@@ -33,6 +34,9 @@ function druru_preprocess_node(&$vars) {
   }
 
   $vars['attributes_array']['data-node-id'] = $vars['node']->nid;
+
+  _druru_wrap_claim($content, 'node', $vars['nid']);
+  _druru_wrap_thanks($vars, 'node');
 }
 
 /**
@@ -51,6 +55,7 @@ function druru_process_node(&$vars) {
       }
     }
   }
+
   if ('frontpage' == $vars['view_mode']) {
     $vars['time'] = format_interval(time() - $vars['revision_timestamp'], 1);
   }

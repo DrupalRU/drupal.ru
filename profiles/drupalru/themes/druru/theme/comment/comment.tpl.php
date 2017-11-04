@@ -70,18 +70,33 @@
   <div class="media-body">
 
     <div class="media-heading">
-      <span class="h4 text-capitalize media-header-item"><?php print $author; ?></span>
-      <small class="media-header-item"><?php print $permalink; ?></small>
-      <small class="text-muted media-header-item">
+      <span class="h4 text-capitalize media-header-item">
+        <?php print $author; ?>
+      </span>
+
+      <span class="text-muted media-header-item small">
         <?php isset($timeago) ? print $timeago : print $changed; ?>
-      </small>
+      </span>
       <?php if (isset($unpublished)): ?>
-        <small class="media-header-item">
+        <span class="media-header-item small">
           <?php print $unpublished; ?>
-        </small>
+        </span>
       <?php endif; ?>
-      <?php if(isset($tnx)): ?>
-        <small class="media-header-item"><?php print render($tnx); ?></small>
+
+      <?php if(!empty($content['ticket-popover'])): ?>
+        <span class="media-header-item small">
+          <?php print drupal_render($content['ticket-popover']); ?>
+        </span>
+      <?php endif; ?>
+
+      <span class="media-header-item small">
+        <?php print $permalink; ?>
+      </span>
+
+      <?php if(!empty($tnx)): ?>
+        <span class="media-header-item small">
+          <?php print $tnx; ?>
+        </span>
       <?php endif; ?>
 
       <?php if(!empty($content['links'])

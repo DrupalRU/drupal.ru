@@ -94,25 +94,44 @@
   <?php endif; ?>
   <?php print render($title_suffix); ?>
 
-  <?php print $user_picture; ?>
+  <div class="node-header">
+    <span class="node-header-item">
+      <?php print $user_picture; ?>
+    </span>
 
-  <?php if ($display_submitted): ?>
-    <div class="submitted small">
-      <?php print $submitted; ?>
-    </div>
-  <?php endif; ?>
+    <span class="node-header-item">
+      <?php if ($display_submitted): ?>
+        <div class="submitted small">
+          <?php print $submitted; ?>
+        </div>
+      <?php endif; ?>
+    </span>
+
+    <?php if(!empty($content['ticket-popover'])): ?>
+      <span class="node-header-item small">
+        <?php print drupal_render($content['ticket-popover']); ?>
+      </span>
+    <?php endif; ?>
+
+    <?php if(!empty($tnx)): ?>
+      <span class="node-header-item small">
+        <?php print $tnx; ?>
+      </span>
+    <?php endif; ?>
+
+
+  </div>
 
   <div <?php print $content_attributes; ?>>
     <?php
       // We hide the comments and links now so that we can render them later.
       hide($content['comments']);
       hide($content['links']);
-      print render($content);
+      print drupal_render($content);
     ?>
   </div>
 
   <?php print render($content['links']); ?>
-
   <?php print render($content['comments']); ?>
 
 </div>

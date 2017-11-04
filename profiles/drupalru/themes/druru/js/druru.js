@@ -230,6 +230,18 @@ var Drupal = Drupal || {};
           $element.popover(options);
         }
       }
+
+      // Tickets should be shown always.
+      var tickets = $(context).find('[data-toggle="ticket-popover"]').toArray();
+      for (var i = 0; i < tickets.length; i++) {
+        $(tickets[i]).popover({
+          placement: 'bottom',
+          html: true,
+          content: function () {
+            return $('.ticket-content[data-ticket="' + $(this).data('ticket') + '"]').html();
+          }
+        });
+      }
     }
   };
 

@@ -16,7 +16,7 @@
   color: #1d79a3;
 }
 
-.claim_message i {
+.claim_message .icon-wrapper {
   padding-right: 10px;
 }
 
@@ -69,18 +69,6 @@
   background: #f7f7f7 none repeat scroll 0 0;
   padding: 15px;
   position: relative;
-}
-
-.ticket-info {
-  background: #f2f2f2 none repeat scroll 0 0;
-  border-left: 3px solid #d6d5d5;
-  color: #555;
-  margin-bottom: 15px;
-  padding: 15px;
-}
-
-.ticket-info i {
-  margin-right: 10px;
 }
 
 .small-inline-text {

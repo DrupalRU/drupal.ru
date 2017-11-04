@@ -8,49 +8,48 @@
  * Implements hook_permission().
  */
 function dru_claim_permission() {
-  return array(
-    'create claim' => array(
-      'title'           => t('Create Claim'),
-      'description'     => t('Allow users to create claim'),
-    ),
-  );
+  return [
+    'create claim' => [
+      'title' => t('Create Claim'),
+      'description' => t('Allow users to create claim'),
+    ],
+  ];
 }
-
 
 /**
  * Implements hook_menu().
  */
 function dru_claim_menu() {
-  $items['ticket/node/nojs/%node/%'] = array(
-    'page callback'    => 'dru_claim_node',
-    'file'             => 'dru_claim.pages.inc',
-    'page arguments'   => array(2, 3, 4),
-    'access arguments' => array('create claim'),
-    'type'             => MENU_CALLBACK,
-  );
-  $items['ticket/node/ajax/%node/%'] = array(
-    'page callback'     => 'dru_claim_node',
-    'file'              => 'dru_claim.pages.inc',
-    'page arguments'    => array(2, 3, 4),
-    'access arguments'  => array('create claim'),
+  $items['ticket/node/nojs/%node/%'] = [
+    'page callback' => 'dru_claim_node',
+    'file' => 'dru_claim.pages.inc',
+    'page arguments' => [2, 3, 4],
+    'access arguments' => ['create claim'],
+    'type' => MENU_CALLBACK,
+  ];
+  $items['ticket/node/ajax/%node/%'] = [
+    'page callback' => 'dru_claim_node',
+    'file' => 'dru_claim.pages.inc',
+    'page arguments' => [2, 3, 4],
+    'access arguments' => ['create claim'],
     'delivery callback' => 'ajax_deliver',
-    'type'              => MENU_CALLBACK,
-  );
-  $items['ticket/comment/nojs/%comment/%'] = array(
-    'page callback'    => 'dru_claim_comment',
-    'file'             => 'dru_claim.pages.inc',
-    'page arguments'   => array(2, 3, 4),
-    'access arguments' => array('create claim'),
-    'type'             => MENU_CALLBACK,
-  );
-  $items['ticket/comment/ajax/%comment/%'] = array(
-    'page callback'     => 'dru_claim_comment',
-    'file'              => 'dru_claim.pages.inc',
-    'page arguments'    => array(2, 3, 4),
-    'access arguments'  => array('create claim'),
+    'type' => MENU_CALLBACK,
+  ];
+  $items['ticket/comment/nojs/%comment/%'] = [
+    'page callback' => 'dru_claim_comment',
+    'file' => 'dru_claim.pages.inc',
+    'page arguments' => [2, 3, 4],
+    'access arguments' => ['create claim'],
+    'type' => MENU_CALLBACK,
+  ];
+  $items['ticket/comment/ajax/%comment/%'] = [
+    'page callback' => 'dru_claim_comment',
+    'file' => 'dru_claim.pages.inc',
+    'page arguments' => [2, 3, 4],
+    'access arguments' => ['create claim'],
     'delivery callback' => 'ajax_deliver',
-    'type'              => MENU_CALLBACK,
-  );
+    'type' => MENU_CALLBACK,
+  ];
 
   return $items;
 }
@@ -68,53 +67,52 @@ function dru_claim_preprocess_node(&$vars) {
  * Implements hook_node_view().
  */
 function dru_claim_node_view($node, $view_mode) {
-
   drupal_add_css(drupal_get_path('module', 'dru_claim') . '/dru_claim.css');
 
   if ($node->type == 'ticket') {
     $claim = db_select('ticket_claim', 't')
-        ->fields('t')
-        ->condition('t.ticket_id', $node->nid, '=')
-        ->execute()
-        ->fetchObject();
+      ->fields('t')
+      ->condition('t.ticket_id', $node->nid, '=')
+      ->execute()
+      ->fetchObject();
 
     if (!empty($claim)) {
       $initiator = user_load($claim->init_uid);
-      $node->content['initiator'] = array(
+      $node->content['initiator'] = [
         '#markup' => '<div class="initiator">
             <div class="label">' . t('Initiator') . ':</div>
             <div class="value">' . l($initiator->name, 'user/' . $initiator->uid) . '</div>
           </div>',
-      );
+      ];
 
       if ($claim->content_type == 'node') {
         $original = node_load($claim->content_id);
         $original_format = $original->body[LANGUAGE_NONE][0]['format'];
-        $original_text   = $original->body[LANGUAGE_NONE][0]['value'];
-        $original_title  = l($original->title, 'node/' . $claim->content_id);
+        $original_text = $original->body[LANGUAGE_NONE][0]['value'];
+        $original_title = l($original->title, 'node/' . $claim->content_id);
       }
       else {
         $original = comment_load($claim->content_id);
         $original_format = $original->comment_body[LANGUAGE_NONE][0]['format'];
-        $original_text   = $original->comment_body[LANGUAGE_NONE][0]['value'];
-        $original_title  = l($original->subject, 'comment/' . $claim->content_id, array('fragment' => 'comment-' . $claim->content_id));
+        $original_text = $original->comment_body[LANGUAGE_NONE][0]['value'];
+        $original_title = l($original->subject, 'comment/' . $claim->content_id, ['fragment' => 'comment-' . $claim->content_id]);
       }
 
       if ($view_mode == 'full') {
-        $node->content['entity'] = array(
+        $node->content['entity'] = [
           '#markup' => '<div class="entity claimed-entity claimed-entity-full">
             <div class="label claim-entity-label">' . t('Entity') . ':</div>
             <div class="value claimed-entity-value">' . $original_title . check_markup($original_text, $original_format) . '</div>
           </div>',
-        );
+        ];
       }
       else {
-        $node->content['entity'] = array(
+        $node->content['entity'] = [
           '#markup' => '<div class="entity claimed-entity claimed-entity-teaser">
             <div class="label claim-entity-label">' . t('Entity') . ':</div>
             <div class="value claimed-entity-value">' . $original_title . '</div>
           </div>',
-        );
+        ];
       }
     }
 
@@ -128,21 +126,21 @@ function dru_claim_node_view($node, $view_mode) {
     $token = drupal_get_token('dru_claim');
 
     if (isset($node->claim) && $node->claim == 0) {
-      $node->content['links']['comment']['#links']['dru-claim'] = array(
+      $node->content['links']['comment']['#links']['dru-claim'] = [
         'title' => t('Claim'),
         'href' => 'ticket/node/nojs/' . $node->nid . '/' . $token,
         'query' => drupal_get_destination(),
-        'attributes' => array(
-          'class' => array('use-ajax', 'claim-node-' . $node->nid),
-        ),
-      );
+        'attributes' => [
+          'class' => ['use-ajax', 'claim-node-' . $node->nid],
+        ],
+      ];
     }
   }
 
   // View claim verdict.
   if (user_is_logged_in()) {
     if (isset($node->claim) && $node->claim && $ticket = node_load($node->claim)) {
-      $node->content['body'][0]['#markup'] = dru_claim_get_ticket_info($ticket, $node, 'node');
+      $node->content += dru_claim_get_ticket_info($ticket, $node, 'node');
     }
   }
 }
@@ -151,64 +149,113 @@ function dru_claim_node_view($node, $view_mode) {
  * Get body with ticket info.
  */
 function dru_claim_get_ticket_info($ticket, $entity, $entity_type) {
+  $output = [];
 
-      if (!$ticket->ticket->ticket_verdict) {
-        $verdict = t('Claim is under review');
-        $icon    = '<i class="fa fa-cogs"></i>';
-        $class   = 'claim_message_processed';
-      }
-      else {
-        $verdict = $ticket->ticket->ticket_verdict;
-        $icon    = '<i class="fa fa-balance-scale"></i>';
-        $class   = 'claim_message_done';
-      }
+  $verdict = $ticket->ticket->ticket_verdict;
+  $icon = $verdict ? 'balance-scale' : 'spinner fa-pulse';
+  $class = $verdict ? 'claim_message_done' : 'claim_message_processed';
+  $verdict = $verdict ?: t('Claim is under review');
 
-      $ticket_author = user_load($ticket->uid);
-      $ticket_category = taxonomy_term_load($ticket->field_claim_category['und'][0]['tid']);
+  $ticket_author = user_load($ticket->uid);
+  $ticket_category = taxonomy_term_load($ticket->field_claim_category['und'][0]['tid']);
 
-      if (!empty($ticket->body['und'][0]['value'])) {
-        $ticket_body  = '<i class="fa fa-commenting-o"></i>';
-        $ticket_body .= $ticket->body['und'][0]['value'];;
-      }
-      else {
-        $ticket_body = '';
-      }
+  $ticket_body = '';
+  if (!empty($ticket->body['und'][0]['value'])) {
+    $ticket_body = '<i class="fa fa-commenting-o"></i>';
+    $ticket_body .= $ticket->body['und'][0]['value'];;
+  }
 
-      $ticket_info   = '<div class="ticket-body">';
-      $ticket_info  .= $ticket_body;
-      $ticket_info  .= '</div>';
-      $ticket_info  .= '<div class="ticket-category">';
-      $ticket_info  .= '<i class="fa fa-exclamation-triangle"></i>';
-      $ticket_info  .= $ticket_category->name;
-      $ticket_info  .= '</div>';
-      $ticket_info  .= '<div class="ticket-created small-inline-text">';
-      $ticket_info  .= '<i class="fa fa-calendar"></i>';
-      $ticket_info  .= date('d.m.Y', $ticket->created);
-      $ticket_info  .= '</div>';
-      $ticket_info  .= '<div class="ticket-id small-inline-text">';
-      $ticket_info  .= '<i class="fa fa-eye"></i>';
-      $ticket_info  .= l(t('View ticket'), 'node/' . $ticket->nid);
-      $ticket_info  .= '</div>';
-      $ticket_info  .= '<div class="ticket-author small-inline-text">';
-      $ticket_info  .= '<i class="fa fa-user"></i>';
-      $ticket_info  .= l($ticket_author->name, 'user/' . $ticket_author->uid);
-      $ticket_info  .= '</div>';
+  $output['claim'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => ['claim_message', $class]
+    ],
+    'icon' => [
+      '#type' => 'markup',
+      '#markup' => '<i class="fa fa-'. $icon .'"></i>',
+      '#prefix' => '<span class="icon-wrapper">',
+      '#suffix' => '</span>'
+    ],
+    'verdict' => [
+      '#type' => 'markup',
+      '#markup' => $verdict,
+    ]
+  ];
 
-      $claim_message  = '<div class="claim_message ' . $class . '">';
-      $claim_message .= $icon;
-      $claim_message .= $verdict;
-      $claim_message .= '</div>';
-      $claim_message .= '<div class="ticket-info">';
-      $claim_message .= $ticket_info;
-      $claim_message .= '</div>';
-      if ($entity_type == 'node') {
-        $claim_message .= $entity->content['body'][0]['#markup'];
-      }
-      if ($entity_type == 'comment') {
-        $claim_message .= $entity->content['comment_body'][0]['#markup'];
-      }
+  $output['ticket'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => ['ticket-info']
+    ]
+  ];
+  $output['ticket']['body-wrapper'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => ['ticket-body']
+    ],
+    'body' => [
+      '#type' => 'markup',
+      '#markup' => $ticket_body
+    ]
+  ];
+  $output['ticket']['category-wrapper'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => ['ticket-category']
+    ],
+    'icon' => [
+      '#type' => 'markup',
+      '#markup' => '<i class="fa fa-exclamation-triangle"></i>'
+    ],
+    'category' => [
+      '#type' => 'markup',
+      '#markup' => $ticket_category->name
+    ],
+  ];
+  $output['ticket']['created-wrapper'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => ['ticket-created', 'small-inline-text']
+    ],
+    'icon' => [
+      '#type' => 'markup',
+      '#markup' => '<i class="fa fa-calendar"></i>'
+    ],
+    'created' => [
+      '#type' => 'markup',
+      '#markup' => date('d.m.Y', $ticket->created)
+    ],
+  ];
+  $output['ticket']['id-wrapper'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => ['ticket-id', 'small-inline-text']
+    ],
+    'icon' => [
+      '#type' => 'markup',
+      '#markup' => '<i class="fa fa-eye"></i>'
+    ],
+    'id' => [
+      '#type' => 'markup',
+      '#markup' => l(t('Open ticket'), 'node/' . $ticket->nid)
+    ],
+  ];
+  $output['ticket']['author-wrapper'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => ['ticket-author', 'small-inline-text']
+    ],
+    'icon' => [
+      '#type' => 'markup',
+      '#markup' => '<i class="fa fa-user"></i>'
+    ],
+    'author' => [
+      '#type' => 'markup',
+      '#markup' => l($ticket_author->name, 'user/' . $ticket_author->uid)
+    ],
+  ];
 
-      return $claim_message;
+  return $output;
 }
 
 /**
@@ -243,15 +290,15 @@ function dru_claim_comment_view($comment, $view_mode) {
     drupal_add_library('system', 'drupal.ajax');
     $token = drupal_get_token('dru_claim');
 
-    if ($comment->claim == 0  && $comment->node_type != 'comment_node_ticket') {
-      $comment->content['links']['comment']['#links']['dru-claim'] = array(
+    if ($comment->claim == 0 && $comment->node_type != 'comment_node_ticket') {
+      $comment->content['links']['comment']['#links']['dru-claim'] = [
         'title' => t('Claim'),
-        'href'  => 'ticket/comment/nojs/' . $comment->cid . '/' . $token,
+        'href' => 'ticket/comment/nojs/' . $comment->cid . '/' . $token,
         'query' => drupal_get_destination(),
-        'attributes' => array(
-          'class' => array('use-ajax', 'claim-comment-' . $comment->cid),
-        ),
-      );
+        'attributes' => [
+          'class' => ['use-ajax', 'claim-comment-' . $comment->cid],
+        ],
+      ];
     }
   }
 
@@ -259,7 +306,7 @@ function dru_claim_comment_view($comment, $view_mode) {
   if (user_is_logged_in()) {
     if ($comment->claim <> 0) {
       $ticket = node_load($comment->claim);
-      $comment->content['comment_body'][0]['#markup'] = dru_claim_get_ticket_info($ticket, $comment, 'comment');
+      $comment->content += dru_claim_get_ticket_info($ticket, $comment, 'comment');
     }
   }
 }

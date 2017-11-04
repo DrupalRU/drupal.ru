@@ -153,7 +153,8 @@ function dru_tnx_show($entity, $type) {
       ],
     ],
     'counter'     => [
-      '#markup' => dru_tnx_get_icon() . $count,
+      '#markup' => $count . ' ' . t('Thanks'),
+      '#counter' => $count
     ],
   ];
 

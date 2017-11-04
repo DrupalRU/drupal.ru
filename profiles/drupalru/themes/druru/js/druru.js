@@ -106,7 +106,7 @@ var Drupal = Drupal || {};
         }
         if (hasComments) {
           $(window).on('blur', Drupal.behaviors.druru.hideContextMenu);
-          $(document).on('mousedown', Drupal.behaviors.druru.hideContextMenu);
+          $(document).on('contextmenu', Drupal.behaviors.druru.hideContextMenu);
         }
       }
     },
@@ -114,7 +114,7 @@ var Drupal = Drupal || {};
     showContextMenu: function (e) {
 
       // Hide all previously showed menus.
-      Drupal.behaviors.druru.hideContextMenu
+      Drupal.behaviors.druru.hideContextMenu();
 
       // Don't triggering the event at excluded tags.
       var excludeTags = Drupal.behaviors.druru.excludeTags,

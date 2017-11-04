@@ -22,7 +22,7 @@ var Drupal = Drupal || {};
 
       // disallow click by link with path to this page
       $('a.active').click(function () {
-        return window.location.pathname != $(this).attr('href');
+        return window.location.pathname !== $(this).attr('href');
       });
       // stylizing the select
       $('.selectpicker').selectpicker({
@@ -313,7 +313,7 @@ var Drupal = Drupal || {};
           $switcher.on('click', function () {
             var showed = Drupal.behaviors.druruHelpBlocks.showed;
             showed ? $helpBlocks.hide() : $helpBlocks.show();
-            $('[name="help-switcher"]').toggleClass('text-default', 'text-primary')
+            $('[name="help-switcher"]').toggleClass('text-default', 'text-primary');
             Drupal.behaviors.druruHelpBlocks.showed = !showed;
             return false;
           });
@@ -362,25 +362,28 @@ var Drupal = Drupal || {};
 
   Drupal.behaviors.druruBueditor = {
     attach: function (context, settings) {
-      if (typeof BUE != 'undefined') {
+      if (typeof BUE !== 'undefined') {
+
+        var grabbedClass = function () {
+          if (!window.attachedGrab) {
+            var $popupHeader = $(window).find('.bue-popup-head');
+            $popupHeader
+              .on('mousedown', function (e) {
+                $popupHeader.addClass('grabbing');
+              })
+              .on('mouseup', function (e) {
+                $popupHeader.removeClass('grabbing');
+              });
+          }
+          window.attachedGrab = true;
+          return window.sourceOnopen();
+        };
+
         for (var popup in BUE.popups || {}) {
           if (BUE.popups.hasOwnProperty(popup)) {
             var window = BUE.popups[popup];
             window.sourceOnopen = window.onopen;
-            window.onopen = function () {
-              if (!this.attachedGrab) {
-                var $popupHeader = $(this).find('.bue-popup-head');
-                $popupHeader
-                  .on('mousedown', function (e) {
-                    $popupHeader.addClass('grabbing');
-                  })
-                  .on('mouseup', function (e) {
-                    $popupHeader.removeClass('grabbing');
-                  });
-              }
-              this.attachedGrab = true;
-              return this.sourceOnopen();
-            };
+            window.onopen = grabbedClass;
           }
         }
       }
@@ -392,7 +395,7 @@ var Drupal = Drupal || {};
       $('.view-switcher').on('click', function () {
         var $this = $(this);
         $this.closest('div').find('button').removeClass('active');
-        if ($this.data('view') == 'short') {
+        if ($this.data('view') === 'short') {
           $this.closest('#blog').addClass('short-view');
         }
         else{
@@ -423,7 +426,7 @@ var Drupal = Drupal || {};
     for (var attribute in attributes) {
       if (attributes.hasOwnProperty(attribute)) {
         attr = attributes[attribute];
-        if (typeof attributes[attribute] == 'object' && attributes[attribute] !== null) {
+        if (typeof attributes[attribute] === 'object' && attributes[attribute] !== null) {
           attr = attributes[attribute].join(' ');
         }
         parsedAttrs += attribute + '="' + attr + '" ';
@@ -442,20 +445,20 @@ var Drupal = Drupal || {};
    * @returns {string}
    */
   Drupal.theme.prototype.icon = function (icon, attributes) {
-    if (typeof attributes == 'undefined') {
+    if (typeof attributes === 'undefined') {
       attributes = {
         'class': []
       };
     }
-    if (typeof attributes.class == 'undefined') {
+    if (typeof attributes.class === 'undefined') {
       attributes.class = [];
     }
 
-    if (typeof attributes.class == 'object' && attributes.class != null) {
+    if (typeof attributes.class === 'object' && attributes.class !== null) {
       attributes.class.push('fa');
       attributes.class.push('fa-' + icon);
     }
-    else if (typeof attributes.class == 'string') {
+    else if (typeof attributes.class === 'string') {
       attributes.class += ' fa fa-' + icon + ' ';
     }
     return '<i ' + Drupal.theme('attributes', attributes) + '"></i>';
@@ -481,7 +484,7 @@ var Drupal = Drupal || {};
 
       choseHtml += '</div>';
 
-      jQuery("#inner_poll_new_fields").append(choseHtml);
+      $("#inner_poll_new_fields").append(choseHtml);
       document.getElementById("edit-inner-poll-new-id").value = id;
     }
   };

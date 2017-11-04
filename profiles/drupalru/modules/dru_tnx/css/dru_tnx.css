@@ -1,6 +1,5 @@
 .tnx-counter {
   position: relative;
-  padding-left: 1.5em;
   display: inline;
 }
 
@@ -9,10 +8,6 @@
 }
 
 .tnx-counter i {
-  font-size: 1em;
-  position: absolute;
-  left: 0;
-  top: 50%;
   margin-top: -.5em;
   will-change: transform, font-size, opacity;
 }

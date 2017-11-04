@@ -370,7 +370,6 @@ function _druru_colorize_button($text) {
 // Include ability to iconize.
 druru_include('druru', 'theme/icons.inc');
 
-
 function _druru_count_unread_messages() {
   $unread_count = &drupal_static('druru_unread_exists', NULL);
   // If we have enabled module "Privatemsg" Then we need to check
@@ -379,4 +378,64 @@ function _druru_count_unread_messages() {
     $unread_count = privatemsg_unread_count();
   }
   return $unread_count;
+}
+
+
+/**
+ * @param $vars
+ */
+function _druru_wrap_thanks(&$vars, $type) {
+  if (!empty($vars[$type]->tnx)) {
+    $counter = dru_tnx_show($vars[$type], $type);
+    $counter['counter']['#markup'] = druru_icon('heart', TRUE, [
+        'class' => ['text-danger'],
+      ]) . $counter['counter']['#counter'];
+    $vars['tnx'] = render($counter);
+    if(!empty($vars['content']['tnx']) && is_array($vars['content']['tnx'])) {
+      hide($vars['content']['tnx']);
+    }
+  }
+}
+
+/**
+ * @param $vars
+ * @param $content
+ */
+function _druru_wrap_claim(&$content, $type,  $id) {
+  // Handling claim data.
+  if (!empty($content['claim']) && !empty($content['ticket'])) {
+    $category = $content['ticket']['category-wrapper']['category']['#markup'];
+    $content['ticket']['category-wrapper']['icon'] = $content['claim']['icon'];
+    $content['ticket']['category-wrapper']['category'] = $content['claim']['verdict'];
+
+    $content['ticket-popover'] = [];
+    $content['ticket-popover']['link'] = [
+      '#theme' => 'html_tag',
+      '#tag' => 'a',
+      '#value' => druru_icon('balance-scale'),
+      '#attributes' => [
+        'tabindex' => 0,
+        'role' => 'button',
+        'data-toggle' => 'ticket-popover',
+        'data-trigger' => 'click',
+        'title' => $category,
+        'data-ticket-type' => $type,
+        'data-ticket' => $id,
+        'class' => ['text-warning']
+      ],
+    ];
+    $content['ticket-popover']['content'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['ticket-content', 'hidden'],
+        'data-ticket' => $id
+      ],
+      $content['ticket']
+    ];
+
+    // Should be hidden because we moved info of status inside ticket,
+    // but we didn't drop this for use if needed.
+    hide($content['claim']);
+    hide($content['ticket']);
+  }
 }

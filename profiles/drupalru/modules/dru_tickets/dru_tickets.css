@@ -64,6 +64,10 @@ li.moderate-help a:before {
   z-index: 9999;
 }
 
+#verdict-add h2 {
+  margin-top: 0;
+}
+
 #verdict-add #verdict-add-form {
   background: #fff none repeat scroll 0 0;
   margin: 50px auto;
@@ -72,6 +76,18 @@ li.moderate-help a:before {
   padding: 20px;
   position: relative;
   width: 320px;
+}
+
+@media screen and (min-width: 480px) {
+  #verdict-add #verdict-add-form {
+    width: 450px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  #verdict-add #verdict-add-form {
+    width: 600px;
+  }
 }
 
 #ticket-help {
@@ -92,17 +108,17 @@ li.moderate-help a:before {
   top: 8px;
 }
 
-#close-form i {
-  color: #e6c8c8;
+#close-form {
+  opacity: .2;
   cursor: pointer;
-  font-size: 35px;
-  -webkit-transition: all 400ms ease-out;
-	transition: all 400ms ease-out;
+  font-size: 25px;
+  font-weight: bold;
+  line-height: 1;
+  color: #000;
 }
 
-#close-form:hover i{
-  color: #d56f6f;
-  transform: rotate(360deg);
+#close-form:hover {
+  opacity: .5;
 }
 
 .no-taken-ticket {

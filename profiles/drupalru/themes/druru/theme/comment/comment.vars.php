@@ -3,6 +3,7 @@
 function druru_preprocess_comment(&$vars) {
   $links      = array();
   $link_attrs = array();
+  $content    = &$vars['content'];
 
   if (isset($vars['content']['links'])) {
     $links = &$vars['content']['links'];
@@ -110,13 +111,12 @@ function druru_preprocess_comment(&$vars) {
     uasort($links['comment']['#links'], 'drupal_sort_weight');
   }
 
-  if (isset($vars['comment']->tnx)) {
-    $vars['tnx'] = dru_tnx_show($vars['comment'], 'comment');
-  }
-
   if (!_druru_links_access($vars['content'])) {
     unset($vars['content']['links']);
   }
+  _druru_wrap_claim($content, 'comment', $vars['id']);
+
+  _druru_wrap_thanks($vars, 'comment');
 }
 
 function _druru_links_access($content) {

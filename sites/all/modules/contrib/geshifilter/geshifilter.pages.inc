@@ -359,8 +359,11 @@ function geshifilter_geshi_process($source_code, $lang, $line_numbering=0, $line
     // To counter a change between GeSHi version 1.0.7.22 and 1.0.8 (svn
     // commit 1610), we use both the language and overall_class for the class,
     // to mimic the 1.0.8 behavior, which is backward compatible.
-    $code_class = "{$geshi->language} {$geshi->overall_class}";
-    $source_code = '<span class="geshifilter"'
+
+    // $language and $overall_class are protected with $geshi, with no get functions,
+    // recreate them manually.
+    $overall_class = 'geshifilter-' . $lang;
+    $code_class = "{$lang} {$overall_class}";$source_code = '<span class="geshifilter"'
       . (isset($title) ? ' title="'. check_plain($title) .'"' : '')
       . '><code class="'. $code_class .'">'. $geshi->parse_code() .'</code></span>';
   }

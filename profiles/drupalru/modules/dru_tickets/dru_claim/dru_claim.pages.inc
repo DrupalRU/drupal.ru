@@ -170,10 +170,9 @@ function dru_claim_submit_js($form_id, $form_state) {
   if (isset($body)) {
     switch ($type) {
       case 'node':
-        $node = node_load($id, NULL, TRUE);
-        $node_view = node_view($node);
-        $commands[] = ajax_command_replace('.node', drupal_render($node_view));
+        $commands[] = _dru_claim_replace_node_ajax_command($id, $type);
         break;
+
       case 'comment':
         $comment = comment_load($id, TRUE);
         $node = node_load($comment->nid, NULL, TRUE);
@@ -189,4 +188,28 @@ function dru_claim_submit_js($form_id, $form_state) {
     '#type' => 'ajax',
     '#commands' => $commands,
   ];
+}
+
+/**
+ * Right render of node after creating a ticket.
+ *
+ * @param $id
+ * @param $type
+ *
+ * @return array
+ */
+function _dru_claim_replace_node_ajax_command($id, $type) {
+  // Save right path of the request.
+  $q = $_GET['q'];
+  $view_mode = $q == 'system/ajax' ? 'full' : 'teaser';
+  $is_full = $view_mode == 'full';
+  $node = node_load($id, NULL, TRUE);
+  // Drupal renders the node incorrectly, if node_is_page() returns false.
+  // This hack is
+  $_GET['q'] = $is_full ? 'node/'. $node->nid : $_GET['q'];
+  $node_view = node_view($node, $view_mode);
+  $node_render = drupal_render($node_view);
+  // Return bask right path.
+  $_GET['q'] = $q;
+  return ajax_command_replace('[data-' . $type . '-id="' . $id . '"]', $node_render);
 }

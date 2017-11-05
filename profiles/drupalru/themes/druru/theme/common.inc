@@ -404,12 +404,53 @@ function _druru_wrap_thanks(&$vars, $type) {
 function _druru_wrap_claim(&$content, $type,  $id) {
   // Handling claim data.
   if (!empty($content['claim']) && !empty($content['ticket'])) {
-    $category = $content['ticket']['category-wrapper']['category']['#markup'];
-    $content['ticket']['category-wrapper']['icon'] = $content['claim']['icon'];
-    $content['ticket']['category-wrapper']['category'] = $content['claim']['verdict'];
+    $is_handled = empty($content['ticket']['#has_verdict']);
+    // Prepare popover data.
+    $ticket = &$content['ticket'];
+    $metadata = &$ticket['metadata'];
+    $category = $ticket['category']['content']['#markup'];
+    $ticket['category']['icon'] = $content['claim']['icon'];
+    $ticket['category']['content'] = $content['claim']['verdict'];
 
+    $ticket['description']['icon']['#markup'] = druru_icon('commenting-o');
+    $ticket['description']['#attributes']['class'][] = 'text-muted';
+
+    $ticket['category']['#weight'] = -1;
+    // Regenerate right icons.
+    if($is_handled) {
+      $ticket['category']['icon']['#markup'] = druru_icon('spinner', FALSE, array(
+        'class' => array('fa-pulse')
+      ));
+      $ticket['category']['#attributes']['class'][] = 'text-warning';
+    }
+    else {
+      $ticket['category']['icon']['#markup'] = druru_icon('check');
+      $ticket['category']['#attributes']['class'][] = 'bg-info';
+      $ticket['category']['#attributes']['class'][] = 'text-accent';
+    }
+    $metadata['created']['icon']['#markup'] = druru_icon('calendar');
+
+    $ticket_link = &$metadata['ticket-link']['content'];
+    $ticket_link['#options']['html'] = TRUE;
+    $ticket_link['#text'] = druru_icon('eye') . $ticket_link['#text'];
+    $author = &$metadata['author']['content'];
+    $author['#options']['html'] = TRUE;
+    $author['#text'] = druru_icon('user') . $author['#text'];
+
+    foreach (element_children($metadata) as $child) {
+      $metadata[$child]['#attributes']['class'][] = 'small-inline-text';
+    }
+
+    // Drop links.
+    unset($ticket_link, $author);
+    // Drop icons which moved inside links.
+    unset($metadata['ticket-link']['icon'], $metadata['author']['icon']);
+    unset($child, $metadata);
+
+
+    // Generate popover.
     $content['ticket-popover'] = [];
-    $content['ticket-popover']['link'] = [
+    $content['ticket-popover']['icon'] = [
       '#theme' => 'html_tag',
       '#tag' => 'a',
       '#value' => druru_icon('balance-scale'),
@@ -421,7 +462,7 @@ function _druru_wrap_claim(&$content, $type,  $id) {
         'title' => $category,
         'data-ticket-type' => $type,
         'data-ticket' => $id,
-        'class' => ['text-warning']
+        'class' => [($is_handled ? 'text-warning' : '')]
       ],
     ];
     $content['ticket-popover']['content'] = [
@@ -430,10 +471,10 @@ function _druru_wrap_claim(&$content, $type,  $id) {
         'class' => ['ticket-content', 'hidden'],
         'data-ticket' => $id
       ],
-      $content['ticket']
+      'ticket' => $ticket
     ];
 
-    // Should be hidden because we moved info of status inside ticket,
+    // Should be hidden because we moved info of status inside the ticket,
     // but we didn't drop this for use if needed.
     hide($content['claim']);
     hide($content['ticket']);

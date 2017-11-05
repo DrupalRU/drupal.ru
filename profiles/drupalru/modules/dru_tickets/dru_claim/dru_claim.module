@@ -151,17 +151,17 @@ function dru_claim_node_view($node, $view_mode) {
 function dru_claim_get_ticket_info($ticket, $entity, $entity_type) {
   $output = [];
 
-  $verdict = $ticket->ticket->ticket_verdict;
-  $icon = $verdict ? 'balance-scale' : 'spinner fa-pulse';
-  $class = $verdict ? 'claim_message_done' : 'claim_message_processed';
-  $verdict = $verdict ?: t('Claim is under review');
+  $has_verdict = $ticket->ticket->ticket_verdict;
+  $icon = $has_verdict ? 'balance-scale' : 'spinner fa-pulse';
+  $class = $has_verdict ? 'claim_message_done' : 'claim_message_processed';
+  $verdict = $has_verdict ?: t('Claim is under review');
 
   $ticket_author = user_load($ticket->uid);
   $ticket_category = taxonomy_term_load($ticket->field_claim_category['und'][0]['tid']);
 
-  $ticket_body = '';
+  $ticket_body = $ticket_icon = '';
   if (!empty($ticket->body['und'][0]['value'])) {
-    $ticket_body = '<i class="fa fa-commenting-o"></i>';
+    $ticket_icon = '<i class="fa fa-commenting-o"></i>';
     $ticket_body .= $ticket->body['und'][0]['value'];;
   }
 
@@ -171,87 +171,104 @@ function dru_claim_get_ticket_info($ticket, $entity, $entity_type) {
       'class' => ['claim_message', $class]
     ],
     'icon' => [
-      '#type' => 'markup',
       '#markup' => '<i class="fa fa-'. $icon .'"></i>',
       '#prefix' => '<span class="icon-wrapper">',
       '#suffix' => '</span>'
     ],
     'verdict' => [
-      '#type' => 'markup',
       '#markup' => $verdict,
     ]
   ];
 
   $output['ticket'] = [
     '#type' => 'container',
+    '#has_verdict' => !!$has_verdict,
     '#attributes' => [
       'class' => ['ticket-info']
     ]
   ];
-  $output['ticket']['body-wrapper'] = [
+  $output['ticket']['description'] = [
     '#type' => 'container',
     '#attributes' => [
       'class' => ['ticket-body']
     ],
-    'body' => [
-      '#type' => 'markup',
+    'icon' => [
+      '#markup' => $ticket_icon
+    ],
+    'content' => [
       '#markup' => $ticket_body
-    ]
+    ],
   ];
-  $output['ticket']['category-wrapper'] = [
+  $output['ticket']['category'] = [
     '#type' => 'container',
     '#attributes' => [
       'class' => ['ticket-category']
     ],
     'icon' => [
-      '#type' => 'markup',
       '#markup' => '<i class="fa fa-exclamation-triangle"></i>'
     ],
-    'category' => [
-      '#type' => 'markup',
+    'content' => [
       '#markup' => $ticket_category->name
     ],
   ];
-  $output['ticket']['created-wrapper'] = [
+  $output['ticket']['metadata'] = [
     '#type' => 'container',
     '#attributes' => [
-      'class' => ['ticket-created', 'small-inline-text']
+      'class' => ['ticket-metadata']
+    ],
+  ];
+  $output['ticket']['metadata']['created'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => ['ticket-created']
     ],
     'icon' => [
-      '#type' => 'markup',
       '#markup' => '<i class="fa fa-calendar"></i>'
     ],
-    'created' => [
-      '#type' => 'markup',
+    'content' => [
       '#markup' => date('d.m.Y', $ticket->created)
     ],
   ];
-  $output['ticket']['id-wrapper'] = [
+  $output['ticket']['metadata']['ticket-link'] = [
     '#type' => 'container',
+    // For the future, when will need to hide ticket and link from unaccessed users.
+    '#access' => TRUE,
     '#attributes' => [
-      'class' => ['ticket-id', 'small-inline-text']
+      'class' => ['ticket-id']
     ],
     'icon' => [
-      '#type' => 'markup',
       '#markup' => '<i class="fa fa-eye"></i>'
     ],
-    'id' => [
-      '#type' => 'markup',
-      '#markup' => l(t('Open ticket'), 'node/' . $ticket->nid)
+    'content' => [
+      '#theme' => 'link',
+      '#path' => 'node/' . $ticket->nid,
+      '#text' => t('Open ticket'),
+      // A bug of Drupal, which disallows
+      // to create links without define attributes.
+      '#options' => array(
+        'html' => false,
+        'attributes' => array()
+      ),
     ],
   ];
-  $output['ticket']['author-wrapper'] = [
+  $output['ticket']['metadata']['author'] = [
     '#type' => 'container',
     '#attributes' => [
-      'class' => ['ticket-author', 'small-inline-text']
+      'class' => ['ticket-author']
     ],
     'icon' => [
-      '#type' => 'markup',
       '#markup' => '<i class="fa fa-user"></i>'
     ],
-    'author' => [
-      '#type' => 'markup',
-      '#markup' => l($ticket_author->name, 'user/' . $ticket_author->uid)
+    'content' => [
+      '#theme' => 'link',
+      '#path' => 'user/' . $ticket_author->uid,
+      '#text' => $ticket_author->name,
+      // A bug of Drupal, which disallows
+      // to create links without define attributes.
+      '#options' => array(
+        'html' => false,
+        'attributes' => array()
+      )
     ],
   ];
 

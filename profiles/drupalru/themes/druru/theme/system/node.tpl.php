@@ -94,7 +94,7 @@
   <?php endif; ?>
   <?php print render($title_suffix); ?>
 
-  <div class="node-header">
+  <div class="node-header clearfix">
     <span class="node-header-item">
       <?php print $user_picture; ?>
     </span>

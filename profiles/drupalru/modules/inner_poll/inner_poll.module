@@ -334,10 +334,21 @@ function inner_poll_form_alter(&$form, $form_state, $form_id) {
 }
 
 /**
- * Implements hook_node_validate().
+ * Implements hook_node_insert().
+ *
+ * Обработка события создания ноды.
  */
-function inner_poll_node_validate($node, $form, &$form_state) {
-  empty($node->nid) ? _add_new_poll($node) : _update_poll($node);
+function inner_poll_node_insert($node) {
+  _add_new_poll($node);
+}
+
+/**
+ * Implements hook_node_update().
+ *
+ * Обработка события обновления ноды.
+ */
+function inner_poll_node_update($node) {
+  _update_poll($node);
 }
 
 /**

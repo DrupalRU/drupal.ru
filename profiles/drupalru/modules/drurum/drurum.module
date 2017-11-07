@@ -387,3 +387,12 @@ function drurum_form_menu_edit_item_submit($form, &$form_state) {
     $vals['options']['html_allowed'] = $vals['html_allowed'];
   }
 }
+
+/**
+ * Implements hook_node_submit().
+ */
+function drurum_node_submit($node, $form, &$form_state) {
+  if ($form['#form_id'] == 'blog_node_form') {
+    $node->title = mb_strtoupper(mb_substr($node->title, 0, 1)) . mb_substr($node->title, 1);
+  }
+}

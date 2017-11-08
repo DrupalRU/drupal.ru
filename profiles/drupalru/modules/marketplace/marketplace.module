@@ -316,7 +316,10 @@ function marketplace_view($node, $view_mode, $langcode = NULL) {
     $website = 'http://' . $website;
   }
   $node->content['website'] = array(
-    '#markup' => l($node->website, $website, array('attributes' => array('rel' => 'nofollow'))),
+    '#markup' => l($node->website, $website, array('attributes' => array(
+      'rel' => 'nofollow',
+      'target' => '_blank',
+    ))),
     '#weight' => 1,
   );
 

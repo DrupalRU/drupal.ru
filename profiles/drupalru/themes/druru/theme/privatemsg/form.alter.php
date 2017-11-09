@@ -189,13 +189,13 @@ function druru_form_pm_block_user_list_alter(&$form, &$form_state) {
   $form['form'] = array(
     '#type' => 'container',
     '#attributes' => array(
-      'class' => array('col-xs-6', 'col-sm-9'),
+      'class' => array('col-xs-12', 'col-sm-8'),
     ),
   );
   $form['actions'] = array(
     '#type'       => 'container',
     '#attributes' => array(
-      'class' => array('col-xs-6', 'col-sm-3'),
+      'class' => array('col-xs-12', 'col-sm-4'),
     ),
   );
 
@@ -208,6 +208,6 @@ function druru_form_pm_block_user_list_alter(&$form, &$form_state) {
 
   $form['actions']['submit'] = $form['form']['submit'];
   $form['actions']['submit']['#value'] = t('Ban');
-  $form['actions']['submit']['#attributes']['class'][] = 'btn-warning pull-right';
+  $form['actions']['submit']['#attributes']['class'][] = 'btn-warning btn-block';
   unset($form['new'], $form['form']['submit']);
 }

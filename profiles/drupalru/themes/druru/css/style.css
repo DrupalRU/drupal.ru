@@ -6786,11 +6786,6 @@ fieldset[disabled] .btn-accent.focus {
 .tabs--primary li.active a.active {
   border-bottom: 1px solid #df9b10;
 }
-@media screen and (max-width: 747px) {
-  .tabs--primary {
-    margin-bottom: 10px !important;
-  }
-}
 #navbar {
   font-weight: 300;
 }
@@ -8132,19 +8127,6 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
 }
 .page-header i {
   color: #797979;
-}
-.page-events .page-header + h2 + .nav,
-.node-type-organization .page-header + h2 + .nav,
-.node-type-blog .page-header + h2 + .nav,
-.node-type-page .page-header + h2 + .nav,
-.node-type-ticket .page-header + h2 + .nav,
-.page-alttracker .page-header + h2 + .nav,
-.page-forum .page-header + h2 + .nav,
-.page-messages:not(.page-messages-view) .page-header + h2 + .nav,
-.page-user .page-header + h2 + .nav,
-.page-blog .page-header + h2 + .nav,
-.node-type-simple-event .page-header + h2 + .nav {
-  margin-bottom: 0;
 }
 @media screen and (min-width: 748px) {
   .page-events .page-header,

@@ -8156,6 +8156,19 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
   .node-type-simple-event .page-header + .alert {
     clear: both;
   }
+  .page-events .page-header + h2 + .nav,
+  .node-type-organization .page-header + h2 + .nav,
+  .node-type-blog .page-header + h2 + .nav,
+  .node-type-page .page-header + h2 + .nav,
+  .node-type-ticket .page-header + h2 + .nav,
+  .page-alttracker .page-header + h2 + .nav,
+  .page-forum .page-header + h2 + .nav,
+  .page-messages:not(.page-messages-view) .page-header + h2 + .nav,
+  .page-user .page-header + h2 + .nav,
+  .page-blog .page-header + h2 + .nav,
+  .node-type-simple-event .page-header + h2 + .nav {
+    margin-bottom: 0;
+  }
 }
 a:focus,
 a:hover,

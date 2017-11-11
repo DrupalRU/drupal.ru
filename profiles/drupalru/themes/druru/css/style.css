@@ -6786,6 +6786,11 @@ fieldset[disabled] .btn-accent.focus {
 .tabs--primary li.active a.active {
   border-bottom: 1px solid #df9b10;
 }
+@media screen and (max-width: 747px) {
+  .tabs--primary {
+    margin-bottom: 10px !important;
+  }
+}
 #navbar {
   font-weight: 300;
 }

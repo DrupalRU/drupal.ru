@@ -55,7 +55,6 @@ function alttracker_permission() {
   );
 }
 
-
 /**
  * Implements hook_menu().
  */
@@ -72,12 +71,14 @@ function alttracker_menu() {
     'title' => 'All recent content',
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
+
   $items['alttracker/my'] = array(
     'title' => 'My recent content',
     'page callback' => 'alttracker_page_my',
     'access arguments' => array('access content'),
     'type' => MENU_LOCAL_TASK,
     'file' => 'alttracker.pages.inc',
+    'access callback' => 'user_is_logged_in',
   );
 
   $items['user/%user/alttracker'] = array(
@@ -89,6 +90,7 @@ function alttracker_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'alttracker.pages.inc',
   );
+
   $items['user/%user/alttracker/content'] = array(
     'title' => 'Track content',
     'type' => MENU_DEFAULT_LOCAL_TASK,

@@ -8143,19 +8143,6 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
     max-width: calc(100% - 180px);
     float: left;
   }
-  .page-events .page-header + .alert,
-  .node-type-organization .page-header + .alert,
-  .node-type-blog .page-header + .alert,
-  .node-type-page .page-header + .alert,
-  .node-type-ticket .page-header + .alert,
-  .page-alttracker .page-header + .alert,
-  .page-forum .page-header + .alert,
-  .page-messages:not(.page-messages-view) .page-header + .alert,
-  .page-user .page-header + .alert,
-  .page-blog .page-header + .alert,
-  .node-type-simple-event .page-header + .alert {
-    clear: both;
-  }
   .page-events .page-header + h2 + .nav,
   .node-type-organization .page-header + h2 + .nav,
   .node-type-blog .page-header + h2 + .nav,
@@ -8168,6 +8155,19 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
   .page-blog .page-header + h2 + .nav,
   .node-type-simple-event .page-header + h2 + .nav {
     margin-bottom: 0;
+  }
+  .page-events .page-header + .alert,
+  .node-type-organization .page-header + .alert,
+  .node-type-blog .page-header + .alert,
+  .node-type-page .page-header + .alert,
+  .node-type-ticket .page-header + .alert,
+  .page-alttracker .page-header + .alert,
+  .page-forum .page-header + .alert,
+  .page-messages:not(.page-messages-view) .page-header + .alert,
+  .page-user .page-header + .alert,
+  .page-blog .page-header + .alert,
+  .node-type-simple-event .page-header + .alert {
+    clear: both;
   }
 }
 a:focus,

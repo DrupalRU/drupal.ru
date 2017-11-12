@@ -3751,6 +3751,7 @@ a.thumbnail.active {
 }
 .media-body {
   width: 10000px;
+  word-break: break-all;
 }
 .media-object {
   display: block;

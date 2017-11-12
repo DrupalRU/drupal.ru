@@ -3751,7 +3751,6 @@ a.thumbnail.active {
 }
 .media-body {
   width: 10000px;
-  word-break: break-all;
 }
 .media-object {
   display: block;
@@ -8089,6 +8088,9 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
   width: 21px;
   text-align: center;
   margin-right: 3px;
+}
+.main-content .comment .media-body {
+  word-break: break-all;
 }
 .main-content .indented {
   padding-left: 12px;

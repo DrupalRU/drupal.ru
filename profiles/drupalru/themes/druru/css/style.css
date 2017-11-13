@@ -8089,8 +8089,9 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
   text-align: center;
   margin-right: 3px;
 }
-.main-content .comment .media-body {
+.main-content .comment .media-body a {
   word-break: break-all;
+  display: inline-block;
 }
 .main-content .indented {
   padding-left: 12px;

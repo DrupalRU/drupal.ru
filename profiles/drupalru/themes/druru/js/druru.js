@@ -508,14 +508,11 @@ var Drupal = Drupal || {};
     }
   };
 
-  $('.comment .media-body .content').each(function() {
-    var commentRoot = $(this).parent().parent();
-    // если коммент больше родителя, значит это наш случай
-    if ($(this).width() > commentRoot.width()) {
-      // не забываем отнять ширину аватарки
-      $(this).width(commentRoot.width() - commentRoot.children().width());
-      $(this).css('overflow', 'auto');
-      $(this).css('white-space', 'nowrap');
+  $('.comment .content').each(function() {
+    var $comment = $(this).closest('.comment'),
+	    $this = $(this);
+    if ($this.width() > $comment.width()) {
+      $this.css('max-width', $comment.width() - $comment.find('.media-left').width());
     }
   });
 

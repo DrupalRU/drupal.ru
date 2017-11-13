@@ -514,6 +514,8 @@ var Drupal = Drupal || {};
     if ($(this).width() > commentRoot.width()) {
       // не забываем отнять ширину аватарки
       $(this).width(commentRoot.width() - commentRoot.children().width());
+      $(this).css('overflow', 'auto');
+      $(this).css('white-space', 'nowrap');
     }
   });
 

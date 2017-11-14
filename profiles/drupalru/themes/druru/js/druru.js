@@ -510,11 +510,11 @@ var Drupal = Drupal || {};
 
   // issue-639: Добавить скролинг тела комментариев
   $('.comment').each(function() {
-    var comment = $(this),
-      content = comment.find('.content'),
-      contentWidth = content.width(),
-      allowedRightSide = comment.width() - comment.find('.media-left').outerWidth(true) - (content.outerWidth(true) - contentWidth);
-    contentWidth > allowedRightSide ? content.css('max-width', allowedRightSide) : null;
+    var $comment = $(this),
+      $content = $comment.find('.content'),
+      contentWidth = $content.width(),
+      allowedRightSide = $comment.width() - $comment.find('.media-left').outerWidth(true) - ($content.outerWidth(true) - contentWidth);
+    contentWidth > allowedRightSide ? $content.css('max-width', allowedRightSide) : null;
   });
 
 })(jQuery, Drupal);

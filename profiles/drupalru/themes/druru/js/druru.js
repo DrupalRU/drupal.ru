@@ -508,12 +508,13 @@ var Drupal = Drupal || {};
     }
   };
 
-  $('.comment .content').each(function() {
-    var $comment = $(this).closest('.comment'),
-	    $this = $(this);
-    if ($this.width() > $comment.width()) {
-      $this.css('max-width', $comment.width() - $comment.find('.media-left').width());
-    }
+  // issue-639: Добавить скролинг тела комментариев
+  $('.comment').each(function() {
+    var comment = $(this),
+      content = comment.find('.content'),
+      contentWidth = content.width(),
+      allowedRightSide = comment.width() - comment.find('.media-left').outerWidth(true) - (content.outerWidth(true) - contentWidth);
+    contentWidth > allowedRightSide ? content.css('max-width', allowedRightSide) : null;
   });
 
 })(jQuery, Drupal);

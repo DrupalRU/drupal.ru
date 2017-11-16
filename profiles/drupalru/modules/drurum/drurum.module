@@ -27,15 +27,15 @@ function drurum_module_implements_alter(&$implementations, $hook) {
  * Implements hook_menu().
  */
 function drurum_menu() {
-  $items['admin/config/system/drupal-ru'] = array(
+  $items['admin/config/system/drupal-ru'] = [
     'title' => 'Drupal.ru customizations',
     'type' => MENU_NORMAL_ITEM,
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('drurum_admin_form'),
-    'access arguments' => array('administer site configurations'),
+    'page arguments' => ['drurum_admin_form'],
+    'access arguments' => ['administer site configurations'],
     'file' => 'drurum.admin.inc',
     'file path' => drupal_get_path('module', 'drurum') . '/includes',
-  );
+  ];
   return $items;
 }
 
@@ -44,8 +44,51 @@ function drurum_menu() {
  */
 function drurum_help($path, $arg) {
   $help = variable_get('drurum_add_organization_help');
-  if($path == 'node/add/organization' && $help) {
+  if ($path == 'node/add/organization' && $help) {
     return $help;
+  }
+}
+
+/**
+ * Implements hook_node_access().
+ */
+function drurum_node_access($node, $op, $account) {
+  $access = NODE_ACCESS_IGNORE;
+  if ($op == 'update' && !user_access('drurum bypass expiration', $account)) {
+    $time = variable_get('drurum_exp_time_' . $node->type, '1 month');
+    if ($node->created * 1 < strtotime("-{$time}")) {
+      $access = NODE_ACCESS_DENY;
+    }
+  }
+  return $access;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function drurum_permission() {
+  return [
+    'drurum bypass expiration' => [
+      'title' => t('Bypass restriction by expiration time'),
+      'description' => t('Allowed to edit nodes by default permissions bypassing restrictions by expiration time.'),
+    ],
+  ];
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for node_type_form().
+ */
+function drurum_form_node_type_form_alter(&$form, &$form_state, $form_id) {
+  if (isset($form['type'])) {
+    $type = $form['#node_type']->type;
+    $form['workflow']['drurum_exp_time'] = [
+      '#type' => 'textfield',
+      '#title' => t('Expiration time'),
+      '#description' => t('Expiration time, after which editing will be disallowed. The value will be used through function !strtotime.', [
+        '!strtotime' => l('strtotime', 'http://php.net/manual/ru/function.strtotime.php'),
+      ]),
+      '#default_value' => variable_get('drurum_exp_time_' . $type, '1 month'),
+    ];
   }
 }
 
@@ -70,7 +113,7 @@ function drurum_preprocess_menu_local_action(&$link) {
  */
 function drurum_query_alter(QueryAlterableInterface $query) {
   $tables = $query->getTables();
-  $joins = array('n', 'ncs', 'f', 'u', 'u2');
+  $joins = ['n', 'ncs', 'f', 'u', 'u2'];
   // The query at forum page has many joins and we can detect it easy.
   if (count(array_intersect($joins, array_keys($tables))) == 5) {
     // Forum index page requested sorting here.
@@ -98,9 +141,9 @@ function drurum_deliver_html_page($page_callback_result) {
 
   if ($is_access_denied && $redirect_enabled && user_is_anonymous()) {
     drupal_set_message(t('Please log in to continue'));
-    drupal_goto('user/login', array(
+    drupal_goto('user/login', [
       'query' => drupal_get_destination(),
-    ));
+    ]);
   }
   else {
     drupal_deliver_html_page($page_callback_result);
@@ -121,13 +164,13 @@ function drurum_page_delivery_callback_alter(&$callback) {
  * Implements hook_block_info().
  */
 function drurum_block_info() {
-  $blocks['new'] = array(
+  $blocks['new'] = [
     'info' => t('New at the forum'),
     'cache' => DRUPAL_CACHE_CUSTOM,
-    'properties' => array(
+    'properties' => [
       'administrative' => TRUE,
-    ),
-  );
+    ],
+  ];
   return $blocks;
 }
 
@@ -141,7 +184,7 @@ function druru_block_configure($delta = '') {
 /**
  * Implements hook_block_save().
  */
-function druru_block_save($delta = '', $edit = array()) {
+function druru_block_save($delta = '', $edit = []) {
   forum_block_save($delta, $edit);
 }
 
@@ -152,7 +195,7 @@ function drurum_block_view($delta = '') {
   global $user;
   $query = db_select('forum_index', 'f')->fields('f')->addTag('node_access');
   $query->leftJoin('node', 'n', 'f.nid = n.nid');
-  $query->fields('n', array('type', 'changed'));
+  $query->fields('n', ['type', 'changed']);
   $title = '';
   switch ($delta) {
     case 'active':
@@ -164,19 +207,18 @@ function drurum_block_view($delta = '') {
     case 'new':
       $title = t('New forum topics');
       $count = drupal_is_front_page() ? 30 : variable_get('forum_block_num_new', 5);
-      $hide_dark_matter = (isset($user->darkmatter) ? $user->darkmatter == 1 : false);
+      $hide_dark_matter = (isset($user->darkmatter) ? $user->darkmatter == 1 : FALSE);
       if (!$hide_dark_matter) {
         $query->condition('n.darkmatter', 0);
       }
-      $query->orderBy('f.created', 'DESC')
-        ->range(0, $count);
+      $query->orderBy('f.created', 'DESC')->range(0, $count);
       break;
   }
 
   // Attach resolved mark.
-  if (module_enable(array('resolve'))) {
+  if (module_enable(['resolve'])) {
     $query->leftJoin('resolved', 'r', 'r.nid = f.nid');
-    $query->fields('r', array('resolved'));
+    $query->fields('r', ['resolved']);
   }
 
   $block['subject'] = $title;
@@ -187,13 +229,13 @@ function drurum_block_view($delta = '') {
   $result = $query->execute();
   $node_title_list = drurum_node_title_list($result);
   if ($node_title_list) {
-    $block['content'] = array();
+    $block['content'] = [];
     $block['content']['forum_list'] = $node_title_list;
-    $block['content']['forum_more'] = array(
+    $block['content']['forum_more'] = [
       '#theme' => 'more_link',
       '#url' => 'forum',
       '#title' => t('Read the latest forum topics.'),
-    );
+    ];
   }
   return $block;
 }
@@ -216,7 +258,7 @@ function drurum_menu_local_tasks_alter(&$data, $router_item, $root_path) {
  */
 function drurum_privatemsg_autocomplete_alter(&$matches, $names, $fragment) {
   $select = db_select('pm_block_user', 'pmb')
-    ->fields('pmb', array('author'))
+    ->fields('pmb', ['author'])
     ->condition('pmb.recipient', $GLOBALS['user']->uid);
 
   // Only show existing users, therefore join users.
@@ -234,10 +276,10 @@ function drurum_privatemsg_autocomplete_alter(&$matches, $names, $fragment) {
  * @see node_title_list().
  */
 function drurum_node_title_list($result, $title = NULL) {
-  $items = array();
+  $items = [];
 
   foreach ($result as $node) {
-    $options = array('html' => TRUE);
+    $options = ['html' => TRUE];
 
     // Add comment count to title.
     if (!empty($node->comment_count)) {
@@ -245,22 +287,22 @@ function drurum_node_title_list($result, $title = NULL) {
       $option['attributes']['title'] = $node_title;
     }
     $icon = drurum_node_icon($node);
-    $mark = theme('mark', array(
+    $mark = theme('mark', [
       'type' => node_mark($node->nid, $node->changed),
-    ));
+    ]);
 
     $items[] = l($icon . check_plain($node->title) . $mark, 'node/' . $node->nid, $options);
   }
 
-  return $items ? array(
+  return $items ? [
     '#theme' => 'item_list__node',
     '#items' => $items,
     '#title' => $title,
-  ) : FALSE;
+  ] : FALSE;
 }
 
 function drurum_node_icon($node) {
-  $node_types = &drupal_static(__FUNCTION__, array());
+  $node_types = &drupal_static(__FUNCTION__, []);
   if (!isset($node_types[$node->nid])) {
     $node_types[$node->nid] = NULL;
     $icon = &$node_types[$node->nid];
@@ -295,7 +337,7 @@ function drurum_node_icon($node) {
 }
 
 function drurum_need_to_resolve($nid) {
-  $resolved = &drupal_static(__FUNCTION__, array());
+  $resolved = &drupal_static(__FUNCTION__, []);
   if (!isset($resolved[$nid])) {
     $resolved[$nid] = db_select('taxonomy_index', 'ti')
         ->condition('ti.nid', $nid)
@@ -313,11 +355,11 @@ function drurum_simple_events_list() {
 
   if (_node_add_access()) {
     $default_message .= '<div>';
-    $default_message .= l(t('Add event'), 'node/add/simple-event', array(
-      'attributes' => array(
-        'class' => array('btn', 'btn-success'),
-      ),
-    ));
+    $default_message .= l(t('Add event'), 'node/add/simple-event', [
+      'attributes' => [
+        'class' => ['btn', 'btn-success'],
+      ],
+    ]);
     $default_message .= '</div>';
   }
 
@@ -325,18 +367,18 @@ function drurum_simple_events_list() {
   if (!empty($nids)) {
     $nodes = node_load_multiple($nids);
     $build = node_view_multiple($nodes);
-    $build['pager'] = array(
+    $build['pager'] = [
       '#theme' => 'pager',
       '#weight' => 5,
-    );
+    ];
   }
   else {
     $default_message .= '<p>' . t('No upcoming events yet.') . '</p>';
-    $build['default_message'] = array(
+    $build['default_message'] = [
       '#markup' => $default_message,
       '#prefix' => '<div id="first-time">',
       '#suffix' => '</div>',
-    );
+    ];
   }
   return $build;
 }
@@ -347,7 +389,7 @@ function _drurum_simple_events_list_nodes() {
   $query->join('simple_events', 'e', 'e.vid = n.vid');
   $query->condition('n.type', 'simple_event', '=')
     ->condition('n.status', 1)
-    ->fields('n', array('nid', 'created'))
+    ->fields('n', ['nid', 'created'])
     ->orderBy('e.time_from', 'ASC')
     ->extend('PagerDefault')
     ->limit(variable_get('default_nodes_main', 10));
@@ -374,11 +416,11 @@ function drurum_form_menu_edit_item_alter(&$form, &$form_state) {
   if (isset($build['args'][1]['options']['html_allowed'])) {
     $html_allowed = $build['args'][1]['options']['html_allowed'];
   }
-  $form['html_allowed'] = array(
+  $form['html_allowed'] = [
     '#type' => 'checkbox',
     '#title' => 'Html in title',
     '#default_value' => $html_allowed,
-  );
+  ];
 }
 
 function drurum_form_menu_edit_item_submit($form, &$form_state) {

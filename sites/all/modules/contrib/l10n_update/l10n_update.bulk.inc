@@ -148,6 +148,7 @@ function l10n_update_export_form($form, &$form_state) {
     }
   }
   $language_default = language_default();
+  $groups = module_invoke_all('locale', 'groups');
 
   if (empty($language_options)) {
     $form['langcode'] = array(
@@ -168,6 +169,12 @@ function l10n_update_export_form($form, &$form_state) {
       '#default_value' => $language_default->id,
       '#empty_option' => t('Source text only, no translations'),
       '#empty_value' => $language->language,
+    );
+    $form['textgroup'] = array(
+      '#type' => 'select',
+      '#title' => t('Text group'),
+      '#options' => $groups,
+      '#default_value' => 'default',
     );
     $form['content_options'] = array(
       '#type' => 'details',
@@ -222,11 +229,13 @@ function l10n_update_export_form_submit($form, &$form_state) {
     $language = NULL;
   }
   $content_options = isset($form_state['values']['content_options']) ? $form_state['values']['content_options'] : array();
+  $textgroup = isset($form_state['values']['textgroup']) ? $form_state['values']['textgroup'] : NULL;
   $reader = new PoDatabaseReader();
   $languageName = '';
   if ($language != NULL) {
     $reader->setLangcode($language->id);
     $reader->setOptions($content_options);
+    $reader->setTextgroup($textgroup);
     $languages = language_list();
     $languageName = isset($languages[$language->id]) ? $languages[$language->id]->name : '';
     $filename = $language->id . '.po';
@@ -278,7 +287,7 @@ function l10n_update_export_form_submit($form, &$form_state) {
  * @todo
  *   Integrate with update status to identify projects needed and integrate
  *   l10n_update functionality to feed in translation files alike.
- *   See http://drupal.org/node/1191488.
+ *   See https://www.drupal.org/node/1191488.
  */
 function l10n_update_batch_import_files(array $options, $force = FALSE) {
   $options += array(
@@ -359,7 +368,6 @@ function l10n_update_get_interface_translation_files($projects = array(), $langc
  *
  * @param array $files
  *   Array of file objects to import.
- *
  * @param array $options
  *   An array with options that can have the following elements:
  *   - 'langcode': The language code. Optional, defaults to NULL, which means
@@ -373,7 +381,7 @@ function l10n_update_get_interface_translation_files($projects = array(), $langc
  *   - 'finish_feedback': Whether or not to give feedback to the user when the
  *     batch is finished. Optional, defaults to TRUE.
  *
- * @return array|boolean
+ * @return array|bool
  *   A batch structure or FALSE if $files was empty.
  */
 function l10n_update_batch_build(array $files, array $options) {
@@ -426,7 +434,7 @@ function l10n_update_batch_build(array $files, array $options) {
  *     to L10N_UPDATE_NOT_CUSTOMIZED.
  *   - 'message': Alternative message to display during import. Note, this must
  *     be sanitized text.
- * @param $context
+ * @param array $context
  *   Contains a list of files imported.
  */
 function l10n_update_batch_import($file, array $options, &$context) {
@@ -458,7 +466,7 @@ function l10n_update_batch_import($file, array $options, &$context) {
         // Maximize the progress bar at 95% before completion, the batch API
         // could trigger the end of the operation before file reading is done,
         // because of floating point inaccuracies. See
-        // http://drupal.org/node/1089472
+        // https://www.drupal.org/node/1089472
         $context['finished'] = min(0.95, $report['seek'] / filesize($file->uri));
         if (isset($options['message'])) {
           $context['message'] = t('!message (@percent%).', array('!message' => $options['message'], '@percent' => (int) ($context['finished'] * 100)));
@@ -530,7 +538,7 @@ function l10n_update_batch_import_save($context) {
 /**
  * Refreshs translations after importing strings.
  *
- * @param $context
+ * @param array $context
  *   Contains a list of strings updated and information about the progress.
  */
 function l10n_update_batch_refresh(&$context) {
@@ -606,9 +614,17 @@ function l10n_update_batch_finished($success, $results) {
       drupal_set_message(format_plural(count($results['files']),
         'One translation file imported. %number translations were added, %update translations were updated and %delete translations were removed.',
         '@count translation files imported. %number translations were added, %update translations were updated and %delete translations were removed.',
-        array('%number' => $additions, '%update' => $updates, '%delete' => $deletes)
+        array(
+          '%number' => $additions,
+          '%update' => $updates,
+          '%delete' => $deletes,
+        )
       ));
-      watchdog('l10n_update', 'Translations imported: %number added, %update updated, %delete removed.', array('%number' => $additions, '%update' => $updates, '%delete' => $deletes));
+      watchdog('l10n_update', 'Translations imported: %number added, %update updated, %delete removed.', array(
+        '%number' => $additions,
+        '%update' => $updates,
+        '%delete' => $deletes,
+      ));
 
       if ($skips) {
         if (module_exists('dblog')) {
@@ -618,7 +634,10 @@ function l10n_update_batch_finished($success, $results) {
           $message = format_plural($skips, 'One translation string was skipped because of disallowed or malformed HTML. See the log for details.', '@count translation strings were skipped because of disallowed or malformed HTML. See the log for details.');
         }
         drupal_set_message($message, 'warning');
-        watchdog('l10n_update', '@count disallowed HTML string(s) in files: @files.', array('@count' => $skips, '@files' => implode(',', $skipped_files)), WATCHDOG_WARNING);
+        watchdog('l10n_update', '@count disallowed HTML string(s) in files: @files.', array(
+          '@count' => $skips,
+          '@files' => implode(',', $skipped_files),
+        ), WATCHDOG_WARNING);
       }
     }
   }
@@ -668,7 +687,7 @@ function l10n_update_file_attach_properties($file, $options = array()) {
   }
 
   // Extract project, version and language code from the file name. Supported:
-  // {project}-{version}.{langcode}.po, {prefix}.{langcode}.po or {langcode}.po
+  // {project}-{version}.{langcode}.po, {prefix}.{langcode}.po or {langcode}.po.
   preg_match('!
     (                       # project OR project and version OR emtpy (group 1)
       ([a-z_]+)             # project name (group 2)

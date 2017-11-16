@@ -32,9 +32,10 @@ files[] = tests/L10nUpdateCronTest.test
 files[] = tests/L10nUpdateInterfaceTest.test
 files[] = tests/L10nUpdateTest.test
 files[] = tests/L10nUpdateTestBase.test
-; Information added by Drupal.org packaging script on 2016-12-03
-version = "7.x-2.1"
+
+; Information added by Drupal.org packaging script on 2017-09-18
+version = "7.x-2.2"
 core = "7.x"
 project = "l10n_update"
-datestamp = "1480765987"
+datestamp = "1505717347"
 

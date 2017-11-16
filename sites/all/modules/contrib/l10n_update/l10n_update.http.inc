@@ -13,7 +13,7 @@
  * @param array $headers
  *   HTTP request headers.
  *
- * @return object|boolean
+ * @return object|bool
  *   Result object containing the HTTP request headers, response code, headers,
  *   data, redirect status and updated timestamp.
  *
@@ -54,7 +54,7 @@ function l10n_update_http_check($url, array $headers = array()) {
  * Perform an HTTP request.
  *
  * We cannot use drupal_http_request() at install,
- * see http://drupal.org/node/527484
+ * see https://www.drupal.org/node/527484
  *
  * This is a flexible and powerful HTTP client implementation. Correctly
  * handles GET, POST, PUT or any other HTTP requests. Handles redirects.
@@ -95,6 +95,7 @@ function l10n_update_http_check($url, array $headers = array()) {
 function l10n_update_http_request($url, array $options = array()) {
   // Allow an alternate HTTP client library to replace l10n_update's default
   // implementation.
+  /** @var string $override_function */
   $override_function = variable_get('drupal_http_request_function', FALSE);
   if (!empty($override_function) && function_exists($override_function)) {
     return $override_function($url, $options);
@@ -131,7 +132,7 @@ function l10n_update_http_request($url, array $options = array()) {
 
   // Merge the default headers.
   $options['headers'] += array(
-    'User-Agent' => 'Drupal (+http://drupal.org/)',
+    'User-Agent' => 'Drupal (+https://www.drupal.org/)',
   );
 
   // stream_socket_client() requires timeout to be a float.
@@ -215,7 +216,7 @@ function l10n_update_http_request($url, array $options = array()) {
     // server's ability to make outgoing HTTP requests the next time that
     // requirements checking is performed.
     // See system_requirements().
-    // variable_set('drupal_http_request_fails', TRUE);
+    // variable_set('drupal_http_request_fails', TRUE);.
     return $result;
   }
 

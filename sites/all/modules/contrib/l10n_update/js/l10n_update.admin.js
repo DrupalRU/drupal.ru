@@ -1,3 +1,8 @@
+/**
+ * @file
+ * JavaScript for the translate interface update page.
+ */
+
 (function ($) {
   'use strict';
 

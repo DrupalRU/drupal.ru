@@ -15,7 +15,15 @@ function fasttoggle_sitewide_toggleable_roles() {
   static $roles;
 
   if (!isset($roles)) {
-    $allowed_roles = array_filter(variable_get('fasttoggle_user_role_settings', array()));
+    $potential_roles = fasttoggle_potential_toggleable_roles();
+
+    $defaults = array();
+    foreach ($potential_roles as $rid => $role_name) {
+      $defaults["role_{$rid}"] = "role_{$rid}";
+    }
+
+    $values = variable_get('fasttoggle_user_role_settings', $defaults);
+    $allowed_roles = array_filter(variable_get('fasttoggle_user_role_settings', $defaults));
 
     // Trim the group ("role_") off the front of each key
     $new_array = array();

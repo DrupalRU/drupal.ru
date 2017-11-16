@@ -148,7 +148,11 @@ function l10n_update_schema_alter(&$schema) {
  * Implements hook_install().
  */
 function l10n_update_install() {
-  db_add_field('locales_target', 'l10n_status', array('type' => 'int', 'not null' => TRUE, 'default' => 0));
+  db_add_field('locales_target', 'l10n_status', array(
+    'type' => 'int',
+    'not null' => TRUE,
+    'default' => 0,
+  ));
   variable_set('l10n_update_rebuild_projects', 1);
 
   // Create the translation directory. We try different alternative paths as the
@@ -216,7 +220,10 @@ function l10n_update_requirements($phase) {
               'title' => 'Translation update status',
               'value' => l(t('Updates available'), 'admin/config/regional/translate/update'),
               'severity' => REQUIREMENT_WARNING,
-              'description' => t('Updates available for: @languages. See the <a href="!updates">Translate interface update</a> page for more information.', array('@languages' => implode(', ', $available_updates), '!updates' => url('admin/config/regional/translate/update'))),
+              'description' => t('Updates available for: @languages. See the <a href="!updates">Translate interface update</a> page for more information.', array(
+                '@languages' => implode(', ', $available_updates),
+                '!updates' => url('admin/config/regional/translate/update'),
+              )),
             );
           }
           else {
@@ -224,7 +231,10 @@ function l10n_update_requirements($phase) {
               'title' => 'Translation update status',
               'value' => t('Missing translations'),
               'severity' => REQUIREMENT_INFO,
-              'description' => t('Missing translations for: @languages. See the <a href="!updates">Translate interface update</a> page for more information.', array('@languages' => implode(', ', $untranslated), '!updates' => url('admin/config/regional/translate/update'))),
+              'description' => t('Missing translations for: @languages. See the <a href="!updates">Translate interface update</a> page for more information.', array(
+                '@languages' => implode(', ', $untranslated),
+                '!updates' => url('admin/config/regional/translate/update'),
+              )),
             );
           }
         }
@@ -271,14 +281,16 @@ function l10n_update_requirements($phase) {
  *   if the import behaviour setting (admin/config/regional/language/update)
  *   allows that.
  *
- * @param integer $limit
- *   The maximum number of records to process. 0 is all records.
+ * @param int $start
+ *   The number of start.
+ * @param int $length
+ *   The length number.
  * @param array $report
  *   Array containing import results.
  *
- * @return boolean
+ * @return bool
  *   Returns true conversion
- * a keyed array of log messages. Available keys:
+ *   a keyed array of log messages. Available keys:
  *   - message: Translated message
  *   - status: Message status. See drush_log() for supported values.
  */
@@ -300,7 +312,7 @@ function l10n_update_d8_plural_conversion($start = 0, $length = 0, array &$repor
       'not_customized' => $mode != LOCALE_IMPORT_KEEP,
       'customized' => $mode == LOCALE_IMPORT_OVERWRITE,
     ),
-    'customized' => L10N_UPDATE_NOT_CUSTOMIZED
+    'customized' => L10N_UPDATE_NOT_CUSTOMIZED,
   ));
   $writer_report = isset($report['writer']) ? $report['writer'] : array();
   $writer->setReport($writer_report);
@@ -317,7 +329,7 @@ function l10n_update_d8_plural_conversion($start = 0, $length = 0, array &$repor
     $item->setSource($sources);
     $item->setTranslation($translations);
     $item->setPlural(TRUE);
-    $item->setLangcode($plural->langcode);
+    $item->setLangcode($plural->language);
     $item->setTextgroup($plural->textgroup);
     $writer->writeItem($item);
 
@@ -338,9 +350,9 @@ function l10n_update_d8_plural_conversion($start = 0, $length = 0, array &$repor
 /**
  * Gets D8 plural style strings.
  *
- * @param integer $start
+ * @param int $start
  *   Offset of records to load.
- * @param integer $length
+ * @param int $length
  *   Maximum number of records to load.
  *
  * @return array|bool
@@ -352,10 +364,22 @@ function l10n_update_get_d8_plural_strings($start = 0, $length = 0) {
   $translation_strings = FALSE;
 
   $query = db_select('locales_source', 'ls');
-  $query->fields('ls', array('lid', 'location', 'textgroup', 'source', 'context', 'version'));
-  $query->fields('lt', array('translation', 'language', 'plid', 'plural', 'l10n_status'));
+  $query->fields('ls', array(
+    'lid', 'location',
+    'textgroup',
+    'source',
+    'context',
+    'version',
+  ));
+  $query->fields('lt', array(
+    'translation',
+    'language',
+    'plid',
+    'plural',
+    'l10n_status',
+  ));
   $query->innerJoin('locales_target', 'lt', 'ls.lid = lt.lid');
-  $query->condition('source','%' . db_like(L10N_UPDATE_PLURAL_DELIMITER) . '%', 'LIKE');
+  $query->condition('source', '%' . db_like(L10N_UPDATE_PLURAL_DELIMITER) . '%', 'LIKE');
   if ($length) {
     $query->range($start, $length);
   }
@@ -373,7 +397,7 @@ function l10n_update_get_d8_plural_strings($start = 0, $length = 0) {
 /**
  * Clean-up after plural string conversion.
  *
- * @param $results
+ * @param array $results
  *   Batch results array.
  */
 function l10n_update_finish_d8_plural_strings($results) {
@@ -470,10 +494,8 @@ function l10n_update_update_7200() {
   // Translation source 'Remote server only' is no longer supported. Use 'Remote
   // and local' instead.
   $mode = variable_get('l10n_update_check_mode', 3);
-  // L10N_UPDATE_USE_SOURCE_REMOTE_AND_LOCAL
   if ($mode == 1) {
     variable_set('l10n_update_check_mode', 3);
-    // L10N_UPDATE_USE_SOURCE_REMOTE_AND_LOCAL
   }
 
   // Daily cron updates are no longer supported. Use weekly instead.
@@ -562,9 +584,10 @@ function l10n_update_update_7207(&$sandbox) {
   $sandbox['progress'] += $batch_size;
 
   // Whether the batch is finished is determined by the result of
-  // l10n_update_d8_plural_conversion(). The progress (percentage) is calculated
+  // l10n_update_d8_plural_conversion().The progress (percentage) is
+  // calculated.
   if (empty($sandbox['max']) || $finished) {
-    $sandbox['#finished'] =  1;
+    $sandbox['#finished'] = 1;
   }
   else {
     $sandbox['#finished'] = $sandbox['progress'] / $sandbox['max'];
@@ -573,7 +596,7 @@ function l10n_update_update_7207(&$sandbox) {
   if ($sandbox['#finished'] == 1) {
     l10n_update_finish_d8_plural_strings($sandbox['report']['results']);
 
-    if($sandbox['report']['writer']['skips']) {
+    if ($sandbox['report']['writer']['skips']) {
       $message = t('Some problems were reported during plural string migration. See <a href="/admin/reports/dblog">Recent log messages</a> for details.');
     }
   }
@@ -588,4 +611,18 @@ function l10n_update_update_7208() {
   $status = variable_get('l10n_update_translation_status');
   cache_set('l10n_update_status', $status);
   variable_del('l10n_update_translation_status');
+}
+
+/**
+ * Update default variable values to use https.
+ */
+function l10n_update_update_7209() {
+  $server_url = variable_get('l10n_client_server', '');
+  if ($server_url == 'http://localize.drupal.org') {
+    variable_set('l10n_client_server', 'https://localize.drupal.org');
+  }
+  $update_url = variable_get('l10n_update_default_update_url', '');
+  if ($update_url == 'http://ftp.drupal.org/files/translations/%core/%project/%project-%release.%language.po') {
+    variable_set('l10n_update_default_update_url', L10N_UPDATE_DEFAULT_SERVER_PATTERN);
+  }
 }

@@ -58,7 +58,7 @@ function l10n_update_get_projects($project_names = array()) {
   if (empty($projects)) {
     // Get project data from the database.
     $result = db_query('SELECT name, project_type, core, version, l10n_path as server_pattern, status FROM {l10n_update_project}');
-    // http://drupal.org/node/1777106 is a follow-up issue to make the check for
+    // https://www.drupal.org/node/1777106 is a follow-up issue to make the check for
     // possible out-of-date project information more robust.
     if ($result->rowCount() == 0) {
       module_load_include('compare.inc', 'l10n_update');
@@ -160,7 +160,7 @@ function l10n_update_build_sources($projects = array(), $langcodes = array()) {
  * @param object $source
  *   Translation source object.
  *
- * @return object|boolean
+ * @return object|bool
  *   Source file object of the po file, updated with:
  *   - "uri": File name and path.
  *   - "timestamp": Last updated time of the po file.
@@ -488,7 +488,11 @@ function _l10n_update_default_update_options() {
  *   The string ID of the existing string modified or the new string added.
  */
 function _l10n_update_locale_import_one_string_db(array &$report, $langcode, $context, $source, $translation, $textgroup, $location, $mode, $status = L10N_UPDATE_NOT_CUSTOMIZED, $plid = 0, $plural = 0) {
-  $lid = db_query("SELECT lid FROM {locales_source} WHERE source = :source AND context = :context AND textgroup = :textgroup", array(':source' => $source, ':context' => $context, ':textgroup' => $textgroup))->fetchField();
+  $lid = db_query("SELECT lid FROM {locales_source} WHERE source = :source AND context = :context AND textgroup = :textgroup", array(
+    ':source' => $source,
+    ':context' => $context,
+    ':textgroup' => $textgroup,
+  ))->fetchField();
 
   if (!empty($translation)) {
     // Skip this string unless it passes a check for dangerous code.

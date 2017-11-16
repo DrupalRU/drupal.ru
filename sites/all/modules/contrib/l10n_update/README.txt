@@ -2,11 +2,11 @@
 Localization Update
 -------------------
   Automatically download and update your translations by fetching them from
-  http://localize.drupal.org or any other Localization server.
+  https://localize.drupal.org or any other Localization server.
 
   The l10n update module helps to keep the translation of your drupal core and
   contributed modules up to date with the central Drupal translation repository
-  at http://localize.drupal.org. Alternatively locally stored translation files
+  at https://localize.drupal.org. Alternatively locally stored translation files
   can be used as translation source too.
 
   By choice updates are performed automatically or manually. Locally altered
@@ -14,12 +14,13 @@ Localization Update
 
   The l10n update module is developed for:
    * Distributions which include their own translations in .po files.
-   * Site admins who want to update the translation with each new module revision.
+   * Site admins who want to update the translation with each new module
+     revision.
    * Site builders who want an easy tool to download translations for a site.
    * Multi-sites that share one translation source.
 
-  Project page:  http://drupal.org/project/l10n_update
-  Support queue: http://drupal.org/project/issues/l10n_update
+  Project page:  https://www.drupal.org/project/l10n_update
+  Support queue: https://www.drupal.org/project/issues/l10n_update
 
 Installation
 ------------
@@ -44,9 +45,11 @@ Update interface translations
 -----------------------------
   You want to import translations regularly using cron. You can enable this
   on Administration > Configuration > Regional and language > Languages:
-    Choose the "Translation updates" tab.
-    Change "Check for updates" to "Daily" or "Weekly" instead of the default "Never".
-  From now on cron will check for updated translations, and import them is required.
+   * Choose the "Translation updates" tab.
+   * Change "Check for updates" to "Daily" or "Weekly" instead of the default
+     "Never".
+  From now on cron will check for updated translations, and import them is
+  required.
 
   The status of the translations is reported on the "Status report" page at
   Administration > Reports.
@@ -55,7 +58,8 @@ Update interface translations
     Administration > Configuration > Regional and language > Translate inteface
     Choose the "Update" tab.
   You see a list of all modules and their translation status.
-  On the bottom of the page, you can manually update using "Update translations".
+  On the bottom of the page, you can manually update using "Update
+  translations".
 
 Use Drush
 ---------
@@ -68,10 +72,12 @@ Use Drush
 Summary of administrative pages
 -------------------------------
   Translations status overview can be found at
-    Administration > Configuration > Regional and language > Languages > Translation updates
+    Administration > Configuration > Regional and language > Languages
+    > Translation updates
 
   Update configuration settings can be found at
-    Administration > Configuration > Regional and language > Translate interface > Update
+    Administration > Configuration > Regional and language > Translate interface
+    > Update
 
 Translating Drupal core, modules and themes
 -------------------------------------------
@@ -90,7 +96,8 @@ Translating Drupal core, modules and themes
   strings will not be overwritten by translation updates.
   NOTE: Only manual changes made AFTER installing Localization Update module
   are preserved. To preserve manual changes made prior to installation of
-  Localization Update module, use the option 'All existing translations are kept...'.
+  Localization Update module, use the option 'All existing translations are
+  kept...'.
 
 po files, multi site and distributions
 --------------------------------------
@@ -100,7 +107,8 @@ po files, multi site and distributions
   as their translation source.
 
   All installations that share the same translation files must be configured
-  with the same 'Store downloaded files' file path e.g. 'sites/all/translations'.
+  with the same 'Store downloaded files' file path e.g.
+  'sites/all/translations'.
   Set the 'Update source' of one installation to 'Local files and remote server'
   or 'Remote server only', all other installations are set to
   'Local files only' or 'Local files and remote server'.
@@ -135,7 +143,7 @@ Missing translations
 
   If only a few of your contributed modules are in the list, first verify that
   the translation is actually missing by visiting the listed URL of the .po file
-  (for example "http://ftp.drupal.org/files/translations/7.x/views/views.hu.po")
+  (for example "https://ftp.drupal.org/files/translations/7.x/views/views.hu.po")
   When the file is not found, you either try again later or contact a
   translation administrator of your language at https://localize.drupal.org/.
 
@@ -178,7 +186,7 @@ API
 Using a Proxy
 -------------
 
-  Use the cURL HTTP Request module (https://drupal.org/project/chr) if your
+  Use the cURL HTTP Request module (https://www.drupal.org/project/chr) if your
   website is behind a proxy. If you want to use an alternative http request
   function, set the 'drupal_http_request_function', the same way as you would
   set it to override Drupal core's http_request function:

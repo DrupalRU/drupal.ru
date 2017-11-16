@@ -35,6 +35,8 @@ function fasttoggle_menu() {
   // general pattern is /fasttoggle/{obj_type}/{obj_id}/{group}/{instance}
   if (!empty($configs)) {
     foreach($configs as $key => $data) {
+      $object_type = $key;
+      $path_item = "%{$key}";
       if (isset($data['override_object_type'])) {
         if ($data['override_object_type'] > '')
           $path_item = "%{$data['override_object_type']}";
@@ -42,11 +44,8 @@ function fasttoggle_menu() {
           $path_item = "%";
       } else if (isset($data['object_type'])) {
         $path_item = "%{$data['object_type']}";
-      } else {
-        drupal_set_message("Invalid fasttoggle configuration detected for the '{$key}' object type.\n", 'error');
-        continue;
       }
-      $path = "fasttoggle/{$data['object_type']}/{$path_item}/%/%";
+      $path = "fasttoggle/$object_type/{$path_item}/%/%";
       $items[$path] = array(
           'title' => 'Toggle',
           'page callback' => 'fasttoggle_do_toggle_option',
@@ -114,7 +113,7 @@ function fasttoggle_get_object_value($options, $group, $instance, $object)
   }
   else {
     if (isset($options['fields'][$group]['instances'][$instance]['value_key'])) {
-      return $object->$options['fields'][$group]['instances'][$instance]['value_key'];
+      return $object->{$options['fields'][$group]['instances'][$instance]['value_key']};
     }
     else {
       return $object->$instance;
@@ -157,14 +156,35 @@ function fasttoggle($option_info, $group, $instance, $object, $format, $view = N
 
   if (empty($option_info['fields']['callback_fn'])) {
     $view = is_null($view) ? '' : "/{$view}";
-    $callback = "fasttoggle/{$option_info['object_type']}/{$object->$option_info['id_field']}/{$group}/{$instance}{$view}";
+    $callback = "fasttoggle/{$option_info['object_type']}/{$object->{$option_info['id_field']}}/{$group}/{$instance}{$view}";
   }
   else {
     $callback = $option_info['fields']['callback_fn']($option_info, $group, $instance, $object, $view);
   }
 
-  $token = $group . '_' . $instance . '_' . $object->$option_info['id_field'];
-  $selector_class = 'fasttoggle-status-' . $option_info['object_type'] . '-' . $object->$option_info['id_field'] . '-' . $group . '-' . $instance;
+  // Allow any rewriting of the URL to be done now, so our POST doesn't get turned into a GET.
+  if (module_exists('spaces')) {
+    $space = spaces_get_space_from_object($option_info['object_type'], $object);
+    $options = array();
+    if ($space && module_exists('purl')) {
+      $original_path = $callback;
+      $purl_params = array(
+          'query' => drupal_get_query_parameters($_GET, array('q')),
+          'purl' => array(
+            'provider' => "spaces_{$space->type}",
+            'id' => $object->{$option_info['id_field']},
+            'absolute' => TRUE,
+            )
+          );
+      $callback = url($callback, $purl_params);
+
+      // Strip the leading slash.
+      $callback = substr($callback, 1);
+    }
+  }
+
+  $token = $group . '_' . $instance . '_' . $object->{$option_info['id_field']};
+  $selector_class = 'fasttoggle-status-' . $option_info['object_type'] . '-' . $object->{$option_info['id_field']} . '-' . $group . '-' . $instance;
   $status_class = 'fasttoggle-status-' . $option_info['object_type'] . '-' . $group . '-' . $instance . '-' . $current_value;
 
   // Only include the support files once.
@@ -190,34 +210,81 @@ function fasttoggle($option_info, $group, $instance, $object, $format, $view = N
 }
 
 /**
+ * fasttoggle_link
+ *
+ * @param $type
+ *  (string) The type of object for which a link is wanted.
+ * @param $object
+ *   (stdClass) The instance of the object (eg user ID)
+ * @param $teaser
+ *   (int) Whether the link is to a teaser.
+ */
+function fasttoggle_link($type, $obj, $teaser = false)
+{
+  $links = array();
+  $options = fasttoggle_get_allowed_links($type, $obj);
+
+  if (!empty($options)) {
+    switch ($type) {
+    case 'node':
+      foreach (array_keys($options['fields']['status']['instances']) as $key) {
+        $links['fasttoggle_'. $key] = fasttoggle($options, 'status', $key, $obj, FASTTOGGLE_FORMAT_LINK_ARRAY);
+      }
+      break;
+    case 'comment':
+      fasttoggle_load_comment($obj);
+      foreach (array_keys($options['fields']['status']['instances']) as $key) {
+        $links['fasttoggle_'. $key] = fasttoggle($options, 'status', $key, $obj, FASTTOGGLE_FORMAT_LINK_ARRAY);
+      }
+      break;
+      // User is not one of the standard types for hook_link(). This
+      // use enables adding of user links to a user profile.
+    case 'user':
+      foreach (array_keys($options['fields']['status']['instances']) as $key) {
+        $links['fasttoggle_'. $key] = fasttoggle($options, 'status', $key, $obj, FASTTOGGLE_FORMAT_LINK_ARRAY);
+      }
+      break;
+    }
+  }
+
+  return $links;
+}
+
+/**
  * fasttoggle_get_available_links
  *
  * @param $type
  *   (optional) The object type for which available links are being sought.
  *
  * @param $obj
- *   (optional) An object object for which available links are being sought.
+ *   (optional) An object instance for which available links are being sought.
  *   The object's subtype (where applicable) may be used to further filter
  *   the links which are returned.
  *
  * @return
- *   If the parameter is NULL, returns an array containing all available links,
- *   indexed by type, is returned. If $type if not NULL, only the subtree for
- *   that type is returned. In the later case, hooks not supporting the chosen
- *   type may skip the work of doing any calculations or calls, saving time and
- *   memory.
+ *   If the parameter is NULL, an array containing all available links, indexed
+ *   by type, is returned. If $type if not NULL, only the subtree for that type
+ *   is returned. In the later case, hooks not supporting the chosen type may
+ *   skip the work of doing any calculations or calls, saving time andmemory.
  */
 function fasttoggle_get_available_links($type = NULL, $obj = NULL) {
   static $config = array();
 
   if (empty($config) || (!is_null($type) && empty($config[$type]))) {
-    if (is_null($type))
+    // The cache is completely empty or the type hasn't been cached.
+    if (is_null($type)) {
+      // Get all available links.
       $config = module_invoke_all('fasttoggle_available_links');
-    else {
+    } else {
+      // Just interested in one type.
       $temp = module_invoke_all('fasttoggle_available_links', $type, $obj);
+      if (!isset($temp[$type])) {
+        $temp[$type] = array();
+      }
       if (is_null($obj)) {
         $config[$type] = $temp[$type];
       } else
+        // Interested in a particular object. Don't cache.
         return $temp[$type];
     }
   }
@@ -321,14 +388,19 @@ function fasttoggle_get_allowed_links($type, $obj = NULL, $object_id = 0, $setti
         if (!isset($sitewide_setting_key) || isset($group_data['#title'])) {
           // Site wide settings
           $sitewide_setting_key = "fasttoggle_{$type}_{$group_name}_settings";
-          $sitewide_current_values = array_filter(variable_get($sitewide_setting_key, array()));
+          $sitewide_current_values = array_filter(variable_get($sitewide_setting_key, $defaults));
         }
         // Get the setting variable, if necessary.
         if (!isset($setting_key) || isset($group_data['#title'])) {
           // More localised settings
           $sub_type = isset($obj) && isset($filtering['subtype_field']) ? $obj->{$filtering['subtype_field']} : "";
           // For nodes, the setter adds the node type so we need to do so too when getting only.
-          $setting_key = isset($setting_prefix) ? "{$setting_prefix}_{$type}_{$obj->$filtering['subtype_field']}" : "fasttoggle_{$type}_{$group_name}_settings";
+          if (isset($setting_prefix)) {
+            $objfield = $filtering['subtype_field'];
+            $setting_key = "{$setting_prefix}_{$type}_{$obj->$objfield}";
+          } else {
+            $setting_key = "fasttoggle_{$type}_{$group_name}_settings";
+          }
           $current_values = array_filter(variable_get($setting_key, $defaults));
 
           // Some forms (node_type_admin...) do array_keys on the values saved.
@@ -437,95 +509,99 @@ function fasttoggle_do_toggle_option($object_type, $object, $group, $option, $vi
 
   // Check if the action is valid. This is essential to ensure the user has
   // access to the action.
-  if (isset($group_data['instances'][$option]) && isset($_GET['token']) && drupal_valid_token($_GET['token'], $group . '_' . $option . '_' . $object->$id_field, TRUE)) {
-    // The action is confirmed: either via form submit or via AJAX/POST
-    if ((isset($_POST['confirm']) && $_POST['confirm']) || (isset($_POST['js']) && $_POST['js'])) {
-      $selectorClass = 'fasttoggle-status-' . $object_type . '-' . $object->$id_field . '-' . $group . '-' . $option;
-      $label_data = $group_data['instances'][$option];
+  if (!isset($group_data['instances'][$option]) || !isset($_GET['token']) || !drupal_valid_token($_GET['token'], $group . '_' . $option . '_' . $object->$id_field, TRUE)) {
+    if (isset($_POST['js']) && $_POST['js']) {
+      $ajax_commands = array(
+          ajax_command_alert(t('Invalid ajax request'))
+      );
+      echo ajax_render($ajax_commands);
+      exit;
+  } else {
+      return MENU_NOT_FOUND;
+    }
+  }
 
-      if (isset($group_data['new_value_fn'])) {
-        $value = $group_data['new_value_fn']($object, $label_data['value_key']);
-      } else {
-        $current_value = fasttoggle_get_object_value($options, $group, $option, $object);
-        $labels = $label_data['labels'][$label_style];
+  // The action is confirmed: either via form submit or via AJAX/POST
+  if ((isset($_POST['confirm']) && $_POST['confirm']) || (isset($_POST['js']) && $_POST['js'])) {
+    $selectorClass = 'fasttoggle-status-' . $object_type . '-' . $object->$id_field . '-' . $group . '-' . $option;
+    $label_data = $group_data['instances'][$option];
 
-        // Find the current value. We need to cast as strings to ensure
-        // we stop at the right value.
-        while ((string) key($labels) !== (string) $current_value) {
-          next($labels);
+    if (isset($group_data['new_value_fn'])) {
+      $value = $group_data['new_value_fn']($object, $label_data['value_key']);
+    } else {
+      $current_value = fasttoggle_get_object_value($options, $group, $option, $object);
+      $labels = $label_data['labels'][$label_style];
+
+      // Find the current value. We need to cast as strings to ensure
+      // we stop at the right value.
+      while ((string)key($labels) !== (string)$current_value) {
+        next($labels);
+      }
+
+      do {
+        // Get the next value and wrap back to the start if necessary.
+        if (next($labels) === FALSE) {
+          reset($labels);
         }
 
-        do {
-          // Get the next value and wrap back to the start if necessary.
+        // Don't stop on the 'unset' value if the field is required.
+        if (key($labels) === '[unset]' && !$label_data['optional']) {
           if (next($labels) === FALSE) {
             reset($labels);
           }
+        }
 
-          // Don't stop on the 'unset' value if the field is required.
-          if (key($labels) === '[unset]' && !$label_data['optional']) {
-            if (next($labels) === FALSE) {
-              reset($labels);
-            }
-          }
+        // Go again if this value isn't allowed.
+      } while (isset($label_data['allowed_values']) && !in_array((string)key($labels), $label_data['allowed_values']));
 
-          // Go again if this value isn't allowed.
-        } while (isset($label_data['allowed_values']) && !in_array((string) key($labels), $label_data['allowed_values']));
+      // And get the new value we'll actually use.
+      $value = key($labels);
+    }
 
-        // And get the new value we'll actually use.
-        $value = key($labels);
-      }
+    // Save the new value.
+    if (!empty($group_data['save_fn']))
+      $group_data['save_fn']($options, $group, $option, $value, $object);
+    else
+      $options['save_fn']($options, $group, $option, $value, $object);
 
-      // Save the new value.
-      if (!empty($group_data['save_fn']))
-        $group_data['save_fn']($options, $group, $option, $value, $object);
-      else
-        $options['save_fn']($options, $group, $option, $value, $object);
+    $label = $labels[$value];
+    $object_label = entity_label($object_type, $object);
+    $newClass = 'fasttoggle-status-' . $object_type . '-' . $group . '-' . $option . '-' . $value;
 
-      $label = $labels[$value];
-      $object_label = entity_label($object_type, $object);
-      $newClass = 'fasttoggle-status-' . $object_type . '-' . $group . '-' . $option . '-' . $value;
+    watchdog('fasttoggle', '@type %title @option toggled to @value.', array('@type' => drupal_ucfirst($object_type), '%title' => $object_label, '@option' => ($option == $group ? $option : $group . ' ' . $option), '@value' => $label));
 
-      watchdog('fasttoggle', '@type %title @option toggled to @value.', array('@type' => drupal_ucfirst($object_type), '%title' => $object_label, '@option' => ($option == $group ? $option : $group . ' ' . $option), '@value' => $label));
+    // Let other modules respond.
+    module_invoke_all('fasttoggle_toggle', $object_type, $object, $group, $option);
 
-      // Let other modules respond.
-      module_invoke_all('fasttoggle_toggle', $object_type, $object, $group, $option);
+    // Output the new status for the updated link text on AJAX changes
+    if (isset($_POST['js']) && $_POST['js']) {
+      drupal_add_http_header('Content-Type', 'text/javascript; charset=utf-8');
 
-      // Output the new status for the updated link text on AJAX changes
-      if (isset($_POST['js']) && $_POST['js']) {
-        drupal_add_http_header('Content-Type', 'text/javascript; charset=utf-8');
-        $path = request_path();
-
-        // l() (invoked by fasttoggle()) adds the active class to our new link. But the original link doesn't get it added,
-        // so clicking the link results in an extra class being applied. Strip the active class here (assuming it's added to
-        // the end of the classes, so we get apples for apples.
-        $new_link = fasttoggle($options, $group, $option, $object, FASTTOGGLE_FORMAT_HTML, $view);
-        $new_link = preg_replace('/class="(.*) active"/', 'class="$1"', $new_link);
-        $ajax_commands = array(
-            ajax_command_replace('.' . $selectorClass, $new_link),
-            ajax_command_invoke('body','trigger', array('FasttoggleTrigger',$newClass))
-            );
-        $params = array(
+      // l() (invoked by fasttoggle()) adds the active class to our new link. But the original link doesn't get it added,
+      // so clicking the link results in an extra class being applied. Strip the active class here (assuming it's added to
+      // the end of the classes, so we get apples for apples.
+      $new_link = fasttoggle($options, $group, $option, $object, FASTTOGGLE_FORMAT_HTML, $view);
+      $new_link = preg_replace('/class="(.*) active"/', 'class="$1"', $new_link);
+      $ajax_commands = array(
+          ajax_command_replace('.' . $selectorClass, $new_link),
+          ajax_command_invoke('body', 'trigger', array('FasttoggleTrigger', $newClass))
+      );
+      $params = array(
           'group' => $group,
           'option' => $option,
           'view' => $view,
-        );
-        drupal_alter('fasttoggle_ajax', $ajax_commands, $object_type, $object, $params);
-        echo ajax_render($ajax_commands);
-        exit;
-      }
-      else {
-        drupal_goto();
-      }
+      );
+      drupal_alter('fasttoggle_ajax', $ajax_commands, $object_type, $object, $params);
+      echo ajax_render($ajax_commands);
+      exit;
+    } else {
+      drupal_goto();
     }
-    else {
-      // The action is not confirmed. The user came here through a regular link;
-      // no AJAX was involved. That means, we need a confirmation form so that
-      // we get a POST form.
-      return drupal_get_form('fasttoggle_do_option_confirm', $object_type, $object->$options['title_field'], $options['fields'][$group]['instances'][$option]['labels'][$label_style][intval(!$object->$option)]);
-    }
-  }
-  else {
-    return MENU_NOT_FOUND;
+  } else {
+    // The action is not confirmed. The user came here through a regular link;
+    // no AJAX was involved. That means, we need a confirmation form so that
+    // we get a POST form.
+    return drupal_get_form('fasttoggle_do_option_confirm', $object_type, $object->{$options['title_field']}, $options['fields'][$group]['instances'][$option]['labels'][$label_style][intval(!$object->$option)]);
   }
 }
 
@@ -554,3 +630,73 @@ function fasttoggle_defaults_from_config_data($config_data) {
 
   return $result;
 }
+
+/**
+ * Implements hook_block_info().
+ *
+ * Register a block for displaying fasttoggle links.
+ */
+function fasttoggle_block_info() {
+  $blocks['block'] = array(
+    'info' => t('Fasttoggle Links'),
+    'weight' => -99,
+    'status' => 1,
+    'region' => 'content',
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+function fasttoggle_block_link_register($link = NULL, $group = NULL, $key = NULL, $instance = NULL) {
+  static $links = array();
+
+  if (!is_null($link)) {
+    // Avoid duplicates by keying by the content
+    if (is_null($group)) {
+      $group = '';
+    }
+    if (is_null($key)) {
+      $key = '';
+    }
+    if (is_null($instance)) {
+      $instance = '';
+    }
+    if (!isset($links[$group])) {
+      $links[$group] = array();
+    }
+    if (!isset($links[$key])) {
+      $links[$key] = array();
+    }
+    $links[$group][$key][$instance] = $link;
+  }
+
+  return $links;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function fasttoggle_block_view($delta = '') {
+  $items = fasttoggle_block_link_register();
+  if (empty($items)) {
+    return;
+  }
+  foreach ($items as $group => $group_content) {
+    foreach ($group_content as $key => $key_content) {
+      $group_content[$key] = implode("<br />", $key_content);
+    }
+    $items[$group] = "<div class='fasttoggle-block-key'>" . implode("</div><div class='fasttoggle-block-key'>", $group_content) . "</div>";
+  }
+  $items = "<div class='fasttoggle-block-group'>" . implode("</div><div class='fasttoggle-block-group'>", $items) . "</div>";
+  $block = array(
+    'subject' => t('Fasttoggle Links'),
+    'content' => array(
+      '#markup' => theme('container', array('element' => array('#children' => $items, '#attributes' => array('class' => 'fasttoggle-block')))),
+      '#attached' => array(
+        'css' => array(drupal_get_path('module', 'fasttoggle') . '/css/fasttoggle.css'),
+      ),
+    ),
+  );
+  return $block;
+}
+

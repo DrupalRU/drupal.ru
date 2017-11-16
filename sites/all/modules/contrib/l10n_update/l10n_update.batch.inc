@@ -9,7 +9,7 @@
  * Load the common translation API.
  */
 // @todo Combine functions differently in files to avoid unnecessary includes.
-// Follow-up issue http://drupal.org/node/1834298
+// Follow-up issue https://www.drupal.org/node/1834298
 require_once __DIR__ . '/l10n_update.translation.inc';
 
 /**
@@ -28,7 +28,7 @@ require_once __DIR__ . '/l10n_update.translation.inc';
  *     batch is finished. Optional, defaults to TRUE.
  *   - 'use_remote': Whether or not to check the remote translation file.
  *     Optional, defaults to TRUE.
- * @param $context
+ * @param array $context
  *   The batch context.
  */
 function l10n_update_batch_status_check($project, $langcode, $options = array(), &$context) {
@@ -127,7 +127,7 @@ function l10n_update_batch_status_finished($success, array $results) {
  *   Name of the translatable project.
  * @param string $langcode
  *   Language code.
- * @param $context
+ * @param array $context
  *   The batch context.
  *
  * @see l10n_update_batch_fetch_import()
@@ -160,7 +160,7 @@ function l10n_update_batch_fetch_download($project, $langcode, &$context) {
  *   Language code.
  * @param array $options
  *   Array of import options.
- * @param $context
+ * @param array $context
  *   The batch context.
  *
  * @see l10n_update_batch_import_files()
@@ -227,12 +227,12 @@ function l10n_update_batch_fetch_finished($success, array $results) {
  *   Directory where the downloaded file will be saved. Defaults to the
  *   temporary file path.
  *
- * @return object|boolean
+ * @return object|bool
  *   File object if download was successful. FALSE on failure.
  */
 function l10n_update_download_source($source_file, $directory = 'temporary://') {
   if ($uri = system_retrieve_file($source_file->uri, $directory, FALSE, FILE_EXISTS_REPLACE)) {
-    $file = clone($source_file);
+    $file = clone $source_file;
     $file->type = L10N_UPDATE_LOCAL;
     $file->uri = $uri;
     $file->directory = $directory;

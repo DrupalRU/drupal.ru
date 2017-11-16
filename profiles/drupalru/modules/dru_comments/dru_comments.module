@@ -5,11 +5,23 @@
  */
 function dru_comments_menu_alter(&$items) {
   $items['comment/%comment/edit']['access callback'] = 'dru_comments_comment_access';
-  $items['comment/%comment/edit']['access arguments'] = array('edit', 1);
+  $items['comment/%comment/edit']['access arguments'] = ['update', 1];
 }
 
 /**
- * Custom comment edit asses callback.
+ * Implements hook_permission().
+ */
+function dru_comments_permission() {
+  return [
+    'dru_comments bypass expiration' => [
+      'title' => t('Bypass restriction for comments by expiration time'),
+      'description' => t('Applies default permissions for editing of comments, bypassing restrictions by expiration time.'),
+    ],
+  ];
+}
+
+/**
+ * Custom comment edit access callback.
  *
  * @param $op
  * @param $comment
@@ -18,10 +30,34 @@ function dru_comments_menu_alter(&$items) {
  */
 function dru_comments_comment_access($op, $comment) {
   global $user;
-  $canedit = ($comment->created + 3600) > time();
+  $access = ($user->uid && $user->uid == $comment->uid && $comment->status == COMMENT_PUBLISHED && user_access('edit own comments'));
+  if ($op == 'update' && !user_access('dru_comments bypass expiration')) {
+    $time = variable_get('dru_comments_exp_time_' . $comment->node_type, '1 month');
+    if ($comment->created * 1 < strtotime("-{$time}")) {
+      $access = FALSE;
+    }
+  }
+  return $access || user_access('administer comments');
+}
 
-  if ($op == 'edit') {
-    return ($user->uid && $user->uid == $comment->uid && $comment->status == COMMENT_PUBLISHED && user_access('edit own comments') && $canedit) || user_access('administer comments');
+/**
+ * Implements hook_form_FORM_ID_alter() for node_type_form().
+ */
+function dru_comments_form_node_type_form_alter(&$form, &$form_state, $form_id) {
+  if (isset($form['type']) && module_exists('comment')) {
+    $type = $form['#node_type']->type;
+    // This name is hack for ease to use in access checking function, where name
+    // generated using of concatenate of "dru_comments_exp_time_" and
+    // $comment->node_type which stores names of node type like that:
+    // "comment_node_blog".
+    $form['comment']['dru_comments_exp_time_comment_node'] = [
+      '#type' => 'textfield',
+      '#title' => t('Expiration time'),
+      '#description' => t('Expiration time, after which editing will be disallowed. The value will be used through function !strtotime.', [
+        '!strtotime' => l('strtotime', 'http://php.net/manual/ru/function.strtotime.php'),
+      ]),
+      '#default_value' => variable_get('dru_comments_exp_time_comment_node_' . $type, '1 month'),
+    ];
   }
 }
 
@@ -29,7 +65,8 @@ function dru_comments_comment_access($op, $comment) {
  * Implements hook_comment_view().
  */
 function dru_comments_comment_view($comment, $view_mode, $langcode) {
-  if (!dru_comments_comment_access('edit', $comment)) {
-    unset($comment->content['links']['comment']['#links']['comment-edit']['href']);
+  if (!dru_comments_comment_access('update', $comment)) {
+    // By some reasons, "#access => false" doesn't works here.
+    unset($comment->content['links']['comment']['#links']['comment-edit']);
   }
 }

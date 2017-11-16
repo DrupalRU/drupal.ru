@@ -1,7 +1,8 @@
-name = Drupal.ru module
+name        = Drupal.ru module
 description = Drupal.ru module for store any customizations of drupal.ru site
-version = 7.x-1.0
-core = 7.x
-php = 5.4
+package     = drupal.ru
+version     = 7.x-1.0
+core        = 7.x
+php         = 5.4
 
 scripts[] = js/drurum.js

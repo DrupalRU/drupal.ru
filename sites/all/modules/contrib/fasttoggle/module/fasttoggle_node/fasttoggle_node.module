@@ -64,7 +64,8 @@ function fasttoggle_node_fasttoggle_available_links($type = NULL, $obj = NULL) {
         'object_type' => 'node',
         'subtype_field' => 'type',
         'access' => array('fasttoggle_node_edit_access'),
-        'global_settings_desc' => t('In addition to these global settings, you need to enable fasttoogle in the settings page for each content type you wish to use.'),
+        'global_settings_desc' => t('In addition to these global settings, you need to enable fasttoggle in the settings page for each content type you wish to use.'),
+        'nodetype_settings_desc' => t('In addition to these settings, you need to enable the sitewide setting for toggles you want to use.'),
         'extra_settings' => array(
           'help_text' => array(
             '#value' => t('Configure access restrictions for these settings on the <a href="@url">access control</a> page.', array('@url' => url('admin/user/permissions', array('fragment' => 'module-fasttoggle')))),
@@ -183,6 +184,7 @@ function fasttoggle_node_node_view($node, $view_mode) {
       if (!empty($flags['instances'])) {
         foreach ($flags['instances'] as $key => $data) {
           $node->content['links']['node']['#links']['fasttoggle_' . $group . '_' . $key] = fasttoggle($options, $group, $key, $node, FASTTOGGLE_FORMAT_LINK_ARRAY, $view_mode);
+          fasttoggle_block_link_register(fasttoggle($options, $group, $key, $node, FASTTOGGLE_FORMAT_HTML, $view_mode), $node->nid, $key, $group);
         }
       }
     }
@@ -190,26 +192,26 @@ function fasttoggle_node_node_view($node, $view_mode) {
 }
 
 function fasttoggle_node_menu_contextual_links_alter(&$links, $router_item, $root_path) {
-  if ($root_path == 'node/%') {
-    if (isset($router_item['map'][0]) && $router_item['map'][0] == 'node') {
-      if (isset($router_item['map'][1]) && is_object($router_item['map'][1])) {
-        $node = $router_item['map'][1];
-        $options = fasttoggle_get_allowed_links('node', $node, $node->nid, 'fasttoggle_add_to_node_links');
 
-        if (!empty($options['fields'])) {
-          foreach ($options['fields'] as $group => $flags) {
-            if (!empty($flags['instances'])) {
-              foreach ($flags as $key => $data) {
-                $link = fasttoggle($options, $group, $key, $node, FASTTOGGLE_FORMAT_LINK_ARRAY);
-                // massage to $link so it fits the expected format.
-                $link['localized_options']['query'] = $link['query'];
-                unset($link['query']);
-                $link['localized_options']['attributes'] = $link['attributes'];
-                unset($link['attributes']);
-                $links['fasttoggle_' . $group . '_' . $key] = $link;
-              }
-            }
-          }
+  if ($root_path != 'node/%' || !isset($router_item['map'][0]) || $router_item['map'][0] != 'node' ||
+      !isset($router_item['map'][1]) || !is_object($router_item['map'][1])) {
+    return;
+  }
+
+  $node = $router_item['map'][1];
+  $options = fasttoggle_get_allowed_links('node', $node, $node->nid, 'fasttoggle_add_to_node_links');
+
+  if (!empty($options['fields'])) {
+    foreach ($options['fields'] as $group => $flags) {
+      if (!empty($flags['instances'])) {
+        foreach ($flags['instances'] as $key => $data) {
+          $link = fasttoggle($options, $group, $key, $node, FASTTOGGLE_FORMAT_LINK_ARRAY);
+          // massage to $link so it fits the expected format.
+          $link['localized_options']['query'] = $link['query'];
+          unset($link['query']);
+          $link['localized_options']['attributes'] = $link['attributes'];
+          unset($link['attributes']);
+          $links['fasttoggle_' . $group . '_' . $key] = $link;
         }
       }
     }

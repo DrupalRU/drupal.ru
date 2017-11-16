@@ -30,9 +30,10 @@ class L10nUpdateTest extends L10nUpdateTestBase {
     $admin_user = $this->drupalCreateUser(array('administer modules', 'administer site configuration', 'administer languages', 'access administration pages', 'translate interface'));
     $this->drupalLogin($admin_user);
 
-    // Exclude drupal core so no remote translations are fetched.
+    // Exclude drupal core and nl10n_update so no remote translations are
+    // fetched.
     $edit = array(
-        'disabled_projects' => 'drupal',
+      'disabled_projects' => 'drupal\nl10n_update',
     );
     $this->drupalPost('admin/config/regional/language/update', $edit, t('Save configuration'));
 

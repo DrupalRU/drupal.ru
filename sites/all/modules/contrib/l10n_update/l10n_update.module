@@ -28,7 +28,7 @@ define('L10N_UPDATE_USE_SOURCE_REMOTE_AND_LOCAL', 3);
  *
  * @see l10n_update_default_translation_server().
  */
-define('L10N_UPDATE_DEFAULT_SERVER_PATTERN', 'http://ftp.drupal.org/files/translations/%core/%project/%project-%release.%language.po');
+define('L10N_UPDATE_DEFAULT_SERVER_PATTERN', 'https://ftp.drupal.org/files/translations/%core/%project/%project-%release.%language.po');
 
 /**
  * Default gettext file name on the translation server.
@@ -173,6 +173,7 @@ function l10n_update_theme() {
     ),
   );
 }
+
 /**
  * Implements hook_menu_alter().
  */
@@ -186,8 +187,7 @@ function l10n_update_menu_alter(&$menu) {
 /**
  * Implements hook_cron().
  *
- * Check one project/language at a time, download and import if update
- * available.
+ * Checks interface translations. Downloads and imports updates when available.
  */
 function l10n_update_cron() {
   // Update translations only when an update frequency was set by the admin
@@ -430,11 +430,20 @@ function l10n_update_client_save_string() {
     if (isset($_POST['source']) && isset($_POST['target']) && !empty($_POST['textgroup']) && !empty($_POST['form_token']) && drupal_valid_token($_POST['form_token'], 'l10n_client_form')) {
       // Ensure we have this source string before we attempt to save it.
       // @todo: add actual context support.
-      $lid = db_query("SELECT lid FROM {locales_source} WHERE source = :source AND context = :context AND textgroup = :textgroup", array(':source' => $_POST['source'], ':context' => '', ':textgroup' => $_POST['textgroup']))->fetchField();
+      $lid = db_query("SELECT lid FROM {locales_source} WHERE source = :source AND context = :context AND textgroup = :textgroup", array(
+        ':source' => $_POST['source'],
+        ':context' => '',
+        ':textgroup' => $_POST['textgroup'],
+      ))->fetchField();
 
       if (!empty($lid)) {
         module_load_include('translation.inc', 'l10n_update');
-        $report = array('skips' => 0, 'additions' => 0, 'updates' => 0, 'deletes' => 0);
+        $report = array(
+          'skips' => 0,
+          'additions' => 0,
+          'updates' => 0,
+          'deletes' => 0,
+        );
         // @todo: add actual context support.
         _l10n_update_locale_import_one_string_db($report, $language->language, '', $_POST['source'], $_POST['target'], $_POST['textgroup'], NULL, LOCALE_IMPORT_OVERWRITE, L10N_UPDATE_STRING_CUSTOM);
         cache_clear_all('locale:', 'cache', TRUE);
@@ -459,9 +468,15 @@ function l10n_update_client_save_string() {
             $message .= theme('l10n_client_message', array('message' => $remote_result[1], 'level' => $remote_result[0] ? WATCHDOG_INFO : WATCHDOG_ERROR));
           }
           else {
-            $server_url = variable_get('l10n_client_server', 'http://localize.drupal.org');
+            $server_url = variable_get('l10n_client_server', 'https://localize.drupal.org');
             $user_edit_url = url('user/' . $user->uid . '/edit', array('absolute' => TRUE));
-            $message .= theme('l10n_client_message', array('message' => t('You could share your work with !l10n_server if you set your API key at !user_link.', array('!l10n_server' => l($server_url, $server_url), '!user_link' => l($user_edit_url, 'user/' . $user->uid . '/edit'))), 'level' => WATCHDOG_WARNING));
+            $message .= theme('l10n_client_message', array(
+              'message' => t('You could share your work with !l10n_server if you set your API key at !user_link.', array(
+                '!l10n_server' => l($server_url, $server_url),
+                '!user_link' => l($user_edit_url, 'user/' . $user->uid . '/edit'),
+              )),
+              'level' => WATCHDOG_WARNING,
+            ));
           }
         }
       }
@@ -544,7 +559,7 @@ function l10n_update_system_remove(array $components) {
       l10n_update_delete_translation_files($list, array());
 
       // Remove translatable projects.
-      // Followup issue http://drupal.org/node/1842362 to replace the
+      // Followup issue https://www.drupal.org/node/1842362 to replace the
       // {l10n_update_project} table. Then change this to a function call.
       db_delete('l10n_update_project')
         ->condition('name', $list)
@@ -670,7 +685,7 @@ function l10n_update_get_status($projects = NULL, $langcodes = NULL) {
  *   File object also containing timestamp when the translation is last updated.
  */
 function l10n_update_status_save($project, $langcode, $type, $data) {
-  // Followup issue: http://drupal.org/node/1842362
+  // Followup issue: https://www.drupal.org/node/1842362
   // Split status storage per module/language and expire individually. This will
   // improve performance for large sites.
   // Load the translation status or build it if not already available.

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Default theme implementation for displaying translation status information.

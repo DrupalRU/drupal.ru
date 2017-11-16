@@ -10,16 +10,19 @@ module_load_include('inc', 'fasttoggle');
 function fasttoggle_get_settings_form_items($config = array())
 {
   $form = array();
+  $setting_key = NULL;
 
   if (empty($config)) {
     $object_type_filter = NULL;
     $object_subtype_filter = NULL;
     $dummy_obj = NULL;
+    $desc_key = "global_settings_desc";
   } else {
     $object_type_filter = $config['type'];
     $object_subtype_filter = $config['subtype'];
     $dummy_obj = new stdClass();
     $dummy_obj->type = $object_subtype_filter;
+    $desc_key = "nodetype_settings_desc";
   }
 
   $config_data = module_invoke_all('fasttoggle_available_links', $object_type_filter, $dummy_obj);
@@ -62,7 +65,7 @@ function fasttoggle_get_settings_form_items($config = array())
         $subform[$setting_key] = array(
             '#type' => 'checkboxes',
             '#title' => t(ucfirst("Togglable {$object_type} {$group_name} fields and settings.")),
-            '#description' => isset($object_data['global_settings_desc']) ? $object_data['global_settings_desc'] : '',
+            '#description' => isset($object_data[$desc_key]) ? $object_data[$desc_key] : '',
             '#options' => array(),
             '#default_value' => array(),
             );

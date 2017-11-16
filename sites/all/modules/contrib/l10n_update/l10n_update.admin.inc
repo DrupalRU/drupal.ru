@@ -37,7 +37,7 @@ function l10n_update_status_form() {
   $projects_update = array();
 
   // @todo Calling l10n_update_build_projects() is an expensive way to
-  //   get a module name. In follow-up issue http://drupal.org/node/1842362
+  //   get a module name. In follow-up issue https://www.drupal.org/node/1842362
   //   the project name will be stored to display use, like here.
   $project_data = l10n_update_build_projects();
   $languages = l10n_update_translatable_language_list();
@@ -94,7 +94,14 @@ function l10n_update_status_form() {
             '#markup' => $title,
           ),
         ),
-        'status' => array('class' => array('description', 'expand', 'priority-low'), 'data' => drupal_render($l10n_update_update_info)),
+        'status' => array(
+          'class' => array(
+            'description',
+            'expand',
+            'priority-low',
+          ),
+          'data' => drupal_render($l10n_update_update_info),
+        ),
       );
     }
     // Sort the table data on language name.
@@ -479,7 +486,10 @@ function template_preprocess_l10n_update_update_info(array &$variables) {
     if ($variables['updates']) {
       foreach ($variables['updates'] as $update) {
         $modules[] = $update['name'];
-        $releases[] = t('@module (@date)', array('@module' => $update['name'], '@date' => format_date($update['timestamp'], 'html_date')));
+        $releases[] = t('@module (@date)', array(
+          '@module' => $update['name'],
+          '@date' => format_date($update['timestamp'], 'html_date'),
+        ));
       }
       $variables['modules'] = $modules;
       $variables['module_list'] = t('Updates for: @modules', array('@modules' => implode(', ', $modules)));

@@ -191,7 +191,7 @@ class StringDatabaseStorage implements StringStorageInterface {
    *   target or location table table.
    */
   protected function dbFieldTable($field) {
-    if (in_array($field, array('language', 'translation', 'customized'))) {
+    if (in_array($field, array('language', 'translation', 'l10n_status'))) {
       return 't';
     }
     elseif (in_array($field, array('type', 'name'))) {
@@ -295,10 +295,6 @@ class StringDatabaseStorage implements StringStorageInterface {
     if (isset($conditions['customized'])) {
       $conditions['l10n_status'] = $conditions['customized'];
       unset($conditions['customized']);
-    }
-    if (isset($options['customized'])) {
-      $options['l10n_status'] = $options['customized'];
-      unset($options['customized']);
     }
     // Start building the query with source table and check whether we need to
     // join the target table too.

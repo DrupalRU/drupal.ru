@@ -24,15 +24,16 @@ function dru_claim_menu() {
     'page callback' => 'dru_claim_node',
     'file' => 'dru_claim.pages.inc',
     'page arguments' => [2, 3, 4],
-    'access arguments' => array(3),
-    'access callback' => '_dru_claim_node_nojs_access_check',
+    'access arguments' => array(3, NULL),
+    'access callback' => 'dru_claim_create_access',
     'type' => MENU_CALLBACK,
   ];
   $items['ticket/node/ajax/%node/%'] = [
     'page callback' => 'dru_claim_node',
     'file' => 'dru_claim.pages.inc',
     'page arguments' => [2, 3, 4],
-    'access arguments' => ['create claim'],
+    'access arguments' => array(3, NULL),
+    'access callback' => 'dru_claim_create_access',
     'delivery callback' => 'ajax_deliver',
     'type' => MENU_CALLBACK,
   ];
@@ -40,14 +41,16 @@ function dru_claim_menu() {
     'page callback' => 'dru_claim_comment',
     'file' => 'dru_claim.pages.inc',
     'page arguments' => [2, 3, 4],
-    'access arguments' => ['create claim'],
+    'access arguments' => array(NULL, 3),
+    'access callback' => 'dru_claim_create_access',
     'type' => MENU_CALLBACK,
   ];
   $items['ticket/comment/ajax/%comment/%'] = [
     'page callback' => 'dru_claim_comment',
     'file' => 'dru_claim.pages.inc',
     'page arguments' => [2, 3, 4],
-    'access arguments' => ['create claim'],
+    'access arguments' => array(NULL, 3),
+    'access callback' => 'dru_claim_create_access',
     'delivery callback' => 'ajax_deliver',
     'type' => MENU_CALLBACK,
   ];
@@ -58,7 +61,10 @@ function dru_claim_menu() {
 /**
  * access callback function for dru_claim_menu().
  */
-function _dru_claim_node_nojs_access_check($node) {
+function dru_claim_create_access($node, $comment) {
+  if ($comment) {
+    $node = node_load($comment->nid);
+  }
   return user_access('create claim') && variable_get('dru_claim_allow_for_node_' . $node->type);
 }
 

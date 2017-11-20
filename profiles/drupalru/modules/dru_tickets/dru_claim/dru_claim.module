@@ -24,7 +24,7 @@ function dru_claim_menu() {
     'page callback' => 'dru_claim_node',
     'file' => 'dru_claim.pages.inc',
     'page arguments' => [2, 3, 4],
-    'access arguments' => array(3, NULL),
+    'access arguments' => array(3),
     'access callback' => 'dru_claim_create_access',
     'type' => MENU_CALLBACK,
   ];
@@ -32,7 +32,7 @@ function dru_claim_menu() {
     'page callback' => 'dru_claim_node',
     'file' => 'dru_claim.pages.inc',
     'page arguments' => [2, 3, 4],
-    'access arguments' => array(3, NULL),
+    'access arguments' => array(3),
     'access callback' => 'dru_claim_create_access',
     'delivery callback' => 'ajax_deliver',
     'type' => MENU_CALLBACK,
@@ -41,7 +41,7 @@ function dru_claim_menu() {
     'page callback' => 'dru_claim_comment',
     'file' => 'dru_claim.pages.inc',
     'page arguments' => [2, 3, 4],
-    'access arguments' => array(NULL, 3),
+    'access arguments' => array(3),
     'access callback' => 'dru_claim_create_access',
     'type' => MENU_CALLBACK,
   ];
@@ -49,7 +49,7 @@ function dru_claim_menu() {
     'page callback' => 'dru_claim_comment',
     'file' => 'dru_claim.pages.inc',
     'page arguments' => [2, 3, 4],
-    'access arguments' => array(NULL, 3),
+    'access arguments' => array(3),
     'access callback' => 'dru_claim_create_access',
     'delivery callback' => 'ajax_deliver',
     'type' => MENU_CALLBACK,
@@ -59,20 +59,16 @@ function dru_claim_menu() {
 }
 
 /**
- * access callback function for dru_claim_menu().
+ * access callback for dru_claim_menu().
  */
-function dru_claim_create_access($node, $comment) {
-  $nodetype = '';
-
-  if ($node) {
-    $nodetype = $node->type;
+function dru_claim_create_access($entity) {
+  if ($entity->type) {
+    $nodetype = $entity->type;
   }
-
-  if ($comment) {
-    $nodetype = end(explode('_', $comment->node_type));
+  else {
+    $nodetype = $entity->node_type ? substr($entity->node_type, strlen('comment_node_')) : NULL;
   }
-
-  return user_access('create claim') && variable_get('dru_claim_allow_for_node_' . $nodetype);
+  return !$nodetype ?: user_access('create claim') && variable_get('dru_claim_allow_for_node_' . $nodetype);
 }
 
 /**

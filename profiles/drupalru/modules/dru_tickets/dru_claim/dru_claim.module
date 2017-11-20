@@ -62,10 +62,18 @@ function dru_claim_menu() {
  * access callback function for dru_claim_menu().
  */
 function dru_claim_create_access($node, $comment) {
-  if ($comment) {
-    $node = node_load($comment->nid);
+  $nodetype = '';
+
+  if ($node) {
+    $nodetype = $node->type;
   }
-  return user_access('create claim') && variable_get('dru_claim_allow_for_node_' . $node->type);
+
+  if ($comment) {
+    $temp = explode('_', $comment->node_type);
+    $nodetype = $temp[count($temp)-1];
+  }
+
+  return user_access('create claim') && variable_get('dru_claim_allow_for_node_' . $nodetype);
 }
 
 /**

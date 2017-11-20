@@ -69,8 +69,7 @@ function dru_claim_create_access($node, $comment) {
   }
 
   if ($comment) {
-    $temp = explode('_', $comment->node_type);
-    $nodetype = $temp[count($temp)-1];
+    $nodetype = end(explode('_', $comment->node_type));
   }
 
   return user_access('create claim') && variable_get('dru_claim_allow_for_node_' . $nodetype);

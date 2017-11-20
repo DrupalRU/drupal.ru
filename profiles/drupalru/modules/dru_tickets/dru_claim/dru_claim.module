@@ -68,7 +68,7 @@ function dru_claim_create_access($entity) {
   else {
     $nodetype = $entity->node_type ? substr($entity->node_type, strlen('comment_node_')) : NULL;
   }
-  return !$nodetype ?: user_access('create claim') && variable_get('dru_claim_allow_for_node_' . $nodetype);
+  return user_access('create claim') && (!$nodetype ?: variable_get('dru_claim_allow_for_node_' . $nodetype));
 }
 
 /**

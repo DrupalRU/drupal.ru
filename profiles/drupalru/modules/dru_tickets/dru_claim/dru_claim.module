@@ -24,7 +24,8 @@ function dru_claim_menu() {
     'page callback' => 'dru_claim_node',
     'file' => 'dru_claim.pages.inc',
     'page arguments' => [2, 3, 4],
-    'access arguments' => ['create claim'],
+    'access arguments' => array(3),
+    'access callback' => '_dru_claim_node_nojs_access_check',
     'type' => MENU_CALLBACK,
   ];
   $items['ticket/node/ajax/%node/%'] = [
@@ -52,6 +53,13 @@ function dru_claim_menu() {
   ];
 
   return $items;
+}
+
+/**
+ * access callback function for dru_claim_menu().
+ */
+function _dru_claim_node_nojs_access_check($node) {
+  return user_access('create claim') && variable_get('dru_claim_allow_for_node_' . $node->type);
 }
 
 /**

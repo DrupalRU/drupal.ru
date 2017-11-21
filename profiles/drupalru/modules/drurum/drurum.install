@@ -167,3 +167,10 @@ function drurum_update_7006() {
   $term->vid = $vocabulary->vid;
   taxonomy_term_save($term);
 }
+
+/**
+ * Allow claim to blog node type
+ */
+function drurum_update_7007() {
+  variable_set('dru_claim_allow_for_node_blog', 1);
+}

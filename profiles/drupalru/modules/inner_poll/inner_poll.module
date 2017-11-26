@@ -891,7 +891,6 @@ function theme_inner_poll_vote_form($variables) {
       // Добавление JavaScript и CSS кода к странице.
       $path = drupal_get_path('module', 'inner_poll');
       drupal_add_js($path . '/vote.js');
-      drupal_add_js(array('sPath' => $_SERVER['HTTP_HOST']), 'setting');
       drupal_add_css($path . '/inner_poll.css');
 
       // Check vote user on this poll or not.

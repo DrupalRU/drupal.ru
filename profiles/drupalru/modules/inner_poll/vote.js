@@ -27,7 +27,7 @@ function vote(v, n){
 
     jQuery.ajax({
       type: "POST",
-      url: "http://" + sPath + basePath + "inner_poll/vote_js",
+      url: "/inner_poll/vote_js",
       dataType: 'json',
       data: "v=" + d + "&n=" + n,
       success: function(data){ jQuery('div#inner_poll_' + n).replaceWith(data.result);},
@@ -48,7 +48,7 @@ function abst(n){
 
   jQuery.ajax({
     type: "POST",
-    url: "http://" + sPath + basePath + "inner_poll/vote_js",
+    url: "/inner_poll/vote_js",
     dataType: 'json',
     data: "abstain=1&n=" + n,
     success: function(data){jQuery('div#inner_poll_' + n).replaceWith(data.result);},
@@ -68,7 +68,7 @@ function cancel_vote(n){
 
   jQuery.ajax({
     type: "POST",
-    url: "http://" + sPath + basePath + "inner_poll/cancel_vote",
+    url: "/inner_poll/cancel_vote",
     dataType: 'json',
     data: "n=" + n,
     success: function(data){jQuery('div#inner_poll_' + n).replaceWith(data.result);},

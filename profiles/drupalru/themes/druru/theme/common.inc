@@ -458,8 +458,8 @@ function _druru_wrap_claim(&$content, $type,  $id) {
         'tabindex' => 0,
         'role' => 'button',
         'data-toggle' => 'ticket-popover',
-        'data-trigger' => 'click',
-        'title' => $category,
+        'data-trigger' => 'manual',
+        'title' => $category . '<button type="button" class="btn-ticket-popover-close close">&times;</button>',
         'data-ticket-type' => $type,
         'data-ticket' => $id,
         'class' => [($is_handled ? 'text-warning' : '')]

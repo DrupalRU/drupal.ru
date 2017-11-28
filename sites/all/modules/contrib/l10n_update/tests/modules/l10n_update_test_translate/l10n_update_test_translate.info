@@ -8,9 +8,9 @@ hidden = true
 interface translation project = l10n_update_test_translate
 l10n path = sites/all/modules/contrib/l10n_update/tests/modules/l10n_update_test_translate/translations/l10n_update_test_translate.%language.po
 
-; Information added by Drupal.org packaging script on 2016-12-03
-version = "7.x-2.1"
+; Information added by Drupal.org packaging script on 2017-09-18
+version = "7.x-2.2"
 core = "7.x"
 project = "l10n_update"
-datestamp = "1480765987"
+datestamp = "1505717347"
 

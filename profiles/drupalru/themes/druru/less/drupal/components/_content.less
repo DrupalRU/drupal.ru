@@ -16,25 +16,25 @@
   }
 }
 
-.page-events,
-.node-type-organization,
-.node-type-blog,
-.node-type-page,
-.node-type-ticket,
-.page-alttracker,
-.page-forum,
-.page-messages:not(.page-messages-view),
-.page-user,
-.page-blog,
-.node-type-simple-event {
-  // Page header.
-  .page-header {
+@media @tablet {
+  .page-events,
+  .node-type-organization,
+  .node-type-blog,
+  .node-type-page,
+  .node-type-ticket,
+  .page-alttracker,
+  .page-forum,
+  .page-messages:not(.page-messages-view),
+  .page-user,
+  .page-blog,
+  .node-type-simple-event {
+    // Page header.
+    .page-header {
 
-    + h2 + .nav {
-      margin-bottom: 0;
-    }
+      + h2 + .nav {
+        margin-bottom: 0;
+      }
 
-    @media @tablet {
       max-width: ~'calc(100% - 180px)';
       float: left;
       + .alert {

@@ -1,20 +1,27 @@
 /**
- * Translate interface update page.
+ * @file
+ * Styling for the translate interface update page.
  */
+
 #l10n-update-status-form table {
   table-layout: fixed;
 }
+
 #l10n-update-status-form th.select-all {
   width: 4%;
 }
+
 #l10n-update-status-form th.title {
   width: 25%;
 }
+
 #l10n-update-status-form th.description {
 }
+
 #l10n-update-status-form td {
   vertical-align: top;
 }
+
 #l10n-update-status-form .expand .inner {
   background: transparent url(../images/menu-collapsed.png) left .6em no-repeat;
   margin-left: -12px;
@@ -29,9 +36,11 @@
   font-size: 1.15em;
   font-weight: bold;
 }
+
 #l10n-update-status-form .description {
   cursor: pointer;
 }
+
 #l10n-update-status-form .description .inner {
   color: #5c5c5b;
   line-height: 20px;
@@ -39,11 +48,13 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 #l10n-update-status-form .expanded .description .inner {
   height: auto;
   overflow: visible;
   white-space: normal;
 }
+
 #l10n-update-status-form .expanded .description .text {
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -52,11 +63,13 @@
 .js #l10n-update-status-form .description .inner {
   height: 20px;
 }
+
 #l10n-update-status-form .expanded .description .inner {
   height: auto;
   overflow: visible;
   white-space: normal;
 }
+
 #l10n-update-status-form .details {
   padding: 5px 0;
   max-width: 490px;
@@ -64,6 +77,7 @@
   font-size: 0.9em;
   color: #666;
 }
+
 #l10n-update-status-form .visually-hidden {
   position: absolute !important;
   clip: rect(1px, 1px, 1px, 1px);
@@ -72,6 +86,7 @@
   width: 1px;
   word-wrap: normal;
 }
+
 @media screen and (max-width: 40em) {
   #l10n-update-status-form th.title {
     width: 20%;

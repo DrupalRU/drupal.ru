@@ -156,3 +156,21 @@ function drurum_update_7005() {
   variable_set('fz152_privacy_policy_page_path', 'privacy-policy');
   variable_set('fz152_privacy_policy_page_title', 'Политика конфиденциальности');
 }
+
+/**
+ * Add "Other" to claim type
+ */
+function drurum_update_7006() {
+  $vocabulary = taxonomy_vocabulary_machine_name_load('claim_category');
+  $term = new stdClass();
+  $term->name = t('Other');
+  $term->vid = $vocabulary->vid;
+  taxonomy_term_save($term);
+}
+
+/**
+ * Allow claim to blog node type
+ */
+function drurum_update_7007() {
+  variable_set('dru_claim_allow_for_node_blog', 1);
+}

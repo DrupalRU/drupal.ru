@@ -18,8 +18,11 @@ class fasttoggle_user_views_handler_field_user_link extends views_handler_field_
 
   function render($values) {
     $account = new stdClass();
-    $account->uid = $values->uid;
-    $account->status = $values->users_status;
+    if (!isset($this->aliases['uid'])) {
+      return FALSE;
+    }
+    $account->uid = $values->{$this->aliases['uid']};
+    $account->status = $values->{$this->aliases['status']};
     return $this->render_link($account, $values);
   }
 

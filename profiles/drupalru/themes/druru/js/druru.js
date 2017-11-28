@@ -409,36 +409,6 @@ var Drupal = Drupal || {};
     }
   };
 
-  Drupal.behaviors.druruBueditor = {
-    attach: function (context, settings) {
-      if (typeof BUE !== 'undefined') {
-
-        var grabbedClass = function () {
-          if (!window.attachedGrab) {
-            var $popupHeader = $(window).find('.bue-popup-head');
-            $popupHeader
-              .on('mousedown', function (e) {
-                $popupHeader.addClass('grabbing');
-              })
-              .on('mouseup', function (e) {
-                $popupHeader.removeClass('grabbing');
-              });
-          }
-          window.attachedGrab = true;
-          return window.sourceOnopen();
-        };
-
-        for (var popup in BUE.popups || {}) {
-          if (BUE.popups.hasOwnProperty(popup)) {
-            var window = BUE.popups[popup];
-            window.sourceOnopen = window.onopen;
-            window.onopen = grabbedClass;
-          }
-        }
-      }
-    }
-  };
-
   Drupal.behaviors.druruBlogTeaserViewSwitcher = {
     attach: function (context, settings) {
       $('.view-switcher').on('click', function () {
@@ -537,5 +507,14 @@ var Drupal = Drupal || {};
       document.getElementById("edit-inner-poll-new-id").value = id;
     }
   };
+
+  // issue-639: Добавить скролинг тела комментариев
+  $('.comment').each(function() {
+    var $comment = $(this),
+      $content = $comment.find('.content'),
+      contentWidth = $content.width(),
+      allowedRightSide = $comment.width() - $comment.find('.media-left').outerWidth(true) - ($content.outerWidth(true) - contentWidth);
+    contentWidth > allowedRightSide ? $content.css('max-width', allowedRightSide) : null;
+  });
 
 })(jQuery, Drupal);

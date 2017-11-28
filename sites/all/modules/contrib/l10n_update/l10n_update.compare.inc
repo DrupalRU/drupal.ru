@@ -9,7 +9,7 @@
  * Load common APIs.
  */
 // @todo Combine functions differently in files to avoid unnecessary includes.
-// Follow-up issue http://drupal.org/node/1834298
+// Follow-up issue https://www.drupal.org/node/1834298
 require_once __DIR__ . '/l10n_update.translation.inc';
 
 /**
@@ -51,7 +51,7 @@ function l10n_update_build_projects($refresh = FALSE) {
       // server to fall back to the latest stable release for that branch.
       if (isset($data['info']['version']) && strpos($data['info']['version'], '-dev')) {
         if (preg_match("/^(\d+\.x-\d+\.).*$/", $data['info']['version'], $matches)) {
-          // Example matches: 7.x-1.x-dev, 7.x-1.0-alpha1+5-dev => 7.x-1.x
+          // Example matches: 7.x-1.x-dev, 7.x-1.0-alpha1+5-dev => 7.x-1.x.
           $data['info']['version'] = $matches[1] . 'x';
         }
         elseif (preg_match("/^(\d+\.).*$/", $data['info']['version'], $matches)) {
@@ -120,9 +120,9 @@ function l10n_update_remove_disabled_projects(&$projects) {
 
     // Remove projects with matching name either by full string of by wild card.
     if (strpos($disabled_name, '*') !== FALSE) {
-      $pattern = str_replace( '*' , '.*?', $disabled_name);
-      $matches = preg_grep( '/^' . $pattern . '$/i' , array_keys($projects));
-      foreach($matches as $match) {
+      $pattern = str_replace('*', '.*?', $disabled_name);
+      $matches = preg_grep('/^' . $pattern . '$/i', array_keys($projects));
+      foreach ($matches as $match) {
         unset($projects[$match]);
       }
     }
@@ -255,9 +255,6 @@ function l10n_update_default_translation_server() {
  * @param string $langcodes
  *   Array of language codes. Defaults to all translatable languages.
  *
- * @return array
- *   Available sources indexed by project and language.
- *
  * @todo Return batch array or NULL
  */
 function l10n_update_check_projects($projects = array(), $langcodes = array()) {
@@ -347,7 +344,14 @@ function _l10n_update_batch_status_operations(array $projects, array $langcodes,
   foreach ($projects as $project) {
     foreach ($langcodes as $langcode) {
       // Check status of local and remote translation sources.
-      $operations[] = array('l10n_update_batch_status_check', array($project, $langcode, $options));
+      $operations[] = array(
+        'l10n_update_batch_status_check',
+        array(
+          $project,
+          $langcode,
+          $options,
+        ),
+      );
     }
   }
 

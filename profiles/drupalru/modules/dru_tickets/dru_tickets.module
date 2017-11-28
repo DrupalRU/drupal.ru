@@ -377,3 +377,13 @@ function dru_tickets_delete($node) {
       ->execute();
   }
 }
+
+/**
+ * Implements hook_node_access().
+*/
+function dru_tickets_node_access($node, $op, $account) {
+  // issue #484: Скрыть жалобы от не авторизованных пользователей
+  if (($node->type == 'ticket') && (!user_is_logged_in())) {
+    return NODE_ACCESS_DENY;
+  }
+}

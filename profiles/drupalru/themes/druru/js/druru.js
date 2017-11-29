@@ -242,6 +242,23 @@ var Drupal = Drupal || {};
           }
         });
       }
+
+      // Open or close ticket-popover on click
+      $('[data-toggle="ticket-popover"]').on('click', function() {
+        $(this).popover('toggle');
+        $('.btn-ticket-popover-close').remove();
+        $('.popover-title').append('<button type="button" class="close btn-ticket-popover-close">&times;</button>');
+      });
+      // Close ticket-popover on click outside OR on click close button
+      $(document).on('click', function(e) {
+        var $target = $(e.target);
+        if ($target.data('toggle') !== 'popover'
+          && $target.closest('[data-toggle="ticket-popover"]').length === 0
+          && $target.closest('.popover.in').length === 0
+          || $target.is('.btn-ticket-popover-close') ) {
+          $('[data-toggle="ticket-popover"]').popover('hide');
+        }
+      });
     }
   };
 

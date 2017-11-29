@@ -1,0 +1,142 @@
+<?php
+
+/**
+ * @file
+ * Contains main functionality of the module.
+ */
+
+define('ACAL_NODE', 1);
+define('ACAL_COMMENT', 2);
+
+/**
+ * Attach helpers.
+ */
+require_once __DIR__ . '/acal.helpers.inc';
+
+/**
+ * Implements hook_menu().
+ */
+function acal_menu() {
+  $items['admin/config/people/acal'] = [
+    'title' => 'Activity calendar',
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['acal_admin_form'],
+    'access arguments' => ['administer site configurations'],
+    'file' => 'acal.admin.inc',
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function acal_permission() {
+  return [
+    'acal collect statistic' => [
+      'title' => 'Collect statistic',
+      'description' => 'Will be collecting statistic for selected role(s) only',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function acal_entity_insert($entity, $type) {
+  if (acal_access($entity, $type)) {
+    acal_collate($GLOBALS['user']->uid, acal_get_id($entity, $type), acal_type_convert($type));
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function acal_cron() {
+  if (variable_get('acal_clear')) {
+    $year_ago = (date('Y') - 1) . date('md');
+    db_delete('acal')->condition('date', $year_ago, '<')->execute();
+  }
+}
+
+/**
+ * Implements hook_user_view().
+ */
+function acal_user_view($account, $view_mode, $langcode) {
+  $module_path = drupal_get_path('module', 'acal');
+  libraries_load('activity-calendar', 'minified');
+  drupal_add_js($module_path . '/acal.js');
+
+  $query = db_select('acal', 'a')
+    ->fields('a', ['date', 'type'])
+    ->condition('a.uid', $account->uid)
+    ->condition('a.date', date('Y'), '>=')
+    ->addTag('load_acal_statistic')
+    ->groupBy('date, type');
+  $query->addExpression('count(*)', 'activity');
+  $stats = $query->execute()->fetchAll();
+  array_walk($stats, '_acal_calculate_activity');
+  _acal_activity_sum($stats);
+  sort($stats);
+  drupal_add_js([
+    'acal' => [
+      'users' => [
+        'user' . $account->uid => $stats,
+      ],
+      'color' => variable_get('acal_color'),
+      'intervals' => array_filter(explode(',', variable_get('acal_intervals'))),
+    ],
+  ], 'setting');
+  $account->content['activity_calendar'] = [
+    '#type' => 'container',
+    '#weight' => 100,
+    '#attributes' => [
+      'class' => ['activity-calendar'],
+    ],
+  ];
+  $account->content['activity_calendar']['title'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'h3',
+    '#value' => t('Activity calendar'),
+  ];
+  $account->content['activity_calendar']['container'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'id' => 'acal-' . $account->uid,
+      'class' => ['acal-holder'],
+      'data-uid' => $account->uid,
+    ],
+  ];
+}
+
+/**
+ * Implements hook_libraries_info().
+ */
+function acal_libraries_info() {
+  $libraries['activity-calendar'] = [
+    'name' => 'Activity Calendar',
+    'vendor url' => 'https://github.com/mbaev/Activity-Calendar',
+    'download url' => 'https://github.com/mbaev/Activity-Calendar/releases',
+    'download file url' => 'https://github.com/mbaev/Activity-Calendar/archive/v.1.0.0.tar.gz',
+    'path' => 'lib',
+    // @TODO: Move this into version_callback and version_arguments.
+    'version' => '1.0.0',
+    'files' => [
+      'js' => [
+        'activity-calendar.js',
+      ],
+    ],
+    'variants' => [
+      'minified' => [
+        'files' => [
+          'js' => [
+            'activity-calendar.min.js',
+          ],
+        ],
+      ],
+    ],
+  ];
+
+  return $libraries;
+}

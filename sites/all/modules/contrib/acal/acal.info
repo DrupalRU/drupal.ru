@@ -1,0 +1,8 @@
+name        = Activity Calendar
+description = Shows activity of users in GitHub style
+version     = 7.x-1.0-dev
+core        = 7.x
+php         = 5.4
+configure   = admin/config/people/acal
+
+dependencies[] = libraries

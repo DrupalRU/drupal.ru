@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file Stores hooks for install and update the module.
+ */
+function acal_schema() {
+  $schema['acal'] = [
+    'description' => 'Stores activity stats for users.',
+    'fields' => [
+      'uid' => [
+        'type' => 'int',
+        'size' => 'normal',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+        'description' => 'User ID.',
+      ],
+      'date' => [
+        'type' => 'int',
+        'size' => 'normal',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Activity date in format %Y%m%d',
+      ],
+      'type' => [
+        'type' => 'int',
+        'size' => 'small',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Activity type.',
+      ],
+    ],
+    'indexes' => ['activity' => ['uid', 'date']],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function acal_install() {
+  variable_set('acal_collect', TRUE);
+  variable_set('acal_clear', TRUE);
+  variable_set('acal_node', TRUE);
+  variable_set('acal_node_coeff', 2);
+  variable_set('acal_comment', module_exists('comment'));
+  variable_set('acal_comment_coeff', 1);
+  variable_set('acal_color', '#2a75be');
+  variable_set('acal_intervals', '3,5,10,20');
+
+  foreach (node_type_get_names() as $type => $name) {
+    variable_set('acal_node_type_' . $type, TRUE);
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function acal_unnstall() {
+  variable_del('acal_collect');
+  variable_del('acal_clear');
+  variable_del('acal_node');
+  variable_del('acal_node_coeff');
+  variable_del('acal_comment');
+  variable_del('acal_comment_coeff');
+  variable_del('acal_color');
+  variable_del('acal_intervals');
+
+  foreach (node_type_get_names() as $type => $name) {
+    variable_del('acal_node_type_' . $type);
+  }
+}

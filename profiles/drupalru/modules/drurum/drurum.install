@@ -94,9 +94,10 @@ function drurum_update_7002() {
 /**
  * Add links into footer.
  */
-function drurum_update_7003(){
+function drurum_update_7003() {
   db_update('block_custom')
-    ->fields(array('body' => '<div class="logo-footer col-sm-2 col-vsd-1">
+    ->fields([
+      'body' => '<div class="logo-footer col-sm-2 col-vsd-1">
   <img src="/profiles/drupalru/themes/druru/img/logos/72.png"></div>
 <div class="copyright col-sm-8 col-vsd-7">
 <p>Содержимое сайта публикуется на условиях <a href="/license#content">CreativeCommons Attribution-ShareAlike 3.0</a> или более поздней версии<br>
@@ -112,7 +113,8 @@ function drurum_update_7003(){
 <li><a href="/contact" target="blank">Обратная связь</a></li>
 <li><a href="/rules" target="blank">Правила сайта</a></li>
 </ul>
-</div>'))
+</div>',
+    ])
     ->condition('bid', 95)
     ->execute();
 }
@@ -123,7 +125,8 @@ function drurum_update_7003(){
 function drurum_update_7004() {
 
   db_update('block_custom')
-    ->fields(array('body' => '<div class="logo-footer col-sm-2 col-vsd-1">
+    ->fields([
+      'body' => '<div class="logo-footer col-sm-2 col-vsd-1">
   <img src="/profiles/drupalru/themes/druru/img/logos/72.png"></div>
 <div class="copyright col-sm-8 col-vsd-7">
 <p>Содержимое сайта публикуется на условиях <a href="/license#content">CreativeCommons Attribution-ShareAlike 3.0</a> или более поздней версии<br>
@@ -140,7 +143,8 @@ function drurum_update_7004() {
 <li><a href="/ru_team" target="_blank">Команда</a></li>
 <li><a href="/contact" target="_blank">Обратная связь</a></li>
 </ul>
-</div>'))
+</div>',
+    ])
     ->condition('bid', 95)
     ->execute();
 }
@@ -173,4 +177,75 @@ function drurum_update_7006() {
  */
 function drurum_update_7007() {
   variable_set('dru_claim_allow_for_node_blog', 1);
+}
+
+/**
+ * Enable module Activity Calendar.
+ */
+function drurum_update_7008() {
+  module_enable(['acal']);
+  variable_set('acal_intervals', '15,30,45');
+  variable_set('acal_color', '#2a75be');
+  variable_set('acal_node_coeff', 4);
+
+  foreach (node_type_get_names() as $type => $name) {
+    variable_set('acal_node_type_' . $type, FALSE);
+  }
+  variable_set('acal_node_type_blog', TRUE);
+}
+
+/**
+ * Calculate user activity for the last year.
+ */
+function drurum_update_7009(&$sandbox) {
+  static $year_ago = REQUEST_TIME - 60 * 60 * 24 * 366;
+  if (!isset($sandbox['progress'])) {
+    $sandbox['progress'] = 0;
+    $sandbox['current_uid'] = 0;
+    // We'll -1 to disregard the uid 0...
+    $sandbox['max'] = db_query('SELECT COUNT(DISTINCT uid) FROM {users}')->fetchField() - 1;
+  }
+
+  $users = db_select('users', 'u')
+    ->fields('u', ['uid'])
+    ->condition('uid', $sandbox['current_uid'], '>')
+    ->range(0, 50)
+    ->orderBy('uid', 'ASC')
+    ->execute();
+
+  foreach ($users as $user) {
+    $query = db_select('comment', 'c')->fields('c', ['cid', 'created']);
+    $query->leftJoin('node', 'n', 'n.nid = c.nid');
+    $comments = $query->fields('n', ['type'])
+      ->condition('c.created', $year_ago, '>')
+      ->condition('c.uid', $user->uid)
+      ->execute()
+      ->fetchAll();
+
+    foreach ($comments as $comment) {
+      if ($comment->type == 'blog') {
+        acal_collate($user->uid, $comment->cid, acal_type_convert('comment'), $comment->created);
+      }
+    }
+
+    $nodes = db_select('node', 'n')
+      ->fields('n', ['nid', 'created', 'type'])
+      ->condition('n.created', $year_ago, '>')
+      ->condition('n.uid', $user->uid)
+      ->execute()
+      ->fetchAll();
+
+    foreach ($nodes as $node) {
+      if ($node->type == 'blog') {
+        acal_collate($user->uid, $node->nid, acal_type_convert('node'), $node->created);
+      }
+    }
+
+    $sandbox['progress']++;
+    $sandbox['current_uid'] = $user->uid;
+  }
+
+  $sandbox['#finished'] = empty($sandbox['max']) ? 1 : ($sandbox['progress'] / $sandbox['max']);
+
+  return 'All users have collated activity for the last year.';
 }

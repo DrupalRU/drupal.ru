@@ -184,7 +184,7 @@ function drurum_update_7007() {
  */
 function drurum_update_7008() {
   module_enable(['acal']);
-  variable_set('acal_intervals', '1,15,30,45');
+  variable_set('acal_intervals', '15,30,45');
   variable_set('acal_color', '#2a75be');
   variable_set('acal_node_coeff', 4);
 

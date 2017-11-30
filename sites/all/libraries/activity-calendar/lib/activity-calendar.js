@@ -971,7 +971,7 @@ Calendar = (function() {
       document.getElementById(container).appendChild(this._);
     }
     intervals = intervals || [4, 10, 15, 20];
-    maxInterval = intervals[intervals.length - 1];
+    maxInterval = intervals.length;
     dayHolder = this.makeHolder(data, day_size, num_weeks);
     datestr_coord_map = {};
     MS_IN_DAY = 1000 * 60 * 60 * 24;
@@ -1006,23 +1006,24 @@ Calendar = (function() {
     for (_i = 0, _len = data.length; _i < _len; _i++) {
       _ref3 = data[_i], date = _ref3[0], points = _ref3[1];
       coord = datestr_coord_map[date];
-      for (key = 0, _len2 = intervals.length; key < _len2; key++) {
-        i = intervals[key];
-        if (i < points) {
-          interval = intervals[key + 1];
+      if (coord && points > 0) {
+        interval = 0;
+        for (key = 0, _len2 = intervals.length; key < _len2; key++) {
+          i = intervals[key];
+          interval = key + 1;
+          if (i >= points) {
+            break;
+          }
         }
-      }
-      if (coord) {
         days[coord].setStyles({
           background: color,
           opacity: 1 / maxInterval * interval
         });
+        days[coord]._.setAttribute('title', date + ', ' + points + ' point(s)');
       }
-      days[coord]._.setAttribute('title', date + ', ' + points + ' points');
     }
   }
   __extends(Calendar, Element);
-  Calendar.prototype.getColor = function(points) {};
   Calendar.prototype.makeHolder = function(data, day_size, num_weeks) {
     var daysHolder, h, w;
     w = (day_size * num_weeks) + (1 * (num_weeks + 1));

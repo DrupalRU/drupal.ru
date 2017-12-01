@@ -343,6 +343,10 @@ function simple_events_update($node) {
       file_delete($node->original->event->image);
     }
   }
+  
+  // Workaround for issue #635
+  if ($fid == NULL)
+    $fid = 0;
 
   db_update('simple_events')
     ->fields(array(

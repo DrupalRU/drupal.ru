@@ -278,13 +278,16 @@ function marketplace_update($node) {
     }
   }
 
-  db_update('organizations')
+  db_merge('organizations')
+    ->key(array(
+      'nid' => $node->nid,
+      'vid' => $node->vid
+    ))
     ->fields(array(
       'website' => $node->website,
       'address' => $node->address,
       'logo_fid' => $fid,
     ))
-    ->condition('vid', $node->vid)
     ->execute();
 }
 
@@ -296,7 +299,7 @@ function marketplace_view($node, $view_mode, $langcode = NULL) {
   drupal_add_css(drupal_get_path('module', 'marketplace') . '/marketplace.css');
 
   $image_path = 'public://default-organization.png';
-  if ($node->logo) {
+  if (!empty($node->logo)) {
     $image_path = $node->logo->uri;
   }
   $logo_img = theme('image_style', array(
@@ -311,19 +314,19 @@ function marketplace_view($node, $view_mode, $langcode = NULL) {
     '#weight' => 1,
   );
 
-  $website = $node->website;
-  if (!valid_url($node->website, true)) {
+  $website = !empty($node->website) ? $node->website : NULL;
+  if ($website && !valid_url($website, true)) {
     $website = 'http://' . $website;
   }
-  $node->content['website'] = array(
-    '#markup' => l($node->website, $website, array('attributes' => array(
+  $node->content['website'] = !$website ? '' : array(
+    '#markup' => l($website, $website, array('attributes' => array(
       'rel' => 'nofollow',
       'target' => '_blank',
     ))),
     '#weight' => 1,
   );
 
-  $node->content['address'] = array(
+  $node->content['address'] = empty($node->address) ? null : array(
     '#markup' => check_plain($node->address),
     '#weight' => 1,
   );

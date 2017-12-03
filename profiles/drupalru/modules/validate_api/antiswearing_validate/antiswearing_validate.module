@@ -3,6 +3,8 @@
  * @file
  */
 
+use Wkhooy\ObsceneCensorRus;
+
 
 /**
  * Implements hook_validator_info().
@@ -26,12 +28,13 @@ function antiswearing_validate_validator_info() {
 function antiswearing_callback($validate_value) {
   module_load_include('php', 'antiswearing_validate', 'obscene/obscene.class');
 
-  $status = FALSE;
+  $matching = ObsceneCensorRus::matching($validate_value);
 
-  $filtred_value = ObsceneCensorRus::getFiltered($validate_value);
-  if ($filtred_value !== $validate_value) {
-    $status = t('Do not use coarse or offensive language');
+  if ($matching) {
+    return t('Do not use coarse or offensive language: @obscene',
+      array('@obscene' => implode(', ', $matching))
+    );
   }
 
-  return $status;
+  return FALSE;
 }

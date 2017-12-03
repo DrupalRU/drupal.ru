@@ -350,7 +350,7 @@ function simple_events_update($node) {
       'address' => $node->address,
       'time_from' => strtotime($node->time_from),
       'time_to' => $node->enable_time_to ? strtotime($node->time_to) : 0,
-      'image_fid' => $fid,
+      'image_fid' => $fid != NULL ? $fid : 0, // Workaround for issue #635
     ))
     ->condition('nid', $node->nid)
     ->execute();

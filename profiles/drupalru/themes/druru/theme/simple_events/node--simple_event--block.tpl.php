@@ -81,30 +81,31 @@
  */
 ?>
 <div id="node-<?php print $node->nid; ?>" class="thumbnail <?php print $classes; ?>"<?php print $attributes; ?>>
+
+  <?php if (isset($content['event_image'])): ?>
     <div class="image">
       <a href="<?php print $node_url; ?>">
         <?php print render($content['event_image']); ?>
       </a>
     </div>
+  <?php endif; ?>
 
-    <div class="caption">
-      <h3>
-        <a href="<?php print $node_url; ?>">
-          <?php print render($content['address']); ?>,
-          <small class="text-accent">
-            <?php print format_date($event->time_from, 'day_long') ?>
-          </small>
-        </a>
-      </h3>
-
-      <?php
-      print render($content['body']);
-      ?>
-    </div>
-
-    <div class="form-actions">
-      <a href="<?php print $node_url; ?>" role="button" class="btn btn-link">
-        <i class="fa fa-eye"></i> Смотреть
+  <div class="caption">
+    <h3>
+      <a href="<?php print $node_url; ?>">
+        <?php print render($content['address']); ?>,
+        <small class="text-accent">
+          <?php print format_date($event->time_from, 'day_long') ?>
+        </small>
       </a>
-    </div>
+    </h3>
+
+    <?php print render($content['body']); ?>
+  </div>
+
+  <div class="form-actions">
+    <a href="<?php print $node_url; ?>" role="button" class="btn btn-link">
+      <i class="fa fa-eye"></i> Смотреть
+    </a>
+  </div>
 </div>

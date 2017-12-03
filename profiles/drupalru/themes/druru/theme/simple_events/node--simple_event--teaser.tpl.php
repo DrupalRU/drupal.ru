@@ -106,7 +106,11 @@
             <dd class="address"><?php print render($content['address']); ?></dd>
           <?php endif; ?>
 
-          <dd class="event-type"><?php print render($content['simple_event_type']); ?></dd>
+          <?php if (isset($content['simple_event_type'])): ?>
+            <dd class="event-type">
+              <?php print render($content['simple_event_type']); ?>
+            </dd>
+          <?php endif; ?>
         </dl>
       </div>
     </div>

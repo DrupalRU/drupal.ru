@@ -83,7 +83,7 @@
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
   <div class="media">
-    <?php if ($picture): ?>
+    <?php if (!empty($content['logo'])): ?>
       <div class="media-left">
         <?php print render($content['logo']); ?>
       </div>
@@ -93,15 +93,15 @@
     <div class="media-body">
       <div class="content">
         <dl class="dl-horizontal">
-          <?php if ($content['website']): ?>
+          <?php if (!empty($content['website'])): ?>
             <dt class="website"><?php print t('Website'); ?></dt>
             <dd class="website"><?php print render($content['website']); ?></dd>
           <?php endif; ?>
-          <?php if ($content['address']): ?>
+          <?php if (!empty($content['address'])): ?>
             <dt class="address"><?php print t('Location'); ?></dt>
             <dd class="address"><?php print render($content['address']); ?></dd>
           <?php endif; ?>
-          <?php if ($content['organization_type']): ?>
+          <?php if (!empty($content['organization_type'])): ?>
             <dt class="organization-type"><?php print t('Organization type'); ?></dt>
             <dd class="organization-type"><?php print render($content['organization_type']); ?></dd>
           <?php endif; ?>

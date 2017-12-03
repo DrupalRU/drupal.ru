@@ -7,6 +7,7 @@ class ObsceneCensorRus {
   public static $logEx;
 
   private static $utf8 = 'UTF-8';
+
   private static $LT_P = 'пПnPp';
   private static $LT_I = 'иИiI1u';
   private static $LT_E = 'еЕeE';
@@ -104,6 +105,8 @@ class ObsceneCensorRus {
     'рсук',
     'влюб',
     'хулио',
+    'хулиг',
+    'хулиg',
     'ляп',
     'граб',
     'ибог',
@@ -157,7 +160,7 @@ class ObsceneCensorRus {
 		|
 		[' . self::$LT_E . self::$LT_YO . '][' . self::$LT_B . ']\w*
 		|
-		[' . self::$LT_I . '][' . /*self::$LT_P .*/ self::$LT_B . '][' . self::$LT_A . ']\w+
+		[' . self::$LT_I . '][' . self::$LT_B . '][' . self::$LT_A . ']\w+
 		|
 		[' . self::$LT_YI . '][' . self::$LT_O . '][' . self::$LT_B . self::$LT_P . ']\w*
 	) # ебать
@@ -180,6 +183,31 @@ class ObsceneCensorRus {
 )\b
 /xu', $text, $matches);
 
+    if ($matches[1]) {
+      for ($i = 0, $l = count($matches); $i < $l; $i++) {
+        $word = $matches[1][$i];
+        $word = mb_strtolower($word, self::$utf8);
+
+        foreach (self::$exceptions as $x) {
+          if (mb_strpos($word, $x) !== false) {
+            if (is_array(self::$logEx)) {
+              $t = &self::$logEx[$matches[1][$i]];
+              ++$t;
+            }
+            $word = false;
+            unset($matches[1][$i]);
+            break;
+          }
+        }
+
+        if ($word) {
+          $matches[1][$i] = str_replace(array(' ', ',', ';', '.', '!', '-', '?', "\t", "\n"), '', $matches[1][$i]);
+        }
+      }
+
+      $matches[1] = array_unique($matches[1]);
+    }
+
     return $matches[1];
   }
 
@@ -188,29 +216,6 @@ class ObsceneCensorRus {
     $matches = self::matching($text);
 
     if ($matches) {
-      for ($i = 0, $l = count($matches); $i < $l; $i++) {
-        $word = $matches[$i];
-        $word = mb_strtolower($word, self::$utf8);
-
-        foreach (self::$exceptions as $x) {
-          if (mb_strpos($word, $x) !== false) {
-            if (is_array(self::$logEx)) {
-              $t = &self::$logEx[$matches[$i]];
-              ++$t;
-            }
-            $word = false;
-            unset($matches[$i]);
-            break;
-          }
-        }
-
-        if ($word) {
-          $matches[$i] = str_replace(array(' ', ',', ';', '.', '!', '-', '?', "\t", "\n"), '', $matches[1][$i]);
-        }
-      }
-
-      $matches = array_unique($matches);
-
       $asterisks = array();
       foreach ($matches as $word) {
         if (is_array(self::$log)) {

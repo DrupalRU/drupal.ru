@@ -27,8 +27,8 @@ msgstr ""
 msgid "Do not allow to use coarse or offensive language"
 msgstr ""
 
-#: antiswearing_validate.module:46
-msgid "Do not use coarse or offensive language"
+#: antiswearing_validate.module:34
+msgid "Do not use coarse or offensive language: @obscene"
 msgstr ""
 
 #: antiswearing_validate.info:0

@@ -28,9 +28,9 @@ msgstr "Фильтр агрессивные или матерных слов"
 msgid "Do not allow to use coarse or offensive language"
 msgstr "Не разрешать использовать матерные или агрессивные слова"
 
-#: antiswearing_validate.module:46
-msgid "Do not use coarse or offensive language"
-msgstr "Не используйте матерные или агрессивные слова"
+#: antiswearing_validate.module:34
+msgid "Do not use coarse or offensive language: @obscene"
+msgstr "Не используйте матерные или агрессивные слова: @obscene"
 
 #: antiswearing_validate.info:0
 msgid "Antiswearing Validate"

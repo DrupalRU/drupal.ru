@@ -245,8 +245,11 @@ var Drupal = Drupal || {};
 
       // Open or close ticket-popover on click
       $('[data-toggle="ticket-popover"]').on('click', function() {
-        $(this).popover('toggle');
-        $('.btn-ticket-popover-close').remove();
+        // Close all open popovers before show new (issue #840)
+        $('[data-toggle="ticket-popover"]').popover('hide');
+        // Show clicked popover
+        $(this).popover('show');
+        // Add close button to popover
         $('.popover-title').append('<button type="button" class="close btn-ticket-popover-close">&times;</button>');
       });
       // Close ticket-popover on click outside OR on click close button

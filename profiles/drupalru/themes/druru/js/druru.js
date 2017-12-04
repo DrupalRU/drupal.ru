@@ -245,10 +245,10 @@ var Drupal = Drupal || {};
 
       // Open or close ticket-popover on click
       $('[data-toggle="ticket-popover"]').on('click', function() {
-        // Close all open popovers before show new (issue #840)
-        $('[data-toggle="ticket-popover"]').popover('hide');
         // Show clicked popover
-        $(this).popover('show');
+        $(this).popover('toggle');
+        // Close all open popovers before show new (issue #840)
+        $('[data-toggle="ticket-popover"]').not($(this)).popover('hide');
         // Add close button to popover
         $('.popover-title').append('<button type="button" class="close btn-ticket-popover-close">&times;</button>');
       });

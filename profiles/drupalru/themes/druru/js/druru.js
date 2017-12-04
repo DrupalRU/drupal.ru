@@ -245,9 +245,9 @@ var Drupal = Drupal || {};
 
       // Open or close ticket-popover on click
       $('[data-toggle="ticket-popover"]').on('click', function() {
-        // Show clicked popover
+        // Toggle clicked popover
         $(this).popover('toggle');
-        // Close all open popovers before show new (issue #840)
+        // Close all open popovers except clicked (issue #840)
         $('[data-toggle="ticket-popover"]').not($(this)).popover('hide');
         // Add close button to popover
         $('.popover-title').append('<button type="button" class="close btn-ticket-popover-close">&times;</button>');

@@ -383,7 +383,8 @@ function dru_tickets_delete($node) {
 */
 function dru_tickets_node_access($node, $op, $account) {
   // issue #484: Скрыть жалобы от не авторизованных пользователей
-  if (($node->type == 'ticket') && (!user_is_logged_in())) {
+  $type = is_object($node) ? $node->type : $node; // https://www.drupal.org/project/drupal/issues/1698532
+  if ($type == 'ticket' && !user_is_logged_in()) {
     return NODE_ACCESS_DENY;
   }
 }

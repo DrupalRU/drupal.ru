@@ -18,6 +18,8 @@ function druru_preprocess_user_profile(&$variables) {
 
   _druru_prepare_profile_groups($variables);
 
+  _druru_prepare_profile_thanks($variables);
+
   module_load_include('inc', 'blog', 'blog.pages');
   $variables['blog'] = blog_page_user($variables['elements']['#account']);
   if(!$variables['blog']){
@@ -36,13 +38,6 @@ function druru_preprocess_user_profile(&$variables) {
   }
 
   _druru_prepare_order($variables['user_profile']);
-
-  $variables['user_profile']['summary']['user_tnx']['#markup'] =
-    druru_icon('copy') . ' ' . $variables['user_profile']['summary']['user_tnx']['#thx_node'] . ', ' .
-    druru_icon('comments-o') . ' ' . $variables['user_profile']['summary']['user_tnx']['#thx_comment'];
-  $variables['user_profile']['summary']['users_tnx']['#markup'] =
-    druru_icon('copy') . ' ' . $variables['user_profile']['summary']['users_tnx']['#thx_node'] . ', ' .
-    druru_icon('comments-o') . ' ' . $variables['user_profile']['summary']['users_tnx']['#thx_comment'];
 }
 
 function _druru_prepare_profile_groups(&$variables) {
@@ -129,6 +124,20 @@ function _druru_prepare_order(&$elements) {
   foreach ($weigts as $key => $weigt) {
     if(isset($elements[$key])){
       $elements[$key]['#weight'] = $weigt;
+    }
+  }
+}
+
+function _druru_prepare_profile_thanks(&$variables) {
+  $profile = &$variables['user_profile'];
+  $copy_icon = druru_icon('copy');
+  $comments_icon = druru_icon('comments-o');
+
+  foreach (array('user_tnx', 'users_tnx') as $stat) {
+    if (!empty($profile['summary'][$stat])) {
+      $user_tnx = &$profile['summary'][$stat];
+      $user_tnx['#markup'] = "$copy_icon {$user_tnx['#thx_node']}";
+      $user_tnx['#markup'] .= ", $comments_icon {$user_tnx['#thx_comment']}";
     }
   }
 }

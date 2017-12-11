@@ -37,16 +37,12 @@ function druru_preprocess_user_profile(&$variables) {
 
   _druru_prepare_order($variables['user_profile']);
 
-  $user_tnx_node = $variables['user_profile']['summary']['user_tnx']['#thx_node'];
-  $user_tnx_comment = $variables['user_profile']['summary']['user_tnx']['#thx_comment'];
   $variables['user_profile']['summary']['user_tnx']['#markup'] =
-    druru_icon('copy') . ' ' . $user_tnx_node . ', ' .
-    druru_icon('comments-o') . ' ' . $user_tnx_comment;
-  $users_tnx_node = $variables['user_profile']['summary']['users_tnx']['#thx_node'];
-  $users_tnx_comment = $variables['user_profile']['summary']['users_tnx']['#thx_comment'];
+    druru_icon('copy') . ' ' . $variables['user_profile']['summary']['user_tnx']['#thx_node'] . ', ' .
+    druru_icon('comments-o') . ' ' . $variables['user_profile']['summary']['user_tnx']['#thx_comment'];
   $variables['user_profile']['summary']['users_tnx']['#markup'] =
-    druru_icon('copy') . ' ' . $users_tnx_node . ', ' .
-    druru_icon('comments-o') . ' ' . $users_tnx_comment;
+    druru_icon('copy') . ' ' . $variables['user_profile']['summary']['users_tnx']['#thx_node'] . ', ' .
+    druru_icon('comments-o') . ' ' . $variables['user_profile']['summary']['users_tnx']['#thx_comment'];
 }
 
 function _druru_prepare_profile_groups(&$variables) {

@@ -242,9 +242,16 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
         'user-tnx-stat',
       ],
     ],
-    '#weight' => 1,
-    '#markup' => druru_icon('copy') . ' ' . $tnx_stats->tnx_node . ', ' .
-                 druru_icon('comments-o') . ' ' . $tnx_stats->tnx_comment,
+    '#weight'     => 1,
+    '#markup'     => t(
+      'Nodes: @nodes, Comments: @comment',
+      [
+        '@nodes'   => $tnx_stats->tnx_node,
+        '@comment' => $tnx_stats->tnx_comment,
+      ]
+    ),
+    '#thx_node'    => $tnx_stats->tnx_node,
+    '#thx_comment' => $tnx_stats->tnx_comment,
   ];
 
   // Users tnx
@@ -257,9 +264,16 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
         'users-tnx-stat',
       ],
     ],
-    '#weight' => 2,
-    '#markup' => druru_icon('copy') . ' ' . $tnx_stats->node . ', ' .
-                 druru_icon('comments-o') . ' ' . $tnx_stats->comment,
+    '#weight'     => 2,
+    '#markup'     => t(
+      'Nodes: @nodes, Comments: @comment',
+      [
+        '@nodes'   => $tnx_stats->node,
+        '@comment' => $tnx_stats->comment,
+      ]
+    ),
+    '#thx_node'    => $tnx_stats->node,
+    '#thx_comment' => $tnx_stats->comment,
   ];
 }
 

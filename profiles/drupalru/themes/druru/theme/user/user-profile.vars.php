@@ -35,9 +35,19 @@ function druru_preprocess_user_profile(&$variables) {
     ));
   }
 
-
   _druru_prepare_order($variables['user_profile']);
 
+  // issue #703: Поменять формулировки благодарностей в профиле пользователя
+  $tnx_stats_node = $variables['user_profile']['summary']['user_tnx']['#thx_node'];
+  $tnx_stats_comment = $variables['user_profile']['summary']['user_tnx']['#thx_comment'];
+  $variables['user_profile']['summary']['user_tnx']['#markup'] =
+    druru_icon('copy') . ' ' . $tnx_stats_node . ', ' .
+    druru_icon('comments-o') . ' ' . $tnx_stats_comment;
+  $tnx_stats_node = $variables['user_profile']['summary']['users_tnx']['#thx_node'];
+  $tnx_stats_comment = $variables['user_profile']['summary']['users_tnx']['#thx_comment'];
+  $variables['user_profile']['summary']['users_tnx']['#markup'] =
+    druru_icon('copy') . ' ' . $tnx_stats_node . ', ' .
+    druru_icon('comments-o') . ' ' . $tnx_stats_comment;
 }
 
 function _druru_prepare_profile_groups(&$variables) {

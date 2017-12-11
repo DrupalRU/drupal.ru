@@ -141,7 +141,8 @@ class ObsceneCensorRus {
       $text = iconv($charset, self::$utf8, $text);
     }
 
-    preg_match_all('/
+
+    $pattern = '/
 \b\d*(
 	\w*[' . self::$LT_P . '][' . self::$LT_I . self::$LT_E . '][' . self::$LT_Z . '][' . self::$LT_D . ']\w* # пизда
 |
@@ -181,10 +182,12 @@ class ObsceneCensorRus {
 |
 	\w*[' . self::$LT_M . '][' . self::$LT_A . '][' . self::$LT_N . '][' . self::$LT_D . '][' . self::$LT_A . self::$LT_O . ']\w* # манда
 )\b
-/xu', $text, $matches);
+/xu';
+
+    preg_match_all($pattern, $text, $matches);
 
     if ($matches[1]) {
-      for ($i = 0, $l = count($matches); $i < $l; $i++) {
+      for ($i = 0, $l = count($matches[1]); $i < $l; $i++) {
         $word = $matches[1][$i];
         $word = mb_strtolower($word, self::$utf8);
 

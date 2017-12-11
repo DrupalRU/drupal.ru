@@ -244,7 +244,7 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
     ],
     '#weight'     => 1,
     '#markup'     => t(
-      'Nodes: @nodes, Comments: @comment',
+      druru_icon('copy') . ' @nodes, ' . druru_icon('comments-o') . ' @comment',
       [
         '@nodes'   => $tnx_stats->tnx_node,
         '@comment' => $tnx_stats->tnx_comment,
@@ -264,7 +264,7 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
     ],
     '#weight'     => 2,
     '#markup'     => t(
-      'Nodes: @nodes, Comments: @comment',
+      druru_icon('copy') . ' @nodes, ' . druru_icon('comments-o') . ' @comment',
       [
         '@nodes'   => $tnx_stats->node,
         '@comment' => $tnx_stats->comment,

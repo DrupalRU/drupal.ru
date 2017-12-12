@@ -228,7 +228,6 @@ function alttracker_node_update($node) {
     $node->original->title != $node->title ||
     $node->original->body['und'][0]['value'] != $node->body['und'][0]['value']
   ) {
-    dpm($node);
     _alttracker_add($node->nid, $node->uid, $node->changed);
   }
 }

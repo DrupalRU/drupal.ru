@@ -244,7 +244,7 @@ var Drupal = Drupal || {};
       }
 
       // Open or close ticket-popover on click
-      $('[data-toggle="ticket-popover"]').on('click', function() {
+      $('[data-toggle="ticket-popover"]').once().click(function() {
         // Toggle clicked popover
         $(this).popover('toggle');
         // Close all open popovers except clicked (issue #840)

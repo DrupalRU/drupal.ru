@@ -16,9 +16,9 @@ function druru_preprocess_user_profile(&$variables) {
     return;
   }
 
-  _druru_prepare_profile_groups($variables);
-
   _druru_prepare_profile_thanks($variables);
+
+  _druru_prepare_profile_groups($variables);
 
   module_load_include('inc', 'blog', 'blog.pages');
   $variables['blog'] = blog_page_user($variables['elements']['#account']);
@@ -129,7 +129,7 @@ function _druru_prepare_order(&$elements) {
 }
 
 function _druru_prepare_profile_thanks(&$variables) {
-  $profile = &$variables['user_profile'];
+  $profile = &$variables['elements'];
   $copy_icon = druru_icon('copy');
   $comments_icon = druru_icon('comments-o');
 

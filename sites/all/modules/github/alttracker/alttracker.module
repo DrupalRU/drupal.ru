@@ -225,11 +225,62 @@ function alttracker_node_insert($node) {
  */
 function alttracker_node_update($node) {
   if (
-    $node->original->title != $node->title ||
-    $node->original->body['und'][0]['value'] != $node->body['und'][0]['value']
+    _alttracker_get_compared_fields($node) !==
+    _alttracker_get_compared_fields($node->original)
   ) {
     _alttracker_add($node->nid, $node->uid, $node->changed);
   }
+}
+
+/**
+ * Return field data to compare by field-type schema.
+ *
+ * @param object $node
+ *
+ * @return array
+ */
+function _alttracker_get_compared_fields($node) {
+  $result = array();
+  $schemas = _alttracker_field_types();
+  $fields = variable_get("alttracker_node_type_fields_{$node->type}", array());
+
+  foreach ($fields as $field => $schema) {
+    if ($schemas[$schema]) {
+      foreach ($node->{$field}[LANGUAGE_NONE] as $item) {
+        $result[$field][] = array_filter($item, function($key) use ($schemas, $schema) {
+          return in_array($key, $schemas[$schema]);
+        },ARRAY_FILTER_USE_KEY);
+      }
+    } else {
+      $result[$field] = $node->{$field};
+    }
+  }
+
+  return $result;
+}
+
+/**
+ * Supported field types.
+ *
+ * @return array
+ */
+function _alttracker_field_types() {
+  return array(
+    'title' => array(),
+    'text' => array('value'),
+    'text_long' => array('value', 'format'),
+    'text_with_summary' => array('value', 'format'),
+    'number_integer' => array('value'),
+    'number_decimal' => array('value'),
+    'number_float' => array('value'),
+    'list_integer' => array('value'),
+    'list_boolean' => array('value'),
+    'list_float' => array('value'),
+    'list_text' => array('value'),
+    'taxonomy_term_reference' => array('tid'),
+    'file' => array('fid'),
+    'image' => array('fid'),
+  );
 }
 
 /**
@@ -244,6 +295,13 @@ function alttracker_node_delete($node) {
   db_delete('alttracker_user')
     ->condition('nid', $node->nid)
     ->execute();
+}
+
+/**
+ * Implements hook_node_type_delete().
+ */
+function alttracker_node_type_delete($info) {
+  variable_del("alttracker_node_type_fields_{$info->type}");
 }
 
 /**

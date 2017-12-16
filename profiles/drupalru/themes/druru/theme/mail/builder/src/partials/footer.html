@@ -1,0 +1,16 @@
+<container>
+    <row class="collapse dru">
+        <columns small="12" large="6" valign="middle">
+            <center>
+                <?php if ($menu_bottom): ?>
+                <spacer size="16"></spacer>
+                <menu style="margin-bottom: 0;">
+                    <?php foreach ($menu_bottom as $menu_item): ?>
+                    <item href="<?php print $menu_item['link']; ?>"><?php print $menu_item['title']; ?></item>
+                    <? endforeach; ?>
+                </menu>
+                <?php endif; ?>
+            </center>
+        </columns>
+    </row>
+</container>

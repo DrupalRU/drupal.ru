@@ -10827,10 +10827,16 @@ fieldset[disabled] #inner_poll_add_field_link a.focus {
 .popover-content .ticket-metadata .small-inline-text:last-of-type {
   margin-right: 0;
 }
+.popover-content .ticket-metadata .ticket-created {
+  color: #333333;
+}
 .popover-content .ticket-category,
 .popover-content .ticket-body,
 .popover-content .ticket-metadata {
   padding: .5em .7em;
+}
+h3.popover-title {
+  color: #333333;
 }
 #verdict-add-form .form-actions {
   margin-top: 15px;

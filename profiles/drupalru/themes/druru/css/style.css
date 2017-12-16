@@ -9910,6 +9910,27 @@ fieldset[disabled] #block-advanced-sphinx-searchbox .search-sphinx:focus + butto
 #block-drurum-new li a i {
   margin-right: 5px;
 }
+[aria-label] {
+  position: relative;
+  border-bottom: 1px dashed;
+}
+[aria-label]:after {
+  content: attr(aria-label);
+  display: none;
+  padding: 5px;
+  background-color: #fff;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 2;
+  border: 1px dashed;
+  color: #3D76A0;
+  box-shadow: 0 5px 10px -5px #000;
+}
+[aria-label]:hover:after,
+[aria-label]:active:after {
+  display: block;
+}
 body.adminimal-menu {
   height: calc(100% - 29px);
 }
@@ -10834,6 +10855,9 @@ fieldset[disabled] #inner_poll_add_field_link a.focus {
 }
 #verdict-add-form .form-actions {
   margin-top: 15px;
+}
+.dru-tnx-user-stat > span {
+  margin-right: 12px;
 }
 html {
   height: 100%;

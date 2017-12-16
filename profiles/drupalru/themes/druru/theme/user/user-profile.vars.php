@@ -16,8 +16,9 @@ function druru_preprocess_user_profile(&$variables) {
     return;
   }
 
+  // Preprocess profile thanks
   _druru_prepare_profile_thanks($variables);
-
+  // Preprocess profile groups
   _druru_prepare_profile_groups($variables);
 
   module_load_include('inc', 'blog', 'blog.pages');
@@ -128,6 +129,11 @@ function _druru_prepare_order(&$elements) {
   }
 }
 
+/**
+ * Preprocess user thanks.
+ *
+ * @param array $variables User variables
+ */
 function _druru_prepare_profile_thanks(&$variables) {
   $profile = &$variables['elements'];
   $copy_icon = druru_icon('copy');
@@ -136,8 +142,31 @@ function _druru_prepare_profile_thanks(&$variables) {
   foreach (array('user_tnx', 'users_tnx') as $stat) {
     if (!empty($profile['summary'][$stat])) {
       $user_tnx = &$profile['summary'][$stat];
-      $user_tnx['#markup'] = "$copy_icon {$user_tnx['#thx_node']}";
-      $user_tnx['#markup'] .= ", $comments_icon {$user_tnx['#thx_comment']}";
+
+      $user_tnxs = [
+        '#theme_wrappers' => array('container'),
+        '#attributes' => $user_tnx['#attributes'] ?: ['class' => ['tnx']],
+        'nodes' => [
+          '#type' => 'html_tag',
+          '#tag' => 'span',
+          '#value' => "$copy_icon {$user_tnx['#thx_node']}",
+          '#attributes' => [
+            //'title' => t('Nodes'),
+            'aria-label' => t('Nodes'),
+          ],
+        ],
+        'comments' => [
+          '#type' => 'html_tag',
+          '#tag' => 'span',
+          '#value' => "$comments_icon {$user_tnx['#thx_comment']}",
+          '#attributes' => [
+            //'title' => t('Comments'),
+            'aria-label' => t('Comments'),
+          ],
+        ],
+      ];
+
+      $user_tnx['#markup'] = drupal_render($user_tnxs);
     }
   }
 }

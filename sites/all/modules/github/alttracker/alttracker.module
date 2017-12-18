@@ -224,10 +224,10 @@ function alttracker_node_insert($node) {
  * Adds tracking information for this node since it's been updated.
  */
 function alttracker_node_update($node) {
-  if (
-    _alttracker_get_compared_fields($node) !==
-    _alttracker_get_compared_fields($node->original)
-  ) {
+  $node_field = _alttracker_get_compared_fields($node);
+  $node_origin_field = _alttracker_get_compared_fields($node->original);
+
+  if ($node_field !== $node_origin_field) {
     _alttracker_add($node->nid, $node->uid, $node->changed);
   }
 }
@@ -251,7 +251,8 @@ function _alttracker_get_compared_fields($node) {
           return in_array($key, $schemas[$schema]);
         },ARRAY_FILTER_USE_KEY);
       }
-    } else {
+    }
+    else {
       $result[$field] = $node->{$field};
     }
   }
@@ -502,8 +503,6 @@ function theme_alttracker($variables){
     }
 
     $title = l($node->title, 'node/' . $node->nid, array('query' => comment_new_page_count($node->comment_count, $node->new_replies, $node), 'fragment' => 'new'));
-
-
     if(!empty($node->terms)){
       $terms_links = array();
       foreach($node->terms as $term){

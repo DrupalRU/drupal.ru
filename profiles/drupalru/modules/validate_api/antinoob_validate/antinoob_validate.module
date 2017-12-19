@@ -1,5 +1,7 @@
 <?php
 
+define('ANTINOOB_VALIDATE_MIN_CAPS_WORD', 1);
+
 /**
  * @file
  */
@@ -9,25 +11,26 @@
  * Antinoob validation.
  */
 function antinoob_validate_validator_info() {
-  $items = array();
-  $items[] = array(
-    'type' => 'text',
-    'title' => t('Exclamation'),
+  $items = [];
+  $items[] = [
+    'type'        => 'text',
+    'title'       => t('Exclamation'),
     'description' => t('Disallow to use multiple exclamation symbols in a row.'),
-    'name' => 'exclamation_point',
-    'callback' => 'antinoob_exclamation_symbol_callback',
-  );
+    'name'        => 'exclamation_point',
+    'callback'    => 'antinoob_exclamation_symbol_callback',
+  ];
 
-  $items[] = array(
-    'type' => 'text',
-    'title' => t('Caps Lock'),
+  $items[] = [
+    'type'        => 'text',
+    'title'       => t('Caps Lock'),
     'description' => t('Disallow to use all capital words.'),
-    'name' => 'caps_lock',
-    'callback' => 'antinoob_caps_lock_callback',
-  );
+    'name'        => 'caps_lock',
+    'callback'    => 'antinoob_caps_lock_callback',
+  ];
 
-  $restricted_words = explode("\n", file_get_contents(drupal_get_path('module', 'antinoob_validate') . '/forbitten.words'));
-  $words = array();
+  $restricted_words = explode("\n", file_get_contents(drupal_get_path('module',
+      'antinoob_validate') . '/forbitten.words'));
+  $words = [];
   foreach ($restricted_words as $word) {
     $word = trim($word);
     if (!empty($word)) {
@@ -35,13 +38,14 @@ function antinoob_validate_validator_info() {
     }
   }
 
-  $items[] = array(
-    'type' => 'text',
-    'title' => t('Disallowed words'),
-    'description' => t('Disallow to use word(s): !words.', array('!words' => implode(', ', $words))),
-    'name' => 'disallowed_words',
-    'callback' => 'antinoob_disallowed_words_callback',
-  );
+  $items[] = [
+    'type'        => 'text',
+    'title'       => t('Disallowed words'),
+    'description' => t('Disallow to use word(s): !words.',
+      ['!words' => implode(', ', $words)]),
+    'name'        => 'disallowed_words',
+    'callback'    => 'antinoob_disallowed_words_callback',
+  ];
   return $items;
 }
 
@@ -51,7 +55,8 @@ function antinoob_validate_validator_info() {
 function antinoob_disallowed_words_callback($validate_value) {
   $status = FALSE;
 
-  $restricted_words = explode("\n", file_get_contents(drupal_get_path('module', 'antinoob_validate') . '/forbitten.words'));
+  $restricted_words = explode("\n", file_get_contents(drupal_get_path('module',
+      'antinoob_validate') . '/forbitten.yml'));
 
   $words = FALSE;
 
@@ -67,7 +72,8 @@ function antinoob_disallowed_words_callback($validate_value) {
   }
 
   if ($words) {
-    $status = t('[@word] is forbidden to use.', array('@word' => implode(', ', $words)));
+    $status = t('[@word] is forbidden to use.',
+      ['@word' => implode(', ', $words)]);
   }
 
   return $status;
@@ -88,14 +94,25 @@ function antinoob_exclamation_symbol_callback($validate_value) {
 }
 
 /**
- *
+ * Caps validation.
  */
 function antinoob_caps_lock_callback($validate_value) {
   $status = FALSE;
 
-  $upper = mb_strtoupper($validate_value);
-  if ($validate_value == $upper) {
-    $status = t('Using ALL capital symbols is forbidden. ');
+  $words = array_filter(explode(' ',
+    preg_replace('/[^\w\s]/ui', '', $validate_value)), function ($value) {
+    return mb_strlen(trim($value)) > ANTINOOB_VALIDATE_MIN_CAPS_WORD;
+  });
+
+  $forbidden = [];
+  foreach ($words as $word) {
+    if ($word == mb_strtoupper($word))
+      $forbidden[] = $word;
+  }
+
+  if ($forbidden) {
+    $status = t('Using ALL capital symbols is forbidden: @obscene',
+      ['@obscene' => implode(', ', $forbidden)]);
   }
 
   return $status;

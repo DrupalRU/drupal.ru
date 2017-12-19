@@ -3,19 +3,21 @@
  * @file
  */
 
+use Wkhooy\ObsceneCensorRus;
+
 
 /**
  * Implements hook_validator_info().
  */
 function antiswearing_validate_validator_info() {
-  $items = array();
-  $items[] = array(
-    'type' => 'text',
-    'title' => t('Coarse or offensive language filter'),
+  $items = [];
+  $items[] = [
+    'type'        => 'text',
+    'title'       => t('Coarse or offensive language filter'),
     'description' => t('Do not allow to use coarse or offensive language'),
-    'name' => 'antiswearing',
-    'callback' => 'antiswearing_callback',
-  );
+    'name'        => 'antiswearing',
+    'callback'    => 'antiswearing_callback',
+  ];
   return $items;
 }
 
@@ -26,12 +28,26 @@ function antiswearing_validate_validator_info() {
 function antiswearing_callback($validate_value) {
   module_load_include('php', 'antiswearing_validate', 'obscene/obscene.class');
 
-  $status = FALSE;
+  $matchings = ObsceneCensorRus::matching($validate_value);
 
-  $filtred_value = ObsceneCensorRus::getFiltered($validate_value);
-  if ($filtred_value !== $validate_value) {
-    $status = t('Do not use coarse or offensive language');
+  if ($matchings) {
+    foreach ($matchings as $k => $matching) {
+      preg_match_all("/(?:|[^\s]*)($matching)(?:$|[^\s]*)/ui", $validate_value,
+        $matches);
+
+      // Exclude URI's && Emails
+      $url_pattern = '/^(?:(https?)?(?::\/\/)?)?((?:www\.)?([\w\.\/\?\~\!\@\=\[\]]+)(\/|\.)([\w\.\/\?\~\!\@\=\[\]]+))$/ui';
+      if ($matches[0][0] && preg_match($url_pattern, $matches[0][0],
+          $urlmatches)) {
+        unset($matchings[$k]);
+      }
+    }
+
+    if ($matchings) {
+      return t('Do not use coarse or offensive language: @obscene',
+        ['@obscene' => implode(', ', $matchings)]);
+    }
   }
 
-  return $status;
+  return FALSE;
 }

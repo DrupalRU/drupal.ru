@@ -1,6 +1,6 @@
 <?php
 
-define('ANTINOOB_VALIDATE_MAX_CAPS_WORD', 3);
+define('ANTINOOB_VALIDATE_MIN_CAPS_WORD', 1);
 
 /**
  * @file
@@ -56,7 +56,7 @@ function antinoob_disallowed_words_callback($validate_value) {
   $status = FALSE;
 
   $restricted_words = explode("\n", file_get_contents(drupal_get_path('module',
-      'antinoob_validate') . '/forbitten.words'));
+      'antinoob_validate') . '/forbitten.yml'));
 
   $words = FALSE;
 
@@ -101,7 +101,7 @@ function antinoob_caps_lock_callback($validate_value) {
 
   $words = array_filter(explode(' ',
     preg_replace('/[^\w\s]/ui', '', $validate_value)), function ($value) {
-    return strlen(trim($value)) > ANTINOOB_VALIDATE_MAX_CAPS_WORD;
+    return mb_strlen(trim($value)) > ANTINOOB_VALIDATE_MIN_CAPS_WORD;
   });
 
   $forbidden = [];

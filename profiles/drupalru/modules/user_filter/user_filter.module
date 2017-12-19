@@ -8,54 +8,105 @@
  * Implements hook_filter_info().
  */
 function user_filter_filter_info() {
-  $filters = array();
-  $filters['user_filter'] = array(
-    'title' => t('User filter'),
-    'description' => t('View user info by "@username"'),
+  $filters = [];
+  $filters['user_filter'] = [
+    'title'            => t('User filter'),
+    'description'      => t('View user info by "@username"'),
     'process callback' => 'user_filter_filter_process',
-    'cache' => FALSE,
-  );
+    'cache'            => FALSE,
+  ];
   return $filters;
 }
 
 /**
  * Filter process.
+ *
+ * @param string $text
+ *
+ * @return string
  */
-function user_filter_filter_process($text, $filter, $format) {
-  if (!empty($text)) {
-    $users = user_filter_mention($text);
-    if (!empty($users)) {
-      foreach ($users as $user) {
-        $user_profile = l('@' . $user->name, drupal_get_path_alias('user/' . $user->uid), array('attributes' => array('class' => array('user_filter'), 'data-user' => array($user->name))));
-        $text = preg_replace('/@' . $user->name . '/', $user_profile, $text);
-      }
+function user_filter_filter_process($text) {
+  if ($users = user_filter_mention($text)) {
+    $patterns = [];
+    $replacements = [];
+
+    foreach ($users as $user) {
+      $uid = $user->uid;
+      $name = $user->name;
+      $patterns[] = "/([^\S]|^)([@]\b$name\b)/ui";
+      $replacements[] = '${1}' . l("@$name", "user/$uid", [
+          'attributes' => [
+            'class'     => ['user_filter'],
+            'data-user' => $uid,
+          ],
+        ]);
     }
-    return $text;
+
+    $text = user_filter_replace_users($patterns, $replacements, $text);
   }
-  else {
-    return $text;
-  }
+
+  return $text;
 }
 
 /**
- * User Filter API.
+ * Replace mentions.
  *
- * Check Users in text by "@username".
+ * @param array  $patterns
+ * @param array  $replacements Replacements.
+ * @param string $text         Input value.
  *
- * Function "user_filter_mention($text)".
- * Return an array with User objects.
+ * @return string
+ */
+function user_filter_replace_users($patterns, $replacements, $text) {
+  return preg_replace($patterns, $replacements, $text);
+}
+
+/**
+ * Get users mentions.
+ *
+ * @param string $text
+ *
+ * @return array
  */
 function user_filter_mention($text) {
-  if (!empty($text)) {
-    $users = array();
-    preg_match_all('/[@][\w\d]+/', $text, $matches);
-    foreach ($matches[0] as $match) {
-      $name = drupal_substr($match, 1, $length = NULL);
-      $user = user_load_by_name($name);
-      if (is_object($user)) {
-        $users[] = $user;
-      }
-    }
-    return $users;
+  $users = [];
+  $pattern = '/(?:[^\S]|^)(?:[@])(\b([\w\d][\s@.\-\_]{0,1})+\b)/iu';
+
+  preg_match_all($pattern, $text, $matches,
+    PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+
+  if ($matches) {
+    $matches = array_map(function ($match) {
+      if (isset($match[2]))
+        unset($match[2]);
+      return $match;
+    }, $matches);
+
+    $users = user_filter_get_users($matches);
   }
+
+  return $users;
+}
+
+/**
+ * Fetching users from DB.
+ *
+ * @param array $matches Users names.
+ *
+ * @return array
+ */
+function user_filter_get_users($matches) {
+  $query = db_select('users', 'u')->fields('u')->condition('u.status', 1);
+  $or = db_or();
+
+  foreach ($matches as $match) {
+    if (!empty($match[1][0])) {
+      $name = explode(' ', $match[1][0])[0];
+      $or->condition('u.name', db_like($name) . '%', 'LIKE');
+    }
+  }
+
+  $query->condition($or)->orderBy('u.name', 'DESC');
+
+  return $query->execute()->fetchAll();
 }

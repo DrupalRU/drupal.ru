@@ -1,0 +1,20 @@
+<container>
+    <row class="collapse dru">
+        <columns style="padding-bottom: 0;" small="12" large="6">
+            <?php if ($menu_top): ?>
+            <img class="small-float-center" src="<?php print $logo; ?>" alt="Drupal.ru Logo">
+            <?php endif; ?>
+        </columns>
+
+        <columns small="12" large="6">
+            <?php if ($menu_top): ?>
+            <spacer size="25"></spacer>
+            <menu style="margin-bottom: 0;">
+                <?php foreach ($menu_top as $menu_item): ?>
+                <item href="<?php print $menu_item['link']; ?>"><?php print $menu_item['title']; ?></item>
+                <?php endforeach; ?>
+            </menu>
+            <?php endif; ?>
+        </columns>
+    </row>
+</container>

@@ -249,3 +249,11 @@ function drurum_update_7009(&$sandbox) {
 
   return 'All users have collated activity for the last year.';
 }
+
+
+/**
+ * Set up Mailsystem theme as default using theme (Druru).
+ */
+function drurum_update_7011(&$sandbox) {
+  variable_set('mailsystem_theme', 'druru');
+}

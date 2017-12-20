@@ -258,3 +258,10 @@ function drurum_update_7010(&$sandbox) {
     'title' => 'title', 'body' => 'text_with_summary'
   ]);
 }
+
+/**
+ * Set up Mailsystem theme as default using theme (Druru).
+ */
+function drurum_update_7011(&$sandbox) {
+  variable_set('mailsystem_theme', 'druru');
+}

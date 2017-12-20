@@ -250,6 +250,8 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
         '@comment' => $tnx_stats->tnx_comment,
       ]
     ),
+    '#thx_node'    => $tnx_stats->tnx_node,
+    '#thx_comment' => $tnx_stats->tnx_comment,
   ];
 
   // Users tnx
@@ -270,6 +272,8 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
         '@comment' => $tnx_stats->comment,
       ]
     ),
+    '#thx_node'    => $tnx_stats->node,
+    '#thx_comment' => $tnx_stats->comment,
   ];
 }
 

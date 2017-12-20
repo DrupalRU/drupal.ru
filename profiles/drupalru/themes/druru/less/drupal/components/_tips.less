@@ -1,0 +1,25 @@
+[aria-label] {
+  position: relative;
+  border-bottom: 1px dashed;
+
+  &:after {
+    content: attr(aria-label);
+    display: none;
+    padding: @padding-small-vertical;
+    background-color: @main-content-bg;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 2;
+    border: 1px dashed;
+    color: @brand-primary;
+    box-shadow: 0 5px 10px -5px #000;
+  }
+
+  &:hover,
+  &:active {
+    &:after {
+      display: block;
+    }
+  }
+}

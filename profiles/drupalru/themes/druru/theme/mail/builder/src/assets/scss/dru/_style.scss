@@ -1,0 +1,11 @@
+// Main styles
+.dru {
+    background-color: $brand-primary;
+
+    table.menu td.menu-item a, 
+    table.menu th.menu-item a, 
+    a,
+    p {
+        color: $brand-primary-link;
+    }
+}

@@ -106,7 +106,7 @@ function alttracker_menu() {
     'type' => MENU_NORMAL_ITEM,
     'file' => 'alttracker.admin.inc',
   );
-  
+
   $items['alttracker/autocomplete/%'] = array(
     'page callback' => 'alttracker_autocomplete_callback',
     'page arguments' => array(2),
@@ -214,7 +214,7 @@ function _alttracker_user_access($account) {
  *
  * Adds new tracking information for this node since it's new.
  */
-function alttracker_node_insert($node, $arg = 0) {
+function alttracker_node_insert($node) {
   _alttracker_add($node->nid, $node->uid, $node->changed);
 }
 
@@ -223,8 +223,65 @@ function alttracker_node_insert($node, $arg = 0) {
  *
  * Adds tracking information for this node since it's been updated.
  */
-function alttracker_node_update($node, $arg = 0) {
-  _alttracker_add($node->nid, $node->uid, $node->changed);
+function alttracker_node_update($node) {
+  $node_field = _alttracker_get_compared_fields($node);
+  $node_origin_field = _alttracker_get_compared_fields($node->original);
+
+  if ($node_field !== $node_origin_field) {
+    _alttracker_add($node->nid, $node->uid, $node->changed);
+  }
+}
+
+/**
+ * Return field data to compare by field-type schema.
+ *
+ * @param object $node
+ *
+ * @return array
+ */
+function _alttracker_get_compared_fields($node) {
+  $result = array();
+  $schemas = _alttracker_field_types();
+  $fields = variable_get("alttracker_node_type_fields_{$node->type}", array());
+
+  foreach ($fields as $field => $schema) {
+    if ($schemas[$schema]) {
+      foreach ($node->{$field}[LANGUAGE_NONE] as $item) {
+        $result[$field][] = array_filter($item, function($key) use ($schemas, $schema) {
+          return in_array($key, $schemas[$schema]);
+        },ARRAY_FILTER_USE_KEY);
+      }
+    }
+    else {
+      $result[$field] = $node->{$field};
+    }
+  }
+
+  return $result;
+}
+
+/**
+ * Supported field types.
+ *
+ * @return array
+ */
+function _alttracker_field_types() {
+  return array(
+    'title' => array(),
+    'text' => array('value'),
+    'text_long' => array('value', 'format'),
+    'text_with_summary' => array('value', 'format'),
+    'number_integer' => array('value'),
+    'number_decimal' => array('value'),
+    'number_float' => array('value'),
+    'list_integer' => array('value'),
+    'list_boolean' => array('value'),
+    'list_float' => array('value'),
+    'list_text' => array('value'),
+    'taxonomy_term_reference' => array('tid'),
+    'file' => array('fid'),
+    'image' => array('fid'),
+  );
 }
 
 /**
@@ -232,13 +289,20 @@ function alttracker_node_update($node, $arg = 0) {
  *
  * Deletes tracking information for a node.
  */
-function alttracker_node_delete($node, $arg = 0) {
+function alttracker_node_delete($node) {
   db_delete('alttracker_node')
     ->condition('nid', $node->nid)
     ->execute();
   db_delete('alttracker_user')
     ->condition('nid', $node->nid)
     ->execute();
+}
+
+/**
+ * Implements hook_node_type_delete().
+ */
+function alttracker_node_type_delete($info) {
+  variable_del("alttracker_node_type_fields_{$info->type}");
 }
 
 /**
@@ -437,10 +501,8 @@ function theme_alttracker($variables){
     if ($node->new) {
       $comments .= ' ' . '<i class="fa fa-comment"></i>' . ' ' . l(format_plural($node->new, '1 new', '@count new'), 'node/' . $node->nid, array('query' => comment_new_page_count($node->comment_count, $node->new_replies, $node), 'fragment' => 'new'));
     }
-    
+
     $title = l($node->title, 'node/' . $node->nid, array('query' => comment_new_page_count($node->comment_count, $node->new_replies, $node), 'fragment' => 'new'));
-    
-    
     if(!empty($node->terms)){
       $terms_links = array();
       foreach($node->terms as $term){
@@ -461,9 +523,9 @@ function theme_alttracker($variables){
       'last updated' => array('class' => array('last-reply'), 'data' => '<i class="fa fa-history"></i>' . ' ' . t('!time ago', array('!time' => format_interval(REQUEST_TIME - $node->changed)))),
     );
   }
-  
+
   drupal_add_css(drupal_get_path('module', 'alttracker') . '/alttracker.css');
-  
+
   return theme('table', array('rows' => $rows, 'header' => array('', t('Title'), t('Author'), t('Replies'), t('Last updated')), 'attributes' => array('class' => array('alttracker'))) );
 }
 

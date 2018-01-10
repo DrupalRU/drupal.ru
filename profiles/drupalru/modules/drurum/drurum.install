@@ -250,6 +250,14 @@ function drurum_update_7009(&$sandbox) {
   return 'All users have collated activity for the last year.';
 }
 
+/**
+ * Setup Alttracker settings for fields comparing on save node.
+ */
+function drurum_update_7010(&$sandbox) {
+  variable_set('alttracker_node_type_fields_blog', [
+    'title' => 'title', 'body' => 'text_with_summary'
+  ]);
+}
 
 /**
  * Set up Mailsystem theme as default using theme (Druru).

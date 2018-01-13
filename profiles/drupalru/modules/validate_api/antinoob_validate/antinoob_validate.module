@@ -100,7 +100,7 @@ function antinoob_caps_lock_callback($validate_value) {
   $status = FALSE;
 
   $words = array_filter(explode(' ',
-    preg_replace('/[^\w\s]/ui', '', $validate_value)), function ($value) {
+    preg_replace('/[^\w\s]|\d/ui', '', $validate_value)), function ($value) {
     return mb_strlen(trim($value)) > ANTINOOB_VALIDATE_MIN_CAPS_WORD;
   });
 

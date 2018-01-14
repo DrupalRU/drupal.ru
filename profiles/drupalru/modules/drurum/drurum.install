@@ -264,4 +264,12 @@ function drurum_update_7010(&$sandbox) {
  */
 function drurum_update_7011(&$sandbox) {
   variable_set('mailsystem_theme', 'druru');
+
+}
+
+/**
+ * Enable Mailsystem and Mimemail modules.
+ */
+function drurum_update_7012(&$sandbox) {
+  module_enable(['mailsystem', 'mimemail', 'mimemail_action']);
 }

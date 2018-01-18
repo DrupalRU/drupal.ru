@@ -373,7 +373,7 @@ var Drupal = Drupal || {};
       var $helpBlocks = $('.help-block'),
         self = Drupal.behaviors.druruHelpBlocks,
         position = self.position;
-      if ($helpBlocks.length && !$('body').hasClass('show-form-help')) {
+      if ($helpBlocks.length && !$('body').hasClass('forms-help')) {
         $('.main-content').once(function () {
           var icon = Drupal.theme('icon', 'question-circle fa-2x'),
             $switcher = $('<a name="help-switcher" href="#" class="help-switcher text-default" title="' +
@@ -401,7 +401,7 @@ var Drupal = Drupal || {};
           });
         });
       }
-      else if ($helpBlocks.length && $('body').hasClass('show-form-help')) {
+      else if ($helpBlocks.length && $('body').hasClass('forms-help')) {
         $helpBlocks.show();
       }
     },

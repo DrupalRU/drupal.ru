@@ -28,8 +28,9 @@ function druru_preprocess_html(&$variables) {
   // Works only in case if in settings of the site not set 403 and 404 page.
   _druru_error_pages_preprocess('html', $vars);
 
-  // Add class show-form-help if user set checkbox
-  if ( $variables['user']->data['show_form_help'] ) {
-    $variables['classes_array'][] = 'show-form-help';
+  // Add class forms-help if user set checkbox and for anonimous users
+  $user = $variables['user'];
+  if (!isset($user->data['forms_help']) || $user->data['forms_help']) {
+    $variables['classes_array'][] = 'forms-help';
   }
 }

@@ -273,3 +273,25 @@ function drurum_update_7011(&$sandbox) {
 function drurum_update_7012(&$sandbox) {
   module_enable(['mailsystem', 'mimemail', 'mimemail_action']);
 }
+
+/**
+ * Hide profile field "Security Question"
+ */
+function drurum_update_7013() {
+  // Hide field on registration
+  db_update('profile_field')
+  ->fields(array('register' => 0))
+  ->condition('fid', 37)
+  ->execute();
+  // Hide field in profile
+  db_update('profile_field')
+  ->fields(array('visibility' => 4))
+  ->condition('fid', 37)
+  ->execute();
+
+  //enable reckaptcha
+  module_enable(['recaptcha']);
+
+  // disable ascii_art_captcha
+  module_disable(['ascii_art_captcha']);
+}

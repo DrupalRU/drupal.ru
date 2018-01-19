@@ -275,16 +275,17 @@ function drurum_update_7012(&$sandbox) {
 }
 
 /**
- * Disable profile field "Security Question" and remove it data
+ * Hide profile field "Security Question"
  */
 function drurum_update_7013() {
-  // remove data
-  db_delete('profile_value')
+  // Hide field on registration
+  db_update('profile_field')
+  ->fields(array('register' => 0))
   ->condition('fid', 37)
   ->execute();
-
-  // remove field
-  db_delete('profile_field')
+  // Hide field in profile
+  db_update('profile_field')
+  ->fields(array('visibility' => 4))
   ->condition('fid', 37)
   ->execute();
 

@@ -273,3 +273,24 @@ function drurum_update_7011(&$sandbox) {
 function drurum_update_7012(&$sandbox) {
   module_enable(['mailsystem', 'mimemail', 'mimemail_action']);
 }
+
+/**
+ * Disable profile field "Security Question" and remove it data
+ */
+function drurum_update_7013() {
+  // remove data
+  db_delete('profile_value')
+  ->condition('fid', 37)
+  ->execute();
+
+  // remove field
+  db_delete('profile_field')
+  ->condition('fid', 37)
+  ->execute();
+
+  //enable reckaptcha
+  module_enable(['recaptcha']);
+
+  // disable ascii_art_captcha
+  module_disable(['ascii_art_captcha']);
+}

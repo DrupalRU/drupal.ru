@@ -273,3 +273,15 @@ function drurum_update_7011(&$sandbox) {
 function drurum_update_7012(&$sandbox) {
   module_enable(['mailsystem', 'mimemail', 'mimemail_action']);
 }
+
+/**
+ * Change text on front page.
+ */
+function drurum_update_7013() {
+  db_update('block_custom')
+    ->fields(array(
+      'body' => '<div class="col-sm-7 col-vsd-8 col-sm-offset-1 text-center"><p class="lead"><span style="font-weight: 300;">Drupal (Дрýпал)</span> - является открытой платформой управления контентом для миллионов веб-сайтов и приложений. Он создан активным и разнообразным сообществом людей по всему миру.<br>Благодаря мощному функционалу Друпала, разрабатывать сложные сайты значительно проще, чем писать их с нуля.</p></div><div class="col-sm-4 col-vsd-3  text-center"><a href="/downloads" class="lead download-drupal-front"><i class="fa fa-drupal fa-4x"></i><br>Скачать Drupal!</a></div>'
+    ))
+    ->condition('bid', 93)
+    ->execute();
+}

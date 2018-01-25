@@ -227,7 +227,7 @@ function alttracker_node_update($node) {
   $node_field = _alttracker_get_compared_fields($node);
   $node_origin_field = _alttracker_get_compared_fields($node->original);
 
-  if ($node_field !== $node_origin_field) {
+  if ($node_field != $node_origin_field) {
     _alttracker_add($node->nid, $node->uid, $node->changed);
   }
 }

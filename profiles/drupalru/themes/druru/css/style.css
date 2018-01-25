@@ -9931,6 +9931,13 @@ fieldset[disabled] #block-advanced-sphinx-searchbox .search-sphinx:focus + butto
 [aria-label]:active:after {
   display: block;
 }
+#BackToTop {
+  background-color: #fafafa;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+}
 body.adminimal-menu {
   height: calc(100% - 29px);
 }

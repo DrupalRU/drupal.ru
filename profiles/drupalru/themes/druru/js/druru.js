@@ -537,4 +537,81 @@ var Drupal = Drupal || {};
     contentWidth > allowedRightSide ? $content.css('max-width', allowedRightSide) : null;
   });
 
+  /**
+   * Back to top.
+   */
+  Drupal.behaviors.druruBackToTop = {
+    attach: function (context, settings) {
+
+      function backToTopWidth() {
+        var $mainContainer = $('.main-container');
+        var $mainContWidth = $mainContainer.width();
+        var $contWidth = $mainContainer.children('.container').first().width();
+        return ($mainContWidth - $contWidth) / 2;
+      }
+      
+      /*function backToTopHeight() {
+        var $windowHeight = $(window).height();
+        var $footerHeight = $('.footer').height() +30 +1;
+        return $windowHeight - $footerHeight;
+      }*/
+
+      // Create BackToTop element
+      if ($('#BackToTop').length == 0) {
+        $('body').append('<div id="BackToTop"></div>');
+      }
+
+      // cache var
+      var $backToTop = $('#BackToTop');
+      // set initial width
+      $backToTop.css('width', backToTopWidth());
+
+      // on scroll
+      $(window).scroll(function() {
+        // Show #BackToTop when user scroll down
+        if ($(this).scrollTop() > 100 && backToTopWidth() > 15) {
+          $backToTop.css('width', backToTopWidth());
+          $backToTop.fadeIn();
+        }
+        else {
+          $backToTop.fadeOut();
+        }
+      });
+
+      // on resize
+      $(window).resize(function() {
+        // Hide #BackToTop on small screens
+        // NEED TRANSFORM TO BUTTON FOR MOBILE
+        if (backToTopWidth() > 15 && $(window).scrollTop() > 100) {
+          $backToTop.css('width', backToTopWidth());
+          $backToTop.fadeIn();
+        }
+        else {
+          $backToTop.fadeOut();
+        }
+      });
+
+      // on hover
+      $backToTop.hover(
+        // on hover
+        function() {
+          $(this).css('backgroundColor', '#eaeff6');
+          $(this).css('cursor', 'pointer');
+        },
+        // mouse over
+        function() {
+          $(this).css('backgroundColor', '#fafafa');
+          $(this).css('cursor', 'default');
+        }
+      );
+
+      // on click
+      $backToTop.click(function() {
+        $('html, body').animate({scrollTop : 0},500);
+        return false;
+      });
+
+    }
+  };
+
 })(jQuery, Drupal);

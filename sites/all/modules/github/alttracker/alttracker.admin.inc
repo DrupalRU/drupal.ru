@@ -3,7 +3,7 @@
  * @file
  * Administer module alttracker.module.
  */
- 
+
 function alttracker_admin_settings($form, &$form_state) {
   $form['alttracker_max_count'] = array(
     '#type' => 'textfield',
@@ -36,12 +36,21 @@ function alttracker_admin_settings($form, &$form_state) {
       '#collapsed' => FALSE,
     );
 
+    $form['alttracker_node_type_properties'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Properties to compare'),
+      '#tree' => TRUE,
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+
     foreach ($node_types as $type => $node_type_name) {
+      // Fields
       $form['alttracker_node_type_fields'][$type] = array(
         '#type' => 'fieldset',
         '#title' => $node_type_name,
         '#collapsible' => TRUE,
-        '#collapsed' => !(boolean) $alttracker_node_type[$type],
+        '#collapsed' => !(isset($alttracker_node_type[$type]) && $alttracker_node_type[$type]),
         '#states' => array(
           'visible' => array(
             "input[name=\"alttracker_node_type[{$type}]\"]" => array(
@@ -51,13 +60,7 @@ function alttracker_admin_settings($form, &$form_state) {
         ),
       );
 
-      $form_state['node_type_fields'][$type] = array(
-        'title' => array(
-          'label' => t('Title'),
-          'type' => 'title',
-        )
-      );
-      $form_state['node_type_fields'][$type] += _alttracker_admin_get_node_fields($type);
+      $form_state['node_type_fields'][$type] = _alttracker_admin_get_node_fields($type);
 
       $fields = variable_get("alttracker_node_type_fields_{$type}", array());
       foreach ($form_state['node_type_fields'][$type] as $field_name => $field) {
@@ -76,6 +79,35 @@ function alttracker_admin_settings($form, &$form_state) {
             array('%field' => $field['type'], '%func' => '_alttracker_field_types()')
           );
         }
+      }
+
+      // Properties
+      $form['alttracker_node_type_properties'][$type] = array(
+        '#type' => 'fieldset',
+        '#title' => $node_type_name,
+        '#collapsible' => TRUE,
+        '#collapsed' => !(isset($alttracker_node_type[$type]) && $alttracker_node_type[$type]),
+        '#states' => array(
+          'visible' => array(
+            "input[name=\"alttracker_node_type[{$type}]\"]" => array(
+              'checked' => TRUE,
+            ),
+          ),
+        ),
+      );
+
+      $form_state['node_type_properties'][$type] = _alttracker_get_node_properties();
+
+      $properties = variable_get("alttracker_node_type_properties_{$type}", array());
+      foreach ($form_state['node_type_properties'][$type] as $field_name => $field) {
+        $form['alttracker_node_type_properties'][$type][$field] = array(
+          '#type' => 'checkbox',
+          '#title' => t('@name (@value)', array(
+            '@name' => t(drupal_ucfirst($field)),
+            '@value' => $field,
+          ), array('context' => 'alttracker')),
+          '#default_value' => isset($properties[$field]),
+        );
       }
     }
   }
@@ -105,6 +137,7 @@ function alttracker_admin_settings($form, &$form_state) {
 function alttracker_admin_settings_submit($form, &$form_state) {
   $values = $form_state['values'];
 
+  // Save fields data
   if ($values['alttracker_node_type_fields']) {
     foreach ($values['alttracker_node_type_fields'] as $node_type => $fields) {
       $node_fields = $values['alttracker_node_type'][$node_type] ? array_filter(
@@ -117,6 +150,17 @@ function alttracker_admin_settings_submit($form, &$form_state) {
       }, array_combine(array_keys($node_fields), array_keys($node_fields)));
 
       variable_set("alttracker_node_type_fields_{$node_type}", $set);
+    }
+  }
+
+  // Save properties data
+  if ($values['alttracker_node_type_properties']) {
+    foreach ($values['alttracker_node_type_properties'] as $node_type => $fields) {
+      $set = array_filter($fields, function ($v) {
+        return $v;
+      });
+
+      variable_set("alttracker_node_type_properties_{$node_type}", $set);
     }
   }
   

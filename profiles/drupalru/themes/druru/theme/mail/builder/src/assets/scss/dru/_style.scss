@@ -9,3 +9,8 @@
         color: $brand-primary-link;
     }
 }
+
+// Fix table brake in Thunderbird
+.wrapper {
+    height: auto !important;
+}

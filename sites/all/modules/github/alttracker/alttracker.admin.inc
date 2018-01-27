@@ -102,10 +102,7 @@ function alttracker_admin_settings($form, &$form_state) {
       foreach ($form_state['node_type_properties'][$type] as $field_name => $field) {
         $form['alttracker_node_type_properties'][$type][$field] = array(
           '#type' => 'checkbox',
-          '#title' => t('@name (@value)', array(
-            '@name' => t(drupal_ucfirst($field)),
-            '@value' => $field,
-          ), array('context' => 'alttracker')),
+          '#title' => drupal_ucfirst($field),
           '#default_value' => isset($properties[$field]),
         );
       }
@@ -156,11 +153,7 @@ function alttracker_admin_settings_submit($form, &$form_state) {
   // Save properties data
   if ($values['alttracker_node_type_properties']) {
     foreach ($values['alttracker_node_type_properties'] as $node_type => $fields) {
-      $set = array_filter($fields, function ($v) {
-        return $v;
-      });
-
-      variable_set("alttracker_node_type_properties_{$node_type}", $set);
+      variable_set("alttracker_node_type_properties_{$node_type}", array_filter($fields));
     }
   }
   
@@ -194,11 +187,11 @@ function alttracker_autocomplete_callback($vid, $str){
   $tag_last = drupal_strtolower(array_pop($tags_typed));
   
   $result = db_select('taxonomy_term_data', 't')
-    -> fields('t', array('tid', 'name'))
-    -> condition('vid', $vid, '=')
-    -> condition('name', $tag_last.'%%', 'LIKE')
-    -> range(0, 10)
-    -> execute();
+    ->fields('t', array('tid', 'name'))
+    ->condition('vid', $vid, '=')
+    ->condition('name', $tag_last.'%%', 'LIKE')
+    ->range(0, 10)
+    ->execute();
   $prefix = count($tags_typed) ? drupal_implode_tags($tags_typed) . ', ' : '';
   
   foreach ($result as $term) {

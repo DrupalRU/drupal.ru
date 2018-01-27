@@ -277,7 +277,7 @@ function drurum_update_7012(&$sandbox) {
 /**
  * Hide profile field "Security Question"
  */
-function drurum_update_7013() {
+function drurum_update_7014() {
   // Hide field on registration
   db_update('profile_field')
   ->fields(array('register' => 0))

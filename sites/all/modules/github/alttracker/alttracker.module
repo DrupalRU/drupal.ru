@@ -227,9 +227,31 @@ function alttracker_node_update($node) {
   $node_field = _alttracker_get_compared_fields($node);
   $node_origin_field = _alttracker_get_compared_fields($node->original);
 
-  if ($node_field !== $node_origin_field) {
+  if ($node_field != $node_origin_field) {
     _alttracker_add($node->nid, $node->uid, $node->changed);
   }
+}
+
+/**
+ * Return all properties from 'node' schema.
+ *
+ * @return array
+ */
+function _alttracker_get_node_properties() {
+  $properties = &drupal_static(__FUNCTION__);
+
+  if (!$properties) {
+    $schema = drupal_get_schema('node');
+    // Unset regular props
+    unset(
+      $schema['fields']['nid'],
+      $schema['fields']['type'],
+      $schema['fields']['created']
+    );
+    $properties = array_keys($schema['fields']);
+  }
+
+  return $properties;
 }
 
 /**
@@ -242,8 +264,9 @@ function alttracker_node_update($node) {
 function _alttracker_get_compared_fields($node) {
   $result = array();
   $schemas = _alttracker_field_types();
-  $fields = variable_get("alttracker_node_type_fields_{$node->type}", array());
 
+  // Fields
+  $fields = variable_get("alttracker_node_type_fields_{$node->type}", array());
   foreach ($fields as $field => $schema) {
     if ($schemas[$schema]) {
       foreach ($node->{$field}[LANGUAGE_NONE] as $item) {
@@ -255,6 +278,12 @@ function _alttracker_get_compared_fields($node) {
     else {
       $result[$field] = $node->{$field};
     }
+  }
+
+  // Properties
+  $properties = variable_get("alttracker_node_type_properties_{$node->type}", array());
+  foreach ($properties as $property => $status) {
+    $result[$property] = $node->{$property};
   }
 
   return $result;

@@ -285,3 +285,17 @@ function drurum_update_7013() {
     ->condition('bid', 93)
     ->execute();
 }
+
+/**
+ * Set up alttracker comparing properties.
+ */
+function drurum_update_7014(&$sandbox) {
+  variable_set('alttracker_node_type_properties_blog', [
+    'title' => true,
+    'status' => true,
+    'comment' => true,
+    'promote' => true,
+    'sticky' => true,
+    'changed' => true,
+  ]);
+}

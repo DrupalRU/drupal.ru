@@ -37,7 +37,6 @@ function druru_form_privatemsg_list_alter(&$form, &$form_state) {
         '#value'      => check_plain($thread['subject']),
         '#attributes' => array(
           'class' => array(
-            'text-capitalize',
             'text-primary',
             'participants',
             'h3',

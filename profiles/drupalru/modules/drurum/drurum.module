@@ -429,3 +429,37 @@ function drurum_form_menu_edit_item_submit($form, &$form_state) {
     $vals['options']['html_allowed'] = $vals['html_allowed'];
   }
 }
+
+/**
+ * Implements hook_FORM_ID_form_alter().
+ */
+function drurum_form_user_profile_form_alter(&$form, &$form_state) {
+  if ($form['#user_category'] == 'account') {
+    $account = $form['#user'];
+    $form['forms_help'] = array(
+      '#type'        => 'fieldset',
+      '#title'       => t('Forms Help'),
+      '#collapsible' => TRUE,
+    );
+    $form['forms_help']['forms_help'] = array(
+      '#type'          => 'checkbox',
+      '#title'         => t('Show help for all forms'),
+      '#description'   => t('This checkbox allow you to see help for all forms.'),
+      '#default_value' => !empty($account->data['forms_help']) ? $account->data['forms_help'] : FALSE,
+    );
+  }
+}
+
+/**
+ * Implements hook_user_presave().
+ */
+function drurum_user_presave(&$edit, $account, $category) {
+  if (isset($edit['forms_help'])) {
+    // Set new value.
+    $edit['data']['forms_help'] = $edit['forms_help'];
+  }
+  elseif (!isset($account->data['forms_help'])) {
+    // Use default if none has been set.
+    $edit['data']['forms_help'] = variable_get('forms_help_default_status', 1);
+  }
+}

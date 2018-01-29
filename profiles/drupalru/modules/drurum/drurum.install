@@ -315,9 +315,12 @@ function drurum_update_7015() {
   ->condition('fid', 37)
   ->execute();
 
-  //enable reckaptcha
+  //enable recaptcha
   module_enable(['recaptcha']);
 
   // disable ascii_art_captcha
   module_disable(['ascii_art_captcha']);
+
+  // Set recaptcha by default
+  variable_set('captcha_default_challenge', 'recaptcha/reCAPTCHA');
 }

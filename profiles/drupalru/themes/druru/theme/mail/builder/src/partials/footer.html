@@ -5,8 +5,10 @@
                 <?php if ($menu_bottom): ?>
                 <spacer size="16"></spacer>
                 <menu style="margin-bottom: 0;">
-                    <?php foreach ($menu_bottom as $menu_item): ?>
-                    <item href="<?php print $menu_item['link']; ?>"><?php print $menu_item['title']; ?></item>
+                    <?php foreach ($menu_bottom as $menu_bottom_item): ?>
+                    <?php if ($menu_bottom_item): ?>
+                    <item href="<?php print $menu_bottom_item['link']; ?>"><?php print $menu_bottom_item['title']; ?></item>
+                    <? endif; ?>
                     <? endforeach; ?>
                 </menu>
                 <?php endif; ?>

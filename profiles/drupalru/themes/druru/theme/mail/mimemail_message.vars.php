@@ -21,28 +21,26 @@ function druru_preprocess_mimemail_message(&$variables) {
   $logo = drupal_get_path('theme', 'druru') . '/img/logos/logo-mail.png';
 
   $variables['logo'] = file_exists($logo) ? file_create_url($logo) : null;
-  $variables['base_path'] = base_path();
-  $variables['menu_top'] = druru_build_menu_for_mail('main-menu');
-  // ToDo: Uncomment when secondary menu will exist
+  $variables['base_path'] = _druru_mail_link_builder(base_path())['link'];
+  // ToDo: Uncomment for generate dynamically;
+  // $variables['menu_top'] = druru_build_menu_for_mail('main-menu');
   // $variables['menu_bottom'] = druru_build_menu_for_mail('main-menu');
-  $variables['menu_bottom'] = [
-    [
-      'link'  => url('privacy-policy', ['absolute' => true]),
-      'title' => 'Конфиденциальность',
-    ],
-    [
-      'link'  => url('rules', ['absolute' => true]),
-      'title' => 'Правила',
-    ],
-    [
-      'link'  => url('ru_team', ['absolute' => true]),
-      'title' => 'Команда',
-    ],
-    [
-      'link'  => url('contact', ['absolute' => true]),
-      'title' => 'Обратная связь',
-    ],
-  ];
+  $variables['menu_top'] = array_map(function ($i) {
+    return _druru_mail_link_builder(...$i);
+  }, [
+    ['tracker', 'Трекер'],
+    ['forum', 'Форум'],
+    ['services', 'Компании'],
+    ['events', 'События'],
+  ]);
+  $variables['menu_bottom'] = array_map(function ($i) {
+    return _druru_mail_link_builder(...$i);
+  }, [
+    ['privacy-policy', 'Конфиденциальность'],
+    ['rules', 'Правила'],
+    ['ru_team', 'Команда'],
+    ['contact', 'Обратная связь'],
+  ]);
 }
 
 /**
@@ -54,11 +52,23 @@ function druru_preprocess_mimemail_message(&$variables) {
  */
 function druru_build_menu_for_mail($menu_name) {
   return array_map(function ($v) {
-    return [
-      'link'  => url($v['link']['href'], ['absolute' => true]),
-      'title' => $v['link']['link_title'],
-    ];
+    return _druru_mail_link_builder($v['link']['href'], $v['link']['link_title']);
   }, array_filter(menu_tree_all_data($menu_name, null, 1), function ($e) {
     return !$e['link']['hidden'];
   }));
+}
+
+/**
+ * Make links for mail.
+ *
+ * @param string|null $url   Link href.
+ * @param string|null $title Link title.
+ *
+ * @return array
+ */
+function _druru_mail_link_builder($url = null, $title = null) {
+  return [
+    'link'  => url($url ?: $GLOBALS['base_url'], ['absolute' => true]),
+    'title' => $title ?: variable_get('site_name'),
+  ];
 }

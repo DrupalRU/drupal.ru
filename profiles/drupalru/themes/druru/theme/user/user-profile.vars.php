@@ -26,7 +26,7 @@ function druru_preprocess_user_profile(&$variables) {
   if(!$variables['blog']){
     $variables['blog'] = druru_status_messages(array(
       'display' => FALSE,
-      'messages' => array(
+      /*'messages' => array(
         'info' => array(
           $GLOBALS['user']->uid == $variables['elements']['#account']->uid
             ? t('You don\'t have posts. You can create <a href="@url">first post</a>', array(
@@ -34,7 +34,7 @@ function druru_preprocess_user_profile(&$variables) {
             ))
             : t('This user has no posts.')
         )
-      ),
+      ),*/
     ));
   }
 

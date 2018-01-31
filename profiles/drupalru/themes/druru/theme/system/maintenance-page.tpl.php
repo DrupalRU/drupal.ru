@@ -26,11 +26,14 @@
     <style>
       .navbar .navbar-brand {
         background-image: url("/<?php echo $directory; ?>/logo.svg");
-        height: 34px;
-        padding-left: 52px;
         background-repeat: no-repeat;
       }
-
+      .main-container {
+        margin-top: 15px;
+      }
+      #navbar {
+        height: 90px;
+      }
     </style>
   </head>
   <body class="<?php print $classes; ?>">

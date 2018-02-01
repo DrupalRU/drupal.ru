@@ -1,0 +1,12 @@
+name = robots.txt
+description = "Generates the robots.txt file dynamically and gives you the chance to edit it, on a per-site basis, from the web UI."
+core = 7.x
+files[] = robotstxt.test
+configure = admin/config/search/robotstxt
+
+; Information added by Drupal.org packaging script on 2017-04-02
+version = "7.x-1.4"
+core = "7.x"
+project = "robotstxt"
+datestamp = "1491149286"
+

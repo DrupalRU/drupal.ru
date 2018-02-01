@@ -1,0 +1,12 @@
+name = "Robotstxt module tests"
+description = "Support module for robotstxt module testing."
+package = Testing
+core = 7.x
+hidden = TRUE
+
+; Information added by Drupal.org packaging script on 2017-04-02
+version = "7.x-1.4"
+core = "7.x"
+project = "robotstxt"
+datestamp = "1491149286"
+

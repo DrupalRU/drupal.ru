@@ -1,0 +1,125 @@
+<?php
+
+/**
+ * @file
+ * Tests for robotstxt.module.
+ */
+
+/**
+ * Tests basic functionality of configured robots.txt files.
+ *
+ * @group Robots.txt
+ */
+class RobotsTxtBasicTestCase extends DrupalWebTestCase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Robots.txt functionality',
+      'description' => 'Tests basic functionality of configured robots.txt files.',
+      'group' => 'Robots.txt',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    // The robotstxt_test module defines a second menu route for testing
+    // because we cannot guarantee that the static robots.txt file is removed
+    // from the docroot.
+    parent::setUp('robotstxt', 'robotstxt_test');
+  }
+
+  /**
+   * Checks that an administrator can view the configuration page.
+   */
+  public function testRobotsTxtAdminAccess() {
+    // Create an admin user, log in and access settings form.
+    $admin_user = $this->drupalCreateUser(array('administer robots.txt'));
+    $this->drupalLogin($admin_user);
+    $this->drupalGet('admin/config/search/robotstxt');
+
+    $this->assertResponse(200);
+    $this->assertFieldById('edit-robotstxt', NULL, 'The textarea for configuring robots.txt is shown.');
+  }
+
+  /**
+   * Checks that a non-administrative user cannot use the configuration page.
+   */
+  public function testRobotsTxtUserNoAccess() {
+    // Attempt to access settings form as unprivileged user.
+    $normal_user = $this->drupalCreateUser(array('access content'));
+    $this->drupalLogin($normal_user);
+    $this->drupalGet('admin/config/search/robotstxt');
+
+    $this->assertResponse(403);
+    $this->assertNoFieldById('edit-robotstxt', NULL, 'The textarea for configuring robots.txt is not shown for users without appropriate permissions.');
+  }
+
+  /**
+   * Test that the robots.txt route delivers content with an appropriate header.
+   */
+  public function testRobotsTxtPath() {
+    $this->drupalGet('robots-test.txt');
+    $this->assertResponse(200, 'An anonymous user is delivered content at the /robots.txt path.');
+    $this->assertText('# This file is to prevent the crawling and indexing of certain parts');
+
+    // Note: the header may have charset appended.
+    $header = $this->drupalGetHeader('Content-Type');
+    $this->assertIdentical(strpos($header, 'text/plain'), 0, 'The robots.txt file was served with header Content-Type: text/plain');
+  }
+
+  /**
+   * Checks that a configured robots.txt file is delivered as configured.
+   */
+  public function testRobotsTxtConfigureRobotsTxt() {
+    // Create an admin user, log in and access settings form.
+    $admin_user = $this->drupalCreateUser(array('administer robots.txt'));
+    $this->drupalLogin($admin_user);
+
+    // Modify and save the robots.txt content.
+    $edit = array();
+    $test_string = "# SimpleTest {$this->testId}";
+    $edit['robotstxt'] = "#\n{$test_string}\n#\n" . variable_get('robotstxt', '');
+    $this->drupalPost('admin/config/search/robotstxt', $edit, t('Save configuration'));
+
+    // Confirm that output contains changes.
+    $this->drupalLogout();
+    $this->drupalGet('robots-test.txt');
+    $this->assertResponse(200, 'An anonymous user is delivered content at the /robots.txt path.');
+    $this->assertText("# SimpleTest {$this->testId}", sprintf('Test string [%s] is displayed in the configured robots.txt file.', $test_string));
+  }
+
+  /**
+   * Test robots.txt file encoding with caching and compression.
+   */
+  public function testRobotsTxtCachingAndCompressionTestCase() {
+    // Create an admin user, log in and access settings form.
+    $admin_user = $this->drupalCreateUser(array('administer site configuration', 'administer robots.txt'));
+    $this->drupalLogin($admin_user);
+
+    // Enable caching and compression.
+    $edit = array();
+    $edit['cache'] = 1;
+    $edit['cache_lifetime'] = 60;
+    $edit['page_cache_maximum_age'] = 60;
+    $edit['page_compression'] = 1;
+    $this->drupalPost('admin/config/development/performance', $edit, t('Save configuration'));
+
+    $this->drupalLogout();
+    $url = url('robots-test.txt', array('absolute' => TRUE));
+
+    // Use drupal_http_request so gzipped response is not automatically
+    // uncompressed.
+    $response = drupal_http_request($url, array('headers' => array('Accept-encoding' => 'gzip')));
+    $this->assertEqual(trim(variable_get('robotstxt', '')), trim(gzinflate(substr($response->data, 10, -8))), 'The robots.txt content is properly served with compression enabled.');
+
+    // Note: the header may have charset appended.
+    $header = $response->headers['content-type'];
+    $this->assertIdentical(strpos($header, 'text/plain'), 0, 'The robots.txt file was served with header Content-Type: text/plain');
+  }
+
+}

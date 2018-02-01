@@ -562,6 +562,9 @@ function druru_icons_libraries() {
         'youtube'      => array(
           t('YouTube'),
         ),
+        'telegram'      => array(
+          t('Telegram'),
+        ),
         'twitter'      => array(
           t('Twitter'),
         ),

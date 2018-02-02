@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ *
+ * We add a second menu route because SimpleTest cannot delete the robots.txt
+ * file from the docroot.
+ */
+function robotstxt_test_menu() {
+  $items = array();
+  $items['robots-test.txt'] = array(
+    'page callback' => 'robotstxt_robots',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}

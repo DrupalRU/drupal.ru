@@ -556,6 +556,9 @@ function druru_icons_libraries() {
         'github'      => array(
           t('Github'),
         ),
+        'telegram'    => array(
+          t('Telegram'),
+        ),
         'comments'      => array(
           t('Gitter'),
         ),

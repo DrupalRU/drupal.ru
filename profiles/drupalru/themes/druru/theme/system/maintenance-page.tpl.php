@@ -23,18 +23,6 @@
     <title><?php print $head_title; ?></title>
     <?php print $head; ?>
     <?php print $styles; ?>
-    <style>
-      .navbar .navbar-brand {
-        background-image: url("/<?php echo $directory; ?>/logo.svg");
-        background-repeat: no-repeat;
-      }
-      .main-container {
-        margin-top: 15px;
-      }
-      #navbar {
-        height: 90px;
-      }
-    </style>
   </head>
   <body class="<?php print $classes; ?>">
 

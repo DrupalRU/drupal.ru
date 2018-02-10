@@ -9931,6 +9931,12 @@ fieldset[disabled] #block-advanced-sphinx-searchbox .search-sphinx:focus + butto
 [aria-label]:active:after {
   display: block;
 }
+.maintenance-page .main-container {
+  margin-top: 15px;
+}
+.maintenance-page #navbar {
+  height: 90px;
+}
 body.adminimal-menu {
   height: calc(100% - 29px);
 }

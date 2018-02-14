@@ -2,10 +2,48 @@
 
 /**
  * @file
+ * Main module file.
+ * Provide main hooks.
  */
 
+define('VALIDATE_API_PATH', drupal_get_path('module', 'validate_api'));
+
 /**
- * Add API hook for imlements custom validators.
+ * Implements hook_permission().
+ */
+function validate_api_permission() {
+  return [
+    'validate api administer' => [
+      'title' => t('Administer Validate API'),
+      'description' => t('Allow users to administer Validate API settings'),
+      'restrict access' => TRUE,
+    ],
+    'validate api skip validation' => [
+      'title' => t('Skip validation'),
+      'description' => t('Allow users to skip validation on post save'),
+    ],
+  ];
+}
+
+/**
+ * Implements hook_menu().
+ */
+function validate_api_menu() {
+
+  $items['admin/config/content/validate_api'] = [
+    'title' => 'Validate API',
+    'description' => 'Validate API settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['validate_api_form_settings'],
+    'access arguments' => ['validate api administer'],
+    'file' => 'includes/validate_api.pages.inc',
+  ];
+
+  return $items;
+}
+
+/**
+ * Add API hook for implements custom validators.
  * hook_validator_info().
  */
 function _validators_types() {

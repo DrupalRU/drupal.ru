@@ -335,3 +335,11 @@ function drurum_update_7016() {
   ->condition('fid', 32)
   ->execute();
 }
+
+/**
+ * Enable views, admin_views and others".
+ */
+function drurum_update_7017() {
+  module_enable(['views', 'entity', 'views_bulk_operations', 'admin_views']);
+}
+

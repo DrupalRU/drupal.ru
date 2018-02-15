@@ -16,7 +16,7 @@ function validate_api_permission() {
     'validate api administer' => [
       'title' => t('Administer Validate API'),
       'description' => t('Allow users to administer Validate API settings'),
-      'restrict access' => TRUE,
+      'restrict access' => true,
     ],
     'validate api skip validation' => [
       'title' => t('Skip validation'),
@@ -58,7 +58,7 @@ function _validators_types() {
  * Invoke validators.
  */
 function validate_api_invoke_all_validators() {
-  $validators = array();
+  $validators = [];
   foreach (module_invoke_all('validator_info') as $validator) {
     $validators[$validator['name']] = $validator;
   }
@@ -76,15 +76,15 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
     if (!empty($validators)) {
       $node_type = $form['#node_type']->type;
       $node_fields = field_info_instances('node', $node_type);
-      $fields = array(
-        array(
+      $fields = [
+        [
           'key' => 'title',
           'name' => t('Title'),
           'module' => 'text',
-        ),
-      );
+        ],
+      ];
 
-      $field_types = array();
+      $field_types = [];
       foreach ($validators as $validator => $type) {
         $field_types[] = $validator;
       }
@@ -92,67 +92,67 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
       $variable_name = 'validate_api_' . $node_type;
       $node_settings = variable_get($variable_name);
       if (empty($node_settings)) {
-        $node_settings['settings'] = FALSE;
+        $node_settings['settings'] = false;
       }
 
       $entity_fields = validate_api_entity_fields($node_fields, $field_types);
       $fields = array_merge($fields, $entity_fields);
 
-      $form['validation'] = array(
+      $form['validation'] = [
         '#type' => 'fieldset',
         '#title' => t('Validate API'),
-        '#collapsible' => TRUE,
-        '#collapsed' => TRUE,
+        '#collapsible' => true,
+        '#collapsed' => true,
         '#group' => 'additional_settings',
-        'validate_settings' => array(
+        'validate_settings' => [
           '#type' => 'checkbox',
           '#title' => t('Enable'),
           '#default_value' => $node_settings['settings'],
-        ),
-        'validate_items' => array(
+        ],
+        'validate_items' => [
           '#type' => 'container',
-          '#states' => array(
-            'visible' => array(
-              'input[name="validate_settings"]' => array(
-                'checked' => TRUE,
-              ),
-            ),
-          ),
-          'fields' => array(),
-        ),
-        'validate_descriptions' => array(
+          '#states' => [
+            'visible' => [
+              'input[name="validate_settings"]' => [
+                'checked' => true,
+              ],
+            ],
+          ],
+          'fields' => [],
+        ],
+        'validate_descriptions' => [
           '#type' => 'container',
-          '#states' => array(
-            'visible' => array(
-              'input[name="validate_settings"]' => array(
-                'checked' => TRUE,
-              ),
-            ),
-          ),
-          'fields' => array(),
-        ),
-      );
+          '#states' => [
+            'visible' => [
+              'input[name="validate_settings"]' => [
+                'checked' => true,
+              ],
+            ],
+          ],
+          'fields' => [],
+        ],
+      ];
 
       $vdesc_output = validate_api_validator_description();
-      $form['validation']['validate_descriptions']['description'] = array(
+      $form['validation']['validate_descriptions']['description'] = [
         '#type' => 'fieldset',
         '#title' => t('Validators'),
-        '#collapsible' => TRUE,
-        '#collapsed' => TRUE,
-        'all_validators' => array(
+        '#collapsible' => true,
+        '#collapsed' => true,
+        'all_validators' => [
           '#markup' => $vdesc_output,
-        ),
-      );
+        ],
+      ];
 
       foreach ($fields as $field) {
         $name = $field['key'];
-        $form['validation']['validate_items']['fields'][$name] = array(
+        $form['validation']['validate_items']['fields'][$name] = [
           '#type' => 'fieldset',
-          '#collapsible' => TRUE,
-          '#collapsed' => FALSE,
+          '#collapsible' => true,
+          '#collapsed' => false,
           '#title' => $field['name'],
-        );
-        $current_validators = array();
+        ];
+        $current_validators = [];
         foreach ($validators[$field['module']] as $validator) {
           $option_key = $validator['name'];
           $option_value = $validator['title'];
@@ -162,44 +162,44 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
           $default_value = array_keys($node_settings['validate'][$name]);
         }
         else {
-          $default_value = array();
+          $default_value = [];
         }
-        $form['validation']['validate_items']['fields'][$name][$field['key'] . '_node_validators'] = array(
+        $form['validation']['validate_items']['fields'][$name][$field['key'] . '_node_validators'] = [
           '#type' => 'checkboxes',
           '#options' => $current_validators,
           '#default_value' => $default_value,
-        );
+        ];
       }
 
       $variable_name = 'validate_api_' . $node_type . '_comment';
       $comment_settings = variable_get($variable_name);
 
       if (empty($comment_settings)) {
-        $comment_settings['settings'] = FALSE;
+        $comment_settings['settings'] = false;
       }
 
       if ($form['comment']['comment']['#default_value'] !== 1) {
         $comm_fields = field_info_instances('comment', 'comment_node_' . $form['#node_type']->type);
         $comment_fields = validate_api_entity_fields($comm_fields, $field_types);
 
-        $form['comment']['validate_comments'] = array(
+        $form['comment']['validate_comments'] = [
           '#type' => 'checkbox',
           '#title' => t('Validate Comments'),
           '#default_value' => $comment_settings['settings'],
-        );
+        ];
 
-        $form['comment']['comment_validate'] = array(
+        $form['comment']['comment_validate'] = [
           '#type' => 'fieldset',
-          '#collapsible' => FALSE,
+          '#collapsible' => false,
           '#title' => t('Comment validate'),
-          '#states' => array(
-            'visible' => array(
-              'input[name="validate_comments"]' => array(
-                'checked' => TRUE,
-              ),
-            ),
-          ),
-        );
+          '#states' => [
+            'visible' => [
+              'input[name="validate_comments"]' => [
+                'checked' => true,
+              ],
+            ],
+          ],
+        ];
 
         foreach ($comment_fields as $comment_field => $field_info) {
           $comment_field_name = $field_info['key'];
@@ -207,39 +207,39 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
             $default_value = array_keys($comment_settings['validate'][$comment_field_name]);
           }
           else {
-            $default_value = array();
+            $default_value = [];
           }
 
           $widget_type = $field_info['module'];
-          $options = array();
+          $options = [];
 
           foreach ($validators[$widget_type] as $validator_name => $validator) {
             $options[$validator_name] = $validator['title'];
           }
 
-          $form['comment']['comment_validate'][$field_info['key']] = array(
+          $form['comment']['comment_validate'][$field_info['key']] = [
             '#type' => 'fieldset',
-            '#collapsible' => TRUE,
-            '#collapsed' => FALSE,
+            '#collapsible' => true,
+            '#collapsed' => false,
             '#title' => $field_info['name'],
-            $field_info['key'] . '_comment_validators' => array(
+            $field_info['key'] . '_comment_validators' => [
               '#type' => 'checkboxes',
               '#options' => $options,
               '#default_value' => $default_value,
-            ),
-          );
+            ],
+          ];
         }
 
         $output = validate_api_validator_description();
-        $form['comment']['comment_validate']['validator_descriptions'] = array(
+        $form['comment']['comment_validate']['validator_descriptions'] = [
           '#type' => 'fieldset',
-          '#collapsible' => TRUE,
-          '#collapsed' => TRUE,
+          '#collapsible' => true,
+          '#collapsed' => true,
           '#title' => t('Validators'),
-          'validators' => array(
+          'validators' => [
             '#markup' => $output,
-          ),
-        );
+          ],
+        ];
       }
 
       $form['#submit'][] = 'validate_api_form_submit';
@@ -257,24 +257,34 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
 }
 
 /**
+ * Validate entity fields.
  *
+ * @param $entity_fields
+ * @param $validators
+ *
+ * @return array
  */
 function validate_api_entity_fields($entity_fields, $validators) {
+  $fields = [];
+
   foreach ($entity_fields as $field) {
     $type = $field['widget']['module'];
     if (in_array($type, $validators)) {
-      $fields[] = array(
+      $fields[] = [
         'key' => $field['field_name'],
         'name' => $field['label'],
         'module' => $field['widget']['module'],
-      );
+      ];
     }
   }
+
   return $fields;
 }
 
 /**
+ * Validate API validator description.
  *
+ * @return string
  */
 function validate_api_validator_description() {
   $validate_descriptions = validate_api_invoke_all_validators();
@@ -283,6 +293,7 @@ function validate_api_validator_description() {
     $output .= '<h3 class="validator_description_title">' . $validate_description['title'] . '</h3>';
     $output .= '<div class="validator_description ' . $validate_description['name'] . '">' . $validate_description['description'] . '</div>';
   }
+
   return $output;
 }
 
@@ -319,7 +330,11 @@ function validate_api_node_validate($node, $form, &$form_state) {
 }
 
 /**
+ * Validate API field attach validate.
  *
+ * @param $entity_type
+ * @param $entity
+ * @param $errors
  */
 function validate_api_field_attach_validate($entity_type, $entity, &$errors) {
   if ($entity_type == 'comment') {
@@ -344,10 +359,10 @@ function validate_api_field_attach_validate($entity_type, $entity, &$errors) {
         $callback_function = $all_validators[$validator]['callback'];
         if (function_exists($callback_function)) {
           if ($validate_message = $callback_function($value)) {
-            $errors[$field_name][LANGUAGE_NONE][0][] = array(
+            $errors[$field_name][LANGUAGE_NONE][0][] = [
               'error' => $field_name,
               'message' => $validate_message,
-            );
+            ];
           }
         }
       }
@@ -356,7 +371,7 @@ function validate_api_field_attach_validate($entity_type, $entity, &$errors) {
 }
 
 /**
- *
+ * Submit validate_api_form.
  */
 function validate_api_form_submit($form, &$form_state) {
   $exists_validators = _validators_types();
@@ -368,17 +383,18 @@ function validate_api_form_submit($form, &$form_state) {
   $node_fields = field_info_instances('node', $node_type);
 
   if ($use_node) {
-    $node_validate_fields = validate_api_get_validate_settings($exists_validators, 'node', $node_fields, array('title'), $form_state);
+    $node_validate_fields = validate_api_get_validate_settings($exists_validators, 'node', $node_fields, ['title'],
+      $form_state);
   }
 
   $node_variable_name = 'validate_api_' . $node_type;
   if (!isset($node_validate_fields)) {
-    $node_validate_fields = array();
+    $node_validate_fields = [];
   }
-  $node_validate = array(
+  $node_validate = [
     'settings' => $use_node,
     'validate' => $node_validate_fields,
-  );
+  ];
 
   variable_set($node_variable_name, $node_validate);
 
@@ -388,16 +404,17 @@ function validate_api_form_submit($form, &$form_state) {
   $comment_fields = field_info_instances('comment', 'comment_node_' . $form['#node_type']->type);
 
   if ($use_comments) {
-    $comment_validate_fields = validate_api_get_validate_settings($exists_validators, 'comment', $comment_fields, array(''), $form_state);
+    $comment_validate_fields = validate_api_get_validate_settings($exists_validators, 'comment', $comment_fields, [''],
+      $form_state);
   }
   $comment_variable_name = 'validate_api_' . $node_type . '_comment';
   if (!isset($comment_validate_fields)) {
-    $comment_validate_fields = array();
+    $comment_validate_fields = [];
   }
-  $comment_validate = array(
+  $comment_validate = [
     'settings' => $use_comments,
     'validate' => $comment_validate_fields,
-  );
+  ];
 
   variable_set($comment_variable_name, $comment_validate);
 }
@@ -405,8 +422,14 @@ function validate_api_form_submit($form, &$form_state) {
 /**
  * Return validate settings.
  */
-function validate_api_get_validate_settings($existen_validators, $entity_type, $entity_fields, $custom_fields, $form_state) {
-  $validator_types = array();
+function validate_api_get_validate_settings(
+  $existen_validators,
+  $entity_type,
+  $entity_fields,
+  $custom_fields,
+  $form_state
+) {
+  $validator_types = [];
   foreach ($existen_validators as $existen_validator => $types) {
     foreach ($types as $type => $arr) {
       if (!in_array($type, $validator_types)) {
@@ -420,13 +443,13 @@ function validate_api_get_validate_settings($existen_validators, $entity_type, $
     $fields[] = $entity_field['field_name'];
   }
 
-  $validate_fields = array();
+  $validate_fields = [];
   foreach ($form_state['values'] as $value => $validators) {
     $validator_string = '_' . $entity_type . '_validators';
     $strlen = drupal_strlen($validator_string);
     if (substr($value, -$strlen) == $validator_string) {
       $field = substr($value, 0, strrpos($value, $validator_string));
-      $active_validators = array();
+      $active_validators = [];
       foreach ($validators as $validator => $validator_name) {
         if (!empty($validator_name) && array_key_exists($validator_name, $validator_types)) {
           $active_validators[$validator_name] = $validator_types[$validator_name];

@@ -16,10 +16,10 @@ function validate_api_form_settings($form, &$form_state) {
     ];
 
     $form['container']['settings'] = [
-      '#type'        => 'fieldset',
+      '#type' => 'fieldset',
       '#collapsible' => false,
-      '#title'       => t('Validator settings'),
-      '#group'       => 'group_tabs',
+      '#title' => t('Validator settings'),
+      '#group' => 'group_tabs',
     ];
 
     foreach ($configs as $name => $config) {
@@ -37,12 +37,12 @@ function validate_api_form_settings($form, &$form_state) {
       $entity_type = $entities[$type]['bundles'][$bundle_name];
 
       $form['container']['settings']['description'][$type] = [
-        '#type'        => 'fieldset',
+        '#type' => 'fieldset',
         '#collapsible' => true,
-        '#collapsed'   => false,
-        '#title'       => t('@label validators',
-          ['@label' => $entity_type['label']]),
+        '#collapsed' => false,
+        '#title' => t('@label validators', ['@label' => $entity_type['label']]),
       ];
+
       $rows = [];
       foreach ($config['validate'] as $field_name => $validators) {
         $field = field_info_instance($type, $field_name, $bundle_name);
@@ -56,44 +56,38 @@ function validate_api_form_settings($form, &$form_state) {
       }
 
       $form['container']['settings']['description'][$type]['fields'] = [
-        '#theme'  => 'table',
-        '#header' => [
-          t('Field'),
-          t('Field type'),
-          t('Enabled validators'),
-          t('Edit'),
-        ],
-        '#rows'   => $rows,
+        '#theme' => 'table',
+        '#header' => [t('Field'), t('Field type'), t('Enabled validators'), t('Edit')],
+        '#rows' => $rows,
       ];
     }
 
 
     $form['actions'] = [
-      '#type'  => 'actions',
+      '#type' => 'actions',
       'submit' => [
-        '#type'  => 'submit',
+        '#type' => 'submit',
         '#value' => t('Save'),
       ],
     ];
   }
   else {
     $form = [
-      '#type'         => 'container',
+      '#type' => 'container',
       'no_validators' => [
-        '#type'       => 'html_tag',
-        '#tag'        => 'h2',
-        '#value'      => t('There are no any validators yet'),
+        '#type' => 'html_tag',
+        '#tag' => 'h2',
+        '#value' => t('There are no any validators yet'),
         '#attributes' => [
           'style' => 'text-align: center',
         ],
       ],
-      'description'   => [
-        '#type'       => 'html_tag',
-        '#tag'        => 'p',
-        '#value'      => t('You should enable Validate API for some !url firstly.',
-          [
-            '!url' => l(t('content type'), 'admin/structure/types'),
-          ]),
+      'description' => [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => t('You should enable Validate API for some !url firstly.', [
+          '!url' => l(t('content type'), 'admin/structure/types'),
+        ]),
         '#attributes' => [
           'style' => 'text-align: center',
         ],
@@ -103,6 +97,7 @@ function validate_api_form_settings($form, &$form_state) {
 
   return $form;
 }
+
 /**
  * Main administer page
  */
@@ -117,7 +112,7 @@ function validate_api_form_settings_submit($form, &$form_state) {
  */
 function validate_api_get_current_configs() {
   $q = db_select('variable', 'v')
-    ->fields('v', [])
+    ->fields('v')
     ->condition('name', db_like('validate_api_') . '%', 'LIKE')
     ->execute();
 

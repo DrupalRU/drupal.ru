@@ -335,3 +335,24 @@ function drurum_update_7016() {
   ->condition('fid', 32)
   ->execute();
 }
+
+/**
+ * Replace Unsubscribe tokens for Comment notifier.
+ */
+function drurum_update_7017() {
+  // Replace comment pattern
+  $comment_notify_default = 'comment_notify_comment_notify_default_mailtext';
+  if ($comment_notify = variable_get($comment_notify_default)) {
+    $pattern = '/\[comment:unsubscribe-url\]/';
+    $replacement = '[comment-subscribed:unsubscribe-url:absolute]';
+    variable_set($comment_notify_default, preg_replace($pattern, $replacement, $comment_notify));
+  }
+
+  // Replace node (author) pattern
+  $node_notify_default = 'comment_notify_node_notify_default_mailtext';
+  if ($node_notify = variable_get($node_notify_default)) {
+    $pattern = '/\s<tr>(.*)Отписаться от этой ветки<\/a><\/td><\/tr>\s/';
+    $replacement = '';
+    variable_set($node_notify_default, preg_replace($pattern, $replacement, $node_notify));
+  }
+}

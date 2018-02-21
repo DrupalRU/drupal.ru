@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function dru_moderation_menu() {
+  $items['ban/%node/%/nojs/%'] = [
+    'page callback' => 'dru_moderation_ban',
+    'file' => 'dru_moderation.pages.inc',
+    'page arguments' => [3, 1, 2, 4],
+    'access arguments' => ['moderate tickets'],
+    'type' => MENU_CALLBACK,
+  ];
+  $items['ban/%node/%/ajax/%'] = [
+    'page callback' => 'dru_moderation_ban',
+    'file' => 'dru_moderation.pages.inc',
+    'page arguments' => [3, 1, 2, 4],
+    'access arguments' => ['moderate tickets'],
+    'delivery callback' => 'ajax_deliver',
+    'type' => MENU_CALLBACK,
+  ];
+  return $items;
+}
+
+/**
+ * Implement hook_node_view().
+ */
+function dru_moderation_node_view($node, $view_mode, $langcode = NULL) {
+  if ($node-> type == 'ticket') {
+    // if verdict not empty
+    if (!empty($node->ticket->ticket_verdict)) {
+      // add BAN link
+      $token = drupal_get_token('dru_moderation');
+
+      // Get claim content id
+      $content_id = db_select('ticket_claim', 't')
+        ->fields('t', array('content_id'))
+        ->condition('t.ticket_id', $node->nid)
+        ->execute()
+        ->fetchField();
+
+      // Get claim content type
+      $content_type = db_select('ticket_claim', 't')
+        ->fields('t', array('content_type'))
+        ->condition('t.ticket_id', $node->nid)
+        ->execute()
+        ->fetchField();
+
+      // Get entity author (user for ban)
+      if ($content_type == 'comment') {
+        $uid = db_select('comment', 'c')
+          ->fields('c', array('uid'))
+          ->condition('c.cid', $content_id)
+          ->execute()
+          ->fetchField();
+      }
+      elseif ($content_type == 'node') {
+        $uid = db_select('node', 'n')
+          ->fields('n', array('uid'))
+          ->condition('n.nid', $content_id)
+          ->execute()
+          ->fetchField();
+      }
+
+      $node->content['links']['comment']['#links']['ban'] = [
+        'title' => t('Ban user!'),
+        'href' => 'ban/' . $node->nid . '/' . $uid . '/nojs/' . $token,
+        'attributes' => [ 'class' => ['use-ajax'], ],
+      ];
+    }
+  }
+}
+

@@ -1,0 +1,69 @@
+<?php
+/**
+ * @file
+ */
+
+
+/**
+ * Implements hook_install().
+ */
+function dru_moderation_install() {
+  // Disable ban_user module
+  module_disable(array('ban_user'));
+  drupal_uninstall_modules(array('ban_user'));
+}
+
+/**
+ * Implements hook_schema().
+ */
+function dru_moderation_schema() {
+  $schema['dru_ban'] = array(
+    'description' => 'Banned list',
+    'fields' => array(
+      'pk' => array(
+        'description' => 'Primary key',
+        'type'        => 'serial',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+      ),
+      'uid' => array(
+        'description' => 'Banned user UID',
+        'type'        => 'int',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+      ),
+      'moderator' => array(
+        'description' => 'Moderator UID',
+        'type'        => 'int',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+      ),
+      'reason' => array(
+        'description' => 'Reason for ban',
+        'type'        => 'text',
+        'not null'    => TRUE,
+      ),
+      'start_date' => array(
+        'description' => 'Ban start date',
+        'mysql_type'  => 'date',
+        'not null'    => TRUE,
+      ),
+      'ban_until' => array(
+        'description' => 'Ban until',
+        'mysql_type'  => 'timestamp',
+        'not null'    => TRUE,
+      ),
+    ),
+    'primary key' => array('pk'),
+  );
+  return $schema;
+}
+
+
+/**
+ * Implements hook_uninstall().
+ */
+/*function dru_moderation_uninstall() {
+  cache_clear_all();
+}*/
+

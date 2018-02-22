@@ -227,9 +227,21 @@ function alttracker_node_update($node) {
   $node_field = _alttracker_get_compared_fields($node);
   $node_origin_field = _alttracker_get_compared_fields($node->original);
 
-  if ($node_field != $node_origin_field) {
+  if ($node_field != $node_origin_field && alltracker_view_validate($node)) {
     _alttracker_add($node->nid, $node->uid, $node->changed);
   }
+}
+
+
+/**
+ * Validate which items allowed to trach: 
+ * - disable moderatorial forum
+ * - ...
+ */
+function alltracker_view_validate($node) {
+  $moderators_tid = 2057;
+  $current_tids = field_get_items('node', $node, 'taxonomy_forums');
+  return ($current_tids[0]['tid'] != $moderators_tid);
 }
 
 /**
@@ -355,7 +367,10 @@ function alttracker_comment_update($comment) {
  * comment_save() calls hook_comment_publish() for all published comments.
  */
 function alttracker_comment_publish($comment) {
-  _alttracker_add($comment->nid, $comment->uid, $comment->changed);
+  $node = node_load($comment->nid);
+  if(alltracker_view_validate($node)) {
+    _alttracker_add($comment->nid, $comment->uid, $comment->changed);
+  }
 }
 
 /**

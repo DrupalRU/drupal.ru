@@ -1,6 +1,13 @@
-# Ignore configuration files that may contain sensitive information.
-sites/*/settings*.php
-
-# Ignore paths that contain user-generated content.
+# Drupal
+sites/**/*settings.php
 sites/*/files
-sites/*/private
+sites/local
+sites/local.sites.php
+
+/*.txt
+!/robots.txt
+
+### Excludes of dev environment
+# PhpStorm
+.idea
+

@@ -4,6 +4,7 @@
  * Moderation Ban.
  */
 function dru_moderation_ban($ajax, $node, $uid, $token) {
+
   if (!drupal_valid_token($token, 'dru_moderation')) {
     return;
   }
@@ -39,6 +40,7 @@ function dru_moderation_ban($ajax, $node, $uid, $token) {
  * dru_moderation_ban_form.
  */
 function dru_moderation_ban_form($form, &$form_state, $vars) {
+
   $form['dru_moderation_ban_reason'] = array(
     '#type'          => 'textfield',
     '#title'         => t('Reason'),
@@ -77,8 +79,10 @@ function dru_moderation_ban_form($form, &$form_state, $vars) {
  * Callback dru_moderation_ban_submit_js.
  */
 function dru_moderation_submit_js($form_id, $form_state) {
+
   $commands[] = ajax_command_remove('#verdict-add');
   $commands[] = ajax_command_remove('.ban');
+
   return array(
     '#type'     => 'ajax',
     '#commands' => $commands,
@@ -105,7 +109,7 @@ function dru_moderation_ban_form_submit($form_id, &$form_state) {
   $reason = $ticket['ticket']->ticket->ticket_verdict;
 
   // Add record to Database
-  /*db_insert('dru_ban')
+  db_insert('dru_ban')
     ->fields(array(
       'uid' => $buid,
       'moderator' => $moder_uid,
@@ -119,7 +123,7 @@ function dru_moderation_ban_form_submit($form_id, &$form_state) {
   db_update('users')
     ->fields(array('status' => 0))
     ->condition('uid', $buid)
-    ->execute();*/
+    ->execute();
 
   // Send mail to user and moderators
   $buser = user_load($buid);

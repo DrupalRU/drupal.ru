@@ -19,6 +19,7 @@ function dru_moderation_install() {
  * Implements hook_schema().
  */
 function dru_moderation_schema() {
+
   $schema['dru_ban'] = array(
     'description' => 'Banned list',
     'fields' => array(
@@ -59,6 +60,7 @@ function dru_moderation_schema() {
     ),
     'primary key' => array('pk'),
   );
+
   return $schema;
 }
 

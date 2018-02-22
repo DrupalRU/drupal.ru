@@ -8,6 +8,7 @@
  * Implements hook_menu().
  */
 function dru_moderation_menu() {
+
   $items['ban/%node/%/nojs/%'] = [
     'page callback' => 'dru_moderation_ban',
     'file' => 'dru_moderation.pages.inc',
@@ -15,6 +16,7 @@ function dru_moderation_menu() {
     'access arguments' => ['moderate tickets'],
     'type' => MENU_CALLBACK,
   ];
+
   $items['ban/%node/%/ajax/%'] = [
     'page callback' => 'dru_moderation_ban',
     'file' => 'dru_moderation.pages.inc',
@@ -23,6 +25,7 @@ function dru_moderation_menu() {
     'delivery callback' => 'ajax_deliver',
     'type' => MENU_CALLBACK,
   ];
+
   return $items;
 }
 
@@ -30,6 +33,7 @@ function dru_moderation_menu() {
  * Implement hook_node_view().
  */
 function dru_moderation_node_view($node, $view_mode, $langcode = NULL) {
+
   if ($node-> type == 'ticket') {
     // if verdict not empty
     if (!empty($node->ticket->ticket_verdict)) {
@@ -88,6 +92,7 @@ function dru_moderation_node_view($node, $view_mode, $langcode = NULL) {
  * Return moderators (user-objects array).
  */
 function dru_moderation_get_moderators() {
+
   $role = user_role_load_by_name('модератор');
   $uids = [];
   $query = 'SELECT DISTINCT(ur.uid) 
@@ -97,6 +102,7 @@ function dru_moderation_get_moderators() {
   foreach ($result as $row) {
     $uids[] = $row->uid;
   }
+
   return user_load_multiple($uids);
 }
 
@@ -104,6 +110,7 @@ function dru_moderation_get_moderators() {
  * Send mail from module.
  */
 function dru_moderation_sendmail($user_name, $moderator_name, $days, $reason, $action) {
+
   switch($action) {
     case 'ban': 
       $theme = t('User is banned!');
@@ -137,23 +144,35 @@ function dru_moderation_sendmail($user_name, $moderator_name, $days, $reason, $a
       ]
     ]);
   }
-}
 
-/**
- * Implements hook_mail_alter().
- */
-function dru_moderation_mail_alter(&$message) {
-  dpm($message);
 }
 
 /**
  * Implement hook_cron().
  */
 function dru_moderation_cron() {
-  //select u.uid from users u left join dru_ban_history bh on bh.uid = u.uid where bh.until_date < :date and u.active = 0
 
-  // Check users and unban
-  // $buser = user_load($buid);
-  // dru_moderation_sendmail($buser->name, '', '', '', 'unban');
+  // Check users
+  $myquery = db_select('dru_ban', 'db');
+  $myquery->join('users', 'u', 'u.uid = db.uid');
+  $users = $myquery->fields('db', array('uid'))
+    ->condition('u.status', 0, '=')
+    ->condition('db.ban_until', time(), '<')
+    ->execute()
+    ->fetchAll(); 
+
+  foreach ($users as $user) {
+    // Unban user
+    db_update('users')
+      ->fields(array('status' => 1))
+      ->condition('uid', $user->uid)
+      ->execute();
+
+    $buser = user_load($user->uid);
+    dru_moderation_sendmail($buser->name, '', '', '', 'unban');
+    //Если этого не сделать, то отправляются не все емейлы!
+    sleep(1);
+  }
+
 }
 

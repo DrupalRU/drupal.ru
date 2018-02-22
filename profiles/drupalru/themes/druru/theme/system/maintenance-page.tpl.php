@@ -26,11 +26,8 @@
     <style>
       .navbar .navbar-brand {
         background-image: url("/<?php echo $directory; ?>/logo.svg");
-        height: 34px;
-        padding-left: 52px;
         background-repeat: no-repeat;
       }
-
     </style>
   </head>
   <body class="<?php print $classes; ?>">

@@ -324,3 +324,14 @@ function drurum_update_7015() {
   // Set recaptcha by default
   variable_set('captcha_default_challenge', 'recaptcha/reCAPTCHA');
 }
+
+/**
+ * Hide profile field "Open external links...".
+ */
+function drurum_update_7016() {
+  // Hide field in profile
+  db_update('profile_field')
+  ->fields(array('visibility' => 4))
+  ->condition('fid', 32)
+  ->execute();
+}

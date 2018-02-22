@@ -105,7 +105,7 @@ function dru_moderation_ban_form_submit($form_id, &$form_state) {
   $reason = $ticket['ticket']->ticket->ticket_verdict;
 
   // Add record to Database
-  db_insert('dru_ban')
+  /*db_insert('dru_ban')
     ->fields(array(
       'uid' => $buid,
       'moderator' => $moder_uid,
@@ -119,7 +119,7 @@ function dru_moderation_ban_form_submit($form_id, &$form_state) {
   db_update('users')
     ->fields(array('status' => 0))
     ->condition('uid', $buid)
-    ->execute();
+    ->execute();*/
 
   // Send mail to user and moderators
   $buser = user_load($buid);

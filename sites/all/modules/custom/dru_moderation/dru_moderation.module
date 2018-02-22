@@ -140,11 +140,20 @@ function dru_moderation_sendmail($user_name, $moderator_name, $days, $reason, $a
 }
 
 /**
+ * Implements hook_mail_alter().
+ */
+function dru_moderation_mail_alter(&$message) {
+  dpm($message);
+}
+
+/**
  * Implement hook_cron().
  */
 function dru_moderation_cron() {
+  //select u.uid from users u left join dru_ban_history bh on bh.uid = u.uid where bh.until_date < :date and u.active = 0
+
   // Check users and unban
   // $buser = user_load($buid);
-  // dru_moderation_sendmail($buser->name, $moder->name, $ban_days, $reason, 'ban');
+  // dru_moderation_sendmail($buser->name, '', '', '', 'unban');
 }
 

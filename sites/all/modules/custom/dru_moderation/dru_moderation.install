@@ -9,8 +9,10 @@
  */
 function dru_moderation_install() {
   // Disable ban_user module
-  module_disable(array('ban_user'));
-  drupal_uninstall_modules(array('ban_user'));
+  if (module_exists('ban_user')) {
+    module_disable(array('ban_user'));
+    drupal_uninstall_modules(array('ban_user'));
+  }
 }
 
 /**
@@ -45,12 +47,13 @@ function dru_moderation_schema() {
       ),
       'start_date' => array(
         'description' => 'Ban start date',
-        'mysql_type'  => 'date',
+        'type'        => 'text',
         'not null'    => TRUE,
       ),
       'ban_until' => array(
         'description' => 'Ban until',
-        'mysql_type'  => 'timestamp',
+        'type'        => 'int',
+        'unsigned'    => TRUE,
         'not null'    => TRUE,
       ),
     ),
@@ -63,7 +66,7 @@ function dru_moderation_schema() {
 /**
  * Implements hook_uninstall().
  */
-/*function dru_moderation_uninstall() {
-  cache_clear_all();
-}*/
+function dru_moderation_uninstall() {
+  db_truncate('dru_ban')->execute();
+}
 

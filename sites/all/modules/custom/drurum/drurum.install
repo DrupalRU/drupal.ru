@@ -337,9 +337,16 @@ function drurum_update_7016() {
 }
 
 /**
- * Replace Unsubscribe tokens for Comment notifier.
+ * Enable views, admin_views and others".
  */
 function drurum_update_7017() {
+  module_enable(['views', 'entity', 'views_bulk_operations', 'admin_views']);
+}
+
+/**
+ * Replace Unsubscribe tokens for Comment notifier.
+ */
+function drurum_update_7018() {
   // Replace comment pattern
   $comment_notify_default = 'comment_notify_comment_notify_default_mailtext';
   if ($comment_notify = variable_get($comment_notify_default)) {

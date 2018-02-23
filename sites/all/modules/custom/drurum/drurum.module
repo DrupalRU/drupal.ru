@@ -16,10 +16,15 @@ define('DRURUM_ACTIONS_OVERRIDE', 'drurum_actions_override');
  * Implements hook_module_implements_alter().
  */
 function drurum_module_implements_alter(&$implementations, $hook) {
-  if ($hook == 'menu_local_tasks') {
-    $group = $implementations['drurum'];
-    unset($implementations['drurum']);
-    $implementations['drurum'] = $group;
+  // Hooks for moving into the end
+  $hooks_to_the_end = ['menu_local_tasks', 'mail_alter'];
+
+  // Move hooks into the end
+  if (in_array($hook, $hooks_to_the_end)) {
+    $module = 'drurum';
+    $group = $implementations[$module];
+    unset($implementations[$module]);
+    $implementations[$module] = $group;
   }
 }
 
@@ -461,5 +466,26 @@ function drurum_user_presave(&$edit, $account, $category) {
   elseif (!isset($account->data['forms_help'])) {
     // Use default if none has been set.
     $edit['data']['forms_help'] = variable_get('forms_help_default_status', 1);
+  }
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function drurum_mail_alter(&$message) {
+  $message['from'] = $message['from'] ?? variable_get('site_mail');
+
+  if (!empty($message['to']) && filter_var($message['to'], FILTER_VALIDATE_EMAIL)) {
+    $message['send'] = $message['send'] ?? FALSE;
+  }
+  else {
+    $message['send'] = FALSE;
+    $type = 'drurum-mail';
+    $warning = "Couldn't sent message with ID \"%message_id\", from module \"%module\". Parameter \"TO\" was unavailable.";
+    $variables = [
+      '%message_id' => $message['id'],
+      '%module' => $message['module'],
+    ];
+    watchdog($type, $warning, $variables, WATCHDOG_WARNING);
   }
 }

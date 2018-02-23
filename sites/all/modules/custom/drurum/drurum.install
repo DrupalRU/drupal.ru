@@ -339,7 +339,7 @@ function drurum_update_7016() {
 /**
  * Add settings for alttracker (hide news from some forums).
  */
-function drurum_update_7017() {
+function drurum_update_7021() {
   variable_set('alttracker_ignore_terms', array('2066','2057','3769'));
   variable_set('alttracker_vocabulary_1', 'Мусор, Курилка, Модераторский');
 }

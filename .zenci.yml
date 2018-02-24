@@ -20,6 +20,16 @@ deploy:
     scripts:
       after: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/deploy.sh'
       fail_deploy: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/rollback.sh'
+  issue-902:
+    server: 89.223.31.105
+    username: drupal
+    dir: '{home}/repo'
+    env_vars:
+      environment: dev
+      store_versions: 5
+    scripts:
+      after: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/deploy.sh'
+      fail_deploy: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/rollback.sh'
   stage:
     server: 89.223.31.105
     username: drupal

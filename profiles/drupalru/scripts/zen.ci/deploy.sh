@@ -29,7 +29,7 @@ fi
 print_status "Деплоймент новой $ENVIRONMENT версии $VERSION"
 rsync -am --stats "$ENVIRONMENT_DIR/etalon/" "$VERSION_DIR"
 print_status "Эталон скопирован"
-rsync -am --stats --inplace "$ZENCI_DEPLOY_DIR/" "$VERSION_DIR" --exclude=".git"
+rsync -aml --stats --inplace "$ZENCI_DEPLOY_DIR/" "$VERSION_DIR" --exclude=".git"
 print_status "Новый коммит \"$COMMIT\" задеплоен"
 ln -sfn "$VERSION_DIR" "$SITE_DIR"
 print_status "Ссылка на новую версию \"$VERSION\" создана"

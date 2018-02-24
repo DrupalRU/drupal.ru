@@ -27,10 +27,12 @@ if [ ! -d "$VERSION_DIR" ]; then
 fi
 
 print_status "Деплоймент новой $ENVIRONMENT версии $VERSION"
-rsync -am --stats "$ENVIRONMENT_DIR/etalon/" "$VERSION_DIR"
-print_status "Эталон скопирован"
 rsync -am --stats --inplace "$ZENCI_DEPLOY_DIR/" "$VERSION_DIR" --exclude=".git"
 print_status "Новый коммит \"$COMMIT\" задеплоен"
+rm -rf "$VERSION_DIR/sites/default/files"
+print_status "Папка default/files очищена"
+rsync -am --stats "$ENVIRONMENT_DIR/etalon/" "$VERSION_DIR"
+print_status "Эталон скопирован"
 ln -sfn "$VERSION_DIR" "$SITE_DIR"
 print_status "Ссылка на новую версию \"$VERSION\" создана"
 

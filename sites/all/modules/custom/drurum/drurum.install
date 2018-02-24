@@ -364,10 +364,17 @@ function drurum_update_7018() {
   }
 }
 
-/*
+/**
  * Add settings for alttracker (hide news from some forums).
  */
 function drurum_update_7019() {
   variable_set('alttracker_ignore_terms', array('2066','2057','3769'));
   variable_set('alttracker_vocabulary_1', 'Мусор, Курилка, Модераторский');
+}
+
+/**
+ * Change default Time Zone to MSK.
+ */
+function drurum_update_7020() {
+  variable_set('date_default_timezone', 'Europe/Moscow');
 }

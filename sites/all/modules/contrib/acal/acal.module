@@ -94,6 +94,9 @@ function acal_user_view($account, $view_mode, $langcode) {
     '#attributes' => [
       'class' => ['activity-calendar'],
     ],
+    '#attached' => [
+       'css' => [drupal_get_path('module', 'acal') . '/acal.css'],
+    ],
   ];
   $account->content['activity_calendar']['title'] = [
     '#type' => 'html_tag',

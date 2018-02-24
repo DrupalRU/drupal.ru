@@ -383,12 +383,8 @@ function drurum_update_7020() {
  * Remove unused modules.
  */
 function drurum_update_7021() {
-  $modules = array("acl", "advanced_help", "advuser", "autosave", "blocker", "flag", "google_appliance", "icon", "image_filter", "video_filter", "og", "boost", "rrssb", "vud", "votingapi", "smtp", "date", "bloginfo", "chain_menu_access", "codefilter", "comment_mover", "google_pr", "google_plusone", "gravatar", "inactive_user", "mail_edit", "mollom", "ping", "site_map", "whois", "extlink", "forum_access", "nodeaccess", "cacherouter", "gmap", "location", "imagecache_actions", "imagecache_profiles", "textimage", "rustemmer", "entityreference", "coder", "blogapi", "services", "taxonomy_manager", "term_merge", "pearwiki_filter", "ban_user");
-  foreach ($modules as $module) {
-    if (module_exists($module)) {
-      module_disable(array($module));
-      drupal_uninstall_modules(array($module));
-    }
-  }
+  $modules = array("acl", "advanced_help", "advuser", "autosave", "blocker", "flag", "google_appliance", "icon", "image_filter", "video_filter", "og", "boost", "rrssb", "vud", "votingapi", "smtp", "bloginfo", "chain_menu_access", "codefilter", "comment_mover", "google_pr", "google_plusone", "gravatar", "inactive_user", "mail_edit", "mollom", "ping", "site_map", "whois", "extlink", "forum_access", "nodeaccess", "cacherouter", "gmap", "location", "imagecache_actions", "imagecache_profiles", "textimage", "rustemmer", "entityreference", "coder", "blogapi", "services", "taxonomy_manager", "term_merge", "pearwiki_filter", "ban_user");
+  module_disable($modules);
+  drupal_uninstall_modules($modules);
 }
 

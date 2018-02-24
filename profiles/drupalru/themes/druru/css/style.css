@@ -10876,6 +10876,10 @@ h3.popover-title {
 .dru-tnx-user-stat > span {
   margin-right: 12px;
 }
+.activity-calendar {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
 html {
   height: 100%;
 }

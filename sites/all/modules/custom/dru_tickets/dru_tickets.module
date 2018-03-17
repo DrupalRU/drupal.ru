@@ -64,13 +64,6 @@ function dru_tickets_menu() {
     'delivery callback' => 'ajax_deliver',
     'type' => MENU_CALLBACK,
   ];
-  $items['admin/moderate/help'] = [
-    'page callback' => 'dru_ticket_moderate_help',
-    'file' => 'dru_tickets.moderate.inc',
-    'access arguments' => TRUE,
-    'delivery callback' => 'ajax_deliver',
-    'type' => MENU_CALLBACK,
-  ];
 
   return $items;
 }
@@ -282,14 +275,6 @@ function dru_tickets_node_view($node, $view_mode) {
         ],
       ];
     }
-
-    $node->content['links']['comment']['#links']['moderate-help'] = [
-      'title' => t('Moderate help'),
-      'href' => 'admin/moderate/help',
-      'attributes' => [
-        'class' => ['use-ajax', 'moderate-help-' . $node->nid],
-      ],
-    ];
   }
 
   $is_ticket = $node->type == 'ticket' && !empty($node->ticket);

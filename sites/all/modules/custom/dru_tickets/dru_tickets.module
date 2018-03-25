@@ -315,9 +315,9 @@ function dru_tickets_theme($existing, $type, $theme, $path) {
  */
 function dru_tickets_preprocess_node(&$vars) {
   if ($vars['type'] == 'ticket') {
+    global $user;
     if ($vars['elements']['#view_mode'] == 'teaser') {
       $vars['theme_hook_suggestions'][] = "node__ticket__teaser";
-      global $user;
       if (user_access('moderate tickets')) {
         if ($user->uid == $vars['ticket']->moderate_uid) {
           $vars['classes_array'][] = 'my-ticket';
@@ -326,6 +326,9 @@ function dru_tickets_preprocess_node(&$vars) {
           $vars['classes_array'][] = 'no-taken-ticket';
         }
       }
+    }
+    if (!empty($vars['ticket']->moderate_uid) && $user->uid != $vars['ticket']->moderate_uid) {
+      unset($vars['content']['links']['comment']['#links']['ticket-verdict']);
     }
   }
 }

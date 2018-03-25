@@ -330,6 +330,9 @@ function dru_tickets_theme($existing, $type, $theme, $path) {
  */
 function dru_tickets_preprocess_node(&$vars) {
   if ($vars['type'] == 'ticket') {
+    if (module_enable(array('darkmatter'))) {
+      unset($vars['content']['links']['comment']['#links']['darkmatter-link']);
+    }
     if ($vars['elements']['#view_mode'] == 'teaser') {
       $vars['theme_hook_suggestions'][] = "node__ticket__teaser";
       global $user;

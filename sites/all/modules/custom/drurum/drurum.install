@@ -388,3 +388,17 @@ function drurum_update_7021() {
   drupal_uninstall_modules($modules);
 }
 
+/**
+ * Add role "Coordinator".
+ */
+function drurum_update_7022() {
+  $name = 'Координатор';
+  $existing_role = user_role_load_by_name($name);
+
+  if (empty($existing_role)){
+    $role = new stdClass();
+    $role->name = $name;
+    user_role_save($role);
+  }
+}
+

@@ -335,3 +335,14 @@ function drurum_update_7016() {
   ->condition('fid', 32)
   ->execute();
 }
+
+/**
+ * Disable module "ban_user".
+ */
+function drurum_update_7017() {
+  if (module_exists('ban_user')) {
+    module_disable(array('ban_user'));
+    drupal_uninstall_modules(array('ban_user'));
+  }
+}
+

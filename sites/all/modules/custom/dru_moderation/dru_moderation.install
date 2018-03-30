@@ -3,18 +3,6 @@
  * @file
  */
 
-
-/**
- * Implements hook_install().
- */
-function dru_moderation_install() {
-  // Disable ban_user module
-  if (module_exists('ban_user')) {
-    module_disable(array('ban_user'));
-    drupal_uninstall_modules(array('ban_user'));
-  }
-}
-
 /**
  * Implements hook_schema().
  */
@@ -23,7 +11,7 @@ function dru_moderation_schema() {
   $schema['dru_ban'] = array(
     'description' => 'Banned list',
     'fields' => array(
-      'pk' => array(
+      'dbid' => array(
         'description' => 'Primary key',
         'type'        => 'serial',
         'unsigned'    => TRUE,
@@ -41,9 +29,10 @@ function dru_moderation_schema() {
         'unsigned'    => TRUE,
         'not null'    => TRUE,
       ),
-      'reason' => array(
-        'description' => 'Reason for ban',
-        'type'        => 'text',
+      'ticket_id' => array(
+        'description' => 'Ticket ID where reason for ban',
+        'type'        => 'int',
+        'unsigned'    => TRUE,
         'not null'    => TRUE,
       ),
       'start_date' => array(
@@ -58,17 +47,9 @@ function dru_moderation_schema() {
         'not null'    => TRUE,
       ),
     ),
-    'primary key' => array('pk'),
+    'primary key' => array('dbid'),
   );
 
   return $schema;
-}
-
-
-/**
- * Implements hook_uninstall().
- */
-function dru_moderation_uninstall() {
-  db_truncate('dru_ban')->execute();
 }
 

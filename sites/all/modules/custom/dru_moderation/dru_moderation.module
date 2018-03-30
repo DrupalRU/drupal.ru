@@ -8,7 +8,6 @@
  * Implements hook_menu().
  */
 function dru_moderation_menu() {
-
   $items['ban/%node/%/nojs/%'] = [
     'page callback' => 'dru_moderation_ban',
     'file' => 'dru_moderation.pages.inc',
@@ -25,7 +24,6 @@ function dru_moderation_menu() {
     'delivery callback' => 'ajax_deliver',
     'type' => MENU_CALLBACK,
   ];
-
   return $items;
 }
 
@@ -33,7 +31,6 @@ function dru_moderation_menu() {
  * Implements hook_node_view().
  */
 function dru_moderation_node_view($node, $view_mode, $langcode = NULL) {
-
   if ($node->type == 'ticket') {
     if (!empty($node->ticket->ticket_verdict)) {
       $token = drupal_get_token('dru_moderation');
@@ -81,7 +78,6 @@ function dru_moderation_node_view($node, $view_mode, $langcode = NULL) {
  * Return moderators (user-objects array).
  */
 function dru_moderation_get_moderators() {
-
   $role = user_role_load_by_name('модератор');
   $uids = db_select('users_roles', 'r')
     ->fields('r', ['uid'])
@@ -97,7 +93,6 @@ function dru_moderation_get_moderators() {
  * Send mail from module.
  */
 function dru_moderation_sendmail($user_name, $days, $reason, $action) {
-
   switch($action) {
     case 'ban': 
       $theme = t('User is banned!');
@@ -139,7 +134,6 @@ function dru_moderation_mail($key, &$message, $params) {
  * Implements hook_cron().
  */
 function dru_moderation_cron() {
-
   // Check users
   $myquery = db_select('dru_ban', 'db');
   $myquery->join('users', 'u', 'u.uid = db.uid');

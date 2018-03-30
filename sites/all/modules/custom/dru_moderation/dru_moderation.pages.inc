@@ -4,7 +4,6 @@
  * Moderation Ban.
  */
 function dru_moderation_ban($ajax, $node, $uid, $token) {
-
   if (!drupal_valid_token($token, 'dru_moderation')) {
     return;
   }
@@ -40,7 +39,6 @@ function dru_moderation_ban($ajax, $node, $uid, $token) {
  * dru_moderation_ban_form.
  */
 function dru_moderation_ban_form($form, &$form_state, $vars) {
-
   $form['dru_moderation_ban_until'] = [
     '#type'          => 'textfield',
     '#title'         => t('Number of days to block user'),
@@ -74,7 +72,6 @@ function dru_moderation_ban_form($form, &$form_state, $vars) {
  * Callback dru_moderation_ban_submit_js.
  */
 function dru_moderation_submit_js($form, $form_state) {
-
   if (!form_get_errors()) {
     $commands[] = ajax_command_remove('#verdict-add');
     $commands[] = ajax_command_remove('.dru-moderation-ban');
@@ -92,7 +89,6 @@ function dru_moderation_submit_js($form, $form_state) {
  * Callback dru_moderation_ban_form_submit.
  */
 function dru_moderation_ban_form_submit($form_id, &$form_state) {
-
   if (!form_get_errors()) {
     // Pointer to ticket
     $ticket = $form_state['dru_moderation_ban_reason'];

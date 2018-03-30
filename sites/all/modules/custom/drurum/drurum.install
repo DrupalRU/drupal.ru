@@ -341,8 +341,9 @@ function drurum_update_7016() {
  */
 function drurum_update_7017() {
   if (module_exists('ban_user')) {
-    module_disable(array('ban_user'));
-    drupal_uninstall_modules(array('ban_user'));
+    module_disable(['ban_user']);
+    drupal_uninstall_modules(['ban_user']);
   }
+  module_enable(['dru_moderation']);
 }
 

@@ -7,9 +7,9 @@ files[] = xbbcode.filter.inc
 
 configure = admin/config/content/xbbcode/settings
 
-; Information added by Drupal.org packaging script on 2015-12-04
-version = "7.x-1.7"
+; Information added by Drupal.org packaging script on 2017-12-13
+version = "7.x-1.8"
 core = "7.x"
 project = "xbbcode"
-datestamp = "1449248334"
+datestamp = "1513182488"
 

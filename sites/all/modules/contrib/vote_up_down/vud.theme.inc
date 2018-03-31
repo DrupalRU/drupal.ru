@@ -170,10 +170,6 @@ function vud_widget_proxy($variables) {
   drupal_add_library('system', 'drupal.ajax');
   ctools_add_js('ajax-responder');
   ctools_include('ajax');
-  // TODO: Move this to vud-comment.
-  if ($type == 'comment') {
-    drupal_add_css(drupal_get_path('module', 'vud_comment') . '/vud_comment.css');
-  }
 
   // Search and add media files.
   vud_add_files('css', $plugin);

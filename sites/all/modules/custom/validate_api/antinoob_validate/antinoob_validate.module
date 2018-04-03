@@ -87,8 +87,16 @@ function antinoob_validate_validate_api_form_submit($form, &$form_state) {
 function antinoob_disallowed_words_callback($validate_value) {
   $status = false;
   $matches = [];
+  $forbidden_words = [];
 
-  if ($forbidden_words = array_map('trim', explode(',', variable_get('antinoob_validate_forbidden_words')))) {
+  foreach (explode(',', variable_get('antinoob_validate_forbidden_words')) as $word){
+    $word = trim($word);
+    if (!empty($word)) {
+      $forbidden_words[] = $word;
+    }
+  }
+
+  if ($forbidden_words) {
     $exclude = implode('|', $forbidden_words);
     preg_match_all("/\b{$exclude}\b/ui", $validate_value, $matches);
   }
@@ -118,8 +126,16 @@ function antinoob_exclamation_symbol_callback($validate_value) {
 function antinoob_caps_lock_callback($validate_value) {
   $status = false;
   $matches = [];
+  $forbidden_words = [];
 
-  if ($forbidden_words = array_map('trim', explode(',', variable_get('antinoob_validate_caps_words')))) {
+  foreach (explode(',', variable_get('antinoob_validate_caps_words')) as $word){
+    $word = trim($word);
+    if (!empty($word)) {
+      $forbidden_words[] = $word;
+    }
+  }
+
+  if ($forbidden_words) {
     $exclude = implode('|', $forbidden_words);
     preg_match_all("/\b{$exclude}\b/u", $validate_value, $matches);
   }

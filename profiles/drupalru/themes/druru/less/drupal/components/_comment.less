@@ -26,10 +26,11 @@
     }
 
     &.darkmatter {
-      .comment-variant(#444, #383838);
 
       &:not(.best-comment):not(.comment-unpublished) {
         color: @gray-lighter;
+        max-height: 100px;
+        overflow: auto;
       }
 
       &.darkmatter-unaccessed {

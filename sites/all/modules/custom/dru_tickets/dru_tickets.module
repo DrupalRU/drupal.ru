@@ -19,6 +19,11 @@ function dru_tickets_permission() {
       'description' => t('Allow users to moderate tickets'),
       'restrict access' => TRUE,
     ],
+    'change any verdict' => [
+      'title' => t('Change Any Verdicts'),
+      'description' => t('Allow users to change any verdicts'),
+      'restrict access' => TRUE,
+    ],
   ];
 }
 
@@ -45,14 +50,16 @@ function dru_tickets_menu() {
     'page callback' => 'dru_ticket_verdict',
     'file' => 'dru_tickets.pages.inc',
     'page arguments' => [3, 1, 4],
-    'access arguments' => ['moderate tickets'],
+    'access callback' => '_dru_tickets_verdict_access',
+    'access arguments' => [1],
     'type' => MENU_CALLBACK,
   ];
   $items['ticket/%node/verdict/ajax/%'] = [
     'page callback' => 'dru_ticket_verdict',
     'file' => 'dru_tickets.pages.inc',
     'page arguments' => [3, 1, 4],
-    'access arguments' => ['moderate tickets'],
+    'access callback' => '_dru_tickets_verdict_access',
+    'access arguments' => [1],
     'delivery callback' => 'ajax_deliver',
     'type' => MENU_CALLBACK,
   ];
@@ -318,11 +325,10 @@ function dru_tickets_theme($existing, $type, $theme, $path) {
  */
 function _dru_tickets_verdict_access($node) {
   $user = $GLOBALS['user'];
-  $coordinator_rid = array_search('Координатор', user_roles());
 
   return $node->type == 'ticket' && !empty($node->ticket) &&
     user_access('moderate tickets') && 
-      ($node->ticket->moderate_uid === $user->uid || user_has_role($coordinator_rid));
+      ($node->ticket->moderate_uid === $user->uid || user_access('change any verdict'));
 }
 
 /**

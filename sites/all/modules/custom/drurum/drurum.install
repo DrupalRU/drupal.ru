@@ -389,9 +389,22 @@ function drurum_update_7021() {
 }
 
 /**
- * Add role "Coordinator".
+ * Convert some "page" to "blog".
  */
 function drurum_update_7022() {
+  $nids = ['536','673','2227','2253','2323','2248','852','134','5022','10606','7741','26333','27609','27605','18067','31161','1','79787','19533','11876','126461'];
+  foreach ( $nids as $nid ) {
+    db_update('node')
+    ->fields(array('type' => 'blog'))
+    ->condition('nid', $nid)
+    ->execute();
+  }
+}
+
+/**
+ * Add role "Coordinator".
+ */
+function drurum_update_7023() {
   $name = 'Координатор';
   $existing_role = user_role_load_by_name($name);
 
@@ -401,4 +414,3 @@ function drurum_update_7022() {
     user_role_save($role);
   }
 }
-

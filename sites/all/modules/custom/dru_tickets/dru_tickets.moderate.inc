@@ -1,27 +1,6 @@
 <?php
 
 /**
- * Return node 127170 (Moderation and responsibility).
- */
-function dru_ticket_moderate_help() {
-  $node = node_load(127170);
-  $commands = [];
-  $render_form = '<div id="ticket-help">';
-  $render_form .= '<div id="close-form">×</div>';
-  $render_form .= '<h2>';
-  $render_form .= $node->title;
-  $render_form .= '</h2>';
-  $render_form .= check_markup($node->body['und'][0]['value'], $node->body['und'][0]['format'], '', TRUE);
-  $render_form .= '</div>';
-  $commands[] = ajax_command_append('body', '<div id="verdict-add">' . $render_form . '</div>');
-
-  return [
-    '#type' => 'ajax',
-    '#commands' => $commands,
-  ];
-}
-
-/**
  * Moderate commands.
  */
 function dru_ticket_moderate_command($command, $entity_type, $entity_id) {

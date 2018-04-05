@@ -540,4 +540,9 @@ var Drupal = Drupal || {};
     contentWidth > allowedRightSide ? $content.css('max-width', allowedRightSide) : null;
   });
 
+  $('.darkmatter__overflow').click(function() {
+    $(this).fadeOut();
+    $(this).parents(".darkmatter").addClass('darkmatter-shown');
+  })
+
 })(jQuery, Drupal);

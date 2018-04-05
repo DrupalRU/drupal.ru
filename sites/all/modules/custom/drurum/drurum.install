@@ -401,3 +401,16 @@ function drurum_update_7022() {
   }
 }
 
+/**
+ * Add role "Coordinator".
+ */
+function drurum_update_7023() {
+  $name = 'Координатор';
+  $existing_role = user_role_load_by_name($name);
+
+  if (empty($existing_role)){
+    $role = new stdClass();
+    $role->name = $name;
+    user_role_save($role);
+  }
+}

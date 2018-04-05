@@ -277,8 +277,7 @@ function dru_tickets_node_view($node, $view_mode) {
     }
   }
 
-  $is_ticket = $node->type == 'ticket' && !empty($node->ticket);
-  if ($is_ticket && $node->ticket->moderate_uid && user_access('moderate tickets')) {
+  if (_dru_tickets_verdict_access($node)) {
     $token = drupal_get_token('dru_tickets');
     $node->content['links']['comment']['#links']['ticket-verdict'] = [
       'title' => $node->ticket->ticket_verdict ? t('Change verdict') : t('Verdict'),
@@ -311,14 +310,30 @@ function dru_tickets_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Check acces to change ticket verdict.
+ *
+ * @param object $node Ticked node object.
+ *
+ * @return bool
+ */
+function _dru_tickets_verdict_access($node) {
+  $user = $GLOBALS['user'];
+  $coordinator_rid = array_search('Координатор', user_roles());
+
+  return $node->type == 'ticket' && !empty($node->ticket) &&
+    user_access('moderate tickets') && 
+      ($node->ticket->moderate_uid === $user->uid || user_has_role($coordinator_rid));
+}
+
+/**
  * Implement hook_preprocess_node().
  */
 function dru_tickets_preprocess_node(&$vars) {
   if ($vars['type'] == 'ticket') {
-    global $user;
     if ($vars['elements']['#view_mode'] == 'teaser') {
       $vars['theme_hook_suggestions'][] = "node__ticket__teaser";
       if (user_access('moderate tickets')) {
+        $user = $GLOBALS['user'];
         if ($user->uid == $vars['ticket']->moderate_uid) {
           $vars['classes_array'][] = 'my-ticket';
         }
@@ -326,9 +341,6 @@ function dru_tickets_preprocess_node(&$vars) {
           $vars['classes_array'][] = 'no-taken-ticket';
         }
       }
-    }
-    if (!empty($vars['ticket']->moderate_uid) && $user->uid != $vars['ticket']->moderate_uid) {
-      unset($vars['content']['links']['comment']['#links']['ticket-verdict']);
     }
   }
 }

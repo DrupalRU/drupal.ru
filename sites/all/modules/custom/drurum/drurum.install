@@ -345,5 +345,7 @@ function drurum_update_7017() {
     drupal_uninstall_modules(['ban_user']);
   }
   module_enable(['dru_moderation']);
+  // Disable Standard Drupal notification
+  variable_set('user_mail_status_blocked_notify', 0);
 }
 

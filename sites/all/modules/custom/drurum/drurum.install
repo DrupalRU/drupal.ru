@@ -401,3 +401,15 @@ function drurum_update_7022() {
   }
 }
 
+/**
+ * Disable users contact forms
+ */
+function drurum_update_7023() {
+  variable_set('contact_default_status', 0);
+  db_delete('role_permission')
+    ->condition('rid', 2)
+    ->condition('permission', 'access user contact forms')
+    ->condition('module', 'contact')
+    ->execute();
+}
+

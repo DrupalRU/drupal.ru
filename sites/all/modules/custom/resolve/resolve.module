@@ -66,7 +66,7 @@ function resolve_comment_view($comment, $view_mode, $langcode) {
   resolve_attach_js();
   $can_resolved = variable_get(RESOLVE_CAN . '_' . $node->type);
   $token = resolve_token_to_arg();
-  if ($can_resolved && resolve_access($node, $comment, $token)) {
+  if ($can_resolved) {
     $links = &$comment->content['links']['comment']['#links'];
     if (!empty($node->resolved_cid) && $node->resolved_cid == $comment->cid) {
       // Add link to comment for resolve the question (node).

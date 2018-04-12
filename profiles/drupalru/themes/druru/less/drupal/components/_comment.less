@@ -30,20 +30,17 @@
 
       &:not(.best-comment):not(.comment-unpublished) {
         overflow: hidden;
-        max-height: 150px;
+        max-height: 130px;
         position: relative;
         transition: all 0.5s ease-in-out;
       }
 
       .darkmatter__overflow {
-        font-size: 1.5em;
-        font-weight: bold;
         display: flex;
         justify-content: center;
         flex-direction: column;
         text-align: center;
         background: #fff;
-        color: #000;
         opacity: 0.9;
         z-index: 2;
         position: absolute;
@@ -52,6 +49,10 @@
         width: 100%;
         height: 100%;
         cursor: pointer;
+        i {
+          font-size: 2em;
+          color: @gray-dark;
+        }
       }
 
       &.darkmatter-unaccessed {

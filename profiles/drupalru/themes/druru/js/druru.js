@@ -542,7 +542,7 @@ var Drupal = Drupal || {};
 
   $('.darkmatter__overflow').click(function() {
     $(this).fadeOut();
-    $(this).parents(".darkmatter").addClass('darkmatter-shown');
+    $(this).closest(".darkmatter").addClass('darkmatter-shown');
   })
 
 })(jQuery, Drupal);

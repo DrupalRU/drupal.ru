@@ -1,0 +1,55 @@
+<?php
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function dru_moderation_schema() {
+
+  $schema['dru_ban'] = array(
+    'description' => 'Banned list',
+    'fields' => array(
+      'dbid' => array(
+        'description' => 'Primary key',
+        'type'        => 'serial',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+      ),
+      'uid' => array(
+        'description' => 'Banned user UID',
+        'type'        => 'int',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+      ),
+      'moderator' => array(
+        'description' => 'Moderator UID',
+        'type'        => 'int',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+      ),
+      'ticket_id' => array(
+        'description' => 'Ticket ID where reason for ban',
+        'type'        => 'int',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+      ),
+      'start_date' => array(
+        'description' => 'Ban start date',
+        'type'        => 'text',
+        'not null'    => TRUE,
+      ),
+      'ban_until' => array(
+        'description' => 'Ban until',
+        'type'        => 'int',
+        'unsigned'    => TRUE,
+        'not null'    => TRUE,
+      ),
+    ),
+    'primary key' => array('dbid'),
+  );
+
+  return $schema;
+}
+

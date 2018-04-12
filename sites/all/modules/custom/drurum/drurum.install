@@ -412,4 +412,16 @@ function drurum_update_7023() {
     ->condition('module', 'contact')
     ->execute();
 }
-
+    
+/**
+ * Disable module "ban_user".
+ */
+function drurum_update_7024() {
+  if (module_exists('ban_user')) {
+    module_disable(['ban_user']);
+    drupal_uninstall_modules(['ban_user']);
+  }
+  module_enable(['dru_moderation']);
+  // Disable Standard Drupal notification
+  variable_set('user_mail_status_blocked_notify', 0);
+}

@@ -1,6 +1,0 @@
-
-
-16/12/2014
-==========
-- #1602842 Port to Drupal 7 (by Dmitriy.trt & mrded)
-

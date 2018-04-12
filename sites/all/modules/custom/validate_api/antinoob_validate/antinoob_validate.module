@@ -1,10 +1,11 @@
 <?php
 
-define('ANTINOOB_VALIDATE_MIN_CAPS_WORD', 1);
-
 /**
  * @file
+ * Main module file.
  */
+
+define('ANTINOOB_VALIDATE_MIN_CAPS_WORD', 1);
 
 /**
  * Implements hook_validator_info().
@@ -13,79 +14,105 @@ define('ANTINOOB_VALIDATE_MIN_CAPS_WORD', 1);
 function antinoob_validate_validator_info() {
   $items = [];
   $items[] = [
-    'type'        => 'text',
-    'title'       => t('Exclamation'),
+    'type' => 'text',
+    'title' => t('Exclamation'),
     'description' => t('Disallow to use multiple exclamation symbols in a row.'),
-    'name'        => 'exclamation_point',
-    'callback'    => 'antinoob_exclamation_symbol_callback',
+    'name' => 'exclamation_point',
+    'callback' => 'antinoob_exclamation_symbol_callback',
   ];
 
   $items[] = [
-    'type'        => 'text',
-    'title'       => t('Caps Lock'),
+    'type' => 'text',
+    'title' => t('Caps Lock'),
     'description' => t('Disallow to use all capital words.'),
-    'name'        => 'caps_lock',
-    'callback'    => 'antinoob_caps_lock_callback',
+    'name' => 'caps_lock',
+    'callback' => 'antinoob_caps_lock_callback',
   ];
-
-  $restricted_words = explode("\n", file_get_contents(drupal_get_path('module',
-      'antinoob_validate') . '/forbitten.words'));
-  $words = [];
-  foreach ($restricted_words as $word) {
-    $word = trim($word);
-    if (!empty($word)) {
-      $words[] = '"' . $word . '"';
-    }
-  }
 
   $items[] = [
-    'type'        => 'text',
-    'title'       => t('Disallowed words'),
-    'description' => t('Disallow to use word(s): !words.',
-      ['!words' => implode(', ', $words)]),
-    'name'        => 'disallowed_words',
-    'callback'    => 'antinoob_disallowed_words_callback',
+    'type' => 'text',
+    'title' => t('Disallowed words'),
+    'description' => t('Disallow to use forbidden words'),
+    'name' => 'disallowed_words',
+    'callback' => 'antinoob_disallowed_words_callback',
   ];
+
   return $items;
 }
 
 /**
- *
+ * Implements hook_form_FORM_ID_alter().
+ */
+function antinoob_validate_form_validate_api_form_settings_alter(&$form) {
+  $rules = [
+    'forbidden_words' => t('Forbidden words'),
+    'caps_words' => t('Forbidden CAPS words'),
+  ];
+
+  $form['container']['antinoob_validate'] = [
+    '#type' => 'fieldset',
+    '#collapsible' => false,
+    '#title' => t('Antinoob settings'),
+    '#group' => 'group_tabs',
+  ];
+
+  foreach ($rules as $rule => $title) {
+    $form['container']['antinoob_validate'][$rule] = [
+      '#type' => 'textarea',
+      '#rows' => 5,
+      '#title' => $title,
+      '#description' => t('List of forbidden words, coma separated.'),
+      '#default_value' => variable_get("antinoob_validate_{$rule}"),
+    ];
+  }
+
+  $form['#submit'][] = 'antinoob_validate_validate_api_form_submit';
+}
+
+/**
+ * Save data on submition.
+ */
+function antinoob_validate_validate_api_form_submit($form, &$form_state) {
+  $values = $form_state['values']['container'];
+  if (!empty($values['antinoob_validate'])) {
+    foreach ($values['antinoob_validate'] as $rule => $data) {
+      variable_set("antinoob_validate_{$rule}", trim($data));
+    }
+  }
+}
+
+/**
+ * Disallowed validation.
  */
 function antinoob_disallowed_words_callback($validate_value) {
-  $status = FALSE;
+  $status = false;
+  $matches = [];
+  $forbidden_words = [];
 
-  $restricted_words = explode("\n", file_get_contents(drupal_get_path('module',
-      'antinoob_validate') . '/forbitten.yml'));
-
-  $words = FALSE;
-
-  foreach ($restricted_words as $word) {
+  foreach (explode(',', variable_get('antinoob_validate_forbidden_words')) as $word){
+    $word = trim($word);
     if (!empty($word)) {
-      $word = trim($word);
-      preg_match('/(^|\s)' . $word . '($|\s)/ui', $validate_value, $matches);
-      $wd = trim(array_shift($matches));
-      if (!empty($wd)) {
-        $words[] = $wd;
-      }
+      $forbidden_words[] = $word;
     }
   }
 
-  if ($words) {
-    $status = t('[@word] is forbidden to use.',
-      ['@word' => implode(', ', $words)]);
+  if ($forbidden_words) {
+    $exclude = implode('|', $forbidden_words);
+    preg_match_all("/\b{$exclude}\b/ui", $validate_value, $matches);
+  }
+
+  if ($matches[0]) {
+    $status = t('[@word] is forbidden to use.', ['@word' => implode(', ', $matches[0])]);
   }
 
   return $status;
 }
 
 /**
- *
+ * Exclamation validation.
  */
 function antinoob_exclamation_symbol_callback($validate_value) {
-
-  $status = FALSE;
-
+  $status = false;
   if (preg_match('/!!/', $validate_value)) {
     $status = t('Do not use more than one exclamation point in a row.');
   }
@@ -97,22 +124,24 @@ function antinoob_exclamation_symbol_callback($validate_value) {
  * Caps validation.
  */
 function antinoob_caps_lock_callback($validate_value) {
-  $status = FALSE;
+  $status = false;
+  $matches = [];
+  $forbidden_words = [];
 
-  $words = array_filter(explode(' ',
-    preg_replace('/[^\w\s]|\d/ui', '', $validate_value)), function ($value) {
-    return mb_strlen(trim($value)) > ANTINOOB_VALIDATE_MIN_CAPS_WORD;
-  });
-
-  $forbidden = [];
-  foreach ($words as $word) {
-    if ($word == mb_strtoupper($word))
-      $forbidden[] = $word;
+  foreach (explode(',', variable_get('antinoob_validate_caps_words')) as $word){
+    $word = trim($word);
+    if (!empty($word)) {
+      $forbidden_words[] = $word;
+    }
   }
 
-  if ($forbidden) {
-    $status = t('Using ALL capital symbols is forbidden: @obscene',
-      ['@obscene' => implode(', ', $forbidden)]);
+  if ($forbidden_words) {
+    $exclude = implode('|', $forbidden_words);
+    preg_match_all("/\b{$exclude}\b/u", $validate_value, $matches);
+  }
+
+  if ($matches[0]) {
+    $status = t('Using ALL capital symbols is forbidden: @obscene', ['@obscene' => implode(', ', $matches[0])]);
   }
 
   return $status;

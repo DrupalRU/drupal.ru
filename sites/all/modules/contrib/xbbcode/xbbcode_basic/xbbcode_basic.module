@@ -226,7 +226,7 @@ function xbbcode_basic_render_youtube($tag) {
   else {
     $id = $tag->content;
   }
-  return "<iframe width=\"$width\" height=\"$height\" src=\"http://www.youtube.com/embed/$id\" frameborder=\"0\" allowfullscreen></iframe>";
+  return "<iframe width=\"$width\" height=\"$height\" src=\"https://www.youtube.com/embed/$id\" frameborder=\"0\" gesture=\"media\" allowfullscreen></iframe>";
 }
 
 function xbbcode_basic_render_nodelink($tag) {

@@ -9901,10 +9901,15 @@ fieldset[disabled] #block-advanced-sphinx-searchbox .search-sphinx:focus + butto
 .node-simple-event .details {
   margin-left: 0;
 }
+span.geshifilter,
 .geshifilter {
+  display: block;
+  overflow: auto;
   white-space: nowrap;
 }
+span.geshifilter code,
 .geshifilter code {
+  padding: 0;
   background: none;
 }
 #block-drurum-new li a i {
@@ -10870,6 +10875,11 @@ h3.popover-title {
 }
 .dru-tnx-user-stat > span {
   margin-right: 12px;
+}
+.activity-calendar {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 15px;
 }
 html {
   height: 100%;

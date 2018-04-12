@@ -7,3 +7,4 @@ dist
 .awspublish*
 config.json
 .vscode-upload.json
+package-lock.json

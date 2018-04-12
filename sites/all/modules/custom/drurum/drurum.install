@@ -337,9 +337,86 @@ function drurum_update_7016() {
 }
 
 /**
- * Disable module "ban_user".
+ * Enable views, admin_views and others".
  */
 function drurum_update_7017() {
+  module_enable(['views', 'entity', 'views_bulk_operations', 'admin_views']);
+}
+
+/**
+ * Replace Unsubscribe tokens for Comment notifier.
+ */
+function drurum_update_7018() {
+  // Replace comment pattern
+  $comment_notify_default = 'comment_notify_comment_notify_default_mailtext';
+  if ($comment_notify = variable_get($comment_notify_default)) {
+    $pattern = '/\[comment:unsubscribe-url\]/';
+    $replacement = '[comment-subscribed:unsubscribe-url:absolute]';
+    variable_set($comment_notify_default, preg_replace($pattern, $replacement, $comment_notify));
+  }
+
+  // Replace node (author) pattern
+  $node_notify_default = 'comment_notify_node_notify_default_mailtext';
+  if ($node_notify = variable_get($node_notify_default)) {
+    $pattern = '/\s<tr>(.*)Отписаться от этой ветки<\/a><\/td><\/tr>\s/';
+    $replacement = '';
+    variable_set($node_notify_default, preg_replace($pattern, $replacement, $node_notify));
+  }
+}
+
+/**
+ * Add settings for alttracker (hide news from some forums).
+ */
+function drurum_update_7019() {
+  variable_set('alttracker_ignore_terms', array('2066','2057','3769'));
+  variable_set('alttracker_vocabulary_1', 'Мусор, Курилка, Модераторский');
+}
+
+/**
+ * Change default Time Zone to MSK.
+ */
+function drurum_update_7020() {
+  variable_set('date_default_timezone', 'Europe/Moscow');
+}
+
+/**
+ * Remove unused modules.
+ */
+function drurum_update_7021() {
+  $modules = array("acl", "advanced_help", "advuser", "autosave", "blocker", "flag", "google_appliance", "icon", "image_filter", "video_filter", "og", "boost", "rrssb", "vud", "votingapi", "smtp", "bloginfo", "chain_menu_access", "codefilter", "comment_mover", "google_pr", "google_plusone", "gravatar", "inactive_user", "mail_edit", "mollom", "ping", "site_map", "whois", "extlink", "forum_access", "nodeaccess", "cacherouter", "gmap", "location", "imagecache_actions", "imagecache_profiles", "textimage", "rustemmer", "entityreference", "coder", "blogapi", "services", "taxonomy_manager", "term_merge", "pearwiki_filter", "ban_user");
+  module_disable($modules);
+  drupal_uninstall_modules($modules);
+}
+
+/**
+ * Convert some "page" to "blog".
+ */
+function drurum_update_7022() {
+  $nids = ['536','673','2227','2253','2323','2248','852','134','5022','10606','7741','26333','27609','27605','18067','31161','1','79787','19533','11876','126461'];
+  foreach ( $nids as $nid ) {
+    db_update('node')
+    ->fields(array('type' => 'blog'))
+    ->condition('nid', $nid)
+    ->execute();
+  }
+}
+
+/**
+ * Disable users contact forms
+ */
+function drurum_update_7023() {
+  variable_set('contact_default_status', 0);
+  db_delete('role_permission')
+    ->condition('rid', 2)
+    ->condition('permission', 'access user contact forms')
+    ->condition('module', 'contact')
+    ->execute();
+}
+    
+/**
+ * Disable module "ban_user".
+ */
+function drurum_update_7024() {
   if (module_exists('ban_user')) {
     module_disable(['ban_user']);
     drupal_uninstall_modules(['ban_user']);
@@ -348,4 +425,3 @@ function drurum_update_7017() {
   // Disable Standard Drupal notification
   variable_set('user_mail_status_blocked_notify', 0);
 }
-

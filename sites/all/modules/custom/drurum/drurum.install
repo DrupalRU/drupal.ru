@@ -405,7 +405,7 @@ function drurum_update_7022() {
  * Add role "Coordinator".
  */
 function drurum_update_7023() {
-  $name = 'Координатор';
+  $name = t("Coordinator");
   $existing_role = user_role_load_by_name($name);
 
   if (empty($existing_role)){
@@ -413,5 +413,37 @@ function drurum_update_7023() {
     $role->name = $name;
     user_role_save($role);
   }
+
+  db_insert('role_permission')
+  ->fields(array(
+    'rid' => 2,
+    'permission' => 'dru_tickets view tickets',
+    'module' => 'dru_tickets',
+  ))
+  ->execute();
+
+  db_insert('role_permission')
+  ->fields(array(
+    'rid' => 20,
+    'permission' => 'dru_tickets moderate tickets',
+    'module' => 'dru_tickets',
+  ))
+  ->execute();
+
+  db_insert('role_permission')
+  ->fields(array(
+    'rid' => 21,
+    'permission' => 'dru_tickets change any verdict',
+    'module' => 'dru_tickets',
+  ))
+  ->execute();
+
+    db_insert('role_permission')
+  ->fields(array(
+    'rid' => 21,
+    'permission' => 'dru_tickets moderate tickets',
+    'module' => 'dru_tickets',
+  ))
+  ->execute();
 }
 

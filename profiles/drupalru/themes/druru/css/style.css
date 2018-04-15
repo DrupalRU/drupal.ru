@@ -7902,50 +7902,42 @@ body aside ul:not(.pager) > * a:first-of-type.active.active:before {
   opacity: 1;
 }
 .main-content .comment.darkmatter {
-  background: #545454;
-  border-color: #444;
-}
-.main-content .comment.darkmatter.hovered {
-  background: #444;
-  border-color: #343434;
-}
-.main-content .comment.darkmatter .dropdown.open .dropdown-toggle,
-.main-content .comment.darkmatter .dropdown.open .dropdown-toggle:hover,
-.main-content .comment.darkmatter .dropdown.open .dropdown-toggle:focus,
-.main-content .comment.darkmatter .dropdown.open .dropdown-toggle:active {
-  background: transparent;
-  border-color: #282828;
-}
-.main-content .comment.darkmatter .dropdown.open .dropdown-toggle .icon-bar,
-.main-content .comment.darkmatter .dropdown.open .dropdown-toggle:hover .icon-bar,
-.main-content .comment.darkmatter .dropdown.open .dropdown-toggle:focus .icon-bar,
-.main-content .comment.darkmatter .dropdown.open .dropdown-toggle:active .icon-bar {
-  background: #080808;
-}
-.main-content .comment.darkmatter .dropdown .dropdown-toggle {
-  border-color: transparent;
-}
-.main-content .comment.darkmatter .dropdown .dropdown-toggle:hover,
-.main-content .comment.darkmatter .dropdown .dropdown-toggle:focus,
-.main-content .comment.darkmatter .dropdown .dropdown-toggle:active {
-  border-color: #383838;
-}
-.main-content .comment.darkmatter .dropdown .dropdown-toggle:hover .icon-bar,
-.main-content .comment.darkmatter .dropdown .dropdown-toggle:focus .icon-bar,
-.main-content .comment.darkmatter .dropdown .dropdown-toggle:active .icon-bar {
-  background: #181818;
-}
-.main-content .comment.darkmatter .dropdown .dropdown-toggle .icon-bar {
-  background: #383838;
+  position: relative;
 }
 .main-content .comment.darkmatter:not(.best-comment):not(.comment-unpublished) {
-  color: #e6e6e6;
+  overflow: hidden;
+  max-height: 130px;
+  position: relative;
+  transition: all 0.5s ease-in-out;
+}
+.main-content .comment.darkmatter .darkmatter__overflow {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  background: #fff;
+  opacity: 0.9;
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.main-content .comment.darkmatter .darkmatter__overflow i {
+  font-size: 2em;
+  color: #333333;
 }
 .main-content .comment.darkmatter.darkmatter-unaccessed .media-body {
   padding: 5px 12px;
 }
 .main-content .comment.darkmatter.best-comment {
   border-color: #bbb;
+}
+.main-content .comment.darkmatter-shown {
+  overflow: auto !important;
+  max-height: none !important;
 }
 .main-content .comment.best-comment {
   background: #f2f9ef;

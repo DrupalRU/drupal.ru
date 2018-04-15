@@ -51,6 +51,10 @@ msgstr ""
 msgid "Mark this content as dark matter."
 msgstr ""
 
+#: darkmatter.module:465
+msgid "was hidden as DM"
+msgstr ""
+
 #: darkmatter.module:539
 msgid "I agree to see all nodes and comments marked as Dark Matter."
 msgstr ""

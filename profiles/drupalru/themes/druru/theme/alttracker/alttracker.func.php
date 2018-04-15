@@ -78,8 +78,7 @@ function druru_alttracker($variables) {
       '#options' => array(
         'attributes' => array(),
         'html'       => TRUE,
-        'query'      => $last_page_query,
-        'fragment'   => 'new',
+        'query'      => $last_page_query
       ),
     );
   }

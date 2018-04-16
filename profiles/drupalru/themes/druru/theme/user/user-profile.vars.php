@@ -70,8 +70,7 @@ function _druru_prepare_profile_groups(&$variables) {
   field_attach_preprocess('user', $account, $elements, $variables);
 
   $variables['name'] = $account->name;
-  $variables['realname'] = @($account->realname ?: $account->name);
-  $variables['realname'] = drupal_ucfirst($variables['realname']);
+  $variables['realname'] = $account->name;
 
   if ($account->signature) {
     $variables['signature'] = check_markup($account->signature, $account->signature_format, '', TRUE);

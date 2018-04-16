@@ -10,7 +10,7 @@ function druru_alttracker($variables) {
   foreach ($variables['nodes'] as $node) {
     $item = array();
 
-    $user_name = $node->name ? ucfirst($node->name) : variable_get('anonymous');
+    $user_name = $node->name ? $node->name : variable_get('anonymous');
     $comments = $comment_icon . $node->comment_count;
     $last_page_query = comment_new_page_count($node->comment_count, $node->new_replies, $node);
     $time_ago = format_interval(REQUEST_TIME - $node->changed, 1);

@@ -82,10 +82,8 @@ function dru_tnx_menu() {
  * Implements hook_node_view().
  */
 function dru_tnx_node_view($node, $view_mode) {
-
-  $user = $GLOBALS['user'];
-
-  if (isset($node->tnx)) {
+  if (dru_tnx_status_by_node_type($node->type) && isset($node->tnx)) {
+    $user = $GLOBALS['user'];
 
     // Add node links
     if (user_access('tnx') && $node->uid !== $user->uid) {
@@ -117,16 +115,17 @@ function dru_tnx_preprocess_node(&$vars) {
  * Implements hook_comment_view().
  */
 function dru_tnx_comment_view($comment, $view_mode) {
+  $type = mb_substr($comment->node_type, strlen('comment_node_'));
+  if (dru_tnx_status_by_comment_node_type($type)) {
+    $user = $GLOBALS['user'];
+    if (user_access('tnx') && $comment->uid !== $user->uid) {
 
-  $user = $GLOBALS['user'];
-
-  // Add comment links
-  if (user_access('tnx') && $comment->uid !== $user->uid) {
-    drupal_add_library('system', 'drupal.ajax');
-    $tnx = dru_tnx_get_user_tnx('comment', $comment->cid, $user->uid);
-    $comment->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link(
-      'comment', $comment->cid, $tnx
-    );
+      drupal_add_library('system', 'drupal.ajax');
+      $tnx = dru_tnx_get_user_tnx('comment', $comment->cid, $user->uid);
+      $comment->content['links']['comment']['#links']['dru-tnx'] = dru_tnx_link(
+        'comment', $comment->cid, $tnx
+      );
+    }
   }
 }
 
@@ -139,24 +138,35 @@ function dru_tnx_comment_view($comment, $view_mode) {
  * @return array
  */
 function dru_tnx_show($entity, $type) {
+  $counter = [];
 
-  $id = $type == 'node' ? 'nid' : 'cid';
-  $count = (isset($entity->tnx) && $entity->tnx > 0) ? $entity->tnx : 0;
+  if ($type == 'node') {
+    $id = 'nid';
+    $status = dru_tnx_status_by_node_type($entity->type);
+  }
+  else {
+    $id = 'cid';
+    $status = dru_tnx_status_by_comment_node_type(mb_substr($entity->node_type, strlen('comment_node_')));
+  }
 
-  $counter = [
-    '#type'       => 'container',
-    '#attributes' => [
-      'class' => [
-        'tnx-counter',
-        'counter-' . $count,
-        'dru-tnx-' . $type . '-' . $entity->$id . '-counter',
+  if ($status) {
+    $count = (isset($entity->tnx) && $entity->tnx > 0) ? $entity->tnx : 0;
+
+    $counter = [
+      '#type'       => 'container',
+      '#attributes' => [
+        'class' => [
+          'tnx-counter',
+          'counter-' . $count,
+          'dru-tnx-' . $type . '-' . $entity->$id . '-counter',
+        ],
       ],
-    ],
-    'counter'     => [
-      '#markup' => $count . ' ' . t('Thanks'),
-      '#counter' => $count
-    ],
-  ];
+      'counter'     => [
+        '#markup' => $count . ' ' . t('Thanks'),
+        '#counter' => $count
+      ],
+    ];
+  }
 
   return $counter;
 }
@@ -167,7 +177,6 @@ function dru_tnx_show($entity, $type) {
  * @return string
  */
 function dru_tnx_get_icon() {
-
   // Require theme icon generator
   $file = DRUPAL_ROOT . '/';
   $file .= drupal_get_path('theme', 'druru');
@@ -282,4 +291,85 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
  */
 function dru_tnx_init() {
   drupal_add_css(DRU_TNX_PATH . '/css/dru_tnx.css');
+}
+
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function dru_tnx_form_node_type_form_alter(&$form, &$form_state, $form_id) {
+  $form['display']['dru_tnx_node'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Enable thanks functionality'),
+    '#default_value' => dru_tnx_status_by_node_type($form['type']['#default_value']),
+    '#description' => t('Show/hide thanks button in node links.'),
+  ];
+
+  if (module_exists('comment') && isset($form['comment'])) {
+    $form['comment']['dru_tnx_comment'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Enable thanks functionality for comments'),
+      '#default_value' => dru_tnx_status_by_comment_node_type($form['type']['#default_value']),
+      '#description' => t('Show/hide thanks button in comment links.'),
+    ];
+  }
+
+  $form['#submit'][] = 'dru_tnx_form_node_type_form_submit';
+}
+
+/**
+ * Save node type state for dru_tnx.
+ */
+function dru_tnx_form_node_type_form_submit($form, &$form_state) {
+  $values = $form_state['values'];
+
+  $state_node = variable_get('dru_tnx_status_by_node_type');
+  $state_node[$values['type']] = $values['dru_tnx_node'];
+  variable_set('dru_tnx_status_by_node_type', $state_node);
+
+  if (module_exists('comment')) {
+    $state_comment = variable_get('dru_tnx_status_by_comment_node_type');
+    $state_comment[$values['type']] = ($values['comment'] == COMMENT_NODE_OPEN) ? $values['dru_tnx_comment'] : false;
+    variable_set('dru_tnx_status_by_comment_node_type', $state_comment);
+  }
+}
+
+/**
+ * Check state of ability by node type.
+ *
+ * @param string $type Machine name of node type.
+ *
+ * @return bool
+ */
+function dru_tnx_status_by_node_type(string $type): bool {
+  $state = variable_get('dru_tnx_status_by_node_type', []);
+
+  return (isset($state[$type]) && $state[$type]);
+}
+
+/**
+ * Check state of ability by comment node type.
+ *
+ * @param string $type Machine name of node type.
+ *
+ * @return bool
+ */
+function dru_tnx_status_by_comment_node_type(string $type): bool {
+  $state = variable_get('dru_tnx_status_by_comment_node_type', []);
+
+  return (isset($state[$type]) && $state[$type]);
+}
+
+/**
+ * Implements hook_node_type_delete().
+ */
+function dru_tnx_node_type_delete($info) {
+  $state_node = variable_get('dru_tnx_status_by_node_type');
+  $state_comment = variable_get('dru_tnx_status_by_comment_node_type');
+
+  unset($state_node[$info->type]);
+  unset($state_comment[$info->type]);
+
+  variable_set('dru_tnx_status_by_node_type', $state_node);
+  variable_set('dru_tnx_status_by_comment_node_type', $state_comment);
 }

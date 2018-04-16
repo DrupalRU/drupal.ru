@@ -71,7 +71,7 @@ function _druru_menu_link_fill_icons(&$element) {
 
       $element['#weight'] = 1000;
       $icon = _druru_user_menu_icon();
-      $element['#title'] = $icon . ' ' . ucfirst($GLOBALS['user']->name);
+      $element['#title'] = $icon . ' ' . $GLOBALS['user']->name;
       $element['#localized_options']['html'] = TRUE;
       break;
 

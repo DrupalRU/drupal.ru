@@ -412,7 +412,7 @@ function drurum_update_7023() {
     ->condition('module', 'contact')
     ->execute();
 }
-    
+
 /**
  * Disable module "ban_user".
  */
@@ -424,4 +424,18 @@ function drurum_update_7024() {
   module_enable(['dru_moderation']);
   // Disable Standard Drupal notification
   variable_set('user_mail_status_blocked_notify', 0);
+}
+
+/**
+ * Enable Thanks functionality for "Blog" node type.
+ */
+function drurum_update_7025(&$sandbox) {
+  $node_types = [];
+  foreach (node_type_get_types() as $node_type) {
+    $node_types[$node_type->type] = FALSE;
+  }
+  $node_types['blog'] = TRUE;
+
+  variable_set('dru_tnx_status_by_node_type', $node_types);
+  variable_set('dru_tnx_status_by_comment_node_type', $node_types);
 }

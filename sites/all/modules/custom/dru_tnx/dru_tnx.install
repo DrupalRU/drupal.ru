@@ -384,11 +384,34 @@ function dru_tnx_update_7001(&$sandbox) {
 }
 
 /**
+ * Add states for Thanks functionality by node types.
+ */
+function dru_tnx_update_7002(&$sandbox) {
+  $node_types = [];
+  foreach (node_type_get_types() as $node_type) {
+    $node_types[$node_type->type] = FALSE;
+  }
+
+  if (!variable_get('dru_tnx_status_by_node_type')) {
+    variable_set('dru_tnx_status_by_node_type', $node_types);
+  }
+
+  if (module_exists('comment')) {
+    if (!variable_get('dru_tnx_status_by_comment_node_type')) {
+      variable_set('dru_tnx_status_by_comment_node_type', $node_types);
+    }
+  }
+}
+
+/**
  * Implements hook_uninstall().
  */
 function dru_tnx_uninstall() {
   drupal_uninstall_schema('dru_tnx');
   db_drop_field('node', 'tnx');
   db_drop_field('comment', 'tnx');
+  variable_del('dru_tnx_status_by_node_type');
+  variable_del('dru_tnx_status_by_comment_node_type');
+
   cache_clear_all();
 }

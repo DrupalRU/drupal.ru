@@ -386,13 +386,17 @@ function _druru_count_unread_messages() {
  */
 function _druru_wrap_thanks(&$vars, $type) {
   if (!empty($vars[$type]->tnx)) {
-    $counter = dru_tnx_show($vars[$type], $type);
-    $counter['counter']['#markup'] = druru_icon('heart', TRUE, [
-        'class' => ['text-danger'],
-      ]) . $counter['counter']['#counter'];
-    $vars['tnx'] = render($counter);
-    if(!empty($vars['content']['tnx']) && is_array($vars['content']['tnx'])) {
-      hide($vars['content']['tnx']);
+    if ($counter = dru_tnx_show($vars[$type], $type)) {
+      $counter['counter']['#markup'] = druru_icon('heart', TRUE, [
+          'class' => ['text-danger'],
+        ]) . $counter['counter']['#counter'];
+      $vars['tnx'] = render($counter);
+      if(!empty($vars['content']['tnx']) && is_array($vars['content']['tnx'])) {
+        hide($vars['content']['tnx']);
+      }
+    }
+    else {
+      unset($vars['tnx']);
     }
   }
 }

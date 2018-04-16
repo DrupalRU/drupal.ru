@@ -138,24 +138,35 @@ function dru_tnx_comment_view($comment, $view_mode) {
  * @return array
  */
 function dru_tnx_show($entity, $type) {
+  $counter = [];
 
-  $id = $type == 'node' ? 'nid' : 'cid';
-  $count = (isset($entity->tnx) && $entity->tnx > 0) ? $entity->tnx : 0;
+  if ($type == 'node') {
+    $id = 'nid';
+    $status = dru_tnx_status_by_node_type($entity->type);
+  }
+  else {
+    $id = 'cid';
+    $status = dru_tnx_status_by_comment_node_type(mb_substr($entity->node_type, strlen('comment_node_')));
+  }
 
-  $counter = [
-    '#type'       => 'container',
-    '#attributes' => [
-      'class' => [
-        'tnx-counter',
-        'counter-' . $count,
-        'dru-tnx-' . $type . '-' . $entity->$id . '-counter',
+  if ($status) {
+    $count = (isset($entity->tnx) && $entity->tnx > 0) ? $entity->tnx : 0;
+
+    $counter = [
+      '#type'       => 'container',
+      '#attributes' => [
+        'class' => [
+          'tnx-counter',
+          'counter-' . $count,
+          'dru-tnx-' . $type . '-' . $entity->$id . '-counter',
+        ],
       ],
-    ],
-    'counter'     => [
-      '#markup' => $count . ' ' . t('Thanks'),
-      '#counter' => $count
-    ],
-  ];
+      'counter'     => [
+        '#markup' => $count . ' ' . t('Thanks'),
+        '#counter' => $count
+      ],
+    ];
+  }
 
   return $counter;
 }
@@ -166,7 +177,6 @@ function dru_tnx_show($entity, $type) {
  * @return string
  */
 function dru_tnx_get_icon() {
-
   // Require theme icon generator
   $file = DRUPAL_ROOT . '/';
   $file .= drupal_get_path('theme', 'druru');

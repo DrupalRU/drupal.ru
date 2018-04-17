@@ -439,3 +439,21 @@ function drurum_update_7025(&$sandbox) {
   variable_set('dru_tnx_status_by_node_type', $node_types);
   variable_set('dru_tnx_status_by_comment_node_type', $node_types);
 }
+
+/**
+ * Configure table filter (for add "table" class to HTML-tables).
+ */
+function drurum_update_7026(&$sandbox) {
+  module_enable(['dru_filters']);
+
+  db_insert('filter')
+    ->fields([
+      'format' => '1',
+      'module' => 'dru_filters',
+      'name' => 'dru_filters_table_fix',
+      'weight' => '0',
+      'status' => '1',
+      'settings' => 'a:2:{s:11:"classes_add";s:15:"table dru-table";s:14:"classes_remove";s:0:"";}',
+    ])
+    ->execute();
+}

@@ -1,0 +1,124 @@
+<?php
+
+/**
+ * @file
+ *      Main module file.
+ */
+
+use Drupal\dru_filters\DOMDocument\DruDOMDocument;
+
+/**
+ * Implements hook_filter_info().
+ */
+function dru_filters_filter_info() {
+  $filters['dru_filters_table_fix'] = [
+    'title' => t('Table fix'),
+    'description' => t('Add classes for tables if they doesen\'t exists'),
+    'process callback' => 'dru_filters_table_fix',
+    'settings callback' => 'dru_filters_table_fix_settings',
+    'default settings' => [
+      'classes_add' => '',
+      'classes_remove' => '',
+    ],
+  ];
+
+  return $filters;
+}
+
+/**
+ * Table filter settings.
+ *
+ * @param array  $form       The prepopulated form array of the filter administration form.
+ * @param array  $form_state The state of the (entire) configuration form.
+ * @param object $filter     The filter object containing the current settings for the given format, in
+ *                           $filter->settings.
+ * @param object $format     The format object being configured.
+ * @param array  $defaults   The default settings for the filter, as defined in 'default settings' in
+ *                           hook_filter_info(). These should be combined with $filter->settings to define the form
+ *                           element defaults.
+ * @param array  $filters    The complete list of filter objects that are enabled for the given format.
+ *
+ * @return array An array of form elements defining settings for the filter. Array keys should match the array keys in
+ *               $filter->settings and $defaults.
+ */
+function dru_filters_table_fix_settings($form, &$form_state, $filter, $format, $defaults, $filters) {
+  return [
+    'classes_add' => [
+      '#type' => 'textarea',
+      '#title' => t('Classes to add'),
+      '#description' => t('The list of classes which will be added. Separated by space.'),
+      '#rows' => 5,
+      '#default_value' => $filter->settings['classes_add'] ?: $defaults['classes_add'],
+    ],
+    'classes_remove' => [
+      '#type' => 'textarea',
+      '#title' => t('Classes to remove'),
+      '#description' => t('The list of classes which will be removed. Separated by space.'),
+      '#rows' => 5,
+      '#default_value' => $filter->settings['classes_remove'] ?: $defaults['classes_remove'],
+    ],
+  ];
+}
+
+/**
+ * Filters HTML-tables, add classes if they unavailable.
+ *
+ * @param string $text     The text string to be filtered.
+ * @param object $filter   The filter object containing settings for the given format.
+ * @param object $format   The text format object assigned to the text to be filtered.
+ * @param string $langcode The language code of the text to be filtered.
+ * @param bool   $cache    A Boolean indicating whether the filtered text is going to be cached in {cache_filter}.
+ * @param string $cache_id The ID of the filtered text in {cache_filter}, if $cache is TRUE.
+ *
+ * @return string
+ */
+function dru_filters_table_fix($text, $filter, $format, $langcode, $cache, $cache_id) {
+  if (preg_match('/<table(?:[\s])?>/ui', $text)) {
+    return dru_filters_table_fix_process($text, $filter->settings);
+  }
+
+  return $text;
+}
+
+/**
+ * Process tables.
+ *
+ * @param string $html
+ * @param object $settings
+ *
+ * @return string
+ */
+function dru_filters_table_fix_process($html, $settings) {
+  module_load_include('php', 'dru_filters', 'src/DOMDocument/DruDOMDocument');
+
+  $classes_add = _dru_filters_explode($settings['classes_add']);
+  $classes_remove = _dru_filters_explode($settings['classes_remove']);
+
+  $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+  $doc = new DruDOMDocument();
+  $doc->preserveWhiteSpace = false;
+  $doc->formatOutput = true;
+  @$doc->loadHTML($html);
+  $tables = $doc->getElementsByTagName('table');
+  /** @var DOMElement $table */
+  foreach ($tables as $table) {
+    $classes = _dru_filters_explode($table->getAttribute('class'));
+    $classes = array_merge($classes, array_diff($classes_add, $classes));
+    $classes = array_diff($classes, $classes_remove);
+    $table->setAttribute('class', implode(' ', $classes));
+  }
+
+  return html_entity_decode($doc->saveHTML());
+}
+
+/**
+ * Explode string.
+ *
+ * @param string $string
+ * @param string $separator
+ *
+ * @return array
+ */
+function _dru_filters_explode(string $string, string $separator = ' '): array {
+  return array_filter(explode($separator, $string), 'trim');
+}

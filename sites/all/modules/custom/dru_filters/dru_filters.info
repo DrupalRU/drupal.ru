@@ -1,0 +1,7 @@
+name        = Drupal.ru filters
+description = Provide content filters for Drupal.ru distributive
+package     = drupal.ru
+version     = 7.x-1.x-dev
+core        = 7.x
+configure   = admin/config/content/formats
+files[]     = src/DOMDocument/DruDOMDocument.php

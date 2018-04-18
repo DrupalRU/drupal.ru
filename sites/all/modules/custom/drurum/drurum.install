@@ -439,11 +439,57 @@ function drurum_update_7025(&$sandbox) {
   variable_set('dru_tnx_status_by_node_type', $node_types);
   variable_set('dru_tnx_status_by_comment_node_type', $node_types);
 }
+    
+/**
+ * Add role "Coordinator".
+ */
+function drurum_update_7026() {
+  $name = t("Coordinator");
+  $existing_role = user_role_load_by_name($name);
+
+  if (empty($existing_role)){
+    $role = new stdClass();
+    $role->name = $name;
+    user_role_save($role);
+  }
+
+  db_insert('role_permission')
+  ->fields(array(
+    'rid' => 2,
+    'permission' => 'dru_tickets view tickets',
+    'module' => 'dru_tickets',
+  ))
+  ->execute();
+
+  db_insert('role_permission')
+  ->fields(array(
+    'rid' => 20,
+    'permission' => 'dru_tickets moderate tickets',
+    'module' => 'dru_tickets',
+  ))
+  ->execute();
+
+  db_insert('role_permission')
+  ->fields(array(
+    'rid' => 21,
+    'permission' => 'dru_tickets change any verdict',
+    'module' => 'dru_tickets',
+  ))
+  ->execute();
+
+    db_insert('role_permission')
+  ->fields(array(
+    'rid' => 21,
+    'permission' => 'dru_tickets moderate tickets',
+    'module' => 'dru_tickets',
+  ))
+  ->execute();
+}
 
 /**
  * Configure table filter (for add "table" class to HTML-tables).
  */
-function drurum_update_7026(&$sandbox) {
+function drurum_update_7027(&$sandbox) {
   module_enable(['dru_filters']);
 
   db_insert('filter')

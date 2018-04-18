@@ -9,14 +9,19 @@
  */
 function dru_tickets_permission() {
   return [
-    'view tickets' => [
+    'dru_tickets view tickets' => [
       'title' => t('View Tickets'),
       'description' => t('Allow users to view tickets'),
       'restrict access' => TRUE,
     ],
-    'moderate tickets' => [
+    'dru_tickets moderate tickets' => [
       'title' => t('Moderate Tickets'),
       'description' => t('Allow users to moderate tickets'),
+      'restrict access' => TRUE,
+    ],
+    'dru_tickets change any verdict' => [
+      'title' => t('Change Any Verdicts'),
+      'description' => t('Allow users to change any verdicts'),
       'restrict access' => TRUE,
     ],
   ];
@@ -31,28 +36,30 @@ function dru_tickets_menu() {
     'title' => 'Tickets',
     'description' => 'Tickets page',
     'page callback' => 'dru_tickets_page',
-    'access arguments' => ['view tickets'],
+    'access arguments' => ['dru_tickets view tickets'],
     'file' => 'dru_tickets.pages.inc',
   ];
   $items['ticket/%node/accept/%'] = [
     'page callback' => 'dru_ticket_accept',
     'file' => 'dru_tickets.pages.inc',
     'page arguments' => [1, 3],
-    'access arguments' => ['moderate tickets'],
+    'access arguments' => ['dru_tickets moderate tickets'],
     'type' => MENU_CALLBACK,
   ];
   $items['ticket/%node/verdict/nojs/%'] = [
     'page callback' => 'dru_ticket_verdict',
     'file' => 'dru_tickets.pages.inc',
     'page arguments' => [3, 1, 4],
-    'access arguments' => ['moderate tickets'],
+    'access callback' => '_dru_tickets_verdict_access',
+    'access arguments' => [1],
     'type' => MENU_CALLBACK,
   ];
   $items['ticket/%node/verdict/ajax/%'] = [
     'page callback' => 'dru_ticket_verdict',
     'file' => 'dru_tickets.pages.inc',
     'page arguments' => [3, 1, 4],
-    'access arguments' => ['moderate tickets'],
+    'access callback' => '_dru_tickets_verdict_access',
+    'access arguments' => [1],
     'delivery callback' => 'ajax_deliver',
     'type' => MENU_CALLBACK,
   ];
@@ -60,7 +67,7 @@ function dru_tickets_menu() {
     'page callback' => 'dru_ticket_moderate_command',
     'file' => 'dru_tickets.moderate.inc',
     'page arguments' => [3, 4, 5],
-    'access arguments' => ['moderate tickets'],
+    'access arguments' => ['dru_tickets moderate tickets'],
     'delivery callback' => 'ajax_deliver',
     'type' => MENU_CALLBACK,
   ];
@@ -213,7 +220,7 @@ function dru_tickets_view($node, $view_mode, $langcode = NULL) {
  * Implements hook_comment_view().
  */
 function dru_tickets_comment_view($comment, $view_mode) {
-  if (user_access('moderate tickets')) {
+  if (user_access('dru_tickets moderate tickets')) {
     if ($comment->status) {
       $unpublish_action = 'unpublish';
       $unpublish_title = t('Unpublish');
@@ -242,31 +249,26 @@ function dru_tickets_comment_view($comment, $view_mode) {
 function dru_tickets_node_view($node, $view_mode) {
   drupal_add_library('system', 'drupal.ajax');
   drupal_add_library('system', 'jquery.form');
+  $token = drupal_get_token('dru_tickets');
 
-  if ($node->type !== 'ticket' && user_access('moderate tickets')) {
-    if ($node->status) {
-      $unpublish_action = 'unpublish';
-      $unpublish_title = t('Unpublish');
-    }
-    else {
-      $unpublish_action = 'publish';
-      $unpublish_title = t('Publish');
-    }
+  if ($node->type !== 'ticket' && user_access('dru_tickets moderate tickets')) {
+    $action = $node->status ? 'unpublish' : 'publish';
+    $title = $node->status ? t('Unpublish') : t('Publish');
     $node->content['links']['comment']['#links']['unpublish'] = [
-      'title' => $unpublish_title,
-      'href' => 'admin/moderate/command/' . $unpublish_action . '/node/' . $node->nid,
+      'title' => $title,
+      'href' => 'admin/moderate/command/' . $action . '/node/' . $node->nid,
       'attributes' => [
         'class' => [
           'use-ajax',
-          'moderate-' . $unpublish_action,
-          'moderate-' . $unpublish_action . '-' . $node->nid,
+          'moderate-' . $action,
+          'moderate-' . $action . '-' . $node->nid,
         ],
       ],
     ];
   }
-  if ($node->type == 'ticket' && user_access('moderate tickets')) {
+
+  if ($node->type == 'ticket' && user_access('dru_tickets moderate tickets')) {
     if ($node->ticket->moderate_uid == 0) {
-      $token = drupal_get_token('dru_tickets');
       $node->content['links']['comment']['#links']['ticket-assign'] = [
         'title' => t('Accept'),
         'href' => 'ticket/' . $node->nid . '/accept' . '/' . $token,
@@ -277,9 +279,7 @@ function dru_tickets_node_view($node, $view_mode) {
     }
   }
 
-  $is_ticket = $node->type == 'ticket' && !empty($node->ticket);
-  if ($is_ticket && $node->ticket->moderate_uid && user_access('moderate tickets')) {
-    $token = drupal_get_token('dru_tickets');
+  if (_dru_tickets_verdict_access($node)) {
     $node->content['links']['comment']['#links']['ticket-verdict'] = [
       'title' => $node->ticket->ticket_verdict ? t('Change verdict') : t('Verdict'),
       'href' => 'ticket/' . $node->nid . '/verdict/nojs/' . $token,
@@ -311,14 +311,28 @@ function dru_tickets_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Check acces to change ticket verdict.
+ *
+ * @param object $node Ticked node object.
+ *
+ * @return bool
+ */
+function _dru_tickets_verdict_access($node) {
+  $user = $GLOBALS['user'];
+
+  return $node->type == 'ticket' && !empty($node->ticket) && $node->ticket->moderate_uid != 0 && ((user_access('dru_tickets moderate tickets') &&
+      $node->ticket->moderate_uid === $user->uid) || user_access('dru_tickets change any verdict'));
+}
+
+/**
  * Implement hook_preprocess_node().
  */
 function dru_tickets_preprocess_node(&$vars) {
   if ($vars['type'] == 'ticket') {
     if ($vars['elements']['#view_mode'] == 'teaser') {
       $vars['theme_hook_suggestions'][] = "node__ticket__teaser";
-      global $user;
-      if (user_access('moderate tickets')) {
+      if (user_access('dru_tickets moderate tickets')) {
+        $user = $GLOBALS['user'];
         if ($user->uid == $vars['ticket']->moderate_uid) {
           $vars['classes_array'][] = 'my-ticket';
         }

@@ -70,7 +70,7 @@
   <div class="media-body">
 
     <div class="media-heading">
-      <span class="h4 text-capitalize media-header-item">
+      <span class="h4 media-header-item">
         <?php print $author; ?>
       </span>
 

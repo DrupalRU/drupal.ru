@@ -402,9 +402,48 @@ function drurum_update_7022() {
 }
 
 /**
- * Add role "Coordinator".
+ * Disable users contact forms
  */
 function drurum_update_7023() {
+  variable_set('contact_default_status', 0);
+  db_delete('role_permission')
+    ->condition('rid', 2)
+    ->condition('permission', 'access user contact forms')
+    ->condition('module', 'contact')
+    ->execute();
+}
+
+/**
+ * Disable module "ban_user".
+ */
+function drurum_update_7024() {
+  if (module_exists('ban_user')) {
+    module_disable(['ban_user']);
+    drupal_uninstall_modules(['ban_user']);
+  }
+  module_enable(['dru_moderation']);
+  // Disable Standard Drupal notification
+  variable_set('user_mail_status_blocked_notify', 0);
+}
+
+/**
+ * Enable Thanks functionality for "Blog" node type.
+ */
+function drurum_update_7025(&$sandbox) {
+  $node_types = [];
+  foreach (node_type_get_types() as $node_type) {
+    $node_types[$node_type->type] = FALSE;
+  }
+  $node_types['blog'] = TRUE;
+
+  variable_set('dru_tnx_status_by_node_type', $node_types);
+  variable_set('dru_tnx_status_by_comment_node_type', $node_types);
+}
+
+/**
+ * Add role "Coordinator".
+ */
+function drurum_update_7026() {
   $name = t("Coordinator");
   $existing_role = user_role_load_by_name($name);
 
@@ -446,4 +485,3 @@ function drurum_update_7023() {
   ))
   ->execute();
 }
-

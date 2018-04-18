@@ -1,0 +1,9 @@
+name = Moderation Drupal.ru
+description = Module improvement moderation process
+version = 7.x-1.x-dev
+core = 7.x
+package = Moderation
+dependencies[] = dru_tickets
+dependencies[] = dru_claim
+php = 5.4
+

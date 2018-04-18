@@ -1,0 +1,158 @@
+<?php
+
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function dru_moderation_menu() {
+  $items['ban/%node/%/nojs/%'] = [
+    'page callback' => 'dru_moderation_ban',
+    'file' => 'dru_moderation.pages.inc',
+    'page arguments' => [3, 1, 2, 4],
+    'access arguments' => ['moderate tickets'],
+    'type' => MENU_CALLBACK,
+  ];
+
+  $items['ban/%node/%/ajax/%'] = [
+    'page callback' => 'dru_moderation_ban',
+    'file' => 'dru_moderation.pages.inc',
+    'page arguments' => [3, 1, 2, 4],
+    'access arguments' => ['moderate tickets'],
+    'delivery callback' => 'ajax_deliver',
+    'type' => MENU_CALLBACK,
+  ];
+  return $items;
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function dru_moderation_node_view($node, $view_mode, $langcode = NULL) {
+  if ($node->type == 'ticket') {
+    if (!empty($node->ticket->ticket_verdict)) {
+      $token = drupal_get_token('dru_moderation');
+
+      // Get claim content id, content type
+      $content = db_select('ticket_claim', 't')
+        ->fields('t', ['content_id', 'content_type'])
+        ->condition('t.ticket_id', $node->nid)
+        ->execute()
+        ->fetchAll();
+
+      $content_id = $content[0]->content_id;
+      $content_type = $content[0]->content_type;
+
+      // Get entity author (user for ban) by content type
+      $id = $content_type == 'comment' ? 'cid' : ($content_type == 'node' ? 'nid' : false);
+      $uid = db_select($content_type, 't')
+        ->fields('t', ['uid'])
+        ->condition('t.'. $id, $content_id)
+        ->execute()
+        ->fetchField();
+
+      if ($uid) {
+        $user_status = db_select('users', 'u')
+          ->fields('u', ['status'])
+          ->condition('u.uid', $uid)
+          ->execute()
+          ->fetchField();
+
+        // If user NOT already banned
+        if ($user_status) {
+          // add BAN link
+          $node->content['links']['comment']['#links']['dru-moderation-ban'] = [
+            'title' => t('Ban user!'),
+            'href' => 'ban/' . $node->nid . '/' . $uid . '/nojs/' . $token,
+            'attributes' => [ 'class' => ['use-ajax'] ],
+          ];
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Return moderators (user-objects array).
+ */
+function dru_moderation_get_moderators() {
+  $role = user_role_load_by_name('модератор');
+  $uids = db_select('users_roles', 'r')
+    ->fields('r', ['uid'])
+    ->distinct()
+    ->condition('r.rid', $role->rid)
+    ->execute()
+    ->fetchCol();
+
+  return user_load_multiple($uids);
+}
+
+/**
+ * Send mail from module.
+ */
+function dru_moderation_sendmail($user_name, $days, $reason, $action) {
+  switch($action) {
+    case 'ban': 
+      $theme = t('User is banned!');
+      $message = t('The moderator has banned the user @user for @time by reason: "%reason"', [
+        '@user' => $user_name,
+        '@time' => format_plural($days, '1 day', '@count days'),
+        '%reason' => $reason
+      ]);
+      break;
+    case 'unban': 
+      $theme = t('User is unbanned!');
+      $message = t('The user @user has been unbanned automatically', [
+        '@user' => $user_name,
+      ]);
+      break;
+  }
+
+  // Send mail to user and moderators
+  $users = dru_moderation_get_moderators();
+  $buser = user_load_by_name($user_name);
+  array_push($users, $buser);
+  foreach ($users as $user) {
+    drupal_mail('dru_moderation', 'ban', $user->mail, language_default(), ['subject' => $theme,'body' => $message]);
+  }
+
+}
+
+/**
+ * Implements hook_mail().
+ */
+function dru_moderation_mail($key, &$message, $params) {
+  if ($key == 'ban') {
+    $message['subject'] = $params['subject'];
+    $message['body'][] = $params['body'];
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function dru_moderation_cron() {
+  // Check users
+  $myquery = db_select('dru_ban', 'db');
+  $myquery->join('users', 'u', 'u.uid = db.uid');
+  $users = $myquery->fields('db', ['uid'])
+    ->condition('u.status', 0, '=')
+    ->condition('db.ban_until', time(), '<')
+    ->execute()
+    ->fetchAll(); 
+
+  foreach ($users as $user) {
+    // Unban user
+    db_update('users')
+      ->fields(['status' => 1])
+      ->condition('uid', $user->uid)
+      ->execute();
+
+    $buser = user_load($user->uid);
+    dru_moderation_sendmail($buser->name, '', '', 'unban');
+  }
+
+}
+

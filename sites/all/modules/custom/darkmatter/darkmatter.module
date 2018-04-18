@@ -461,6 +461,9 @@ function darkmatter_comment_view($comment, $view_mode, $langcode) {
       );
     }
   }
+  if ($comment->darkmatter) {
+    $comment->content['comment_body'][0]['#markup'] .= '<div class="darkmatter__overflow"><i class="fa fa-eye-slash"></i></div>';
+  }
 }
 
 /**

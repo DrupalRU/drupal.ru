@@ -26,10 +26,33 @@
     }
 
     &.darkmatter {
-      .comment-variant(#444, #383838);
+      position: relative;
 
       &:not(.best-comment):not(.comment-unpublished) {
-        color: @gray-lighter;
+        overflow: hidden;
+        max-height: 130px;
+        position: relative;
+        transition: all 0.5s ease-in-out;
+      }
+
+      .darkmatter__overflow {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        background: #fff;
+        opacity: 0.9;
+        z-index: 2;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        i {
+          font-size: 2em;
+          color: @gray-dark;
+        }
       }
 
       &.darkmatter-unaccessed {
@@ -40,6 +63,10 @@
       &.best-comment {
         border-color: #bbb;
       }
+    }
+    &.darkmatter-shown {
+      overflow: auto !important;
+      max-height: none !important;
     }
     &.best-comment {
       .comment-variant(@state-success-bg, desaturate(darken(@state-success-bg, @tone * 2), @tone * 2));

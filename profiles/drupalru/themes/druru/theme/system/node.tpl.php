@@ -127,11 +127,15 @@
       // We hide the comments and links now so that we can render them later.
       hide($content['comments']);
       hide($content['links']);
+      hide($content['best-comment-header']);
+      hide($content['resolved_comment']);
       print drupal_render($content);
     ?>
   </div>
 
   <?php print render($content['links']); ?>
+  <?php print render($content['best-comment-header']); ?>
+  <?php print render($content['resolved_comment']); ?>
   <?php print render($content['comments']); ?>
 
 </div>

@@ -73,7 +73,7 @@ function dru_filters_table_fix_settings($form, &$form_state, $filter, $format, $
  * @return string
  */
 function dru_filters_table_fix($text, $filter, $format, $langcode, $cache, $cache_id) {
-  if (preg_match('/<table(?:[\s])?>/ui', $text)) {
+  if (preg_match('/<table(.*)?>/ui', $text)) {
     return dru_filters_table_fix_process($text, $filter->settings);
   }
 

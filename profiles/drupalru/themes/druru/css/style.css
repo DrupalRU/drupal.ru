@@ -4,7 +4,6 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
-@import 'https://fonts.googleapis.com/css?family=Roboto:100,100i,300,400,400i,700&subset=cyrillic';
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -7344,6 +7343,42 @@ form#user-admin-permissions .form-type-checkbox {
 body.admin-menu {
   margin-top: 29px !important;
 }
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 100;
+  src: local('Roboto Thin Italic'), local('Roboto-ThinItalic'), url(https://fonts.gstatic.com/s/roboto/v18/KFOiCnqEu92Fr1Mu51QrEzQdKg.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Roboto Italic'), local('Roboto-Italic'), url(https://fonts.gstatic.com/s/roboto/v18/KFOkCnqEu92Fr1Mu51xMIzc.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Roboto Thin'), local('Roboto-Thin'), url(https://fonts.gstatic.com/s/roboto/v18/KFOkCnqEu92Fr1MmgVxMIzc.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Roboto Light'), local('Roboto-Light'), url(https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmSU5fABc9.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto'), local('Roboto-Regular'), url(https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu5mxP.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Bold'), local('Roboto-Bold'), url(https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmWUlfABc9.ttf) format('truetype');
+}
 /*!
  * bootstrap-select v1.5.4
  * http://silviomoreto.github.io/bootstrap-select/
@@ -8726,9 +8761,9 @@ body .main-content {
 .region-sidebar-second .block .pager .ajax-progress.ajax-progress-throbber i {
   position: absolute;
   top: 50%;
-  top: calc(43%);
+  top: calc(50% - 7px);
   left: 50%;
-  left: calc(43%);
+  left: calc(50% - 7px);
 }
 .pagination {
   margin: 0;
@@ -10118,7 +10153,7 @@ html.js div.ctools-dropdown a.ctools-dropdown-image-link {
   height: 18px;
   width: 20px;
   display: block;
-  margin: calc(6px  + 1px) calc(0.5em + 1px) 1px calc(.2em + 1px);
+  margin: calc(12px - 6px  + 1px) calc(0.5em + 1px) 1px calc(.2em + 1px);
   padding: 6px 8px;
   box-sizing: content-box;
   z-index: 99;
@@ -10449,6 +10484,50 @@ html.js .node div.ctools-dropdown .ctools-dropdown-container {
 #privatemsg-new .form-actions,
 #privatemsg-new .form-item {
   margin-bottom: 0;
+}
+#privatemsg-list .sticky-header,
+#privatemsg-list .privatemsg-list thead {
+  display: none;
+}
+#privatemsg-list .privatemsg-list {
+  margin-top: 18px;
+}
+#privatemsg-list .privatemsg-list tbody tr {
+  border: 1px solid #ddd;
+}
+#privatemsg-list .privatemsg-list tbody tr.selected,
+#privatemsg-list .privatemsg-list tbody tr.selected > td {
+  background-color: #f2dede;
+}
+#privatemsg-list .privatemsg-list tbody tr td {
+  border: 0;
+  display: inline-block;
+}
+#privatemsg-list .privatemsg-list tbody tr td:first-child {
+  line-height: 25.2px;
+  position: absolute;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-subject {
+  font-size: 21px;
+  font-weight: 300;
+  line-height: 1.2;
+  width: 100%;
+  padding-left: 40px;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-participants,
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date {
+  font-size: 86%;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date {
+  float: right !important;
+  color: #939393;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date a {
+  color: #8ab4d2;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date a:hover,
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date a:focus {
+  color: #73a5ca;
 }
 .bue-ui {
   border: none;

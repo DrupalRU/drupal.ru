@@ -10499,6 +10499,50 @@ html.js .node div.ctools-dropdown .ctools-dropdown-container {
 #privatemsg-new .form-item {
   margin-bottom: 0;
 }
+#privatemsg-list .sticky-header,
+#privatemsg-list .privatemsg-list thead {
+  display: none;
+}
+#privatemsg-list .privatemsg-list {
+  margin-top: 18px;
+}
+#privatemsg-list .privatemsg-list tbody tr {
+  border: 1px solid #ddd;
+}
+#privatemsg-list .privatemsg-list tbody tr.selected,
+#privatemsg-list .privatemsg-list tbody tr.selected > td {
+  background-color: #f2dede;
+}
+#privatemsg-list .privatemsg-list tbody tr td {
+  border: 0;
+  display: inline-block;
+}
+#privatemsg-list .privatemsg-list tbody tr td:first-child {
+  line-height: 25.2px;
+  position: absolute;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-subject {
+  font-size: 21px;
+  font-weight: 300;
+  line-height: 1.2;
+  width: 100%;
+  padding-left: 40px;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-participants,
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date {
+  font-size: 86%;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date {
+  float: right !important;
+  color: #939393;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date a {
+  color: #8ab4d2;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date a:hover,
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date a:focus {
+  color: #73a5ca;
+}
 .bue-ui {
   border: none;
   padding: 0;

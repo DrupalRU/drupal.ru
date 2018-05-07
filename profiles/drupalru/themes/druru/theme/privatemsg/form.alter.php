@@ -9,87 +9,10 @@ function druru_form_privatemsg_list_alter(&$form, &$form_state) {
   if (isset($form['filter'])) {
     hide($form['filter']);
   }
-  if (isset($form['updated']['actions'])) {
-    hide($form['updated']['actions']);
+  if (isset($form['updated']['actions']['operation'])) {
+    hide($form['updated']['actions']['operation']);
+    hide($form['updated']['actions']['submit']);
   }
-  if (isset($form['updated']['list'])) {
-    $items = array();
-    foreach ($form['updated']['list']['#options'] as $thread) {
-      $item = array();
-      $last_change = $thread['last_updated'];
-
-      // New messages.
-      if ($thread['is_new']) {
-        $item[] = array(
-          '#type'       => 'html_tag',
-          '#tag'        => 'span',
-          '#value'      => format_plural($thread['is_new'], '1 new', '@count new'),
-          '#attributes' => array(
-            'class' => array('label', 'label-success', 'pull-right'),
-          ),
-        );
-      }
-
-      // Subject.
-      $item[] = array(
-        '#type'       => 'html_tag',
-        '#tag'        => 'div',
-        '#value'      => check_plain($thread['subject']),
-        '#attributes' => array(
-          'class' => array(
-            'text-primary',
-            'participants',
-            'h3',
-          ),
-        ),
-      );
-
-      // Time.
-      $item[] = array(
-        '#type'       => 'html_tag',
-        '#tag'        => 'small',
-        '#value'      => format_interval(REQUEST_TIME - $last_change),
-        '#attributes' => array(
-          'class' => array('text-muted', 'pull-right'),
-        ),
-      );
-
-      // Users.
-      $participants = theme('privatemsg_list_field__participants', array(
-        'thread' => $thread,
-      ));
-      $item[] = array(
-        '#type'       => 'html_tag',
-        '#tag'        => 'div',
-        '#value'      => filter_xss($participants['data'], array()),
-        '#attributes' => array(
-          'class' => array('subject'),
-        ),
-      );
-
-      $items[] = array(
-        '#theme'   => 'link',
-        '#text'    => render($item),
-        '#path'    => 'messages/view/' . $thread['thread_id'],
-        '#options' => array(
-          'attributes' => array(),
-          'html'       => TRUE,
-        ),
-      );
-    }
-    $form['list'] = array(
-      '#theme'      => 'bootstrap_list_group',
-      '#type'       => 'links',
-      '#items'      => $items,
-      '#attributes' => array(
-        'id' => 'privatemsg-list-wrapper',
-      ),
-    );
-    hide($form['updated']['list']);
-    $form['pager'] = $form['updated']['pager'];
-    hide($form['updated']['pager']);
-  }
-  $form['updated']['actions']['#prefix'] = '<div class="form-inline">';
 }
 
 /**

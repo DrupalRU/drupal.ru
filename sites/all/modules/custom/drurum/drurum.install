@@ -485,3 +485,12 @@ function drurum_update_7026() {
   ))
   ->execute();
 }
+
+/**
+ * Remove vocabulary "Ключевые слова" and all terms
+ */
+function drurum_update_7027() {
+  field_delete_field('taxonomy_vocabulary_2');
+  taxonomy_vocabulary_delete(2);
+}
+

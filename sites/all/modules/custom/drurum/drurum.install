@@ -593,3 +593,40 @@ function drurum_update_7031(&$sandbox) {
     ])
     ->execute();
 }
+
+/**
+ * Remove profile field «Откуда узнали о Drupal?»
+ */
+function drurum_update_7032() {
+  $name = 'profile_referer';
+
+  //  Get field id by name
+  $field_id = db_select('profile_field', 'pf')
+    ->fields('pf', ['fid'])
+    ->condition('pf.name', $name)
+    ->execute()
+    ->fetchField();
+
+  // if field exists
+  if (!empty($field_id)) {
+    // Remove field values
+    db_delete('profile_value')
+    ->condition('fid', $field_id)
+    ->execute();
+
+    // Additional check that values were removed
+    $count = db_select('profile_value', 'pv')
+      ->condition('pv.fid', $field_id)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    // If all data removed then remove field
+    if ($count == 0) {
+      db_delete('profile_field')
+        ->condition('fid', $field_id)
+        ->execute();
+    }
+  }
+}
+

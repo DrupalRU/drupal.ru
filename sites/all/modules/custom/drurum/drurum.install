@@ -644,3 +644,16 @@ function drurum_update_7033() {
   }
 }
 
+/**
+ * Add permissions to use DarkMatter
+ */
+function drurum_update_7034() {
+  db_insert('role_permission')
+  ->fields([
+    'rid' => 22,
+    'permission' => 'darkmatter comments',
+    'module' => 'darkmatter',
+  ])
+  ->execute();
+}
+

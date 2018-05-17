@@ -566,3 +566,13 @@ function drurum_update_7029() {
   }
 }
 
+/**
+ * Hide some fields from register page
+ */
+function drurum_update_7030() {
+  db_update('profile_field')
+    ->fields(['register' => 0])
+    ->condition('register', 1)
+    ->execute();
+}
+

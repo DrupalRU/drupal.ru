@@ -65,6 +65,11 @@ function resolve_comment_view($comment, $view_mode, $langcode) {
   // Attach js files.
   resolve_attach_js();
   $can_resolved = variable_get(RESOLVE_CAN . '_' . $node->type);
+
+  if ($node->resolved_cid == $comment->cid) {
+    $comment->best = TRUE;
+  }
+
   $token = resolve_token_to_arg();
   if ($can_resolved && resolve_access($node, $comment, $token)) {
     $links = &$comment->content['links']['comment']['#links'];

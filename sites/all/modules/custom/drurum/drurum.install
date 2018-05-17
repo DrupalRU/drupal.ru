@@ -494,7 +494,6 @@ function drurum_update_7027() {
   taxonomy_vocabulary_delete(2);
 }
 
-
 /**
  * Remove profile field «Секретный вопрос»
  */

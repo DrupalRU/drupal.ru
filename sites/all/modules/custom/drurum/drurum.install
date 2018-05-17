@@ -494,3 +494,18 @@ function drurum_update_7027() {
   taxonomy_vocabulary_delete(2);
 }
 
+
+/**
+ * Remove profile field «Секретный вопрос»
+ */
+function drurum_update_7028() {
+  // Remove field values
+  db_delete('profile_value')
+    ->condition('fid', 37)
+    ->execute();
+  // Remove field
+  db_delete('profile_field')
+    ->condition('fid', 37)
+    ->execute();
+}
+

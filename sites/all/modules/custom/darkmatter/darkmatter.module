@@ -493,16 +493,7 @@ function darkmatter_comment_access($comment) {
  * Checks access to move entity in Dark Matter.
  */
 function darkmatter_move_access($comment = NULL) {
-  global $user;
-  $node = null;
-  if (isset($comment)) {
-    $node = !empty($comment->nid) ? node_load($comment->nid) : null;
-  }
-  $author_of_comment = $node && !empty($node->uid) ? $node->uid == $user->uid : FALSE;
-  return $user->uid == 1 || (
-    !empty($user->darkmatter)
-    && ($author_of_comment || user_access('darkmatter comments'))
-  );
+  return user_access('darkmatter comments');
 }
 
 /**

@@ -20,10 +20,6 @@ var Drupal = Drupal || {};
       this.improveBootstrapDropdowns(context, settings);
       this.initContextMenu(context, settings);
 
-      // disallow click by link with path to this page
-      $('a.active').click(function () {
-        return window.location.pathname !== $(this).attr('href');
-      });
       // stylizing the select
       $('.selectpicker').selectpicker({
         noneSelectedText: 'Ничего не выбрано'

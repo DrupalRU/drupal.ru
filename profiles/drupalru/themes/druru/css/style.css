@@ -273,7 +273,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', 'Roboto-fallback', "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 15px;
   line-height: 1.2;
   color: #333333;
@@ -379,7 +379,7 @@ h6,
 .h5,
 .h6,
 .popup .popup-header {
-  font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', 'Roboto-fallback', "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 300;
   line-height: 1.2;
   color: inherit;
@@ -4557,7 +4557,7 @@ button.close {
   position: absolute;
   z-index: 1030;
   display: block;
-  font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', 'Roboto-fallback', "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
@@ -4683,7 +4683,7 @@ button.close {
   display: none;
   max-width: 350px;
   padding: 1px;
-  font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', 'Roboto-fallback', "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
@@ -7344,6 +7344,66 @@ form#user-admin-permissions .form-type-checkbox {
 body.admin-menu {
   margin-top: 29px !important;
 }
+/* roboto-100 - cyrillic_latin */
+@font-face {
+  font-family: 'Roboto-fallback';
+  font-style: normal;
+  font-weight: 100;
+  src: url('../fonts/Roboto/roboto-v18-cyrillic_latin-100.eot');
+  /* IE9 Compat Modes */
+  src: local('Roboto Thin'), local('Roboto-Thin'), url('../fonts/Roboto/roboto-v18-cyrillic_latin-100.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-100.woff2') format('woff2'), /* Super Modern Browsers */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-100.woff') format('woff'), /* Modern Browsers */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-100.ttf') format('truetype'), /* Safari, Android, iOS */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-100.svg#Roboto') format('svg');
+  /* Legacy iOS */
+}
+/* roboto-100italic - cyrillic_latin */
+@font-face {
+  font-family: 'Roboto-fallback';
+  font-style: italic;
+  font-weight: 100;
+  src: url('../fonts/Roboto/roboto-v18-cyrillic_latin-100italic.eot');
+  /* IE9 Compat Modes */
+  src: local('Roboto Thin Italic'), local('Roboto-ThinItalic'), url('../fonts/Roboto/roboto-v18-cyrillic_latin-100italic.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-100italic.woff2') format('woff2'), /* Super Modern Browsers */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-100italic.woff') format('woff'), /* Modern Browsers */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-100italic.ttf') format('truetype'), /* Safari, Android, iOS */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-100italic.svg#Roboto') format('svg');
+  /* Legacy iOS */
+}
+/* roboto-300 - cyrillic_latin */
+@font-face {
+  font-family: 'Roboto-fallback';
+  font-style: normal;
+  font-weight: 300;
+  src: url('../fonts/Roboto/roboto-v18-cyrillic_latin-300.eot');
+  /* IE9 Compat Modes */
+  src: local('Roboto Light'), local('Roboto-Light'), url('../fonts/Roboto/roboto-v18-cyrillic_latin-300.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-300.woff2') format('woff2'), /* Super Modern Browsers */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-300.woff') format('woff'), /* Modern Browsers */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-300.ttf') format('truetype'), /* Safari, Android, iOS */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-300.svg#Roboto') format('svg');
+  /* Legacy iOS */
+}
+/* roboto-regular - cyrillic_latin */
+@font-face {
+  font-family: 'Roboto-fallback';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/Roboto/roboto-v18-cyrillic_latin-regular.eot');
+  /* IE9 Compat Modes */
+  src: local('Roboto-fallback'), local('Roboto-Regular'), url('../fonts/Roboto/roboto-v18-cyrillic_latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-regular.woff2') format('woff2'), /* Super Modern Browsers */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-regular.woff') format('woff'), /* Modern Browsers */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-regular.svg#Roboto') format('svg');
+  /* Legacy iOS */
+}
+/* roboto-italic - cyrillic_latin */
+@font-face {
+  font-family: 'Roboto-fallback';
+  font-style: italic;
+  font-weight: 400;
+  src: url('../fonts/Roboto/roboto-v18-cyrillic_latin-italic.eot');
+  /* IE9 Compat Modes */
+  src: local('Roboto Italic'), local('Roboto-Italic'), url('../fonts/Roboto/roboto-v18-cyrillic_latin-italic.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-italic.woff2') format('woff2'), /* Super Modern Browsers */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-italic.woff') format('woff'), /* Modern Browsers */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-italic.ttf') format('truetype'), /* Safari, Android, iOS */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-italic.svg#Roboto') format('svg');
+  /* Legacy iOS */
+}
+/* roboto-700 - cyrillic_latin */
+@font-face {
+  font-family: 'Roboto-fallback';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/Roboto/roboto-v18-cyrillic_latin-700.eot');
+  /* IE9 Compat Modes */
+  src: local('Roboto Bold'), local('Roboto-Bold'), url('../fonts/Roboto/roboto-v18-cyrillic_latin-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-700.woff2') format('woff2'), /* Super Modern Browsers */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-700.woff') format('woff'), /* Modern Browsers */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-700.ttf') format('truetype'), /* Safari, Android, iOS */ url('../fonts/Roboto/roboto-v18-cyrillic_latin-700.svg#Roboto') format('svg');
+  /* Legacy iOS */
+}
 /*!
  * bootstrap-select v1.5.4
  * http://silviomoreto.github.io/bootstrap-select/
@@ -8175,9 +8235,6 @@ a:focus,
 a:hover,
 a:active {
   outline: none;
-}
-a.active:not([href*='#']) {
-  cursor: default;
 }
 table a.active {
   cursor: pointer;
@@ -10441,6 +10498,50 @@ html.js .node div.ctools-dropdown .ctools-dropdown-container {
 #privatemsg-new .form-actions,
 #privatemsg-new .form-item {
   margin-bottom: 0;
+}
+#privatemsg-list .sticky-header,
+#privatemsg-list .privatemsg-list thead {
+  display: none;
+}
+#privatemsg-list .privatemsg-list {
+  margin-top: 18px;
+}
+#privatemsg-list .privatemsg-list tbody tr {
+  border: 1px solid #ddd;
+}
+#privatemsg-list .privatemsg-list tbody tr.selected,
+#privatemsg-list .privatemsg-list tbody tr.selected > td {
+  background-color: #f2dede;
+}
+#privatemsg-list .privatemsg-list tbody tr td {
+  border: 0;
+  display: inline-block;
+}
+#privatemsg-list .privatemsg-list tbody tr td:first-child {
+  line-height: 25.2px;
+  position: absolute;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-subject {
+  font-size: 21px;
+  font-weight: 300;
+  line-height: 1.2;
+  width: 100%;
+  padding-left: 40px;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-participants,
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date {
+  font-size: 86%;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date {
+  float: right !important;
+  color: #939393;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date a {
+  color: #8ab4d2;
+}
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date a:hover,
+#privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date a:focus {
+  color: #73a5ca;
 }
 .bue-ui {
   border: none;

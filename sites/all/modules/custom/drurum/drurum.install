@@ -630,3 +630,17 @@ function drurum_update_7032() {
   }
 }
 
+/**
+ * Add role "Dev Team".
+ */
+function drurum_update_7033() {
+  $name = t("Dev Team");
+  $existing_role = user_role_load_by_name($name);
+
+  if (empty($existing_role)){
+    $role = new stdClass();
+    $role->name = $name;
+    user_role_save($role);
+  }
+}
+

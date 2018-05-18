@@ -657,3 +657,24 @@ function drurum_update_7034() {
   ->execute();
 }
 
+/**
+ * Revert and fix update 7034
+ */
+function drurum_update_7035() {
+  db_delete('role_permission')
+    ->condition('rid', 22)
+    ->condition('permission', 'darkmatter comments')
+    ->condition('module', 'darkmatter')
+  ->execute();
+
+  $coordinator_role = user_role_load_by_name("Coordinator");
+
+  db_insert('role_permission')
+  ->fields([
+    'rid' => $coordinator_role->rid,
+    'permission' => 'darkmatter comments',
+    'module' => 'darkmatter',
+  ])
+  ->execute();
+}
+

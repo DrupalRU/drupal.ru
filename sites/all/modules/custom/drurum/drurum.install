@@ -682,8 +682,6 @@ function drurum_update_7035() {
  * Disable module "antiswearing_validate".
  */
 function drurum_update_7036() {
-  variable_set('validate_comments_blog', 0);
-  variable_set('validate_settings_blog', 0);
   if (module_exists('antiswearing_validate')) {
     module_disable(['antiswearing_validate']);
     drupal_uninstall_modules(['antiswearing_validate']);

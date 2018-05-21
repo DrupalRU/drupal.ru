@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Install and uninstall module actions.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function antiswearing_validate_uninstall() {
+  module_load_include('inc', 'validate_api', 'includes/validate_api.pages');
+  if ($configs = validate_api_get_current_configs()) {
+    foreach ($configs as $name => $config) {
+      $save = false;
+      foreach ($config['validate'] as $field => $validators) {
+        if (isset($validators['antiswearing'])) {
+          unset($config['validate'][$field]['antiswearing']);
+          $save = true;
+        }
+
+        if (!$config['validate'][$field]) {
+          unset($config['validate'][$field]);
+        }
+      }
+
+      if (!$config['validate']) {
+        $config['settings'] = 0;
+      }
+
+      if ($save) {
+        variable_set($name, $config);
+      }
+    }
+  }
+}
+

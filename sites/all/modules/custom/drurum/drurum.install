@@ -678,3 +678,13 @@ function drurum_update_7035() {
     ])
     ->execute();
 }
+
+/**
+ * Disable module "antiswearing_validate".
+ */
+function drurum_update_7036() {
+  if (module_exists('antiswearing_validate')) {
+    module_disable(['antiswearing_validate']);
+    drupal_uninstall_modules(['antiswearing_validate']);
+  }
+}

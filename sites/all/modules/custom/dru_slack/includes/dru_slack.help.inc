@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implements hook_help().
  */
 function dru_slack_help($path, $arg) {
@@ -19,7 +23,7 @@ function dru_slack_help($path, $arg) {
                 <a href='https://api.slack.com/custom-integrations/legacy-tokens'>странице</a>
                 </p></li>";
     $output .= "<li><p>Заполните поля <b>workspace</b> и <b>token</b> 
-                соответствующими значениями на <a href='".url('admin/config/dru_slack/settings')."'>странице настроек модуля</a>
+                соответствующими значениями на <a href='" . url('admin/config/dru_slack/settings') . "'>странице настроек модуля</a>
                 </p></li>";
     $output .= '</ol>';
 
@@ -59,7 +63,7 @@ function dru_slack_help($path, $arg) {
                 </p>';
 
     $output .= "<p>Для предотвращения несанкционированного доступа к использованию команд лицами, не имеющими на то право,
-                на <a href='".url('admin/config/dru_slack/settings')."'>странице настроек модуля</a> 
+                на <a href='" . url('admin/config/dru_slack/settings') . "'>странице настроек модуля</a> 
                 укажите через запятую ID участников Вашего workspace, которые будут иметь право на выполнение команд в соответствующем поле.
                 </p>";
 
@@ -95,7 +99,7 @@ function dru_slack_help($path, $arg) {
     $output .= '<p>Интерфейс для управления доступными каналами для сообщений
                 Вы можете найти в разделе <em>Incoming Webhooks</em>
                 на странице настроек <a href="https://api.slack.com/apps">вашего приложения</a>.
-                Аналогично укажите на <a href='.url("admin/config/dru_slack/settings").'>странице настроек модуля</a>
+                Аналогично укажите на <a href=' . url("admin/config/dru_slack/settings") . '>странице настроек модуля</a>
                 маппинг <b>Канал->URL</b>(<em>Название канала будет использовано в качестве аргумента для <b>notificate_by_chanel()</b></em>).
                 </p>';
 

@@ -5,11 +5,11 @@
  */
 
 /**
- * Tickets page
+ * Tickets page.
  */
 function dru_tickets_page() {
-  
-  // Get ticket ststus terms
+
+  // Get ticket ststus terms.
   $status_voc = taxonomy_vocabulary_machine_name_load('ticket_status');
   $status_terms = taxonomy_get_tree($status_voc->vid);
   $status = array('any' => t('Select'));
@@ -18,8 +18,8 @@ function dru_tickets_page() {
   }
   $default_status = array_keys($status);
   unset($default_status[0]);
-  
-  // Get claim category terms
+
+  // Get claim category terms.
   $claim_category_voc = taxonomy_vocabulary_machine_name_load('claim_category');
   $claim_category_terms = taxonomy_get_tree($claim_category_voc->vid);
   $claim_category = array('any' => t('Select'));
@@ -28,13 +28,13 @@ function dru_tickets_page() {
   }
   $default_claim_category = array_keys($claim_category);
   unset($default_claim_category[0]);
-  
-  // Get query parametrs
+
+  // Get query parametrs.
   $q = drupal_get_query_parameters();
   isset($q['status']) ? $default_status = array($q['status']) : $default_status;
   isset($q['claim_category']) ? $default_claim_category = array($q['claim_category']) : $default_claim_category;
-  
-  // Get filters form
+
+  // Get filters form.
   $filter_vars = array(
     'status'         => array(
       'options' => $status,
@@ -49,13 +49,13 @@ function dru_tickets_page() {
 
   $query = new EntityFieldQuery();
   $result = $query->entityCondition('entity_type', 'node')
-                  ->propertyCondition('status', 1)
-                  ->propertyCondition('type', 'ticket')
-                  ->fieldCondition('field_ticket_status', 'tid', $default_status, 'IN')
-                  ->fieldCondition('field_claim_category', 'tid', $default_claim_category, 'in')
-                  ->propertyOrderBy('nid', 'DESC')
-                  ->pager(10)
-                  ->execute();
+    ->propertyCondition('status', 1)
+    ->propertyCondition('type', 'ticket')
+    ->fieldCondition('field_ticket_status', 'tid', $default_status, 'IN')
+    ->fieldCondition('field_claim_category', 'tid', $default_claim_category, 'in')
+    ->propertyOrderBy('nid', 'DESC')
+    ->pager(10)
+    ->execute();
 
   if (!empty($result)) {
     $content = node_view_multiple(node_load_multiple(array_keys($result['node'])));
@@ -70,7 +70,7 @@ function dru_tickets_page() {
   else {
     $page = t('There are no tickets');
   }
-  $output  = '';
+  $output = '';
   $output .= render($filters);
   $output .= render($page);
 
@@ -83,32 +83,32 @@ function dru_tickets_page() {
  */
 function dru_tickets_page_filters($form, &$form_state, $filter_vars) {
   $form = array();
-  
+
   $form['filter_status'] = array(
     '#type'          => 'select',
     '#title'         => t('Status'),
     '#options'       => $filter_vars['status']['options'],
     '#default_value' => $filter_vars['status']['default'],
   );
-  
+
   $form['filter_claim_category'] = array(
     '#type'          => 'select',
     '#title'         => t('Claim category'),
     '#options'       => $filter_vars['claim_category']['options'],
     '#default_value' => $filter_vars['claim_category']['default'],
   );
-  
+
   $form['filters_submit'] = array(
     '#type'  => 'submit',
     '#value' => t('Send'),
   );
-  
+
   $form['filters_clear'] = array(
     '#type'   => 'submit',
     '#value'  => t('Clear'),
     '#submit' => array('dru_tickets_page_filters_clear'),
   );
-  
+
   return $form;
 }
 
@@ -126,17 +126,17 @@ function dru_tickets_page_filters_submit($form, &$form_state) {
   $query = array();
   foreach ($form_state['values'] as $key => $filter) {
     if (
-      substr($key, 0, 7) == 'filter_' && 
-      !empty($filter) && 
+      substr($key, 0, 7) == 'filter_' &&
+      !empty($filter) &&
       $filter !== 'any') {
-          $query[substr($key, 7)] = $filter;
+      $query[substr($key, 7)] = $filter;
     }
   }
   drupal_goto(current_path(), array('query' => $query));
 }
 
 /**
- * Accept ticket
+ * Accept ticket.
  */
 function dru_ticket_accept($node, $token) {
 
@@ -172,7 +172,7 @@ function dru_ticket_accept($node, $token) {
  * Verdict.
  */
 function dru_ticket_verdict($ajax, $node, $token) {
-  
+
   if (!drupal_valid_token($token, 'dru_tickets')) {
     return;
   }
@@ -187,7 +187,7 @@ function dru_ticket_verdict($ajax, $node, $token) {
 
     $commands = array();
 
-    $render_form  = '<div id="verdict-add-form">';
+    $render_form = '<div id="verdict-add-form">';
     $render_form .= '<div id="close-form"><i class="fa fa-times"></i></div>';
     $render_form .= '<h2>';
     $render_form .= t('Add Verdict');
@@ -263,7 +263,7 @@ function dru_verdict_submit_js($form_id, $form_state) {
   $commands[] = ajax_command_invoke('.verdict', 'addClass', array('tiket-changed'));
 
   $commands[] = ajax_command_remove('#verdict-add');
-  
+
   $token = drupal_get_token('dru_tickets');
   $link = l(t('Change verdict'), 'ticket/' . $nid . '/verdict/nojs/' . $token, array('attributes' => array('class' => array('use-ajax', 'ticket-verdict-' . $nid))));
   $commands[] = ajax_command_replace('.ticket-verdict-' . $nid, $link);
@@ -281,7 +281,7 @@ function dru_verdict_submit_js($form_id, $form_state) {
 function dru_verdict_form_submit($form_id, &$form_state) {
 
   $verdict = $form_state['values']['dru_verdict'];
-  $ticket  = $form_state['dru_ticket']['ticket'];
+  $ticket = $form_state['dru_ticket']['ticket'];
 
   $ticket->ticket->ticket_verdict = $verdict;
 

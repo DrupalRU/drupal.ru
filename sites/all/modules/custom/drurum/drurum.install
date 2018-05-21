@@ -75,7 +75,7 @@ function drurum_update_7001() {
 }
 
 /**
- * Adding info for
+ * Adding info for.
  */
 function drurum_update_7002() {
   variable_set('drurum_add_organization_help', '<p class="lead text-success text-center">Вы можете поддержать развитие проекта, в связи с чем информацию о вашей компании увидит большее количество пользователей!</p>
@@ -162,7 +162,7 @@ function drurum_update_7005() {
 }
 
 /**
- * Add "Other" to claim type
+ * Add "Other" to claim type.
  */
 function drurum_update_7006() {
   $vocabulary = taxonomy_vocabulary_machine_name_load('claim_category');
@@ -173,7 +173,7 @@ function drurum_update_7006() {
 }
 
 /**
- * Allow claim to blog node type
+ * Allow claim to blog node type.
  */
 function drurum_update_7007() {
   variable_set('dru_claim_allow_for_node_blog', 1);
@@ -255,7 +255,8 @@ function drurum_update_7009(&$sandbox) {
  */
 function drurum_update_7010(&$sandbox) {
   variable_set('alttracker_node_type_fields_blog', [
-    'title' => 'title', 'body' => 'text_with_summary'
+    'title' => 'title',
+    'body' => 'text_with_summary',
   ]);
 }
 
@@ -280,7 +281,7 @@ function drurum_update_7012(&$sandbox) {
 function drurum_update_7013() {
   db_update('block_custom')
     ->fields(array(
-      'body' => '<div class="col-sm-7 col-vsd-8 col-sm-offset-1 text-center"><p class="lead"><span style="font-weight: 300;">Drupal (Дрýпал)</span> - является открытой платформой управления контентом для миллионов веб-сайтов и приложений. Он создан активным и разнообразным сообществом людей по всему миру.<br>Благодаря мощному функционалу Друпала, разрабатывать сложные сайты значительно проще, чем писать их с нуля.</p></div><div class="col-sm-4 col-vsd-3  text-center"><a href="/downloads" class="lead download-drupal-front"><i class="fa fa-drupal fa-4x"></i><br>Скачать Drupal!</a></div>'
+      'body' => '<div class="col-sm-7 col-vsd-8 col-sm-offset-1 text-center"><p class="lead"><span style="font-weight: 300;">Drupal (Дрýпал)</span> - является открытой платформой управления контентом для миллионов веб-сайтов и приложений. Он создан активным и разнообразным сообществом людей по всему миру.<br>Благодаря мощному функционалу Друпала, разрабатывать сложные сайты значительно проще, чем писать их с нуля.</p></div><div class="col-sm-4 col-vsd-3  text-center"><a href="/downloads" class="lead download-drupal-front"><i class="fa fa-drupal fa-4x"></i><br>Скачать Drupal!</a></div>',
     ))
     ->condition('bid', 93)
     ->execute();
@@ -291,12 +292,12 @@ function drurum_update_7013() {
  */
 function drurum_update_7014(&$sandbox) {
   variable_set('alttracker_node_type_properties_blog', [
-    'title' => true,
-    'status' => true,
-    'comment' => true,
-    'promote' => true,
-    'sticky' => true,
-    'changed' => true,
+    'title' => TRUE,
+    'status' => TRUE,
+    'comment' => TRUE,
+    'promote' => TRUE,
+    'sticky' => TRUE,
+    'changed' => TRUE,
   ]);
 }
 
@@ -304,24 +305,24 @@ function drurum_update_7014(&$sandbox) {
  * Hide profile field "Security Question".
  */
 function drurum_update_7015() {
-  // Hide field on registration
+  // Hide field on registration.
   db_update('profile_field')
-  ->fields(array('register' => 0))
-  ->condition('fid', 37)
-  ->execute();
-  // Hide field in profile
+    ->fields(array('register' => 0))
+    ->condition('fid', 37)
+    ->execute();
+  // Hide field in profile.
   db_update('profile_field')
-  ->fields(array('visibility' => 4))
-  ->condition('fid', 37)
-  ->execute();
+    ->fields(array('visibility' => 4))
+    ->condition('fid', 37)
+    ->execute();
 
-  //enable recaptcha
+  // Enable recaptcha.
   module_enable(['recaptcha']);
 
-  // disable ascii_art_captcha
+  // Disable ascii_art_captcha.
   module_disable(['ascii_art_captcha']);
 
-  // Set recaptcha by default
+  // Set recaptcha by default.
   variable_set('captcha_default_challenge', 'recaptcha/reCAPTCHA');
 }
 
@@ -329,11 +330,11 @@ function drurum_update_7015() {
  * Hide profile field "Open external links...".
  */
 function drurum_update_7016() {
-  // Hide field in profile
+  // Hide field in profile.
   db_update('profile_field')
-  ->fields(array('visibility' => 4))
-  ->condition('fid', 32)
-  ->execute();
+    ->fields(array('visibility' => 4))
+    ->condition('fid', 32)
+    ->execute();
 }
 
 /**
@@ -347,7 +348,7 @@ function drurum_update_7017() {
  * Replace Unsubscribe tokens for Comment notifier.
  */
 function drurum_update_7018() {
-  // Replace comment pattern
+  // Replace comment pattern.
   $comment_notify_default = 'comment_notify_comment_notify_default_mailtext';
   if ($comment_notify = variable_get($comment_notify_default)) {
     $pattern = '/\[comment:unsubscribe-url\]/';
@@ -355,7 +356,7 @@ function drurum_update_7018() {
     variable_set($comment_notify_default, preg_replace($pattern, $replacement, $comment_notify));
   }
 
-  // Replace node (author) pattern
+  // Replace node (author) pattern.
   $node_notify_default = 'comment_notify_node_notify_default_mailtext';
   if ($node_notify = variable_get($node_notify_default)) {
     $pattern = '/\s<tr>(.*)Отписаться от этой ветки<\/a><\/td><\/tr>\s/';
@@ -368,7 +369,7 @@ function drurum_update_7018() {
  * Add settings for alttracker (hide news from some forums).
  */
 function drurum_update_7019() {
-  variable_set('alttracker_ignore_terms', array('2066','2057','3769'));
+  variable_set('alttracker_ignore_terms', array('2066', '2057', '3769'));
   variable_set('alttracker_vocabulary_1', 'Мусор, Курилка, Модераторский');
 }
 
@@ -392,17 +393,17 @@ function drurum_update_7021() {
  * Convert some "page" to "blog".
  */
 function drurum_update_7022() {
-  $nids = ['536','673','2227','2253','2323','2248','852','134','5022','10606','7741','26333','27609','27605','18067','31161','1','79787','19533','11876','126461'];
-  foreach ( $nids as $nid ) {
+  $nids = ['536', '673', '2227', '2253', '2323', '2248', '852', '134', '5022', '10606', '7741', '26333', '27609', '27605', '18067', '31161', '1', '79787', '19533', '11876', '126461'];
+  foreach ($nids as $nid) {
     db_update('node')
-    ->fields(array('type' => 'blog'))
-    ->condition('nid', $nid)
-    ->execute();
+      ->fields(array('type' => 'blog'))
+      ->condition('nid', $nid)
+      ->execute();
   }
 }
 
 /**
- * Disable users contact forms
+ * Disable users contact forms.
  */
 function drurum_update_7023() {
   variable_set('contact_default_status', 0);
@@ -422,7 +423,7 @@ function drurum_update_7024() {
     drupal_uninstall_modules(['ban_user']);
   }
   module_enable(['dru_moderation']);
-  // Disable Standard Drupal notification
+  // Disable Standard Drupal notification.
   variable_set('user_mail_status_blocked_notify', 0);
 }
 
@@ -439,7 +440,7 @@ function drurum_update_7025(&$sandbox) {
   variable_set('dru_tnx_status_by_node_type', $node_types);
   variable_set('dru_tnx_status_by_comment_node_type', $node_types);
 }
-    
+
 /**
  * Add role "Coordinator".
  */
@@ -447,47 +448,47 @@ function drurum_update_7026() {
   $name = t("Coordinator");
   $existing_role = user_role_load_by_name($name);
 
-  if (empty($existing_role)){
+  if (empty($existing_role)) {
     $role = new stdClass();
     $role->name = $name;
     user_role_save($role);
   }
 
   db_insert('role_permission')
-  ->fields(array(
-    'rid' => 2,
-    'permission' => 'dru_tickets view tickets',
-    'module' => 'dru_tickets',
-  ))
-  ->execute();
+    ->fields(array(
+      'rid' => 2,
+      'permission' => 'dru_tickets view tickets',
+      'module' => 'dru_tickets',
+    ))
+    ->execute();
 
   db_insert('role_permission')
-  ->fields(array(
-    'rid' => 20,
-    'permission' => 'dru_tickets moderate tickets',
-    'module' => 'dru_tickets',
-  ))
-  ->execute();
+    ->fields(array(
+      'rid' => 20,
+      'permission' => 'dru_tickets moderate tickets',
+      'module' => 'dru_tickets',
+    ))
+    ->execute();
 
   db_insert('role_permission')
-  ->fields(array(
-    'rid' => 21,
-    'permission' => 'dru_tickets change any verdict',
-    'module' => 'dru_tickets',
-  ))
-  ->execute();
+    ->fields(array(
+      'rid' => 21,
+      'permission' => 'dru_tickets change any verdict',
+      'module' => 'dru_tickets',
+    ))
+    ->execute();
 
-    db_insert('role_permission')
-  ->fields(array(
-    'rid' => 21,
-    'permission' => 'dru_tickets moderate tickets',
-    'module' => 'dru_tickets',
-  ))
-  ->execute();
+  db_insert('role_permission')
+    ->fields(array(
+      'rid' => 21,
+      'permission' => 'dru_tickets moderate tickets',
+      'module' => 'dru_tickets',
+    ))
+    ->execute();
 }
 
 /**
- * Remove vocabulary "Ключевые слова" and all terms
+ * Remove vocabulary "Ключевые слова" and all terms.
  */
 function drurum_update_7027() {
   field_delete_field('taxonomy_vocabulary_2');
@@ -495,33 +496,33 @@ function drurum_update_7027() {
 }
 
 /**
- * Remove profile field «Секретный вопрос»
+ * Remove profile field «Секретный вопрос».
  */
 function drurum_update_7028() {
   $name = 'profile_secret';
 
-  //  Get field id by name
+  // Get field id by name.
   $field_id = db_select('profile_field', 'pf')
     ->fields('pf', ['fid'])
     ->condition('pf.name', $name)
     ->execute()
     ->fetchField();
 
-  // if field exists
+  // If field exists.
   if (!empty($field_id)) {
-    // Remove field values
+    // Remove field values.
     db_delete('profile_value')
-    ->condition('fid', $field_id)
-    ->execute();
+      ->condition('fid', $field_id)
+      ->execute();
 
-    // Additional check that values were removed
+    // Additional check that values were removed.
     $count = db_select('profile_value', 'pv')
       ->condition('pv.fid', $field_id)
       ->countQuery()
       ->execute()
       ->fetchField();
 
-    // If all data removed then remove field
+    // If all data removed then remove field.
     if ($count == 0) {
       db_delete('profile_field')
         ->condition('fid', $field_id)
@@ -531,33 +532,33 @@ function drurum_update_7028() {
 }
 
 /**
- * Remove profile field «Открывать внешние ссылки в новом окне»
+ * Remove profile field «Открывать внешние ссылки в новом окне».
  */
 function drurum_update_7029() {
   $name = 'profile_ext_links_in_new_window';
 
-  //  Get field id by name
+  // Get field id by name.
   $field_id = db_select('profile_field', 'pf')
     ->fields('pf', ['fid'])
     ->condition('pf.name', $name)
     ->execute()
     ->fetchField();
 
-  // if field exists
+  // If field exists.
   if (!empty($field_id)) {
-    // Remove field values
+    // Remove field values.
     db_delete('profile_value')
-    ->condition('fid', $field_id)
-    ->execute();
+      ->condition('fid', $field_id)
+      ->execute();
 
-    // Additional check that values were removed
+    // Additional check that values were removed.
     $count = db_select('profile_value', 'pv')
       ->condition('pv.fid', $field_id)
       ->countQuery()
       ->execute()
       ->fetchField();
 
-    // If all data removed then remove field
+    // If all data removed then remove field.
     if ($count == 0) {
       db_delete('profile_field')
         ->condition('fid', $field_id)
@@ -567,7 +568,7 @@ function drurum_update_7029() {
 }
 
 /**
- * Hide some fields from register page
+ * Hide some fields from register page.
  */
 function drurum_update_7030() {
   db_update('profile_field')
@@ -595,33 +596,33 @@ function drurum_update_7031(&$sandbox) {
 }
 
 /**
- * Remove profile field «Откуда узнали о Drupal?»
+ * Remove profile field «Откуда узнали о Drupal?».
  */
 function drurum_update_7032() {
   $name = 'profile_referer';
 
-  //  Get field id by name
+  // Get field id by name.
   $field_id = db_select('profile_field', 'pf')
     ->fields('pf', ['fid'])
     ->condition('pf.name', $name)
     ->execute()
     ->fetchField();
 
-  // if field exists
+  // If field exists.
   if (!empty($field_id)) {
-    // Remove field values
+    // Remove field values.
     db_delete('profile_value')
-    ->condition('fid', $field_id)
-    ->execute();
+      ->condition('fid', $field_id)
+      ->execute();
 
-    // Additional check that values were removed
+    // Additional check that values were removed.
     $count = db_select('profile_value', 'pv')
       ->condition('pv.fid', $field_id)
       ->countQuery()
       ->execute()
       ->fetchField();
 
-    // If all data removed then remove field
+    // If all data removed then remove field.
     if ($count == 0) {
       db_delete('profile_field')
         ->condition('fid', $field_id)
@@ -637,7 +638,7 @@ function drurum_update_7033() {
   $name = t("Dev Team");
   $existing_role = user_role_load_by_name($name);
 
-  if (empty($existing_role)){
+  if (empty($existing_role)) {
     $role = new stdClass();
     $role->name = $name;
     user_role_save($role);
@@ -645,36 +646,35 @@ function drurum_update_7033() {
 }
 
 /**
- * Add permissions to use DarkMatter
+ * Add permissions to use DarkMatter.
  */
 function drurum_update_7034() {
   db_insert('role_permission')
-  ->fields([
-    'rid' => 22,
-    'permission' => 'darkmatter comments',
-    'module' => 'darkmatter',
-  ])
-  ->execute();
+    ->fields([
+      'rid' => 22,
+      'permission' => 'darkmatter comments',
+      'module' => 'darkmatter',
+    ])
+    ->execute();
 }
 
 /**
- * Revert and fix update 7034
+ * Revert and fix update 7034.
  */
 function drurum_update_7035() {
   db_delete('role_permission')
     ->condition('rid', 22)
     ->condition('permission', 'darkmatter comments')
     ->condition('module', 'darkmatter')
-  ->execute();
+    ->execute();
 
   $coordinator_role = user_role_load_by_name("Coordinator");
 
   db_insert('role_permission')
-  ->fields([
-    'rid' => $coordinator_role->rid,
-    'permission' => 'darkmatter comments',
-    'module' => 'darkmatter',
-  ])
-  ->execute();
+    ->fields([
+      'rid' => $coordinator_role->rid,
+      'permission' => 'darkmatter comments',
+      'module' => 'darkmatter',
+    ])
+    ->execute();
 }
-

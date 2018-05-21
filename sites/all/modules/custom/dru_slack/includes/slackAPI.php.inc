@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: hulygun
  * Date: 10.09.17
- * Time: 23:11
+ * Time: 23:11.
  */
 
 define('SLACK_INVITE_ALREADY_IN_TEAM', 'already_in_team');
@@ -12,7 +13,7 @@ define('SLACK_INVITE_ALREADY_INVITED', 'already_invited');
 
 /**
  * Class slackAPI
- * Реализация интерфейса для работы с API Slack
+ * Реализация интерфейса для работы с API Slack.
  */
 class slackAPI {
 
@@ -20,13 +21,16 @@ class slackAPI {
 
   protected $token;
 
+  /**
+   *
+   */
   public function __construct() {
     $this->hostname = variable_get('slack_team_hostname');
     $this->token = variable_get('slack_token');
   }
 
   /**
-   * Отправка сообщений в Slack по урлу
+   * Отправка сообщений в Slack по урлу.
    *
    * @param $url
    *   url, на который следует слать сообщение
@@ -51,7 +55,7 @@ class slackAPI {
   }
 
   /**
-   * Отправка сообщений в Slack по названию канала
+   * Отправка сообщений в Slack по названию канала.
    *
    * @param $chanel
    *   название канала
@@ -64,13 +68,14 @@ class slackAPI {
     $chanels = variable_get('slack_chanels');
     if (is_array($chanels) && isset($chanels[$chanel])) {
       return $this->notificate_by_url($chanels[$chanel], $message);
-    } else {
+    }
+    else {
       watchdog('dru_slack', 'Unknown chanel name as @chanel', ['@chanel' => $chanel]);
     }
   }
 
   /**
-   * Отправка инвайтов в Slack по email
+   * Отправка инвайтов в Slack по email.
    *
    * @param $email
    *   email получателя
@@ -129,9 +134,8 @@ class slackAPI {
 
   }
 
-
   /**
-   * Получение данных об участниках Slack team
+   * Получение данных об участниках Slack team.
    *
    * @return array
    */
@@ -139,10 +143,10 @@ class slackAPI {
     $url = "https://slack.com/api/users.list";
     $data = [
       'token' => $this->token,
-      'presence' => true,
+      'presence' => TRUE,
     ];
     $data = drupal_http_build_query($data);
-    $response = drupal_http_request($url.'?'.$data);
+    $response = drupal_http_request($url . '?' . $data);
     $active = 0;
     $total = 0;
     if ($response->code == 200) {
@@ -163,7 +167,7 @@ class slackAPI {
 
   /**
    * Метод, который вызывает остальные по строковому значению.
-   * Через него все кастомные команды
+   * Через него все кастомные команды.
    *
    * @param $action
    *   Название метода
@@ -191,44 +195,47 @@ class slackAPI {
   }
 
   /**
-   * Примеры для создания своих команд для бота с аргументами и без
+   * Примеры для создания своих команд для бота с аргументами и без.
    *
-   * public function call_without_args($args) {
+   * Public function call_without_args($args) {
    *   return ['text' => t("This message return after call the method **call_without_args**")];
    * }
    *
    * public function call_with_args($args) {
    *   return ['text' => t("This message return after call the method **call_with_args** с аргументами {implode(', ', $args)}")];
-   * }
-
-  */
-
+   * }   *
+   */
   public function invite_user($args) {
     $args_len = count($args);
     $message = [
-      "attachments" => []
+      "attachments" => [],
     ];
     if ($args_len == 0) {
       $message['attachments'][0]['pretext'] = 'Введите email';
-    } elseif ($args_len == 1) {
-        $invite = $this->invite($args[0]);
-        switch ($invite['status']) {
-          case 'warning':
-            $color = '#ff7909';
-            break;
-          case 'error':
-            $color = '#f00';
-            break;
-          default:
-            $color = '#390';
-            break;
-        }
-        $message['attachments'][0]['pretext'] = 'Отправка приглашения выполнена';
-        $message['attachments'][0]['color'] = $color;
-        $message['attachments'][0]['text'] = $invite['message'];
-    } else {
+    }
+    elseif ($args_len == 1) {
+      $invite = $this->invite($args[0]);
+      switch ($invite['status']) {
+        case 'warning':
+          $color = '#ff7909';
+          break;
+
+        case 'error':
+          $color = '#f00';
+          break;
+
+        default:
+          $color = '#390';
+          break;
+      }
+      $message['attachments'][0]['pretext'] = 'Отправка приглашения выполнена';
+      $message['attachments'][0]['color'] = $color;
+      $message['attachments'][0]['text'] = $invite['message'];
+    }
+    else {
       $message['attachments'][0]['pretext'] = 'Слишком много аргументов';
     }
     return $message;
   }
+
 }

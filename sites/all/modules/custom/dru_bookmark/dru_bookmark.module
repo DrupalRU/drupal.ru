@@ -1,11 +1,15 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implements hook_menu().
  */
 function dru_bookmark_menu() {
   $items = array();
-  
+
   $items['bookmark/node/%node/%'] = array(
     'page callback'     => 'dru_bookmark_page',
     'page arguments'    => array(1, 2, 3),
@@ -13,7 +17,7 @@ function dru_bookmark_menu() {
     'type'              => MENU_CALLBACK,
     'delivery callback' => 'ajax_deliver',
   );
-  
+
   $items['user/bookmarks'] = array(
     'title'            => 'My bookmarks',
     'page callback'    => 'dru_bookmarks_page',
@@ -22,7 +26,7 @@ function dru_bookmark_menu() {
     'menu_name'        => 'user-menu',
     'file'             => 'dru_bookmark.pages.inc',
   );
-  
+
   return ($items);
 }
 
@@ -31,14 +35,14 @@ function dru_bookmark_menu() {
  */
 function dru_bookmark_node_view($node, $view_mode) {
   global $user;
-  
+
   if ($user->uid) {
     drupal_add_library('system', 'drupal.ajax');
     drupal_add_css(drupal_get_path('module', 'dru_bookmark') . '/' . 'dru_bookmark.css');
-    
+
     $in_bookmark = dru_check_node_in_bookmark($node, $user);
-    
-    $node->content['links']['comment']['#links']['bookmark'] = dru_get_bookmark_link($node,$user, $in_bookmark);
+
+    $node->content['links']['comment']['#links']['bookmark'] = dru_get_bookmark_link($node, $user, $in_bookmark);
   }
 }
 
@@ -53,8 +57,8 @@ function dru_check_node_in_bookmark($node, $user) {
     array(
       ':nid' => $node->nid,
       ':uid' => $user->uid,
-  ))->fetchField();
-  
+    ))->fetchField();
+
   return $query;
 }
 
@@ -62,12 +66,12 @@ function dru_check_node_in_bookmark($node, $user) {
  *
  */
 function dru_get_bookmark_link($node, $user, $in_bookmark) {
-  
+
   $token = & drupal_static(__FUNCTION__);
   if (!isset($token)) {
     $token = drupal_get_token('dru_bookmark');
   }
-  
+
   if ($in_bookmark) {
     $name   = t('Bookmark Out');
     $title  = t('Delete from bookmarks');
@@ -78,7 +82,7 @@ function dru_get_bookmark_link($node, $user, $in_bookmark) {
     $title  = t('Add to bookmarks');
     $action = 'in';
   }
-    
+
   $link = array(
     'title'      => $name,
     'href'       => 'bookmark/node/' . $node->nid . '/' . $token,
@@ -92,7 +96,7 @@ function dru_get_bookmark_link($node, $user, $in_bookmark) {
       ),
     ),
   );
-  
+
   return $link;
 }
 
@@ -100,13 +104,13 @@ function dru_get_bookmark_link($node, $user, $in_bookmark) {
  *
  */
 function dru_bookmark_page($content_type, $content, $token) {
-  
+
   if (!drupal_valid_token($token, 'dru_bookmark')) {
     return;
   }
-  
+
   $callback = 'dru_bookmark_' . $content_type;
-  
+
   return dru_bookmark_node($content);
 }
 
@@ -114,23 +118,23 @@ function dru_bookmark_page($content_type, $content, $token) {
  *
  */
 function dru_bookmark_node($node) {
-  
+
   global $user;
-  
+
   $in_bookmark = dru_check_node_in_bookmark($node, $user);
-  
+
   $in_bookmark ? dru_bookmark_node_remove_bookmark($node, $user) : dru_bookmark_node_add_bookmark($node, $user);
-  
+
   $commands = array();
-  
+
   $sb_link = dru_get_bookmark_link($node, $user, !$in_bookmark);
   $link    = l($sb_link['title'], $sb_link['href'], array(
     'query'      => $sb_link['query'],
     'attributes' => $sb_link['attributes'],
   ));
-  
+
   $commands[] = ajax_command_replace('.dru-bookmark', $link);
-  
+
   return array(
     '#type'     => 'ajax',
     '#commands' => $commands,

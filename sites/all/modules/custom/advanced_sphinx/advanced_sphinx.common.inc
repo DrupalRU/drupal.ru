@@ -57,10 +57,10 @@ function advanced_sphinx_goto_search($query = NULL) {
  * @see advanced_sphinx_search_page()
  * @see advanced_sphinx_block()
  *
- * @param boolean $exceeded
+ * @param bool $exceeded
  *   TRUE to enable the flag. This argument is optional.
  *
- * @return boolean
+ * @return bool
  *   TRUE is flood limit has been exceeded.
  */
 function advanced_sphinx_flood_limit_exceeded($exceeded = NULL) {
@@ -112,7 +112,7 @@ function &advanced_sphinx_get_client() {
 /**
  * Check connection with Sphinx searchd daemon.
  *
- * @return boolean
+ * @return bool
  */
 function advanced_sphinx_check_connection() {
   $advanced_sphinx = &advanced_sphinx_get_client();
@@ -249,13 +249,12 @@ function advanced_sphinx_execute_query($search_options) {
   $advanced_sphinx->ResetGroupBy();
   $advanced_sphinx->SetLimits($current_page * $search_options['results_per_page'], $search_options['results_per_page']);
   $advanced_sphinx->SetFieldWeights(array('title' => 20, 'body' => 5));
-  // $advanced_sphinx->SetIndexWeights(array('index1'=>20, 'index2'=>5));
+  // $advanced_sphinx->SetIndexWeights(array('index1'=>20, 'index2'=>5));.
   $sphinx_excerpt_keywords = $sphinx_query_keywords[0];
   $advanced_sphinx->SetMatchMode(SPH_MATCH_EXTENDED2);
   $advanced_sphinx->SetRankingMode(SPH_RANK_MATCHANY);
   // $advanced_sphinx->SetRankingMode(SPH_RANK_PROXIMITY_BM25);
-  // $advanced_sphinx->SetSelect('@weight + ( countitl - '.count($search_options['keys']).')*(-0.1) AS new_weight');
-
+  // $advanced_sphinx->SetSelect('@weight + ( countitl - '.count($search_options['keys']).')*(-0.1) AS new_weight');.
   // Sort options.
   if (isset($search_options['sorted'])) {
     foreach ($search_options['sorted'] as $key => $value) {
@@ -334,8 +333,10 @@ function advanced_sphinx_execute_query($search_options) {
     'before_match' => '<b>',
     'after_match' => '</b>',
     'chunk_separator' => '',
-    'limit' => 1024, // We want all text here, so using a high enough number.
-    'around' => 200, // Ignored when single_passage is TRUE.
+  // We want all text here, so using a high enough number.
+    'limit' => 1024,
+  // Ignored when single_passage is TRUE.
+    'around' => 200,
     'exact_phrase' => ($search_options['matchmode'] == ADVANCED_SPHINX_MATCH_PHRASE),
     'single_passage' => TRUE,
   ));

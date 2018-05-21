@@ -59,7 +59,7 @@ function dru_claim_menu() {
 }
 
 /**
- * access callback for dru_claim_menu().
+ * Access callback for dru_claim_menu().
  */
 function dru_claim_create_access($entity) {
   if ($entity->type) {
@@ -185,65 +185,65 @@ function dru_claim_get_ticket_info($ticket, $entity, $entity_type) {
   $output['claim'] = [
     '#type' => 'container',
     '#attributes' => [
-      'class' => ['claim_message', $class]
+      'class' => ['claim_message', $class],
     ],
     'icon' => [
-      '#markup' => '<i class="fa fa-'. $icon .'"></i>',
+      '#markup' => '<i class="fa fa-' . $icon . '"></i>',
       '#prefix' => '<span class="icon-wrapper">',
-      '#suffix' => '</span>'
+      '#suffix' => '</span>',
     ],
     'verdict' => [
       '#markup' => $verdict,
-    ]
+    ],
   ];
 
   $output['ticket'] = [
     '#type' => 'container',
     '#has_verdict' => !!$has_verdict,
     '#attributes' => [
-      'class' => ['ticket-info']
-    ]
+      'class' => ['ticket-info'],
+    ],
   ];
   $output['ticket']['description'] = [
     '#type' => 'container',
     '#attributes' => [
-      'class' => ['ticket-body']
+      'class' => ['ticket-body'],
     ],
     'icon' => [
-      '#markup' => $ticket_icon
+      '#markup' => $ticket_icon,
     ],
     'content' => [
-      '#markup' => $ticket_body
+      '#markup' => $ticket_body,
     ],
   ];
   $output['ticket']['category'] = [
     '#type' => 'container',
     '#attributes' => [
-      'class' => ['ticket-category']
+      'class' => ['ticket-category'],
     ],
     'icon' => [
-      '#markup' => '<i class="fa fa-exclamation-triangle"></i>'
+      '#markup' => '<i class="fa fa-exclamation-triangle"></i>',
     ],
     'content' => [
-      '#markup' => $ticket_category->name
+      '#markup' => $ticket_category->name,
     ],
   ];
   $output['ticket']['metadata'] = [
     '#type' => 'container',
     '#attributes' => [
-      'class' => ['ticket-metadata']
+      'class' => ['ticket-metadata'],
     ],
   ];
   $output['ticket']['metadata']['created'] = [
     '#type' => 'container',
     '#attributes' => [
-      'class' => ['ticket-created']
+      'class' => ['ticket-created'],
     ],
     'icon' => [
-      '#markup' => '<i class="fa fa-calendar"></i>'
+      '#markup' => '<i class="fa fa-calendar"></i>',
     ],
     'content' => [
-      '#markup' => date('d.m.Y', $ticket->created)
+      '#markup' => date('d.m.Y', $ticket->created),
     ],
   ];
   $output['ticket']['metadata']['ticket-link'] = [
@@ -251,10 +251,10 @@ function dru_claim_get_ticket_info($ticket, $entity, $entity_type) {
     // For the future, when will need to hide ticket and link from unaccessed users.
     '#access' => TRUE,
     '#attributes' => [
-      'class' => ['ticket-id']
+      'class' => ['ticket-id'],
     ],
     'icon' => [
-      '#markup' => '<i class="fa fa-eye"></i>'
+      '#markup' => '<i class="fa fa-eye"></i>',
     ],
     'content' => [
       '#theme' => 'link',
@@ -263,18 +263,18 @@ function dru_claim_get_ticket_info($ticket, $entity, $entity_type) {
       // A bug of Drupal, which disallows
       // to create links without define attributes.
       '#options' => array(
-        'html' => false,
-        'attributes' => array()
+        'html' => FALSE,
+        'attributes' => array(),
       ),
     ],
   ];
   $output['ticket']['metadata']['author'] = [
     '#type' => 'container',
     '#attributes' => [
-      'class' => ['ticket-author']
+      'class' => ['ticket-author'],
     ],
     'icon' => [
-      '#markup' => '<i class="fa fa-user"></i>'
+      '#markup' => '<i class="fa fa-user"></i>',
     ],
     'content' => [
       '#theme' => 'link',
@@ -283,9 +283,9 @@ function dru_claim_get_ticket_info($ticket, $entity, $entity_type) {
       // A bug of Drupal, which disallows
       // to create links without define attributes.
       '#options' => array(
-        'html' => false,
-        'attributes' => array()
-      )
+        'html' => FALSE,
+        'attributes' => array(),
+      ),
     ],
   ];
 

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file
+ */
+
 require_once __DIR__ . '/includes/dru_slack.help.inc';
 
 /**
@@ -9,7 +13,7 @@ function dru_slack_menu() {
 
   $items = [];
 
-  // Настройки модуля
+  // Настройки модуля.
   $items['admin/config/dru_slack/settings'] = [
     'title' => t('Slack Settings'),
     'page callback' => 'drupal_get_form',
@@ -19,7 +23,7 @@ function dru_slack_menu() {
     'file' => 'inc/admin.inc',
   ];
 
-  // Страница бейджа
+  // Страница бейджа.
   $items['slack/badge/%/badge.svg'] = [
     'page callback' => 'dru_slack_badge',
     'page arguments' => [2],
@@ -28,7 +32,7 @@ function dru_slack_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  // Роут для получения команд из Slack
+  // Роут для получения команд из Slack.
   $items['slack/callback/%'] = [
     'page callback' => 'dru_slack_incoming',
     'page arguments' => [2],
@@ -41,7 +45,7 @@ function dru_slack_menu() {
 }
 
 /**
- * Контроллер для обработки команд с сервера Slack
+ * Контроллер для обработки команд с сервера Slack.
  *
  * @param $method
  *   Параметр из url
@@ -71,13 +75,13 @@ function dru_slack_incoming($method) {
 }
 
 /**
- * Контроллер для показа бейджа
+ * Контроллер для показа бейджа.
  *
  * @param $height
  *   Высота бейджа в px
  */
 function dru_slack_badge($height) {
-  $width = intval($height)*6;
+  $width = intval($height) * 6;
   $slack = new slackAPI();
   $badge = $slack->badge();
   $counter = "{$badge['active']}/{$badge['total']}";

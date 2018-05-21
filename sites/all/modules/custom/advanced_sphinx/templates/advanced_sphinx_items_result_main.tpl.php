@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Default theme implementation to item search result.

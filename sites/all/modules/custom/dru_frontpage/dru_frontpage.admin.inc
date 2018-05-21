@@ -1,9 +1,13 @@
 <?php
+
 /**
  * @file
  * Administer module dru_frontpage.module.
  */
- 
+
+/**
+ *
+ */
 function dru_frontpage_admin_settings($form, &$form_state) {
   $form['dru_frontpage_max_count'] = array(
     '#type' => 'textfield',

@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implements hook_menu_alter().
  */
 function dru_comments_menu_alter(&$items) {

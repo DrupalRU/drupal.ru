@@ -1,8 +1,8 @@
 <?php
+
 /**
  * @file
  */
-
 
 /**
  * Implements hook_filter_info().
@@ -35,11 +35,11 @@ function user_filter_filter_process($text) {
       $name = $user->name;
       $patterns[] = "/([^\S]|^)([@]\b$name\b)/ui";
       $replacements[] = '${1}' . l("@$name", "user/$uid", [
-          'attributes' => [
-            'class'     => ['user_filter'],
-            'data-user' => $uid,
-          ],
-        ]);
+        'attributes' => [
+          'class'     => ['user_filter'],
+          'data-user' => $uid,
+        ],
+      ]);
     }
 
     $text = user_filter_replace_users($patterns, $replacements, $text);
@@ -51,9 +51,11 @@ function user_filter_filter_process($text) {
 /**
  * Replace mentions.
  *
- * @param array  $patterns
- * @param array  $replacements Replacements.
- * @param string $text         Input value.
+ * @param array $patterns
+ * @param array $replacements
+ *   Replacements.
+ * @param string $text
+ *   Input value.
  *
  * @return string
  */
@@ -77,8 +79,9 @@ function user_filter_mention($text) {
 
   if ($matches) {
     $matches = array_map(function ($match) {
-      if (isset($match[2]))
+      if (isset($match[2])) {
         unset($match[2]);
+      }
       return $match;
     }, $matches);
 
@@ -91,7 +94,8 @@ function user_filter_mention($text) {
 /**
  * Fetching users from DB.
  *
- * @param array $matches Users names.
+ * @param array $matches
+ *   Users names.
  *
  * @return array
  */

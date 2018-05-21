@@ -1,11 +1,15 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implements hook_schema().
  */
 function dru_tnx_schema() {
 
-  // Tnx's table
+  // Tnx's table.
   $schema['tnx'] = [
     'description' => 'Thanks',
     'fields'      => [
@@ -37,7 +41,7 @@ function dru_tnx_schema() {
     'primary key' => ['id'],
   ];
 
-  // Statistic table
+  // Statistic table.
   $schema['tnx_stat'] = [
     'description' => 'Thanks statistic',
     'fields'      => [
@@ -138,7 +142,7 @@ function dru_tnx_update_7001(&$sandbox) {
     $sandbox['max_execution'] = 10;
   }
 
-  // Phase #1
+  // Phase #1.
   if (!isset($sandbox['#finished']) && !isset($sandbox['results'])) {
     $query = db_select('tnx', 't')
       ->fields('t')
@@ -149,8 +153,7 @@ function dru_tnx_update_7001(&$sandbox) {
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
 
-
-  // Phase #2
+  // Phase #2.
   if (!isset($sandbox['#finished']) && !isset($sandbox['data'])) {
     $sandbox['data'] = [
       'node'    => [],
@@ -175,8 +178,7 @@ function dru_tnx_update_7001(&$sandbox) {
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
 
-
-  // Phase #3
+  // Phase #3.
   if (
     !isset($sandbox['#finished']) &&
     !empty($sandbox['delete']) &&
@@ -186,7 +188,8 @@ function dru_tnx_update_7001(&$sandbox) {
     try {
       db_query("DELETE FROM tnx WHERE id IN (" . implode(",",
           $sandbox['delete']) . ")");
-    } catch (\Exception $exception) {
+    }
+    catch (\Exception $exception) {
       throw new \Exception('Can\'t delete doubles!');
     }
 
@@ -203,8 +206,7 @@ function dru_tnx_update_7001(&$sandbox) {
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
 
-
-  // Phase #4
+  // Phase #4.
   if (!isset($sandbox['#finished']) && !isset($sandbox['nodes'])) {
     if (!empty($sandbox['data']['node'])) {
       try {
@@ -212,7 +214,8 @@ function dru_tnx_update_7001(&$sandbox) {
           "SELECT nid, uid FROM node WHERE nid IN (" . implode(",",
             array_keys($sandbox['data']['node'])) . ")"
         )->fetchAllKeyed();
-      } catch (\Exception $exception) {
+      }
+      catch (\Exception $exception) {
         throw new \Exception('Can\'t load all nodes!');
       }
     }
@@ -221,8 +224,7 @@ function dru_tnx_update_7001(&$sandbox) {
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
 
-
-  // Phase #5
+  // Phase #5.
   if (!isset($sandbox['#finished']) && !isset($sandbox['comments'])) {
     if (!empty($sandbox['data']['comment'])) {
       try {
@@ -230,7 +232,8 @@ function dru_tnx_update_7001(&$sandbox) {
           "SELECT cid, uid FROM comment WHERE cid IN (" . implode(",",
             array_keys($sandbox['data']['comment'])) . ")"
         )->fetchAllKeyed();
-      } catch (\Exception $exception) {
+      }
+      catch (\Exception $exception) {
         throw new \Exception('Can\'t load all nodes!');
       }
     }
@@ -239,8 +242,7 @@ function dru_tnx_update_7001(&$sandbox) {
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
 
-
-  // Phase #6
+  // Phase #6.
   if (!isset($sandbox['#finished']) && !isset($sandbox['nodes_complete'])) {
     foreach ($sandbox['nodes'] as $id => $uid) {
       if (!isset($sandbox['users'][$uid])) {
@@ -260,8 +262,7 @@ function dru_tnx_update_7001(&$sandbox) {
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
 
-
-  // Phase #7
+  // Phase #7.
   if (!isset($sandbox['#finished']) && !isset($sandbox['comments_complete'])) {
     foreach ($sandbox['comments'] as $id => $uid) {
       if (!isset($sandbox['users'][$uid])) {
@@ -281,8 +282,7 @@ function dru_tnx_update_7001(&$sandbox) {
     $sandbox['#finished'] = $sandbox['last'] / $sandbox['phases'];
   }
 
-
-  // Phase #8
+  // Phase #8.
   if (!isset($sandbox['#finished']) && !isset($sandbox['users_update'])) {
     if (!isset($sandbox['users_update_phases'])) {
       $sandbox['phases'] += (ceil(count($sandbox['users']) / $sandbox['max_execution']) - 1);
@@ -319,8 +319,7 @@ function dru_tnx_update_7001(&$sandbox) {
     }
   }
 
-
-  // Phase #9
+  // Phase #9.
   if (!isset($sandbox['#finished']) && !isset($sandbox['data_nodes_complete'])) {
     if (!isset($sandbox['data_nodes_complete_phases'])) {
       $sandbox['phases'] += (ceil(count($sandbox['data']['node']) / $sandbox['max_execution']) - 1);
@@ -350,8 +349,7 @@ function dru_tnx_update_7001(&$sandbox) {
     }
   }
 
-
-  // Phase #10
+  // Phase #10.
   if (!isset($sandbox['#finished']) && !isset($sandbox['data_comment_complete'])) {
     if (!isset($sandbox['data_comment_complete_phases'])) {
       $sandbox['phases'] += (ceil(count($sandbox['data']['comment']) / $sandbox['max_execution']) - 1);

@@ -1,7 +1,11 @@
 <?php
 
 /**
- * Callback dru_tnx_entity
+ * @file
+ */
+
+/**
+ * Callback dru_tnx_entity.
  *
  * @param string $tnx_type
  * @param string $entity_type
@@ -42,7 +46,7 @@ function dru_tnx_entity($tnx_type, $entity_type, $ajax, $entity, $token) {
 }
 
 /**
- * dru_tnx_callback
+ * Dru_tnx_callback.
  */
 function dru_tnx_callback($ajax, $vars) {
 

@@ -1,8 +1,8 @@
 <?php
+
 /**
  * @file
  */
-
 
 /**
  * Implements hook_install().
@@ -131,7 +131,6 @@ function dru_tickets_schema() {
 
   return $schema;
 }
-
 
 /**
  * Implements hook_uninstall().

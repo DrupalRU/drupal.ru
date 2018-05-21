@@ -1,26 +1,30 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implement hook_preprocess_node().
  */
-function dru_solve_mark_preprocess_node (&$vars) {
+function dru_solve_mark_preprocess_node(&$vars) {
   $vars['title'] = get_dru_solve_mark($vars['title']);
 }
 
 /**
- * get_dru_solve_mark().
+ * Get_dru_solve_mark().
  */
-function get_dru_solve_mark($title){
-  if(!empty($title)) {
-    
+function get_dru_solve_mark($title) {
+  if (!empty($title)) {
+
     preg_match_all('/\[(Решено|Решен|Solve|Solved)\]/ui', $title, $matches);
-    foreach($matches[0] as $match){
+    foreach ($matches[0] as $match) {
       $match = substr($match, 0, strlen($match) - 1);
       $match = substr($match, 1, strlen($match));
       $solve = '<span class="dru-solve-mark">Решено</span>';
       $title = preg_replace('/\[' . $match . '\]/ui', $solve, $title);
     }
-    
+
     return $title;
   }
 }

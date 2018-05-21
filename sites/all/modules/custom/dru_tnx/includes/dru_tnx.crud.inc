@@ -2,13 +2,13 @@
 
 /**
  * @file
- *   Data Base functionality
+ * Data Base functionality.
  */
 
 /**
  * Implementation dru_tnx_get_user_statistic().
  *
- * Return user statistic object
+ * Return user statistic object.
  */
 function dru_tnx_get_user_statistic($uid) {
   $statistic = db_select('tnx_stat', 't')
@@ -35,9 +35,12 @@ function dru_tnx_get_user_statistic($uid) {
  *
  * Return Boolean TRUE if user already have thanked.
  *
- * @param string $entity_type Entity type ("node" or "comment").
- * @param int    $entity_id   Entity ID (NID or CID).
- * @param int    $uid         Thanked user ID (UID).
+ * @param string $entity_type
+ *   Entity type ("node" or "comment").
+ * @param int $entity_id
+ *   Entity ID (NID or CID).
+ * @param int $uid
+ *   Thanked user ID (UID).
  *
  * @return bool
  */
@@ -71,7 +74,7 @@ function dru_tnx_insert_tnx($vars) {
  * Counting thanks statistic.
  *
  * @param array $vars
- * @param int   $add
+ * @param int $add
  *
  * @return int
  */
@@ -88,7 +91,7 @@ function dru_tnx_counting_tnx_statistic($vars, $add = 1) {
  * Counting user statistic.
  *
  * @param array $vars
- * @param int   $add
+ * @param int $add
  *
  * @return int
  */
@@ -117,34 +120,40 @@ function dru_tnx_delete_tnx($vars) {
 }
 
 /**
- * Callback dru_tnx_data
+ * Callback dru_tnx_data.
  */
 function dru_tnx_data($vars) {
 
-  // Counting tnx by entity
+  // Counting tnx by entity.
   $tnx_count = $vars['entity']->tnx;
 
   if ($vars['tnx'] == 'tnx') {
     $tnx_count++;
 
-    dru_tnx_insert_tnx($vars);              // Add tnx
-    dru_tnx_counting_tnx_statistic($vars);  // Count tnx
-    dru_tnx_counting_user_statistic($vars); // Count user tnx
+    // Add tnx.
+    dru_tnx_insert_tnx($vars);
+    // Count tnx.
+    dru_tnx_counting_tnx_statistic($vars);
+    // Count user tnx.
+    dru_tnx_counting_user_statistic($vars);
   }
   else {
     $tnx_count--;
 
-    dru_tnx_delete_tnx($vars); // Delete tnx
+    // Delete tnx.
+    dru_tnx_delete_tnx($vars);
 
     if ($vars['entity']->tnx) {
-      dru_tnx_counting_tnx_statistic($vars, 0);  // Count tnx
-      dru_tnx_counting_user_statistic($vars, 0); // Count user tnx
+      // Count tnx.
+      dru_tnx_counting_tnx_statistic($vars, 0);
+      // Count user tnx.
+      dru_tnx_counting_user_statistic($vars, 0);
     }
   }
 
-  // Write tnx count to entity
+  // Write tnx count to entity.
   $query = db_update($vars['type']);
   $query->condition($vars['id_type'], $vars['id'])
-        ->fields(['tnx' => $tnx_count])
-        ->execute();
+    ->fields(['tnx' => $tnx_count])
+    ->execute();
 }

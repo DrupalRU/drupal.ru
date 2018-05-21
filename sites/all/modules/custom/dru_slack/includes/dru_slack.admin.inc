@@ -1,7 +1,11 @@
 <?php
 
 /**
- * Slack API admin settings form
+ * @file
+ */
+
+/**
+ * Slack API admin settings form.
  */
 function dru_slack_admin() {
 
@@ -13,7 +17,8 @@ function dru_slack_admin() {
       $chanelsForms['inline'][] = _dru_slack_init_chanel($key, $val, $i);
       $i++;
     }
-  } else {
+  }
+  else {
     $chanelsForms['inline'][] = _dru_slack_init_chanel('', '', $i);
   }
   $chanelsForms['#prefix'] = '<div id="chanels"><h2>' . t('Slack chanels') . '</h2>';
@@ -60,7 +65,7 @@ function dru_slack_admin() {
 }
 
 /**
- * Формирует массив для инлайново формсета
+ * Формирует массив для инлайново формсета.
  *
  * @param $label
  *   Название канала
@@ -114,14 +119,13 @@ function _dru_slack_init_chanel($label, $value, $i) {
   return $output;
 }
 
-
 /**
- * Возвращает подготовленный массив для сохранения в переменную каналов
+ * Возвращает подготовленный массив для сохранения в переменную каналов.
  *
  * @param $values
  *   массив значений из $form_state
  * @param int $trigger
- *   Указатель на удаляемый элемент
+ *   Указатель на удаляемый элемент.
  *
  * @return array
  */
@@ -139,9 +143,8 @@ function _dru_slack_chanels_to_save($values, $trigger = -1) {
   return $data;
 }
 
-
 /**
- * Добавление инлайновой формы в основную
+ * Добавление инлайновой формы в основную.
  *
  * @param $form
  * @param $form_state
@@ -154,7 +157,7 @@ function dru_slack_add_chanel($form, &$form_state) {
 }
 
 /**
- * Удаление инлановой формы из основной
+ * Удаление инлановой формы из основной.
  *
  * @param $form
  * @param $form_state
@@ -174,9 +177,8 @@ function dru_slack_remove_chanel($form, &$form_state) {
 
 }
 
-
 /**
- * Отправка тестового сообщения в Slack
+ * Отправка тестового сообщения в Slack.
  *
  * @param $form
  * @param $form_state
@@ -198,7 +200,7 @@ function dru_slack_send_test_message($form, &$form_state) {
 }
 
 /**
- * Slack API admin form submit
+ * Slack API admin form submit.
  *
  * @param $form
  * @param $form_state

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Primarily Drupal hooks and global API functions to manipulate sphinx.
@@ -244,7 +245,6 @@ function advanced_sphinx_get_memory_limit() {
   return $memory_limit;
 }
 
-
 /**
  * Filter body value to plain text.
  */
@@ -272,7 +272,7 @@ function advanced_sphinx_get_node_text_fast(&$node) {
  * Count comments for node.
  */
 function advanced_sphinx_get_node_count($nid) {
-  $result = new stdClass;
+  $result = new stdClass();
   $result->comment_count = db_select('comment', 'comment')
     ->condition('nid', $nid, '=')
     ->countQuery()
@@ -295,7 +295,6 @@ function advanced_sphinx_get_data_sphinxmain($nid) {
   return $result;
 }
 
-
 /**
  * Return information about node.
  */
@@ -310,7 +309,6 @@ function advanced_sphinx_get_node_info($nid) {
   // $result->taxonomy = taxonomy_node_get_terms($result);
   return $result;
 }
-
 
 /**
  * Insert data in sphinx log and redirect to node.
@@ -348,7 +346,6 @@ function advanced_sphinx_log($nid) {
   drupal_goto('node/' . $nid);
 }
 
-
 /**
  * Create directory hierarchy for sphinx config and sphinx config file
  * if access available.
@@ -368,7 +365,6 @@ function advanced_sphinx_create_config_dir() {
     advanced_sphinx_create_config_file($dirs['home']);
   }
 }
-
 
 /**
  * Create sphinx config file if access available.

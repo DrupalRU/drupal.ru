@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implements hook_schema().
  */
 function dru_bookmark_schema() {
@@ -45,7 +49,7 @@ function dru_bookmark_schema() {
       'vid' => array('vid'),
     ),
   );
-  
+
   return $schema;
 }
 
@@ -54,6 +58,6 @@ function dru_bookmark_schema() {
  */
 function dru_bookmark_uninstall() {
   drupal_uninstall_schema('dru_bookmark');
-  
+
   cache_clear_all();
 }

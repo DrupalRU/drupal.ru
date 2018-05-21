@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Dru_frontpage module.
@@ -75,15 +76,15 @@ function dru_frontpage_preprocess_node(&$variables) {
 function dru_frontpage_list() {
   $query = db_select('node', 'n', array('target' => 'slave'));
 
-  if($types = variable_get('dru_frontpage_node_type')){
+  if ($types = variable_get('dru_frontpage_node_type')) {
     $in_types = array();
 
-    foreach($types as $type => $val){
-      if($val){
+    foreach ($types as $type => $val) {
+      if ($val) {
         $in_types[] = $type;
       }
     }
-    if(!empty($in_types)){
+    if (!empty($in_types)) {
       $query->condition('n.type', $in_types, 'IN');
     }
   }
@@ -101,13 +102,14 @@ function dru_frontpage_list() {
   if (!empty($nids)) {
 
     $nodes = node_load_multiple($nids);
-    foreach($nodes as $key => $node){
+    foreach ($nodes as $key => $node) {
       $history = _forum_user_last_visit($node->nid);
       $node->new_replies = comment_num_new($node->nid, $history);
       $node->new = $node->new_replies || (isset($node->last_comment_timestamp) && $node->last_comment_timestamp > $history);
-      if($node->new){
+      if ($node->new) {
         $node->url = url("node/$node->nid", array('query' => comment_new_page_count($node->comment_count, $node->new_replies, $node), 'fragment' => 'new'));
-      }else{
+      }
+      else {
         $node->url = url("node/$node->nid");
       }
 
@@ -134,7 +136,8 @@ function dru_frontpage_list() {
       '#attributes' => array('class' => array('frontpage_links')),
     );
     drupal_set_title('');
-  }else{
+  }
+  else {
     drupal_set_title('', PASS_THROUGH);
     $default_message = '<p>' . t('No nodes has been promoted yer.') . '</p>';
     $build['default_message'] = array(

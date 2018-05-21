@@ -6,4 +6,3 @@ package = Moderation
 dependencies[] = dru_tickets
 dependencies[] = dru_claim
 php = 5.4
-

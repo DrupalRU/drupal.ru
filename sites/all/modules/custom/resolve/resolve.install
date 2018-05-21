@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Implements hook_uninstall().
  */
 function resolve_uninstall() {
@@ -8,7 +12,6 @@ function resolve_uninstall() {
     variable_del('dru_can_resolved_' . $type->type);
   }
 }
-
 
 /**
  * Implements hook_schema().

@@ -3,12 +3,12 @@
 }
 
 .inner_poll_question {
-  float: left; 
+  float: left;
   width: 150px;
-} 
+}
 
 .inner_poll_result {
-  float: left; 
+  float: left;
   border: 0;
   width: 50px;
 }
@@ -55,6 +55,7 @@
 .inner_poll_line {
   margin-top: .7em;
 }
-.inner_poll .total_votes, .inner_poll .abs_votes {
+.inner_poll .total_votes,
+.inner_poll .abs_votes {
   text-align: right;
 }

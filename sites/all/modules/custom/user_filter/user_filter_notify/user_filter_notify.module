@@ -211,10 +211,10 @@ function user_filter_notify($entity, $type) {
         $message = token_replace($pattern['message'], array('user' => $user, 'author' => $author, 'node' => $node, 'comment' => $comment, 'text' => $body));
         $from = variable_get('site_mail', ini_get('sendmail_from'));
         drupal_mail('user_filter_notify', 'user_filter_notify', $user->mail, language_default(), array(
-        'context' => array(
-          'subject' => $theme,
-          'message' => $message,
-        ), $from,
+          'context' => array(
+            'subject' => $theme,
+            'message' => $message,
+          ), $from,
         ));
       }
     }

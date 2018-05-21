@@ -16,7 +16,7 @@ function validate_api_permission() {
     'validate api administer' => [
       'title' => t('Administer Validate API'),
       'description' => t('Allow users to administer Validate API settings'),
-      'restrict access' => true,
+      'restrict access' => TRUE,
     ],
     'validate api skip validation' => [
       'title' => t('Skip validation'),
@@ -66,7 +66,6 @@ function validate_api_invoke_all_validators() {
   return $validators;
 }
 
-
 /**
  * Implements hook_form().
  */
@@ -92,7 +91,7 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
       $variable_name = 'validate_api_' . $node_type;
       $node_settings = variable_get($variable_name);
       if (empty($node_settings)) {
-        $node_settings['settings'] = false;
+        $node_settings['settings'] = FALSE;
       }
 
       $entity_fields = validate_api_entity_fields($node_fields, $field_types);
@@ -101,8 +100,8 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
       $form['validation'] = [
         '#type' => 'fieldset',
         '#title' => t('Validate API'),
-        '#collapsible' => true,
-        '#collapsed' => true,
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
         '#group' => 'additional_settings',
         'validate_settings' => [
           '#type' => 'checkbox',
@@ -114,7 +113,7 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
           '#states' => [
             'visible' => [
               'input[name="validate_settings"]' => [
-                'checked' => true,
+                'checked' => TRUE,
               ],
             ],
           ],
@@ -125,7 +124,7 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
           '#states' => [
             'visible' => [
               'input[name="validate_settings"]' => [
-                'checked' => true,
+                'checked' => TRUE,
               ],
             ],
           ],
@@ -137,8 +136,8 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
       $form['validation']['validate_descriptions']['description'] = [
         '#type' => 'fieldset',
         '#title' => t('Validators'),
-        '#collapsible' => true,
-        '#collapsed' => true,
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
         'all_validators' => [
           '#markup' => $vdesc_output,
         ],
@@ -148,8 +147,8 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
         $name = $field['key'];
         $form['validation']['validate_items']['fields'][$name] = [
           '#type' => 'fieldset',
-          '#collapsible' => true,
-          '#collapsed' => false,
+          '#collapsible' => TRUE,
+          '#collapsed' => FALSE,
           '#title' => $field['name'],
         ];
         $current_validators = [];
@@ -175,7 +174,7 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
       $comment_settings = variable_get($variable_name);
 
       if (empty($comment_settings)) {
-        $comment_settings['settings'] = false;
+        $comment_settings['settings'] = FALSE;
       }
 
       if ($form['comment']['comment']['#default_value'] !== 1) {
@@ -190,12 +189,12 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
 
         $form['comment']['comment_validate'] = [
           '#type' => 'fieldset',
-          '#collapsible' => false,
+          '#collapsible' => FALSE,
           '#title' => t('Comment validate'),
           '#states' => [
             'visible' => [
               'input[name="validate_comments"]' => [
-                'checked' => true,
+                'checked' => TRUE,
               ],
             ],
           ],
@@ -219,8 +218,8 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
 
           $form['comment']['comment_validate'][$field_info['key']] = [
             '#type' => 'fieldset',
-            '#collapsible' => true,
-            '#collapsed' => false,
+            '#collapsible' => TRUE,
+            '#collapsed' => FALSE,
             '#title' => $field_info['name'],
             $field_info['key'] . '_comment_validators' => [
               '#type' => 'checkboxes',
@@ -233,8 +232,8 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
         $output = validate_api_validator_description();
         $form['comment']['comment_validate']['validator_descriptions'] = [
           '#type' => 'fieldset',
-          '#collapsible' => true,
-          '#collapsed' => true,
+          '#collapsible' => TRUE,
+          '#collapsed' => TRUE,
           '#title' => t('Validators'),
           'validators' => [
             '#markup' => $output,
@@ -253,7 +252,7 @@ function validate_api_form_alter(&$form, $form_state, $form_id) {
   //   if (!empty($comment_settings['validate'])) {
   //     $form['#validate'][] = 'validate_api_comment_validate';
   //   }
-  // }
+  // }.
 }
 
 /**

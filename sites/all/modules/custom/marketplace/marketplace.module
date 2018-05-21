@@ -1,9 +1,9 @@
 <?php
+
 /**
  * @file
  * Marketplacd module.
  */
-
 
 /**
  * Implements hook_node_info().
@@ -70,7 +70,7 @@ function marketplace_theme($existing, $type, $theme, $path) {
  * Implement hook_preprocess_node().
  */
 function marketplace_preprocess_node(&$variables) {
-  //  drupal_set_message('<pre>' . print_r($variables, true) . '</pre>');
+  // drupal_set_message('<pre>' . print_r($variables, true) . '</pre>');.
   if ($variables['type'] == 'organization' && $variables['elements']['#view_mode'] == 'teaser') {
     $variables['theme_hook_suggestions'][] = "node__organization__teaser";
   }
@@ -121,7 +121,6 @@ function marketplace_block_save($delta = '', $edit = array()) {
     variable_set('organizations_block_count', $edit['organizations_block_count']);
   }
 }
-
 
 /**
  * Implements hook_block_view().
@@ -198,7 +197,6 @@ function marketplace_form($node, $form_state) {
 /**
  * Implement hook_validate().
  */
-
 function marketplace_validate($node, $form, &$form_state) {
   $logo_directory = file_default_scheme() . '://' . variable_get('marketplace_org_path', 'organization');
 
@@ -218,7 +216,6 @@ function marketplace_validate($node, $form, &$form_state) {
 /**
  * Implement hook_load().
  */
-
 function marketplace_load($nodes) {
   $vids = array();
   foreach ($nodes as $node) {
@@ -258,7 +255,6 @@ function marketplace_insert($node) {
 /**
  * Implement hook_update().
  */
-
 function marketplace_update($node) {
 
   $fid = 0;
@@ -281,7 +277,7 @@ function marketplace_update($node) {
   db_merge('organizations')
     ->key(array(
       'nid' => $node->nid,
-      'vid' => $node->vid
+      'vid' => $node->vid,
     ))
     ->fields(array(
       'website' => $node->website,
@@ -294,7 +290,6 @@ function marketplace_update($node) {
 /**
  * Implement hook_view().
  */
-
 function marketplace_view($node, $view_mode, $langcode = NULL) {
   drupal_add_css(drupal_get_path('module', 'marketplace') . '/marketplace.css');
 
@@ -315,18 +310,20 @@ function marketplace_view($node, $view_mode, $langcode = NULL) {
   );
 
   $website = !empty($node->website) ? $node->website : NULL;
-  if ($website && !valid_url($website, true)) {
+  if ($website && !valid_url($website, TRUE)) {
     $website = 'http://' . $website;
   }
   $node->content['website'] = !$website ? '' : array(
-    '#markup' => l($website, $website, array('attributes' => array(
-      'rel' => 'nofollow',
-      'target' => '_blank',
-    ))),
+    '#markup' => l($website, $website, array(
+      'attributes' => array(
+        'rel' => 'nofollow',
+        'target' => '_blank',
+      ),
+    )),
     '#weight' => 1,
   );
 
-  $node->content['address'] = empty($node->address) ? null : array(
+  $node->content['address'] = empty($node->address) ? NULL : array(
     '#markup' => check_plain($node->address),
     '#weight' => 1,
   );

@@ -51,7 +51,7 @@ function antinoob_validate_form_validate_api_form_settings_alter(&$form) {
 
   $form['container']['antinoob_validate'] = [
     '#type' => 'fieldset',
-    '#collapsible' => false,
+    '#collapsible' => FALSE,
     '#title' => t('Antinoob settings'),
     '#group' => 'group_tabs',
   ];
@@ -85,11 +85,11 @@ function antinoob_validate_validate_api_form_submit($form, &$form_state) {
  * Disallowed validation.
  */
 function antinoob_disallowed_words_callback($validate_value) {
-  $status = false;
+  $status = FALSE;
   $matches = [];
   $forbidden_words = [];
 
-  foreach (explode(',', variable_get('antinoob_validate_forbidden_words')) as $word){
+  foreach (explode(',', variable_get('antinoob_validate_forbidden_words')) as $word) {
     $word = trim($word);
     if (!empty($word)) {
       $forbidden_words[] = $word;
@@ -112,7 +112,7 @@ function antinoob_disallowed_words_callback($validate_value) {
  * Exclamation validation.
  */
 function antinoob_exclamation_symbol_callback($validate_value) {
-  $status = false;
+  $status = FALSE;
   if (preg_match('/!!/', $validate_value)) {
     $status = t('Do not use more than one exclamation point in a row.');
   }
@@ -124,11 +124,11 @@ function antinoob_exclamation_symbol_callback($validate_value) {
  * Caps validation.
  */
 function antinoob_caps_lock_callback($validate_value) {
-  $status = false;
+  $status = FALSE;
   $matches = [];
   $forbidden_words = [];
 
-  foreach (explode(',', variable_get('antinoob_validate_caps_words')) as $word){
+  foreach (explode(',', variable_get('antinoob_validate_caps_words')) as $word) {
     $word = trim($word);
     if (!empty($word)) {
       $forbidden_words[] = $word;

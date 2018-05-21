@@ -262,12 +262,12 @@ function advanced_sphinx_check_connection_page() {
   }
   else {
     $steps['connection']['messages'][] = t('ERROR') . ' - ' . t('Unable to connect to your Sphinx searchd daemon.') . theme('item_list', array(
-        'items' => array(
-          t('searchd host: %host', array('%host' => variable_get('advanced_sphinx_searchd_host', 'localhost'))),
-          t('searchd port: %port', array('%port' => (int) variable_get('advanced_sphinx_searchd_port', '3306'))),
-          t('Sphinx message: %message', array('%message' => $advanced_sphinx->GetLastError())),
-        ),
-      ));
+      'items' => array(
+        t('searchd host: %host', array('%host' => variable_get('advanced_sphinx_searchd_host', 'localhost'))),
+        t('searchd port: %port', array('%port' => (int) variable_get('advanced_sphinx_searchd_port', '3306'))),
+        t('Sphinx message: %message', array('%message' => $advanced_sphinx->GetLastError())),
+      ),
+    ));
   }
 
   // Check distributed index.
@@ -288,8 +288,8 @@ function advanced_sphinx_check_connection_page() {
     $sphinx_results = $advanced_sphinx->Query('', $advanced_sphinx_query_index);
     if (!$sphinx_results) {
       $steps['query']['messages'][] = t('ERROR') . ' - ' . t('Search query failed.') . theme('item_list', array(
-          'items' => array(t('Sphinx message: %message', array('%message' => $advanced_sphinx->GetLastError()))),
-        ));
+        'items' => array(t('Sphinx message: %message', array('%message' => $advanced_sphinx->GetLastError()))),
+      ));
     }
     else {
       if (!empty($sphinx_results['matches'])) {
@@ -303,24 +303,24 @@ function advanced_sphinx_check_connection_page() {
       }
 
       $steps['query']['messages'][] = t('OK') . ' - ' . t('Test passed successfully. Sphinx results summary follow:') . theme('item_list', array(
-          'items' => array(
-            t('Query execution time: @time seconds', array('@time' => $sphinx_results['time'])),
-            t('Total results found: @total', array('@total' => $sphinx_results['total_found'])),
-            t('Total results available: @total', array('@total' => $sphinx_results['total'])),
-            t('Last indexed node: @nid @updated', array(
-              '@nid' => $nid,
-              '@updated' => $updated,
-            )),
-          ),
-        ));
+        'items' => array(
+          t('Query execution time: @time seconds', array('@time' => $sphinx_results['time'])),
+          t('Total results found: @total', array('@total' => $sphinx_results['total_found'])),
+          t('Total results available: @total', array('@total' => $sphinx_results['total'])),
+          t('Last indexed node: @nid @updated', array(
+            '@nid' => $nid,
+            '@updated' => $updated,
+          )),
+        ),
+      ));
     }
 
     $warning = $advanced_sphinx->GetLastWarning();
 
     if (!empty($warning)) {
       $steps['query']['messages'][] = t('WARNING') . ' - ' . t('There was a problem while trying to resolve the query.') . theme('item_list', array(
-          'items' => array(t('Sphinx message: %message', array('%message' => $warning))),
-        ));
+        'items' => array(t('Sphinx message: %message', array('%message' => $warning))),
+      ));
     }
   }
 
@@ -340,17 +340,17 @@ function advanced_sphinx_check_connection_page() {
 
     if (!$excerpt_results) {
       $steps['excerpts']['messages'][] = t('ERROR') . ' - ' . t('Unable to build excerpts.') . theme('item_list', array(
-          'items' => array(t('Sphinx message: %message', array('%message' => $advanced_sphinx->GetLastError()))),
-        ));
+        'items' => array(t('Sphinx message: %message', array('%message' => $advanced_sphinx->GetLastError()))),
+      ));
     }
     else {
       $steps['excerpts']['messages'][] = t('OK') . ' - ' . t('Test passed successfully. Sphinx results summary follow:') . theme('item_list', array(
-          'items' => array(
-            t('Sample text: <code>@sample</code>', array('@sample' => $excerpt_samples[0])),
-            t('Keywords: <code>@keywords</code>', array('@keywords' => $excerpt_keywords)),
-            t('Result: <code>@result</code>', array('@result' => $excerpt_results[0])),
-          ),
-        ));
+        'items' => array(
+          t('Sample text: <code>@sample</code>', array('@sample' => $excerpt_samples[0])),
+          t('Keywords: <code>@keywords</code>', array('@keywords' => $excerpt_keywords)),
+          t('Result: <code>@result</code>', array('@result' => $excerpt_results[0])),
+        ),
+      ));
     }
   }
 

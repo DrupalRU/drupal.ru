@@ -215,10 +215,10 @@ function resolve_preprocess_alttracker(&$variables) {
  * Implements hook_preprocess_HOOK().
  */
 function resolve_preprocess_page(&$variables) {
-  //  if (isset($variables['node']) && is_object($variables['node'])) {
+  // If (isset($variables['node']) && is_object($variables['node'])) {
   //    $node = &$variables['node'];
   //    $node->title = resolve_add_mark($node, !empty($node->resolved)) . $node->title;
-  //  }
+  //  }.
 }
 
 /**
@@ -267,7 +267,8 @@ function resolve_unsolved_node_ajax_callback($node, $comment, $token) {
       ->condition('nid', $node->nid)
       ->condition('cid', $comment->cid)
       ->execute();
-  } catch (Exception $e) {
+  }
+  catch (Exception $e) {
     $transaction->rollback();
     watchdog_exception('resolve', $e, 'The comment can not be unsolved.', array(), WATCHDOG_ERROR);
   }
@@ -332,7 +333,7 @@ function resolve_token_to_arg() {
  * @param string $title
  *   Some title of node or page.
  * @param bool $resolved
- *   If set to TRUE, then the flag says: "Hey, the node is resolved!"
+ *   If set to TRUE, then the flag says: "Hey, the node is resolved!".
  */
 function resolve_add_mark($node, $resolved) {
   return theme('resolved', array(
@@ -415,6 +416,9 @@ function theme_resolved($variables) {
   return $variables['resolved'] == RESOLVE_IS_RESOLVED ? '[' . t('Resolved') . '] ' : '';
 }
 
+/**
+ *
+ */
 function resolved_node_can_be_resolved($node) {
   return isset($node->type) ? variable_get(RESOLVE_CAN . '_' . $node->type) : FALSE;
 }

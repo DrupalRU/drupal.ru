@@ -205,8 +205,8 @@ function _dru_claim_replace_node_ajax_command($id, $type) {
   $is_full = $view_mode == 'full';
   $node = node_load($id, NULL, TRUE);
   // Drupal renders the node incorrectly, if node_is_page() returns false.
-  // This hack is
-  $_GET['q'] = $is_full ? 'node/'. $node->nid : $_GET['q'];
+  // This hack is.
+  $_GET['q'] = $is_full ? 'node/' . $node->nid : $_GET['q'];
   $node_view = node_view($node, $view_mode);
   $node_render = drupal_render($node_view);
   // Return bask right path.

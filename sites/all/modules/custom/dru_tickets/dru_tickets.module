@@ -313,7 +313,8 @@ function dru_tickets_theme($existing, $type, $theme, $path) {
 /**
  * Check acces to change ticket verdict.
  *
- * @param object $node Ticked node object.
+ * @param object $node
+ *   Ticked node object.
  *
  * @return bool
  */
@@ -345,7 +346,7 @@ function dru_tickets_preprocess_node(&$vars) {
 }
 
 /**
- * Implements hook_mail
+ * Implements hook_mail.
  */
 function dru_tickets_mail($key, &$message, $params) {
   if ($key == 'dru_tickets') {
@@ -379,10 +380,11 @@ function dru_tickets_delete($node) {
 
 /**
  * Implements hook_node_access().
-*/
+ */
 function dru_tickets_node_access($node, $op, $account) {
-  // issue #484: Скрыть жалобы от не авторизованных пользователей
-  $type = is_object($node) ? $node->type : $node; // https://www.drupal.org/project/drupal/issues/1698532
+  // Issue #484: Скрыть жалобы от не авторизованных пользователей
+  // https://www.drupal.org/project/drupal/issues/1698532
+  $type = is_object($node) ? $node->type : $node;
   if ($type == 'ticket' && !user_is_logged_in()) {
     return NODE_ACCESS_DENY;
   }

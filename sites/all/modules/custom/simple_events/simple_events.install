@@ -1,9 +1,9 @@
 <?php
+
 /**
  * @file
  * Simple_event install file.
  */
-
 
 /**
  * Implements hook_install().
@@ -75,7 +75,6 @@ function _simple_event_installed_instances() {
     ),
   );
 }
-
 
 /**
  * Implements hook_schema().
@@ -161,7 +160,6 @@ function simple_events_schema() {
   );
   return $schema;
 }
-
 
 /**
  * Implements hook_uninstall().

@@ -2,7 +2,7 @@
 
 /**
  * @file
- *   Main module file
+ * Main module file.
  */
 
 /**
@@ -43,9 +43,9 @@ function dru_tnx_menu() {
   ];
 
   $items['tnx/node/ajax/%node/%'] = [
-      'delivery callback' => 'ajax_deliver',
-      'type'              => MENU_CALLBACK,
-    ] + $items['tnx/node/nojs/%node/%'];
+    'delivery callback' => 'ajax_deliver',
+    'type'              => MENU_CALLBACK,
+  ] + $items['tnx/node/nojs/%node/%'];
 
   $items['untnx/node/nojs/%node/%'] = [
     'page callback'     => 'dru_tnx_entity',
@@ -57,23 +57,23 @@ function dru_tnx_menu() {
   ];
 
   $items['untnx/node/ajax/%node/%'] = [
-      'delivery callback' => 'ajax_deliver',
-      'type'              => MENU_CALLBACK,
-    ] + $items['tnx/node/nojs/%node/%'];
+    'delivery callback' => 'ajax_deliver',
+    'type'              => MENU_CALLBACK,
+  ] + $items['tnx/node/nojs/%node/%'];
 
   $items['tnx/comment/nojs/%comment/%'] = $items['tnx/node/nojs/%node/%'];
 
   $items['tnx/comment/ajax/%comment/%'] = [
-      'delivery callback' => 'ajax_deliver',
-      'type'              => MENU_CALLBACK,
-    ] + $items['tnx/comment/nojs/%comment/%'];
+    'delivery callback' => 'ajax_deliver',
+    'type'              => MENU_CALLBACK,
+  ] + $items['tnx/comment/nojs/%comment/%'];
 
   $items['untnx/comment/nojs/%comment/%'] = $items['untnx/node/nojs/%node/%'];
 
   $items['untnx/comment/ajax/%comment/%'] = [
-      'delivery callback' => 'ajax_deliver',
-      'type'              => MENU_CALLBACK,
-    ] + $items['untnx/comment/nojs/%comment/%'];
+    'delivery callback' => 'ajax_deliver',
+    'type'              => MENU_CALLBACK,
+  ] + $items['untnx/comment/nojs/%comment/%'];
 
   return $items;
 }
@@ -85,7 +85,7 @@ function dru_tnx_node_view($node, $view_mode) {
   if (dru_tnx_status_by_node_type($node->type) && isset($node->tnx)) {
     $user = $GLOBALS['user'];
 
-    // Add node links
+    // Add node links.
     if (user_access('tnx') && $node->uid !== $user->uid) {
       drupal_add_library('system', 'drupal.ajax');
       $tnx = dru_tnx_get_user_tnx('node', $node->nid, $user->uid);
@@ -163,7 +163,7 @@ function dru_tnx_show($entity, $type) {
       ],
       'counter'     => [
         '#markup' => $count . ' ' . t('Thanks'),
-        '#counter' => $count
+        '#counter' => $count,
       ],
     ];
   }
@@ -177,7 +177,7 @@ function dru_tnx_show($entity, $type) {
  * @return string
  */
 function dru_tnx_get_icon() {
-  // Require theme icon generator
+  // Require theme icon generator.
   $file = DRUPAL_ROOT . '/';
   $file .= drupal_get_path('theme', 'druru');
   $file .= '/theme/icons.inc';
@@ -209,7 +209,7 @@ function dru_tnx_get_icon() {
  *
  * @param string $entity_type
  * @param string $entity_id
- * @param bool   $tnx
+ * @param bool $tnx
  *
  * @return array
  */
@@ -241,7 +241,7 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
 
   $tnx_stats = dru_tnx_get_user_statistic($account->uid);
 
-  // User tnx
+  // User tnx.
   $account->content['summary']['user_tnx'] = [
     '#type'       => 'user_profile_item',
     '#title'      => t('User tnx'),
@@ -263,7 +263,7 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
     '#thx_comment' => $tnx_stats->tnx_comment,
   ];
 
-  // Users tnx
+  // Users tnx.
   $account->content['summary']['users_tnx'] = [
     '#type'       => 'user_profile_item',
     '#title'      => t('Users tnx'),
@@ -292,7 +292,6 @@ function dru_tnx_user_view($account, $view_mode, $langcode) {
 function dru_tnx_init() {
   drupal_add_css(DRU_TNX_PATH . '/css/dru_tnx.css');
 }
-
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -329,7 +328,7 @@ function dru_tnx_form_node_type_form_submit($form, &$form_state) {
 
   if (module_exists('comment')) {
     $state_comment = variable_get('dru_tnx_status_by_comment_node_type');
-    $state_comment[$values['type']] = ($values['comment'] == COMMENT_NODE_OPEN) ? $values['dru_tnx_comment'] : false;
+    $state_comment[$values['type']] = ($values['comment'] == COMMENT_NODE_OPEN) ? $values['dru_tnx_comment'] : FALSE;
     variable_set('dru_tnx_status_by_comment_node_type', $state_comment);
   }
 }
@@ -337,7 +336,8 @@ function dru_tnx_form_node_type_form_submit($form, &$form_state) {
 /**
  * Check state of ability by node type.
  *
- * @param string $type Machine name of node type.
+ * @param string $type
+ *   Machine name of node type.
  *
  * @return bool
  */
@@ -350,7 +350,8 @@ function dru_tnx_status_by_node_type(string $type): bool {
 /**
  * Check state of ability by comment node type.
  *
- * @param string $type Machine name of node type.
+ * @param string $type
+ *   Machine name of node type.
  *
  * @return bool
  */

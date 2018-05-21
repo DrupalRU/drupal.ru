@@ -1,11 +1,13 @@
 <?php
 
 /**
+ * @file
  * Variable name which contains flag. If the flag is set to TRUE,
  * then it means that we need to automatically redirect user from
  * 403 page to authorization form. After authorization module
  * login_destination will return back user.
  */
+
 define('DRURUM_LOGIN_WHEN_403', 'drurum_login_when_403');
 /**
  * Variable name which contains list of rules for rename actions (menu links).
@@ -16,10 +18,10 @@ define('DRURUM_ACTIONS_OVERRIDE', 'drurum_actions_override');
  * Implements hook_module_implements_alter().
  */
 function drurum_module_implements_alter(&$implementations, $hook) {
-  // Hooks for moving into the end
+  // Hooks for moving into the end.
   $hooks_to_the_end = ['menu_local_tasks', 'mail_alter'];
 
-  // Move hooks into the end
+  // Move hooks into the end.
   if (in_array($hook, $hooks_to_the_end)) {
     $module = 'drurum';
     $group = $implementations[$module];
@@ -273,12 +275,12 @@ function drurum_privatemsg_autocomplete_alter(&$matches, $names, $fragment) {
 /**
  * Duplicate of node_title_list() with little changes.
  *
- * @param      $result
+ * @param $result
  * @param null $title
  *
  * @return array|bool
  *
- * @see node_title_list().
+ * @see node_title_list()
  */
 function drurum_node_title_list($result, $title = NULL) {
   $items = [];
@@ -306,6 +308,9 @@ function drurum_node_title_list($result, $title = NULL) {
   ] : FALSE;
 }
 
+/**
+ *
+ */
 function drurum_node_icon($node) {
   $node_types = &drupal_static(__FUNCTION__, []);
   if (!isset($node_types[$node->nid])) {
@@ -341,20 +346,26 @@ function drurum_node_icon($node) {
   return $node_types[$node->nid];
 }
 
+/**
+ *
+ */
 function drurum_need_to_resolve($nid) {
   $resolved = &drupal_static(__FUNCTION__, []);
   if (!isset($resolved[$nid])) {
     $resolved[$nid] = db_select('taxonomy_index', 'ti')
-        ->condition('ti.nid', $nid)
+      ->condition('ti.nid', $nid)
         // @todo: to add UI for configure the term id.
-        ->condition('ti.tid', 15362)
-        ->countQuery()
-        ->execute()
-        ->fetchField() > 0;
+      ->condition('ti.tid', 15362)
+      ->countQuery()
+      ->execute()
+      ->fetchField() > 0;
   }
   return $resolved[$nid];
 }
 
+/**
+ *
+ */
 function drurum_simple_events_list() {
   $default_message = '';
 
@@ -388,6 +399,9 @@ function drurum_simple_events_list() {
   return $build;
 }
 
+/**
+ *
+ */
 function _drurum_simple_events_list_nodes() {
   $query = db_select('node', 'n');
   $query->addTag('node_access');
@@ -428,6 +442,9 @@ function drurum_form_menu_edit_item_alter(&$form, &$form_state) {
   ];
 }
 
+/**
+ *
+ */
 function drurum_form_menu_edit_item_submit($form, &$form_state) {
   $vals = &$form_state['values'];
   if (isset($vals['html_allowed'])) {

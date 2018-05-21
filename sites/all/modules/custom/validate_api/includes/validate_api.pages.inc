@@ -2,22 +2,22 @@
 
 /**
  * @file
- * Administer pages
+ * Administer pages.
  */
 
 /**
- * Main administer page
+ * Main administer page.
  */
 function validate_api_form_settings($form, &$form_state) {
   if ($configs = validate_api_get_current_configs()) {
     $form['container'] = [
       '#type' => 'vertical_tabs',
-      '#tree' => true,
+      '#tree' => TRUE,
     ];
 
     $form['container']['settings'] = [
       '#type' => 'fieldset',
-      '#collapsible' => false,
+      '#collapsible' => FALSE,
       '#title' => t('Validator settings'),
       '#group' => 'group_tabs',
     ];
@@ -38,8 +38,8 @@ function validate_api_form_settings($form, &$form_state) {
 
       $form['container']['settings']['description'][$type] = [
         '#type' => 'fieldset',
-        '#collapsible' => true,
-        '#collapsed' => false,
+        '#collapsible' => TRUE,
+        '#collapsed' => FALSE,
         '#title' => t('@label validators', ['@label' => $entity_type['label']]),
       ];
 
@@ -61,7 +61,6 @@ function validate_api_form_settings($form, &$form_state) {
         '#rows' => $rows,
       ];
     }
-
 
     $form['actions'] = [
       '#type' => 'actions',
@@ -99,7 +98,7 @@ function validate_api_form_settings($form, &$form_state) {
 }
 
 /**
- * Main administer page
+ * Main administer page.
  */
 function validate_api_form_settings_submit($form, &$form_state) {
   drupal_set_message(t('Settings saved.'));
@@ -119,8 +118,8 @@ function validate_api_get_current_configs() {
   $configs = $q->fetchAllAssoc('name');
 
   return array_filter(array_map(function ($item) {
-    return $item->value = isset($item->value) ? unserialize($item->value) : null;
+    return $item->value = isset($item->value) ? unserialize($item->value) : NULL;
   }, $configs), function ($config) {
-    return ($config['settings'] ?? null);
+    return ($config['settings'] ?? NULL);
   });
 }

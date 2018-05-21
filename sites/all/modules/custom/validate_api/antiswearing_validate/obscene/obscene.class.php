@@ -2,6 +2,9 @@
 
 namespace Wkhooy;
 
+/**
+ *
+ */
 class ObsceneCensorRus {
   public static $log;
   public static $logEx;
@@ -120,27 +123,37 @@ class ObsceneCensorRus {
     'doubl',
   );
 
+  /**
+   *
+   */
   public static function getObscene($text, $charset = 'UTF-8') {
     return self::matching($text, $charset);
   }
 
+  /**
+   *
+   */
   public static function getFiltered($text, $charset = 'UTF-8') {
     self::filterText($text, $charset);
     return $text;
   }
 
+  /**
+   *
+   */
   public static function isAllowed($text, $charset = 'UTF-8') {
     $original = $text;
     self::filterText($text, $charset);
     return $original === $text;
   }
 
-  public static function matching($text, $charset = 'UTF-8')
-  {
+  /**
+   *
+   */
+  public static function matching($text, $charset = 'UTF-8') {
     if ($charset !== self::$utf8) {
       $text = iconv($charset, self::$utf8, $text);
     }
-
 
     $pattern = '/
 \b\d*(
@@ -192,12 +205,12 @@ class ObsceneCensorRus {
         $word = mb_strtolower($word, self::$utf8);
 
         foreach (self::$exceptions as $x) {
-          if (mb_strpos($word, $x) !== false) {
+          if (mb_strpos($word, $x) !== FALSE) {
             if (is_array(self::$logEx)) {
               $t = &self::$logEx[$matches[1][$i]];
               ++$t;
             }
-            $word = false;
+            $word = FALSE;
             unset($matches[1][$i]);
             break;
           }
@@ -214,8 +227,10 @@ class ObsceneCensorRus {
     return $matches[1];
   }
 
-  public static function filterText(&$text, $charset = 'UTF-8')
-  {
+  /**
+   *
+   */
+  public static function filterText(&$text, $charset = 'UTF-8') {
     $matches = self::matching($text);
 
     if ($matches) {
@@ -225,7 +240,7 @@ class ObsceneCensorRus {
           $t = &self::$log[$word];
           ++$t;
         }
-        $asterisks []= str_repeat('*', mb_strlen($word, self::$utf8));
+        $asterisks[] = str_repeat('*', mb_strlen($word, self::$utf8));
       }
 
       $text = str_replace($matches, $asterisks, $text);
@@ -234,14 +249,15 @@ class ObsceneCensorRus {
         $text = iconv(self::$utf8, $charset, $text);
       }
 
-      return true;
-    } else {
+      return TRUE;
+    }
+    else {
       if ($charset !== self::$utf8) {
         $text = iconv(self::$utf8, $charset, $text);
       }
 
-      return false;
+      return FALSE;
     }
   }
 
-} 
+}

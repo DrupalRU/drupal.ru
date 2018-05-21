@@ -1,9 +1,9 @@
 <?php
+
 /**
  * @file
  * Marketplace install file.
  */
-
 
 /**
  * Implements hook_install().

@@ -5,5 +5,3 @@ core = "7.x"
 package = Content
 
 version = 7.x-dev
-
-

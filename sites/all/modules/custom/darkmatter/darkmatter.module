@@ -138,7 +138,7 @@ function darkmatter_update_stats_node($op, $uid, $nid) {
  */
 function darkmatter_node_access($node, $op, $account) {
   // If we want that nodes in DM will unaccessed, then need uncomment line bellow.
-//  return is_object($node) && !darkmatter_view_access($node, $account) ? NODE_ACCESS_DENY : NODE_ACCESS_IGNORE;
+  //  return is_object($node) && !darkmatter_view_access($node, $account) ? NODE_ACCESS_DENY : NODE_ACCESS_IGNORE;.
   return NODE_ACCESS_IGNORE;
 }
 
@@ -172,10 +172,10 @@ function darkmatter_node($ajax, $node, $token) {
   $darkmatter_status = $node->darkmatter ? 0 : 1;
 
   db_update('node')
-  // Table name no longer needs {}
+  // Table name no longer needs {}.
     ->fields(array(
-    'darkmatter' => $darkmatter_status,
-  ))
+      'darkmatter' => $darkmatter_status,
+    ))
     ->condition('nid', $node->nid)
     ->execute();
 
@@ -262,10 +262,10 @@ function darkmatter_comment($ajax, $comment, $token) {
   $darkmatter_status = $comment->darkmatter ? 0 : 1;
 
   db_update('comment')
-  // Table name no longer needs {}
+  // Table name no longer needs {}.
     ->fields(array(
-    'darkmatter' => $darkmatter_status,
-  ))
+      'darkmatter' => $darkmatter_status,
+    ))
     ->condition('cid', $comment->cid)
     ->execute();
 
@@ -331,7 +331,7 @@ function darkmatter_comment_mark_subcomments($cid, $darkmatter) {
   $cids = array();
 
   db_update('comment')
-  // Table name no longer needs {}
+  // Table name no longer needs {}.
     ->fields(array(
       'darkmatter' => $darkmatter,
     ))

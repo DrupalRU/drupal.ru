@@ -1,8 +1,8 @@
 <?php
+
 /**
  * @file
  */
-
 
 /**
  * User info page.

@@ -11,6 +11,7 @@
  * Search form submits with POST but redirects to GET. This way we can keep
  * the search query URL clean as a whistle:
  * http://www.example.com/search-path?keys=... (including keys and options)
+ *
  * @see advanced_sphinx_get_query_string()
  * group=atribute fields for grouping
  * fil-atribute=znach,znach2,znach+n - fields for filter
@@ -139,18 +140,18 @@ function theme_advanced_sphinx_search_results($variables) {
   }
 
   $result_wrapper['stat'] = t('Found results: @count on @seconds seconds.', array(
-      '@count' => $search_results['total_found'],
-      '@seconds' => round($search_results['time'], 3),
-    )
+    '@count' => $search_results['total_found'],
+    '@seconds' => round($search_results['time'], 3),
+  )
   );
 
   if (!empty($search_results['words'])) {
     $words = array();
     foreach ($search_results['words'] as $word => $word_data) {
       $words[] = '<em>' . check_plain($word) . '</em> (' . t('results: @docs, repeats: @hits', array(
-          '@docs' => (int) $word_data['docs'],
-          '@hits' => (int) $word_data['hits'],
-        )) . ')';
+        '@docs' => (int) $word_data['docs'],
+        '@hits' => (int) $word_data['hits'],
+      )) . ')';
     }
 
     $result_wrapper['word_stat'] = implode('; ', $words) . '.';
@@ -167,6 +168,9 @@ function theme_advanced_sphinx_search_results($variables) {
   return $output;
 }
 
+/**
+ *
+ */
 function theme_advanced_sphinx_sorted_links($variables) {
   $query = $variables['query'];
 
@@ -202,6 +206,9 @@ function theme_advanced_sphinx_sorted_links($variables) {
   return theme('links', array('links' => $url));
 }
 
+/**
+ *
+ */
 function advanced_sphinx_get_items_result_main($search_options, $search_results) {
   $items_result = array();
   $result_wrapper = array('result' => '');

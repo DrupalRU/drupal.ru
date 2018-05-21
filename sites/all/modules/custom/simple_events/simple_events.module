@@ -1,9 +1,9 @@
 <?php
+
 /**
  * @file
  * Simple event module.
  */
-
 
 /**
  * Implements hook_node_info().
@@ -46,7 +46,6 @@ function simple_events_block_info() {
 
   return $blocks;
 }
-
 
 /**
  * Implements hook_block_configure().
@@ -208,8 +207,8 @@ function simple_events_form($node, $form_state) {
   $form['time'] = array(
     '#type' => 'container',
     '#attributes' => array(
-      'class' => array('clearfix', 'time-wrapper')
-    )
+      'class' => array('clearfix', 'time-wrapper'),
+    ),
   );
   $form['time']['time_from'] = array(
     '#type' => 'date_popup',
@@ -261,7 +260,7 @@ function simple_events_form($node, $form_state) {
     '#description' => t('Address, where event will happen.'),
     '#weight' => 1,
     '#default_value' => isset($node->event->address) ? $node->event->address : '',
-    '#required' => TRUE
+    '#required' => TRUE,
   );
   return $form;
 }
@@ -269,7 +268,6 @@ function simple_events_form($node, $form_state) {
 /**
  * Implement hook_validate().
  */
-
 function simple_events_validate($node, $form, &$form_state) {
   $logo_directory = file_default_scheme() . '://' . variable_get('simple_events_path', 'simpleevents');
 
@@ -289,7 +287,6 @@ function simple_events_validate($node, $form, &$form_state) {
 /**
  * Implement hook_load().
  */
-
 function simple_events_load($nodes) {
   $vids = array();
   foreach ($nodes as $node) {
@@ -333,7 +330,6 @@ function simple_events_insert($node) {
 /**
  * Implement hook_update().
  */
-
 function simple_events_update($node) {
 
   $fid = 0;
@@ -356,7 +352,7 @@ function simple_events_update($node) {
   db_merge('simple_events')
     ->key(array(
       'nid' => $node->nid,
-      'vid' => $node->vid
+      'vid' => $node->vid,
     ))
     ->fields(array(
       'url' => $node->url,
@@ -371,7 +367,6 @@ function simple_events_update($node) {
 /**
  * Implement hook_view().
  */
-
 function simple_events_view($node, $view_mode, $langcode = NULL) {
   if (!isset($node->event) || empty($node->event)) {
     return $node;
@@ -383,7 +378,7 @@ function simple_events_view($node, $view_mode, $langcode = NULL) {
   $image = !empty($node->event->image) ? $node->event->image : NULL;
   $event_image = theme('image_style', array(
     'style_name' => 'event_teaser',
-    'path'       =>  $image ? $image->uri : 'public://default-calendar.jpg',
+    'path'       => $image ? $image->uri : 'public://default-calendar.jpg',
     'attributes' => array(
       'class' => 'event-image',
     ),
@@ -395,9 +390,9 @@ function simple_events_view($node, $view_mode, $langcode = NULL) {
 
   $time = '<div class="from">'
     . t('!date at !time', array(
-        '!date' => format_date($node->event->time_from, 'custom', 'd M H:i'),
-        '!time' => format_date($node->event->time_from, 'custom', 'H:i'),
-  )
+      '!date' => format_date($node->event->time_from, 'custom', 'd M H:i'),
+      '!time' => format_date($node->event->time_from, 'custom', 'H:i'),
+    )
       )
     . '</div>';
   if (!empty($node->event->time_to)) {
@@ -423,7 +418,7 @@ function simple_events_view($node, $view_mode, $langcode = NULL) {
       '#markup' => l($node->event->url, $node->event->url, array(
         'attributes' => array(
           'rel' => 'nofollow',
-          'class' => array('text-ellipsis')
+          'class' => array('text-ellipsis'),
         ),
       )),
       '#weight' => 1,

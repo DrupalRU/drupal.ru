@@ -1,3 +1,9 @@
+<?php
+
+/**
+ * @file
+ */
+?>
 source source_main
 {
   type               = mysql
@@ -29,37 +35,37 @@ source source_delta : source_main
 
 index index_main
 {
-  source			 = source_main
-  path				 = <?php print $config['index_main']; ?>
-  docinfo			 = extern
-  morphology		 = stem_ru, stem_en
-  charset_type		 = utf-8
-  charset_table		 = <?php print $config['charset_table']; ?>
-  min_word_len		 = 1
-  html_strip		 = 1
+  source             = source_main
+  path                 = <?php print $config['index_main']; ?>
+  docinfo             = extern
+  morphology         = stem_ru, stem_en
+  charset_type         = utf-8
+  charset_table         = <?php print $config['charset_table']; ?>
+  min_word_len         = 1
+  html_strip         = 1
 }
 
 index index_delta : index_main
 {
-  source			 = source_delta
-  path				 = <?php print $config['index_delta']; ?>
+  source             = source_delta
+  path                 = <?php print $config['index_delta']; ?>
 }
 
 indexer
 {
-  mem_limit			 = 64M
+  mem_limit             = 64M
 }
 
 searchd
 {
   listen             = <?php print $config['listen']; ?>
-  log				 = <?php print $config['log']; ?>
-  query_log		     = <?php print $config['query_log']; ?>
-  read_timeout	     = 5
-  max_children	     = 30
-  pid_file		     = <?php print $config['searchd']; ?>
-  max_matches		 = 1000
-  seamless_rotate	 = 1
-  preopen_indexes	 = 1
-  unlink_old		 = 1
+  log                 = <?php print $config['log']; ?>
+  query_log             = <?php print $config['query_log']; ?>
+  read_timeout         = 5
+  max_children         = 30
+  pid_file             = <?php print $config['searchd']; ?>
+  max_matches         = 1000
+  seamless_rotate     = 1
+  preopen_indexes     = 1
+  unlink_old         = 1
 }

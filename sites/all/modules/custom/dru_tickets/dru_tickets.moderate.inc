@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @file
+ */
+
+/**
  * Moderate commands.
  */
 function dru_ticket_moderate_command($command, $entity_type, $entity_id) {

@@ -688,3 +688,14 @@ function drurum_update_7036() {
     drupal_uninstall_modules(['antiswearing_validate']);
   }
 }
+
+/**
+ * Disable module "book".
+ */
+function drurum_update_7037() {
+  if (module_exists('book')) {
+    module_disable(['book']);
+    drupal_uninstall_modules(['book']);
+  }
+}
+

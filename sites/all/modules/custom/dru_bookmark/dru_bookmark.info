@@ -1,4 +1,0 @@
-name        = Dru Bookmark
-description = Provide bookmarks functional on nodes
-core        = 7.x
-version     = 7.x-1.x-dev

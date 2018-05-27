@@ -1,7 +1,6 @@
 #!/bin/sh
 
 set -e
-trap 'echo "exit due to $(!!)"' EXIT
 . ../helpers.sh
 
 COMMIT=$(git log -n1 --abbrev-commit|grep commit|awk '{print $2}')
@@ -54,4 +53,15 @@ if [ $(ls -l | grep -c ^d) -gt $STORE_VERSIONS ] ; then
 else
     exe "Устаревших версий не найдено"
 fi;
+
+# Making of backup for dev environments.
+chmod +x "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"
+sh "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"
+chmod -x "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"
+
+# Making of backup for local environments.
+chmod +x "$SCRIPTS_DIR/sync/local/make-prod-dump.sh"
+sh "$SCRIPTS_DIR/sync/local/make-prod-dump.sh"
+chmod -x "$SCRIPTS_DIR/sync/local/make-prod-dump.sh"
+
 exe "Деплоймент завершён"

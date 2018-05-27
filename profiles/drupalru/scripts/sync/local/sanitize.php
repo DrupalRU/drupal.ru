@@ -50,7 +50,6 @@ $clean_variables = array(
     'abuse_warn_bcc' => 's:15:"mail@drupal.loc";',
     'site_mail' => 's:15:"mail@drupal.loc";',
     'pm_email_notify_from' => 's:15:"mail@drupal.loc";',
-
     'captcha_token' => sprintf('s:32:"%s";', substr($hash, 0, 32)),
     'cron_key' => sprintf('s:64:"%s";', $hash),
     'drupal_private_key' => sprintf('s:64:"%s";', $hash),

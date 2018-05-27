@@ -1,13 +1,6 @@
 #!/usr/bin/env sh
 
-sm() {
-  echo "\033[0;32m$@\033[0m";
-}
-
-exe() {
-  sm "$@";
-  $@;
-}
+. ../../helpers.sh
 
 if [ -z $(which drush) ]; then
   sm "\"drush\" program need to be installed."

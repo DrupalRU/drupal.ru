@@ -8,7 +8,7 @@ deploy:
       site: drupal.ru
       store_versions: 3
     scripts:
-      after: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/deploy.sh'
+      after: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/deploy-prod.sh'
       fail_deploy: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/rollback.sh'
   dev:
     server: 89.223.31.105

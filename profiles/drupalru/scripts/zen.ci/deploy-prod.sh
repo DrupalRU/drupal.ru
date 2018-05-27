@@ -1,7 +1,17 @@
 #!/bin/sh
 
 set -e
-. ../helpers.sh
+CI_COLOR='\033[1;32m'
+NO_COLOR='\033[0m'
+sm() {
+  echo "";
+  echo "${CI_COLOR}$@${NO_COLOR}";
+}
+
+exe() {
+  sm "$@";
+  $@;
+}
 
 COMMIT=$(git log -n1 --abbrev-commit|grep commit|awk '{print $2}')
 TIMESTAMP=$(date +%Y.%m.%d_%H:%M:%S)

@@ -1,7 +1,18 @@
 #!/usr/bin/env sh
 
 set -e
-. ../../helpers.sh
+
+CI_COLOR='\033[1;32m'
+NO_COLOR='\033[0m'
+sm() {
+  echo "";
+  echo "${CI_COLOR}$@${NO_COLOR}";
+}
+
+exe() {
+  sm "$@";
+  $@;
+}
 
 exe "drush @dru.prod cc all"
 exe "drush @dru.prod wd-del all -y"

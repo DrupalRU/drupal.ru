@@ -9,7 +9,6 @@ deploy:
       store_versions: 3
     scripts:
       after: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/deploy-prod.sh'
-      fail_deploy: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/rollback.sh'
   dev:
     server: 89.223.31.105
     username: drupal
@@ -19,7 +18,6 @@ deploy:
       store_versions: 5
     scripts:
       after: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/deploy.sh'
-      fail_deploy: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/rollback.sh'
   stage:
     server: 89.223.31.105
     username: drupal
@@ -29,4 +27,3 @@ deploy:
       store_versions: 5
     scripts:
       after: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/deploy.sh'
-      fail_deploy: '{deploy_dir}/profiles/drupalru/scripts/zen.ci/rollback.sh'

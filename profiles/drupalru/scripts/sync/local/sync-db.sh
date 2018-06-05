@@ -17,11 +17,17 @@ if [ -z $(which drush) ]; then
   exit 1;
 fi
 
+# Drush alias that given from command line like "@dru.dev"
 DRUSH_ALIAS=$1
+# Project web home dir
 PROJECT=$(drush $DRUSH_ALIAS status | grep "Drupal root" | awk -F: '{ gsub(/ /, "", $2); print $2 }')
+# Dump directory with specific date
 DUMP_DIR=$PROJECT/sites/default/files/update/$(date +%Y%m%d%H%M%S)
-DUMP_URL="http://drupal.ru/sites/default/files/drupalru-dump.sql.gz"
+# Web path to sql dump file.
+DUMP_URL="https://drupal.ru/sites/default/files/drupalru-dump.sql.gz"
+# File check for existence
 DUMP_FILE_STATUS=$(curl --head --silent $DUMP_URL | head -n 1)
+# Get user email from git config
 GIT_EMAIL=$(git config --get user.email)
 
 
@@ -53,18 +59,23 @@ exe "cd $DUMP_DIR"
 exe "wget $DUMP_URL"
 sm "zcat \"$DUMP_DIR/drupalru-dump.sql.gz\" | drush $DRUSH_ALIAS sqlc"
 zcat "$DUMP_DIR/drupalru-dump.sql.gz" | drush $DRUSH_ALIAS sqlc
+# Generate content
 exe "drush $DRUSH_ALIAS en devel_generate -y"
 exe "drush $DRUSH_ALIAS genu 10"
 exe "drush $DRUSH_ALIAS genc 100 5 --types=blog"
 exe "drush $DRUSH_ALIAS dis devel_generate -y"
 exe "drush $DRUSH_ALIAS pm-uninstall devel_generate -y"
+# Disable cache
 exe "drush $DRUSH_ALIAS vset page_compression 0"
 exe "drush $DRUSH_ALIAS vset preprocess_css 0"
 exe "drush $DRUSH_ALIAS vset preprocess_js 0"
 
+# Change site email.
 if [ -z "$GIT_EMAIL" ]; then
   exe "drush $DRUSH_ALIAS vset site_mail $GIT_EMAIL"
 fi
 
+# Clear cache
 exe "drush $DRUSH_ALIAS cc all"
+# Reset password for root
 exe "drush $DRUSH_ALIAS uli"

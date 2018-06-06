@@ -490,9 +490,41 @@ function drurum_update_7026() {
 /**
  * Remove vocabulary "Ключевые слова" and all terms.
  */
-function drurum_update_7027() {
-  field_delete_field('taxonomy_vocabulary_2');
-  taxonomy_vocabulary_delete(2);
+function drurum_update_7027(&$sandbox) {
+  $vid = 2;
+  if (!isset($sandbox['progress'])) {
+    $sandbox['progress'] = 0;
+    $sandbox['max'] = db_query('
+      SELECT COUNT(t.tid)
+      FROM {taxonomy_term_data} t
+      INNER JOIN {taxonomy_term_hierarchy} th ON th.tid = t.tid
+      WHERE t.vid = :vid
+        AND th.parent = 0', [':vid' => $vid])->fetchField();
+  }
+
+  // Only load terms without a parent, child terms will get deleted too.
+  $result = db_query('
+      SELECT t.tid
+      FROM {taxonomy_term_data} t
+      INNER JOIN {taxonomy_term_hierarchy} th ON th.tid = t.tid
+      WHERE t.vid = :vid
+        AND th.parent = 0
+      LIMIT 0, 50
+      ', [':vid' => $vid])->fetchCol();
+
+  foreach ($result as $tid) {
+    taxonomy_term_delete($tid);
+    $sandbox['progress']++;
+  }
+
+  $sandbox['#finished'] = empty($sandbox['max']) || !$result ? 1 : $sandbox['progress'] / $sandbox['max'];
+  unset($result);
+
+  if ($sandbox['#finished']) {
+    field_delete_field('taxonomy_vocabulary_2');
+    taxonomy_vocabulary_delete($vid);
+    return "Keywords of vocabulary_2 has been deleted";
+  }
 }
 
 /**

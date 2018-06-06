@@ -1,7 +1,6 @@
 #!/bin/sh
 
 set -e
-trap 'echo "exit due to $(!!)"' EXIT
 
 CI_COLOR='\033[1;32m'
 NO_COLOR='\033[0m'
@@ -64,5 +63,5 @@ if [ $(ls -l | grep -c ^d) -gt $STORE_VERSIONS ] ; then
     done
 else
     sm "Устаревших версий не найдено"
-fi;
+fi
 sm "Деплоймент завершён"

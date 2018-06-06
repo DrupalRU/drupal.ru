@@ -62,9 +62,10 @@ if [ $(ls -l | grep -c ^d) -gt $STORE_VERSIONS ] ; then
     done
 else
     sm "Устаревших версий не найдено"
-fi;
+fi
 
 # Making of backup for dev environments.
+sm "Scripts dir: $SCRIPTS_DIR"
 chmod +x "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"
 sh "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"
 chmod -x "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"

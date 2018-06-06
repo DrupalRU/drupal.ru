@@ -11,6 +11,7 @@ $rules = array(
   'block_custom',
   'bueditor_editors',
   'bueditor_buttons',
+  'captcha_points',
   'contact',
   'date_formats',
   'date_format_type',

@@ -731,3 +731,24 @@ function drurum_update_7037() {
   }
 }
 
+/**
+ * Install module "One Click Upload".
+ */
+function drurum_update_7038() {
+  // Enable module
+  module_enable(['ocupload']);
+  // Add permissions for registered users
+  db_insert('role_permission')
+    ->fields([
+      'rid' => 2,
+      'permission' => 'upload files use template 1',
+      'module' => 'ocupload',
+    ])
+    ->execute();
+  // Edit image button on BUEditor
+  db_update('bueditor_buttons')
+    ->fields(array('content' => 'js: E.showFileSelectionDialog();'))
+    ->condition('bid', 113)
+    ->execute();
+}
+

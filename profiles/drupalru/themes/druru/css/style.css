@@ -9991,6 +9991,10 @@ span.geshifilter code,
 .maintenance-page #navbar {
   height: 90px;
 }
+.page-comment-edit .ocupload-button-wrapper .input-group,
+.node-type-blog .ocupload-button-wrapper .input-group {
+  display: none;
+}
 body.adminimal-menu {
   height: calc(100% - 29px);
 }

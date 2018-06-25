@@ -13,3 +13,5 @@ sites/local
 # PhpStorm
 .idea
 
+sites/all/translations
+

@@ -731,3 +731,9 @@ function drurum_update_7037() {
   }
 }
 
+/**
+ * Enable module "ymb".
+ */
+function drurum_update_7038() {
+  module_enable(['ymb']);
+}

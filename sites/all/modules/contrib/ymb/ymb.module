@@ -1,0 +1,396 @@
+<?php
+
+/**
+ * @file
+ * Main module file.
+ */
+
+/**
+ * Attach helpers.
+ */
+require_once __DIR__ . '/ymb.helpers.inc';
+
+/**
+ * Implements hook_menu().
+ */
+function ymb_menu() {
+  $items['admin/structure/ymb'] = [
+    'title' => 'Yandex Money Blocks',
+    'description' => 'Raise money to your Yandex Money Wallet.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['ymb_list_form'],
+    'access arguments' => ['administer blocks'],
+  ];
+
+  $items['admin/structure/ymb/add'] = [
+    'title' => 'Add new Yandex Money Block',
+    'description' => 'Create block with form to raise money to your Yandex Money Wallet.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['ymb_add_form'],
+    'access arguments' => ['administer blocks'],
+  ];
+
+  $items['admin/structure/ymb/%/delete'] = [
+    'title' => 'Delete block',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['ymb_block_delete', 3],
+    'access arguments' => ['administer blocks'],
+  ];
+
+  $items['admin/structure/ymb/%/edit'] = [
+    'title' => 'Edit block',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['ymb_block_edit', 3],
+    'access arguments' => ['administer blocks'],
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function ymb_form_alter(&$form, &$form_state, $form_id) {
+  $blocks = _ymb_get_all_blocks();
+  foreach ($blocks as $block) {
+    $bid = $block->bid;
+    // Hide 'body' field in block edit form as we store raising form in there.
+    if ($form_id == 'block_admin_configure' && $bid == $form['delta']['#value']) {
+      hide($form['settings']['body_field']);
+      $block = _ymb_get_block_by_bid($bid);
+      $form['settings']['ymb'] = [
+        '#type' => 'fieldset',
+        '#title' => t('Payment settings'),
+      ];
+      $form['settings']['ymb']['receiver'] = [
+        '#type' => 'textfield',
+        '#title' => t('Number of Yandex Money Wallet'),
+        '#default_value' => $block->receiver,
+        '#maxlength' => 17,
+        '#required' => TRUE,
+        '#element_validate' => ['element_validate_number'],
+        '#disabled' => TRUE,
+      ];
+      $form['settings']['ymb']['target'] = [
+        '#type' => 'textfield',
+        '#title' => t('Payment purpose'),
+        '#default_value' => $block->target,
+        '#required' => TRUE,
+        '#disabled' => TRUE,
+      ];
+      $form['settings']['ymb']['sum'] = [
+        '#type' => 'textfield',
+        '#title' => t('Amount to be prompted'),
+        '#default_value' => $block->sum,
+        '#required' => TRUE,
+        '#maxlength' => 4,
+        '#element_validate' => ['element_validate_number'],
+        '#disabled' => TRUE,
+      ];
+      $form['settings']['ymb']['url'] = [
+        '#type' => 'textfield',
+        '#title' => t('Link for redirecting'),
+        '#default_value' => $block->url,
+        '#disabled' => TRUE,
+      ];
+      $form['settings']['ymb']['description'] = [
+        '#type' => 'textarea',
+        '#title' => t('Description'),
+        '#default_value' => $block->description,
+        '#disabled' => TRUE,
+      ];
+      $form['settings']['ymb']['edit'] = [
+        '#markup' => l(t('edit'), "admin/structure/ymb/{$bid}/edit"),
+      ];
+    }
+    // Replace 'Remove' link.
+    if ($form_id == 'block_admin_display_form') {
+      $form['blocks']["block_{$bid}"]['delete']['#href'] = "admin/structure/ymb/{$bid}/delete";
+    }
+  }
+}
+
+/**
+ * Form constructor for the block list form.
+ */
+function ymb_list_form() {
+  global $base_url;
+  $rows = [];
+
+  // Get YMB blocks bids.
+  $blocks = _ymb_get_all_blocks();
+
+  // Make rows.
+  foreach ($blocks as $block) {
+    $bid = $block->bid;
+
+    $rows[$bid]['bid'] = $bid;
+    $rows[$bid]['title'] = _ymb_get_block_title('bid', $bid);
+    $rows[$bid]['receiver'] = $block->receiver;
+    $rows[$bid]['target'] = $block->target;
+    $rows[$bid]['op'] = "<a href={$base_url}/admin/structure/ymb/{$bid}/edit>" . t('edit') . "</a> <a href={$base_url}/admin/structure/ymb/{$bid}/delete>" . t('delete') . "</a>";
+  }
+
+  $form['list'] = [
+    '#theme' => 'table',
+    '#header' => [
+      t('Block ID'),
+      t('Block Title'),
+      t('Receiver'),
+      t('Target'),
+      t('Actions'),
+    ],
+    '#rows' => $rows,
+  ];
+
+  $form['go'] = [
+    '#type' => 'submit',
+    '#value' => t('Create new block'),
+    '#submit' => ['ymb_list_form_submit'],
+  ];
+
+  return $form;
+}
+
+/**
+ * Form submission handler for ymb_list_form().
+ *
+ * @see ymb_list_form()
+ */
+function ymb_list_form_submit($form, &$form_state) {
+  drupal_goto('admin/structure/ymb/add');
+}
+
+/**
+ * Form constructor for the block add form.
+ */
+function ymb_add_form() {
+  $form['ymb'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Create new block'),
+  ];
+  $form['ymb']['receiver'] = [
+    '#type' => 'textfield',
+    '#title' => t('Number of Yandex Money Wallet'),
+    '#default_value' => '',
+    '#maxlength' => 17,
+    '#required' => TRUE,
+    '#element_validate' => ['element_validate_number'],
+  ];
+  $form['ymb']['target'] = [
+    '#type' => 'textfield',
+    '#title' => t('Payment purpose'),
+    '#default_value' => '',
+    '#required' => TRUE,
+  ];
+  $form['ymb']['sum'] = [
+    '#type' => 'textfield',
+    '#title' => t('Amount to be prompted'),
+    '#default_value' => '',
+    '#required' => TRUE,
+    '#maxlength' => 4,
+    '#element_validate' => ['element_validate_number'],
+  ];
+  $form['ymb']['url'] = [
+    '#type' => 'textfield',
+    '#title' => t('Link for redirecting'),
+    '#default_value' => '',
+  ];
+  $form['ymb']['description'] = [
+    '#type' => 'textarea',
+    '#title' => t('Description'),
+    '#default_value' => '',
+  ];
+  $form['ymb']['go'] = [
+    '#type' => 'submit',
+    '#value' => t('Create block'),
+    '#submit' => ['ymb_add_form_submit'],
+  ];
+  return $form;
+}
+
+/**
+ * Form submission handler for ymb_add_form().
+ *
+ * @see ymb_add_form()
+ */
+function ymb_add_form_submit($form, &$form_state) {
+  $submitform = $form['ymb'];
+  $receiver = $submitform['receiver']['#value'];
+  $target = $submitform['target']['#value'];
+  $sum = $submitform['sum']['#value'];
+  $url = $submitform['url']['#value'];
+  $description = $submitform['description']['#value'];
+
+  // Create block and get bid.
+  $bid = db_insert('block_custom')
+    ->fields([
+      'body' => '',
+      'info' => 'YMB: ' . $target . REQUEST_TIME,
+      'format' => 'full_html',
+    ])
+    ->execute();
+  // Set bid to block's 'info' field.
+  db_update('block_custom')
+    ->fields([
+      'info' => 'YMB: ' . $target . ' (' . $bid . ')',
+      'body' => _ymb_generate_template($bid, $receiver, $target, $sum, $url, $description),
+    ])
+    ->condition('bid', $bid)
+    ->execute();
+
+  db_insert('ymb')
+    ->fields([
+      'bid' => $bid,
+      'receiver' => $receiver,
+      'target' => $target,
+      'sum' => $sum,
+      'url' => $url,
+      'description' => $description,
+    ])
+    ->execute();
+
+  // Set block's title for current theme.
+  db_insert('block')
+    ->fields([
+      'module' => 'block',
+      'delta' => $bid,
+      'theme' => variable_get('theme_default', NULL),
+      'status' => 0,
+      'weight' => 0,
+      'region' => -1,
+      'custom' => 0,
+      'visibility' => 0,
+      'pages' => '',
+      'title' => $target,
+      'cache' => '-1',
+    ])
+    ->execute();
+
+  drupal_set_message(t('New block created!'));
+  drupal_goto('admin/structure/ymb');
+}
+
+/**
+ * Form constructor for the custom block deletion form.
+ */
+function ymb_block_delete($form, &$form_state, $delta) {
+  $block = block_load('block', $delta);
+  $custom_block = block_custom_block_get($block->delta);
+  $form['info'] = ['#type' => 'hidden', '#value' => $custom_block['info'] ? $custom_block['info'] : $custom_block['title']];
+  $form['bid'] = ['#type' => 'hidden', '#value' => $block->delta];
+  return confirm_form($form, t('Are you sure you want to delete the block %name?', ['%name' => $custom_block['info']]), 'admin/structure/block', '', t('Delete'), t('Cancel'));
+}
+
+/**
+ * Form submission handler for ymb_block_delete().
+ *
+ * @see ymb_block_delete()
+ */
+function ymb_block_delete_submit($form, &$form_state) {
+  $bid = $form_state['values']['bid'];
+  _ymb_remove_block_by_bid($bid);
+  drupal_set_message(t('The block %name has been removed.', ['%name' => $form_state['values']['info']]));
+  cache_clear_all();
+  $form_state['redirect'] = 'admin/structure/ymb';
+}
+
+/**
+ * Form constructor for the custom block edit form.
+ */
+function ymb_block_edit($form, &$form_state, $delta) {
+  $block = _ymb_get_block_by_bid($delta);
+  $form['ymb'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Edit block'),
+  ];
+  $form['ymb']['bid'] = [
+    '#type' => 'hidden',
+    '#default_value' => $delta,
+  ];
+  $form['ymb']['receiver'] = [
+    '#type' => 'textfield',
+    '#title' => t('Number of Yandex Money Wallet'),
+    '#default_value' => $block->receiver,
+    '#maxlength' => 17,
+    '#required' => TRUE,
+    '#element_validate' => ['element_validate_number'],
+  ];
+  $form['ymb']['target'] = [
+    '#type' => 'textfield',
+    '#title' => t('Payment purpose'),
+    '#default_value' => $block->target,
+    '#required' => TRUE,
+  ];
+  $form['ymb']['sum'] = [
+    '#type' => 'textfield',
+    '#title' => t('Amount to be prompted'),
+    '#default_value' => $block->sum,
+    '#required' => TRUE,
+    '#maxlength' => 4,
+    '#element_validate' => ['element_validate_number'],
+  ];
+  $form['ymb']['url'] = [
+    '#type' => 'textfield',
+    '#title' => t('Link for redirecting'),
+    '#default_value' => $block->url,
+  ];
+  $form['ymb']['description'] = [
+    '#type' => 'textarea',
+    '#title' => t('Description'),
+    '#default_value' => $block->description,
+  ];
+  $form['ymb']['go'] = [
+    '#type' => 'submit',
+    '#value' => t('Save block'),
+    '#submit' => ['ymb_block_edit_submit'],
+  ];
+  return $form;
+}
+
+/**
+ * Form submission handler for ymb_block_edit().
+ *
+ * @see ymb_block_edit()
+ */
+function ymb_block_edit_submit($form, &$form_state) {
+  $submitform = $form['ymb'];
+  $bid = $submitform['bid']['#value'];
+  $receiver = $submitform['receiver']['#value'];
+  $target = $submitform['target']['#value'];
+  $sum = $submitform['sum']['#value'];
+  $url = $submitform['url']['#value'];
+  $description = $submitform['description']['#value'];
+
+  db_update('block_custom')
+    ->fields([
+      'body' => _ymb_generate_template($bid, $receiver, $target, $sum, $url, $description),
+    ])
+    ->condition('bid', $bid)
+    ->execute();
+
+  db_update('ymb')
+    ->fields([
+      'receiver' => $receiver,
+      'target' => $target,
+      'sum' => $sum,
+      'url' => $url,
+      'description' => $description,
+    ])
+    ->condition('bid', $bid)
+    ->execute();
+
+  drupal_set_message(t('Block saved!'));
+  drupal_goto('admin/structure/ymb');
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function ymb_preprocess_block(&$variables) {
+  $bid = $variables['block']->delta;
+
+  if (_ymb_get_block_by_bid($bid)) {
+    $variables['classes_array'][] = drupal_html_class('block-ymb');
+  }
+}

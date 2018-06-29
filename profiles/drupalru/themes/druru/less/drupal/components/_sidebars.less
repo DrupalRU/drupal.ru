@@ -67,6 +67,7 @@ body {
           a {
             line-height: 1.4em;
             color: lighten(@brand-primary, @tone);
+
             &:hover, &:focus {
               color: @brand-primary;
             }
@@ -95,22 +96,25 @@ body {
     }
   }
 
-  &.two-sidebars, &.sidebar-first {
+  &.two-sidebars,
+  &.sidebar-first {
     section.main {
       @media @very-smalld {
         float: right;
       }
     }
   }
+
   aside {
     &.second {
       clear: left;
+
       @media @very-smalld {
         clear: none;
       }
     }
-    ul:not(.pager) {
 
+    ul:not(.pager) {
       // Makes links in left side block black.
       // Need to move inside .li(<here>) and uncomment.
       //
@@ -125,6 +129,7 @@ body {
       //  }
       //}
 
+      margin-left: -@padding-base-horizontal;
       .li-select();
     }
   }

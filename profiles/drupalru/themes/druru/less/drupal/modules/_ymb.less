@@ -1,0 +1,24 @@
+.ymb-form {
+  .form-item-sum {
+    &:extend(.form-group);
+
+    input {
+      &:extend(.form-control);
+    }
+  }
+
+  .form-item-payment-type {
+    &:extend(.radio);
+    input[type="radio"] {
+      &:extend(.radio input[type="radio"]);
+    }
+  }
+
+  .form-submit {
+    &:extend(.btn, .btn-primary);
+
+    .front & {
+      &:extend(.btn-default);
+    }
+  }
+}

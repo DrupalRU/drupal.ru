@@ -1076,7 +1076,8 @@ output {
   line-height: 1.2;
   color: #555555;
 }
-.form-control {
+.form-control,
+.ymb-form .form-item-sum input {
   display: block;
   width: 100%;
   height: 32px;
@@ -1164,11 +1165,13 @@ input[type="search"] {
     line-height: 45px;
   }
 }
-.form-group {
+.form-group,
+.ymb-form .form-item-sum {
   margin-bottom: 15px;
 }
 .radio,
-.checkbox {
+.checkbox,
+.ymb-form .form-item-payment-type {
   position: relative;
   display: block;
   margin-top: 10px;
@@ -1185,7 +1188,8 @@ input[type="search"] {
 .radio input[type="radio"],
 .radio-inline input[type="radio"],
 .checkbox input[type="checkbox"],
-.checkbox-inline input[type="checkbox"] {
+.checkbox-inline input[type="checkbox"],
+.ymb-form .form-item-payment-type input[type="radio"] {
   position: absolute;
   margin-left: -20px;
   margin-top: 4px \9;
@@ -1542,7 +1546,8 @@ select[multiple].input-lg {
     font-size: 13px;
   }
 }
-.btn {
+.btn,
+.ymb-form .form-submit {
   display: inline-block;
   margin-bottom: 0;
   font-weight: normal;
@@ -1603,7 +1608,8 @@ a.btn.disabled,
 fieldset[disabled] a.btn {
   pointer-events: none;
 }
-.btn-default {
+.btn-default,
+.front .ymb-form .form-submit {
   color: #333;
   background-color: #fff;
   border-color: #ccc;
@@ -1660,7 +1666,8 @@ fieldset[disabled] .btn-default.focus {
   color: #fff;
   background-color: #333;
 }
-.btn-primary {
+.btn-primary,
+.ymb-form .form-submit {
   color: #fff;
   background-color: #3D76A0;
   border-color: #36688e;
@@ -5773,7 +5780,8 @@ fieldset[disabled] .btn-accent.focus {
 }
 .form-control,
 .form-control:focus,
-.form-control:hover {
+.form-control:hover,
+.ymb-form .form-item-sum input {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -9909,6 +9917,17 @@ span.geshifilter code,
 }
 #block-drurum-new li a i {
   margin-right: 5px;
+}
+.block-ymb {
+  border: 1px solid #df9b10;
+  background-color: #fae4b7;
+  padding: 15px !important;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.front .region-sidebar-first .block-ymb:first-child,
+.front .region-sidebar-second .block-ymb:first-child {
+  margin-top: -12px;
 }
 [aria-label] {
   position: relative;

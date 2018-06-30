@@ -1,0 +1,12 @@
+name = Yandex Money Blocks
+description = Create blocks with form for raising money to your Yandex Money Wallet.
+core = 7.x
+php = 5.4
+dependencies[] = block
+configure = admin/structure/ymb
+
+; Information added by Drupal.org packaging script on 2018-06-28
+version = "7.x-1.0-rc4"
+core = "7.x"
+project = "ymb"
+datestamp = "1530173026"

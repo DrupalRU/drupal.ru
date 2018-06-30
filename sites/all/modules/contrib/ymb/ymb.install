@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions.
+ */
+
+/**
+ * Attach helpers.
+ */
+require_once __DIR__ . '/ymb.helpers.inc';
+
+/**
+ * Implements hook_schema().
+ */
+function ymb_schema() {
+  $schema['ymb'] = [
+    'description' => 'Stores content of custom-made blocks.',
+    'fields' => [
+      'bid' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => "The block's {block}.bid.",
+      ],
+      'receiver' => [
+        'type' => 'varchar',
+        'length' => 17,
+        'not null' => TRUE,
+        'description' => 'Number of Yandex Money Wallet',
+      ],
+      'target' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Payment purpose',
+      ],
+      'sum' => [
+        'type' => 'varchar',
+        'length' => 4,
+        'not null' => TRUE,
+        'description' => 'Amount to be prompted',
+      ],
+      'url' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Link for redirecting',
+      ],
+      'description' => array(
+        'type' => 'text',
+        'not null' => FALSE,
+        'size' => 'big',
+        'description' => 'Description',
+      ),
+    ],
+    'primary key' => ['bid'],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function ymb_uninstall() {
+  $bids = _ymb_get_all_blocks();
+  foreach ($bids as $bid) {
+    _ymb_remove_block_by_bid($bid->bid);
+  }
+}

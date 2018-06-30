@@ -4,7 +4,6 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
-@import 'https://fonts.googleapis.com/css?family=Roboto:100,100i,300,400,400i,700&subset=cyrillic';
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -1077,7 +1076,8 @@ output {
   line-height: 1.2;
   color: #555555;
 }
-.form-control {
+.form-control,
+.ymb-form .form-item-sum input {
   display: block;
   width: 100%;
   height: 32px;
@@ -1165,11 +1165,13 @@ input[type="search"] {
     line-height: 45px;
   }
 }
-.form-group {
+.form-group,
+.ymb-form .form-item-sum {
   margin-bottom: 15px;
 }
 .radio,
-.checkbox {
+.checkbox,
+.ymb-form .form-item-payment-type {
   position: relative;
   display: block;
   margin-top: 10px;
@@ -1186,7 +1188,8 @@ input[type="search"] {
 .radio input[type="radio"],
 .radio-inline input[type="radio"],
 .checkbox input[type="checkbox"],
-.checkbox-inline input[type="checkbox"] {
+.checkbox-inline input[type="checkbox"],
+.ymb-form .form-item-payment-type input[type="radio"] {
   position: absolute;
   margin-left: -20px;
   margin-top: 4px \9;
@@ -1543,7 +1546,8 @@ select[multiple].input-lg {
     font-size: 13px;
   }
 }
-.btn {
+.btn,
+.ymb-form .form-submit {
   display: inline-block;
   margin-bottom: 0;
   font-weight: normal;
@@ -1604,7 +1608,8 @@ a.btn.disabled,
 fieldset[disabled] a.btn {
   pointer-events: none;
 }
-.btn-default {
+.btn-default,
+.front .ymb-form .form-submit {
   color: #333;
   background-color: #fff;
   border-color: #ccc;
@@ -1661,7 +1666,8 @@ fieldset[disabled] .btn-default.focus {
   color: #fff;
   background-color: #333;
 }
-.btn-primary {
+.btn-primary,
+.ymb-form .form-submit {
   color: #fff;
   background-color: #3D76A0;
   border-color: #36688e;
@@ -5774,7 +5780,8 @@ fieldset[disabled] .btn-accent.focus {
 }
 .form-control,
 .form-control:focus,
-.form-control:hover {
+.form-control:hover,
+.ymb-form .form-item-sum input {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -7344,6 +7351,42 @@ form#user-admin-permissions .form-type-checkbox {
 body.admin-menu {
   margin-top: 29px !important;
 }
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 100;
+  src: local('Roboto Thin Italic'), local('Roboto-ThinItalic'), url(https://fonts.gstatic.com/s/roboto/v18/KFOiCnqEu92Fr1Mu51QrEzQdKg.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Roboto Italic'), local('Roboto-Italic'), url(https://fonts.gstatic.com/s/roboto/v18/KFOkCnqEu92Fr1Mu51xMIzc.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Roboto Thin'), local('Roboto-Thin'), url(https://fonts.gstatic.com/s/roboto/v18/KFOkCnqEu92Fr1MmgVxMIzc.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Roboto Light'), local('Roboto-Light'), url(https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmSU5fABc9.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto'), local('Roboto-Regular'), url(https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu5mxP.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Bold'), local('Roboto-Bold'), url(https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmWUlfABc9.ttf) format('truetype');
+}
 /* roboto-100 - cyrillic_latin */
 @font-face {
   font-family: 'Roboto-fallback';
@@ -8775,9 +8818,9 @@ body .main-content {
 .region-sidebar-second .block .pager .ajax-progress.ajax-progress-throbber i {
   position: absolute;
   top: 50%;
-  top: calc(43%);
+  top: calc(50% - 7px);
   left: 50%;
-  left: calc(43%);
+  left: calc(50% - 7px);
 }
 .pagination {
   margin: 0;
@@ -10167,7 +10210,7 @@ html.js div.ctools-dropdown a.ctools-dropdown-image-link {
   height: 18px;
   width: 20px;
   display: block;
-  margin: calc(6px  + 1px) calc(0.5em + 1px) 1px calc(.2em + 1px);
+  margin: calc(12px - 6px  + 1px) calc(0.5em + 1px) 1px calc(.2em + 1px);
   padding: 6px 8px;
   box-sizing: content-box;
   z-index: 99;
@@ -10973,6 +11016,19 @@ h3.popover-title {
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 15px;
+}
+.block-ymb {
+  border: 1px solid #aaa;
+  padding: 15px !important;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+body .region-sidebar-first .block-ymb:first-child,
+body .region-sidebar-second .block-ymb:first-child {
+  margin-top: -15px;
+}
+.front .block-ymb {
+  border: 1px solid #ffffff33;
 }
 html {
   height: 100%;

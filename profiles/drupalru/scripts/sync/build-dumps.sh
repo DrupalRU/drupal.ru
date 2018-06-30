@@ -16,7 +16,6 @@ exe() {
 }
 
 . ~/.profile
-exe "drush @dru.prod cc all"
 exe "drush @dru.prod wd-del all -y"
 
 sm "Create dumps"

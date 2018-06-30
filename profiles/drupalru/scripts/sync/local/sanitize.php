@@ -42,7 +42,7 @@ $rules = [
   'taxonomy_vocabulary',
   'trigger_assignments',
   'variable',
-  'users' => ['uid', 0, '!='],
+  'users' => [['uid', 0, '!=']],
 ];
 
 $hash = hash('sha256', microtime() . '' . rand());

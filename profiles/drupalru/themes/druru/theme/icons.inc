@@ -575,7 +575,7 @@ function druru_icons_libraries() {
           t('VK'),
         ),
         'heart'      => array(
-          t('Yandex.Money'),
+          'Yandex.Money',
         ),
       ),
     ),

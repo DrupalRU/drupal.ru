@@ -4,7 +4,7 @@ set -e
 
 CI_COLOR='\033[1;32m'
 NO_COLOR='\033[0m'
-DRUPALRU_DUMP_FILE=/tmp/$(date +%Y%m%d%H%M%S).sql
+DRUPALRU_DUMP_FILE=$HOME/backups/drupal_main_$(date +%Y%m%d%H%M%S).sql
 sm() {
   echo "";
   echo "${CI_COLOR}$@${NO_COLOR}";
@@ -19,9 +19,8 @@ exe() {
 exe "drush @dru.prod wd-del all -y"
 
 sm "Create dumps"
-exe "drush @dru.prod sql-dump --result-file=$DRUPALRU_DUMP_FILE --skip-tables-list=sphinxmain -y"
-drush @dru.temp sqlc < $DRUPALRU_DUMP_FILE
-exe "rm $DRUPALRU_DUMP_FILE"
+exe "drush @dru.prod sql-dump --result-file=$DRUPALRU_DUMP_FILE --gzip --skip-tables-list=sphinxmain -y"
+zcat $DRUPALRU_DUMP_FILE.gz | drush @dru.temp sqlc
 exe "drush @dru.temp scr profiles/drupalru/scripts/sync/dev/sanitize.php"
 drush @dru.temp sql-dump --result-file=$DRUPALRU_DEV_DUMP --gzip > /dev/null 2>&1
 # Cleaning for local environments

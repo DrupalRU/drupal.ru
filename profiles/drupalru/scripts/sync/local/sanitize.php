@@ -35,7 +35,7 @@ $rules = array(
   'role',
   'role_permission',
   'simplenews_category',
-  'sphinxmain', // view
+//  'sphinxmain', // view
   'system',
   'taxonomy_term_data',
   'taxonomy_term_hierarchy',

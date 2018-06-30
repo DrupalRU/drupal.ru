@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 set -e
 
@@ -47,9 +47,10 @@ if [ -z $(which zcat) ]; then
   exit 1;
 fi
 
+. ~/.profile
 exe "cd $DUMP_DIR"
-exe "Downloading dump from source..."
-wget -O "drupalru-dump.sql.gz" "$DRUPALRU_DEV_DUMP_SOURCE"
+sm "Downloading dump from source..."
+wget -O drupalru-dump.sql.gz $DRUPALRU_DEV_DUMP_SOURCE
 sm "zcat \"$DUMP_DIR/drupalru-dump.sql.gz\" | drush $DRUSH_ALIAS sqlc"
 zcat "$DUMP_DIR/drupalru-dump.sql.gz" | drush $DRUSH_ALIAS sqlc
 exe "drush $DRUSH_ALIAS en devel_generate -y"

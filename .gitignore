@@ -6,10 +6,9 @@ sites/local.sites.php
 sites/*/files
 sites/local
 
-/*.txt
-!/robots.txt
-
 ### Excludes of dev environment
 # PhpStorm
 .idea
+
+sites/all/translations
 

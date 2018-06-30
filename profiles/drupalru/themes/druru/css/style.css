@@ -7946,6 +7946,7 @@ body aside.second {
   }
 }
 body aside ul:not(.pager) {
+  margin-left: -12px;
   padding-left: 2px;
 }
 body aside ul:not(.pager) > * {
@@ -8532,12 +8533,11 @@ body.page-user #blog.short-view .node > h2 i {
 body.page-user #blog.short-view .node:not(:first-child) h2 {
   margin-top: 0;
 }
-body.front {
-  background: #1D3E5A;
-  color: #c8dce5;
-}
 body.front .navbar-second {
   background: transparent;
+}
+body.front .region-content {
+  padding-left: 15px;
 }
 body.front .region-content section {
   margin-top: 25px;
@@ -8547,84 +8547,6 @@ body.front .region-content section:first-child {
 }
 body.front .region-content section h2 {
   margin-top: 0;
-}
-body.front h1,
-body.front h2,
-body.front h3,
-body.front .h1,
-body.front .h2,
-body.front .h3,
-body.front h1 small,
-body.front h2 small,
-body.front h3 small,
-body.front .h1 small,
-body.front .h2 small,
-body.front .h3 small,
-body.front h1 .small,
-body.front h2 .small,
-body.front h3 .small,
-body.front .h1 .small,
-body.front .h2 .small,
-body.front .h3 .small {
-  color: #ebb444;
-}
-body.front h1 a,
-body.front h2 a,
-body.front h3 a,
-body.front .h1 a,
-body.front .h2 a,
-body.front .h3 a,
-body.front h1 a small,
-body.front h2 a small,
-body.front h3 a small,
-body.front .h1 a small,
-body.front .h2 a small,
-body.front .h3 a small,
-body.front h1 a .small,
-body.front h2 a .small,
-body.front h3 a .small,
-body.front .h1 a .small,
-body.front .h2 a .small,
-body.front .h3 a .small {
-  color: #ebb444;
-}
-body.front h1 a:hover,
-body.front h2 a:hover,
-body.front h3 a:hover,
-body.front .h1 a:hover,
-body.front .h2 a:hover,
-body.front .h3 a:hover,
-body.front h1 a:focus,
-body.front h2 a:focus,
-body.front h3 a:focus,
-body.front .h1 a:focus,
-body.front .h2 a:focus,
-body.front .h3 a:focus,
-body.front h1 a:hover small,
-body.front h2 a:hover small,
-body.front h3 a:hover small,
-body.front .h1 a:hover small,
-body.front .h2 a:hover small,
-body.front .h3 a:hover small,
-body.front h1 a:focus small,
-body.front h2 a:focus small,
-body.front h3 a:focus small,
-body.front .h1 a:focus small,
-body.front .h2 a:focus small,
-body.front .h3 a:focus small,
-body.front h1 a:hover .small,
-body.front h2 a:hover .small,
-body.front h3 a:hover .small,
-body.front .h1 a:hover .small,
-body.front .h2 a:hover .small,
-body.front .h3 a:hover .small,
-body.front h1 a:focus .small,
-body.front h2 a:focus .small,
-body.front h3 a:focus .small,
-body.front .h1 a:focus .small,
-body.front .h2 a:focus .small,
-body.front .h3 a:focus .small {
-  color: #eebf61;
 }
 body.front .navbar {
   margin: 0;
@@ -8648,8 +8570,9 @@ body.front .jumbotron {
   background-position: center   101%;
   background-repeat: repeat-x;
   color: #efefef;
-  padding-bottom: 260px;
+  margin-bottom: 0;
   padding-top: 60px;
+  padding-bottom: 60px;
   position: relative;
   z-index: 2;
 }
@@ -8668,6 +8591,9 @@ body.front .jumbotron .download-drupal-front i {
   -o-text-shadow: 0 0 80px;
   text-shadow: 0 0 80px;
 }
+body.front .jumbotron + * {
+  margin-top: 30px;
+}
 body.front .block-simple-events .event-list {
   display: -webkit-box;
   display: -moz-box;
@@ -8679,8 +8605,6 @@ body.front .block-simple-events .event-list {
   overflow: auto;
 }
 body.front .block-simple-events .event-list .thumbnail {
-  background: #163651;
-  border: 1px solid #132e45;
   width: 32%;
   margin-right: 2%;
   margin-bottom: 0;
@@ -8700,25 +8624,13 @@ body.front .block-simple-events .event-list .thumbnail.add-more-link {
   font-size: 5em;
   text-align: center;
   line-height: 5em;
-  color: #132e45;
   -webkit-transition: all 0.2s ease-out;
   -moz-transition: all 0.2s ease-out;
   -o-transition: all 0.2s ease-out;
   transition: all 0.2s ease-out;
 }
-body.front .block-simple-events .event-list .thumbnail.add-more-link:hover,
-body.front .block-simple-events .event-list .thumbnail.add-more-link:focus {
-  border-color: #0f2538;
-  color: #0f2538;
-}
 body.front .block-simple-events .event-list .thumbnail .caption {
   font-weight: 300;
-  color: #c8dce5;
-}
-body.front .frontpage-list {
-  background-color: #163651;
-  border: 1px solid #132e45;
-  padding: 10px 16px;
 }
 body.front .frontpage-list .list-group {
   margin-left: -16px;
@@ -8744,11 +8656,10 @@ body.front .frontpage-list .h4 {
   padding-right: 16px;
 }
 body.front .frontpage-list .h4 .icon {
-  color: #df9b10;
   width: 20px;
 }
-body.front aside ul:not(.pager) > * a:first-of-type i {
-  color: rgba(255, 255, 255, 0.5);
+body.front .frontpage-list .h4 .icon.fa-check-circle-o {
+  color: #df9b10;
 }
 body .main-content {
   position: relative;
@@ -10006,6 +9917,17 @@ span.geshifilter code,
 }
 #block-drurum-new li a i {
   margin-right: 5px;
+}
+.block-ymb {
+  border: 1px solid #df9b10;
+  background-color: #fae4b7;
+  padding: 15px !important;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.front .region-sidebar-first .block-ymb:first-child,
+.front .region-sidebar-second .block-ymb:first-child {
+  margin-top: -12px;
 }
 [aria-label] {
   position: relative;
@@ -11556,3 +11478,4 @@ sup.beta {
   line-height: .3em;
   margin: 0;
 }
+/*# sourceMappingURL=style.css.map */

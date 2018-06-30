@@ -14,6 +14,7 @@ exe() {
   $@;
 }
 
+. ~/.profile
 exe "drush @dru.prod cc all"
 exe "drush @dru.prod wd-del all -y"
 exe "drush sql-sync @dru.prod @dru.temp --skip-tables-list=sphinxmain -y"

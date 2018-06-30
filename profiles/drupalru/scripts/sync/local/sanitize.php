@@ -5,7 +5,7 @@
  * Sanitize dump of drupal.ru database.
  */
 
-$rules = array(
+$rules = [
   'actions',
   'block',
   'block_custom',
@@ -35,19 +35,19 @@ $rules = array(
   'role',
   'role_permission',
   'simplenews_category',
-//  'sphinxmain', // view
+  //  'sphinxmain', // view
   'system',
   'taxonomy_term_data',
   'taxonomy_term_hierarchy',
   'taxonomy_vocabulary',
   'trigger_assignments',
   'variable',
-  'users' => array(array('uid', 0, '!=')),
-);
+  'users' => ['uid', [0, 1], 'NOT IN'],
+];
 
 $hash = hash('sha256', microtime() . '' . rand());
-$clean_variables = array(
-  'values' => array(
+$clean_variables = [
+  'values' => [
     'abuse_warn_bcc' => 's:15:"mail@drupal.loc";',
     'site_mail' => 's:15:"mail@drupal.loc";',
     'pm_email_notify_from' => 's:15:"mail@drupal.loc";',
@@ -57,8 +57,9 @@ $clean_variables = array(
     'simplenews_private_key' => sprintf('s:32:"%s";', substr($hash, 0, 32)),
     'spambot_sfs_api_key' => sprintf('s:14:"%s";', substr($hash, 0, 14)),
     'token' => sprintf('s:32:"%s";', substr($hash, 0, 32)),
-  ),
-  'drop' => array(
+    'comment_notify_node_notify_default_mailalert' => 'i:0;',
+  ],
+  'drop' => [
     'abuse_',
     'birthdays_',
     'color_garland_',
@@ -79,8 +80,8 @@ $clean_variables = array(
     'user_relationship_',
     'user_relationships_',
     'xtemplate_',
-  ),
-);
+  ],
+];
 
 $rules_keys = array_keys($rules);
 foreach (db_find_tables('%') as $table) {
@@ -112,7 +113,7 @@ foreach (db_find_tables('%') as $table) {
 print PHP_EOL;
 print '####### Clean Variables #######' . PHP_EOL;
 foreach ($clean_variables['drop'] as $variable) {
-  $query = db_delete('variable')->condition('name', db_like($variable).'%', 'LIKE');
+  $query = db_delete('variable')->condition('name', db_like($variable) . '%', 'LIKE');
   print str_replace(PHP_EOL, '', $query->__toString()) . PHP_EOL;
   $query->execute();
 }
@@ -121,7 +122,7 @@ print PHP_EOL;
 print '####### Change sensitive data #######' . PHP_EOL;
 foreach ($clean_variables['values'] as $variable => $value) {
   $query = db_update('variable')
-    ->fields(array('value' => $value))
+    ->fields(['value' => $value])
     ->condition('name', $variable);
   print str_replace(PHP_EOL, '', $query->__toString()) . PHP_EOL;
   $query->execute();
@@ -130,7 +131,7 @@ foreach ($clean_variables['values'] as $variable => $value) {
 print PHP_EOL;
 print '####### Cleaning of blocks #######' . PHP_EOL;
 $query = db_update('block_custom')
-  ->fields(array('body' => ''))
+  ->fields(['body' => ''])
   ->condition('bid', 46); // Block with counters
 print str_replace(PHP_EOL, '', $query->__toString()) . PHP_EOL;
 $query->execute();

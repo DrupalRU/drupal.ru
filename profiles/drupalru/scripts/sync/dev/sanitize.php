@@ -5,7 +5,7 @@
  * Sanitize dump of drupal.ru database.
  */
 
-$dev_team_role = getenv('DRUPALRU_TEAM_ROLE');
+$dev_team_role = 'Dev Team';
 
 // Getting Dev team.
 $usersQuery = db_select('users', 'u')->fields('u', ['uid']);
@@ -63,7 +63,7 @@ $rules = [
   'role',
   'role_permission',
   'simplenews_category',
-//  'sphinxmain', // view
+  //  'sphinxmain', // view
   'system',
   'taxonomy_term_data',
   'taxonomy_term_hierarchy',
@@ -73,7 +73,7 @@ $rules = [
   'users_roles' => [$not_dev_team_rule],
   'users' => [
     $not_dev_team_rule,
-    ['uid', 0, '!='],
+    ['uid', [0, 1], 'NOT IN'],
   ],
 ];
 
@@ -89,6 +89,7 @@ $clean_variables = [
     'simplenews_private_key' => sprintf('s:32:"%s";', substr($hash, 0, 32)),
     'spambot_sfs_api_key' => sprintf('s:14:"%s";', substr($hash, 0, 14)),
     'token' => sprintf('s:32:"%s";', substr($hash, 0, 32)),
+    'comment_notify_node_notify_default_mailalert' => 'i:0;',
   ],
   'drop' => [
     'abuse_',

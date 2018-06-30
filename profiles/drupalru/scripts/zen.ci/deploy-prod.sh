@@ -18,7 +18,7 @@ TIMESTAMP=$(date +%Y.%m.%d_%H:%M:%S)
 ENVIRONMENT=${ENVIRONMENT:-dev}
 SITE_NAME=${SITE:-$ENVIRONMENT.drupal.ru}
 SITE_DIR="$HOME/domains/$SITE_NAME"
-SCRIPTS_DIR="$ZENCI_DEPLOY_DIR/profiles/drupalru/scripts/zen.ci"
+SCRIPTS_DIR="$ZENCI_DEPLOY_DIR/profiles/drupalru/scripts"
 ENVIRONMENT_DIR="$HOME/envs/$ENVIRONMENT"
 VERSION="$TIMESTAMP.$COMMIT"
 VERSIONS_DIR="$ENVIRONMENT_DIR/versions"
@@ -50,6 +50,17 @@ drush @dru.${ENVIRONMENT} updb -y
 sm "Очистка кэша"
 drush @dru.${ENVIRONMENT} cc all
 
+# Making of backup for dev environments.
+sm "Scripts dir: $SCRIPTS_DIR"
+chmod +x "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"
+sh "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"
+chmod -x "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"
+
+# Making of backup for local environments.
+chmod +x "$SCRIPTS_DIR/sync/local/make-prod-dump.sh"
+sh "$SCRIPTS_DIR/sync/local/make-prod-dump.sh"
+chmod -x "$SCRIPTS_DIR/sync/local/make-prod-dump.sh"
+
 cd $VERSIONS_DIR
 if [ $(ls -l | grep -c ^d) -gt $STORE_VERSIONS ] ; then
     sm "Удаление устаревших версий"
@@ -62,16 +73,6 @@ if [ $(ls -l | grep -c ^d) -gt $STORE_VERSIONS ] ; then
     done
 else
     sm "Устаревших версий не найдено"
-fi;
-
-# Making of backup for dev environments.
-chmod +x "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"
-sh "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"
-chmod -x "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"
-
-# Making of backup for local environments.
-chmod +x "$SCRIPTS_DIR/sync/local/make-prod-dump.sh"
-sh "$SCRIPTS_DIR/sync/local/make-prod-dump.sh"
-chmod -x "$SCRIPTS_DIR/sync/local/make-prod-dump.sh"
+fi
 
 sm "Деплоймент завершён"

@@ -19,9 +19,9 @@ exe() {
 exe "drush @dru.prod wd-del all -y"
 
 sm "Create dumps"
-drush @dru.prod sql-dump --result-file=$DRUPALRU_DUMP_FILE --skip-tables-list=sphinxmain -y
-drush @dru.temp sqlc < $DRUPALRU_DUMP_FILE
-rm $DRUPALRU_DUMP_FILE
+exe "drush @dru.prod sql-dump --result-file=$DRUPALRU_DUMP_FILE --skip-tables-list=sphinxmain -y"
+exe "drush @dru.temp sqlc < $DRUPALRU_DUMP_FILE"
+exe "rm $DRUPALRU_DUMP_FILE"
 exe "drush @dru.temp scr profiles/drupalru/scripts/sync/dev/sanitize.php"
 drush @dru.temp sql-dump --result-file=$DRUPALRU_DEV_DUMP --gzip > /dev/null 2>&1
 # Cleaning for local environments

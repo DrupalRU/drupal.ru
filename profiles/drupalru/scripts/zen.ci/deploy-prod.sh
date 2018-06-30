@@ -50,6 +50,17 @@ drush @dru.${ENVIRONMENT} updb -y
 sm "Очистка кэша"
 drush @dru.${ENVIRONMENT} cc all
 
+# Making of backup for dev environments.
+sm "Scripts dir: $SCRIPTS_DIR"
+chmod +x "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"
+sh "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"
+chmod -x "$SCRIPTS_DIR/sync/dev/make-prod-dump.sh"
+
+# Making of backup for local environments.
+chmod +x "$SCRIPTS_DIR/sync/local/make-prod-dump.sh"
+sh "$SCRIPTS_DIR/sync/local/make-prod-dump.sh"
+chmod -x "$SCRIPTS_DIR/sync/local/make-prod-dump.sh"
+
 cd $VERSIONS_DIR
 if [ $(ls -l | grep -c ^d) -gt $STORE_VERSIONS ] ; then
     sm "Удаление устаревших версий"

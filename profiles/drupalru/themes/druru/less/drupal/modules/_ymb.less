@@ -1,0 +1,40 @@
+.ymb-form {
+  .form-item-sum {
+    &:extend(.form-group);
+
+    input {
+      &:extend(.form-control);
+    }
+  }
+
+  .form-item-payment-type {
+    &:extend(.radio);
+    input[type="radio"] {
+      &:extend(.radio input[type="radio"]);
+    }
+  }
+
+  .form-submit {
+    &:extend(.btn, .btn-primary);
+
+    .front & {
+      &:extend(.btn-default);
+    }
+  }
+}
+
+.block-ymb {
+  border: 1px solid #aaa;
+  padding: 15px !important;
+  margin-left: -15px;
+  margin-right: -15px;
+
+  body .region-sidebar-first &:first-child,
+  body .region-sidebar-second &:first-child {
+    margin-top: -15px;
+  }
+
+  .front & {
+    border: 1px solid #ffffff33;
+  }
+}

@@ -1,0 +1,168 @@
+# $Id$
+#
+# Russian translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  ymb.helpers.inc: n/a
+#  ymb.module: n/a
+#  ymb.info: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2018-06-28 12:49+0500\n"
+"PO-Revision-Date: 2018-06-28 12:49+0500\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Russian <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
+
+#: ymb.helpers.inc:63
+msgid "Amount"
+msgstr "Сумма"
+
+#: ymb.helpers.inc:64
+msgid "This field is required."
+msgstr "Это поле обязательно для заполнения."
+
+#: ymb.helpers.inc:65
+msgid "Yandex.Money"
+msgstr "Яндекс.Деньги"
+
+#: ymb.helpers.inc:66
+msgid "Bank card"
+msgstr "Банковская карта"
+
+#: ymb.helpers.inc:67
+msgid "Pay"
+msgstr "Оплатить"
+
+#: ymb.module:63
+msgid "Payment settings"
+msgstr "Параметры приёма платежей"
+
+#: ymb.module:67;174;313
+msgid "Number of Yandex Money Wallet"
+msgstr "Кошелек получателя"
+
+#: ymb.module:76;182;321
+msgid "Payment purpose"
+msgstr "Назначение платежа"
+
+#: ymb.module:83;188;327
+msgid "Amount to be prompted"
+msgstr "Сумма платежа по-умолчанию"
+
+#: ymb.module:92;196;335
+msgid "Link for redirecting"
+msgstr "URL перенаправления в случае успеха"
+
+#: ymb.module:98;201;340
+msgid "Description"
+msgstr "Описание"
+
+#: ymb.module:103;131
+msgid "edit"
+msgstr "изменить"
+
+#: ymb.module:131
+msgid "delete"
+msgstr "удалить"
+
+#: ymb.module:137
+msgid "Block ID"
+msgstr "ID блока"
+
+#: ymb.module:138
+msgid "Block Title"
+msgstr "Название блока"
+
+#: ymb.module:139
+msgid "Receiver"
+msgstr "Кошелёк"
+
+#: ymb.module:140
+msgid "Target"
+msgstr "Назначение платежа"
+
+#: ymb.module:141
+msgid "Actions"
+msgstr "Действия"
+
+#: ymb.module:148;170
+msgid "Create new block"
+msgstr "Создать новый блок"
+
+#: ymb.module:206
+msgid "Create block"
+msgstr "Создать блок"
+
+#: ymb.module:270
+msgid "New block created!"
+msgstr "Новый блок создан!"
+
+#: ymb.module:282
+msgid "Are you sure you want to delete the block %name?"
+msgstr ""
+"Вы действительно хотите удалить блок "
+"%name?"
+
+#: ymb.module:282
+msgid "Delete"
+msgstr "Удалить"
+
+#: ymb.module:282
+msgid "Cancel"
+msgstr "Отмена"
+
+#: ymb.module:293
+msgid "The block %name has been removed."
+msgstr "Блок %name удален."
+
+#: ymb.module:305;41
+msgid "Edit block"
+msgstr "Редактировать блок"
+
+#: ymb.module:345
+msgid "Save block"
+msgstr "Сохранить блок"
+
+#: ymb.module:383
+msgid "Block saved!"
+msgstr "Блок сохранен!"
+
+#: ymb.module:18 ymb.info:0
+msgid "Yandex Money Blocks"
+msgstr ""
+"Блоки сбора средств через "
+"Яндекс.Деньги"
+
+#: ymb.module:19
+msgid "Raise money to your Yandex Money Wallet."
+msgstr ""
+"Модуль позволяет создавать блоки с "
+"формой сбора средств через "
+"Яндекс.Деньги"
+
+#: ymb.module:26
+msgid "Add new Yandex Money Block"
+msgstr "Добавить новый блок"
+
+#: ymb.module:27
+msgid "Create block with form to raise money to your Yandex Money Wallet."
+msgstr "Добавить новый блок"
+
+#: ymb.module:34
+msgid "Delete block"
+msgstr "Удалить блок"
+
+#: ymb.info:0
+msgid "Create blocks with form for raising money to your Yandex Money Wallet."
+msgstr ""
+"Модуль позволяет создавать блоки с "
+"формой сбора средств через "
+"Яндекс.Деньги"
+

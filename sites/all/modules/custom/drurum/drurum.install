@@ -752,3 +752,9 @@ function drurum_update_7038() {
     ->execute();
 }
 
+/**
+ * Enable module "ymb".
+ */
+function drurum_update_7039() {
+  module_enable(['ymb']);
+}

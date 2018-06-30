@@ -1,0 +1,13 @@
+name = One Click Upload
+description = Simple file uploads to BUEditor, CKEditor and textareas.
+core = 7.x
+package = Content authoring
+configure = admin/config/content/ocupload
+php = 5.4
+
+; Information added by Drupal.org packaging script on 2017-05-06
+version = "7.x-2.1"
+core = "7.x"
+project = "ocupload"
+datestamp = "1494103692"
+

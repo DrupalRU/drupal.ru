@@ -10034,6 +10034,9 @@ span.geshifilter code,
 .maintenance-page #navbar {
   height: 90px;
 }
+.ocupload-button-wrapper .input-group {
+  display: none;
+}
 body.adminimal-menu {
   height: calc(100% - 29px);
 }

@@ -9919,11 +9919,11 @@ span.geshifilter code,
   margin-right: 5px;
 }
 .block-ymb {
-  border: 1px solid #df9b10;
   background-color: #fae4b7;
-  padding: 15px !important;
+  border: 1px solid #df9b10;
   margin-left: -15px;
   margin-right: -15px;
+  padding: 15px !important;
 }
 .front .region-sidebar-first .block-ymb:first-child,
 .front .region-sidebar-second .block-ymb:first-child {
@@ -10941,19 +10941,6 @@ h3.popover-title {
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 15px;
-}
-.block-ymb {
-  border: 1px solid #aaa;
-  padding: 15px !important;
-  margin-left: -15px;
-  margin-right: -15px;
-}
-body .region-sidebar-first .block-ymb:first-child,
-body .region-sidebar-second .block-ymb:first-child {
-  margin-top: -15px;
-}
-.front .block-ymb {
-  border: 1px solid #ffffff33;
 }
 html {
   height: 100%;

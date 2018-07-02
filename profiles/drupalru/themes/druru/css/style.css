@@ -9051,6 +9051,7 @@ ul.li-accent > *:before {
 }
 .node .content {
   clear: both;
+  margin-top: 10px;
 }
 .node.node-unpublished {
   background-color: #f2dede;

@@ -8538,6 +8538,7 @@ body.front .navbar-second {
 }
 body.front .region-content {
   padding-left: 15px;
+  padding-right: 18px;
 }
 body.front .region-content section {
   margin-top: 25px;
@@ -9919,11 +9920,11 @@ span.geshifilter code,
   margin-right: 5px;
 }
 .block-ymb {
-  border: 1px solid #df9b10;
   background-color: #fae4b7;
-  padding: 15px !important;
+  border: 1px solid #df9b10;
   margin-left: -15px;
   margin-right: -15px;
+  padding: 15px !important;
 }
 .front .region-sidebar-first .block-ymb:first-child,
 .front .region-sidebar-second .block-ymb:first-child {
@@ -11478,4 +11479,3 @@ sup.beta {
   line-height: .3em;
   margin: 0;
 }
-/*# sourceMappingURL=style.css.map */

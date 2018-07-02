@@ -8595,6 +8595,9 @@ body.front .jumbotron .download-drupal-front i {
 body.front .jumbotron + * {
   margin-top: 30px;
 }
+body.front .jumbotron p {
+  font-weight: 300;
+}
 body.front .block-simple-events .event-list {
   display: -webkit-box;
   display: -moz-box;

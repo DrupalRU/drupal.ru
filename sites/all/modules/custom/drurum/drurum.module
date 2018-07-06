@@ -506,3 +506,10 @@ function drurum_mail_alter(&$message) {
     watchdog($type, $warning, $variables, WATCHDOG_WARNING);
   }
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function drurum_form_comment_node_blog_form_alter(&$form, &$form_state, $form_id) {
+  hide($form['field_comment_upload']);
+}

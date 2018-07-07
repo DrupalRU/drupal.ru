@@ -22,6 +22,11 @@ function dru_filters_filter_info() {
     ],
   ];
 
+  $filters['dru_filters_colorbox'] = [
+    'title' => t('Open images in colorbox'),
+    'process callback' => '_dru_filters_colorbox_process',
+  ];
+
   return $filters;
 }
 
@@ -133,4 +138,36 @@ function dru_filters_table_fix_process($html, $settings) {
  */
 function _dru_filters_explode(string $string, string $separator = ' '): array {
   return array_filter(explode($separator, $string), 'trim');
+}
+
+/**
+ * @param string $text
+ * @param string $filter
+ * @param string $format
+ *
+ * @return string
+ */
+function _dru_filters_colorbox_process($text, $filter, $format) {
+  if (preg_match('/<img(.*)?>/ui', $text)) {
+    module_load_include('php', 'dru_filters', 'src/DOMDocument/DruDOMDocument');
+
+    $html = mb_convert_encoding($text, 'HTML-ENTITIES', 'UTF-8');
+    $doc = new DruDOMDocument();
+    $doc->preserveWhiteSpace = FALSE;
+    $doc->formatOutput = TRUE;
+    $doc->loadHTML($html);
+    $images = $doc->getElementsByTagName('img');
+
+    foreach ($images as $image) {
+      $a = $doc->createElement('a');
+      $image->parentNode->insertBefore($a, $image);
+      $a->appendChild($image);
+      $a->setAttribute('href', $image->getAttribute('src'));
+      $a->setAttribute('class', 'colorbox-load');
+    }
+
+    return html_entity_decode($doc->saveHTML());
+  }
+
+  return $text;
 }

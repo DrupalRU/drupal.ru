@@ -758,3 +758,26 @@ function drurum_update_7038() {
 function drurum_update_7039() {
   module_enable(['ymb']);
 }
+
+/**
+ * Enable module "Colorbox".
+ */
+function drurum_update_7040() {
+  module_enable(['colorbox']);
+  db_insert('variable')
+    ->fields([
+      'name' => 'colorbox_load',
+      'value' => 'i:1;',
+    ])
+    ->execute();
+  db_insert('filter')
+    ->fields([
+      'format' => '1',
+      'module' => 'dru_filters',
+      'name' => 'dru_filters_colorbox',
+      'weight' => '0',
+      'status' => '1',
+      'settings' => 'a:0:{}',
+    ])
+    ->execute();
+}

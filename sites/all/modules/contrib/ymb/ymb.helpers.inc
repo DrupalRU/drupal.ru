@@ -75,7 +75,7 @@ function _ymb_generate_template($bid, $receiver, $target, $sum, $url, $descripti
       <div class='form-item form-type-radios form-item-payment-type'>
         <div id='edit-payment-type--{$bid}' class='form-radios'>
           <div class='form-item form-type-radio form-item-payment-type'>
-            <input id='edit-payment-type-pc--{$bid}' type='radio' name='paymentType' value='PC' class='form-radio'><label class='option' for='edit-payment-type-pc--{$bid}'>{$label_pc}</label>
+            <input id='edit-payment-type-pc--{$bid}' type='radio' name='paymentType' value='PC' class='form-radio' checked><label class='option' for='edit-payment-type-pc--{$bid}'>{$label_pc}</label>
           </div>
           <div class='form-item form-type-radio form-item-payment-type'>
             <input id='edit-payment-type-ac--{$bid}' type='radio' name='paymentType' value='AC' class='form-radio'><label class='option' for='edit-payment-type-ac--{$bid}'>{$label_ac}</label>

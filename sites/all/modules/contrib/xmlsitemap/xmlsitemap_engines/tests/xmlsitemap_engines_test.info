@@ -6,9 +6,8 @@ files[] = xmlsitemap_engines_test.module
 version = VERSION
 hidden = TRUE
 
-; Information added by Drupal.org packaging script on 2016-05-25
-version = "7.x-2.3"
+; Information added by Drupal.org packaging script on 2018-07-18
+version = "7.x-2.4"
 core = "7.x"
 project = "xmlsitemap"
-datestamp = "1464191061"
-
+datestamp = "1531917526"

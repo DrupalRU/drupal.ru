@@ -7965,6 +7965,7 @@ body aside ul:not(.pager) > * a:first-of-type.active.active {
   position: relative;
   background: #fff;
   padding: 6px 0 6px 6px;
+  margin-top: 0;
 }
 .main-content .comment:hover .dropdown,
 .main-content .comment:focus .dropdown {
@@ -8039,9 +8040,8 @@ body aside ul:not(.pager) > * a:first-of-type.active.active {
 .main-content .comment.hovered .dropdown {
   opacity: 1;
 }
-.main-content .comment.new-comment {
-  border-left: 7px solid #6ab7dd;
-  margin-left: 0;
+.main-content .comment.new-comment .media-heading > .media-header-item:nth-child(2) {
+  color: #61ad61;
 }
 .main-content .comment.comment-unpublished {
   background: #fbf5f5;
@@ -8145,11 +8145,37 @@ body aside ul:not(.pager) > * a:first-of-type.active.active {
   margin-right: 3px;
 }
 .main-content .indented {
-  padding-left: 12px;
-  background: rgba(61, 118, 160, 0.13);
+  padding-left: 3px;
+  position: relative;
 }
-.main-content .indented .comment.new-comment {
-  margin-left: -7px;
+.main-content .indented:after,
+.main-content .indented:before {
+  content: "";
+  display: block;
+  height: 100%;
+  width: 3px;
+  top: 0;
+  left: 0;
+  position: absolute;
+  background-color: #3D76A0;
+  z-index: 1;
+}
+.main-content .indented:after {
+  background-color: rgba(255, 255, 255, 0.8);
+  margin-left: -1px;
+  z-index: 2;
+}
+@media screen and (min-width: 1004px) {
+  .main-content .indented {
+    padding-left: 6px;
+  }
+  .main-content .indented:after,
+  .main-content .indented:before {
+    width: 6px;
+  }
+  .main-content .indented:after {
+    margin-left: -2px;
+  }
 }
 .main-content #comment-form #edit-author--2 {
   margin-bottom: 0;

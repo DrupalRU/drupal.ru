@@ -9,6 +9,7 @@
     position: relative;
     background: @main-content-bg;
     padding: @padding-base-vertical 0 @padding-base-vertical @padding-base-vertical;
+    margin-top: 0;
 
     &:hover, &:focus {
       .dropdown {
@@ -61,8 +62,9 @@
     }
 
     &.new-comment {
-      border-left: 7px solid @brand-info;
-      margin-left: 0;
+      .media-heading > .media-header-item:nth-child(2) {
+        color: @brand-success;
+      }
     }
 
     &.comment-unpublished {
@@ -120,6 +122,7 @@
 
         a, .darkmatter-link > span {
           padding-left: 12px;
+
           .fa {
             width: 21px;
             text-align: center;
@@ -131,11 +134,39 @@
   }
 
   .indented {
-    padding-left: @padding-base-horizontal;
-    background: @comment-intend-background;
+    padding-left: 3px;
+    position: relative;
 
-    .comment.new-comment {
-      margin-left: -7px;
+    &:after,
+    &:before {
+      content: "";
+      display:block;
+      height: 100%;
+      width: 3px;
+      top: 0;
+      left: 0;
+      position: absolute;
+      background-color: @brand-primary;
+      z-index: 1;
+    }
+
+    &:after {
+      background-color: rgba(255,255,255,.8);
+      margin-left: -1px;
+      z-index: 2;
+    }
+
+    @media @very-smalld {
+      padding-left: 6px;
+
+      &:after,
+      &:before {
+        width: 6px;
+      }
+
+      &:after {
+        margin-left: -2px;
+      }
     }
   }
 

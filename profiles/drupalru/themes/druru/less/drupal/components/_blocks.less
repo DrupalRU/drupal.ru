@@ -1,19 +1,9 @@
-#block-drurum-new {
-  li {
-    a {
-      i {
-        margin-right: 5px;
-      }
-    }
-  }
-}
-
 .block-ymb {
   background-color:lighten(@brand-accent, 38%);
   border: 1px solid @brand-accent;
-  margin-left: -15px;
-  margin-right: -15px;
-  padding: 15px !important;
+  padding: @padding-large-vertical @padding-large-horizontal !important;
+  margin-left: -@padding-large-horizontal;
+  margin-right: -@padding-large-horizontal;
 
   .front .region-sidebar-first &:first-child,
   .front .region-sidebar-second &:first-child {

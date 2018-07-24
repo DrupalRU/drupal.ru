@@ -14,10 +14,31 @@ function xmlsitemap_node_entity_info_alter(array &$entity_info) {
 /**
  * Implements hook_cron().
  *
- * Process old nodes not found in the {xmlsitemap} table.
+ * Process nodes that need to be added to or updated in the {xmlsitemap} table.
  */
 function xmlsitemap_node_cron() {
-  xmlsitemap_node_xmlsitemap_index_links(xmlsitemap_var('batch_limit'));
+  $limit = xmlsitemap_var('batch_limit');
+
+  // Process nodes that have been queued in hook_node_update().
+  $queue = DrupalQueue::get('xmlsitemap_node');
+  while ($limit > 0 && $item = $queue->claimItem()) {
+    $limit--;
+    try {
+      $node = node_load($item->data);
+      $link = xmlsitemap_node_create_link($node);
+      xmlsitemap_link_save($link, array($link['type'] => $node));
+      $queue->deleteItem($item);
+    }
+    catch (Exception $e) {
+      // In case of exception log it and leave the item in the queue
+      // to be processed again later.
+      watchdog_exception('xmlsitemap_node', $e);
+    }
+  }
+
+  // Add nodes that are missing from the {xmlsitemap} table.
+  // This catches nodes that were created prior to this module being enabled.
+  xmlsitemap_node_xmlsitemap_index_links($limit);
 }
 
 /**
@@ -55,8 +76,11 @@ function xmlsitemap_node_node_insert(stdClass $node) {
  * Implements hook_node_update().
  */
 function xmlsitemap_node_node_update(stdClass $node) {
-  $link = xmlsitemap_node_create_link($node);
-  xmlsitemap_link_save($link, array($link['type'] => $node));
+  // Node access can not be accurately determined in hook_node_update() because
+  // node grants have not yet been written to the table, so we defer creation of
+  // a sitemap link and process during cron.
+  $queue = DrupalQueue::get('xmlsitemap_node');
+  $queue->createItem($node->nid);
 }
 
 /**
@@ -194,11 +218,6 @@ function xmlsitemap_node_create_link(stdClass $node) {
   $timestamps = xmlsitemap_node_get_timestamps($node);
   $node->xmlsitemap['changefreq'] = $node->nid ? xmlsitemap_calculate_changefreq($timestamps) : 0;
   $node->xmlsitemap['changecount'] = $node->nid ? count($timestamps) - 1 : 0;
-
-  // Node access must be reset since it a user may have changed published status, etc.
-  //$access = &drupal_static('node_access');
-  //unset($access[0][$node->nid]);
-  //node_access_acquire_grants($node);
 
   // The following values must always be checked because they are volatile.
   $node->xmlsitemap['loc'] = $uri['path'];

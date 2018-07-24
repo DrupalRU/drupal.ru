@@ -407,7 +407,8 @@ function _mailsystem_html_to_text(DOMNode $node, array $allowed_tags, array &$no
   // Copy each child node to output.
   if ($node->hasChildNodes()) {
     foreach ($node->childNodes as $child) {
-      $child_text .= _mailsystem_html_to_text($child, $allowed_tags, $notes, $line_length - drupal_strlen($indent), $parents, $child_count);    }
+      $child_text .= _mailsystem_html_to_text($child, $allowed_tags, $notes, $line_length - drupal_strlen($indent), $parents, $child_count);
+    }
   }
   // We only add prefix and suffix if the child nodes were non-empty.
   if ($child_text > '') {
@@ -416,7 +417,7 @@ function _mailsystem_html_to_text(DOMNode $node, array $allowed_tags, array &$no
       $child_text = drupal_strtoupper($child_text);
     }
     // Don't add a newline to an existing newline.
-    if ($suffix === $eol && drupal_substr($child_text, - drupal_strlen($eol)) === $eol) {
+    if ($suffix === $eol && drupal_substr($child_text, -drupal_strlen($eol)) === $eol) {
       $suffix = '';
     }
     // Trim spaces around newlines except with <pre> or inline tags.
@@ -496,7 +497,7 @@ function _mailsystem_html_to_text_table(DOMNode $node, $allowed_tags = NULL, arr
               $footer[] = $current;
               break;
 
-            default: // Either 'tbody' or 'table'
+            default: // Either 'tbody' or 'table'.
               $body[] = $current;
               break;
           }
@@ -647,7 +648,7 @@ function _mailsystem_html_to_text_table(DOMNode $node, $allowed_tags = NULL, arr
       }
       // Generate the row separator line.
       $separator = '+';
-      for($i = 0; $i < $num_cols; $i++) {
+      for ($i = 0; $i < $num_cols; $i++) {
         $separator .= str_repeat('-', $widths[$i]) . '+';
       }
       $separator .= $eol;

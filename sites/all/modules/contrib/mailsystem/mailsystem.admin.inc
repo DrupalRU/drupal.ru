@@ -4,6 +4,7 @@
  * @file
  * Administrative form for setting the mail_system variable.
  */
+
 function mailsystem_admin_settings() {
   $args = array(
     '!interface' => url('http://api.drupal.org/api/drupal/includes--mail.inc/interface/MailSystemInterface/7'),
@@ -49,13 +50,13 @@ function mailsystem_admin_settings() {
     '#default_value' => $mail_system[mailsystem_default_id()],
   );
   $mailsystem_classes = array(
-    mailsystem_default_id() => t('Remove this setting.')
+    mailsystem_default_id() => t('Remove this setting.'),
   ) + $mailsystem_classes;
   foreach (array_diff_key($mail_system, $mail_defaults) as $id => $class) {
     // Separate $id into $module and $key.
     $module = $id;
     while ($module && empty($descriptions[$module])) {
-      // Remove a key from the end
+      // Remove a key from the end.
       $module = implode('_', explode('_', $module, -1));
     }
     // If an array key of the $mail_system variable is neither "default-system"
@@ -91,11 +92,11 @@ function mailsystem_admin_settings() {
     }
   }
   $form['mailsystem']['mailsystem_theme'] = array(
-      '#type' => 'select',
-      '#title' => t('Theme to render the emails'),
-      '#description' => t('Select the theme that will be used to render the emails. This can be either the current theme, the default theme, the domain theme or any active theme.'),
-      '#options' => $theme_options,
-      '#default_value' => variable_get('mailsystem_theme', 'current'),
+    '#type' => 'select',
+    '#title' => t('Theme to render the emails'),
+    '#description' => t('Select the theme that will be used to render the emails. This can be either the current theme, the default theme, the domain theme or any active theme.'),
+    '#options' => $theme_options,
+    '#default_value' => variable_get('mailsystem_theme', 'current'),
   );
   $form['class'] = array(
     '#type' => 'fieldset',
@@ -168,7 +169,7 @@ function mailsystem_admin_settings_submit($form, &$form_state) {
       empty($form_state['values'][$default_id])
       ? mailsystem_default_value()
       : $form_state['values'][$default_id]
-    )
+    ),
   );
   foreach (element_children($form_state['values']['mailsystem']) as $module) {
     $class = $form_state['values']['mailsystem'][$module];

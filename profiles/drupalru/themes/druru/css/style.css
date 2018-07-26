@@ -10026,6 +10026,34 @@ span.geshifilter code,
 .front .region-sidebar-second .block-ymb:first-child {
   margin-top: -12px;
 }
+.event-block-container {
+  width: 32%;
+  margin-bottom: 0;
+  min-width: 280px;
+  justify-content: space-between;
+  float: left;
+  margin-right: 10px;
+  height: 340px;
+  padding: 10px;
+}
+.event-block-container .event-block-title h3 {
+  display: inline-block;
+}
+.event-block-container .event-block-date {
+  display: inline;
+}
+.event-block-container .event-block-date .field-content {
+  display: inline;
+}
+.event-block-container .event-block-desc {
+  font-weight: 300;
+}
+#block-views-events-block {
+  overflow: auto;
+}
+#block-views-events-block .view-content {
+  display: flex;
+}
 [aria-label] {
   position: relative;
   border-bottom: 1px dashed;

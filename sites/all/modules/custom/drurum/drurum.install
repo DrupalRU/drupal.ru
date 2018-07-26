@@ -866,7 +866,7 @@ function drurum_update_7040() {
         'file_extensions' => 'png gif jpg jpeg',
         'max_filesize' => '',
         'max_resolution' => '300x200',
-        'min_resolution' => '',
+        'min_resolution' => '300x200',
         'alt_field' => 0,
         'title_field' => 0,
         'default_image' => '54136',

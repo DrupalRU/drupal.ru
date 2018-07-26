@@ -1236,5 +1236,5 @@ function drurum_update_7041() {
     'module' => 'menu',
   );
   menu_link_save($item);
-  
+
 }

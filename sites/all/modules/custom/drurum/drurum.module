@@ -656,6 +656,13 @@ function drurum_views_default_views() {
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
+  /* Заголовок: Глобальный: Нефильтруемый текст */
+  $handler->display->display_options['header']['area_text_custom']['id'] = 'area_text_custom';
+  $handler->display->display_options['header']['area_text_custom']['table'] = 'views';
+  $handler->display->display_options['header']['area_text_custom']['field'] = 'area_text_custom';
+  $handler->display->display_options['header']['area_text_custom']['content'] = '<ul class="tabs--primary nav nav-pills"><li class="active"><a href="/events" class="active">Ближайшие мероприятия<span class="element-invisible">(активная вкладка)</span></a></li>
+<li class=""><a href="/events/past">Прошедшие мероприятия</a></li>
+</ul>';
   /* Поведение при отсутствии результатов: Глобальный: Нефильтруемый текст */
   $handler->display->display_options['empty']['area_text_custom']['id'] = 'area_text_custom';
   $handler->display->display_options['empty']['area_text_custom']['table'] = 'views';
@@ -781,6 +788,13 @@ function drurum_views_default_views() {
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
+  /* Заголовок: Глобальный: Нефильтруемый текст */
+  $handler->display->display_options['header']['area_text_custom']['id'] = 'area_text_custom';
+  $handler->display->display_options['header']['area_text_custom']['table'] = 'views';
+  $handler->display->display_options['header']['area_text_custom']['field'] = 'area_text_custom';
+  $handler->display->display_options['header']['area_text_custom']['content'] = '<ul class="tabs--primary nav nav-pills"><li class=""><a href="/events">Ближайшие мероприятия</a></li>
+<li class="active"><a href="/events/past" class="active">Прошедшие мероприятия</a><span class="element-invisible">(активная вкладка)</span></li>
+</ul>';
   /* Поведение при отсутствии результатов: Глобальный: Нефильтруемый текст */
   $handler->display->display_options['empty']['area_text_custom']['id'] = 'area_text_custom';
   $handler->display->display_options['empty']['area_text_custom']['table'] = 'views';

@@ -785,12 +785,13 @@ function drurum_update_7040() {
 /**
  * "Events" refactoring.
  */
-/*function drurum_update_7041() {
+function drurum_update_7041() {
   if (module_exists('simple_events')) {
     module_disable(['simple_events']);
     drupal_uninstall_modules(['simple_events']);
   }
   module_enable(['date']);
+  module_enable(['date_views']);
   module_enable(['link']);
 
   $t = get_t();
@@ -1225,4 +1226,15 @@ function drurum_update_7040() {
     ];
     field_create_instance($instance);
   }
-}*/
+
+  $item = array(
+    'link_path' => 'node/add/event',
+    'link_title' => t('Event'),
+    'menu_name' => 'user-menu',
+    'weight' => 1,
+    'plid' => 3971,
+    'module' => 'menu',
+  );
+  menu_link_save($item);
+  
+}

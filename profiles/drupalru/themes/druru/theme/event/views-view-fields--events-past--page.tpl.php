@@ -25,10 +25,27 @@
  */
 ?>
 
-<div class="event-block-container thumbnail">
-  <div class="event-block-image"><?php print $fields['field_event_image']->content; ?></div>
-  <div class="event-block-title"><h3><?php print $fields['title']->content; ?></h3>
-    <div class="event-block-date text-accent"><?php print $fields['field_event_start_date']->content; ?></div>
-  </div>
-  <div class="event-block-desc"><?php print $fields['body']->content; ?></div>
+<div class="node node-event node-teaser well-lg">
+    <h2 class="title"><?php print $fields['title']->content; ?>
+      <small class="event-date"><?php print $fields['field_event_start_date']->content; ?></small>
+    </h2>
+    <div class="row">
+      <div class="col-sm-4 col-sd-3">
+          <div class="image">
+              <?php print $fields['field_event_image']->content; ?>
+          </div>
+      </div>
+      <div class="col-sm-8 col-sd-9">
+          <dl class="alert alert-info">
+              <dd class="website"><?php print $fields['field_event_link']->content; ?></dd>
+              <dd class="address"><?php print $fields['field_event_address']->content; ?></dd>
+              <dd class="event-type"><?php print $fields['field_event_type']->content; ?></dd>
+          </dl>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <?php print $fields['body']->content; ?>
+        </div>
+    </div>
 </div>

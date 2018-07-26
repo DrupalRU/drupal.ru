@@ -10001,6 +10001,13 @@ fieldset[disabled] #block-advanced-sphinx-searchbox .search-sphinx:focus + butto
 .node-event .details {
   margin-left: 0;
 }
+.node-event .image img {
+  max-width: 100%;
+  height: auto;
+}
+.node-event .event-type {
+  margin-top: 5px;
+}
 span.geshifilter,
 .geshifilter {
   display: block;

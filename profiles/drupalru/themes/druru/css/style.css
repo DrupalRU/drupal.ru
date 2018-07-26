@@ -9926,7 +9926,7 @@ fieldset[disabled] #block-advanced-sphinx-searchbox .search-sphinx:focus + butto
 }
 .node-event .attributes {
   margin-right: 12px;
-  width: 320px;
+  width: auto;
   float: none;
   min-height: 20px;
   padding: 19px;
@@ -9948,8 +9948,9 @@ fieldset[disabled] #block-advanced-sphinx-searchbox .search-sphinx:focus + butto
 }
 @media screen and (min-width: 748px) {
   .node-event .attributes {
-    /*width: auto;*/
-    float: left;
+    width: 320px;
+    float: right;
+    margin-left: 20px;
   }
 }
 .node-event .attributes .image {
@@ -11055,7 +11056,8 @@ body {
   font-weight: 400;
   height: 100%;
 }
-body ul {
+body ul,
+body ol {
   padding-left: 20px;
 }
 body #wrapper {

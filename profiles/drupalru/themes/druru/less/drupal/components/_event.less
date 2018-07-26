@@ -1,13 +1,14 @@
 .node-event {
   .attributes {
     margin-right: @padding-base-horizontal;
-    width: 320px;
+    width: auto;
     float: none;
     .well();
 
     @media @tablet {
-      /*width: auto;*/
-      float: left;
+      width: 320px;
+      float: right;
+      margin-left: 20px;
     }
 
     .image {

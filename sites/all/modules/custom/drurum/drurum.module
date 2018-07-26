@@ -320,7 +320,7 @@ function drurum_node_icon($node) {
     if (function_exists('druru_icon')) {
       switch (TRUE) {
         // Will be used icon "calendar" for events.
-        case !empty($node->type) && $node->type == 'simple_event':
+        case !empty($node->type) && $node->type == 'event':
           $icon = 'calendar';
           break;
 

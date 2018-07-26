@@ -1,41 +1,12 @@
-.node-simple_event-form {
-
-  .form-item-enable-time-to {
-    margin: 0;
-  }
-
-  .time-wrapper {
-    .make-row();
-  }
-  .container-inline-date {
-    .make-sm-column(6);
-    .date-padding {
-      .make-row();
-    }
-    .form-type-textfield {
-      .make-sm-column(6);
-    }
-  }
-  .form-item-address {
-    clear: both;
-  }
-  input[name="enable_time_to"]:checked {
-    + label {
-      display: none;
-    }
-  }
-
-}
-
-.node-simple-event {
+.node-event {
   .attributes {
     margin-right: @padding-base-horizontal;
-    width:100%;
+    width: 320px;
     float: none;
     .well();
 
     @media @tablet {
-      width: auto;
+      /*width: auto;*/
       float: left;
     }
 
@@ -61,6 +32,7 @@
           text-rendering: auto;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
+					float: left;
         }
       }
       &.image {

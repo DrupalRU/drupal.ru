@@ -1,0 +1,7 @@
+.link-field-column {
+  float: right;
+}
+.link-field-column.link-field-url .form-text {
+  direction: ltr;
+  text-align: left;
+}

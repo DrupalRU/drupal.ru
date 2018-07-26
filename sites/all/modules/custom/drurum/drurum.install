@@ -280,9 +280,9 @@ function drurum_update_7012(&$sandbox) {
  */
 function drurum_update_7013() {
   db_update('block_custom')
-    ->fields(array(
+    ->fields([
       'body' => '<div class="col-sm-7 col-vsd-8 col-sm-offset-1 text-center"><p class="lead"><span style="font-weight: 300;">Drupal (Дрýпал)</span> - является открытой платформой управления контентом для миллионов веб-сайтов и приложений. Он создан активным и разнообразным сообществом людей по всему миру.<br>Благодаря мощному функционалу Друпала, разрабатывать сложные сайты значительно проще, чем писать их с нуля.</p></div><div class="col-sm-4 col-vsd-3  text-center"><a href="/downloads" class="lead download-drupal-front"><i class="fa fa-drupal fa-4x"></i><br>Скачать Drupal!</a></div>',
-    ))
+    ])
     ->condition('bid', 93)
     ->execute();
 }
@@ -307,12 +307,12 @@ function drurum_update_7014(&$sandbox) {
 function drurum_update_7015() {
   // Hide field on registration.
   db_update('profile_field')
-    ->fields(array('register' => 0))
+    ->fields(['register' => 0])
     ->condition('fid', 37)
     ->execute();
   // Hide field in profile.
   db_update('profile_field')
-    ->fields(array('visibility' => 4))
+    ->fields(['visibility' => 4])
     ->condition('fid', 37)
     ->execute();
 
@@ -332,7 +332,7 @@ function drurum_update_7015() {
 function drurum_update_7016() {
   // Hide field in profile.
   db_update('profile_field')
-    ->fields(array('visibility' => 4))
+    ->fields(['visibility' => 4])
     ->condition('fid', 32)
     ->execute();
 }
@@ -369,7 +369,7 @@ function drurum_update_7018() {
  * Add settings for alttracker (hide news from some forums).
  */
 function drurum_update_7019() {
-  variable_set('alttracker_ignore_terms', array('2066', '2057', '3769'));
+  variable_set('alttracker_ignore_terms', ['2066', '2057', '3769']);
   variable_set('alttracker_vocabulary_1', 'Мусор, Курилка, Модераторский');
 }
 
@@ -384,7 +384,7 @@ function drurum_update_7020() {
  * Remove unused modules.
  */
 function drurum_update_7021() {
-  $modules = array("acl", "advanced_help", "advuser", "autosave", "blocker", "flag", "google_appliance", "icon", "image_filter", "video_filter", "og", "boost", "rrssb", "vud", "votingapi", "smtp", "bloginfo", "chain_menu_access", "codefilter", "comment_mover", "google_pr", "google_plusone", "gravatar", "inactive_user", "mail_edit", "mollom", "ping", "site_map", "whois", "extlink", "forum_access", "nodeaccess", "cacherouter", "gmap", "location", "imagecache_actions", "imagecache_profiles", "textimage", "rustemmer", "entityreference", "coder", "blogapi", "services", "taxonomy_manager", "term_merge", "pearwiki_filter", "ban_user");
+  $modules = ["acl", "advanced_help", "advuser", "autosave", "blocker", "flag", "google_appliance", "icon", "image_filter", "video_filter", "og", "boost", "rrssb", "vud", "votingapi", "smtp", "bloginfo", "chain_menu_access", "codefilter", "comment_mover", "google_pr", "google_plusone", "gravatar", "inactive_user", "mail_edit", "mollom", "ping", "site_map", "whois", "extlink", "forum_access", "nodeaccess", "cacherouter", "gmap", "location", "imagecache_actions", "imagecache_profiles", "textimage", "rustemmer", "entityreference", "coder", "blogapi", "services", "taxonomy_manager", "term_merge", "pearwiki_filter", "ban_user"];
   module_disable($modules);
   drupal_uninstall_modules($modules);
 }
@@ -396,7 +396,7 @@ function drurum_update_7022() {
   $nids = ['536', '673', '2227', '2253', '2323', '2248', '852', '134', '5022', '10606', '7741', '26333', '27609', '27605', '18067', '31161', '1', '79787', '19533', '11876', '126461'];
   foreach ($nids as $nid) {
     db_update('node')
-      ->fields(array('type' => 'blog'))
+      ->fields(['type' => 'blog'])
       ->condition('nid', $nid)
       ->execute();
   }
@@ -455,35 +455,35 @@ function drurum_update_7026() {
   }
 
   db_insert('role_permission')
-    ->fields(array(
+    ->fields([
       'rid' => 2,
       'permission' => 'dru_tickets view tickets',
       'module' => 'dru_tickets',
-    ))
+    ])
     ->execute();
 
   db_insert('role_permission')
-    ->fields(array(
+    ->fields([
       'rid' => 20,
       'permission' => 'dru_tickets moderate tickets',
       'module' => 'dru_tickets',
-    ))
+    ])
     ->execute();
 
   db_insert('role_permission')
-    ->fields(array(
+    ->fields([
       'rid' => 21,
       'permission' => 'dru_tickets change any verdict',
       'module' => 'dru_tickets',
-    ))
+    ])
     ->execute();
 
   db_insert('role_permission')
-    ->fields(array(
+    ->fields([
       'rid' => 21,
       'permission' => 'dru_tickets moderate tickets',
       'module' => 'dru_tickets',
-    ))
+    ])
     ->execute();
 }
 
@@ -747,7 +747,7 @@ function drurum_update_7038() {
     ->execute();
   // Edit image button on BUEditor
   db_update('bueditor_buttons')
-    ->fields(array('content' => 'js: E.showFileSelectionDialog();'))
+    ->fields(['content' => 'js: E.showFileSelectionDialog();'])
     ->condition('bid', 113)
     ->execute();
 }
@@ -781,3 +781,448 @@ function drurum_update_7040() {
     ])
     ->execute();
 }
+
+/**
+ * "Events" refactoring.
+ */
+/*function drurum_update_7041() {
+  if (module_exists('simple_events')) {
+    module_disable(['simple_events']);
+    drupal_uninstall_modules(['simple_events']);
+  }
+  module_enable(['date']);
+  module_enable(['link']);
+
+  $t = get_t();
+  if (!in_array('event', node_type_get_names())) {
+    $type = [
+      'type' => 'event',
+      'name' => $t('Event'),
+      'base' => 'node_content',
+      'custom' => 1,
+      'modified' => 1,
+      'locked' => 0,
+      'title_label' => $t('Event Title')
+    ];
+
+    $type = node_type_set_defaults($type);
+    node_type_save($type);
+
+    db_insert('variable')
+      ->fields([
+        'name' => 'comment_event',
+        'value' => 's:1:\"1\";',
+      ])
+      ->execute();
+
+    db_insert('variable')
+      ->fields([
+        'name' => 'node_options_event',
+        'value' => 'a:1:{i:0;s:6:\"status\";}',
+      ])
+      ->execute();
+
+    db_insert('variable')
+      ->fields([
+        'name' => 'node_submitted_event',
+        'value' => 'i:0;',
+      ])
+      ->execute();
+
+    db_insert('variable')
+      ->fields([
+        'name' => 'date_format_medium',
+        'value' => 's:12:\"j F Y - H:i\";',
+      ])
+      ->execute();
+
+    $field = [
+      'translatable' => '0',
+      'settings' => [
+        'uri_scheme' => 'public',
+        'default_image' => 0,
+      ],
+      'field_name' => 'field_event_image',
+      'type' => 'image',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+    ];
+    field_create_field($field);
+
+    $instance = [
+      'label' => $t('Event Image'),
+      'widget' => [
+        'weight' => '41',
+        'type' => 'image_image',
+        'active' => 1,
+        'settings' => [
+          'progress_indicator' => 'throbber',
+          'preview_image_style' => 'thumbnail',
+        ],
+      ],
+      'settings' => [
+        'file_directory' => 'events_images',
+        'file_extensions' => 'png gif jpg jpeg',
+        'max_filesize' => '',
+        'max_resolution' => '300x200',
+        'min_resolution' => '',
+        'alt_field' => 0,
+        'title_field' => 0,
+        'default_image' => '54136',
+        'user_register_form' => FALSE,
+      ],
+      'display' => [
+        'default' => [
+          'label' => 'hidden',
+          'type' => 'image',
+          'settings' => [
+            'image_style' => '',
+            'image_link' => '',
+          ],
+          'weight' => 0,
+        ],
+        'teaser' => [
+          'type' => 'hidden',
+          'label' => 'hidden',
+          'settings' => [],
+          'weight' => 0,
+        ],
+        'frontpage' => [
+          'type' => 'hidden',
+          'label' => 'hidden',
+          'settings' => [],
+          'weight' => 0,
+        ],
+        'block' => [
+          'type' => 'hidden',
+          'label' => 'hidden',
+          'settings' => [],
+          'weight' => 0,
+        ],
+      ],
+      'required' => 0,
+      'description' => '',
+      'field_name' => 'field_event_image',
+      'entity_type' => 'node',
+      'bundle' => 'event',
+    ];
+    field_create_instance($instance);
+
+    $field = [
+      'translatable' => '0',
+      'settings' => [
+        'granularity' => [
+          'month' => 'month',
+          'day' => 'day',
+          'hour' => 'hour',
+          'minute' => 'minute',
+          'year' => 'year',
+          'second' => 0,
+        ],
+        'tz_handling' => 'site',
+        'timezone_db' => 'UTC',
+        'cache_enabled' => 0,
+        'cache_count' => '4',
+        'todate' => 'optional',
+      ],
+      'field_name' => 'field_event_start_date',
+      'type' => 'datetime',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+    ];
+    field_create_field($field);
+
+    $instance = [
+      'label' => 'Дата начала',
+      'widget' => [
+        'weight' => '4',
+        'type' => 'date_popup',
+        'active' => 1,
+        'settings' => [
+          'input_format' => 'd.m.Y - H:i:s',
+          'input_format_custom' => '',
+          'year_range' => '-10:+10',
+          'increment' => '15',
+          'label_position' => 'above',
+          'text_parts' => [],
+          'no_fieldset' => 0,
+        ],
+      ],
+      'settings' => [
+        'default_value' => 'now',
+        'default_value_code' => '',
+        'default_value2' => 'same',
+        'default_value_code2' => '',
+        'user_register_form' => FALSE,
+      ],
+      'display' => [
+        'default' => [
+          'label' => 'hidden',
+          'type' => 'date_default',
+          'weight' => '1',
+          'settings' => [
+            'format_type' => 'medium',
+            'fromto' => 'value',
+            'multiple_number' => '',
+            'multiple_from' => '',
+            'multiple_to' => '',
+            'show_remaining_days' => 0,
+          ],
+        ],
+        'teaser' => [
+          'type' => 'hidden',
+          'label' => 'above',
+          'settings' => [],
+          'weight' => 0,
+        ],
+        'frontpage' => [
+          'type' => 'hidden',
+          'label' => 'above',
+          'settings' => [],
+          'weight' => 0,
+        ],
+        'block' => [
+          'type' => 'hidden',
+          'label' => 'above',
+          'settings' => [],
+          'weight' => 0,
+        ],
+      ],
+      'required' => 1,
+      'description' => '',
+      'field_name' => 'field_event_start_date',
+      'entity_type' => 'node',
+      'bundle' => 'event',
+    ];
+    field_create_instance($instance);
+
+    $field = [
+      'translatable' => '0',
+      'settings' => [
+        'attributes' => [
+          'target' => 'default',
+          'class' => '',
+          'rel' => '',
+        ],
+        'url' => 0,
+        'title' => 'optional',
+        'title_value' => '',
+        'title_maxlength' => 128,
+        'enable_tokens' => 1,
+        'display' => [
+          'url_cutoff' => 80,
+        ],
+      ],
+      'field_name' => 'field_event_link',
+      'type' => 'link_field',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+    ];
+    field_create_field($field);
+
+    $instance = [
+      'label' => 'Event Web-Page',
+      'widget' => [
+        'weight' => '5',
+        'type' => 'link_field',
+        'active' => 0,
+        'settings' => [],
+      ],
+      'settings' => [
+        'absolute_url' => 1,
+        'validate_url' => 1,
+        'url' => 0,
+        'title' => 'none',
+        'title_value' => '',
+        'title_allowed_values' => '',
+        'title_label_use_field_label' => 0,
+        'title_maxlength' => '128',
+        'enable_tokens' => 1,
+        'display' => [
+          'url_cutoff' => '80',
+        ],
+        'attributes' => [
+          'target' => 'default',
+          'rel' => '',
+          'configurable_class' => 0,
+          'class' => '',
+          'configurable_title' => 0,
+          'title' => '',
+        ],
+        'rel_remove' => 'default',
+        'user_register_form' => FALSE,
+      ],
+      'display' => [
+        'default' => [
+          'label' => 'hidden',
+          'type' => 'link_url',
+          'weight' => '2',
+          'settings' => [],
+        ],
+        'teaser' => [
+          'type' => 'hidden',
+          'label' => 'above',
+          'settings' => [],
+          'weight' => 0,
+        ],
+        'frontpage' => [
+          'type' => 'hidden',
+          'label' => 'above',
+          'settings' => [],
+          'weight' => 0,
+        ],
+        'block' => [
+          'type' => 'hidden',
+          'label' => 'above',
+          'settings' => [],
+          'weight' => 0,
+        ],
+      ],
+      'required' => 0,
+      'description' => '',
+      'default_value' => NULL,
+      'field_name' => 'field_event_link',
+      'entity_type' => 'node',
+      'bundle' => 'event',
+    ];
+    field_create_instance($instance);
+
+    $field = [
+      'translatable' => '0',
+      'settings' => [
+        'max_length' => '255',
+      ],
+      'field_name' => 'field_event_address',
+      'type' => 'text',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+    ];
+    field_create_field($field);
+
+    $instance = [
+      'label' => $t('Event Address'),
+      'widget' => [
+        'weight' => '44',
+        'type' => 'text_textfield',
+        'active' => 1,
+        'settings' => [
+          'size' => '60',
+        ],
+      ],
+      'settings' => [
+        'text_processing' => '0',
+        'user_register_form' => FALSE,
+      ],
+      'display' => [
+        'default' => [
+          'label' => 'hidden',
+          'type' => 'text_default',
+          'settings' => [],
+          'weight' => 3,
+        ],
+        'teaser' => [
+          'type' => 'hidden',
+          'label' => 'hidden',
+          'settings' => [],
+          'weight' => 0,
+        ],
+        'frontpage' => [
+          'type' => 'hidden',
+          'label' => 'hidden',
+          'settings' => [],
+          'weight' => 0,
+        ],
+        'block' => [
+          'type' => 'hidden',
+          'label' => 'hidden',
+          'settings' => [],
+          'weight' => 0,
+        ],
+      ],
+      'required' => 1,
+      'description' => '',
+      'default_value' => NULL,
+      'field_name' => 'field_event_address',
+      'entity_type' => 'node',
+      'bundle' => 'event',
+    ];
+    field_create_instance($instance);
+
+    $field = [
+      'translatable' => '0',
+      'settings' => [
+        'allowed_values' => [
+          0 => [
+            'vocabulary' => 'event_types',
+            'parent' => '0',
+          ],
+        ],
+      ],
+      'field_name' => 'field_event_type',
+      'type' => 'taxonomy_term_reference',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+    ];
+    field_create_field($field);
+
+    $instance = [
+      'label' => $t('Event Type'),
+      'widget' => [
+        'weight' => '45',
+        'type' => 'options_select',
+        'active' => 1,
+        'settings' => [],
+      ],
+      'settings' => [
+        'user_register_form' => FALSE,
+      ],
+      'display' => [
+        'default' => [
+          'label' => 'hidden',
+          'type' => 'taxonomy_term_reference_link',
+          'settings' => [],
+          'weight' => 4,
+        ],
+        'teaser' => [
+          'type' => 'hidden',
+          'label' => 'hidden',
+          'settings' => [],
+          'weight' => 0,
+        ],
+        'frontpage' => [
+          'type' => 'hidden',
+          'label' => 'hidden',
+          'settings' => [],
+          'weight' => 0,
+        ],
+        'block' => [
+          'type' => 'hidden',
+          'label' => 'hidden',
+          'settings' => [],
+          'weight' => 0,
+        ],
+      ],
+      'required' => 1,
+      'description' => '',
+      'default_value' => NULL,
+      'field_name' => 'field_event_type',
+      'entity_type' => 'node',
+      'bundle' => 'event',
+    ];
+    field_create_instance($instance);
+
+    $instance = [
+      'field_name' => 'body',
+      'entity_type' => 'node',
+      'label' => $t('Event Description'),
+      'bundle' => 'event',
+      'widget' => []
+    ];
+    field_create_instance($instance);
+  }
+}*/

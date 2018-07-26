@@ -781,3 +781,13 @@ function drurum_update_7040() {
     ])
     ->execute();
 }
+
+/**
+ * Remove H1 button from BUEditor.
+ */
+function drurum_update_7041() {
+  db_update('bueditor_buttons')
+    ->fields(['content' => "js: E.tagChooser([\n ['h2', 'Заголовок 2'],\n ['h3', 'Заголовок 3'],\n ['h4', 'Заголовок 4'],\n]);"])
+    ->condition('bid', 109)
+    ->execute();
+}

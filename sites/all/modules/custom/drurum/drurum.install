@@ -793,6 +793,7 @@ function drurum_update_7041() {
   module_enable(['date']);
   module_enable(['date_views']);
   module_enable(['link']);
+  module_enable(['field_ui']);
 
   $t = get_t();
   if (!in_array('event', node_type_get_names())) {
@@ -809,33 +810,10 @@ function drurum_update_7041() {
     $type = node_type_set_defaults($type);
     node_type_save($type);
 
-    db_insert('variable')
-      ->fields([
-        'name' => 'comment_event',
-        'value' => 's:1:\"1\";',
-      ])
-      ->execute();
-
-    db_insert('variable')
-      ->fields([
-        'name' => 'node_options_event',
-        'value' => 'a:1:{i:0;s:6:\"status\";}',
-      ])
-      ->execute();
-
-    db_insert('variable')
-      ->fields([
-        'name' => 'node_submitted_event',
-        'value' => 'i:0;',
-      ])
-      ->execute();
-
-    db_insert('variable')
-      ->fields([
-        'name' => 'date_format_medium',
-        'value' => 's:12:\"j F Y - H:i\";',
-      ])
-      ->execute();
+    variable_set('comment_event', '1');
+    variable_set('node_submitted_event', '0');
+    variable_set('date_format_medium', 'j F Y - H:i');
+    variable_set('node_options_event', ['status']);
 
     $field = [
       'translatable' => '0',
@@ -1222,19 +1200,44 @@ function drurum_update_7041() {
       'entity_type' => 'node',
       'label' => $t('Event Description'),
       'bundle' => 'event',
-      'widget' => []
+      'widget' => [],
+      'display' => [
+        'default' => [
+          'label' => 'hidden',
+          'type' => 'text_default',
+          'settings' => [],
+          'weight' => 4,
+        ],
+        'teaser' => [
+          'type' => 'hidden',
+          'label' => 'hidden',
+          'settings' => [],
+          'weight' => 0,
+        ],
+        'frontpage' => [
+          'type' => 'hidden',
+          'label' => 'hidden',
+          'settings' => [],
+          'weight' => 0,
+        ],
+        'block' => [
+          'type' => 'hidden',
+          'label' => 'hidden',
+          'settings' => [],
+          'weight' => 0,
+        ],
+      ],
     ];
     field_create_instance($instance);
+
+    $item = array(
+      'link_path' => 'node/add/event',
+      'link_title' => t('Event'),
+      'menu_name' => 'user-menu',
+      'weight' => 1,
+      'plid' => 3971,
+      'module' => 'menu',
+    );
+    menu_link_save($item);
   }
-
-  $item = array(
-    'link_path' => 'node/add/event',
-    'link_title' => t('Event'),
-    'menu_name' => 'user-menu',
-    'weight' => 1,
-    'plid' => 3971,
-    'module' => 'menu',
-  );
-  menu_link_save($item);
-
 }

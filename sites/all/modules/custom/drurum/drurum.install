@@ -1239,5 +1239,22 @@ function drurum_update_7041() {
       'module' => 'menu',
     );
     menu_link_save($item);
+
+    db_insert('block')
+      ->fields([
+        'module' => 'views',
+        'delta' => 'events-block',
+        'status' => '1',
+        'weight' => '-16',
+        'region' => 'content',
+        'custom' => '0',
+        'visibility' => '1',
+        'pages' => '<front>',
+        'theme' => 'druru',
+        'title' => 'Ближайшие события',
+        'bid' => 1441,
+        'cache' => '-1',
+      ])
+      ->execute();
   }
 }

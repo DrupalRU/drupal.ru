@@ -27,7 +27,7 @@
 
 <div class="node node-event node-teaser well-lg">
     <h2 class="title"><?php print $fields['title']->content; ?>
-      <small class="event-date"><?php print $fields['field_event_start_date']->content; ?></small>
+      <small class="event-date"><?php print $fields['field_event_date']->content; ?></small>
     </h2>
     <div class="row">
       <div class="col-sm-4 col-sd-3">

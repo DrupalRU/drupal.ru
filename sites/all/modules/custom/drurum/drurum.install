@@ -785,7 +785,7 @@ function drurum_update_7040() {
 /**
  * "Events" refactoring.
  */
-function drurum_update_7041() {
+function drurum_update_7042() {
   if (module_exists('simple_events')) {
     module_disable(['simple_events']);
     drupal_uninstall_modules(['simple_events']);
@@ -804,7 +804,7 @@ function drurum_update_7041() {
       'custom' => 1,
       'modified' => 1,
       'locked' => 0,
-      'title_label' => $t('Event Title')
+      'title_label' => $t('Title')
     ];
 
     $type = node_type_set_defaults($type);
@@ -812,7 +812,6 @@ function drurum_update_7041() {
 
     variable_set('comment_event', '1');
     variable_set('node_submitted_event', '0');
-    variable_set('date_format_medium', 'j F Y - H:i');
     variable_set('node_options_event', ['status']);
 
     $field = [
@@ -830,7 +829,7 @@ function drurum_update_7041() {
     field_create_field($field);
 
     $instance = [
-      'label' => $t('Event Image'),
+      'label' => $t('Image'),
       'widget' => [
         'weight' => '41',
         'type' => 'image_image',
@@ -894,10 +893,7 @@ function drurum_update_7041() {
         'granularity' => [
           'month' => 'month',
           'day' => 'day',
-          'hour' => 'hour',
-          'minute' => 'minute',
           'year' => 'year',
-          'second' => 0,
         ],
         'tz_handling' => 'site',
         'timezone_db' => 'UTC',
@@ -905,7 +901,7 @@ function drurum_update_7041() {
         'cache_count' => '4',
         'todate' => 'optional',
       ],
-      'field_name' => 'field_event_start_date',
+      'field_name' => 'field_event_date',
       'type' => 'datetime',
       'active' => '1',
       'locked' => '0',
@@ -914,16 +910,14 @@ function drurum_update_7041() {
     field_create_field($field);
 
     $instance = [
-      'label' => 'Дата начала',
+      'label' => 'Date',
       'widget' => [
         'weight' => '4',
         'type' => 'date_popup',
         'active' => 1,
         'settings' => [
-          'input_format' => 'd.m.Y - H:i:s',
-          'input_format_custom' => '',
+          'input_format' => 'd.m.Y',
           'year_range' => '-10:+10',
-          'increment' => '15',
           'label_position' => 'above',
           'text_parts' => [],
           'no_fieldset' => 0,
@@ -942,7 +936,7 @@ function drurum_update_7041() {
           'type' => 'date_default',
           'weight' => '1',
           'settings' => [
-            'format_type' => 'medium',
+            'format_type' => 'short',
             'fromto' => 'value',
             'multiple_number' => '',
             'multiple_from' => '',
@@ -971,7 +965,7 @@ function drurum_update_7041() {
       ],
       'required' => 1,
       'description' => '',
-      'field_name' => 'field_event_start_date',
+      'field_name' => 'field_event_date',
       'entity_type' => 'node',
       'bundle' => 'event',
     ];
@@ -1003,7 +997,7 @@ function drurum_update_7041() {
     field_create_field($field);
 
     $instance = [
-      'label' => 'Event Web-Page',
+      'label' => 'Url',
       'widget' => [
         'weight' => '5',
         'type' => 'link_field',
@@ -1083,7 +1077,7 @@ function drurum_update_7041() {
     field_create_field($field);
 
     $instance = [
-      'label' => $t('Event Address'),
+      'label' => $t('Address'),
       'widget' => [
         'weight' => '44',
         'type' => 'text_textfield',
@@ -1150,7 +1144,7 @@ function drurum_update_7041() {
     field_create_field($field);
 
     $instance = [
-      'label' => $t('Event Type'),
+      'label' => $t('Type'),
       'widget' => [
         'weight' => '45',
         'type' => 'options_select',
@@ -1198,7 +1192,7 @@ function drurum_update_7041() {
     $instance = [
       'field_name' => 'body',
       'entity_type' => 'node',
-      'label' => $t('Event Description'),
+      'label' => $t('Description'),
       'bundle' => 'event',
       'widget' => [],
       'display' => [
@@ -1240,19 +1234,24 @@ function drurum_update_7041() {
     );
     menu_link_save($item);
 
+    // Get weight of the main content block
+    $block_main_weight = db_query("SELECT weight FROM block WHERE module = 'system' AND delta = 'main' AND region = 'content' AND theme = 'druru'")->fetchField();
+
+    // Load events block to get its bid
+    $block_events_upcoming = block_load('views', 'events_upcoming_block-block');
+
     db_insert('block')
       ->fields([
         'module' => 'views',
-        'delta' => 'events-block',
+        'delta' => 'events_upcoming_block-block',
         'status' => '1',
-        'weight' => '-16',
+        'weight' => $block_main_weight + 1,
         'region' => 'content',
         'custom' => '0',
         'visibility' => '1',
         'pages' => '<front>',
         'theme' => 'druru',
-        'title' => 'Ближайшие события',
-        'bid' => 1441,
+        'bid' => $block_events_upcoming->bid,
         'cache' => '-1',
       ])
       ->execute();

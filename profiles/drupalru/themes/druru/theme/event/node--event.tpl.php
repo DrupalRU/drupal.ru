@@ -102,9 +102,9 @@
       </div>
 
       <div class="date_time">
-        <?php print render($content['field_event_start_date']); ?>
+        <?php print render($content['field_event_date']); ?>
       </div>
-      
+
       <?php if (isset($content['field_event_link'])): ?>
         <div class="website">
           <?php print render($content['field_event_link']); ?>
@@ -126,7 +126,7 @@
           <?php print render($content['rrssb']); ?>
         </div>
       <?php endif; ?>
-      
+
     </div>
     <div class="details">
     <?php

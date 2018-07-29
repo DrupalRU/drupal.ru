@@ -28,7 +28,7 @@
 <div class="event-block-container thumbnail">
   <div class="event-block-image"><?php print $fields['field_event_image']->content; ?></div>
   <div class="event-block-title"><h3><?php print $fields['title']->content; ?></h3>
-    <div class="event-block-date text-accent"><?php print $fields['field_event_start_date']->content; ?></div>
+    <div class="event-block-date text-muted"><?php print $fields['field_event_date']->content; ?></div>
   </div>
   <div class="event-block-desc"><?php print $fields['body']->content; ?></div>
 </div>

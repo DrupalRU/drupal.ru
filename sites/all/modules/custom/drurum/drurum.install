@@ -791,3 +791,10 @@ function drurum_update_7041() {
     ->condition('bid', 109)
     ->execute();
 }
+
+/**
+ * Rules during registration.
+ */
+function drurum_update_7042() {
+  variable_set('fz152_checkbox_title', 'Я даю согласие на <a href="/privacy-policy" target="_blank" rel="nofollow">обработку моих персональных данных</a>.</br>Нажимая кнопку "Регистрация", вы соглашаетесь с <a href="/rules" target="_blank" rel="nofollow">правилами</a> сайта.');
+}

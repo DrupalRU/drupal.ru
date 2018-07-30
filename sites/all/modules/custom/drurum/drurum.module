@@ -320,7 +320,7 @@ function drurum_node_icon($node) {
     if (function_exists('druru_icon')) {
       switch (TRUE) {
         // Will be used icon "calendar" for events.
-        case !empty($node->type) && $node->type == 'simple_event':
+        case !empty($node->type) && $node->type == 'event':
           $icon = 'calendar';
           break;
 
@@ -361,58 +361,6 @@ function drurum_need_to_resolve($nid) {
       ->fetchField() > 0;
   }
   return $resolved[$nid];
-}
-
-/**
- *
- */
-function drurum_simple_events_list() {
-  $default_message = '';
-
-  if (_node_add_access()) {
-    $default_message .= '<div>';
-    $default_message .= l(t('Add event'), 'node/add/simple-event', [
-      'attributes' => [
-        'class' => ['btn', 'btn-success'],
-      ],
-    ]);
-    $default_message .= '</div>';
-  }
-
-  $nids = _drurum_simple_events_list_nodes();
-  if (!empty($nids)) {
-    $nodes = node_load_multiple($nids);
-    $build = node_view_multiple($nodes);
-    $build['pager'] = [
-      '#theme' => 'pager',
-      '#weight' => 5,
-    ];
-  }
-  else {
-    $default_message .= '<p>' . t('No upcoming events yet.') . '</p>';
-    $build['default_message'] = [
-      '#markup' => $default_message,
-      '#prefix' => '<div id="first-time">',
-      '#suffix' => '</div>',
-    ];
-  }
-  return $build;
-}
-
-/**
- *
- */
-function _drurum_simple_events_list_nodes() {
-  $query = db_select('node', 'n');
-  $query->addTag('node_access');
-  $query->join('simple_events', 'e', 'e.vid = n.vid');
-  $query->condition('n.type', 'simple_event', '=')
-    ->condition('n.status', 1)
-    ->fields('n', ['nid', 'created'])
-    ->orderBy('e.time_from', 'ASC')
-    ->extend('PagerDefault')
-    ->limit(variable_get('default_nodes_main', 10));
-  return $query->execute()->fetchCol();
 }
 
 /**
@@ -512,4 +460,28 @@ function drurum_mail_alter(&$message) {
  */
 function drurum_form_comment_node_blog_form_alter(&$form, &$form_state, $form_id) {
   hide($form['field_comment_upload']);
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function drurum_views_api() {
+  return array(
+    'api' => 3
+  );
+}
+
+/**
+ * Implements hook_views_default_views().
+ */
+function drurum_views_default_views() {
+  $files = file_scan_directory(drupal_get_path('module', 'drurum') . '/includes/views', '/.*\.view$/');
+  foreach ($files as $filepath => $file) {
+    require $filepath;
+    if (isset($view)) {
+      $views[$view->name] = $view;
+    }
+  }
+
+  return $views;
 }

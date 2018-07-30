@@ -176,7 +176,7 @@ function simple_events_uninstall() {
   // Delete all the nodes at once.
   node_delete_multiple($nids);
 
-  $instance = array('field_name' => 'comment_body', 'bundle' => 'comment_node_simple_event', 'entity_type' => 'comment');
+  /*$instance = array('field_name' => 'comment_body', 'bundle' => 'comment_node_simple_event', 'entity_type' => 'comment');
   field_delete_instance($instance);
 
   $instance = array('field_name' => 'body', 'bundle' => 'simple_event', 'entity_type' => 'node');
@@ -188,5 +188,5 @@ function simple_events_uninstall() {
   }
 
   // Purge all field infromation.
-  field_purge_batch(1000);
+  field_purge_batch(1000);*/
 }

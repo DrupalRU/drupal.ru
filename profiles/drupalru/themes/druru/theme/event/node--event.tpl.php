@@ -73,39 +73,73 @@
  * desired field language; for example, $node->body['en'], thus overriding any
  * language negotiation rule that was previously applied.
  *
- * @see     template_preprocess()
- * @see     template_preprocess_node()
- * @see     template_process()
+ * @see template_preprocess()
+ * @see template_preprocess_node()
+ * @see template_process()
  *
  * @ingroup themeable
  */
 ?>
-<div id="node-<?php print $node->nid; ?>" class="thumbnail <?php print $classes; ?>"<?php print $attributes; ?>>
+<div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
-  <?php if (isset($content['event_image'])): ?>
-    <div class="image">
-      <a href="<?php print $node_url; ?>">
-        <?php print render($content['event_image']); ?>
-      </a>
+  <?php print render($title_prefix); ?>
+  <?php if (!$page): ?>
+    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
+  <?php endif; ?>
+  <?php print render($title_suffix); ?>
+
+  <?php if ($display_submitted): ?>
+    <div class="submitted">
+      <?php print $submitted; ?>
     </div>
   <?php endif; ?>
 
-  <div class="caption">
-    <h3>
-      <a href="<?php print $node_url; ?>">
-        <?php print render($content['address']); ?>,
-        <small class="text-accent">
-          <?php print format_date($event->time_from, 'day_long') ?>
-        </small>
-      </a>
-    </h3>
+  <div class="content"<?php print $content_attributes; ?>>
+    <div class="attributes">
 
-    <?php print render($content['body']); ?>
+      <div class="image">
+      <?php print render($content['field_event_image']); ?>
+      </div>
+
+      <div class="date_time">
+        <?php print render($content['field_event_date']); ?>
+      </div>
+
+      <?php if (isset($content['field_event_link'])): ?>
+        <div class="website">
+          <?php print render($content['field_event_link']); ?>
+        </div>
+      <?php endif; ?>
+
+      <?php if (isset($content['field_event_address'])): ?>
+        <div class="address">
+          <?php print render($content['field_event_address']); ?>
+        </div>
+      <?php endif; ?>
+
+      <div class="event-type">
+        <?php print render($content['field_event_type']); ?>
+      </div>
+
+      <?php if (isset($content['rrssb'])): ?>
+        <div class="rrssb-links">
+          <?php print render($content['rrssb']); ?>
+        </div>
+      <?php endif; ?>
+
+    </div>
+    <div class="details">
+    <?php
+      // We hide the comments and links now so that we can render them later.
+      hide($content['comments']);
+      hide($content['links']);
+      print render($content);
+    ?>
+    </div>
   </div>
 
-  <div class="form-actions">
-    <a href="<?php print $node_url; ?>" role="button" class="btn btn-link">
-      <i class="fa fa-eye"></i> Смотреть
-    </a>
-  </div>
+  <?php print render($content['links']); ?>
+
+  <?php print render($content['comments']); ?>
+
 </div>

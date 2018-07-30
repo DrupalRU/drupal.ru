@@ -921,6 +921,8 @@ function drurum_update_7042() {
           'label_position' => 'above',
           'text_parts' => [],
           'no_fieldset' => 0,
+          'input_format_custom' => '',
+          'increment' => 15,
         ],
       ],
       'settings' => [
@@ -937,7 +939,7 @@ function drurum_update_7042() {
           'weight' => '1',
           'settings' => [
             'format_type' => 'short',
-            'fromto' => 'value',
+            'fromto' => 'both',
             'multiple_number' => '',
             'multiple_from' => '',
             'multiple_to' => '',
@@ -1235,7 +1237,7 @@ function drurum_update_7042() {
     menu_link_save($item);
 
     // Get weight of the main content block
-    $block_main_weight = db_query("SELECT weight FROM block WHERE module = 'system' AND delta = 'main' AND region = 'content' AND theme = 'druru'")->fetchField();
+    $block_main_weight = db_query("SELECT weight FROM {block} WHERE module = 'system' AND delta = 'main' AND region = 'content' AND theme = 'druru'")->fetchField();
 
     // Load events block to get its bid
     $block_events_upcoming = block_load('views', 'events_upcoming_block-block');
@@ -1256,4 +1258,7 @@ function drurum_update_7042() {
       ])
       ->execute();
   }
+
+  // Delete manually created link for Events
+  menu_link_delete(3389);
 }

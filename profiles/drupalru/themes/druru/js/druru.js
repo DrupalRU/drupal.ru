@@ -12,7 +12,6 @@ var Drupal = Drupal || {};
 
   Drupal.behaviors.druru = {
     attach: function (context, settings) {
-
       // Improvement for bootstrap-filestyle plugin.
       $.fn.filestyle.defaults.buttonText = 'Выбрать файл';
       $.fn.filestyle.defaults.iconName = 'fa fa-folder-open';
@@ -24,10 +23,9 @@ var Drupal = Drupal || {};
       $('.selectpicker').selectpicker({
         noneSelectedText: 'Ничего не выбрано'
       });
+
       // stylizing the file input
       $(":file").filestyle();
-
-
     },
 
     improveBootstrapTabIntegration: function (context, settings) {
@@ -45,8 +43,10 @@ var Drupal = Drupal || {};
               $content.css('min-height', $tabs.outerHeight());
             }
           };
+
           // Add min-height on content for left and right tabs.
           druruTabResize();
+
           // Detect tab switch.
           if ($wrapper.hasClass('tabs-left') || $wrapper.hasClass('tabs-right')) {
             $tabs.on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
@@ -88,9 +88,7 @@ var Drupal = Drupal || {};
     },
 
     excludeTags    : ['a', 'button'],
-
     contextMenuId: null,
-
     initContextMenuClicks: 0,
 
     initContextMenu: function (context, settings) {
@@ -117,7 +115,6 @@ var Drupal = Drupal || {};
     },
 
     showContextMenu: function (e) {
-
       var $target = $(e.target),
         $targetId = $target.closest('.comment').data('comment-id');
 
@@ -134,11 +131,13 @@ var Drupal = Drupal || {};
           childOfExcludedTags = false,
           targetTagName = $target.prop("tagName").toString().toLowerCase(),
           tagIsExcluded = excludeTags.indexOf(targetTagName) !== -1;
+
         for (var tag in excludeTags) {
           if (excludeTags.hasOwnProperty(tag)) {
             childOfExcludedTags = childOfExcludedTags || !!$target.closest(excludeTags[tag]).length;
           }
         }
+
         if (tagIsExcluded || childOfExcludedTags) {
           return true;
         }
@@ -175,7 +174,6 @@ var Drupal = Drupal || {};
       }
       else {
         Drupal.behaviors.druru.hideContextMenu($target.closest('.comment'));
-
         Drupal.behaviors.druru.clearContextMenuData();
       }
     },
@@ -248,6 +246,7 @@ var Drupal = Drupal || {};
         // Add close button to popover
         $('.popover-title').append('<button type="button" class="close btn-ticket-popover-close">&times;</button>');
       });
+
       // Close ticket-popover on click outside OR on click close button
       $(document).on('click', function(e) {
         var $target = $(e.target);
@@ -282,8 +281,9 @@ var Drupal = Drupal || {};
    */
   var $scrollableElement = $();
   Drupal.behaviors.druruAnchors = {
-    attach     : function (context, settings) {
+    attach: function (context, settings) {
       var i, elements = ['html', 'body'];
+
       if (!$scrollableElement.length) {
         for (i = 0; i < elements.length; i++) {
           var $element = $(elements[i]);
@@ -301,9 +301,11 @@ var Drupal = Drupal || {};
           }
         }
       }
+
       if (!settings.druru || !settings.druru.anchorsFix) {
         return;
       }
+
       var anchors = $(context).find('a').toArray();
       for (i = 0; i < anchors.length; i++) {
         if (!anchors[i].scrollTo) {
@@ -325,6 +327,7 @@ var Drupal = Drupal || {};
           attr = 'name';
           $target = $('[name="' + element.hash.replace('#', '') + '"');
         }
+
         var offset = $target.offset().top - parseInt($scrollableElement.css('paddingTop'), 10) - parseInt($scrollableElement.css('marginTop'), 10);
         if (this.validAnchor && $target.length && offset > 0) {
           if (event) {
@@ -340,11 +343,13 @@ var Drupal = Drupal || {};
             })
             .appendTo(document);
           $target.removeAttr(attr);
+
           var complete = function () {
             location.hash = element.hash;
             $fakeAnchor.remove();
             $target.attr(attr, element.hash.replace('#', ''));
           };
+
           if (Drupal.settings.druru.anchorsSmoothScrolling) {
             $scrollableElement.animate({scrollTop: offset, avoidTransforms: true}, 400, complete);
           }
@@ -382,6 +387,7 @@ var Drupal = Drupal || {};
             Drupal.behaviors.druruHelpBlocks.showed = !showed;
             return false;
           });
+
           $helpBlocks.hide();
           $('.main-content').prepend($switcher);
           $switcher = $('.help-switcher');
@@ -390,7 +396,6 @@ var Drupal = Drupal || {};
           // Fixation logic.
           position.top = $switcher.offset().top;
           position.left = $switcher.offset().left;
-
           self.setPosition();
           $(window).on('scroll', function (event) {
             self.setPosition();
@@ -416,8 +421,7 @@ var Drupal = Drupal || {};
             left : position.left,
             right: 'auto'
           })
-          .addClass('fixed')
-        ;
+          .addClass('fixed');
       }
       else {
         $switcher.css('left', '');
@@ -439,6 +443,7 @@ var Drupal = Drupal || {};
         else{
           $this.closest('#blog').removeClass('short-view');
         }
+
         $this.addClass('active');
       });
     }
@@ -460,7 +465,7 @@ var Drupal = Drupal || {};
   Drupal.theme.prototype.attributes = function (attributes) {
     var parsedAttrs = '', attr = null;
 
-    //set attributes
+    // Set attributes
     for (var attribute in attributes) {
       if (attributes.hasOwnProperty(attribute)) {
         attr = attributes[attribute];
@@ -472,7 +477,6 @@ var Drupal = Drupal || {};
     }
 
     return ' ' + parsedAttrs + ' ';
-
   };
 
   /**
@@ -488,6 +492,7 @@ var Drupal = Drupal || {};
         'class': []
       };
     }
+
     if (typeof attributes.class === 'undefined') {
       attributes.class = [];
     }
@@ -499,6 +504,7 @@ var Drupal = Drupal || {};
     else if (typeof attributes.class === 'string') {
       attributes.class += ' fa fa-' + icon + ' ';
     }
+
     return '<i ' + Drupal.theme('attributes', attributes) + '"></i>';
   };
 
@@ -507,38 +513,22 @@ var Drupal = Drupal || {};
     if (!window.id_chose) {
       window.id_chose = document.getElementById("edit-inner-poll-new-id").value;
     }
+
     if (window.id_chose < 999) {
       window.id_chose++;
-      var id = window.id_chose,
-        choseHtml = '';
+      var id = window.id_chose, choseHtml = '';
+
       choseHtml += '<div id="edit-choice-' + id + '-wrapper" class="form-group input-group">';
       choseHtml += '<input type="text" class="form-text form-control" value="" size="" id="edit-choice-' + id + '" name="choice_' + id + '" maxlength="128"/>';
-
       choseHtml += '<span class="input-group-btn">';
       choseHtml += '<button class="btn btn-default" onclick="removeFormField(\'#edit-choice-' + id + '-wrapper\'); return false;" type="button">';
       choseHtml += '<i class="fa fa-times"></i>';
       choseHtml += '</button>';
       choseHtml += '</span>';
-
       choseHtml += '</div>';
 
       $("#inner_poll_new_fields").append(choseHtml);
       document.getElementById("edit-inner-poll-new-id").value = id;
     }
   };
-
-  // issue-639: Добавить скролинг тела комментариев
-  $('.comment').each(function() {
-    var $comment = $(this),
-      $content = $comment.find('.content'),
-      contentWidth = $content.width(),
-      allowedRightSide = $comment.width() - $comment.find('.media-left').outerWidth(true) - ($content.outerWidth(true) - contentWidth);
-    contentWidth > allowedRightSide ? $content.css('max-width', allowedRightSide) : null;
-  });
-
-  $('.darkmatter__overflow').click(function() {
-    $(this).fadeOut();
-    $(this).closest(".darkmatter").addClass('darkmatter-shown');
-  })
-
 })(jQuery, Drupal);

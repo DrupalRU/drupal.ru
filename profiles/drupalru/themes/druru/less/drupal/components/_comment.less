@@ -3,71 +3,52 @@
 }
 
 .main-content {
-
   .comment {
     border: 1px solid transparent;
     border-top-color: @gray-lighter;
     position: relative;
-    margin-top: 0;
     background: @main-content-bg;
-    padding-top: @padding-base-vertical;
+    padding: @padding-base-vertical 0 @padding-base-vertical @padding-base-vertical;
+    margin-top: 0;
 
-    div.user-picture {
-      margin-bottom: 0;
-      margin-right: 0;
-      img {
-        max-width: inherit;
-      }
-    }
     &:hover, &:focus {
       .dropdown {
         opacity: 1;
       }
     }
 
-    &.darkmatter {
-      position: relative;
+    .media-left {
+      float: left;
+      padding-right: 0;
+      margin-right: @padding-base-vertical;
+    }
 
-      &:not(.best-comment):not(.comment-unpublished) {
-        overflow: hidden;
-        max-height: 130px;
-        position: relative;
-        transition: all 0.5s ease-in-out;
-      }
+    .media-body {
+      display: initial;
+      width: 100%;
 
-      .darkmatter__overflow {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        text-align: center;
-        background: #fff;
-        opacity: 0.9;
-        z-index: 2;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
-        i {
-          font-size: 2em;
-          color: @gray-dark;
-        }
-      }
-
-      &.darkmatter-unaccessed {
-        .media-body {
-          padding: @padding-small-vertical @padding-base-horizontal;
-        }
-      }
-      &.best-comment {
-        border-color: #bbb;
+      .content {
+        overflow: auto;
+        margin-top: 0;
       }
     }
-    &.darkmatter-shown {
-      overflow: auto !important;
-      max-height: none !important;
+
+    .geshifilter {
+      margin: 0 0 9px;
     }
+
+    div.user-picture {
+      margin-bottom: 0;
+      margin-right: 0;
+
+      img {
+        max-width: inherit;
+        height: 1.5em;
+        width: auto;
+        display: block;;
+      }
+    }
+
     &.best-comment {
       .comment-variant(@state-success-bg, desaturate(darken(@state-success-bg, @tone * 2), @tone * 2));
     }
@@ -79,9 +60,11 @@
         opacity: 1;
       }
     }
+
     &.new-comment {
-      border-left: 7px solid @brand-info;
-      margin-left: 0;
+      .media-heading > .media-header-item:nth-child(2) {
+        color: @brand-success;
+      }
     }
 
     &.comment-unpublished {
@@ -97,6 +80,7 @@
           &, &:hover, &:focus, &:active {
             background: transparent;
             border-color: @dropdown-toggle-active-border;
+
             .icon-bar {
               background: @dropdown-icon-active-bg;
             }
@@ -117,6 +101,7 @@
             background: @dropdown-icon-hover-bg;
           }
         }
+
         .icon-bar {
           background: @dropdown-icon-bg;
           width: 20px;
@@ -129,12 +114,15 @@
           }
         }
       }
+
       .dropdown-menu {
         .darkmatter-link > span {
           color: @btn-link-disabled-color;
         }
+
         a, .darkmatter-link > span {
           padding-left: 12px;
+
           .fa {
             width: 21px;
             text-align: center;
@@ -146,11 +134,39 @@
   }
 
   .indented {
-    padding-left: @padding-base-horizontal;
-    background: @comment-intend-background;
+    padding-left: 3px;
+    position: relative;
 
-    .comment.new-comment {
-      margin-left: -7px;
+    &:after,
+    &:before {
+      content: "";
+      display:block;
+      height: 100%;
+      width: 3px;
+      top: 0;
+      left: 0;
+      position: absolute;
+      background-color: @brand-primary;
+      z-index: 1;
+    }
+
+    &:after {
+      background-color: rgba(255,255,255,.8);
+      margin-left: -1px;
+      z-index: 2;
+    }
+
+    @media @very-smalld {
+      padding-left: 6px;
+
+      &:after,
+      &:before {
+        width: 6px;
+      }
+
+      &:after {
+        margin-left: -2px;
+      }
     }
   }
 
@@ -163,6 +179,7 @@
         margin-bottom: 0;
         text-transform: capitalize;
       }
+
       .user-picture {
         img {
           height: 2em;
@@ -174,13 +191,5 @@
     .field-name-comment-body {
       clear: both;
     }
-  }
-}
-
-#comments {
-  clear: left;
-
-  .media-body .content {
-    overflow: auto;
   }
 }

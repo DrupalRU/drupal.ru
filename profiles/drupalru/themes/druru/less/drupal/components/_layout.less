@@ -10,30 +10,26 @@
   }
 }
 
+section.main {
+  padding-left: @padding-large-horizontal;
+
+  @media @very-smalld {
+    & {
+      padding-right: 0;
+    }
+
+    .main-content,
+    .front & .region-content {
+      margin-left: @padding-large-horizontal;
+    }
+  }
+}
+
 body {
   &:not(.front) {
-    section {
-      padding: 0;
-
-      .main-content {
-        background: @main-content-bg;
-        padding: (@grid-gutter-width / 2);
-        border: 1px solid #eee;
-      }
-    }
-    #navbar {
-      margin: 0;
-    }
     @media @tablet {
       #navbar {
         margin-bottom: @navbar-margin-bottom;
-      }
-      section.main {
-        padding: 0 @grid-gutter-width / 2;
-
-        .main-content {
-          //padding: (@grid-gutter-width / 2) 0;
-        }
       }
     }
   }

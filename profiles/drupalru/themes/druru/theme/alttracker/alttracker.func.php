@@ -27,9 +27,9 @@ function druru_alttracker($variables) {
       '#value'      => $comments,
       '#attributes' => array(
         'class' => array(
+          'node-item--comments-stat',
           'label',
           $node->new ? 'label-success' : 'label-default',
-          'pull-right',
         ),
       ),
     );
@@ -37,37 +37,23 @@ function druru_alttracker($variables) {
     // Title.
     $item[] = array(
       '#type'       => 'html_tag',
-      '#tag'        => 'div',
+      '#tag'        => 'span',
       '#value'      => $node_icon . check_plain($node->title),
       '#attributes' => array(
         'class' => array(
-          'text-primary',
-          'participants',
-          'title',
-          'text-ellipsis',
-          'h3',
+          'node-item--title',
         ),
         'title' => check_plain($node->title),
-      ),
-    );
-
-    // Time.
-    $item[] = array(
-      '#type'       => 'html_tag',
-      '#tag'        => 'small',
-      '#value'      => $time_ago,
-      '#attributes' => array(
-        'class' => array('text-muted', 'pull-right'),
       ),
     );
 
     // User.
     $item[] = array(
       '#type'       => 'html_tag',
-      '#tag'        => 'div',
-      '#value'      => $user_icon . $user_name,
+      '#tag'        => 'small',
+      '#value'      => $user_name,
       '#attributes' => array(
-        'class' => array('user-picture'),
+        'class' => array('node-item--author', 'user-picture'),
       ),
     );
 
@@ -76,7 +62,9 @@ function druru_alttracker($variables) {
       '#text'    => render($item),
       '#path'    => "node/{$node->nid}",
       '#options' => array(
-        'attributes' => array(),
+        'attributes' => array(
+          'class' => array('node-item')
+        ),
         'html'       => TRUE,
         'query'      => $last_page_query,
         'fragment'   => 'new',

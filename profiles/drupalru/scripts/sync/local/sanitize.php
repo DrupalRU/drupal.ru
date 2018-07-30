@@ -43,6 +43,7 @@ $rules = [
   'trigger_assignments',
   'variable',
   'users' => [['uid', 0, '!=']],
+  'ymb',
 ];
 
 $hash = hash('sha256', microtime() . '' . rand());

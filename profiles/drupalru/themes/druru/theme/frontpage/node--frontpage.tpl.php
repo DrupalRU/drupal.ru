@@ -80,18 +80,12 @@
  * @ingroup themeable
  */
 ?>
-<a href="<?php print $node->url; ?>" class="text-ellipsis clearfix list-group-item">
-  <span class="label label-<?php print($node->new_replies?'success':'primary'); ?> pull-right">
+<a href="<?php print $node->url; ?>" class="node-item list-group-item"> <!-- @todo apply .list-group-item -->
+  <span class="node-item--comments-stat label label-<?php print($node->new_replies?'success':'primary'); ?>">
     <?php print druru_icon('comment'.($node->new_replies?'':'-o')); ?>
     <?php print $node->comment_count; ?>
     <?php if ($node->new_replies): ?> / <?php print $node->new_replies; ?><?php endif; ?>
   </span>
-
-  <div class="text-ellipsis text-primary participants h4"><?php print $title; ?></div>
-
-  <small class="text-muted pull-right">
-    <?php print druru_icon('history'); ?>
-    <?php print $time; ?>
-  </small>
-  <div class="subject text-muted"><?php print $name; ?></div>
+  <span class="node-item--title"><?php print $title; ?></span>
+  <small class="node-item--author"><?php print $name; ?></small>
 </a>

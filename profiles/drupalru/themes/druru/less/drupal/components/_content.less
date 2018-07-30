@@ -3,7 +3,6 @@
   color: lighten(@text-color, 30%);
 }
 
-// Page header.
 .page-header {
   margin-top: 0;
   word-wrap: break-word;
@@ -30,13 +29,13 @@
   .node-type-event {
     // Page header.
     .page-header {
-
       + h2 + .nav {
         margin-bottom: 0;
       }
 
       max-width: ~'calc(100% - 180px)';
       float: left;
+
       + .alert {
         clear: both;
       }
@@ -45,7 +44,6 @@
 }
 
 a {
-
   &:focus, &:hover, &:active {
     outline: none;
   }
@@ -54,7 +52,6 @@ a {
 
 table {
   a {
-
     &.active {
       cursor: pointer;
     }
@@ -62,7 +59,6 @@ table {
 }
 
 .content {
-
   img {
     max-width: 100%;
   }
@@ -83,7 +79,6 @@ span.cke_top, span.cke_bottom {
     cursor: pointer;
 
     &.cke_button_disabled {
-
       &, a, span {
         cursor: default;
       }
@@ -98,9 +93,7 @@ span.cke_toolgroup, a.cke_combo_button {
     cursor: pointer;
 
     &.cke_button_disabled {
-
       &, a, span {
-
         cursor: default;
       }
     }
@@ -144,9 +137,11 @@ span.cke_toolgroup, a.cke_combo_button {
       margin-right: @padding-base-horizontal;
     }
   }
+
   .field-items > div {
     display: inline-block;
     margin-right: @padding-small-horizontal;
+
     &:after {
       display: inline-block;
       content: ', ';
@@ -183,11 +178,12 @@ span.cke_toolgroup, a.cke_combo_button {
     right: @padding-base-horizontal;
     z-index: 0;
   }
+
   .field:first-of-type {
     margin: 0;
   }
-  @media @phone {
 
+  @media @phone {
     .field-label {
       .text-ellipsis();
       float: left;
@@ -195,6 +191,7 @@ span.cke_toolgroup, a.cke_combo_button {
       text-align: right;
       font-weight: 400;
     }
+
     .field-items {
       padding-left: 212px;
       float: none;

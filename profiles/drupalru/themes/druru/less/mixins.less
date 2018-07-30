@@ -1,5 +1,4 @@
 .inline-user-login-block-links(@size-of-links:'default', @centered:true) {
-
   #user-login-form ul {
     padding-left: 0;
     text-align: left;
@@ -248,7 +247,6 @@
 }
 
 .loader-circle(@size: 'middle') {
-
   .ajax-progress {
     padding: 0 5px;
     margin: 0;
@@ -329,7 +327,7 @@
  * }
  */
 .li-select(@tag: ~"*", @rules: "") {
-  padding-left: 2px;
+  padding-left: 0;
 
   > @{tag} {
     list-style: none;
@@ -338,11 +336,10 @@
     z-index: 2;
 
     a:first-of-type {
-      border-left: 1px solid transparent;
       line-height: @line-height-large;
       display: block;
       text-decoration: none;
-      padding: @padding-base-vertical @padding-base-horizontal;
+      padding: @padding-large-vertical @padding-large-horizontal;
 
       //&:before {
       //  content: '';
@@ -359,16 +356,9 @@
       &:hover, &:focus, &.active {
         // For true overriden a.active:hover of other places.
         &, &.active{
-          border-left-color: @brand-accent;
-          border-left-width: 2px;
-          padding-left: @padding-base-horizontal - 1px;
           background: rgba(0,0,0,.05);
           font-weight: normal;
           color: lighten(@brand-primary, @tone);
-
-          &:before {
-            border-color: transparent transparent transparent lighten(@brand-accent, @tone);
-          }
         }
       }
     }
@@ -382,9 +372,11 @@
 
 .li-accent(@tag: ~"*", @rules: "") {
   padding-left: 20px;
+
   > @{tag} {
     list-style: none;
     display: block;
+
     & when not (@rules = '') {
       @rules();
     }
@@ -394,7 +386,7 @@
       font-weight: normal;
       color: @brand-accent;
       float: left;
-      margin-left: -16px;
+      margin-left: -@padding-large-horizontal;
       font-size: 1.2em;
       line-height: .9em;
     }

@@ -75,6 +75,7 @@ $rules = [
     $not_dev_team_rule,
     ['uid', [0, 1], 'NOT IN'],
   ],
+  'ymb',
 ];
 
 $hash = hash('sha256', microtime() . '' . rand());

@@ -485,3 +485,14 @@ function drurum_views_default_views() {
 
   return $views;
 }
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter() for node_form().
+ */
+function drurum_form_node_form_alter(&$form, &$form_state, $form_id) {
+  if (isset($form['taxonomy_forums'])) {
+    $langcode = $form['taxonomy_forums']['#language'];
+    // DO NOT Make the vocabulary required for 'real' forum-nodes.
+    $form['taxonomy_forums'][$langcode]['#required'] = FALSE;
+  }
+}

@@ -25,8 +25,12 @@ function xmlsitemap_node_cron() {
     $limit--;
     try {
       $node = node_load($item->data);
-      $link = xmlsitemap_node_create_link($node);
-      xmlsitemap_link_save($link, array($link['type'] => $node));
+      // The node could have been deleted in the meantime, skip XML sitemap
+      // updates in this case.
+      if ($node) {
+        $link = xmlsitemap_node_create_link($node);
+        xmlsitemap_link_save($link, [$link['type'] => $node]);
+      }
       $queue->deleteItem($item);
     }
     catch (Exception $e) {

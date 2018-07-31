@@ -1279,3 +1279,13 @@ function drurum_update_7043() {
   // Delete manually created link for Events
   menu_link_delete(3389);
 }
+
+/**
+ * Disable module dru_forum.
+ */
+function drurum_update_7044() {
+  if (module_exists('dru_forum')) {
+    module_disable(['dru_forum']);
+    drupal_uninstall_modules(['dru_forum']);
+  }
+}

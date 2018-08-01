@@ -1,8 +1,13 @@
 html {
   height: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+
   &.overlay-open .navbar-fixed-top {
     z-index: 400;
   }
+
   &.js {
     // Collapsible fieldsets.
     fieldset.collapsed {
@@ -35,53 +40,67 @@ body {
   &.admin-expanded.admin-vertical.admin-sw .navbar {
     margin-left: 260px;
   }
+
   // Add padding to body if various toolbar or navbars are fixed on top.
   &.navbar-is-fixed-top {
     padding-top: 64px !important;
   }
+
   &.navbar-is-fixed-bottom {
     padding-bottom: 64px !important;
   }
+
   &.toolbar {
     padding-top: 30px !important;
+
     .navbar-fixed-top {
       top: 30px;
     }
+
     &.navbar-is-fixed-top {
       padding-top: 94px !important;
     }
   }
+
   &.toolbar-drawer {
     padding-top: 64px !important;
+
     .navbar-fixed-top {
       top: 64px;
     }
+
     &.navbar-is-fixed-top {
       padding-top: 128px !important;
     }
   }
+
   // Admin_menu toolbar.
   &.admin-menu {
     .navbar-fixed-top {
       top: 29px;
     }
+
     &.navbar-is-fixed-top {
       padding-top: 93px !important;
     }
   }
+
   div#admin-toolbar {
     z-index: 1600;
   }
+
   // Override box-shadow styles on all "admin" menus.
   #toolbar, #admin-menu, #admin-toolbar {
     .box-shadow(none);
   }
+
   // Override #admin-menu style.
   #admin-menu {
     margin: 0;
     padding: 0;
     position: fixed;
     z-index: 1600;
+
     .dropdown li {
       line-height: normal;
     }
@@ -90,27 +109,32 @@ body {
 
 // Default navbar.
 .navbar.container {
-  @media @tablet {
-    max-width: ((@container-st  - 30px));
-  }
-  @media @very-smalld {
-    max-width: ((@container-vsd - 30px));
-  }
-  @media @smalld {
-    max-width: ((@container-sd  - 30px));
-  }
-  @media @middled {
-    max-width: ((@container-md  - 30px));
-  }
-  @media @larged {
-    max-width: ((@container-ld  - 30px));
-  }
-
   margin-top: 20px;
+
   > .container {
     margin: 0;
     padding: 0;
     width: auto;
+  }
+
+  @media @tablet {
+    max-width: ((@container-st  - 30px));
+  }
+
+  @media @very-smalld {
+    max-width: ((@container-vsd - 30px));
+  }
+
+  @media @smalld {
+    max-width: ((@container-sd  - 30px));
+  }
+
+  @media @middled {
+    max-width: ((@container-md  - 30px));
+  }
+
+  @media @larged {
+    max-width: ((@container-ld  - 30px));
   }
 }
 
@@ -118,9 +142,11 @@ body {
   @media @tablet {
     width: auto;
   }
+
   @media @very-smalld {
     width: ((@container-vsd));
   }
+
   @media @smalld {
     width: ((@container-sd));
   }
@@ -160,6 +186,7 @@ body {
 // Navigation.
 ul.secondary {
   float: left;
+
   @media @tablet {
     float: right;
   }
@@ -170,6 +197,7 @@ ul.secondary {
   &:first-child h2.block-title {
     margin-top: 0;
   }
+
   h2.block-title {
     font-size: ceil(@font-size-h2 * 1);
 
@@ -191,6 +219,7 @@ p:last-child {
     float: left;
     margin: -0.05em 0.5em 0 0;
   }
+
   .block {
     overflow: hidden;
   }
@@ -204,6 +233,7 @@ form#search-block-form {
 .navbar #block-search-form {
   float: none;
   margin: 5px 0 5px 5px;
+
   @media @very-smalld {
     float: right;
   }
@@ -254,9 +284,11 @@ fieldset .panel-heading a.panel-title {
   label {
     font-weight: @font-weight-base;
   }
+
   &:first-child {
     margin-top: 0;
   }
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -284,13 +316,16 @@ table tr.error {
 
 .control-group.error {
   background: none;
+
   label, .control-label {
     color: @state-danger-text;
   }
+
   input, textarea, select, .uneditable-input {
     color: @input-color;
     border: 1px solid @input-border;
   }
+
   .help-block, .help-inline {
     color: @text-color;
   }
@@ -299,6 +334,7 @@ table tr.error {
 // Lists
 .list-inline {
   margin-left: 0;
+
   > li.first {
     padding-left: 0;
   }
@@ -399,6 +435,7 @@ div.password-suggestions ul {
 .tabs-below, .tabs-left, .tabs-right {
   > .nav-tabs {
     border-bottom: 0;
+
     .summary {
       color: @nav-disabled-link-color;
       font-size: @font-size-small;
@@ -418,11 +455,14 @@ div.password-suggestions ul {
 .tabs-below {
   > .nav-tabs {
     border-top: 1px solid @nav-tabs-border-color;
+
     > li {
       margin-top: -1px;
       margin-bottom: 0;
+
       > a {
         border-radius: 0 0 @border-radius-base @border-radius-base;
+
         &:hover,
         &:focus {
           border-top-color: @nav-tabs-border-color;
@@ -430,6 +470,7 @@ div.password-suggestions ul {
         }
       }
     }
+
     > .active {
       > a,
       > a:hover,
@@ -446,14 +487,17 @@ div.password-suggestions ul {
   > .nav-tabs {
     padding-bottom: 20px;
     width: 220px;
+
     > li {
       float: none;
       &:focus {
         outline: 0;
       }
+
       > a {
         margin-right: 0;
         margin-bottom: 3px;
+
         &:focus {
           outline: 0;
         }
@@ -474,6 +518,7 @@ div.password-suggestions ul {
   > .nav-tabs {
     float: left;
     margin-right: -1px;
+
     > li > a {
       border-radius: @border-radius-base 0 0 @border-radius-base;
       &:hover,
@@ -481,6 +526,7 @@ div.password-suggestions ul {
         border-color: @nav-tabs-link-hover-border-color @nav-tabs-border-color @nav-tabs-link-hover-border-color @nav-tabs-link-hover-border-color;
       }
     }
+
     > .active > a,
     > .active > a:hover,
     > .active > a:focus {
@@ -495,6 +541,7 @@ div.password-suggestions ul {
   > .nav-tabs {
     float: right;
     margin-left: -1px;
+
     > li > a {
       border-radius: 0 @border-radius-base @border-radius-base 0;
       &:hover,
@@ -503,6 +550,7 @@ div.password-suggestions ul {
         .box-shadow(1px 1px 1px rgba(0, 0, 0, .05));
       }
     }
+
     > .active > a,
     > .active > a:hover,
     > .active > a:focus {
@@ -525,6 +573,7 @@ td.radio {
     font-size: 100%;
     color: #666666;
   }
+
   .footer {
     padding: 0;
     margin: 4px 0 0 0;
@@ -538,6 +587,7 @@ table {
       position: static;
     }
   }
+
   .radio input[type="radio"],
   .checkbox input[type="checkbox"] {
     max-width: inherit;

@@ -9990,11 +9990,11 @@ span.geshifilter code,
 .event-block-container {
   width: 32%;
   margin-bottom: 0;
-  min-width: 280px;
+  min-width: 295px;
   justify-content: space-between;
   float: left;
   margin-right: 10px;
-  height: 340px;
+  height: 360px;
   padding: 10px;
 }
 .event-block-container .event-block-title h3 {
@@ -10009,10 +10009,10 @@ span.geshifilter code,
 .event-block-container .event-block-desc {
   font-weight: 300;
 }
-#block-views-events-block {
+#block-views-events-upcoming-block-block {
   overflow: auto;
 }
-#block-views-events-block .view-content {
+#block-views-events-upcoming-block-block .view-content {
   display: flex;
 }
 [aria-label] {

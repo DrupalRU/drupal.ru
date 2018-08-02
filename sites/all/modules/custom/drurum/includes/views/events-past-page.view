@@ -67,10 +67,6 @@ $handler->display->display_options['fields']['body']['table'] = 'field_data_body
 $handler->display->display_options['fields']['body']['field'] = 'body';
 $handler->display->display_options['fields']['body']['label'] = '';
 $handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
-$handler->display->display_options['fields']['body']['type'] = 'text_trimmed';
-$handler->display->display_options['fields']['body']['settings'] = array(
-  'trim_length' => '150',
-);
 /* Field: Content: Address */
 $handler->display->display_options['fields']['field_event_address']['id'] = 'field_event_address';
 $handler->display->display_options['fields']['field_event_address']['table'] = 'field_data_field_event_address';

@@ -127,62 +127,6 @@ body {
         font-weight: 300;
       }
     }
-
-    .block-simple-events {
-      .event-list {
-        display: -webkit-box;
-        display: -moz-box;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-
-        -webkit-flex-flow: row;
-        flex-wrap: nowrap;
-        overflow: auto;
-
-        margin-left: -@padding-large-horizontal;
-        margin-right: -@padding-large-horizontal;
-
-        @media @very-smalld {
-          & {
-            margin-left: 0;
-            margin-right: 0;
-          }
-        }
-
-        .thumbnail {
-          margin-right: 2%;
-          margin-bottom: 0;
-          min-width: 292px;
-          width: 32%;
-          display: flex;
-          flex-direction: column;
-          -ms-flex-direction: column;
-
-          &:last-child {
-            margin-right: 0;
-          }
-
-          &.add-more-link {
-            display: block;
-            border-width: 3px;
-            border-style: dashed;
-            font-size: 5em;
-            text-align: center;
-            line-height: 5em;
-            .transition();
-          }
-
-          .caption {
-            font-weight: 300;
-          }
-
-          .form-actions {
-            margin-top: auto;
-          }
-        }
-      }
-    }
   }
 
   .frontpage-list {

@@ -10,5 +10,14 @@ sites/local
 # PhpStorm
 .idea
 
+# Ignore translations
 sites/all/translations
 
+# Ignore modules for developers
+sites/all/modules/contrib/coder
+sites/all/modules/contrib/devel
+sites/all/modules/contrib/field_inspector
+sites/all/modules/contrib/hacked
+sites/all/modules/contrib/masquerade
+sites/all/modules/contrib/search_krumo
+sites/all/modules/contrib/stage_file_proxy

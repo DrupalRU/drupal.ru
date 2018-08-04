@@ -119,7 +119,6 @@ function _druru_prepare_order(&$elements) {
     'Мои работы для Drupal' => ++$x,
     'Рассылки' => ++$x,
     'summary' => ++$x,
-    'simplenews' => ++$x,
   );
   foreach ($weigts as $key => $weigt) {
     if(isset($elements[$key])){

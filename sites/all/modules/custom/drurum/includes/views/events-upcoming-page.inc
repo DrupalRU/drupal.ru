@@ -137,3 +137,4 @@ $translatables['events_upcoming'] = array(
   t('There are no events in the near future'),
   t('Upcoming events'),
 );
+$view->save();

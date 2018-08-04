@@ -807,6 +807,7 @@ function drurum_update_7043() {
     module_disable(['simple_events']);
     drupal_uninstall_modules(['simple_events']);
   }
+
   module_enable(['date']);
   module_enable(['date_views']);
   module_enable(['link']);
@@ -831,7 +832,7 @@ function drurum_update_7043() {
     variable_set('node_submitted_event', '0');
     variable_set('node_options_event', ['status']);
 
-    // Load fields definitions
+    // Create fields and fields' instances
     $files = file_scan_directory(drupal_get_path('module', 'drurum') . '/includes/fields', '/.*\.inc$/');
     foreach ($files as $filepath => $file) {
       require_once $filepath;
@@ -847,27 +848,11 @@ function drurum_update_7043() {
     );
     menu_link_save($item);
 
-    // Get weight of the main content block
-    $block_main_weight = db_query("SELECT weight FROM {block} WHERE module = 'system' AND delta = 'main' AND region = 'content' AND theme = 'druru'")->fetchField();
-
-    // Load events block to get its bid
-    $block_events_upcoming = block_load('views', 'events_upcoming_block-block');
-
-    db_insert('block')
-      ->fields([
-        'module' => 'views',
-        'delta' => 'events_upcoming_block-block',
-        'status' => '1',
-        'weight' => $block_main_weight + 1,
-        'region' => 'content',
-        'custom' => '0',
-        'visibility' => '1',
-        'pages' => '<front>',
-        'theme' => 'druru',
-        'bid' => $block_events_upcoming->bid,
-        'cache' => '-1',
-      ])
-      ->execute();
+    // Create views
+    $files = file_scan_directory(drupal_get_path('module', 'drurum') . '/includes/views', '/.*\.inc$/');
+    foreach ($files as $filepath => $file) {
+      require_once $filepath;
+    }
   }
 
   // Delete manually created link for Events

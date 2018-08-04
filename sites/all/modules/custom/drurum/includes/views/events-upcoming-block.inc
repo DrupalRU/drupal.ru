@@ -112,3 +112,4 @@ $translatables['events'] = array(
   t('Block'),
   t('Upcoming events'),
 );
+$view->save();

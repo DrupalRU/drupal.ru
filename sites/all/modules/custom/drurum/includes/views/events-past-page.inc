@@ -133,3 +133,4 @@ $translatables['events_past'] = array(
   t('Desc'),
   t('There are no events in the near future'),
 );
+$view->save();

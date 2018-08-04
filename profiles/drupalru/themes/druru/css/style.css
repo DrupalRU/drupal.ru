@@ -8733,6 +8733,39 @@ body .frontpage-list .list-group .list-group-item:hover,
 body .alttracker.list-group .list-group-item:hover {
   background: rgba(0, 0, 0, 0.1);
 }
+body.page-events .node-event img {
+  max-width: 100%;
+  height: auto;
+}
+body.page-events .node-event iframe {
+  max-width: 100%;
+}
+@media screen and (min-width: 748px) {
+  body.page-events #block-system-main {
+    padding-left: 60px;
+    margin-left: 96px;
+    border-left: 1px solid #6ab7dd;
+  }
+  body.page-events .event-date {
+    position: absolute;
+    left: -165.25px;
+    line-height: 1.3em;
+    font-size: 0.5em;
+    color: #df9b10;
+  }
+  body.page-events .event-date:after {
+    display: block;
+    content: '';
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 1px solid;
+    right: -35px;
+    top: 0.3em;
+    background: #fafafa;
+  }
+}
 .pager-wrapper {
   clear: left;
 }
@@ -9920,10 +9953,6 @@ fieldset[disabled] #block-advanced-sphinx-searchbox .search-sphinx:focus + butto
 }
 .node-event .details {
   margin-left: 0;
-}
-.node-event .image img {
-  max-width: 100%;
-  height: auto;
 }
 .node-event .event-type {
   margin-top: 5px;

@@ -14,6 +14,7 @@
     .image {
       margin-bottom: @padding-base-vertical;
     }
+
     > * {
       margin-bottom: @padding-small-vertical;
 
@@ -36,15 +37,19 @@
 					float: left;
         }
       }
+
       &.image {
         margin-bottom: @padding-large-vertical;
       }
+
       &.website:before {
         content: "\f0c1";
       }
+
       &.address:before {
         content: "\f041";
       }
+
       &.event-type {
         &:before {
           content: "\f05a";
@@ -53,10 +58,12 @@
           display: inline;
         }
       }
+
       &.date_time {
         &:before {
           content: "\f073";
         }
+
         a > * {
           margin-right: @padding-small-horizontal;
           display: inline;
@@ -64,15 +71,11 @@
       }
     }
   }
+
   .details {
     margin-left: 0;
   }
-  .image {
-    img {
-      max-width: 100%;
-      height: auto;
-    }
-  }
+
   .event-type {
     margin-top: 5px;
   }

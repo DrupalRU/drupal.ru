@@ -36,7 +36,7 @@ $handler->display->display_options['fields']['field_event_image']['label'] = '';
 $handler->display->display_options['fields']['field_event_image']['element_label_colon'] = FALSE;
 $handler->display->display_options['fields']['field_event_image']['click_sort_column'] = 'fid';
 $handler->display->display_options['fields']['field_event_image']['settings'] = array(
-  'image_style' => '',
+  'image_style' => 'event_teaser',
   'image_link' => 'content',
 );
 /* Field: Content: Title */

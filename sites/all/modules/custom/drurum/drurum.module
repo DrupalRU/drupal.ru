@@ -463,30 +463,6 @@ function drurum_form_comment_node_blog_form_alter(&$form, &$form_state, $form_id
 }
 
 /**
- * Implements hook_views_api().
- */
-function drurum_views_api() {
-  return array(
-    'api' => 3
-  );
-}
-
-/**
- * Implements hook_views_default_views().
- */
-function drurum_views_default_views() {
-  $files = file_scan_directory(drupal_get_path('module', 'drurum') . '/includes/views', '/.*\.view$/');
-  foreach ($files as $filepath => $file) {
-    require $filepath;
-    if (isset($view)) {
-      $views[$view->name] = $view;
-    }
-  }
-
-  return $views;
-}
-
-/**
  * Implements hook_form_BASE_FORM_ID_alter() for node_form().
  */
 function drurum_form_node_form_alter(&$form, &$form_state, $form_id) {

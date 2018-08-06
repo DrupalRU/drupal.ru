@@ -508,27 +508,4 @@ var Drupal = Drupal || {};
     return '<i ' + Drupal.theme('attributes', attributes) + '"></i>';
   };
 
-  // Inner poll.
-  window.addFormField = function () {
-    if (!window.id_chose) {
-      window.id_chose = document.getElementById("edit-inner-poll-new-id").value;
-    }
-
-    if (window.id_chose < 999) {
-      window.id_chose++;
-      var id = window.id_chose, choseHtml = '';
-
-      choseHtml += '<div id="edit-choice-' + id + '-wrapper" class="form-group input-group">';
-      choseHtml += '<input type="text" class="form-text form-control" value="" size="" id="edit-choice-' + id + '" name="choice_' + id + '" maxlength="128"/>';
-      choseHtml += '<span class="input-group-btn">';
-      choseHtml += '<button class="btn btn-default" onclick="removeFormField(\'#edit-choice-' + id + '-wrapper\'); return false;" type="button">';
-      choseHtml += '<i class="fa fa-times"></i>';
-      choseHtml += '</button>';
-      choseHtml += '</span>';
-      choseHtml += '</div>';
-
-      $("#inner_poll_new_fields").append(choseHtml);
-      document.getElementById("edit-inner-poll-new-id").value = id;
-    }
-  };
 })(jQuery, Drupal);

@@ -3587,8 +3587,7 @@ a.events--front .event.active {
   padding: 9px;
   color: #333333;
 }
-.alert,
-.messages {
+.alert {
   padding: 15px;
   margin-bottom: 18px;
   border: 1px solid transparent;
@@ -3619,8 +3618,7 @@ a.events--front .event.active {
   right: -21px;
   color: inherit;
 }
-.alert-success,
-.messages.status {
+.alert-success {
   background-color: #dff0d8;
   border-color: #a6d593;
   color: #468847;
@@ -10803,131 +10801,6 @@ div.altpager ul li a:hover,
 div.altpager ul li a:focus {
   color: #df9b10;
 }
-#inner_poll_add_field_link a {
-  display: inline-block;
-  margin-bottom: 0;
-  font-weight: normal;
-  text-align: center;
-  vertical-align: middle;
-  touch-action: manipulation;
-  cursor: pointer;
-  background-image: none;
-  border: 1px solid transparent;
-  white-space: nowrap;
-  padding: 6px 12px;
-  font-size: 15px;
-  line-height: 1.2;
-  border-radius: 0;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  color: #fff;
-  background-color: #61ad61;
-  border-color: #54a154;
-}
-#inner_poll_add_field_link a:focus,
-#inner_poll_add_field_link a:active:focus,
-#inner_poll_add_field_link a.active:focus,
-#inner_poll_add_field_link a.focus,
-#inner_poll_add_field_link a:active.focus,
-#inner_poll_add_field_link a.active.focus {
-  outline: 5px auto -webkit-focus-ring-color;
-  outline-offset: -2px;
-}
-#inner_poll_add_field_link a:hover,
-#inner_poll_add_field_link a:focus,
-#inner_poll_add_field_link a.focus {
-  color: #333;
-  text-decoration: none;
-}
-#inner_poll_add_field_link a:active,
-#inner_poll_add_field_link a.active {
-  outline: 0;
-  background-image: none;
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-}
-#inner_poll_add_field_link a.disabled,
-#inner_poll_add_field_link a[disabled],
-fieldset[disabled] #inner_poll_add_field_link a {
-  cursor: not-allowed;
-  -moz-opacity: 0.65;
-  -khtml-opacity: 0.65;
-  -webkit-opacity: 0.65;
-  opacity: 0.65;
-  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(opacity=65);
-  filter: alpha(opacity=65);
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-}
-a#inner_poll_add_field_link a.disabled,
-fieldset[disabled] a#inner_poll_add_field_link a {
-  pointer-events: none;
-}
-#inner_poll_add_field_link a:focus,
-#inner_poll_add_field_link a.focus {
-  color: #fff;
-  background-color: #4b904b;
-  border-color: #284d28;
-}
-#inner_poll_add_field_link a:hover {
-  color: #fff;
-  background-color: #4b904b;
-  border-color: #3f793f;
-}
-#inner_poll_add_field_link a:active,
-#inner_poll_add_field_link a.active,
-.open > .dropdown-toggle#inner_poll_add_field_link a {
-  color: #fff;
-  background-color: #4b904b;
-  border-color: #3f793f;
-}
-#inner_poll_add_field_link a:active:hover,
-#inner_poll_add_field_link a.active:hover,
-.open > .dropdown-toggle#inner_poll_add_field_link a:hover,
-#inner_poll_add_field_link a:active:focus,
-#inner_poll_add_field_link a.active:focus,
-.open > .dropdown-toggle#inner_poll_add_field_link a:focus,
-#inner_poll_add_field_link a:active.focus,
-#inner_poll_add_field_link a.active.focus,
-.open > .dropdown-toggle#inner_poll_add_field_link a.focus {
-  color: #fff;
-  background-color: #3f793f;
-  border-color: #284d28;
-}
-#inner_poll_add_field_link a:active,
-#inner_poll_add_field_link a.active,
-.open > .dropdown-toggle#inner_poll_add_field_link a {
-  background-image: none;
-}
-#inner_poll_add_field_link a.disabled:hover,
-#inner_poll_add_field_link a[disabled]:hover,
-fieldset[disabled] #inner_poll_add_field_link a:hover,
-#inner_poll_add_field_link a.disabled:focus,
-#inner_poll_add_field_link a[disabled]:focus,
-fieldset[disabled] #inner_poll_add_field_link a:focus,
-#inner_poll_add_field_link a.disabled.focus,
-#inner_poll_add_field_link a[disabled].focus,
-fieldset[disabled] #inner_poll_add_field_link a.focus {
-  background-color: #61ad61;
-  border-color: #54a154;
-}
-#inner_poll_add_field_link a .badge {
-  color: #61ad61;
-  background-color: #fff;
-}
-.inner_poll.jumbotron h2 {
-  margin-top: 0;
-}
-.inner_poll.jumbotron .form-actions {
-  margin-bottom: 0;
-}
-.inner_poll.jumbotron .inner-poll-unauthorized {
-  margin-top: 10px;
-}
 .node.node-organization {
   margin-top: 18px;
   padding-top: 18px;
@@ -11530,4 +11403,3 @@ sup.beta {
   line-height: 0.3em;
   margin: 0;
 }
-/*# sourceMappingURL=style.css.map */

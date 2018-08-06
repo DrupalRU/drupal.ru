@@ -878,3 +878,13 @@ function drurum_update_7045() {
     drupal_uninstall_modules(['inner_poll']);
   }
 }
+
+/**
+ * Disable module user_filter.
+ */
+function drurum_update_7046() {
+  if (module_exists('user_filter') && module_exists('user_filter_notify')) {
+    module_disable(['user_filter_notify', 'user_filter']);
+    drupal_uninstall_modules(['user_filter_notify', 'user_filter']);
+  }
+}

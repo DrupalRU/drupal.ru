@@ -34,8 +34,6 @@ $rules = [
   'registry_file',
   'role',
   'role_permission',
-  'simplenews_category',
-  //  'sphinxmain', // view
   'system',
   'taxonomy_term_data',
   'taxonomy_term_hierarchy',
@@ -55,7 +53,6 @@ $clean_variables = [
     'captcha_token' => sprintf('s:32:"%s";', substr($hash, 0, 32)),
     'cron_key' => sprintf('s:64:"%s";', $hash),
     'drupal_private_key' => sprintf('s:64:"%s";', $hash),
-    'simplenews_private_key' => sprintf('s:32:"%s";', substr($hash, 0, 32)),
     'spambot_sfs_api_key' => sprintf('s:14:"%s";', substr($hash, 0, 14)),
     'token' => sprintf('s:32:"%s";', substr($hash, 0, 32)),
     'comment_notify_node_notify_default_mailalert' => 'i:0;',

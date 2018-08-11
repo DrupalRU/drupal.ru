@@ -3,31 +3,25 @@ var less          = require('gulp-less');
 var header        = require('gulp-header');
 var rename        = require('gulp-rename');
 var lessGlob      = require('gulp-less-glob');
-var autoprefixer  = require('gulp-autoprefixer');
 var sourcemaps    = require('gulp-sourcemaps');
 var browserSync   = require('browser-sync');
+var autoprefixer  = require('gulp-autoprefixer');
 
-// Config
+// Replace 'proxy' value with actual url to your local drupal.ru
 var config = {
-  proxy: 'http://drupalru.lndo.site',
-  themes: {
-    druru: {
-      path: 'profiles/drupalru/themes/druru',
-      file: 'style.less'
-    }
-  }
-};
+  proxy: 'http://drupalru.lndo.site'
+}
 
-// Compile LESS and create sourcemaps
+// Compile LESS with autoprefixing and create sourcemaps
 gulp.task('css', function() {
   return gulp
-    .src(config.themes.druru.path + '/less/' + config.themes.druru.file)
+    .src('./less/style.less')
     .pipe(sourcemaps.init())
     .pipe(lessGlob())
     .pipe(less()).on('error', console.log.bind(console))
     .pipe(autoprefixer())
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(config.themes.druru.path + '/css'))
+    .pipe(gulp.dest('./css'))
     .pipe(browserSync.reload({
       stream: true
     }));
@@ -53,5 +47,5 @@ gulp.task('dev', ['css'], function () {
 
   // Add browserSync.reload to the tasks array to make
   // all browsers reload after tasks are complete.
-  gulp.watch(config.themes.druru.path + '/less/**/*.less', ['css-watch']);
+  gulp.watch('./less/**/*.less', ['css-watch']);
 });

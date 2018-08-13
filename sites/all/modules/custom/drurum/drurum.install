@@ -893,7 +893,7 @@ function drurum_update_7046() {
 
     foreach ($result as $body) {
       $patterns[] = "/(^|[^@\\w])@(\\w{1,15})\\b/";
-      $replacements[] = "$1<a href='/username/$2'>$2</a>";
+      $replacements[] = "$1[user=$2]$2[/user]";
 
       $new_body = preg_replace($patterns, $replacements, $body->{$field . '_value'});
 

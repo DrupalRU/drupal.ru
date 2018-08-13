@@ -870,7 +870,7 @@ function drurum_update_7044() {
 }
 
 /**
- * Disable module inner_poll.
+ * Disable and uninstall module inner_poll.
  */
 function drurum_update_7045() {
   if (module_exists('inner_poll')) {
@@ -880,7 +880,8 @@ function drurum_update_7045() {
 }
 
 /**
- * Disable module user_filter.
+ * Disable and uninstall module user_filter.
+ * Replace '@username' with bb-code in nodes and comments.
  */
 function drurum_update_7046() {
   $fields = ['body', 'comment_body'];

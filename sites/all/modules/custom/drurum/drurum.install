@@ -868,3 +868,13 @@ function drurum_update_7044() {
     drupal_uninstall_modules(['dru_forum']);
   }
 }
+
+/**
+ * Disable module inner_poll.
+ */
+function drurum_update_7045() {
+  if (module_exists('inner_poll')) {
+    module_disable(['inner_poll']);
+    drupal_uninstall_modules(['inner_poll']);
+  }
+}

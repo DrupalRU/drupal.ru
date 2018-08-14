@@ -56,18 +56,4 @@ chmod +x "$SCRIPTS_DIR/sync/build-dumps.sh"
 sh "$SCRIPTS_DIR/sync/build-dumps.sh"
 chmod -x "$SCRIPTS_DIR/sync/build-dumps.sh"
 
-cd $VERSIONS_DIR
-if [ $(ls -l | grep -c ^d) -gt $STORE_VERSIONS ] ; then
-    sm "Удаление устаревших версий"
-    while [ $(ls -l | grep -c ^d) -gt $STORE_VERSIONS ]
-    do
-        DEPRECATED_VERSION=$(ls -r | tail -n 1)
-        chmod 755 -R ./$DEPRECATED_VERSION
-        rm -rf ./$DEPRECATED_VERSION
-        sm "Версия \"$DEPRECATED_VERSION\" удалена"
-    done
-else
-    sm "Устаревших версий не найдено"
-fi
-
 sm "Деплоймент завершён"

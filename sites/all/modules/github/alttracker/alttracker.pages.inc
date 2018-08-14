@@ -63,11 +63,6 @@ function alttracker_page($account = NULL, $set_title = FALSE) {
     ->condition('t.published', 1)
     ->orderBy('t.changed', 'DESC');
 
-    $hide_dark_matter = (isset($user->darkmatter) ? $user->darkmatter == 1 : false);
-    if (!$hide_dark_matter) {
-      $query->condition('n.darkmatter', 0);
-    }
-
   if($ignore_terms = variable_get('alttracker_ignore_terms')){
     $query->condition('n.nid', db_select('taxonomy_index', 't')
       -> fields('t', array('nid'))

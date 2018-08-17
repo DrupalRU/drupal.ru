@@ -55,7 +55,6 @@ function druru_preprocess_comment(&$vars) {
     'dru-claim'     => 'balance-scale',
   );
   $icons2 = array(
-    'darkmatter-link'  => 'moon-o',
     'comment-resolve'  => 'flag',
     'comment-unsolved' => 'flag-o',
     'unpublish'        => 'eye-slash',

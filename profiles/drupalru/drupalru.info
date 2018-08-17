@@ -25,7 +25,6 @@ dependencies[] = file
 # contrib modules
 dependencies[] = admin_menu
 dependencies[] = adminimal_admin_menu
-dependencies[] = ban_user
 dependencies[] = bbcode
 dependencies[] = bueditor
 dependencies[] = comment_notify
@@ -63,17 +62,13 @@ dependencies[] = drupal_deploy
 # Custom modules
 dependencies[] = antinoob_validate
 dependencies[] = antiswearing_validate
-dependencies[] = darkmatter
 dependencies[] = dru_claim
 dependencies[] = dru_comment_quote
 dependencies[] = dru_comments
 dependencies[] = dru_frontpage
 dependencies[] = dru_tickets
 dependencies[] = dru_tnx
-dependencies[] = inner_poll
 dependencies[] = marketplace
 dependencies[] = resolve
-dependencies[] = user_filter
-dependencies[] = user_filter_notify
 dependencies[] = validate_api
 dependencies[] = xbbcode_dru

@@ -68,6 +68,8 @@ $rules = [
   'taxonomy_vocabulary',
   'trigger_assignments',
   'variable',
+  'views_display',
+  'views_view',
   'users_roles' => [$not_dev_team_rule],
   'users' => [
     $not_dev_team_rule,

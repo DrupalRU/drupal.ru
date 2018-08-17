@@ -40,6 +40,8 @@ $rules = [
   'taxonomy_vocabulary',
   'trigger_assignments',
   'variable',
+  'views_display',
+  'views_view',
   'users' => [['uid', 0, '!=']],
   'ymb',
 ];

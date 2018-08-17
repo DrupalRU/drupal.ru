@@ -51,11 +51,12 @@ fi
 exe "cd $DUMP_DIR"
 sm "Downloading dump from source..."
 wget -O drupalru-dump.sql.gz $DRUPALRU_DEV_DUMP_SOURCE
+exe "drush $DRUSH_ALIAS sql-drop -y"
 sm "zcat \"$DUMP_DIR/drupalru-dump.sql.gz\" | drush $DRUSH_ALIAS sqlc"
 zcat "$DUMP_DIR/drupalru-dump.sql.gz" | drush $DRUSH_ALIAS sqlc
 exe "drush $DRUSH_ALIAS en devel_generate -y"
 exe "drush $DRUSH_ALIAS genu 10"
-exe "drush $DRUSH_ALIAS genc 100 5 --types=blog"
+exe "drush $DRUSH_ALIAS genc 20 5 --types=blog"
 exe "drush $DRUSH_ALIAS dis devel_generate -y"
 exe "drush $DRUSH_ALIAS pm-uninstall devel_generate -y"
 exe "drush $DRUSH_ALIAS vset page_compression 0"

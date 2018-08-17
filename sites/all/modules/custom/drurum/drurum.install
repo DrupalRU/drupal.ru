@@ -920,8 +920,13 @@ function drurum_update_7047() {
     ->condition('darkmatter', 1)
     ->execute();
 
+  db_update('node')
+    ->fields(['status' => 0])
+    ->condition('darkmatter', 1)
+    ->execute();
+
   if (module_exists('darkmatter')) {
     module_disable(['darkmatter']);
-    drupal_uninstall_modules(['darkmatter']);
+    //drupal_uninstall_modules(['darkmatter']);
   }
 }

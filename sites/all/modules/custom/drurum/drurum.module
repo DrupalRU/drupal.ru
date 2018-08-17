@@ -214,10 +214,6 @@ function drurum_block_view($delta = '') {
     case 'new':
       $title = t('New forum topics');
       $count = drupal_is_front_page() ? 30 : variable_get('forum_block_num_new', 5);
-      $hide_dark_matter = (isset($user->darkmatter) ? $user->darkmatter == 1 : FALSE);
-      if (!$hide_dark_matter) {
-        $query->condition('n.darkmatter', 0);
-      }
       $query->orderBy('f.created', 'DESC')->range(0, $count);
       break;
   }

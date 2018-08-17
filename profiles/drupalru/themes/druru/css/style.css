@@ -8262,15 +8262,10 @@ body aside ul:not(.pager) > * a:first-of-type.active.active {
 .main-content .comment .dropdown .dropdown-toggle .icon-bar + .icon-bar {
   margin-top: 3px;
 }
-.main-content .comment .dropdown .dropdown-menu .darkmatter-link > span {
-  color: #999999;
-}
-.main-content .comment .dropdown .dropdown-menu a,
-.main-content .comment .dropdown .dropdown-menu .darkmatter-link > span {
+.main-content .comment .dropdown .dropdown-menu a > span {
   padding-left: 12px;
 }
-.main-content .comment .dropdown .dropdown-menu a .fa,
-.main-content .comment .dropdown .dropdown-menu .darkmatter-link > span .fa {
+.main-content .comment .dropdown .dropdown-menu a > span .fa {
   width: 21px;
   text-align: center;
   margin-right: 3px;
@@ -9113,28 +9108,6 @@ ul.li-accent > *:before {
 .node.node-blog .node-header-item {
   float: left;
   margin-right: 12px;
-}
-.node.darkmatter {
-  background: #545454;
-  padding: 6px 12px;
-  color: #e6e6e6;
-}
-.node.darkmatter a {
-  color: #73a5ca;
-}
-.node.darkmatter a:hover,
-.node.darkmatter a:focus {
-  color: #5c96c1;
-}
-.node.darkmatter .inner_poll,
-.node.darkmatter .well,
-.node.darkmatter .jumbotron {
-  color: #ddd;
-  background: #444;
-  border-color: #343434;
-}
-.node.darkmatter .terms-wrapper:after {
-  color: rgba(0, 0, 0, 0.2);
 }
 .node .content {
   clear: both;

@@ -49,7 +49,6 @@ function dru_ticket_moderate_command_unpublish($entity_type, $entity_id) {
         ],
       ]);
       $commands[] = ajax_command_replace('.moderate-unpublish-' . $entity_id, $comment_link);
-      $commands[] = ajax_command_invoke('.darkmatter-comment-' . $entity_id, 'addClass', ['comment-unpublished']);
       break;
   }
 
@@ -96,7 +95,6 @@ function dru_ticket_moderate_command_publish($entity_type, $entity_id) {
         ],
       ]);
       $commands[] = ajax_command_replace('.moderate-publish-' . $entity_id, $comment_link);
-      $commands[] = ajax_command_invoke('.darkmatter-comment-' . $entity_id, 'removeClass', ['comment-unpublished']);
       break;
   }
 

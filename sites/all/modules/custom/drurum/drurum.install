@@ -927,6 +927,8 @@ function drurum_update_7047() {
 
   if (module_exists('darkmatter')) {
     module_disable(['darkmatter']);
+    // Необходимо удалять вручную, т.к. удаление
+    // здесь приводить к ошибке
     //drupal_uninstall_modules(['darkmatter']);
   }
 }

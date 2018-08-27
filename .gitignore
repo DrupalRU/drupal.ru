@@ -21,3 +21,6 @@ sites/all/modules/contrib/hacked
 sites/all/modules/contrib/masquerade
 sites/all/modules/contrib/search_krumo
 sites/all/modules/contrib/stage_file_proxy
+
+# Ignore npm packages
+node_modules/

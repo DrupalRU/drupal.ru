@@ -880,41 +880,9 @@ function drurum_update_7045() {
 }
 
 /**
- * Disable and uninstall module user_filter.
- * Replace '@username' with bb-code in nodes and comments.
- */
-function drurum_update_7046() {
-  $fields = ['body', 'comment_body'];
-
-  foreach ($fields as $field) {
-    $result = db_select('field_data_' . $field, 'b')
-      ->fields('b', [$field . '_value', 'entity_id'])
-      ->execute()
-      ->fetchAll();
-
-    foreach ($result as $body) {
-      $patterns[] = "/(^|[^@\\w])@(\\w{1,15})\\b/";
-      $replacements[] = "$1[user=$2]$2[/user]";
-
-      $new_body = preg_replace($patterns, $replacements, $body->{$field . '_value'});
-
-      db_update('field_data_' . $field)
-        ->fields([$field . '_value' => $new_body])
-        ->condition('entity_id', $body->entity_id)
-        ->execute();
-    }
-  }
-
-  if (module_exists('user_filter') && module_exists('user_filter_notify')) {
-    module_disable(['user_filter_notify', 'user_filter']);
-    drupal_uninstall_modules(['user_filter_notify', 'user_filter']);
-  }
-}
-
-/**
  * Disable and uninstall "darkmatter" module.
  */
-function drurum_update_7047() {
+function drurum_update_7046() {
   db_update('comment')
     ->fields(['status' => 0])
     ->condition('darkmatter', 1)

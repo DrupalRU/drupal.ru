@@ -1,2 +1,0 @@
-subscriptions_content.admin.inc:41:sql
-subscriptions_taxonomy.admin.inc:49:sql

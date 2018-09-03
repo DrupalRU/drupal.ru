@@ -1,6 +1,0 @@
-name = Drupal.ru forum extension
-description = Allow blog to be a part of forum but not mandatory
-version = 7.x-1.0
-core = 7.x
-package = "Forum"
-dependencies[] = forum

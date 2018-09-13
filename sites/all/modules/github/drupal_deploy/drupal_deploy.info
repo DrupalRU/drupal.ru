@@ -1,5 +1,0 @@
-name = Drupal database deploy
-description = Make deployment via git much easier.
-core = "7.x"
-
-package = drupal db deploy

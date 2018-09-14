@@ -900,3 +900,10 @@ function drurum_update_7046() {
     //drupal_uninstall_modules(['darkmatter']);
   }
 }
+
+/**
+ * Enable "back_to_top" module.
+ */
+function drurum_update_7047() {
+  module_enable(['back_to_top'], TRUE);
+}

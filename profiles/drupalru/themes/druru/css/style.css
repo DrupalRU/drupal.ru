@@ -323,7 +323,6 @@ img {
   border: 1px solid #ddd;
   border-radius: 0;
   transition: all 0.2s ease-in-out;
-  transition: all all 0.2s ease-in-out ease-out;
   display: inline-block;
   max-width: 100%;
   height: auto;
@@ -1084,7 +1083,6 @@ output {
   border-radius: 0;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-  transition: all border-color ease-in-out .15s, box-shadow ease-in-out .15s ease-out;
 }
 .form-control:focus {
   border-color: #66afe9;
@@ -1988,7 +1986,6 @@ input[type="button"].btn-block {
 .fade {
   opacity: 0;
   transition: opacity 0.15s linear;
-  transition: all opacity 0.15s linear ease-out;
 }
 .fade.in {
   opacity: 1;
@@ -3502,7 +3499,6 @@ a.badge:focus {
   border: 1px solid #ddd;
   border-radius: 0;
   transition: border 0.2s ease-in-out;
-  transition: all border 0.2s ease-in-out ease-out;
 }
 .thumbnail > img,
 .thumbnail a > img,
@@ -3634,7 +3630,6 @@ a.events--front .event.active {
   background-color: #3D76A0;
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   transition: width 0.6s ease;
-  transition: all width 0.6s ease ease-out;
 }
 .progress-striped .progress-bar,
 .progress-bar-striped {
@@ -4734,7 +4729,6 @@ button.close {
   display: none;
   position: relative;
   transition: 0.6s ease-in-out left;
-  transition: all 0.6s ease-in-out left ease-out;
 }
 .carousel-inner > .item > img,
 .carousel-inner > .item > a > img {
@@ -5702,7 +5696,6 @@ fieldset[disabled] .btn-accent.focus {
 .ymb-form .form-item-sum input {
   box-shadow: none;
   transition: none;
-  transition: all none ease-out;
 }
 .container {
   margin-right: auto;
@@ -6949,7 +6942,6 @@ sup.label {
   position: relative;
   z-index: 1;
   transition: all 0.2s;
-  transition: all all 0.2s ease-out;
 }
 .navbar.navbar-default .nav > li > a img {
   vertical-align: bottom;
@@ -7808,7 +7800,6 @@ form#user-admin-permissions .form-type-checkbox {
 .main-content .comment .dropdown {
   opacity: 0.5;
   transition: opacity 0.2s;
-  transition: all opacity 0.2s ease-out;
 }
 .main-content .comment .dropdown.open .dropdown-toggle,
 .main-content .comment .dropdown.open .dropdown-toggle:hover,
@@ -8450,7 +8441,6 @@ body footer.footer a:focus {
 .help-switcher.fixed {
   position: fixed;
   transition: text-shadow 0.2s;
-  transition: all text-shadow 0.2s ease-out;
   -webkit-text-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
   -moz-text-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
   -ms-text-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
@@ -9016,7 +9006,6 @@ body.page-events .node-event iframe {
   #block-advanced-sphinx-searchbox form:hover .search-sphinx:not(:focus) + button {
     box-shadow: inset 0 2px 0 0 #df9b10;
     transition: box-shadow 0.2s;
-    transition: all box-shadow 0.2s ease-out;
   }
 }
 #block-advanced-sphinx-searchbox .search-sphinx {
@@ -9028,7 +9017,6 @@ body.page-events .node-event iframe {
   max-width: initial;
   width: 100%;
   transition: width 0.2s, background 0.2s;
-  transition: all width 0.2s, background 0.2s ease-out;
 }
 #block-advanced-sphinx-searchbox .search-sphinx:focus {
   background: #fafafa;
@@ -9125,7 +9113,6 @@ fieldset[disabled] #block-advanced-sphinx-searchbox .search-sphinx:focus + butto
   z-index: 2;
   position: relative;
   transition: background 0.2s;
-  transition: all background 0.2s ease-out;
 }
 #block-advanced-sphinx-searchbox .btn:focus {
   background-color: #4e86af;
@@ -9150,7 +9137,6 @@ fieldset[disabled] #block-advanced-sphinx-searchbox .search-sphinx:focus + butto
   cursor: pointer;
   max-width: initial;
   transition: all 0.2s;
-  transition: all all 0.2s ease-out;
 }
 @media screen and (max-width: 747px) {
   #block-advanced-sphinx-searchbox .search-sphinx:focus + .btn {
@@ -9859,7 +9845,6 @@ div.altpager ul li a:focus {
   border-right: none;
   background-color: #ffffff;
   transition: all 0.2s;
-  transition: all all 0.2s ease-out;
 }
 .bue-ui .bue-button + .bue-button {
   border-left: none;

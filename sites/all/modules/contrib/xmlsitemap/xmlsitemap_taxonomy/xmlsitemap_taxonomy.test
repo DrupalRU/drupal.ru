@@ -5,10 +5,32 @@
  * Unit tests for the xmlsitemap_taxonomy module.
  */
 
+/**
+ * Functional Test.
+ */
 class XMLSitemapTaxonomyFunctionalTest extends XMLSitemapTestHelper {
+
+  /**
+   * Normal User.
+   *
+   * @var string
+   *
+   * @codingStandardsIgnoreStart
+   */
   protected $normal_user;
+  
+  /**
+   * Terms.
+   *
+   * @var array
+   */
   protected $terms = array();
 
+  /**
+   * Get Info.
+   *
+   * @codingStandardsIgnoreEnd
+   */
   public static function getInfo() {
     return array(
       'name' => 'XML sitemap taxonomy',
@@ -17,7 +39,10 @@ class XMLSitemapTaxonomyFunctionalTest extends XMLSitemapTestHelper {
     );
   }
 
-  function setUp($modules = array()) {
+  /**
+   * SetUp.
+   */
+  public function setUp($modules = array()) {
     $modules[] = 'xmlsitemap_taxonomy';
     $modules[] = 'taxonomy';
     parent::setUp($modules);
@@ -26,7 +51,10 @@ class XMLSitemapTaxonomyFunctionalTest extends XMLSitemapTestHelper {
     $this->normal_user = $this->drupalCreateUser(array('access content'));
   }
 
-  function testTaxonomySettings() {
+  /**
+   * TaxonomySettings.
+   */
+  public function testTaxonomySettings() {
     $this->drupalLogin($this->admin_user);
 
     $edit = array(
@@ -46,4 +74,5 @@ class XMLSitemapTaxonomyFunctionalTest extends XMLSitemapTestHelper {
     );
     $this->drupalPost("admin/structure/taxonomy/{$vocabulary->machine_name}/add", $edit, 'Save');
   }
+
 }

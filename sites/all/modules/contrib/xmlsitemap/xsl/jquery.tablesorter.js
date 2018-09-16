@@ -13,6 +13,8 @@
  */
 /**
  *
+ * @codingStandardsIgnoreFile Ignore because it's code from another project.
+ *
  * @description Create a sortable table with multi-column sorting capabilitys
  *
  * @example $('table').tablesorter();

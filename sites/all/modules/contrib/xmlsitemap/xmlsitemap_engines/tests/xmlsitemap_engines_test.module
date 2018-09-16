@@ -1,11 +1,17 @@
 <?php
 
 /**
+ * @file
+ * Unit tests for the XML sitemap engines project.
+ */
+
+/**
  * Implements hook_menu().
  */
 function xmlsitemap_engines_test_menu() {
   $items['ping'] = array(
     'page callback' => 'xmlsitemap_engines_test_pinged',
+    // @codingStandardsIgnoreLine
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
@@ -30,6 +36,9 @@ function xmlsitemap_engines_test_xmlsitemap_engine_info_alter(&$engines) {
   $engines['simpletest']['url'] = url('ping', array('absolute' => TRUE, 'query' => array('sitemap' => ''))) . '[sitemap]';
 }
 
+/**
+ * Test pinged.
+ */
 function xmlsitemap_engines_test_pinged() {
   if (empty($_GET['sitemap']) || !valid_url($_GET['sitemap'])) {
     watchdog('xmlsitemap', 'No valid sitemap parameter provided.', array(), WATCHDOG_WARNING);

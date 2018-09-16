@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Default file for XML sitemap node.
+ */
+
+/**
  * Implements hook_entity_info_alter().
  */
 function xmlsitemap_node_entity_info_alter(array &$entity_info) {
@@ -14,7 +19,7 @@ function xmlsitemap_node_entity_info_alter(array &$entity_info) {
 /**
  * Implements hook_cron().
  *
- * Process nodes that need to be added to or updated in the {xmlsitemap} table.
+ * Process old nodes not found in the {xmlsitemap} table.
  */
 function xmlsitemap_node_cron() {
   $limit = xmlsitemap_var('batch_limit');
@@ -29,7 +34,7 @@ function xmlsitemap_node_cron() {
       // updates in this case.
       if ($node) {
         $link = xmlsitemap_node_create_link($node);
-        xmlsitemap_link_save($link, [$link['type'] => $node]);
+        xmlsitemap_link_save($link, array($link['type'] => $node));
       }
       $queue->deleteItem($item);
     }
@@ -58,14 +63,23 @@ function xmlsitemap_node_xmlsitemap_index_links($limit) {
 /**
  * Process node sitemap links.
  *
- * @param $nids
+ * @param array $nids
  *   An array of node IDs.
  */
 function xmlsitemap_node_xmlsitemap_process_node_links(array $nids) {
-  $nodes = node_load_multiple($nids);
-  foreach ($nodes as $node) {
-    $link = xmlsitemap_node_create_link($node);
-    xmlsitemap_link_save($link, array($link['type'] => $node));
+  // Load no more than 15 nodes at a time.
+  if (count($nids) >= 1) {
+    $nids_chunks = array_chunk($nids, 15);
+    foreach ($nids_chunks as $chunk) {
+      $nodes = node_load_multiple($chunk);
+      foreach ($nodes as $node) {
+        $link = xmlsitemap_node_create_link($node);
+        xmlsitemap_link_save($link, array($link['type'] => $node));
+      }
+      // Flush each entity from the load cache after processing, to avoid
+      // exceeding PHP memory limits if $nids is large.
+      entity_get_controller('node')->resetCache($chunk);
+    }
   }
 }
 
@@ -80,9 +94,13 @@ function xmlsitemap_node_node_insert(stdClass $node) {
  * Implements hook_node_update().
  */
 function xmlsitemap_node_node_update(stdClass $node) {
+  // Save a sitemap link with revoked access until the node permissions are
+  // checked in the cron.
+  $link = xmlsitemap_node_create_link($node);
+  xmlsitemap_link_presave($link, array($link['type'] => $node));
   // Node access can not be accurately determined in hook_node_update() because
-  // node grants have not yet been written to the table, so we defer creation of
-  // a sitemap link and process during cron.
+  // node grants have not yet been written to the table, so we defer checking
+  // node access permissions and process the sitemap link during cron.
   $queue = DrupalQueue::get('xmlsitemap_node');
   $queue->createItem($node->nid);
 }
@@ -98,7 +116,7 @@ function xmlsitemap_node_node_delete(stdClass $node) {
  * Implements hook_comment_update().
  */
 function xmlsitemap_node_comment_update(stdClass $comment) {
-  if ($node = node_load($comment->nid, NULL, TRUE)) {
+  if ($node = entity_load_unchanged('node', $comment->nid)) {
     xmlsitemap_node_node_update($node);
   }
 }
@@ -154,6 +172,8 @@ function xmlsitemap_node_form_node_type_form_alter(array &$form, array $form_sta
 /**
  * Implements hook_form_alter().
  *
+ * @codingStandardsIgnoreLine
+ *
  * Add the XML sitemap individual link options for a node.
  *
  * @see xmlsitemap_add_form_link_options()
@@ -168,9 +188,10 @@ function xmlsitemap_node_form_node_form_alter(array &$form, array &$form_state) 
 /**
  * Fetch all the timestamps for when a node was changed.
  *
- * @param $node
+ * @param object $node
  *   A node object.
- * @return
+ *
+ * @return array
  *   An array of UNIX timestamp integers.
  */
 function xmlsitemap_node_get_timestamps(stdClass $node) {
@@ -192,7 +213,7 @@ function xmlsitemap_node_get_timestamps(stdClass $node) {
  *
  * The link will be saved as $node->xmlsitemap.
  *
- * @param $node
+ * @param object $node
  *   A node object.
  */
 function xmlsitemap_node_create_link(stdClass $node) {
@@ -235,16 +256,18 @@ function xmlsitemap_node_create_link(stdClass $node) {
 /**
  * Determine whether a user may view the specified node.
  *
- * @param $node
+ * @param object $node
  *   The node object on which the operation is to be performed, or node type
  *   (e.g. 'forum') for "create" operation.
- * @param $account
+ * @param object $account
  *   Optional, a user object representing the user for whom the operation is to
  *   be performed. Determines access for a user other than the current user.
- * @return
+ *
+ * @return bool
  *   TRUE if the operation may be performed, FALSE otherwise.
  *
- * This is for all intesive purposes a copy of Drupal 7's node_access() function.
+ *   This is for all intesive purposes a copy of Drupal 7's node_access()
+ *   function.
  */
 function xmlsitemap_node_view_access($node, $account = NULL) {
   global $user;
@@ -264,8 +287,7 @@ function xmlsitemap_node_view_access($node, $account = NULL) {
 
   // $node may be either an object or a node type. Since node types cannot be
   // an integer, use either nid or type as the static cache id.
-  //$cid = is_object($node) ? $node->nid : $node;
-
+  // $cid = is_object($node) ? $node->nid : $node;
   // If we've already checked access for this node, user and op, return from
   // cache.
   if (isset($rights[$account->uid][$node->nid])) {
@@ -317,7 +339,8 @@ function xmlsitemap_node_view_access($node, $account = NULL) {
       $query->condition($nids);
       $query->range(0, 1);
 
-      // Fetch the node grants and allow other modules to alter them (D7 backport).
+      // Fetch the node grants and allow other modules to alter them
+      // (D7 backport).
       $grants = &drupal_static(__FUNCTION__ . ':grants', array());
       if (!isset($grants[$account->uid][$op])) {
         // Indicate that this is our special function in the grants.

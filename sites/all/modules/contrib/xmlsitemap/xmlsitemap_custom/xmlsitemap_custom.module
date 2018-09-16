@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Main file for XML sitemap Custom.
+ */
+
+/**
  * Implements hook_menu().
  */
 function xmlsitemap_custom_menu() {
@@ -42,7 +47,7 @@ function xmlsitemap_custom_menu() {
 /**
  * Menu load callback; load a custom sitemap link from the {xmlsitemap} table.
  *
- * @param $id
+ * @param string $id
  *   The sitemap link ID of the custom link to load.
  *
  * @see xmlsitemap_link_load()

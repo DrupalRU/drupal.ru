@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Default file for XML sitemap user.
+ */
+
+/**
  * Implements hook_entity_info_alter().
  */
 function xmlsitemap_user_entity_info_alter(&$entity_info) {
@@ -30,7 +35,7 @@ function xmlsitemap_user_xmlsitemap_index_links($limit) {
 /**
  * Process user sitemap links.
  *
- * @param $uids
+ * @param array $uids
  *   An array of user IDs.
  */
 function xmlsitemap_user_xmlsitemap_process_user_links(array $uids) {
@@ -120,7 +125,7 @@ function xmlsitemap_user_form_user_admin_settings_alter(&$form, $form_state) {
  *
  * The link will be saved as $account->xmlsitemap.
  *
- * @param $account
+ * @param object $account
  *   A user object.
  */
 function xmlsitemap_user_create_link(stdClass &$account) {
@@ -155,7 +160,7 @@ function xmlsitemap_user_create_link(stdClass &$account) {
 }
 
 /**
- * Implementation of hook_variables().
+ * Implements hook_variables().
  */
 function xmlsitemap_user_variables() {
   $defaults = array();

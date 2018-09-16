@@ -2,12 +2,10 @@ name = XML sitemap engines test
 description = Support module for XML sitemap engines testing.
 package = Testing
 core = 7.x
-files[] = xmlsitemap_engines_test.module
-version = VERSION
 hidden = TRUE
 
-; Information added by Drupal.org packaging script on 2018-07-18
-version = "7.x-2.4"
+; Information added by Drupal.org packaging script on 2018-08-29
+version = "7.x-2.5"
 core = "7.x"
 project = "xmlsitemap"
-datestamp = "1531917526"
+datestamp = "1535559185"

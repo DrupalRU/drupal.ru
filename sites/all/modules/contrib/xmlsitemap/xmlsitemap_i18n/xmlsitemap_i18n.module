@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Main file for XML sitemap i18n.
+ */
+
+/**
  * Implements hook_xmlsitemap_context_info().
  */
 function xmlsitemap_i18n_xmlsitemap_context_info() {
@@ -88,14 +93,18 @@ function xmlsitemap_i18n_query_xmlsitemap_generate_alter(QueryAlterableInterface
       // Current language and language neutral.
       $query->condition('x.language', array($current, LANGUAGE_NONE));
       break;
+
     case 'mixed':
-      // Mixed current language (if available) or default language (if not) and language neutral.
+      // Mixed current language (if available) or default language (if not) and
+      // language neutral.
       $query->condition('x.language', array($current, $default, LANGUAGE_NONE));
       break;
+
     case 'default':
       // Only default language and language neutral.
       $query->condition('x.language', array($default, LANGUAGE_NONE));
       break;
+
     case 'strict':
       // Only current language (for nodes), simple for all other types.
       $node_condition = db_and();
@@ -109,6 +118,7 @@ function xmlsitemap_i18n_query_xmlsitemap_generate_alter(QueryAlterableInterface
       $condition->condition($normal_condition);
       $query->condition($condition);
       break;
+
     case 'off':
       // All content. No language conditions apply.
       break;

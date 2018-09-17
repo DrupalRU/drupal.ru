@@ -8463,7 +8463,7 @@ body footer.footer a:focus {
 #blog-node-form #edit-keys > div {
   margin-bottom: 0;
 }
-.frontpage-list .node-item--title .fa {
+#block-views-front-sticked-block .fa {
   padding-right: 5px;
 }
 span.geshifilter,

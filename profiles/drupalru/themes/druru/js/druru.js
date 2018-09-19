@@ -508,4 +508,9 @@ var Drupal = Drupal || {};
     return '<i ' + Drupal.theme('attributes', attributes) + '"></i>';
   };
 
+  $('#comments .comment').each(function(){
+    var commentId = $(this).attr('data-comment-id');
+    $(this).addClass('comment-' + commentId);
+  });
+
 })(jQuery, Drupal);

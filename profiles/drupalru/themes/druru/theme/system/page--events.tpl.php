@@ -56,7 +56,6 @@
  *
  * Regions:
  * - $page['help']: Dynamic help text, mostly for admin pages.
- * - $page['highlighted']: Items for the highlighted content region.
  * - $page['content']: The main content of the current page.
  * - $page['sidebar_first']: Items for the first sidebar.
  * - $page['sidebar_second']: Items for the second sidebar.
@@ -132,10 +131,6 @@
 
         <section<?php print drupal_attributes($content_column_attributes); ?>>
           <div class="main-content">
-            <?php if (!empty($page['highlighted'])): ?>
-              <div class="highlighted jumbotron"><?php print render($page['highlighted']); ?></div>
-            <?php endif; ?>
-
             <?php if (!empty($breadcrumb)): print $breadcrumb; endif;?>
 
             <a id="main-content"></a>

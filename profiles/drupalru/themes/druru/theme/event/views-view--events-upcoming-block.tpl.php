@@ -92,5 +92,4 @@
         <li class="list last"><a href="/events"> <i class="text-accent icon fa fa-list" aria-hidden="true"></i> Еще</a></li>
     </ul>
   </div>
-
 </div><?php /* class view */ ?>

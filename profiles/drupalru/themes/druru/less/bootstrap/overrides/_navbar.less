@@ -3,6 +3,7 @@
 }
 
 .navbar {
+  margin-bottom: 0;
 
   .navbar-header {
     padding: 0 1em;
@@ -52,10 +53,12 @@
         width: 32px;
         height: 3px;
         background: @lighter;
+
         + .icon-bar {
           margin-top: 6px;
         }
       }
+
       &.collapsed {
         .icon-bar {
           background: @lighter;
@@ -75,15 +78,18 @@
 
         li.leaf {
           background: @navbar-default-bg;
+
           a {
             background-color: @navbar-default-link-hover-bg;
             padding: .6em 1.2em;
             color: #fff;
+
             &:hover, &:focus, &.active{
               background-color: @little-darker;
             }
           }
         }
+
         @media @tablet {
           position: absolute;
           width: 200px;
@@ -159,21 +165,27 @@
 
   .navbar-second {
     background: rgba(0, 0, 0, .1);
+
     .nav {
       > li {
         display: inline-block;
+
         a {
           .lighter(color, @brand-info, 3);
+
           &, &:hover, &:focus {
             border: none;
             background: none;
             .box-shadow(none);
           }
+
           &:hover, &:focus {
             color: #fff;
           }
+
           &.type-heart {
             .lighter(color, @brand-success, 1);
+
             &:hover, &:active {
               .lighter(color, @brand-accent, 1);
             }
@@ -200,6 +212,7 @@
       overflow: visible;
     }
   }
+
   @media @very-smalld {
     clear: none;
   }

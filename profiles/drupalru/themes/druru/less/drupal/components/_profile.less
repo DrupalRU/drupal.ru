@@ -1,14 +1,17 @@
 .profile {
-  .field, .item {
-    clear: both;
-    margin-bottom: 20px;
+  .field,
+  .item {
+    margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+
     h3:after {
       display: block;
       content: ':';
       float: right;
-      margin-right: 5px;
+      margin-right: 5px; // @todo Replace with proper variable
     }
-    h3, .item-value {
+
+    h3,
+    .item-value {
       display: inline-block;
       vertical-align: baseline;
       margin: 0;

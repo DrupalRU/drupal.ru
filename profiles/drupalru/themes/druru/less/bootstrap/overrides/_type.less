@@ -3,10 +3,14 @@
 
 h1, .h1 {
   font-weight: 100;
+  font-size: 28px;
 }
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
+  margin-top: 0;
+  margin-bottom: 0;
+
   a {
     &:hover, &:focus {
       small, .small {
@@ -18,7 +22,7 @@ h1, h2, h3, h4, h5, h6,
 
 .help-block, .control-group .help-inline {
   font-size: @font-size-small;
-  margin: 5px 0 10px;
+  margin: 5px 0 10px; // @todo Replace with proper variable
   padding: 0;
 }
 
@@ -57,18 +61,20 @@ blockquote {
 
 .bb-quote {
   > b {
-    margin-bottom: -35px;
+    margin-bottom: -35px; // @todo Replace with proper variable
     display: block;
-    margin-left: 15px;
+    margin-left: 15px; // @todo Replace with proper variable
     color: @gray-light;
     text-transform: capitalize;
     font-weight: 400;
-    font-size: 17px;
+    font-size: 17px; // @todo Replace with proper variable
   }
+
   blockquote {
     font-size: 15px;
     border-left-color: @gray-lighter;
-    padding-top: 26px;
+    padding-top: 26px; // @todo Replace with proper variable
+
     &.bb-quote-body {
       > b {
         &:extend(.bb-quote > b);
@@ -83,31 +89,40 @@ strong {
 
 ol.with-parent {
   counter-reset: first-lvl;
+
   li {
     &:before {
       display: inline;
-      margin-left: -2em;
+      margin-left: -2em; // @todo Replace with proper variable
     }
   }
+
   > li {
     list-style-type: none;
+
     &:before {
-      margin-left: -1.5em;
+      margin-left: -1.5em; // @todo Replace with proper variable
       counter-increment: first-lvl;
       content: counter(first-lvl) ". ";
     }
+
     ol {
       counter-reset: second-lvl;
+
       > li {
         list-style-type: none;
+
         &:before {
           counter-increment: second-lvl;
           content: counter(first-lvl) "." counter(second-lvl) ". ";
         }
+
         ol {
           counter-reset: third-lvl;
+
           > li {
             list-style-type: none;
+
             &:before {
               counter-increment: third-lvl;
               content: counter(first-lvl) "." counter(second-lvl) "." counter(third-lvl) ". " ;

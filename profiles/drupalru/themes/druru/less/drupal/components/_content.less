@@ -6,54 +6,13 @@
 .page-header {
   margin-top: 0;
   border: none;
-  line-height: 1em;
+  line-height: @line-height-base;
   padding-bottom: 0;
+  margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+  margin-bottom: 0;
 
   i {
     color: darken(@gray-light, @tone * 2);
-  }
-}
-
-@media @tablet {
-  .page-events,
-  .node-type-organization,
-  .node-type-blog,
-  .node-type-page,
-  .node-type-ticket,
-  .page-alttracker,
-  .page-forum,
-  .page-messages:not(.page-messages-view),
-  .page-user,
-  .page-blog,
-  .node-type-event {
-    // Page header.
-    .page-header {
-      + h2 + .nav {
-        margin-bottom: 0;
-      }
-
-      max-width: ~'calc(100% - 180px)';
-      float: left;
-
-      + .alert {
-        clear: both;
-      }
-    }
-  }
-}
-
-a {
-  &:focus, &:hover, &:active {
-    outline: none;
-  }
-
-}
-
-table {
-  a {
-    &.active {
-      cursor: pointer;
-    }
   }
 }
 
@@ -99,18 +58,12 @@ span.cke_toolgroup, a.cke_combo_button {
   }
 }
 
-.region.region-content {
-  margin-bottom: 10px;
-  clear: left;
-}
-
 .more-link {
   text-align: right;
   margin-top: 6px;
 }
 
 .node-type-list {
-
   dd {
     padding: 0 0 5px 15px;
   }
@@ -123,10 +76,6 @@ span.cke_toolgroup, a.cke_combo_button {
       margin-top: 0;
     }
   }
-}
-
-.main-container {
-  margin-bottom: 30px;
 }
 
 .field-type-taxonomy-term-reference {

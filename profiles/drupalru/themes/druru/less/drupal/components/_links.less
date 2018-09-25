@@ -1,0 +1,39 @@
+// = Links
+a {
+  color: @link-color;
+  text-decoration: none;
+  transition: color @transition-speed @transition-func,
+              box-shadow @transition-speed @transition-func;
+
+  .alert & {
+    box-shadow: 0 1px 0 fade(@link-color, 100% - 2 * @tone);
+  }
+
+  &:focus, &:hover, &:active {
+    outline: none;
+    text-decoration: none;
+    color: darken(@link-color, 2 * @tone);
+
+    .alert & {
+      box-shadow: 0 1px 0 @link-color;
+    }
+  }
+
+  .footer & {
+    color: fade(@footer-color, 100% - 4 * @tone);
+    box-shadow: 0 1px 0 fade(@footer-color, 100% - 8 * @tone);
+
+    &:focus, &:hover, &:active {
+      color: fade(@footer-color, 100% - 2 * @tone);
+      box-shadow: 0 1px 0 @footer-color;
+    }
+  }
+}
+
+table {
+  a {
+    &.active {
+      cursor: pointer;
+    }
+  }
+}

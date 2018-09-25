@@ -3,11 +3,9 @@ body {
     #profile {
       .user-picture {
         .caption {
-          padding-top: @padding-large-vertical;
+          padding-top: @padding-large-vertical; // @todo Replace with proper variable
 
           h3 {
-            margin-top: 0;
-
             small {
               display: block;
             }
@@ -17,55 +15,83 @@ body {
 
       .user-info {
         h3 {
-          margin-top: 0;
+          margin-top: @padding-large-horizontal; // @todo Replace with proper variable
           border-bottom: 1px solid @brand-info;
           color: @brand-primary;
+        }
+
+        dl {
+          margin-top: @padding-base-vertical; // @todo Replace with proper variable
+          margin-bottom: 0;
+          display: flex;
+          flex-wrap: wrap;
         }
 
         dt {
           text-align: left;
           font-weight: normal;
+          margin-top: @padding-small-vertical; // @todo Replace with proper variable
+          width: 30%;
         }
 
         dd {
-          margin-left: 33%;
-        }
-
-        @media @tablet {
-          dt {
-            width: 30%;
-          }
+          margin-top: @padding-small-vertical; // @todo Replace with proper variable
+          width: 70%;
+          padding-left: @padding-small-vertical; // @todo Replace with proper variable
         }
       }
     }
 
     #blog {
+      .form-actions {
+        margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+
+        .btn {
+          outline: none;
+        }
+      }
+
+      .nodes {
+        padding-top: @padding-large-horizontal; // @todo Replace with proper variable
+      }
+
       .node {
+        &:not(:first-child) {
+          padding-top: @padding-large-horizontal; // @todo Replace with proper variable
+          margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+          border-top: 1px solid @little-darker;
+        }
+
         .content {
-          &, > .field-name-body {
-            clear: none;
+          img {
+            max-height: 10 * @font-size-base; // @todo Replace with proper variable
+            width: auto;
           }
+        }
+
+        .node-header-item:first-child, // @todo Add specific class to user avatar
+        .node-header-item .fa-user, // @todo Add wrapper and specific class to user name
+        .node-header-item .username, // @todo Add wrapper and specific class to user name
+        > .links {
+          display: none;
         }
       }
 
       &.short-view {
         .node {
+          &:not(:first-child) {
+            padding-top: 0;
+            margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+            border-top: none;
+          }
+
           > *:not(h2) {
             display: none;
           }
 
           > h2 {
-            padding-left: @padding-large-horizontal;
-
-            i {
-              padding-right: @padding-base-horizontal;
-            }
-          }
-
-          &:not(:first-child) {
-            h2 {
-              margin-top: 0;
-            }
+            font-size: @font-size-base;
+            font-weight: @font-weight-base;
           }
         }
       }
@@ -79,25 +105,24 @@ body {
 
     .region-content {
       section {
-        margin-top: 25px;
+        margin-top: @padding-large-horizontal; // @todo Replace with proper variable
 
         &:first-child {
           margin-top: 0;
         }
 
-        h2 {
-          margin-top: 0;
+        @media @very-smalld {
+          &#block-system-main:first-child {
+            // @todo: Temp workaround, will be fixed upon implementation of vertical rhythm
+            margin-top: @padding-large-horizontal - 2px;
+          }
         }
       }
     }
 
-    .navbar {
-      margin: 0;
-    }
-
     .jumbotron {
       .gradient-image("../img/front-bg.svg", @brand-primary, #71afdc);
-      background-position: center   101%;
+      background-position: center 101%;
       background-repeat: repeat-x;
       color: @navbar-default-link-color;
       margin-bottom: 0;
@@ -119,10 +144,6 @@ body {
         }
       }
 
-      & + * {
-        margin-top: @jumbotron-padding;
-      }
-
       p {
         font-weight: 300;
       }
@@ -132,7 +153,7 @@ body {
   .frontpage-list {
     .h4 {
       margin: 0;
-      padding-right: @padding-large-horizontal;
+      padding-right: @padding-large-horizontal; // @todo Replace with proper variable
 
       .icon {
         width: 20px;
@@ -146,6 +167,8 @@ body {
 
   .frontpage-list .list-group,
   .alttracker.list-group {
+    margin: 0;
+
     &, .list-group-item {
       background: none;
       border: none;
@@ -153,10 +176,10 @@ body {
 
     .list-group-item {
       border-bottom: 1px solid @little-darker;
-      padding-left: 15px;
-      padding-right: 15px;
-      margin-left: -15px;
-      margin-right: -15px; //@todo test on screens other then mobile
+      padding-left: @padding-large-horizontal; // @todo Replace with proper variable
+      padding-right: @padding-large-horizontal; // @todo Replace with proper variable
+      margin-left: -@padding-large-horizontal; // @todo Replace with proper variable
+      margin-right: -@padding-large-horizontal; // @todo Replace with proper variable
 
       &:last-child {
         border-bottom: none;
@@ -168,6 +191,7 @@ body {
     }
   }
 
+  // @todo Do refactoring of /events page
   &.page-events {
     @timeline-width: 96px;
     @point-size: 13px;
@@ -179,7 +203,7 @@ body {
       }
 
       // Temp workaround to prevent embedded videos from overlapping container
-      // @todo: Refactor embedding of external videos
+      // @todo Refactor embedding of external videos
       // see https://getbootstrap.com/docs/3.3/components/#responsive-embed
       iframe {
         max-width: 100%;
@@ -195,7 +219,7 @@ body {
 
       .event-date {
         position: absolute;
-        left: -(@timeline-width + (@grid-gutter-width*2.5) - (@well-padding-lg-horizontal/2) + (@point-size/2)-1px);
+        left: -(@timeline-width + (2.5 * @grid-gutter-width) - (.5 * @well-padding-lg-horizontal) + (.5 * @point-size) - 1px);
         line-height: 1.3em;
         font-size: 0.5em;
         color: @brand-accent;

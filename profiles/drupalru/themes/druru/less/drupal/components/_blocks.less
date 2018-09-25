@@ -1,13 +1,12 @@
 .block-ymb {
   background-color: lighten(@brand-accent, 38%);
   border: 1px solid @brand-accent;
-  padding: @padding-large-vertical @padding-large-horizontal !important;
+  padding: @padding-large-horizontal !important;
   margin-left: -@padding-large-horizontal;
   margin-right: -@padding-large-horizontal;
 
-  .front .region-sidebar-first &:first-child,
-  .front .region-sidebar-second &:first-child {
-    margin-top: -12px;
+  &:first-child {
+    margin-top: -@padding-large-horizontal !important; // @todo Replace with proper variable
   }
 }
 

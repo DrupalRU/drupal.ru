@@ -81,7 +81,6 @@
  */
 ?>
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-
   <?php print render($title_prefix); ?>
   <?php if (!$page && (!empty($title) || is_numeric($title))): ?>
     <h2<?php print $title_attributes; ?>>
@@ -92,6 +91,7 @@
       <?php endif; ?>
     </h2>
   <?php endif; ?>
+
   <?php print render($title_suffix); ?>
 
   <div class="node-header clearfix">
@@ -118,8 +118,6 @@
         <?php print $tnx; ?>
       </span>
     <?php endif; ?>
-
-
   </div>
 
   <div <?php print $content_attributes; ?>>
@@ -136,7 +134,12 @@
   <?php print render($content['links']); ?>
   <?php print render($content['best-comment-header']); ?>
   <?php print render($content['resolved_comment']); ?>
+
+  <?php if ($content_third): ?>
+    <div class="region region-content-third">
+        <?php print render($content_third); ?>
+    </div>
+  <?php endif; ?>
+
   <?php print render($content['comments']); ?>
-
 </div>
-

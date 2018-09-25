@@ -8,14 +8,20 @@ core = 7.x
 
 regions[navigation]     = 'Navigation'
 regions[between_menus]  = 'Between menus'
-regions[header]         = 'Top Bar'
+regions[header]         = 'Header'
 regions[help]           = 'Help'
 regions[content]        = 'Content'
-regions[sidebar_first]  = 'Primary'
-regions[sidebar_second] = 'Secondary'
+regions[sidebar_first]  = 'Left sidebar'
+regions[sidebar_second] = 'Right sidebar'
 regions[footer]         = 'Footer'
-regions[page_top]       = 'Page top'
-regions[page_bottom]    = 'Page bottom'
+regions[site_first]     = 'Site top'
+regions[site_last]      = 'Site bottom'
+regions[page_first]     = 'Page top'
+regions[page_last]      = 'Page bottom'
+regions[content_first]  = 'Content top'
+regions[content_second] = 'Main content top'
+regions[content_third]  = 'Between node and comments'
+regions[content_last]   = 'Content bottom'
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Theme Settings

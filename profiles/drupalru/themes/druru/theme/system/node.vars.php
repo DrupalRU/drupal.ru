@@ -35,6 +35,12 @@ function druru_preprocess_node(&$vars) {
 
   $vars['attributes_array']['data-node-id'] = $vars['node']->nid;
 
+  // Render blocks assigned to 'content_third' region
+  // (between node and comments) for node full view
+  if ($vars['page'] && $content_third = block_get_blocks_by_region('content_third')) {
+    $vars['content_third'] = $content_third;
+  }
+
   _druru_wrap_claim($content, 'node', $vars['nid']);
   _druru_wrap_thanks($vars, 'node');
 }

@@ -1,3 +1,15 @@
+// Make footer fixed to bottom
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#wrapper {
+  flex-grow: 1;
+}
+
+// = Regions
 .region {
   &.region-between-menus {
     display: inline-block;
@@ -10,27 +22,46 @@
   }
 }
 
+// Mimic bootstrap .row
+.region-content-first,
+.region-content-last,
+.main-content {
+  .make-row();
+}
+
+// Add top margin to specific regions
+.region-sidebar-first,
+.region-help,
+.region-content-first,
+.region-content-third,
+.region-page-last,
+.region-content,
+.main-content {
+  margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+}
+
+// Double top margin for wrapper of footer
+.footer-wrapper {
+  margin-top: 2 * @padding-large-horizontal; // @todo Replace with proper variable
+}
+
+// Section of main content
 section.main {
-  padding-left: @padding-large-horizontal;
+  padding-left: @padding-large-horizontal; // @todo Replace with proper variable
 
   @media @very-smalld {
-    & {
+    .sidebar-first & {
+      padding-left: 2 * @padding-large-horizontal; // @todo Replace with proper variable
       padding-right: 0;
-    }
-
-    .main-content,
-    .front & .region-content {
-      margin-left: @padding-large-horizontal;
     }
   }
 }
 
-body {
-  &:not(.front) {
-    @media @tablet {
-      #navbar {
-        margin-bottom: @navbar-margin-bottom;
-      }
-    }
+// Left sidebar
+aside.first {
+  margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+
+  @media @very-smalld {
+    margin-top: 0;
   }
 }

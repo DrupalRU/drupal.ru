@@ -1,0 +1,9 @@
+// Multiple blocks in top/bottom site bar must take equal space
+.region-site-first,
+.region-site-last {
+  display: flex;
+
+  > .block {
+    flex-grow: 1;
+  }
+}

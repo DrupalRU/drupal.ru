@@ -6,9 +6,10 @@ sites/local.sites.php
 sites/*/files
 sites/local
 
-### Excludes of dev environment
-# PhpStorm
+### Ignore editors' configugarion files
 .idea
+.vscode
+.eslintrc.json
 
 # Ignore translations
 sites/all/translations
@@ -24,3 +25,6 @@ sites/all/modules/contrib/stage_file_proxy
 
 # Ignore npm packages
 node_modules/
+
+# Ignore css sourcemaps
+*.css.map

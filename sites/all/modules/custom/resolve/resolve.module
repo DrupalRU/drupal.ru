@@ -171,6 +171,7 @@ function resolve_preprocess_comment(&$variables) {
 function resolve_preprocess_node(&$variables) {
   $is_resolved = !empty($variables['resolved']);
   $correct_mode = $variables['view_mode'] == 'full';
+
   if (resolved_node_can_be_resolved($variables['node'])) {
     $variables['title'] = resolve_add_mark($variables['node'], $is_resolved) . $variables['title'];
   }
@@ -178,7 +179,9 @@ function resolve_preprocess_node(&$variables) {
   // Adding best comment to bottom of the node.
   if ($correct_mode && $is_resolved && isset($variables['content'])) {
     $content = &$variables['content'];
+
     if ($comment = comment_load($variables['resolved_cid'])) {
+      $variables['has_resolved_comment'] = TRUE;
       $content['resolved_comment'] = comment_view($comment, $variables['node']);
 
       // Get max weight of the page.
@@ -193,11 +196,6 @@ function resolve_preprocess_node(&$variables) {
       if ($weight < count($content)) {
         $weight = count($content) + 1;
       }
-
-      $content['best-comment-header'] = array(
-        '#markup' => '<h3>' . t('Best reply') . '</h3>',
-        '#weight' => ++$weight,
-      );
 
       $content['resolved_comment']['#weight'] = ++$weight;
     }

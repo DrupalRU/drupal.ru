@@ -5,6 +5,19 @@
 }
 
 .node {
+  > .links {
+    padding: 0;
+    margin: @padding-large-horizontal 0 0 0; // @todo Replace with proper variable
+
+    &.inline {
+      li {
+        list-style: none;
+        display: inline-block;
+        padding-right: 10px; // @todo Replace with proper variable
+      }
+    }
+  }
+
   &.node-teaser {
     > ul.links {
       text-align: right;
@@ -71,19 +84,6 @@ body.not-front {
       float: left;
       margin-right: @padding-base-horizontal; // @todo Replace with proper variable
       margin-bottom: @padding-base-vertical; // @todo Replace with proper variable
-    }
-  }
-}
-
-.links {
-  padding: 0;
-  margin: 0;
-
-  &.inline {
-    li {
-      list-style: none;
-      display: inline-block;
-      padding-right: 10px; // @todo Replace with proper variable
     }
   }
 }

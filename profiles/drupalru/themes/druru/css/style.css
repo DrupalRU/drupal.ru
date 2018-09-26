@@ -7880,6 +7880,9 @@ form#user-admin-permissions .form-type-checkbox {
 #comment-form .field-name-comment-body {
   clear: both;
 }
+.node-best-reply {
+  margin-top: 15px;
+}
 .description {
   font-size: 0.9em;
   color: #808080;
@@ -7989,7 +7992,8 @@ a.cke_combo_button span.cke_button_disabled span {
   padding-right: 12px;
 }
 .terms-wrapper {
-  margin-top: 10px;
+  margin-top: 15px;
+  margin-bottom: 0;
   position: relative;
 }
 .terms-wrapper:after {
@@ -8609,6 +8613,15 @@ ul.li-accent > *:before {
 #block-system-main .node-teaser {
   box-sizing: border-box;
 }
+.node > .links {
+  padding: 0;
+  margin: 15px 0 0 0;
+}
+.node > .links.inline li {
+  list-style: none;
+  display: inline-block;
+  padding-right: 10px;
+}
 .node.node-teaser > ul.links {
   text-align: right;
 }
@@ -8658,15 +8671,6 @@ body.not-front div:not(.alttracker.list-group) .user-picture {
   float: left;
   margin-right: 12px;
   margin-bottom: 6px;
-}
-.links {
-  padding: 0;
-  margin: 0;
-}
-.links.inline li {
-  list-style: none;
-  display: inline-block;
-  padding-right: 10px;
 }
 .pager-wrapper {
   margin-top: 15px;

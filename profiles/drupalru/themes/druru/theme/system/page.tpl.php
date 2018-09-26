@@ -138,6 +138,7 @@
         <?php print render($page['content_first']); ?>
       <?php endif; ?>
 
+      <a id="main-content"></a>
       <div class="main-content">
         <section<?php print drupal_attributes($content_column_attributes); ?>>
           <?php print $messages; ?>
@@ -148,7 +149,6 @@
 
           <?php if ($breadcrumb): print $breadcrumb; endif; ?>
 
-          <a id="main-content"></a>
           <?php print render($title_prefix); ?>
           <?php if ($title || is_numeric($title)): ?>
             <h1 class="page-header"><?php print $title; ?></h1>

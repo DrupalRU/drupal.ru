@@ -41,6 +41,10 @@
     .node-header {
       display: flex;
       align-items: baseline;
+
+      .page-user & {
+        margin-top: @padding-large-vertical; // @todo Replace with proper variable
+      }
     }
 
     .node-header-item {
@@ -48,7 +52,7 @@
     }
   }
 
-  .content {
+  .content:not(:first-child) {
     margin-top: @padding-large-vertical; // @todo Replace with proper variable
   }
 

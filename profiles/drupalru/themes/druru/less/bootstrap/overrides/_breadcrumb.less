@@ -1,8 +1,11 @@
 .breadcrumb {
   padding: 0;
-  margin-top: @padding-large-horizontal; // @todo Replace with proper variable
   margin-bottom: 0;
   list-style: none;
+
+  &:not(:first-child) {
+    margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+  }
 
   > li {
     display: inline;

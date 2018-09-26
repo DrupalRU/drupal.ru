@@ -164,11 +164,16 @@
   }
 
   .navbar-second {
-    background: rgba(0, 0, 0, .1);
-
     .nav {
+      display: flex;
+      justify-content: space-between;
+
       > li {
-        display: inline-block;
+        @media @tablet {
+          &:first-child {
+            margin-left: auto;
+          }
+        }
 
         a {
           .lighter(color, @brand-info, 3);

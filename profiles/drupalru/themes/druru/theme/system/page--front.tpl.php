@@ -56,12 +56,18 @@
  *
  * Regions:
  * - $page['help']: Dynamic help text, mostly for admin pages.
- * - $page['highlighted']: Items for the highlighted content region.
  * - $page['content']: The main content of the current page.
- * - $page['sidebar_first']: Items for the first sidebar.
- * - $page['sidebar_second']: Items for the second sidebar.
+ * - $page['sidebar_first']: Items for the left sidebar.
+ * - $page['sidebar_second']: Items for the right sidebar.
  * - $page['header']: Items for the header region.
  * - $page['footer']: Items for the footer region.
+ * - $page['site_first']: Items for the top site region.
+ * - $page['site_last']: Items for the bottom site region.
+ * - $page['page_first']: Items for the top page region.
+ * - $page['page_last']: Items for the bottom page region.
+ * - $page['content_first']: Items for the top content region.
+ * - $page['content_second']: Items for the middle content region.
+ * - $page['content_last']: Items for the bottom content region.
  *
  * @see druru_preprocess_page()
  * @see template_preprocess()
@@ -73,37 +79,39 @@
  * @ingroup themeable
  */
 ?>
+<?php if ($page['site_first']): ?>
+  <?php print render($page['site_first']); ?>
+<?php endif; ?>
 <div id="wrapper">
   <header id="navbar" role="banner" class="<?php print $navbar_classes; ?>">
     <div class="container">
       <div class="navbar-header">
 
-        <?php if ($logo): print $logo; endif;?>
-
+        <?php if ($logo): print $logo; endif; ?>
         <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
-          <?php if(_druru_count_unread_messages()):?>
+          <?php if (_druru_count_unread_messages()):?>
             <i class="fa fa-circle small whistle-blower"></i>
-          <?php endif;?>
+          <?php endif; ?>
         </button>
       </div>
 
-      <?php if (!empty($primary_nav) || !empty($secondary_nav) || !empty($page['between_menus'])): ?>
+      <?php if ($primary_nav || $secondary_nav || $page['between_menus']): ?>
         <div class="navbar-collapse collapse">
           <nav role="navigation">
             <?php
             // We need use this method for exclude unnecessary spaces between regions.
-            if (!empty($primary_nav)) {
+            if ($primary_nav) {
               print trim(render($primary_nav));
             }
-            if (!empty($page['between_menus'])) {
+            if ($page['between_menus']) {
               print trim(render($page['between_menus']));
             }
-            if (!empty($secondary_nav)) {
+            if ($secondary_nav) {
               print trim(render($secondary_nav));
             }
             ?>
@@ -111,7 +119,7 @@
         </div>
       <?php endif; ?>
     </div>
-    <?php if (!empty($page['navigation'])) : ?>
+    <?php if ($page['navigation']): ?>
       <div class="navbar-second navbar-collapse collapse">
         <div class="container">
           <?php print trim(render($page['navigation'])); ?>
@@ -121,59 +129,76 @@
   </header>
 
   <div class="main-container">
-    <?php if($page['header']): ?>
-      <header role="banner" id="page-header" class="highlighted jumbotron">
+    <?php if ($page['header']): ?>
+      <header role="banner" id="page-header" class="jumbotron">
         <div class="container">
           <?php print render($page['header']); ?>
         </div>
       </header> <!-- /#page-header -->
     <?php endif; ?>
 
+    <?php if ($page['page_first']): ?>
+      <?php print render($page['page_first']); ?>
+    <?php endif; ?>
+
     <div class="container">
-      <div class="row">
+      <?php if ($page['content_first']): ?>
+        <?php print render($page['content_first']); ?>
+      <?php endif; ?>
+
+      <a id="main-content"></a>
+      <div class="main-content">
         <section<?php print drupal_attributes($content_column_attributes); ?>>
-          <?php if (!empty($page['highlighted'])): ?>
-            <div class="highlighted jumbotron"><?php print render($page['highlighted']); ?></div>
-          <?php endif; ?>
-          <?php if (!empty($breadcrumb)): print $breadcrumb; endif;?>
-          <a id="main-content"></a>
+          <?php print $messages; ?>
+
           <?php print render($title_prefix); ?>
-          <?php if (!empty($title) || is_numeric($title)): ?>
+          <?php if ($title || is_numeric($title)): ?>
             <h1 class="page-header"><?php print $title; ?></h1>
           <?php endif; ?>
           <?php print render($title_suffix); ?>
-          <?php print $messages; ?>
-          <?php if (!empty($tabs)): ?>
+          <?php if ($tabs): ?>
             <?php print render($tabs); ?>
           <?php endif; ?>
-          <?php if (!empty($page['help'])): ?>
+          <?php if ($page['help']): ?>
             <?php print render($page['help']); ?>
           <?php endif; ?>
-          <?php if (!empty($action_links)): ?>
+          <?php if ($action_links): ?>
             <ul class="action-links"><?php print render($action_links); ?></ul>
           <?php endif; ?>
           <?php print render($page['content']); ?>
         </section>
 
-        <?php if (!empty($page['sidebar_first'])): ?>
+        <?php if ($page['sidebar_first']): ?>
           <aside<?php print drupal_attributes($sidebar_first_attributes); ?>>
             <?php print render($page['sidebar_first']); ?>
           </aside>  <!-- /#sidebar-first -->
         <?php endif; ?>
 
-        <?php if (!empty($page['sidebar_second'])): ?>
+        <?php if ($page['sidebar_second']): ?>
           <aside <?php print drupal_attributes($sidebar_second_attributes); ?>>
             <?php print render($page['sidebar_second']); ?>
           </aside>  <!-- /#sidebar-second -->
         <?php endif; ?>
-
       </div>
     </div>
   </div>
 </div>
 
-<footer class="footer">
+<div class="footer-wrapper">
   <div class="container">
-    <?php print render($page['footer']); ?>
+    <?php if ($page['content_last']): ?>
+      <?php print render($page['content_last']); ?>
+    <?php endif; ?>
   </div>
-</footer>
+  <?php if ($page['page_last']): ?>
+    <?php print render($page['page_last']); ?>
+  <?php endif; ?>
+  <div class="footer">
+    <div class="container">
+      <?php print render($page['footer']); ?>
+    </div>
+  </div>
+  <?php if ($page['site_last']): ?>
+    <?php print render($page['site_last']); ?>
+  <?php endif; ?>
+</div>

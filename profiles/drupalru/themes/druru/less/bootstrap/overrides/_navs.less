@@ -1,17 +1,16 @@
 .nav {
-  margin-bottom: @padding-large-vertical * 2;
+  margin-top: @padding-large-vertical; // @todo Replace with proper variable
 }
 
 .tabs--primary {
-  text-align: right;
-
   li {
     float: none;
     display: inline-block;
 
     + li{
-      margin-left: -4px;
+      margin-left: -4px; // @todo Replace with proper variable
     }
+
     &.active {
       a.active {
         border-bottom: 1px solid @brand-accent;

@@ -32,15 +32,18 @@
       }
     }
   }
+
   #edit-captcha-response {
     font-size: 60px;
     height: auto;
     font-weight: bold;
     letter-spacing: 5px;
   }
+
   .password-field, input.password-confirm {
     width: 50%;
   }
+
   .password-strength, div.password-confirm {
     margin-right: 1em;
   }
@@ -61,11 +64,26 @@
   }
 }
 
-
 #blog-node-form {
-  #edit-type-version, #edit-keys {
+  #edit-type-version,
+  #edit-keys {
     &, & > div {
       margin-bottom: 0;
     }
   }
+}
+
+.form-group,
+.form-actions {
+  margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+  margin-bottom: 0;
+
+  &:first-child,
+  & > & {
+    margin-top: 0;
+  }
+}
+
+.description:not(:first-child) {
+  margin-top: @padding-large-horizontal; // @todo Replace with proper variable
 }

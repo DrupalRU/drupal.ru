@@ -5,24 +5,29 @@
 }
 
 .node {
-  &.node-teaser {
+  > .links {
+    padding: 0;
+    margin: @padding-large-horizontal 0 0 0; // @todo Replace with proper variable
 
-    > .submitted {
-      margin-bottom: 5px;
+    &.inline {
+      li {
+        list-style: none;
+        display: inline-block;
+        padding-right: 10px; // @todo Replace with proper variable
+      }
     }
+  }
 
+  &.node-teaser {
     > ul.links {
       text-align: right;
     }
 
-    .content {
-      clear: both;
-    }
     &.node-event {
       position: relative;
       border: 1px solid @well-border;
-      margin-bottom: @line-height-computed;
-      background-color: #fff;
+      margin-bottom: @line-height-computed; // @todo Replace with proper variable
+      background-color: @body-bg;
 
       h2 {
         margin-top: 0;
@@ -46,15 +51,22 @@
   }
 
   &.node-blog {
+    .node-header {
+      display: flex;
+      align-items: baseline;
+
+      .page-user & {
+        margin-top: @padding-large-vertical; // @todo Replace with proper variable
+      }
+    }
+
     .node-header-item {
-      float: left;
-      margin-right: @padding-base-horizontal;
+      margin-right: @padding-base-horizontal; // @todo Replace with proper variable
     }
   }
 
-  .content {
-    clear: both;
-    margin-top: 10px;
+  .content:not(:first-child) {
+    margin-top: @padding-large-vertical; // @todo Replace with proper variable
   }
 
   &.node-unpublished {
@@ -70,18 +82,8 @@ body.not-front {
   div:not(.alttracker.list-group) {
     .user-picture {
       float: left;
-      margin-right: @padding-base-horizontal;
-      margin-bottom: @padding-base-vertical;
+      margin-right: @padding-base-horizontal; // @todo Replace with proper variable
+      margin-bottom: @padding-base-vertical; // @todo Replace with proper variable
     }
-  }
-}
-
-.links.inline {
-  padding: 0;
-
-  li {
-    list-style: none;
-    display: inline-block;
-    padding-right: 10px;
   }
 }

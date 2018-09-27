@@ -25,6 +25,6 @@
  */
 ?>
 <h3><?php print $title; ?></h3>
-<dl class="dl-horizontal">
+<dl>
   <?php print $profile_items; ?>
 </dl>

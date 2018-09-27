@@ -1,5 +1,4 @@
 html {
-  height: 100%;
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
@@ -23,17 +22,11 @@ html {
 body {
   // Fix horizontal scrolling on iOS devices.
   // http://drupal.org/node/1870076
-  position: relative;
+  // position: relative;
   font-weight: @font-weight-base;
-  height: 100%;
 
   ul, ol {
     padding-left: 20px;
-  }
-
-  #wrapper {
-    min-height: 100%;
-    padding-bottom: @footer-height;
   }
 
   &.admin-expanded.admin-vertical.admin-nw .navbar,
@@ -199,11 +192,7 @@ ul.secondary {
   }
 
   h2.block-title {
-    font-size: ceil(@font-size-h2 * 1);
-
-    @media @tablet {
-      font-size: ceil(@font-size-h2 * .85);
-    }
+    font-size: @font-size-h3;
   }
 }
 
@@ -217,7 +206,7 @@ p:last-child {
   > .glyphicon {
     font-size: @font-size-large;
     float: left;
-    margin: -0.05em 0.5em 0 0;
+    margin: -.05em .5em 0 0; // @todo Replace with proper variable
   }
 
   .block {
@@ -232,7 +221,7 @@ form#search-block-form {
 
 .navbar #block-search-form {
   float: none;
-  margin: 5px 0 5px 5px;
+  margin: 5px 0 5px 5px; // @todo Replace with proper variable
 
   @media @very-smalld {
     float: right;
@@ -240,7 +229,7 @@ form#search-block-form {
 }
 
 .navbar-search .control-group {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 // Form elements.
@@ -274,6 +263,7 @@ fieldset .panel-heading a.panel-title {
 
 .form-actions {
   clear: both;
+  text-align: left;
 }
 
 .resizable-textarea textarea {
@@ -353,7 +343,6 @@ ul li.leaf {
 
 // Submitted
 .submitted {
-  margin-bottom: 1em;
   font-style: italic;
   font-weight: normal;
   color: #777;
@@ -429,7 +418,7 @@ div.password-suggestions ul {
  * @see http://bootply.com/74926
  */
 .tabbable {
-  margin-bottom: 20px;
+  margin-top: @padding-large-horizontal; // @todo Replace with proper variable
 }
 
 .tabs-below, .tabs-left, .tabs-right {
@@ -485,18 +474,18 @@ div.password-suggestions ul {
 .tabs-left,
 .tabs-right {
   > .nav-tabs {
-    padding-bottom: 20px;
     width: 220px;
+    margin-bottom: 0;
 
     > li {
       float: none;
+
       &:focus {
         outline: 0;
       }
 
       > a {
         margin-right: 0;
-        margin-bottom: 3px;
 
         &:focus {
           outline: 0;
@@ -504,12 +493,13 @@ div.password-suggestions ul {
       }
     }
   }
+
   > .tab-content {
     border-radius: 0 @border-radius-base @border-radius-base @border-radius-base;
     .box-shadow(0 1px 1px rgba(0, 0, 0, .05));
     border: 1px solid @nav-tabs-border-color;
     overflow: hidden;
-    padding: 10px 15px;
+    padding: @padding-large-vertical @padding-large-horizontal;
   }
 }
 
@@ -521,17 +511,20 @@ div.password-suggestions ul {
 
     > li > a {
       border-radius: @border-radius-base 0 0 @border-radius-base;
+
       &:hover,
       &:focus {
         border-color: @nav-tabs-link-hover-border-color @nav-tabs-border-color @nav-tabs-link-hover-border-color @nav-tabs-link-hover-border-color;
       }
     }
 
-    > .active > a,
-    > .active > a:hover,
-    > .active > a:focus {
-      border-color: @nav-tabs-border-color transparent @nav-tabs-border-color @nav-tabs-border-color;
-      .box-shadow(-1px 1px 1px rgba(0, 0, 0, .05));
+    > .active {
+      > a,
+      > a:hover,
+      > a:focus {
+        border-color: @nav-tabs-border-color transparent @nav-tabs-border-color @nav-tabs-border-color;
+        .box-shadow(-1px 1px 1px rgba(0, 0, 0, .05));
+      }
     }
   }
 }
@@ -544,6 +537,7 @@ div.password-suggestions ul {
 
     > li > a {
       border-radius: 0 @border-radius-base @border-radius-base 0;
+
       &:hover,
       &:focus {
         border-color: @nav-tabs-link-hover-border-color @nav-tabs-link-hover-border-color @nav-tabs-link-hover-border-color @nav-tabs-border-color;
@@ -611,27 +605,6 @@ table {
   }
 }
 
-// Treat all links inside alert as .alert-link
-.alert a {
-  font-weight: @alert-link-font-weight;
-}
-
-.alert-success a {
-  color: darken(@alert-success-text, 10%);
-}
-
-.alert-info a {
-  color: darken(@alert-info-text, 10%);
-}
-
-.alert-warning a {
-  color: darken(@alert-warning-text, 10%);
-}
-
-.alert-danger a {
-  color: darken(@alert-danger-text, 10%);
-}
-
 .to-right {
   float: right;
 }
@@ -643,7 +616,6 @@ table {
 
 sup.beta {
   color: saturate(lighten(@brand-success, @tone*4), @tone);
-  //color: @alert-warning-border;
   font-size: .6em;
   line-height: .3em;
   margin: 0;

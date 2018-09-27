@@ -9768,6 +9768,8 @@ form table input.form-radio {
   margin-top: 10px;
   overflow-x: auto;
   overflow-y: hidden;
+  padding-bottom: 15px;
+  margin-bottom: -15px;
 }
 .acal-holder .Calendar > div {
   height: 82px !important;

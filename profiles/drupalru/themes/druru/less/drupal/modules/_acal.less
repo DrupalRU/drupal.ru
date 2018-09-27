@@ -1,6 +1,13 @@
-.activity-calendar {
+.acal-holder {
+  margin-top: @padding-large-vertical; // @todo Replace with proper variable
   overflow-x: auto;
   overflow-y: hidden;
-  padding-bottom: 15px;
-}
 
+  .Calendar > div {
+    height: 82px !important;
+
+    > div {
+      z-index: unset !important;
+    }
+  }
+}

@@ -7,20 +7,27 @@
   padding-bottom: 15px;
   color: @footer-color;
   font-weight: 300;
-  text-align: center;
 
-  @media @tablet {
-    text-align: left;
+  .logo-footer {
+    @media @tablet {
+      text-align: right;
+    }
   }
 
   .copyright {
-    @media @very-smalld {
-      padding-top: @padding-base-vertical;
+    margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+
+    @media @tablet {
+      margin-top: 0;
     }
   }
 
   .age-limit {
-    padding-top: @padding-large-vertical;
+    margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+
+    @media @tablet {
+      margin-top: 0;
+    }
 
     > span {
       color: white;
@@ -30,25 +37,29 @@
       font-size: @font-size-h3;
       background: @little-lighter;
       border: 1px solid fade(@little-lighter, 15);
+      display: inline-block;
     }
   }
 
   .site-links {
+    margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+
+    @media @very-smalld {
+      margin-top: 0;
+    }
+
     ul {
       list-style: square;
 
       li {
-        display: inline;
-        margin-right: 20px;
+        @media @very-smalld {
+          display: inline;
+          margin-right: 20px; // @todo Replace with proper variable
+        }
 
         & + li {
-          margin-top: 5px; // @todo Replace with proper variable
+          margin-top: @padding-large-vertical; // @todo Replace with proper variable
         }
-      }
-
-      @media screen and (max-width: @screen-sm-max) {
-        padding-left: 0;
-        margin-top: 10px;
       }
 
       @media @very-smalld {

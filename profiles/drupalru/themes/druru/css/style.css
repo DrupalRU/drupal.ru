@@ -8260,20 +8260,27 @@ a.cke_combo_button span.cke_button_disabled span {
   padding-bottom: 15px;
   color: #e6e6e6;
   font-weight: 300;
-  text-align: center;
 }
 @media screen and (min-width: 748px) {
-  .footer {
-    text-align: left;
+  .footer .logo-footer {
+    text-align: right;
   }
 }
-@media screen and (min-width: 1004px) {
+.footer .copyright {
+  margin-top: 15px;
+}
+@media screen and (min-width: 748px) {
   .footer .copyright {
-    padding-top: 6px;
+    margin-top: 0;
   }
 }
 .footer .age-limit {
-  padding-top: 10px;
+  margin-top: 15px;
+}
+@media screen and (min-width: 748px) {
+  .footer .age-limit {
+    margin-top: 0;
+  }
 }
 .footer .age-limit > span {
   color: white;
@@ -8283,22 +8290,27 @@ a.cke_combo_button span.cke_button_disabled span {
   font-size: 21px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.15);
+  display: inline-block;
+}
+.footer .site-links {
+  margin-top: 15px;
+}
+@media screen and (min-width: 1004px) {
+  .footer .site-links {
+    margin-top: 0;
+  }
 }
 .footer .site-links ul {
   list-style: square;
 }
-.footer .site-links ul li {
-  display: inline;
-  margin-right: 20px;
+@media screen and (min-width: 1004px) {
+  .footer .site-links ul li {
+    display: inline;
+    margin-right: 20px;
+  }
 }
 .footer .site-links ul li + li {
-  margin-top: 5px;
-}
-@media screen and (max-width: 1003px) {
-  .footer .site-links ul {
-    padding-left: 0;
-    margin-top: 10px;
-  }
+  margin-top: 10px;
 }
 @media screen and (min-width: 1004px) {
   .footer .site-links ul {
@@ -9752,10 +9764,16 @@ form table input.form-radio {
 .actions ul {
   margin: 0;
 }
-.activity-calendar {
+.acal-holder {
+  margin-top: 10px;
   overflow-x: auto;
   overflow-y: hidden;
-  padding-bottom: 15px;
+}
+.acal-holder .Calendar > div {
+  height: 82px !important;
+}
+.acal-holder .Calendar > div > div {
+  z-index: unset !important;
 }
 .node-item {
   align-items: baseline;

@@ -907,3 +907,14 @@ function drurum_update_7046() {
 function drurum_update_7047() {
   module_enable(['back_to_top'], TRUE);
 }
+
+/**
+ * Disable and uninstall "frontpage" module.
+ */
+function drurum_update_7048() {
+  if (module_exists('frontpage')) {
+    module_disable(['frontpage']);
+    drupal_uninstall_modules(['frontpage']);
+  }
+  variable_set('site_frontpage', 'node');
+}

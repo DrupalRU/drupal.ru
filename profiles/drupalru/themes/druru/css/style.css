@@ -7294,6 +7294,15 @@ form#user-admin-permissions .form-type-checkbox {
   font-weight: normal !important;
   margin: 0;
 }
+#block-views-front-sticked-block {
+  margin-bottom: 15px;
+}
+#block-views-front-sticked-block .fa {
+  padding-right: 5px;
+}
+#block-views-front-sticked-block .block-title {
+  font-size: 24px;
+}
 .ocupload-button-wrapper .input-group {
   display: none;
 }
@@ -8902,10 +8911,6 @@ body .alttracker.list-group .list-group-item {
   padding-right: 15px;
   margin-left: -15px;
   margin-right: -15px;
-}
-body .frontpage-list .list-group .list-group-item:last-child,
-body .alttracker.list-group .list-group-item:last-child {
-  border-bottom: none;
 }
 body .frontpage-list .list-group .list-group-item:focus,
 body .alttracker.list-group .list-group-item:focus,

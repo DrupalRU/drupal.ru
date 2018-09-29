@@ -5287,6 +5287,10 @@ button.close {
  *   }
  * }
  */
+.alert {
+  margin-top: 15px;
+  margin-bottom: 0;
+}
 .breadcrumb {
   padding: 0;
   margin-bottom: 0;

@@ -11,12 +11,24 @@ h1, h2, h3, h4, h5, h6,
   margin-top: 0;
   margin-bottom: 0;
 
+  * + & {
+    margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+  }
+
   a {
     &:hover, &:focus {
       small, .small {
         color: darken(@headings-small-color, @tone);
       }
     }
+  }
+}
+
+p {
+  margin: 0;
+
+  * + & {
+    margin-top: @padding-base-vertical; // @todo Replace with proper variable
   }
 }
 

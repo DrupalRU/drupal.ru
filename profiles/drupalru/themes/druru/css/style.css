@@ -10476,6 +10476,9 @@ h3.popover-title {
 #privatemsg-new .form-item {
   margin-bottom: 0;
 }
+#privatemsg-new .text-format-wrapper {
+  margin-top: 15px;
+}
 #privatemsg-list .sticky-header,
 #privatemsg-list .privatemsg-list thead {
   display: none;

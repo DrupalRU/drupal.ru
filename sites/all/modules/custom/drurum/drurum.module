@@ -39,7 +39,7 @@ function drurum_menu() {
     'type' => MENU_NORMAL_ITEM,
     'page callback' => 'drupal_get_form',
     'page arguments' => ['drurum_admin_form'],
-    'access arguments' => ['administer site configurations'],
+    'access arguments' => ['administer site configuration'],
     'file' => 'drurum.admin.inc',
     'file path' => drupal_get_path('module', 'drurum') . '/includes',
   ];

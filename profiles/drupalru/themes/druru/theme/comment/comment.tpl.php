@@ -60,7 +60,6 @@
  */
 ?>
 <article class="media <?php print $zebra; ?> <?php if ($new) print "new-comment" ?> <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-
   <?php if ($picture): ?>
     <div class="media-left">
       <?php print $picture; ?>
@@ -68,7 +67,6 @@
   <?php endif; ?>
 
   <div class="media-body">
-
     <div class="media-heading">
       <span class="h4 media-header-item">
         <?php print $author; ?>

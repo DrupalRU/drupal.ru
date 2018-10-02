@@ -332,6 +332,7 @@
       display: block;
       text-decoration: none;
       padding: @padding-large-vertical @padding-large-horizontal;
+      transition: background-color @transition-speed @transition-func;
 
       //&:before {
       //  content: '';
@@ -348,7 +349,7 @@
       &:hover, &:focus, &.active {
         // For true overriden a.active:hover of other places.
         &, &.active{
-          background: rgba(0,0,0,.05);
+          background-color: @little-darker;
           font-weight: normal;
           color: lighten(@brand-primary, @tone);
         }

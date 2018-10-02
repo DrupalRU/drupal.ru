@@ -162,7 +162,8 @@ body {
   .alttracker.list-group {
     margin: 0;
 
-    &, .list-group-item {
+    &,
+    .list-group-item {
       background: none;
       border: none;
     }
@@ -173,9 +174,14 @@ body {
       padding-right: @padding-large-horizontal; // @todo Replace with proper variable
       margin-left: -@padding-large-horizontal; // @todo Replace with proper variable
       margin-right: -@padding-large-horizontal; // @todo Replace with proper variable
+      transition: background-color @transition-speed @transition-func;
+
+      &:last-child {
+        border-bottom: none;
+      }
 
       &:focus, &:hover{
-        background: @little-darker;
+        background-color: @little-darker;
       }
     }
   }

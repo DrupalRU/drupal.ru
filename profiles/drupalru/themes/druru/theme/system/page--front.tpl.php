@@ -86,7 +86,6 @@
   <header id="navbar" role="banner" class="<?php print $navbar_classes; ?>">
     <div class="container">
       <div class="navbar-header">
-
         <?php if ($logo): print $logo; endif; ?>
         <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -119,6 +118,7 @@
         </div>
       <?php endif; ?>
     </div>
+
     <?php if ($page['navigation']): ?>
       <div class="navbar-second navbar-collapse collapse">
         <div class="container">
@@ -190,14 +190,17 @@
       <?php print render($page['content_last']); ?>
     <?php endif; ?>
   </div>
+
   <?php if ($page['page_last']): ?>
     <?php print render($page['page_last']); ?>
   <?php endif; ?>
+
   <div class="footer">
     <div class="container">
       <?php print render($page['footer']); ?>
     </div>
   </div>
+
   <?php if ($page['site_last']): ?>
     <?php print render($page['site_last']); ?>
   <?php endif; ?>

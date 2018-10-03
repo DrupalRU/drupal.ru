@@ -7318,8 +7318,11 @@ form#user-admin-permissions .form-type-checkbox {
   font-weight: normal !important;
   margin: 0;
 }
-#block-views-featured-block .fa {
+#block-views-featured-block .list-group-item .fa {
   margin-right: 5px;
+}
+.block-title .inline-action {
+  float: right;
 }
 .ocupload-button-wrapper .input-group {
   display: none;
@@ -8901,6 +8904,12 @@ body.front .jumbotron .download-drupal-front i {
 }
 body.front .jumbotron p {
   font-weight: 300;
+  font-size: 15px;
+}
+@media screen and (min-width: 1004px) {
+  body.front .jumbotron p {
+    font-size: 24px;
+  }
 }
 body .frontpage-list .h4 {
   margin: 0;
@@ -9578,10 +9587,6 @@ body .region-sidebar-first .block > div,
 body .region-sidebar-second .block > div {
   position: relative;
 }
-body .region-sidebar-first .block h2.block-title,
-body .region-sidebar-second .block h2.block-title {
-  margin-top: 0;
-}
 body .region-sidebar-first .block:first-child,
 body .region-sidebar-second .block:first-child {
   margin-top: 0;
@@ -9642,35 +9647,6 @@ body .region-sidebar-first .block .view .more-link,
 body .region-sidebar-second .block .view .more-link {
   text-align: right;
   margin-top: 6px;
-}
-body .region-sidebar-first .block .submitted,
-body .region-sidebar-second .block .submitted {
-  font-size: 13px;
-  margin: 2px 0 5px 5px;
-  color: #8c8c8c;
-  line-height: 1em;
-}
-body .region-sidebar-first .block .submitted a,
-body .region-sidebar-second .block .submitted a {
-  color: #6a9fc6;
-}
-@media screen and (min-width: 748px) {
-  body .region-sidebar-first .block .submitted,
-  body .region-sidebar-second .block .submitted {
-    font-size: 10px;
-    margin: 0 0 2px;
-  }
-}
-body .region-sidebar-first .block#block-drurum-new h2 a,
-body .region-sidebar-second .block#block-drurum-new h2 a {
-  line-height: 1.4em;
-  color: #4687b7;
-}
-body .region-sidebar-first .block#block-drurum-new h2 a:hover,
-body .region-sidebar-second .block#block-drurum-new h2 a:hover,
-body .region-sidebar-first .block#block-drurum-new h2 a:focus,
-body .region-sidebar-second .block#block-drurum-new h2 a:focus {
-  color: #3D76A0;
 }
 body .region-sidebar-first li i.fa-check-circle-o,
 body .region-sidebar-second li i.fa-check-circle-o {
@@ -10484,7 +10460,7 @@ h3.popover-title {
 #privatemsg-new .form-item {
   margin-bottom: 0;
 }
-#privatemsg-new .text-format-wrapper {
+#privatemsg-new .form-wrapper + .text-format-wrapper {
   margin-top: 15px;
 }
 #privatemsg-list .sticky-header,
@@ -10765,15 +10741,6 @@ ul.secondary {
   ul.secondary {
     float: right;
   }
-}
-.block:first-child h2.block-title {
-  margin-top: 0;
-}
-.block h2.block-title {
-  font-size: 21px;
-}
-p:last-child {
-  margin-bottom: 0;
 }
 .region-help > .glyphicon {
   font-size: 18px;

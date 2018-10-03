@@ -7318,6 +7318,9 @@ form#user-admin-permissions .form-type-checkbox {
   font-weight: normal !important;
   margin: 0;
 }
+#block-views-featured-block .fa {
+  margin-right: 5px;
+}
 .ocupload-button-wrapper .input-group {
   display: none;
 }
@@ -8571,6 +8574,7 @@ ul.li-select > * a:first-of-type {
   display: block;
   text-decoration: none;
   padding: 10px 15px;
+  transition: background-color 0.2s ease-in-out;
 }
 ul.li-select > * a:first-of-type:hover,
 ul.li-select > * a:first-of-type:focus,
@@ -8578,7 +8582,7 @@ ul.li-select > * a:first-of-type.active,
 ul.li-select > * a:first-of-type:hover.active,
 ul.li-select > * a:first-of-type:focus.active,
 ul.li-select > * a:first-of-type.active.active {
-  background: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.1);
   font-weight: normal;
   color: #4687b7;
 }
@@ -8926,6 +8930,7 @@ body .alttracker.list-group .list-group-item {
   padding-right: 15px;
   margin-left: -15px;
   margin-right: -15px;
+  transition: background-color 0.2s ease-in-out;
 }
 body .frontpage-list .list-group .list-group-item:last-child,
 body .alttracker.list-group .list-group-item:last-child {
@@ -8935,7 +8940,7 @@ body .frontpage-list .list-group .list-group-item:focus,
 body .alttracker.list-group .list-group-item:focus,
 body .frontpage-list .list-group .list-group-item:hover,
 body .alttracker.list-group .list-group-item:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 body.page-events .node-event img {
   max-width: 100%;
@@ -9615,6 +9620,7 @@ body .region-sidebar-second .block .view .view-content > * a:first-of-type {
   display: block;
   text-decoration: none;
   padding: 10px 15px;
+  transition: background-color 0.2s ease-in-out;
 }
 body .region-sidebar-first .block .view .view-content > * a:first-of-type:hover,
 body .region-sidebar-second .block .view .view-content > * a:first-of-type:hover,
@@ -9628,7 +9634,7 @@ body .region-sidebar-first .block .view .view-content > * a:first-of-type:focus.
 body .region-sidebar-second .block .view .view-content > * a:first-of-type:focus.active,
 body .region-sidebar-first .block .view .view-content > * a:first-of-type.active.active,
 body .region-sidebar-second .block .view .view-content > * a:first-of-type.active.active {
-  background: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.1);
   font-weight: normal;
   color: #4687b7;
 }
@@ -9721,6 +9727,7 @@ body aside ul:not(.pager) > * a:first-of-type {
   display: block;
   text-decoration: none;
   padding: 10px 15px;
+  transition: background-color 0.2s ease-in-out;
 }
 body aside ul:not(.pager) > * a:first-of-type:hover,
 body aside ul:not(.pager) > * a:first-of-type:focus,
@@ -9728,7 +9735,7 @@ body aside ul:not(.pager) > * a:first-of-type.active,
 body aside ul:not(.pager) > * a:first-of-type:hover.active,
 body aside ul:not(.pager) > * a:first-of-type:focus.active,
 body aside ul:not(.pager) > * a:first-of-type.active.active {
-  background: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.1);
   font-weight: normal;
   color: #4687b7;
 }
@@ -9981,6 +9988,7 @@ div.altpager ul li a:focus {
   display: block;
   text-decoration: none;
   padding: 10px 15px;
+  transition: background-color 0.2s ease-in-out;
 }
 .bue-popup .bue-popup-content ul.tag-chooser > * a:first-of-type:hover,
 .bue-popup .bue-popup-content ul.tag-chooser > * a:first-of-type:focus,
@@ -9988,7 +9996,7 @@ div.altpager ul li a:focus {
 .bue-popup .bue-popup-content ul.tag-chooser > * a:first-of-type:hover.active,
 .bue-popup .bue-popup-content ul.tag-chooser > * a:first-of-type:focus.active,
 .bue-popup .bue-popup-content ul.tag-chooser > * a:first-of-type.active.active {
-  background: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.1);
   font-weight: normal;
   color: #4687b7;
 }

@@ -31,16 +31,12 @@ function druru_preprocess_block(&$variables) {
  * Add icon "plus" for quickly adding node at the forum.
  */
 function druru_preprocess_block__drurum__new(&$variables) {
-  // No need to show the "Plus" icon at page of creating "Blog".
-  $allowed_path = !preg_match('/node\/add\/blog(\/\d)?/', $_GET['q']);
-  if ($allowed_path) {
-    $variables['block']->subject .= l(druru_icon('plus'), 'node/add/blog', array(
-      'html'       => TRUE,
-      'attributes' => array(
-        'class' => array('pull-right', drupal_is_front_page() ?: 'text-muted'),
-      ),
-    ));
-  }
+  $variables['block']->subject .= l(druru_icon('plus'), 'node/add/blog', array(
+    'html'       => TRUE,
+    'attributes' => array(
+      'class' => array('inline-action'),
+    ),
+  ));
 }
 
 /**

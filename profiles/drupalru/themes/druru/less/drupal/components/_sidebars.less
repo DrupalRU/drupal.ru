@@ -11,10 +11,6 @@ body {
         position: relative;
       }
 
-      h2.block-title {
-        margin-top: 0;
-      }
-
       &:first-child {
         margin-top: 0;
       }
@@ -37,35 +33,6 @@ body {
         .more-link {
           text-align: right;
           margin-top: 6px;
-        }
-      }
-
-      .submitted {
-        font-size: @font-size-small;
-        margin: 2px 0 5px 5px;
-        color: lighten(@text-color, 35%);
-        line-height: 1em;
-
-        a {
-          color: lighten(@link-color, 10%);
-        }
-
-        @media @tablet {
-          font-size: @font-size-very-small;
-          margin: 0 0 2px;
-        }
-      }
-
-      &#block-drurum-new {
-        h2 {
-          a {
-            line-height: 1.4em;
-            color: lighten(@brand-primary, @tone);
-
-            &:hover, &:focus {
-              color: @brand-primary;
-            }
-          }
         }
       }
     }

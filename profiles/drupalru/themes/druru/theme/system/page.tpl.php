@@ -141,8 +141,6 @@
       <a id="main-content"></a>
       <div class="main-content">
         <section<?php print drupal_attributes($content_column_attributes); ?>>
-          <?php print $messages; ?>
-
           <?php if ($page['content_second']): ?>
             <?php print render($page['content_second']); ?>
           <?php endif; ?>
@@ -154,6 +152,7 @@
             <h1 class="page-header"><?php print $title; ?></h1>
           <?php endif; ?>
           <?php print render($title_suffix); ?>
+          <?php print $messages; ?>
           <?php if ($tabs): ?>
             <?php print render($tabs); ?>
           <?php endif; ?>

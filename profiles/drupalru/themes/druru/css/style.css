@@ -5287,6 +5287,10 @@ button.close {
  *   }
  * }
  */
+.alert {
+  margin-top: 15px;
+  margin-bottom: 0;
+}
 .breadcrumb {
   padding: 0;
   margin-bottom: 0;
@@ -7016,6 +7020,20 @@ h6,
   margin-top: 0;
   margin-bottom: 0;
 }
+* + h1,
+* + h2,
+* + h3,
+* + h4,
+* + h5,
+* + h6,
+* + .h1,
+* + .h2,
+* + .h3,
+* + .h4,
+* + .h5,
+* + .h6 {
+  margin-top: 15px;
+}
 h1 a:hover small,
 h2 a:hover small,
 h3 a:hover small,
@@ -7065,6 +7083,12 @@ h6 a:focus .small,
 .h5 a:focus .small,
 .h6 a:focus .small {
   color: #898989;
+}
+p {
+  margin: 0;
+}
+* + p {
+  margin-top: 6px;
 }
 .help-block,
 .control-group .help-inline {
@@ -7294,8 +7318,11 @@ form#user-admin-permissions .form-type-checkbox {
   font-weight: normal !important;
   margin: 0;
 }
-#block-views-featured-block .fa {
+#block-views-featured-block .list-group-item .fa {
   margin-right: 5px;
+}
+.block-title .inline-action {
+  float: right;
 }
 .ocupload-button-wrapper .input-group {
   display: none;
@@ -8877,6 +8904,12 @@ body.front .jumbotron .download-drupal-front i {
 }
 body.front .jumbotron p {
   font-weight: 300;
+  font-size: 15px;
+}
+@media screen and (min-width: 1004px) {
+  body.front .jumbotron p {
+    font-size: 24px;
+  }
 }
 body .frontpage-list .h4 {
   margin: 0;
@@ -9554,10 +9587,6 @@ body .region-sidebar-first .block > div,
 body .region-sidebar-second .block > div {
   position: relative;
 }
-body .region-sidebar-first .block h2.block-title,
-body .region-sidebar-second .block h2.block-title {
-  margin-top: 0;
-}
 body .region-sidebar-first .block:first-child,
 body .region-sidebar-second .block:first-child {
   margin-top: 0;
@@ -9618,35 +9647,6 @@ body .region-sidebar-first .block .view .more-link,
 body .region-sidebar-second .block .view .more-link {
   text-align: right;
   margin-top: 6px;
-}
-body .region-sidebar-first .block .submitted,
-body .region-sidebar-second .block .submitted {
-  font-size: 13px;
-  margin: 2px 0 5px 5px;
-  color: #8c8c8c;
-  line-height: 1em;
-}
-body .region-sidebar-first .block .submitted a,
-body .region-sidebar-second .block .submitted a {
-  color: #6a9fc6;
-}
-@media screen and (min-width: 748px) {
-  body .region-sidebar-first .block .submitted,
-  body .region-sidebar-second .block .submitted {
-    font-size: 10px;
-    margin: 0 0 2px;
-  }
-}
-body .region-sidebar-first .block#block-drurum-new h2 a,
-body .region-sidebar-second .block#block-drurum-new h2 a {
-  line-height: 1.4em;
-  color: #4687b7;
-}
-body .region-sidebar-first .block#block-drurum-new h2 a:hover,
-body .region-sidebar-second .block#block-drurum-new h2 a:hover,
-body .region-sidebar-first .block#block-drurum-new h2 a:focus,
-body .region-sidebar-second .block#block-drurum-new h2 a:focus {
-  color: #3D76A0;
 }
 body .region-sidebar-first li i.fa-check-circle-o,
 body .region-sidebar-second li i.fa-check-circle-o {
@@ -10341,22 +10341,18 @@ h3.popover-title {
 .node-teaser.node-organization h3 {
   margin: 0;
 }
-.page-messages .privatemsg-message {
-  margin-top: 6px;
+.page-messages .privatemsg-message:not(:first-child) {
+  margin-top: 15px;
 }
 .page-messages .privatemsg-message .user-picture {
   float: none;
   margin-right: 0;
 }
-.page-messages .privatemsg-message .user-picture img {
-  border-radius: 50%;
-}
 .page-messages .privatemsg-message .media-body {
   background: #e9eff3;
-  padding: 10px 20px;
+  padding: 15px;
   border: 1px solid #a9c1d3;
   position: relative;
-  border-radius: 20px;
 }
 .page-messages .privatemsg-message .media-body.new {
   background: #dff0d8;
@@ -10366,8 +10362,13 @@ h3.popover-title {
   position: absolute;
   top: 3px;
   right: 5px;
+  list-style: none;
+}
+.page-messages .privatemsg-message .media-body .privatemsg-message-actions li + li {
+  margin-top: 6px;
 }
 .page-messages .privatemsg-message .media-body .privatemsg-message-actions a {
+  font-size: 18px;
   opacity: 0.2;
 }
 .page-messages .privatemsg-message .media-body .privatemsg-message-actions a:focus,
@@ -10383,12 +10384,6 @@ h3.popover-title {
 }
 .page-messages .privatemsg-message .media-right .user-picture {
   text-align: right;
-}
-.page-messages .privatemsg-message.first-of-author-stack {
-  margin-top: 10px;
-}
-.page-messages .privatemsg-message.first-of-author-stack:first-of-type {
-  margin-top: 0;
 }
 .page-messages .privatemsg-message.first-of-author-stack .media-body {
   overflow: visible;
@@ -10458,16 +10453,26 @@ h3.popover-title {
 #privatemsg-list-wrapper .participants {
   margin: 0;
 }
+#privatemsg-new {
+  margin-top: 15px;
+}
 #privatemsg-new .form-actions,
 #privatemsg-new .form-item {
   margin-bottom: 0;
+}
+#privatemsg-new .form-wrapper + .text-format-wrapper {
+  margin-top: 15px;
 }
 #privatemsg-list .sticky-header,
 #privatemsg-list .privatemsg-list thead {
   display: none;
 }
 #privatemsg-list .privatemsg-list {
-  margin-top: 18px;
+  margin-top: 15px;
+  margin-bottom: 0;
+}
+#privatemsg-list .privatemsg-list + .container-inline {
+  margin-top: 15px;
 }
 #privatemsg-list .privatemsg-list tbody tr {
   border: 1px solid #ddd;
@@ -10505,6 +10510,9 @@ h3.popover-title {
 #privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date a:hover,
 #privatemsg-list .privatemsg-list tbody tr td.privatemsg-list-date a:focus {
   color: #73a5ca;
+}
+h2.privatemsg-reply {
+  font-size: 21px;
 }
 .view-teasers-list .views-row {
   border-bottom: 1px solid #e6e6e6;
@@ -10733,15 +10741,6 @@ ul.secondary {
   ul.secondary {
     float: right;
   }
-}
-.block:first-child h2.block-title {
-  margin-top: 0;
-}
-.block h2.block-title {
-  font-size: 21px;
-}
-p:last-child {
-  margin-bottom: 0;
 }
 .region-help > .glyphicon {
   font-size: 18px;

@@ -1,30 +1,38 @@
+// @todo Make lesscss refactoring of privatemsg pages
 .page-messages {
   .privatemsg-message {
-    margin-top: @padding-base-vertical;
+    &:not(:first-child) {
+      margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+    }
 
     .user-picture {
       float: none;
       margin-right: 0;
-
-      img {
-        .rounded(50%);
-      }
     }
+
     .media-body {
       background: @privatemsg-bg;
-      padding: 10px 20px;
+      padding: @padding-large-horizontal; // @todo Replace with proper variable
       border: 1px solid @privatemsg-border;
       position: relative;
-      .rounded(@privatemsg-border-radius);
+
       &.new {
         background: @privatemsg-bg-new;
         border-color: @privatemsg-border-new;
       }
+
       .privatemsg-message-actions {
         position: absolute;
         top: 3px;
         right: 5px;
+        list-style: none;
+
+        li + li {
+          margin-top: @padding-base-vertical; // @todo Replace with proper variable
+        }
+
         a {
+          font-size: @font-size-large;
           opacity: .2;
 
           &:focus, &:hover {
@@ -33,7 +41,9 @@
         }
       }
     }
-    .media-left, .media-right {
+
+    .media-left,
+    .media-right {
       .placeholder {
         height: 0;
         float: left;
@@ -41,6 +51,7 @@
         width: 100px;
       }
     }
+
     .media-right {
       .user-picture {
         text-align: right;
@@ -59,13 +70,6 @@
       @pmgs-rotate: -145deg;
       @pmsg-right-rotate-coeff: -.25;
 
-      margin-top: @padding-large-vertical;
-
-      // No need to add margin for first message.
-      &:first-of-type {
-        margin-top: 0;
-      }
-
       .media-body {
         overflow: visible;
         z-index: 1;
@@ -80,9 +84,11 @@
           z-index: 1;
           top: @pmsg-p-top;
         }
+
         &:before {
           z-index: 2;
         }
+
         &:after {
           z-index: 0;
         }
@@ -91,13 +97,13 @@
       &:not(.current-user) {
         .media-body {
           &:before {
-            // 15px 25px 27px 15px
             border-width: @pmgs-bt @pmgs-br @pmgs-bb @pmgs-bl;
             border-top-color: @privatemsg-bg;
             left: -@pmsg-p-width+4;
             top: @pmsg-p-top - 10;
             .rotate(@pmgs-rotate);
           }
+
           &:after {
             border-width: @pmgs-bt+2 @pmgs-br+2 @pmgs-bb+2 @pmgs-bl+3;
             border-top-color: @privatemsg-border;
@@ -105,26 +111,29 @@
             top: @pmsg-p-top - 14;
             .rotate(@pmgs-rotate);
           }
+
           &.new {
             &:before {
               border-top-color: @privatemsg-bg-new;
             }
+
             &:after {
               border-top-color: @privatemsg-border-new;
             }
           }
         }
       }
+
       &.current-user {
         .media-body {
           &:before {
-            // 15px 25px 27px 15px
             border-width: @pmgs-bt @pmgs-br @pmgs-bb @pmgs-bl;
             border-top-color: @privatemsg-bg;
             right: -@pmsg-p-width+4;
             top: @pmsg-p-top + 10;
             .rotate(@pmgs-rotate*@pmsg-right-rotate-coeff);
           }
+
           &:after {
             border-width: @pmgs-bt+2 @pmgs-br+2 @pmgs-bb+2 @pmgs-bl+3;
             border-top-color: @privatemsg-border;
@@ -132,10 +141,12 @@
             top: @pmsg-p-top + 10;
             .rotate(@pmgs-rotate*@pmsg-right-rotate-coeff);
           }
+
           &.new {
             &:before {
               border-bottom-color: @privatemsg-bg-new;
             }
+
             &:after {
               border-bottom-color: @privatemsg-border-new;
             }
@@ -153,8 +164,15 @@
 }
 
 #privatemsg-new {
-  .form-actions, .form-item {
+  margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+
+  .form-actions,
+  .form-item {
     margin-bottom: 0;
+  }
+
+  .form-wrapper + .text-format-wrapper {
+    margin-top: @padding-large-horizontal; // @todo Replace with proper variable
   }
 }
 
@@ -165,7 +183,12 @@
   }
 
   .privatemsg-list {
-    margin-top: @line-height-computed;
+    margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+    margin-bottom: 0;
+
+    & + .container-inline {
+      margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+    }
 
     tbody tr {
       border: 1px solid @table-border-color;
@@ -206,3 +229,6 @@
   }
 }
 
+h2.privatemsg-reply {
+  font-size: @font-size-h3;
+}

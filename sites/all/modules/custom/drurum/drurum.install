@@ -912,9 +912,9 @@ function drurum_update_7047() {
  * Disable and uninstall "frontpage" module.
  */
 function drurum_update_7048() {
-  if (module_exists('frontpage')) {
-    module_disable(['frontpage']);
-    drupal_uninstall_modules(['frontpage']);
+  if (module_exists('dru_frontpage')) {
+    module_disable(['dru_frontpage']);
+    drupal_uninstall_modules(['dru_frontpage']);
   }
   variable_set('site_frontpage', 'node');
 }

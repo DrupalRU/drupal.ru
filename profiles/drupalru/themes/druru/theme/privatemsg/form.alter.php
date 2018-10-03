@@ -9,10 +9,14 @@ function druru_form_privatemsg_list_alter(&$form, &$form_state) {
   if (isset($form['filter'])) {
     hide($form['filter']);
   }
+
   if (isset($form['updated']['actions']['operation'])) {
     hide($form['updated']['actions']['operation']);
     hide($form['updated']['actions']['submit']);
   }
+
+  // Place 'Delete' button under the messages list
+  $form['updated']['actions']['#weight'] = 6;
 }
 
 /**
@@ -24,9 +28,11 @@ function druru_form_privatemsg_new_alter(&$form, &$form_state) {
   if (isset($form['actions']['cancel'])) {
     hide($form['actions']['cancel']);
   }
+
   if (isset($form['token'])) {
     hide($form['token']);
   }
+
   if (isset($form['body'])) {
     $form['body']['#title_display'] = 'invisible';
   }
@@ -50,6 +56,7 @@ function druru_form_privatemsg_new_alter(&$form, &$form_state) {
       'class' => array('row'),
     ),
   );
+
   $form['top']['recipient'] = $form['recipient'];
   $form['top']['subject'] = $form['subject'];
   unset($form['recipient'], $form['subject']);
@@ -61,7 +68,6 @@ function druru_form_privatemsg_new_alter(&$form, &$form_state) {
 
   $form['top']['recipient']['#attributes']['placeholder'] = $form['top']['recipient']['#title'];
   $form['top']['subject']['#attributes']['placeholder'] = $form['top']['subject']['#title'];
-
 
   $form['top']['recipient']['#prefix'] = '<div class="col-sm-6">';
   $form['top']['recipient']['#suffix'] = '</div>';
@@ -114,6 +120,7 @@ function druru_form_pm_block_user_list_alter(&$form, &$form_state) {
       'class' => array('col-xs-12', 'col-sm-8'),
     ),
   );
+
   $form['actions'] = array(
     '#type'       => 'container',
     '#attributes' => array(
@@ -131,5 +138,6 @@ function druru_form_pm_block_user_list_alter(&$form, &$form_state) {
   $form['actions']['submit'] = $form['form']['submit'];
   $form['actions']['submit']['#value'] = t('Ban');
   $form['actions']['submit']['#attributes']['class'][] = 'btn-warning btn-block';
+
   unset($form['new'], $form['form']['submit']);
 }

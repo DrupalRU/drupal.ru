@@ -42,6 +42,7 @@ function dru_tnx_entity($tnx_type, $entity_type, $ajax, $entity, $token) {
   drupal_set_message(
     $tnx ? t("You can't unthanks twice!") : t("You can't thanks twice!")
   );
+
   drupal_goto();
 }
 
@@ -49,7 +50,6 @@ function dru_tnx_entity($tnx_type, $entity_type, $ajax, $entity, $token) {
  * Dru_tnx_callback.
  */
 function dru_tnx_callback($ajax, $vars) {
-
   dru_tnx_data($vars);
   $entity = dru_tnx_entity_prepare($vars);
 
@@ -57,7 +57,7 @@ function dru_tnx_callback($ajax, $vars) {
     $commands = [];
     $animate = ['plus', 'minus'];
     $selector = "*[data-{$vars['type']}-id=\"{$vars['id']}\"]";
-    $commands[] = ajax_command_replace($selector, drupal_render($entity));
+    $commands[] = ajax_command_invoke($selector, 'replaceWith', array(drupal_render($entity)));
     $commands[] = ajax_command_invoke(
       $selector . " .dru-tnx-{$vars['type']}-{$vars['id']}-counter",
       'addClass',

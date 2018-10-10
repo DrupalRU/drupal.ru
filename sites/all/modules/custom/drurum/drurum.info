@@ -6,3 +6,4 @@ core        = 7.x
 php         = 5.4
 
 scripts[] = js/drurum.js
+files[] = drurum.forum.inc

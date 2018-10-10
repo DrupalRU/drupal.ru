@@ -15,6 +15,11 @@ define('DRURUM_LOGIN_WHEN_403', 'drurum_login_when_403');
 define('DRURUM_ACTIONS_OVERRIDE', 'drurum_actions_override');
 
 /**
+ * Name of the flag to subscribe to the forum topic
+ */
+define('DRURUM_FORUM_TOPIC_SUBSCRIBE_FLAG', 'forum_subscribe');
+
+/**
  * Implements hook_module_implements_alter().
  */
 function drurum_module_implements_alter(&$implementations, $hook) {
@@ -467,4 +472,29 @@ function drurum_form_node_form_alter(&$form, &$form_state, $form_id) {
     // DO NOT Make the vocabulary required for 'real' forum-nodes.
     $form['taxonomy_forums'][$langcode]['#required'] = FALSE;
   }
+}
+
+/**
+ * Define default flags.
+ */
+function drurum_flag_default_flags() {
+  $flags = _drurum_flag_default_flags();
+  return $flags;
+}
+
+
+/**
+ * Implements hook_comment_update().
+ */
+function drurum_comment_update($comment) {
+  _drurum_comment_notify_mailalert($comment);
+
+}
+
+
+/**
+ * Implements hook_comment_insert().
+ */
+function drurum_comment_insert($comment) {
+  _drurum_comment_notify_mailalert($comment);
 }

@@ -27,6 +27,6 @@
 <a href="<?php print "/node/" . $fields['nid']->content; ?>" class="node-item list-group-item">
   <span class="node-item--comments-stat label label-primary">
   <i class="icon fa fa-comment-o" aria-hidden="true"></i><?php print $fields['comment_count']->content; ?></span>
-  <span class="node-item--title"><i class="icon fa fa-file-text-o" aria-hidden="true"></i><?php print $fields['title']->content; ?></span>
+  <span class="node-item--title"><?php print $fields['title']->content; ?></span>
   <small class="node-item--author"><?php print $fields['name']->content; ?></small>
 </a>

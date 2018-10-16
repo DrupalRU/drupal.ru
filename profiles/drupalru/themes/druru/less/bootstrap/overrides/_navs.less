@@ -2,19 +2,14 @@
   margin-top: @padding-large-vertical; // @todo Replace with proper variable
 }
 
-.tabs--primary {
-  li {
-    float: none;
-    display: inline-block;
+.tabs--primary,
+.tabs--secondary {
+  &:extend(.nav all);
+  &:extend(.nav-tabs all);
 
-    + li{
-      margin-left: -4px; // @todo Replace with proper variable
-    }
-
-    &.active {
-      a.active {
-        border-bottom: 1px solid @brand-accent;
-      }
+  li.active {
+    a.active {
+      border-top: 1px solid @brand-accent;
     }
   }
 }

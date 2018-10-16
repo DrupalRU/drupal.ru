@@ -3,33 +3,12 @@
 
 /**
  * Implements hook_menu_local_tasks_alter().
+ * @todo Remove and test
  */
 function druru_menu_local_tasks_alter(&$data, $router_item, $root_path) {
   $actions = array();
   if (isset($data['actions'])) {
     $actions = &$data['actions'];
-  }
-
-  if (isset($data['tabs'][0]['output'])) {
-    foreach ($data['tabs'][0]['output'] as &$tab) {
-      $link = &$tab['#link'];
-      if (isset($link['path'])) {
-        switch ($link['path']) {
-          case 'node/%/view':
-            _druru_iconize_pill($link, 'eye');
-            break;
-          case 'node/%/edit':
-            _druru_iconize_pill($link, 'pencil');
-            break;
-          case 'node/%/outline':
-            _druru_iconize_pill($link, 'sitemap');
-            break;
-          case 'node/%/revisions':
-            _druru_iconize_pill($link, 'code-fork');
-            break;
-        }
-      }
-    }
   }
 
   if (isset($actions['output']) && is_array($actions['output'])) {
@@ -63,15 +42,4 @@ function druru_menu_contextual_links_alter(&$links, $router_item, $root_path) {
   foreach ($links as &$link) {
     _druru_add_ajax_metadata_to_link($link);
   }
-}
-
-function _druru_visible_on_phone($text) {
-  return '<span class="visible-xs-inline-block">' . $text . '</span>';
-}
-
-function _druru_iconize_pill(&$link, $icon) {
-  $link['localized_options']['attributes']['title'] = $link['title'];
-  $link['title'] = druru_icon($icon) . _druru_visible_on_phone($link['title']);
-  $link['html'] = TRUE;
-  $link['localized_options']['html'] = TRUE;
 }

@@ -132,14 +132,14 @@
 
   <?php print render($content['links']); ?>
 
-  <?php if($has_resolved_comment): ?>
+  <?php if(isset($has_resolved_comment)): ?>
     <div class="node-best-reply">
       <h3><?php print t('Best reply'); ?></h3>
       <?php print render($content['resolved_comment']); ?>
     </div>
   <?php endif; ?>
 
-  <?php if ($content_third): ?>
+  <?php if (isset($content_third)): ?>
     <div class="region region-content-third">
         <?php print render($content_third); ?>
     </div>

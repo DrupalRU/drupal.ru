@@ -29,6 +29,7 @@ $rules = [
   'menu_router',
   'metatag_config',
   'node_type',
+  'ocupload_templates',
   'profile_field',
   'registry',
   'registry_file',

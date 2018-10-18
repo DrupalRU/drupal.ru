@@ -278,11 +278,13 @@ function xmlsitemap_menu_create_link(array $menu_item) {
   // Exclude menu items created for nodes that are added by xmlsitemap_node.
   if ($menu_item['xmlsitemap']['access'] && $menu_item['router_path'] == 'node/%' && module_exists('xmlsitemap_node')) {
     $node = node_load(substr($menu_item['link_path'], 5));
-    if (empty($node->xmlsitemap)) {
-      xmlsitemap_node_create_link($node);
-    }
-    if ($node->xmlsitemap['status'] && $node->xmlsitemap['access']) {
-      $menu_item['xmlsitemap']['status'] = FALSE;
+    if ($node) {
+      if (empty($node->xmlsitemap)) {
+        xmlsitemap_node_create_link($node);
+      }
+      if ($node->xmlsitemap['status'] && $node->xmlsitemap['access']) {
+        $menu_item['xmlsitemap']['status'] = FALSE;
+      }
     }
   }
 

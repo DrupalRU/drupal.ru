@@ -4,9 +4,8 @@ dependencies[] = mimemail
 package = Example modules
 core = 7.x
 
-; Information added by Drupal.org packaging script on 2017-05-14
-version = "7.x-1.0"
+; Information added by Drupal.org packaging script on 2018-10-17
+version = "7.x-1.1"
 core = "7.x"
 project = "mimemail"
-datestamp = "1494775689"
-
+datestamp = "1539793390"

@@ -117,7 +117,7 @@ class XMLSitemapWriter extends XMLWriter {
    */
   public function writeXSL() {
     // @codingStandardsIgnoreEnd
-    $this->writePi('xml-stylesheet', 'type="text/xsl" href="' . $this->getSitemapUrl('sitemap.xsl', array('protocol_relative' => TRUE)) . '"');
+    $this->writePi('xml-stylesheet', 'type="text/xsl" href="' . $this->getSitemapUrl('sitemap.xsl', array('absolute' => FALSE)) . '"');
     $this->writeRaw(PHP_EOL);
   }
 

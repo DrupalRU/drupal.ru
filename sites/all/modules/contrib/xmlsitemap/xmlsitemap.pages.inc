@@ -82,7 +82,6 @@ function xmlsitemap_output_file($file, array $headers = array()) {
 
   $headers += array(
     'Content-type' => 'text/xml; charset=utf-8',
-    // 'Content-length' => filesize($file),
     'Last-modified' => $last_modified,
     'Etag' => $etag,
     'Expires' => gmdate(DATE_RFC1123, $mtime + variable_get('xmlsitemap_minimum_lifetime', 0)),

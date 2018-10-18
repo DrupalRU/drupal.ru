@@ -299,11 +299,8 @@ function xmlsitemap_regenerate_batch(array $smids = array()) {
   if (empty($smids)) {
     $smids = db_query("SELECT smid FROM {xmlsitemap_sitemap}")->fetchCol();
   }
-
-  // $t = get_t();
   $batch = array(
     'operations' => array(),
-    // 'error_message' => $t('An error has occurred.'),.
     'finished' => 'xmlsitemap_regenerate_batch_finished',
     'title' => t('Regenerating Sitemap'),
     'file' => drupal_get_path('module', 'xmlsitemap') . '/xmlsitemap.generate.inc',
@@ -496,8 +493,6 @@ function xmlsitemap_rebuild_batch_fetch($entity, &$context) {
 
   // PostgreSQL cannot have the ORDERED BY in the count query.
   $query->entityOrderBy('entity_id');
-
-  // variable_get('xmlsitemap_batch_limit', 100)
   $limit = 20;
   $query->range(0, $limit);
 

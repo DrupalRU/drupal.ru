@@ -1,20 +1,15 @@
 name = XML sitemap
-# @codingStandardsIgnoreFile
 description = Creates an XML sitemap conforming to the <a href="http://sitemaps.org/">sitemaps.org protocol</a>.
 package = XML sitemap
 core = 7.x
-files[] = xmlsitemap.inc
-files[] = xmlsitemap.admin.inc
-files[] = xmlsitemap.drush.inc
-files[] = xmlsitemap.generate.inc
 files[] = xmlsitemap.xmlsitemap.inc
-files[] = xmlsitemap.pages.inc
 files[] = xmlsitemap.test
 recommends[] = robotstxt
 configure = admin/config/search/xmlsitemap
+test_dependencies[] = robotstxt:robotstxt
 
-; Information added by Drupal.org packaging script on 2018-08-29
-version = "7.x-2.5"
+; Information added by Drupal.org packaging script on 2018-10-09
+version = "7.x-2.6"
 core = "7.x"
 project = "xmlsitemap"
-datestamp = "1535559185"
+datestamp = "1539120486"

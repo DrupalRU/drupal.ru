@@ -1,6 +1,11 @@
 Mime Mail 7.x-1.x, xxxx-xx-xx
 -----------------------
 
+Mime Mail 7.x-1.1, 2018-10-17
+-----------------------
+- #161907 by RainbowLyte, sgabe: Fixed sanitization of additional mail parameter
+- #2986204 by TR: Missing test dependencies
+
 Mime Mail 7.x-1.0, 2017-05-14
 -----------------------
 - #2743229 by Bird-Kid, AdamPS: CSS doesn't get attached in PHP7

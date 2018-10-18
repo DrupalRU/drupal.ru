@@ -58,11 +58,6 @@ define('XMLSITEMAP_STATUS_DEFAULT', 0);
 define('XMLSITEMAP_PRIORITY_DEFAULT', 0.5);
 
 /**
- * The default batch limit.
- */
-define('XMLSITEMAP_BATCH_LIMIT', 100);
-
-/**
  * Implements hook_hook_info().
  */
 function xmlsitemap_hook_info() {

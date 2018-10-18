@@ -1,25 +1,30 @@
 [aria-label] {
+  border-bottom: 1px dashed @brand-primary;
   position: relative;
-  border-bottom: 1px dashed;
 
   &:after {
+    background-color: @body-bg;
+    border: 1px solid lighten(@brand-primary, 25%);
+    box-shadow: 0 0 0 0 @body-bg;
     content: attr(aria-label);
-    display: none;
+    font-size: @font-size-small;
+    left: 0;
+    opacity: 0;
     padding: @padding-small-vertical;
-    background-color: @main-content-bg;
     position: absolute;
     top: 100%;
-    left: 0;
+    transition: visibility 0s, box-shadow 2 * @transition-speed @transition-delay, opacity @transition-speed @transition-func;
+    visibility: hidden;
+    word-break: initial;
     z-index: 2;
-    border: 1px dashed;
-    color: @brand-primary;
-    box-shadow: 0 5px 10px -5px #000;
   }
 
   &:hover,
   &:active {
     &:after {
-      display: block;
+      box-shadow: 0 5px 10px -5px @gray-light;
+      opacity: 1;
+      visibility: visible;
     }
   }
 }

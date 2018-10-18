@@ -56,7 +56,7 @@
  *
  * Regions:
  * - $page['help']: Dynamic help text, mostly for admin pages.
- * - $page['content']: The main content of the current page.
+ * - $page['frontpage']: The main content of the current page.
  * - $page['sidebar_first']: Items for the left sidebar.
  * - $page['sidebar_second']: Items for the right sidebar.
  * - $page['header']: Items for the header region.

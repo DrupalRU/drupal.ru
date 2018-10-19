@@ -466,7 +466,7 @@ function _druru_wrap_claim(&$content, $type,  $id) {
         'title' => $category,
         'data-ticket-type' => $type,
         'data-ticket' => $id,
-        'class' => [($is_handled ? 'text-info' : '')]
+        'class' => [($is_handled ? 'text-warning' : '')]
       ],
     ];
     $content['ticket-popover']['content'] = [

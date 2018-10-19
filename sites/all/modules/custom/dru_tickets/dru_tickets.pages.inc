@@ -260,7 +260,7 @@ function dru_verdict_submit_js($form_id, $form_state) {
         <div class="value">' . check_plain($form_state['values']['dru_verdict']) . '</div>
       </div>');
 
-  $commands[] = ajax_command_invoke('.verdict', 'addClass', array('tiket-changed'));
+  $commands[] = ajax_command_invoke('.verdict', 'addClass', array('ticket-changed'));
 
   $commands[] = ajax_command_remove('#verdict-add');
 

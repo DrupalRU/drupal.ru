@@ -52,7 +52,7 @@ function druru_preprocess_comment(&$vars) {
     'dru-untnx'     => 'heart-o',
     'quote'         => 'quote-right',
     'comment-reply' => 'reply',
-    'dru-claim'     => 'balance-scale',
+    'dru-claim'     => 'bell',
   );
   $icons2 = array(
     'comment-resolve'  => 'flag',
@@ -67,8 +67,8 @@ function druru_preprocess_comment(&$vars) {
       'title' => '&nbsp;',
       'html'  => TRUE,
     );
-    $icons1['divider']                     = 'divider';
-    $sort                                  = array_merge($icons1, $icons2);
+    $icons1['divider'] = 'divider';
+    $sort = array_merge($icons1, $icons2);
   }
   else {
     $sort = $icons1;

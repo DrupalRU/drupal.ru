@@ -420,18 +420,18 @@ function _druru_wrap_claim(&$content, $type,  $id) {
     $ticket['description']['#attributes']['class'][] = 'text-muted';
 
     $ticket['category']['#weight'] = -1;
+
     // Regenerate right icons.
-    if($is_handled) {
-      $ticket['category']['icon']['#markup'] = druru_icon('spinner', FALSE, array(
-        'class' => array('fa-pulse')
-      ));
+    if ($is_handled) {
+      $ticket['category']['icon']['#markup'] = druru_icon('balance-scale');
       $ticket['category']['#attributes']['class'][] = 'text-warning';
     }
     else {
-      $ticket['category']['icon']['#markup'] = druru_icon('check');
+      $ticket['category']['icon']['#markup'] = druru_icon('gavel');
       $ticket['category']['#attributes']['class'][] = 'bg-info';
       $ticket['category']['#attributes']['class'][] = 'text-accent';
     }
+
     $metadata['created']['icon']['#markup'] = druru_icon('calendar');
 
     $ticket_link = &$metadata['ticket-link']['content'];
@@ -466,7 +466,7 @@ function _druru_wrap_claim(&$content, $type,  $id) {
         'title' => $category,
         'data-ticket-type' => $type,
         'data-ticket' => $id,
-        'class' => [($is_handled ? 'text-warning' : '')]
+        'class' => [($is_handled ? 'text-info' : '')]
       ],
     ];
     $content['ticket-popover']['content'] = [

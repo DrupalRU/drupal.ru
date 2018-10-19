@@ -25,12 +25,6 @@
     margin-left: -@padding-base-vertical; // @todo Replace with proper variable
   }
 
-  &:hover, &:focus {
-    .dropdown {
-      opacity: 1;
-    }
-  }
-
   .media-left {
     float: left;
     padding-right: 0;
@@ -86,29 +80,15 @@
   }
 
   .dropdown {
-    opacity: .5;
-    .transition(opacity @transition-speed);
-
-    &.open {
-      .dropdown-toggle {
-        &, &:hover, &:focus, &:active {
-          background: transparent;
-          border-color: @dropdown-toggle-active-border;
-
-          .icon-bar {
-            background: @dropdown-icon-active-bg;
-          }
-        }
-      }
+    .dropdown-toggle {
+      border: 0;
     }
 
     .dropdown-toggle {
-      border-color: @dropdown-toggle-border;
-      background: transparent;
+      background-color: transparent;
       padding: 8px; // @todo Replace with proper variable
 
       &:hover, &:focus, &:active {
-        border-color: @dropdown-toggle-hover-border;
         outline: none;
 
         .icon-bar {
@@ -117,7 +97,8 @@
       }
 
       .icon-bar {
-        background: @dropdown-icon-bg;
+        transition: background-color @transition-speed @transition-func;
+        background-color: @dropdown-icon-bg;
         width: 20px;
         height: 3px;
         display: block;

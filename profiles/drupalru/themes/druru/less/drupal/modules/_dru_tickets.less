@@ -1,20 +1,27 @@
+@import '../../../font-awesome/variables.less';
 .popover-content {
   .ticket-info {
     padding: .3em 0;
+
     blockquote, .well {
       margin-bottom: 0;
     }
   }
+
   .ticket-metadata {
     .small-inline-text:last-of-type {
       margin-right: 0;
     }
+
     .ticket-created {
       color: @gray-dark;
     }
   }
-  .ticket-category, .ticket-body, .ticket-metadata {
-    padding: .5em .7em;
+
+  .ticket-category,
+  .ticket-body,
+  .ticket-metadata {
+    padding: .5em .7em; // @todo Replace with proper variable
   }
 }
 
@@ -25,5 +32,11 @@ h3.popover-title {
 #verdict-add-form {
   .form-actions {
     margin-top: @form-group-margin-bottom;
+  }
+}
+
+.view-claim {
+  .fa-bell::before {
+    content: @fa-var-balance-scale;
   }
 }

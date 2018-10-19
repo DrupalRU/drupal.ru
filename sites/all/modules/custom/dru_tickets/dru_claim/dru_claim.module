@@ -169,7 +169,7 @@ function dru_claim_get_ticket_info($ticket, $entity, $entity_type) {
   $output = [];
 
   $has_verdict = $ticket->ticket->ticket_verdict;
-  $icon = $has_verdict ? 'balance-scale' : 'spinner fa-pulse';
+  $icon = $has_verdict ? 'gavel' : 'balance-scale fa-pulse';
   $class = $has_verdict ? 'claim_message_done' : 'claim_message_processed';
   $verdict = $has_verdict ?: t('Claim is under review');
 
@@ -331,6 +331,15 @@ function dru_claim_comment_view($comment, $view_mode) {
         'query' => drupal_get_destination(),
         'attributes' => [
           'class' => ['use-ajax', 'claim-comment-' . $comment->cid],
+        ],
+      ];
+    }
+    elseif ($comment->claim && $comment->node_type != 'comment_node_ticket') {
+      $comment->content['links']['comment']['#links']['dru-claim'] = [
+        'title' => t('Open ticket'),
+        'href' => '/node/' . $comment->claim,
+        'attributes' => [
+          'class' => ['view-claim'],
         ],
       ];
     }

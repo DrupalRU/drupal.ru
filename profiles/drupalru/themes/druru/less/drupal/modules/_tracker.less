@@ -1,0 +1,32 @@
+.node-item {
+  align-items: baseline;
+  display: flex;
+  flex-flow: row wrap;
+  padding: @padding-large-vertical @padding-large-horizontal;
+
+  .node-item--comments-stat {
+    order: 3;
+    margin-left: auto;
+    font-size: 12px;
+  }
+
+  .node-item--title {
+    font-size: @font-size-large;
+    font-weight: @headings-font-weight;
+    line-height: @headings-line-height;
+    margin-top: @padding-base-vertical;
+    order: 5;
+    width: 100%;
+    .text-emphasis-variant(@brand-primary);
+  }
+
+  .node-item--author {
+    font-size: 86%;
+    order: 1;
+    max-width: 50%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+

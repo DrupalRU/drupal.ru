@@ -918,3 +918,17 @@ function drurum_update_7048() {
   }
   variable_set('site_frontpage', 'node');
 }
+
+/**
+ * Disable and uninstall alttracker and altpager modules.
+ */
+function drurum_update_7049() {
+  if (module_exists('alttracker')) {
+    module_disable(['alttracker']);
+    drupal_uninstall_modules(['alttracker']);
+  }
+  if (module_exists('altpager')) {
+    module_disable(['altpager']);
+    drupal_uninstall_modules(['altpager']);
+  }
+}

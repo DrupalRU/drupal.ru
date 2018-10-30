@@ -24,6 +24,17 @@ function druru_preprocess_page(&$variables) {
     }
   }
 
+  // Remove last item from breadcrumbs added by views in view 'tracker_my'
+  $page = menu_get_item();
+  if ($page['page_callback'] == 'views_page' && $page['page_arguments'][0] == 'tracker_my') {
+    // Remove breadcrumbs from view arguments.
+    // This assumes there's only one breadcrumb to take off the end
+    // If there are more you could change the array_slice
+    $breadcrumb = drupal_get_breadcrumb();
+    $new_breadcrumb = array_slice($breadcrumb, 0, count($breadcrumb) - 1);
+    drupal_set_breadcrumb($new_breadcrumb);
+  }
+
   // Make bootstrap menu from local tasks and local actions.
 //  _druru_move_page_tabs($variables);
 

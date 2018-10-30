@@ -134,14 +134,6 @@ function resolve_query_node_load_multiple_alter(QueryAlterableInterface &$query)
 }
 
 /**
- * Implements hook_query_TAG_alter() for alttracker_nodes_load().
- */
-function resolve_query_alttracker_nodes_load_alter(QueryAlterableInterface &$query) {
-  $query->leftJoin('resolved', 'dr', 'dr.nid = n.nid');
-  _resolve_add_fields($query);
-}
-
-/**
  * Implements hook_form_FORM_ID_alter() for node_type_form().
  */
 function resolve_form_node_type_form_alter(&$form, &$form_state, $form_id) {
@@ -200,23 +192,6 @@ function resolve_preprocess_node(&$variables) {
       $content['resolved_comment']['#weight'] = ++$weight;
     }
   }
-}
-
-/**
- * Implements hook_preproces_HOOK().
- */
-function resolve_preprocess_alttracker(&$variables) {
-  array_walk($variables['nodes'], '_resolve_alttraker');
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function resolve_preprocess_page(&$variables) {
-  // If (isset($variables['node']) && is_object($variables['node'])) {
-  //    $node = &$variables['node'];
-  //    $node->title = resolve_add_mark($node, !empty($node->resolved)) . $node->title;
-  //  }.
 }
 
 /**
@@ -375,18 +350,6 @@ function _resolve_path($nid, $cid) {
  */
 function _resolve_unsolved_path($nid, $cid) {
   return 'node/' . $nid . '/unsolved/' . $cid . '/' . resolve_token_to_arg();
-}
-
-/**
- * Helper for array_walk.
- *
- * @param object $node
- *   Object of a node.
- *
- * @see resolve_preprocess_alttracker()
- */
-function _resolve_alttraker(&$node) {
-  $node->resolved_status = resolve_add_mark($node, !empty($node->resolved));
 }
 
 /**

@@ -55,8 +55,6 @@ dependencies[] = transliteration
 dependencies[] = xbbcode
 
 # Github modules
-dependencies[] = altpager
-dependencies[] = alttracker
 dependencies[] = drupal_deploy
 
 # Custom modules
@@ -65,7 +63,6 @@ dependencies[] = antiswearing_validate
 dependencies[] = dru_claim
 dependencies[] = dru_comment_quote
 dependencies[] = dru_comments
-dependencies[] = dru_frontpage
 dependencies[] = dru_tickets
 dependencies[] = dru_tnx
 dependencies[] = marketplace

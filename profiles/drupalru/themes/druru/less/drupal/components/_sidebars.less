@@ -1,98 +1,36 @@
-body {
-  .region-sidebar-first,
-  .region-sidebar-second {
-    .block {
-      margin-top: @padding-large-horizontal;
+.region-sidebar-first,
+.region-sidebar-second {
+  .block {
+    .loader-circle('gt-small'); // @todo Test if removed
+    margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+    position: relative;
+
+    > div {
+      // for correct work of ajax-loaders
       position: relative;
-      .loader-circle('gt-small');
-
-      > div {
-        // for correct work of ajax-loaders
-        position: relative;
-      }
-
-      &:first-child {
-        margin-top: 0;
-      }
-
-      a.active {
-        &, &:hover, &:focus, &:active, &:visited {
-          text-decoration: none;
-          cursor: default;
-          font-weight: bold;
-        }
-      }
-
-      .view {
-        position: relative;
-
-        .view-content {
-          .li-select();
-        }
-
-        .more-link {
-          text-align: right;
-          margin-top: 6px;
-        }
-      }
     }
 
-    li {
-      i {
-        &.fa-check-circle-o {
-          color: @brand-accent;
-        }
-      }
+    &:first-child {
+      margin-top: 0;
     }
   }
+}
 
-  .col-sm-3 {
-    .inline-user-login-block-links('small');
-  }
-
-  .region {
-    &.well {
-      border: 1px solid @well-border;
-      box-shadow: none;
+.two-sidebars,
+.sidebar-first {
+  section.main {
+    @media @very-smalld {
+      float: right;
     }
   }
+}
 
-  &.two-sidebars,
-  &.sidebar-first {
-    section.main {
-      @media @very-smalld {
-        float: right;
-      }
-    }
-  }
+aside {
+  &.second {
+    clear: left;
 
-  aside {
-    &.second {
-      clear: left;
-
-      @media @very-smalld {
-        clear: none;
-      }
-    }
-
-    ul:not(.pager) {
-      // Makes links in left side block black.
-      // Need to move inside .li(<here>) and uncomment.
-      //
-      //  ~'*'; {
-      //  a:first-of-type {
-      //    color: lighten(@gray, @tone * 2);
-      //    &:hover, &:focus, &.active {
-      //      &, &.active{
-      //        color: lighten(@gray-darker, @tone);
-      //      }
-      //    }
-      //  }
-      //}
-
-      margin-left: -@padding-large-horizontal;
-      margin-right: -@padding-large-horizontal;
-      .li-select();
+    @media @very-smalld {
+      clear: none;
     }
   }
 }

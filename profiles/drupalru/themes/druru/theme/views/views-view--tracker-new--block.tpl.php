@@ -91,6 +91,6 @@
 
 <div class="actions">
   <ul class="list-inline"><li class="add first"><a href="/node/add/blog"> <i class="text-accent icon fa fa-plus" aria-hidden="true"></i> Создать</a></li>
-    <li class="list last"><a href="/featured"> <i class="text-accent icon fa fa-list" aria-hidden="true"></i> Еще</a></li>
+    <li class="list last"><a href="/tracker/new"> <i class="text-accent icon fa fa-list" aria-hidden="true"></i> Еще</a></li>
   </ul>
 </div>

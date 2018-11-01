@@ -27,8 +27,14 @@ function druru_preprocess_views_view_unformatted(&$vars) {
 
       $node_mark = node_mark($result[$id]->nid, $result[$id]->node_changed);
 
-      if ($node_mark != MARK_NEW && $result[$id]->node_new_comments > 0) {
-        $vars['node_hrefs'][$id] .= '#new';
+      if (isset($result[$id]->node_new_comments)) {
+        if ($node_mark != MARK_NEW && $result[$id]->node_new_comments > 0) {
+          $vars['node_hrefs'][$id] .= '#new';
+        }
+
+        if ($result[$id]->node_new_comments > 0) {
+          $vars['classes'][$id][] = 'has-new-comments';
+        }
       }
 
       if ($node_mark == MARK_NEW) {
@@ -37,10 +43,6 @@ function druru_preprocess_views_view_unformatted(&$vars) {
 
       if ($node_mark == MARK_UPDATED) {
         $vars['classes'][$id][] = 'is-updated';
-      }
-
-      if ($result[$id]->node_new_comments > 0) {
-        $vars['classes'][$id][] = 'has-new-comments';
       }
 
       if ($result[$id]->node_comment_statistics_comment_count == 0) {

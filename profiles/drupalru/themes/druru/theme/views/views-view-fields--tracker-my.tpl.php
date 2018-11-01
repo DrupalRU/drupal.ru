@@ -24,10 +24,7 @@
  * @ingroup views_templates
  */
 ?>
-<span class="node-item__comments-stat">
-  <?php print $fields['comment_count']->content; ?>
-  <?php print $fields['new_comments']->content; ?>
-</span>
+<span class="node-item__comments"><?php print $fields['comment_count']->content; ?></span>
 <span class="node-item__title"><?php print $fields['title']->content; ?></span>
 <span class="node-item__author"><?php print $fields['name']->content; ?></span>
-<span class="node-item__date"><?php print $fields['display_date']; ?></span>
+<span class="node-item__date"><?php print $fields['created']->content; ?></span>

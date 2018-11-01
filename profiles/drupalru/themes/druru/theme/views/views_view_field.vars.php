@@ -45,12 +45,14 @@ function druru_preprocess_views_view_field(&$vars) {
     }
 
     if ($field->field == 'comment_count') {
-      $node_mark = node_mark($row->nid, $row->node_changed);
-      if ($node_mark == MARK_NEW || $row->node_new_comments == $row->node_comment_statistics_comment_count) {
-        $vars['output'] = $row->node_new_comments ? '<span class="node-item__new-comments">' . $row->node_new_comments . '</span>' : 0;
-      }
-      else {
-        $vars['output'] = $row->node_comment_statistics_comment_count . ($row->node_new_comments ? ' / <span class="node-item__new-comments">' . $row->node_new_comments . '</span>' : '');
+      if (isset($row->node_new_comments)) {
+        $node_mark = node_mark($row->nid, $row->node_changed);
+        if ($node_mark == MARK_NEW || $row->node_new_comments == $row->node_comment_statistics_comment_count) {
+          $vars['output'] = $row->node_new_comments ? '<span class="node-item__new-comments">' . $row->node_new_comments . '</span>' : '0';
+        }
+        else {
+          $vars['output'] = $row->node_comment_statistics_comment_count . ($row->node_new_comments ? ' / <span class="node-item__new-comments">' . $row->node_new_comments . '</span>' : '');
+        }
       }
     }
   }

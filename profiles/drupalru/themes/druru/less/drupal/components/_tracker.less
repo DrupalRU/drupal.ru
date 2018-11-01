@@ -30,26 +30,31 @@
   }
 
   &:focus,
-  &:hover{
+  &:hover {
     background-color: @little-darker;
     color: @gray;
   }
 }
 
-.node-item__comments-stat {
+.node-item__comments {
   color: inherit;
   font-size: @font-size-small;
-  margin-left: @padding-large-horizontal;
+  margin-left: @padding-small-horizontal; // @todo Replace with proper variable
   order: 3;
   transition: color @transition-speed @transition-func;
 
   &:before {
+    content: @fa-var-commenting-o;
     font-family: FontAwesome;
-    content: @fa-var-comment-o;
+    margin-right: .3333em;
 
-    .is-updated & {
-      content: @fa-var-commenting;
+    .has-new-comments & {
       color: @brand-success;
+      content: @fa-var-commenting;
+    }
+
+    .zero-comments & {
+      content: @fa-var-comment-o;
     }
   }
 }
@@ -59,7 +64,7 @@
 }
 
 .node-item__title {
-  .text-emphasis-variant(@brand-primary);
+  color: @brand-primary;
   font-size: @font-size-large;
   font-weight: @headings-font-weight;
   line-height: @headings-line-height;
@@ -74,6 +79,11 @@
   order: 2;
   transition: color @transition-speed @transition-func;
   margin-left: auto;
+
+  .is-new &,
+  .is-updated & {
+    color: @brand-success;
+  }
 }
 
 .node-item__author {
@@ -93,15 +103,15 @@ aside.first {
     padding: @padding-base-vertical @padding-large-horizontal; // @todo Replace with proper variable
   }
 
-  .node-item__comments-stat {
+  .node-item__comments {
     margin-left: auto;
-  }
-
-  .node-item__date {
-    display: none;
   }
 
   .node-item__title {
     font-size: @font-size-base;
+  }
+
+  .node-item__date {
+    display: none;
   }
 }

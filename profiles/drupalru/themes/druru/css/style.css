@@ -9733,20 +9733,24 @@ form table input.form-radio {
   background-color: rgba(0, 0, 0, 0.1);
   color: #555555;
 }
-.node-item__comments-stat {
+.node-item__comments {
   color: inherit;
   font-size: 13px;
-  margin-left: 15px;
+  margin-left: 10px;
   order: 3;
   transition: color 0.2s ease-in-out;
 }
-.node-item__comments-stat:before {
+.node-item__comments:before {
+  content: "\f27b";
   font-family: FontAwesome;
-  content: "\f0e5";
+  margin-right: 0.3333em;
 }
-.is-updated .node-item__comments-stat:before {
-  content: "\f27a";
+.has-new-comments .node-item__comments:before {
   color: #61ad61;
+  content: "\f27a";
+}
+.zero-comments .node-item__comments:before {
+  content: "\f0e5";
 }
 .node-item__new-comments {
   color: #61ad61;
@@ -9760,16 +9764,16 @@ form table input.form-radio {
   order: 5;
   width: 100%;
 }
-a.node-item__title:hover,
-a.node-item__title:focus {
-  color: #2f5b7b;
-}
 .node-item__date {
   color: inherit;
   font-size: 13px;
   order: 2;
   transition: color 0.2s ease-in-out;
   margin-left: auto;
+}
+.is-new .node-item__date,
+.is-updated .node-item__date {
+  color: #61ad61;
 }
 .node-item__author {
   color: inherit;
@@ -9784,14 +9788,14 @@ a.node-item__title:focus {
 aside.first .node-item {
   padding: 6px 15px;
 }
-aside.first .node-item__comments-stat {
+aside.first .node-item__comments {
   margin-left: auto;
-}
-aside.first .node-item__date {
-  display: none;
 }
 aside.first .node-item__title {
   font-size: 15px;
+}
+aside.first .node-item__date {
+  display: none;
 }
 .indent {
   padding-left: 2em;

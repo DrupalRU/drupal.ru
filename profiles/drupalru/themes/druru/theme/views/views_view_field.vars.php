@@ -22,21 +22,10 @@ function druru_preprocess_views_view_field(&$vars) {
   if (in_array($view->name, ['tracker', 'tracker_new', 'tracker_my', 'featured'])) {
     if ($field->field == 'created') {
       $timestamp = $row->node_created;
-
-      $today = new DateTime();
-      $today->setTime(0, 0, 0); // Reset time part, to prevent partial comparison
-
-      $match_date = new DateTime('@' . $timestamp);
-      $match_date->setTime(0, 0, 0); // Reset time part, to prevent partial comparison
-
-      $diff = $today->diff($match_date);
-      $diff_days = (integer)$diff->format('%R%a'); // Extract days count in interval
-      $diff_years = (integer)$diff->format('%R%y'); // Extract years count in interval
-
-      if ($diff_days == 0) {
+      if (date('Ymd') == date('Ymd', $timestamp)) {
         $vars['output'] = format_date($row->node_created, 'current_day');
       }
-      elseif ($diff_years == 0) {
+      elseif (date('Y') == date('Y', $timestamp)) {
         $vars['output'] = format_date($row->node_created, 'current_year');
       }
       else {

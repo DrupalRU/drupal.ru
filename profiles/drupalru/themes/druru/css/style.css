@@ -6879,16 +6879,16 @@ sup.label {
   height: 88px;
   margin-bottom: -100%;
 }
-.navbar .navbar-header .brand-link {
+.navbar .navbar-header .frontpage-link {
   margin: 0;
   height: 100%;
 }
-.navbar .navbar-header .brand-link .navbar-brand {
+.navbar .navbar-header .frontpage-link .navbar-brand {
   height: 100%;
   padding-left: 0;
 }
 @media screen and (max-width: 747px) {
-  .navbar .navbar-header .brand-link .navbar-brand {
+  .navbar .navbar-header .frontpage-link .navbar-brand {
     margin-left: 0;
   }
 }

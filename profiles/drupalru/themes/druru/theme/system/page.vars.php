@@ -155,7 +155,7 @@ function _druru_struct_logo(&$variables) {
       $variables['logo'] = l($logo, $variables['front_page'], array(
         'attributes' => array(
           'alt'   => t('Home'),
-          'class' => array('navbar-btn', 'brand-link'),
+          'class' => array('navbar-btn', 'frontpage-link'),
         ),
         'html'       => TRUE,
       ));
@@ -164,7 +164,7 @@ function _druru_struct_logo(&$variables) {
     $variables['logo'] .= l($brand, $variables['front_page'], array(
       'attributes' => array(
         'alt'   => t('Home'),
-        'class' => array('navbar-btn', 'brand-link'),
+        'class' => array('navbar-btn', 'frontpage-link'),
       ),
       'html'       => TRUE,
     ));

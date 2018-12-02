@@ -394,3 +394,10 @@ function ymb_preprocess_block(&$variables) {
     $variables['classes_array'][] = drupal_html_class('block-ymb');
   }
 }
+
+/**
+ * Implements hook_help().
+ */
+function ymb_help($path, $arg) {
+  return '';
+}

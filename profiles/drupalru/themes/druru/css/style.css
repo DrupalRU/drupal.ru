@@ -8542,6 +8542,9 @@ a.cke_combo_button span.cke_button_disabled span {
 .description:not(:first-child) {
   margin-top: 15px;
 }
+.page-node-add-event .form-type-managed-file .input-group .form-control {
+  z-index: 0;
+}
 span.geshifilter,
 .geshifilter {
   display: block;

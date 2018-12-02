@@ -1,0 +1,10 @@
+#garland {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-image: url('../img/garland.png');
+  height: 36px;
+  width: 100%;
+  overflow: hidden;
+  z-index: 1031;
+}

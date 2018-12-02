@@ -508,4 +508,14 @@ var Drupal = Drupal || {};
     return '<i ' + Drupal.theme('attributes', attributes) + '"></i>';
   };
 
+  /* Happy New Year! */
+  setTimeout(function () {
+    if ($('#garland').length) {
+      $('#navbar').css('paddingTop', '40px');
+      if ($('.navbar.navbar-default .navbar-toggle').css('display') !== 'none') {
+        $('.navbar .navbar-header').css('background', 'none');
+      }
+    }
+  }, 500);
+
 })(jQuery, Drupal);

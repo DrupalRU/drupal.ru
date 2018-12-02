@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Happy New Year module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function happy_new_year_uninstall() {
+  variable_del('happy_new_year_garland');
+  variable_del('happy_new_year_snow');
+  variable_del('happy_new_year_snowcolor');
+  variable_del('happy_new_year_start');
+  variable_del('happy_new_year_end');
+  variable_del('happy_new_year_period');
+  variable_del('happy_new_year_minified');
+}

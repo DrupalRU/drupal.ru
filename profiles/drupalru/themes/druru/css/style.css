@@ -7133,6 +7133,9 @@ sup.label {
     clear: none;
   }
 }
+.navbar-static-top {
+  z-index: 997;
+}
 .nav,
 .tabs--primary,
 .tabs--secondary {

@@ -1,0 +1,82 @@
+# $Id$
+#
+# Russian translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  happy_new_year.module: n/a
+#  happy_new_year.info: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2017-12-11 14:34+0500\n"
+"PO-Revision-Date: 2017-12-11 14:34+0500\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Russian <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
+
+#: happy_new_year.module:13 happy_new_year.info:0
+msgid "Happy New Year"
+msgstr "Счастливого Нового Года!"
+
+#: happy_new_year.module:14 happy_new_year.info:0
+msgid "A module with garland and snow decoration that creates longlasting atmosphere of New Year for you and the users of your website."
+msgstr ""
+"Модуль с гирляндой и снегом поможет "
+"создать новогоднее настроение для вас "
+"и посетителей вашего сайта"
+
+#: happy_new_year.module:34
+msgid "Working period"
+msgstr "Рабочий период"
+
+#: happy_new_year.module:38
+msgid "Enable working period"
+msgstr "Включить рабочий период"
+
+#: happy_new_year.module:40
+msgid "If the working period is not specified, the module will run all the time"
+msgstr "Если период не включен, то модуль будет работать всё время"
+
+#: happy_new_year.module:44
+msgid "Start date"
+msgstr "Дата начала"
+
+#: happy_new_year.module:50
+msgid "Use current year"
+msgstr "Используется текущий год"
+
+#: happy_new_year.module:55
+msgid "End date"
+msgstr "Дата окончания"
+
+#: happy_new_year.module:61
+msgid "Use next year"
+msgstr "Используется следующий год"
+
+#: happy_new_year.module:66
+msgid "Garland and Snow"
+msgstr "Гирлянда и снег"
+
+#: happy_new_year.module:70
+msgid "Enable garland"
+msgstr "Включить гирлянду"
+
+#: happy_new_year.module:75
+msgid "Enable snow"
+msgstr "Включить снег"
+
+#: happy_new_year.module:80
+msgid "Snow color"
+msgstr "Цвет снега"
+
+#: happy_new_year.module:92
+msgid "Use minified libraries if it possible"
+msgstr ""
+"Использовать minified библиотеки, если "
+"возможно"
+

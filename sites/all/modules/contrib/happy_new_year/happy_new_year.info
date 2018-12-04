@@ -3,8 +3,8 @@ description = A module with garland and snow decoration that creates longlasting
 core = 7.x
 configure = admin/config/media/happy_new_year
 
-; Information added by Drupal.org packaging script on 2018-11-11
-version = "7.x-1.0-rc1"
+; Information added by Drupal.org packaging script on 2018-12-04
+version = "7.x-1.0-rc2"
 core = "7.x"
 project = "happy_new_year"
-datestamp = "1541920984"
+datestamp = "1543905489"

@@ -129,7 +129,7 @@ function happy_new_year_page_build(&$page) {
     if (variable_get('happy_new_year_garland')) {
       drupal_add_js(drupal_get_path('module', 'happy_new_year') . '/js/garland.js');
       drupal_add_css(drupal_get_path('module', 'happy_new_year') . '/css/garland.css');
-      if (variable_get('happy_new_year_garland_position')) {
+      if (variable_get('happy_new_year_garland_position', TRUE)) {
         drupal_add_css(drupal_get_path('module', 'happy_new_year') . '/css/garland-fixed.css');
       }
       else {

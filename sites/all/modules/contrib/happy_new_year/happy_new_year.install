@@ -16,4 +16,5 @@ function happy_new_year_uninstall() {
   variable_del('happy_new_year_end');
   variable_del('happy_new_year_period');
   variable_del('happy_new_year_minified');
+  variable_del('happy_new_year_garland_position');
 }

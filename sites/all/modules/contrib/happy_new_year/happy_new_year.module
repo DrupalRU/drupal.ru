@@ -69,6 +69,11 @@ function happy_new_year_settings_form() {
     '#title' => t('Enable garland'),
     '#default_value' => variable_get('happy_new_year_garland', FALSE),
   ];
+  $form['snow_and_garland']['happy_new_year_garland_position'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Top-Fixed garland'),
+    '#default_value' => variable_get('happy_new_year_garland_position', TRUE),
+  ];
   $form['snow_and_garland']['happy_new_year_snow'] = [
     '#type' => 'checkbox',
     '#title' => t('Enable snow'),
@@ -124,6 +129,12 @@ function happy_new_year_page_build(&$page) {
     if (variable_get('happy_new_year_garland')) {
       drupal_add_js(drupal_get_path('module', 'happy_new_year') . '/js/garland.js');
       drupal_add_css(drupal_get_path('module', 'happy_new_year') . '/css/garland.css');
+      if (variable_get('happy_new_year_garland_position', TRUE)) {
+        drupal_add_css(drupal_get_path('module', 'happy_new_year') . '/css/garland-fixed.css');
+      }
+      else {
+        drupal_add_css(drupal_get_path('module', 'happy_new_year') . '/css/garland-absolute.css');
+      }
     }
     if (variable_get('happy_new_year_snow')) {
       drupal_add_js(drupal_get_path('module', 'happy_new_year') . $snowLibrary);

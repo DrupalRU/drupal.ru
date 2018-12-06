@@ -515,7 +515,12 @@ var Drupal = Drupal || {};
       if ($('.navbar.navbar-default .navbar-toggle').css('display') !== 'none') {
         $('.navbar .navbar-header').css('background', 'none');
       }
+      if ($('.slicknav_menu').length) {
+        if ($('.slicknav_menu').css('display') !== 'none') {
+          $('#garland').css('top', '47px');
+        }
+      }
     }
-  }, 500);
+  }, 1000);
 
 })(jQuery, Drupal);

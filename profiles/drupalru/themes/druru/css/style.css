@@ -7238,6 +7238,10 @@ p {
 * + p {
   margin-top: 6px;
 }
+.node-type-blog .field-name-body p,
+.node-type-blog .field-name-comment-body p {
+  margin-top: 12px;
+}
 .help-block,
 .control-group .help-inline {
   font-size: 13px;

@@ -177,7 +177,7 @@ scripts[] = bootstrap/js/popover.js
 ; vertical tabs
 scripts[] = bootstrap/js/tab.js
 ; Exists in bootstrap core
-;scripts[] = bootstrap/js/transition.js
+scripts[] = bootstrap/js/transition.js
 ; Stylizing select form element
 scripts[] = js/bootstrap-plugins/selectpicker.js
 ; Stylizing file form element

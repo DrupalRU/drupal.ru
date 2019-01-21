@@ -7236,7 +7236,7 @@ p {
   margin: 0;
 }
 * + p {
-  margin-top: 6px;
+  margin-top: 10px;
 }
 .help-block,
 .control-group .help-inline {

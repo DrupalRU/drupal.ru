@@ -1,0 +1,176 @@
+<?php
+
+/**
+ * @file
+ * Responsive bootstrap wrappers input filter.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function responsivewrappers_menu() {
+  $item['admin/config/content/responsivewrappers'] = array(
+    'title' => 'Responsive wrappers settings',
+    'description' => 'Configure overall settings for responsive wrappers input filter.',
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('administer filters'),
+    'page arguments' => array('responsivewrappers_admin_settings'),
+    'file' => 'responsivewrappers.admin.inc',
+  );
+
+  return $item;
+}
+
+/**
+ * Implements hook_page_build().
+ */
+function responsivewrappers_page_build(&$page) {
+  if (variable_get('responsivewrappers_add_css')) {
+    $version = variable_get('responsivewrappers_output_version', 3);
+    $path = drupal_get_path('module', 'responsivewrappers');
+    $page['content']['#attached']['css'][$path . '/css/responsivewrappers-bootstrap' . $version . '.css'] = array(
+      'every_page' => TRUE,
+      'group' => CSS_THEME,
+    );
+  }
+}
+
+/**
+ * Implements hook_filter_info().
+ */
+function responsivewrappers_filter_info() {
+  $filters['bootstrapresponsivewrapper'] = array(
+    'title' => t('Responsive wrappers filter'),
+    'description' => t('Add Bootstrap responsive classes and wrappers for images, videos and tables.'),
+    'settings callback' => '_responsivewrappers_filter_settings',
+    'default settings' => array(
+      'responsive_iframe' => 1,
+      'responsive_iframe_pattern' => '#<iframe.*src=".*(youtube.|vimeo.).*".*>.*</iframe>#ui',
+      'responsive_iframe_aspect_ratio' => 'embed-responsive-16by9',
+      'responsive_table' => 1,
+      'responsive_image' => 0,
+    ),
+    'process callback' => '_responsivewrappers_process',
+  );
+
+  return $filters;
+}
+
+/**
+ * Input filter settings and defaults.
+ */
+function _responsivewrappers_filter_settings($form, &$form_state, $filter, $format, $defaults) {
+  $filter->settings += $defaults;
+
+  $settings['responsive_iframe'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add responsive wrapper for youtbe and vimeo videos.'),
+    '#default_value' => $filter->settings['responsive_iframe'],
+  );
+  $settings['responsive_iframe_pattern'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Regular expresion for video detection.'),
+    '#default_value' => $filter->settings['responsive_iframe_pattern'],
+  );
+  $settings['responsive_iframe_aspect_ratio'] = array(
+    '#type' => 'select',
+    '#title' => t('Video aspect ratio'),
+    '#options' => array(
+      'embed-responsive-16by9' => t('16/9'),
+      'embed-responsive-4by3' => t('4/3'),
+    ),
+    '#default_value' => $filter->settings['responsive_iframe_aspect_ratio'],
+  );
+  $settings['responsive_table'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add responsive wrapper for tables.'),
+    '#default_value' => $filter->settings['responsive_table'],
+  );
+  $settings['responsive_image'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add responsive class for images.'),
+    '#default_value' => $filter->settings['responsive_image'],
+  );
+
+  return $settings;
+}
+
+/**
+ * Process callback for the responsive wrappers filter.
+ */
+function _responsivewrappers_process($text, $filter) {
+
+  if ($filter->settings['responsive_iframe'] || $filter->settings['responsive_table'] || $filter->settings['responsive_image']) {
+
+    // Bootstrap version output.
+    $version = variable_get('responsivewrappers_output_version', 3);
+
+    // Iframe wrappers.
+    if ($filter->settings['responsive_iframe']) {
+      $pattern = $filter->settings['responsive_iframe_pattern'];
+      preg_match_all($pattern, $text, $matches);
+      if (!empty($matches[0])) {
+        $aspect_ratio = $filter->settings['responsive_iframe_aspect_ratio'];
+        foreach ($matches[0] as $match) {
+          // Only add the wrapper if not exists.
+          if (strpos('embed-responsive', $match) === FALSE) {
+            $match_replace = _responsivewrappers_add_class($match, 'iframe', 'embed-responsive-item');
+            $text = str_replace($match, '<div class="embed-responsive ' . $aspect_ratio . '">' . $match_replace . '</div>', $text);
+          }
+        }
+      }
+    }
+
+    // Table wrappers.
+    if ($filter->settings['responsive_table']) {
+      preg_match_all('#<table.*>.*</table>#ims', $text, $matches);
+      if (!empty($matches[0])) {
+        foreach ($matches[0] as $match) {
+          // Only add the wrapper if not exists.
+          if (strpos('table-responsive', $match) === FALSE) {
+            if ($version == 4) {
+              $match_replace = _responsivewrappers_add_class($match, 'table', 'table table-responsive');
+              $text = str_replace($match, $match_replace, $text);
+            }
+            else {
+              $match_replace = _responsivewrappers_add_class($match, 'table', 'table');
+              $text = str_replace($match, '<div class="table-responsive">' . $match_replace . '</div>', $text);
+            }
+          }
+        }
+      }
+    }
+
+    // Image wrappers.
+    if ($filter->settings['responsive_image']) {
+      preg_match_all('#<img[^>]+>#ui', $text, $matches);
+      if (!empty($matches[0])) {
+        $responsive_class = ($version == 4) ? 'img-fluid' : 'img-responsive';
+        foreach ($matches[0] as $match) {
+          // Only add the class if not exists.
+          if (strpos($responsive_class, $match) === FALSE) {
+            $match_replace = _responsivewrappers_add_class($match, 'img', $responsive_class);
+            $text = str_replace($match, $match_replace, $text);
+          }
+        }
+      }
+    }
+  }
+
+  return $text;
+}
+
+/**
+ * Add or append a class in a selected HTML tag.
+ */
+function _responsivewrappers_add_class($text, $tag, $class) {
+  // If HTML class property exists append, if not create the class property.
+  if (strpos('class="', $text) !== FALSE) {
+    $text = str_replace('class="', 'class="' . $class . ' ', $text);
+  }
+  else {
+    $text = str_replace('<' . $tag . ' ', '<' . $tag . ' class="' . $class . '" ', $text);
+  }
+
+  return $text;
+}

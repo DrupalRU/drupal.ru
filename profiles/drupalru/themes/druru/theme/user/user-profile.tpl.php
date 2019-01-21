@@ -35,32 +35,6 @@
  */
 ?>
 <div class="profile"<?php print $attributes; ?>>
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active">
-      <?php print l(druru_icon('user') . t('Profile'), current_path(), array(
-        'fragment'   => 'profile',
-        'attributes' => array(
-          'aria-controls' => 'profile',
-          'role'          => 'tab',
-          'data-toggle'   => 'tab',
-        ),
-        'html' => TRUE
-      )); ?>
-    </li>
-    <li role="presentation">
-      <?php print l(druru_icon('list') . t('Blog'), current_path(), array(
-        'fragment'   => 'blog',
-        'attributes' => array(
-          'aria-controls' => 'blog',
-          'role'          => 'tab',
-          'data-toggle'   => 'tab',
-        ),
-        'html' => TRUE
-      )); ?>
-    </li>
-  </ul>
-
   <!-- Tab panes -->
   <div class="tab-content">
     <div id="profile" role="tabpanel" class="tab-pane active">
@@ -82,22 +56,5 @@
       </div>
     </div>
 
-    <div id="blog" role="tabpanel" class="tab-pane">
-
-      <div class="form-actions">
-        <div class="btn-group" data-toggle="buttons">
-          <button type="button" class="btn btn-default btn-sm view-switcher active" data-view="long">
-            <?php print t('Long'); ?>
-          </button>
-          <button type="button" class="btn btn-default btn-sm view-switcher" data-view="short">
-            <?php print t('Titles only'); ?>
-          </button>
-        </div>
-      </div>
-
-      <div class="nodes">
-        <?php print render($blog); ?>
-      </div>
-    </div>
   </div>
 </div>

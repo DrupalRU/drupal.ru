@@ -468,15 +468,3 @@ function drurum_form_node_form_alter(&$form, &$form_state, $form_id) {
     $form['taxonomy_forums'][$langcode]['#required'] = FALSE;
   }
 }
-
-/**
- * Implements hook_views_pre_render().
- *
- * Меняем заголовок для представления "Блог пользователя".
- */
-function drurum_views_pre_render(&$view) {
-  if ($view->name == 'userblog') {
-    $user = user_load(arg(1));
-    $view->build_info['title'] = 'Блог пользователя ' . $user->name;
-  }
-}

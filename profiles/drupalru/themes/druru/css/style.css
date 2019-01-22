@@ -9833,6 +9833,9 @@ aside.first .node-item__date {
 .acal-holder .Calendar > div > div {
   z-index: unset !important;
 }
+.page-user-blog .field-name-body {
+  margin-bottom: 10px;
+}
 .bue-ui {
   border: none;
   padding: 0;

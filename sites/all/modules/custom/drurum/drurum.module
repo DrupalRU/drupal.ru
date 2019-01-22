@@ -43,18 +43,6 @@ function drurum_menu() {
     'file' => 'drurum.admin.inc',
     'file path' => drupal_get_path('module', 'drurum') . '/includes',
   ];
-
-  $items['user/%user/blog'] = [
-    'title' => t('Blog'),
-    'page callback' => 'blog_page_user',
-    'page arguments' => [1],
-    'access callback' => 'user_is_logged_in',
-    'type' => MENU_LOCAL_TASK,
-    'file' => 'blog.pages.inc',
-    'file path' => drupal_get_path('module', 'blog'),
-    'weight' => -1,
-  ];
-
   return $items;
 }
 
@@ -478,5 +466,17 @@ function drurum_form_node_form_alter(&$form, &$form_state, $form_id) {
     $langcode = $form['taxonomy_forums']['#language'];
     // DO NOT Make the vocabulary required for 'real' forum-nodes.
     $form['taxonomy_forums'][$langcode]['#required'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ *
+ * Меняем заголовок для представления "Блог пользователя".
+ */
+function drurum_views_pre_render(&$view) {
+  if ($view->name == 'userblog') {
+    $user = user_load(arg(1));
+    $view->build_info['title'] = 'Блог пользователя ' . $user->name;
   }
 }

@@ -918,3 +918,10 @@ function drurum_update_7048() {
   }
   variable_set('site_frontpage', 'node');
 }
+
+/**
+ * Enable module responsivewrappers.
+ */
+function drurum_update_7049() {
+  module_enable(['responsivewrappers'], TRUE);
+}

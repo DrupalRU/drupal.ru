@@ -17,7 +17,7 @@
           var firstSet = allstr.substring(0, limit);
           var secdHalf = allstr.substring(limit, allstr.length);
           var strtoadd = firstSet + "<div id='comment-" + i + "' class='collapse'>"
-              + secdHalf + "</div> <a href=# data-toggle='collapse' data-target='#comment-" + i + "'>" + expandText + "</a>";
+              + secdHalf + "</div> <a class='user-comments-collapse-btn' href=# data-toggle='collapse' data-target='#comment-" + i + "'>" + expandText + "</a>";
           $(this).html(strtoadd);
         }
 
@@ -34,6 +34,16 @@
           $(this).text(expandText);
         }
 
+      });
+
+      $('#user-comments-expand-all').click(function () {
+        $('.collapse').collapse('show');
+        $('.user-comments-collapse-btn').text(collapsetext);
+      });
+
+      $('#user-comments-collapse-all').click(function () {
+        $('.collapse').collapse('hide');
+        $('.user-comments-collapse-btn').text(expandText);
       });
 
     }

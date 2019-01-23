@@ -485,7 +485,7 @@ function drurum_preprocess_views_view(&$vars) {
  */
 function drurum_views_pre_view(&$view, &$display_id, &$args) {
   if ($view->name == 'user_comments') {
-    $header = "<button id='user-comments-expand-all' class='btn btn-default'>развернуть всё</button> <button id='user-comments-collapse-all' class='btn btn-default'>свернуть всё</button>";
+    $header = "<button id='user-comments-expand-all' class='btn btn-default'>развернуть всё</button> <button id='user-comments-collapse-all' class='btn btn-default'>свернуть всё</button><br><br>";
     $view->add_item('default', 'header', 'views', 'area', ['content' => $header, 'format' => 'full_html']);
   }
 }

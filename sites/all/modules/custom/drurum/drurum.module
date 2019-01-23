@@ -468,3 +468,24 @@ function drurum_form_node_form_alter(&$form, &$form_state, $form_id) {
     $form['taxonomy_forums'][$langcode]['#required'] = FALSE;
   }
 }
+
+/**
+ * Implements hook_preprocess_views_view().
+ */
+function drurum_preprocess_views_view(&$vars) {
+  $view = &$vars['view'];
+
+  if ($view->name == 'user_comments') {
+    drupal_add_js(drupal_get_path('theme', 'druru') . '/js/modules/views/js/user-profile-comments.js');
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function drurum_views_pre_view(&$view, &$display_id, &$args) {
+  if ($view->name == 'user_comments') {
+    $header = "<button id='user-comments-expand-all' class='btn btn-default'>развернуть всё</button> <button id='user-comments-collapse-all' class='btn btn-default'>свернуть всё</button>";
+    $view->add_item('default', 'header', 'views', 'area', ['content' => $header, 'format' => 'full_html']);
+  }
+}

@@ -10536,11 +10536,11 @@ h2.privatemsg-reply {
   font-size: 18px;
   line-height: 0.6;
 }
-.view-comments-user .views-field-timestamp {
+.view-user-comments .views-field-timestamp {
   width: 200px;
 }
 @media screen and (max-width: 747px) {
-  .view-comments-user .views-field-timestamp {
+  .view-user-comments .views-field-timestamp {
     width: 100px;
   }
 }

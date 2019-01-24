@@ -80,7 +80,7 @@ body.adminimal-skin-material table.tableheader-processed {
 
 body.adminimal-skin-material tr.even,
 body.adminimal-skin-material tr.odd {
-    background: #FFF;
+  background: #FFF;
 }
 
 body.adminimal-skin-material .messages ul {
@@ -158,6 +158,12 @@ body.adminimal-menu #admin-menu .admin-menu-search input:focus {
 
 body.adminimal-menu #admin-menu .dropdown li.admin-menu-action.admin-menu-account a {
   background: #1B2327 !important;
+}
+
+body.adminimal-skin-material ul li a {
+  -webkit-user-select: all;  /* Chrome 49+ */
+  -moz-user-select: all;     /* Firefox 43+ */
+  -ms-user-select: all;      /* No support yet */
 }
 
 body.adminimal-skin-material ul.primary li.active a,
@@ -267,7 +273,6 @@ body.adminimal-skin-material fieldset {
 }
 
 body.adminimal-skin-material .fieldset-description {
-  padding-top: 28px;
   padding-bottom: 20px;
   color: #909090;
 }
@@ -276,6 +281,10 @@ body.adminimal-skin-material .text-format-wrapper fieldset.filter-wrapper {
   box-shadow: none;
   border: 1px solid #DDD;
   border-radius: 0;
+}
+
+body.adminimal-skin-material .vertical-tabs-panes fieldset {
+  padding-top: 42px;
 }
 
 body.adminimal-skin-material .vertical-tabs-panes fieldset.vertical-tabs-pane {
@@ -287,12 +296,28 @@ body.adminimal-skin-material .exposed-filters .form-item label {
   font-family: Roboto, sans-serif;
 }
 
+body.adminimal-skin-material .form-item label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+body.adminimal-skin-material .form-item label.option {
+  font-size: 16px;
+  font-weight: 100;
+}
+
 body.adminimal-skin-material fieldset legend {
   font-family: Roboto, sans-serif;
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 22px;
+  font-weight: 100;
   position: absolute;
   top: 14px;
+  left: 9px;
+  color: #455a64;
+}
+
+body.adminimal-skin-material fieldset .fieldset-wrapper {
+  margin-top: 5px;
 }
 
 body.adminimal-skin-material .features-export-parent fieldset legend {
@@ -313,8 +338,8 @@ body.page-admin-appearance-settings-omega.adminimal-skin-material fieldset {
 /* Apperance page */
 body.page-admin-appearance.adminimal-skin-material fieldset legend {
   font-family: Roboto, sans-serif !important;
-  font-size: 20px !important;
-  font-weight: 500 !important;
+  font-size: 22px !important;
+  font-weight: 100 !important;
   top: 16px;
 }
 
@@ -469,6 +494,14 @@ body.adminimal-skin-material.style-checkboxes input[type=radio]:disabled:hover {
   cursor: default;
   /*cursor: not-allowed;*/
   }
+}
+
+body.adminimal-skin-material.style-checkboxes input[type=checkbox]:disabled:checked,
+body.adminimal-skin-material.style-checkboxes input[type=checkbox]:disabled:checked:hover,
+body.adminimal-skin-material.style-checkboxes input[type=radio]:disabled:checked,
+body.adminimal-skin-material.style-checkboxes input[type=radio]:disabled:checked:hover {
+  background-color: #999;
+  border-color: #999;
 }
 
 /* Waves plugin (Ripple effect) */
@@ -1059,19 +1092,19 @@ body.adminimal-skin-material.overlay ul.secondary {
 body.adminimal-skin-material .rules-elements-add ul.action-links a,
 body.adminimal-skin-material ul.rules-operations a,
 body.adminimal-skin-material .rules-elements-add ul.action-links a {
-    background: transparent;
-    color: #2196F3;
-    box-shadow: none;
-    padding: 8px 18px;
-    margin: 5px 0 0 0;
+  background: transparent;
+  color: #2196F3;
+  box-shadow: none;
+  padding: 8px 18px;
+  margin: 5px 0 0 0;
 }
 
 body.adminimal-skin-material .rules-elements-add ul.action-links a:hover,
 body.adminimal-skin-material ul.rules-operations a:hover,
 body.adminimal-skin-material .rules-elements-add ul.action-links a:hover {
-    background: transparent;
-    color: #2196F3;
-    box-shadow: none;
+  background: transparent;
+  color: #2196F3;
+  box-shadow: none;
 }
 
 body.adminimal-skin-material .rules-elements-add ul.action-links a:focus,
@@ -1087,5 +1120,33 @@ body.sticky-actions.adminimal-skin-material .form-actions.form-wrapper {
 }
 
 body.sticky-actions.adminimal-skin-material #page {
-    margin-bottom: 80px;
+  margin-bottom: 80px;
+}
+
+html.js .module-filter-inputs-wrapper .form-item {
+  padding-bottom: 0;
+  margin-bottom: 10px;
+  background: #fff;
+}
+
+html.js .module-filter-inputs-wrapper .form-item.form-type-checkbox,
+html.js .module-filter-inputs-wrapper .form-item.form-type-radio {
+  background: transparent;
+}
+
+body.adminimal-skin-material .ctools-twisty {
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-style: solid;
+  border-width: 4px 4px 0;
+  line-height: 0;
+  right: 6px;
+  position: absolute;
+  padding: 0;
+  top: 16px;
+}
+
+body.adminimal-skin-material .ctools-dropbutton-processed.open .ctools-twisty {
+  top: 12px;
 }

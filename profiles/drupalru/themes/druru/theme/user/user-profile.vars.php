@@ -21,23 +21,6 @@ function druru_preprocess_user_profile(&$variables) {
   // Preprocess profile groups
   _druru_prepare_profile_groups($variables);
 
-  module_load_include('inc', 'blog', 'blog.pages');
-  $variables['blog'] = blog_page_user($variables['elements']['#account']);
-  if(!$variables['blog']){
-    $variables['blog'] = druru_status_messages(array(
-      'display' => FALSE,
-      /*'messages' => array(
-        'info' => array(
-          $GLOBALS['user']->uid == $variables['elements']['#account']->uid
-            ? t('You don\'t have posts. You can create <a href="@url">first post</a>', array(
-              '@url' => 'node/add/blog'
-            ))
-            : t('This user has no posts.')
-        )
-      ),*/
-    ));
-  }
-
   _druru_prepare_order($variables['user_profile']);
 }
 

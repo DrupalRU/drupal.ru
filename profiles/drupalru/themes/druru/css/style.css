@@ -8800,8 +8800,6 @@ ul.li-accent > *:before {
 .node.node-blog .node-header {
   display: flex;
   align-items: baseline;
-}
-.page-user .node.node-blog .node-header {
   margin-top: 10px;
 }
 .node.node-blog .node-header-item {
@@ -8923,41 +8921,25 @@ body.page-user #profile .user-info dd {
   width: 70%;
   padding-left: 5px;
 }
-body.page-user #blog .form-actions {
-  margin-top: 15px;
-}
-body.page-user #blog .form-actions .btn {
-  outline: none;
-}
-body.page-user #blog .nodes {
+body.page-user .view-user-blog {
   padding-top: 15px;
 }
-body.page-user #blog .node:not(:first-child) {
+body.page-user .view-user-blog .view-content > div:not(:first-child) {
   padding-top: 15px;
   margin-top: 15px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
-body.page-user #blog .node .content img {
+body.page-user .view-user-blog .view-content > div .content img {
   max-height: 150px;
   width: auto;
 }
-body.page-user #blog .node .node-header-item:first-child,
-body.page-user #blog .node .node-header-item .fa-user,
-body.page-user #blog .node .node-header-item .username,
-body.page-user #blog .node > .links {
+body.page-user .view-user-blog .view-content > div .node-header-item:first-child,
+body.page-user .view-user-blog .view-content > div .node-header-item .fa-user,
+body.page-user .view-user-blog .view-content > div .node-header-item .username {
   display: none;
 }
-body.page-user #blog.short-view .node:not(:first-child) {
-  padding-top: 0;
-  margin-top: 15px;
-  border-top: none;
-}
-body.page-user #blog.short-view .node > *:not(h2) {
-  display: none;
-}
-body.page-user #blog.short-view .node > h2 {
-  font-size: 15px;
-  font-weight: 400;
+body.page-user .view-user-blog .pager-wrapper {
+  margin-top: 25px;
 }
 body.front .navbar-second {
   background: transparent;
@@ -9015,9 +8997,6 @@ body.front .jumbotron p {
 body.page-events .node-event img {
   max-width: 100%;
   height: auto;
-}
-body.page-events .node-event iframe {
-  max-width: 100%;
 }
 @media screen and (min-width: 748px) {
   body.page-events #block-system-main {
@@ -9832,6 +9811,9 @@ aside.first .node-item__date {
 }
 .acal-holder .Calendar > div > div {
   z-index: unset !important;
+}
+.page-user-blog .field-name-body {
+  margin-bottom: 10px;
 }
 .bue-ui {
   border: none;

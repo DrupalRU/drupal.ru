@@ -1,5 +1,7 @@
 body {
   &.page-user {
+    //////////
+    // User profile
     #profile {
       .user-picture {
         .caption {
@@ -42,26 +44,19 @@ body {
       }
     }
 
-    #blog {
-      .form-actions {
-        margin-top: @padding-large-horizontal; // @todo Replace with proper variable
+    //////////
+    // User's blog posts
+    .view-user-blog {
+      padding-top: @padding-large-horizontal; // @todo Replace with proper variable
 
-        .btn {
-          outline: none;
-        }
-      }
-
-      .nodes {
-        padding-top: @padding-large-horizontal; // @todo Replace with proper variable
-      }
-
-      .node {
+      .view-content > div {
         &:not(:first-child) {
           padding-top: @padding-large-horizontal; // @todo Replace with proper variable
           margin-top: @padding-large-horizontal; // @todo Replace with proper variable
           border-top: 1px solid @little-darker;
         }
 
+        // Set max-height to images to make nodes listing less ugly
         .content {
           img {
             max-height: 10 * @font-size-base; // @todo Replace with proper variable
@@ -69,31 +64,21 @@ body {
           }
         }
 
-        .node-header-item:first-child, // @todo Add specific class to user avatar
-        .node-header-item .fa-user, // @todo Add wrapper and specific class to user name
-        .node-header-item .username, // @todo Add wrapper and specific class to user name
-        > .links {
-          display: none;
+        // Hide avatar and username
+        .node-header-item {
+          &:first-child, // @todo Add specific class to user avatar
+          .fa-user, // @todo Add wrapper and specific class to user name
+          .username { // @todo Add wrapper and specific class to user name
+            display: none;
+          }
         }
       }
 
-      &.short-view {
-        .node {
-          &:not(:first-child) {
-            padding-top: 0;
-            margin-top: @padding-large-horizontal; // @todo Replace with proper variable
-            border-top: none;
-          }
-
-          > *:not(h2) {
-            display: none;
-          }
-
-          > h2 {
-            font-size: @font-size-base;
-            font-weight: @font-weight-base;
-          }
-        }
+      // Increase top margin as content items has no internal top/bottom paddings
+      // as they have on '/tracker/*' listings.
+      // @todo Apply this rule to other pagers if needed
+      .pager-wrapper {
+        margin-top: @padding-large-vertical + @padding-large-horizontal; // @todo Replace with proper variable
       }
     }
   }
@@ -157,13 +142,6 @@ body {
       img {
         max-width: 100%;
         height: auto;
-      }
-
-      // Temp workaround to prevent embedded videos from overlapping container
-      // @todo Refactor embedding of external videos
-      // see https://getbootstrap.com/docs/3.3/components/#responsive-embed
-      iframe {
-        max-width: 100%;
       }
     }
 

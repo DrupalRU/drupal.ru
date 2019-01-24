@@ -22,6 +22,43 @@ function adminimal_preprocess_maintenance_page(&$vars) {
  */
 function adminimal_preprocess_html(&$vars) {
 
+  // watchdog('Emergency', 'This is a test emergency watchdog mesage' , NULL , WATCHDOG_EMERGENCY);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Debug', 'This is a test debug watchdog mesage' , NULL , WATCHDOG_DEBUG);
+  // watchdog('Notice', 'This is a test notice watchdog mesage' , NULL , WATCHDOG_NOTICE);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Warning', 'This is a test warning watchdog mesage' , NULL , WATCHDOG_WARNING);
+  // watchdog('Debug', 'This is a test debug watchdog mesage' , NULL , WATCHDOG_DEBUG);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Error', 'This is a test error watchdog mesage' , NULL , WATCHDOG_ERROR);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Notice', 'This is a test notice watchdog mesage' , NULL , WATCHDOG_NOTICE);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Debug', 'This is a test debug watchdog mesage' , NULL , WATCHDOG_DEBUG);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Notice', 'This is a test notice watchdog mesage' , NULL , WATCHDOG_NOTICE);
+  // watchdog('Critical', 'This is a test critical watchdog mesage' , NULL , WATCHDOG_CRITICAL);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Alert', 'This is a test alert watchdog mesage' , NULL , WATCHDOG_ALERT);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Debug', 'This is a test debug watchdog mesage' , NULL , WATCHDOG_DEBUG);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+  // watchdog('Notice', 'This is a test notice watchdog mesage' , NULL , WATCHDOG_NOTICE);
+  // watchdog('Debug', 'This is a test debug watchdog mesage' , NULL , WATCHDOG_DEBUG);
+  // watchdog('Info', 'This is a test info watchdog mesage' , NULL , WATCHDOG_INFO);
+
+
   // Get adminimal folder path.
   $adminimal_path = drupal_get_path('theme', 'adminimal');
 
@@ -72,7 +109,7 @@ function adminimal_preprocess_html(&$vars) {
   }
 
   // Load CKEditor styles if enabled in settings.
-  if (theme_get_setting('adminimal_ckeditor')) {
+  if (theme_get_setting('adminimal_ckeditor') and theme_get_setting('adminimal_theme_skin') != 'dark') {
     drupal_add_css($adminimal_path . '/css/ckeditor-adminimal.css', array('group' => CSS_THEME, 'media' => 'all', 'weight' => 2));
   }
 
@@ -84,6 +121,11 @@ function adminimal_preprocess_html(&$vars) {
   if (theme_get_setting('use_custom_media_queries')) {
     $media_query_mobile = theme_get_setting('media_query_mobile');
     $media_query_tablet = theme_get_setting('media_query_tablet');
+  }
+
+  // Use Bootstrap Gids.
+  if (theme_get_setting('use_bootstrap_grids')) {
+    drupal_add_css($adminimal_path . '/css/bootstrap-grids.css', array('group' => CSS_THEME, 'weight' => 1000, 'preprocess' => TRUE));
   }
 
   // Load custom Adminimal skin.
@@ -142,6 +184,15 @@ function adminimal_preprocess_html(&$vars) {
   }
   else {
     $vars['classes_array'][] = 'no-sidebars';
+  }
+
+  // Display warning message on certain pages if theme is disabled.
+  if (in_array('page-admin-appearance', $vars['classes_array']) || in_array('page-admin-modules', $vars['classes_array']) || in_array('page-admin-reports-status', $vars['classes_array'])) {
+    $active_themes = list_themes();
+    if ($active_themes['adminimal']->status == 0) {
+      global $base_url;
+      drupal_set_message(t('Adminimal Theme must be enabled to work properly. Please enable it from the <a href="@link">Appearance page</a>.', array('@link' => $base_url . '/admin/appearance')), 'warning');
+    }
   }
 }
 
@@ -241,7 +292,7 @@ function adminimal_css_alter(&$css) {
  */
 function adminimal_js_alter(&$javascript) {
   // Fix module filter available updates page.
-  if (isset($javascript[drupal_get_path('module','module_filter').'/js/update_status.js'])) {
+  if (module_exists('module_filter') && isset($javascript[drupal_get_path('module', 'module_filter') . '/js/update_status.js'])) {
     $javascript[drupal_get_path('module','module_filter').'/js/update_status.js']['data'] = drupal_get_path('theme', 'adminimal') . '/js/update_status.js';
   }
 }
@@ -327,7 +378,7 @@ function adminimal_table($variables) {
   $empty = $variables['empty'];
 
   // Add sticky headers, if applicable.
-  if (count($header) && $sticky) {
+  if (!empty($header) && $sticky) {
     drupal_add_js('misc/tableheader.js');
     // Add 'sticky-enabled' class to the table to identify it for JS.
     // This is needed to target tables constructed by this function.
@@ -342,7 +393,7 @@ function adminimal_table($variables) {
   }
 
   // Format the table columns:
-  if (count($colgroups)) {
+  if (!empty($colgroups)) {
     foreach ($colgroups as $number => $colgroup) {
       $attributes = array();
 
@@ -377,14 +428,16 @@ function adminimal_table($variables) {
   }
 
   // Add the 'empty' row message if available.
-  if (!count($rows) && $empty) {
+  if (empty($rows) && $empty) {
     $header_count = 0;
-    foreach ($header as $header_cell) {
-      if (is_array($header_cell)) {
-        $header_count += isset($header_cell['colspan']) ? $header_cell['colspan'] : 1;
-      }
-      else {
-        ++$header_count;
+    if (!empty($header)) {
+      foreach ($header as $header_cell) {
+        if (is_array($header_cell)) {
+          $header_count += isset($header_cell['colspan']) ? $header_cell['colspan'] : 1;
+        }
+        else {
+          ++$header_count;
+        }
       }
     }
     $rows[] = array(array(
@@ -395,24 +448,24 @@ function adminimal_table($variables) {
   }
 
   // Format the table header:
-  if (count($header)) {
+  if (!empty($header)) {
     $ts = tablesort_init($header);
     // HTML requires that the thead tag has tr tags in it followed by tbody
     // tags. Using ternary operator to check and see if we have any rows.
-    $output .= (count($rows) ? ' <thead><tr>' : ' <tr>');
+    $output .= (!empty($rows) ? ' <thead><tr>' : ' <tr>');
     foreach ($header as $cell) {
       $cell = tablesort_header($cell, $header, $ts);
       $output .= _theme_table_cell($cell, TRUE);
     }
     // Using ternary operator to close the tags based on whether or not there are rows
-    $output .= (count($rows) ? " </tr></thead>\n" : "</tr>\n");
+    $output .= (!empty($rows) ? " </tr></thead>\n" : "</tr>\n");
   }
   else {
     $ts = array();
   }
 
   // Format the table rows:
-  if (count($rows)) {
+  if (!empty($rows)) {
     $output .= "<tbody>\n";
     $flip = array(
       'even' => 'odd',
@@ -435,7 +488,7 @@ function adminimal_table($variables) {
         $attributes = array();
         $no_striping = FALSE;
       }
-      if (count($cells)) {
+      if (!empty($cells)) {
         // Add odd/even class
         if (!$no_striping) {
           $class = $flip[$class];
@@ -458,4 +511,19 @@ function adminimal_table($variables) {
   $output .= "</table>\n";
   $output .= "</div>\n";
   return $output;
+}
+
+/**
+ * Set dark skin for CKEditor.
+ * Implements hook_ckeditor_settings_alter().
+ */
+function adminimal_ckeditor_settings_alter(&$settings) {
+
+  // Check if selected adminimal skin is dark.
+  if (theme_get_setting('adminimal_theme_skin') == 'dark') {
+    $adminimal_path = drupal_get_path('theme', 'adminimal');
+    global $base_url;
+    $settings['skin'] = 'adminimal-dark, '. $base_url .'/'. $adminimal_path . '/skins/dark/ckeditor/';
+    array_push($settings['contentsCss'], $base_url .'/'. $adminimal_path . '/skins/dark/ckeditor/contents.css');
+  }
 }

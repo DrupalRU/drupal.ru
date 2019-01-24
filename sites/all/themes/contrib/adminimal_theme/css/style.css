@@ -22,12 +22,17 @@ body.adminimal-theme *::-moz-focus-inner {
   border: 0;
 }
 
+* {-webkit-overflow-scrolling: touch;}
+
 body.adminimal-theme * {
-  -moz-box-sizing: inherit;
-  -webkit-box-sizing: inherit;
-  box-sizing: inherit;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body.adminimal-theme .panel-panel {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
@@ -1771,7 +1776,6 @@ body.adminimal-theme .token-tree th {
 }
 
 .ui-widget table th {
-  text-align: center;
   font-weight: bold;
   font-size: 12px;
 }
@@ -1781,9 +1785,11 @@ body.adminimal-theme .token-tree th {
   background: white;
   padding: 0;
   margin: 0;
+  width: auto;
 }
 
-.ui-widget table thead th {
+.ui-widget table thead th,
+.mac .ui-widget table thead th {
   background: #555;
   color: white;
 }
@@ -2023,7 +2029,6 @@ div.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.media-wrapper {
     color: #111;
     border: none;
     font-size: 16px;
-    line-height: 8px;
     margin: 0;
     padding: 10px 20px;
 }
@@ -3047,11 +3052,19 @@ body.adminimal-skin-alternative.adminimal-theme.page-admin-structure-features #e
   text-align: left;
 }
 
-
 /**
  * Hide dummy checkbox in Fast Permissions Administration (FPA) see #2653436.
  * by @rcodina.
  */
-.fpa-container .dummy-checkbox {
+.adminimal-theme .fpa-container .dummy-checkbox {
   display: none !important;
+}
+
+.adminimal-theme.page-admin-reports-dblog #block-system-help .content {
+  margin-bottom: 3em;
+}
+
+/* Fix Views main-content display issue see #1820494 */
+body.page-admin-structure-views-view #content-wrapper #main-content {
+  display: initial;
 }

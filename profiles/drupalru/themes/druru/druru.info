@@ -101,9 +101,11 @@ settings[toggle_search] = 1
 ; JavaScript
 ; --------------
 ; exclude[js][] = 'modules/contextual/contextual.js'
+exclude[js][] = 'resolve/resolve.js'
 
 ; CSS
 ; --------------
+exclude[css][] = 'resolve/resolve.css'
 exclude[css][] = 'misc/vertical-tabs.css'
 exclude[css][] = 'modules/aggregator/aggregator.css'
 ; Necessary administrative block CSS.

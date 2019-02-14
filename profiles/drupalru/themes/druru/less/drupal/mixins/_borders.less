@@ -1,0 +1,20 @@
+// Emulate 1px border(s) as box-shadow doesn't change box dimentions
+// @todo Refactor code depended on mixin .border() as we'll use limited number of border types: left (code blocks), top/bottom (listings)
+.border (@top, @right, @bottom, @left, @color) {
+  & when (@top = 1) {
+    box-shadow+: inset 0 1px 0 @color;
+  }
+  & when (@right = 1) {
+    box-shadow+: inset -1px 0 0 @color;
+  }
+  & when (@bottom = 1) {
+    box-shadow+: inset 0 -1px 0 @color;
+  }
+  & when (@left = 1) {
+    box-shadow+: inset 1px 0 0 @color;
+  }
+}
+
+.border (@none) when (@none = none) {
+  box-shadow: unset;
+}

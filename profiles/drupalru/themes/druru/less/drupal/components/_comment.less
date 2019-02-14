@@ -1,189 +1,110 @@
-.comment-wrapper,
-.comment-form-wrapper {
-  margin-top: @padding-large-horizontal; // @todo Replace with proper variable
-
-  > h2 {
-    margin: 0;
-    font-size: @font-size-h3;
-  }
-}
-
-.media-header-item {
-  margin-right: 10px; // @todo Replace with proper variable
-}
-
+////////////////////
+// Generic styling for comment
 .comment {
-  border: 1px solid transparent;
-  border-top-color: @gray-lighter;
-  position: relative;
-  background: @main-content-bg;
-  padding: @padding-base-vertical 0 @padding-base-vertical @padding-base-vertical; // @todo Replace with proper variable
-  margin-top: 0;
+  @entity();
 
-  .comment-wrapper > &,
-  .comment-wrapper > & + .indented {
-    margin-left: -@padding-base-vertical; // @todo Replace with proper variable
-  }
+  @media (min-width: @grid-float-breakpoint) {
+    &__links > * {
+      .border(0, 0, 1, 0, @color-divider);
+    }
 
-  .media-left {
-    float: left;
-    padding-right: 0;
-    margin-right: @padding-base-vertical; // @todo Replace with proper variable
-  }
-
-  .media-body {
-    display: initial;
-    width: 100%;
-
-    .content {
-      overflow: auto;
-      margin-top: 0;
+    #comments > &:last-child &__links > * {
+      .border(none);
     }
   }
 
-  .geshifilter {
-    margin: 0 0 9px; // @todo Replace with proper variable
-  }
+  &__links {
+    & > * {
+      background-color: @color-entity-links-bg;
 
-  div.user-picture {
-    margin-bottom: 0;
-    margin-right: 0;
+      a {
+        color: @color-entity-links-link-listing;
 
-    img {
-      max-width: inherit;
-      height: 1.5em;
-      width: auto;
-      display: block;;
-    }
-  }
-
-  &.best-comment {
-    .comment-variant(@state-success-bg, desaturate(darken(@state-success-bg, @tone * 2), @tone * 2));
-  }
-
-  &.hovered {
-    background: darken(@main-content-bg, @tone/2);
-
-    .dropdown {
-      opacity: 1;
-    }
-  }
-
-  &.new-comment {
-    .media-heading > .media-header-item:nth-child(2) {
-      color: @brand-success;
-    }
-  }
-
-  &.comment-unpublished {
-    .comment-variant(@state-danger-bg, desaturate(darken(@state-danger-bg, @tone * 2), @tone * 2));
-  }
-
-  .dropdown {
-    .dropdown-toggle {
-      border: 0;
-    }
-
-    .dropdown-toggle {
-      background-color: transparent;
-      padding: 8px; // @todo Replace with proper variable
-
-      &:hover, &:focus, &:active {
-        outline: none;
-
-        .icon-bar {
-          background: @dropdown-icon-hover-bg;
-        }
-      }
-
-      .icon-bar {
-        transition: background-color @transition-speed @transition-func;
-        background-color: @dropdown-icon-bg;
-        width: 20px;
-        height: 3px;
-        display: block;
-        .rounded(1px);
-
-        + .icon-bar {
-          margin-top: 3px;
+        &:hover,
+        &:focus,
+        &:active {
+          color: @color-entity-links-link-listing-hover;
         }
       }
     }
 
-    .dropdown-menu {
-      a > span {
-        padding-left: 12px; // @todo Replace with proper variable
+    .accepted-answer & > *:last-child {
+      @media (min-width: @grid-float-breakpoint) {
+        .border(0, 1, 1, 1, @color-notification);
+      }
+    }
 
-        .fa {
-          width: 21px;
-          text-align: center;
-          margin-right: 3px;
+    .accepted-answer & {
+      margin-left: -@padding;
+      margin-right: -@padding;
+
+      > * {
+        @media (max-width: @grid-float-breakpoint) {
+          .border(0, 1, 0, 1, @color-notification);
+          margin-bottom: unset;
+        }
+      }
+    }
+  }
+
+  &__status {
+    .is-new &::after,
+    .is-updated &::after {
+      @icon();
+      color: @color-notification;
+      content: @fa-var-circle;
+      font-size: @font-size-aux;
+    }
+  }
+
+  .accepted-answer & {
+    margin-top: @gap-entity;
+  }
+
+  @media (max-width: @grid-float-breakpoint) {
+    .comment__links {
+      & > * {
+        background-color: @color-entity-links-bg-hover;
+      }
+    }
+  }
+
+  @media (min-width: @grid-float-breakpoint) {
+    &:hover,
+    &:active,
+    &:focus {
+      .comment__links {
+        & > * {
+          background-color: @color-entity-links-bg-hover;
+        }
+
+        a {
+          color: @color-entity-links-link;
         }
       }
     }
   }
 }
 
-.indented {
-  padding-left: 3px;
-  position: relative;
+// @todo Move styling of .menu-toggle to separate file
+.menu-toggle {
+  @icon();
+  width: @font-size-aux;
+  height: @font-size-aux;
+  margin-left: auto;
+  cursor: pointer;
 
-  &:after,
-  &:before {
-    content: '';
-    display: block;
-    height: 100%;
-    width: 3px;
-    top: 0;
-    left: 0;
-    position: absolute;
-    background-color: @brand-primary;
-    z-index: 1;
+  &::after {
+    content: @fa-var-bars;
   }
 
-  &:after {
-    background-color: rgba(255,255,255,.8);
-    margin-left: -1px;
-    z-index: 2;
+  &:hover,
+  &:focus,
+  &:active {
+    color: @color-meta;
   }
 
-  @media @very-smalld {
-    padding-left: 6px;
-
-    &:after,
-    &:before {
-      width: 6px;
-    }
-
-    &:after {
-      margin-left: -2px;
-    }
+  @media (min-width: @grid-float-breakpoint) {
+    display: none;
   }
-}
-
-#comment-form {
-  #edit-author--2 {
-    margin-bottom: 0;
-
-    label {
-      line-height: 2em;
-      margin-bottom: 0;
-      text-transform: capitalize;
-    }
-
-    .user-picture {
-      img {
-        height: 2em;
-        width: auto;
-      }
-    }
-  }
-
-  .field-name-comment-body {
-    clear: both;
-  }
-}
-
-.node-best-reply {
-  margin-top: @padding-large-horizontal; // @todo Replace with proper variable
 }

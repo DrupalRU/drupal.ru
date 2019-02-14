@@ -1,0 +1,21 @@
+@keyframes animate-throbber {
+  0%, 100% {
+    left: 0;
+  }
+
+  50% {
+    left: calc(100% - @throbber-width);
+  }
+}
+
+@keyframes animate-comment-menu {
+  0% {
+    padding-bottom: @grid;
+  }
+  1% {
+    padding-bottom: @grid * 20;
+  }
+  100% {
+    padding-bottom: @grid;
+  }
+}

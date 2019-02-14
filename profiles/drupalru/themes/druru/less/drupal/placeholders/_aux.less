@@ -1,0 +1,22 @@
+@aux: {
+  font-size: @font-size-aux;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  & > *:not(:last-child) {
+    margin-right: @gap-inline-h;
+  }
+}
+
+@notification: {
+  background-color: @color-notification-bg;
+  color: @color-notification-fg;
+  padding: 0 @grid; // @todo Maybe create specific variable
+  border-radius: @grid; // @todo Maybe create specific variable
+}
+
+@icon: {
+  font-family: FontAwesome;
+}

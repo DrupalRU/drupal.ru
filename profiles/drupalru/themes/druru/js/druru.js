@@ -10,6 +10,58 @@ var Drupal = Drupal || {};
 (function ($, Drupal) {
   "use strict";
 
+  Drupal.behaviors.Brights = {
+    attach: function () {
+      // Resize timeout event ID.
+      var resizeTimeoutId;
+      // Resize timeout duration in milliseconds.
+      var resizeTimeoutDuration = 100;
+      // Debounces resizing behaviors.
+      var resizeDebounce = function () {
+        clearTimeout(resizeTimeoutId);
+        resizeTimeoutId = setTimeout(doneResizing, resizeTimeoutDuration);
+      };
+      // Main screen resize logic. This function is called after the screen is finished resizing.
+      var doneResizing = function () {
+        $('.menu-open').each(function() {
+          var entity = $(this);
+          Drupal.behaviors.Brights.adaptEntityMenuHeight(entity);
+        });
+      };
+      // Window resize events.
+      $(window).resize(resizeDebounce);
+
+      $('.menu-toggle').click(function() {
+        var entity = $(this).parents().filter(function() {
+          return $(this).data('entity-type');
+        }).eq(0);
+        entity.toggleClass('menu-open');
+        Drupal.behaviors.Brights.adaptEntityMenuHeight(entity);
+      });
+
+    },
+    adaptEntityMenuHeight: function(entity) {
+      var entityType = entity.data('entity-type');
+      if (entityType === undefined) {
+        return;
+      }
+
+      var wrapper = entity.find('.' + entityType + '__links');
+
+      var totalHeight = 0;
+      wrapper.children().each(function() {
+        totalHeight = totalHeight + $(this).outerHeight(true);
+      });
+
+      if (entity.hasClass('menu-open')) {
+        wrapper.css('height', totalHeight);
+      }
+      else {
+        wrapper.css('height', '');
+      }
+    }
+  };
+
   Drupal.behaviors.druru = {
     attach: function (context, settings) {
       // Improvement for bootstrap-filestyle plugin.
@@ -87,7 +139,7 @@ var Drupal = Drupal || {};
       });
     },
 
-    excludeTags    : ['a', 'button'],
+    excludeTags: ['a', 'button'],
     contextMenuId: null,
     initContextMenuClicks: 0,
 
@@ -431,36 +483,6 @@ var Drupal = Drupal || {};
       }
     }
   };
-
-  Drupal.behaviors.druruBlogTeaserViewSwitcher = {
-    attach: function (context, settings) {
-      $('.view-switcher').on('click', function () {
-        var $this = $(this);
-        $this.closest('div').find('button').removeClass('active');
-        if ($this.data('view') === 'short') {
-          $this.closest('#blog').addClass('short-view');
-        }
-        else{
-          $this.closest('#blog').removeClass('short-view');
-        }
-
-        $this.addClass('active');
-      });
-    }
-  };
-
-  // Make parallax effect on front page.
-  // Drupal.behaviors.druruParallax = {
-  //   attach: function (context, settings) {
-  //     $('body').once(function () {
-  //       $(window).on('mousemove', function (e) {
-  //         $('body.front .jumbotron').css('background-position-x',(
-  //           (100 / $(window).outerWidth() * e.pageX) * (-1) // inverse moving
-  //         ));
-  //       })
-  //     });
-  //   }
-  // };
 
   Drupal.theme.prototype.attributes = function (attributes) {
     var parsedAttrs = '', attr = null;

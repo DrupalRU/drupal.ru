@@ -35,9 +35,6 @@ function druru_preprocess_page(&$variables) {
     drupal_set_breadcrumb($new_breadcrumb);
   }
 
-  // Make bootstrap menu from local tasks and local actions.
-//  _druru_move_page_tabs($variables);
-
   // Stylize 404 and 403 pages.
   // if it not override in settings on admin-side.
   _druru_error_pages_preprocess('page', $variables);
@@ -49,7 +46,7 @@ function druru_preprocess_page(&$variables) {
  * Generate custom classes for page elements.
  */
 function _druru_generate_classes(&$variables) {
-// Primary nav.
+  // Primary nav.
   $variables['primary_nav'] = FALSE;
   if ($variables['main_menu']) {
     // Build links.
@@ -88,6 +85,7 @@ function _druru_generate_classes(&$variables) {
  * Implements hook_process_page().
  *
  * @see page.tpl.php
+ * @todo Test and remove if not required
  */
 function druru_process_page(&$variables) {
   $variables['navbar_classes'] = implode(' ', $variables['navbar_classes_array']);
@@ -96,7 +94,6 @@ function druru_process_page(&$variables) {
   }
   if (isset($variables['node'])) {
     $title = &$variables['title'];
-    $title = drurum_node_icon($variables['node']) . $title;
   }
 }
 
@@ -179,6 +176,7 @@ function _druru_struct_logo(&$variables) {
 
 /**
  * Generate layout classes.
+ * @todo Refactor to make code simpler and clearer
  */
 function _druru_generate_columns_classes(&$variables) {
   // Detecting columns.

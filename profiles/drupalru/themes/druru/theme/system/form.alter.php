@@ -48,15 +48,6 @@ function druru_form_blog_node_form_alter(&$form, &$form_state) {
       'class' => array('row'),
     ),
   );
-  $name = 'taxonomy_vocabulary_2';
-  if (isset($form[$name])) {
-    $field = $form[$name];
-    $form['keys'][$name] = $field;
-    $form['keys'][$name]['#attributes']['class'] = array('col-sm-6');
-    $weight = $weight > $field['#weight'] ? $field['#weight'] : $weight;
-    $form['keys']['#weight'] = $weight;
-    unset($form[$name]);
-  }
   $name = 'taxonomy_vocabulary_10';
   if (isset($form[$name])) {
     $field = $form[$name];

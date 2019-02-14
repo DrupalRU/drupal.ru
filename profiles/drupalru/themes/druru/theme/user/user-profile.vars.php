@@ -25,7 +25,6 @@ function druru_preprocess_user_profile(&$variables) {
 }
 
 function _druru_prepare_profile_groups(&$variables) {
-
   $profile = &$variables['user_profile'];
   $elements = &$variables['elements'];
   $account = $elements['#account'];
@@ -34,9 +33,12 @@ function _druru_prepare_profile_groups(&$variables) {
 
   foreach (element_children($elements) as $key) {
     $is_element = isset($elements[$key]['#type']);
+
     if ($is_element && $elements[$key]['#type'] == 'user_profile_category') {
       foreach ($elements[$key] as $item_key => $item_value) {
+
         $is_item = isset($item_value['#type']);
+
         if ($is_item && $item_value['#type'] == 'user_profile_item') {
           if (empty($item_value['#title'])) {
             $elements[$key][$item_key]['#title'] = $elements[$key]['#title'];
@@ -46,6 +48,7 @@ function _druru_prepare_profile_groups(&$variables) {
         }
       }
     }
+
     $profile[$key] = $elements[$key];
   }
 
@@ -66,9 +69,11 @@ function _druru_prepare_private_message(&$elements) {
   $link['#title'] = $title . ' ' . druru_icon('envelope');
   $link['#options']['html'] = TRUE;
   $attributes = &$link['#options']['attributes'];
+
   if (!is_array($attributes['class'])) {
     $attributes['class'] = array($attributes['class']);
   }
+
   $attributes['class'][] = 'btn';
   $attributes['class'][] = 'btn-primary';
   $attributes['class'][] = 'pull-right';
@@ -77,12 +82,14 @@ function _druru_prepare_private_message(&$elements) {
 function _druru_prepare_user_picture(&$elements) {
   $account = $elements['#account'];
   $picture = isset($account->picture) ? $account->picture : null;
+
   if (!empty($picture->uri)) {
     $filepath = $picture->uri;
   }
   elseif (variable_get('user_picture_default', '')) {
     $filepath = variable_get('user_picture_default', '');
   }
+
   if (isset($filepath)) {
     $elements['user_picture']['#markup'] = theme('image_style', array(
       'style_name' => 'avatar_profile',
@@ -103,6 +110,7 @@ function _druru_prepare_order(&$elements) {
     'Рассылки' => ++$x,
     'summary' => ++$x,
   );
+
   foreach ($weigts as $key => $weigt) {
     if(isset($elements[$key])){
       $elements[$key]['#weight'] = $weigt;

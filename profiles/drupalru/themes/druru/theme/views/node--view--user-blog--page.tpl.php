@@ -78,8 +78,6 @@
  * @see template_process()
  *
  * @ingroup themeable
- * @todo Refactor node.tpl.php to make it html5-compliant and enriched with microformats.
- * @todo Make sure all node-*.tpl.php files were refactored as well.
  */
 ?>
 <article data-entity-type="node" id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?>"<?php print $attributes; ?>>
@@ -94,7 +92,7 @@
   <?php endif; ?>
 
   <div class="node__meta">
-    <?php if ($name): ?>
+    <?php if ($show_author): ?>
       <span class="node__author-avatar"><?php print $user_picture; ?></span>
       <span class="node__author-name"><?php print $name; ?></span>
     <?php endif; ?>
@@ -115,7 +113,7 @@
       </span>
     <?php endif; ?>
 
-    <div class="menu-toggle"></div>
+    <span class="menu-toggle"></span>
   </div>
 
   <div<?php print $content_attributes; ?>>

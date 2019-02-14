@@ -35,26 +35,19 @@
  */
 ?>
 <div class="profile"<?php print $attributes; ?>>
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div id="profile" role="tabpanel" class="tab-pane active">
-      <div class="row">
 
-        <div class="col-sm-4 col-vsd-3 col-md-3 user-picture">
-          <div class="thumbnail">
-            <?php print render($user_profile['user_picture']); ?>
-            <div class="caption clearfix">
-              <?php print render($user_profile['privatemsg_send_new_message']); ?>
-              <h3><?php print $realname; ?> <small><?php print $name; ?></small></h3>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-8 col-vsd-9 col-md-9 user-info">
-          <?php print render($user_profile); ?>
-        </div>
+  <div class="col-sm-4 col-vsd-3 col-md-3 user-picture">
+    <div class="thumbnail">
+      <?php print render($user_profile['user_picture']); ?>
+      <div class="caption clearfix">
+        <?php print render($user_profile['privatemsg_send_new_message']); ?>
+        <h3><?php print $realname; ?> <small><?php print $name; ?></small></h3>
       </div>
     </div>
-
   </div>
+
+  <div class="col-sm-8 col-vsd-9 col-md-9 user-info">
+    <?php print render($user_profile); ?>
+  </div>
+
 </div>

@@ -6,12 +6,14 @@
 
 /**
  * Implements hook_preprocess_links().
+ * @todo Refactor to use unified names for css classes
+ * @todo Test if the first part of function's code is really required
  */
-function druru_preprocess_links(&$variables) {
+function druru_preprocess_links(&$vars) {
   $attributes = array();
 
-  if (isset($variables['attributes'])) {
-    $attributes = &$variables['attributes'];
+  if (isset($vars['attributes'])) {
+    $attributes = &$vars['attributes'];
   }
 
   if (isset($attributes['class'])) {
@@ -29,8 +31,8 @@ function druru_preprocess_links(&$variables) {
   }
 
   if (in_array('privatemsg-message-actions', $attributes['class'])) {
-    if (!empty($variables['links']) && is_array($variables['links'])) {
-      foreach ($variables['links'] as &$link) {
+    if (!empty($vars['links']) && is_array($vars['links'])) {
+      foreach ($vars['links'] as &$link) {
         switch ($link['title']) {
           case t('Delete'):
             $link['attributes']['title'] = $link['title'];
@@ -58,7 +60,7 @@ function druru_preprocess_links(&$variables) {
         $link['html'] = TRUE;
       }
 
-      uasort($variables['links'], 'drupal_sort_weight');
+      uasort($vars['links'], 'drupal_sort_weight');
     }
   }
 }

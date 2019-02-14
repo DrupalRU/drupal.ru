@@ -1,31 +1,33 @@
 <?php
 
 function druru_preprocess_comment(&$vars) {
+  $comment    = $vars['elements']['#comment'];
+  $node       = $vars['elements']['#node'];
   $links      = array();
   $link_attrs = array();
   $content    = &$vars['content'];
+  $view_mode  = $vars['elements']['#view_mode'];
 
-  if (isset($vars['content']['links'])) {
-    $links = &$vars['content']['links'];
-  }
-  if (isset($links['#attributes'])) {
-    $link_attrs = &$links['#attributes'];
-  }
+  $vars['changed'] = _druru_format_date_aging($comment->changed);
 
   $vars['attributes_array']['data-comment-id'] = $vars['comment']->cid;
 
-  // Generate bautiful permanent link to comment which
-  // includes path to node instead of path to comment.
-  $node_url          = entity_uri('node', $vars['node']);
-  $comment_fragment  = 'comment-' . $vars['comment']->cid;
-  $vars['permalink'] = l(druru_icon('anchor'), $node_url['path'], array(
-    'html'       => TRUE,
-    'fragment'   => $comment_fragment,
+  // Remove author avatar and name in comment teasers
+  $vars['show_author'] = ($view_mode == 'teaser') ? FALSE : TRUE;
+
+  $uri = entity_uri('comment', $comment);
+  $uri['options'] += array(
+    'html' => TRUE,
     'attributes' => array(
-      'class' => array('permanent-link', 'text-muted'),
-      'title' => t('Anchor for this comment'),
+      'class' => array(
+        'permalink',
+      ),
+      'rel' => 'bookmark',
     ),
-  ));
+  );
+
+  $vars['title'] = l($node->title, $uri['path'], $uri['options']);
+  $vars['permalink'] = l(druru_icon('anchor'), $uri['path'], $uri['options']);
   $vars['timeago']   = t('@time ago', array(
     '@time' => format_interval(time() - $vars['comment']->changed, 1),
   ));
@@ -39,6 +41,7 @@ function druru_preprocess_comment(&$vars) {
 
   // Delete class 'inline" and
   // "list-inline" (will added automatically) from links.
+  // @todo Refactor to use unified names for css classes
   if (!empty($link_attrs['class'])) {
     $key = array_search('inline', $link_attrs['class']);
     if ($key !== FALSE) {
@@ -46,75 +49,14 @@ function druru_preprocess_comment(&$vars) {
     }
   }
 
-  // Icons will shown by the order.
-  $icons1 = array(
-    'dru-tnx'       => 'heart',
-    'dru-untnx'     => 'heart-o',
-    'quote'         => 'quote-right',
-    'comment-reply' => 'reply',
-    'dru-claim'     => 'bell',
-  );
-  $icons2 = array(
-    'comment-resolve'  => 'flag',
-    'comment-unsolved' => 'flag-o',
-    'unpublish'        => 'eye-slash',
-    'comment-edit'     => 'pencil',
-    'comment-delete'   => 'trash',
-  );
+  $vars['content_attributes_array']['class'] = 'comment__content';
+  $vars['content']['links']['#attributes']['class'] = [];
+  $vars['content']['links']['#attributes']['class'][] = 'comment__menu';
 
-  if (array_intersect_key($icons2, $links['comment']['#links'])) {
-    $links['comment']['#links']['divider'] = array(
-      'title' => '&nbsp;',
-      'html'  => TRUE,
-    );
-    $icons1['divider'] = 'divider';
-    $sort = array_merge($icons1, $icons2);
-  }
-  else {
-    $sort = $icons1;
-  }
-
-  if (isset($links['comment']['#links'])) {
-    foreach ($links['comment']['#links'] as $key => &$link) {
-      $classes = $icon_classes = array();
-      if (isset($link['attributes']['class'])) {
-        $classes = $link['attributes']['class'];
-      }
-
-      if ('dru-tnx' == $key) {
-        $icon_classes[] = 'text-danger';
-      }
-
-      if (array_search('dru-untnx', $classes) !== FALSE) {
-        $key = 'dru-untnx';
-      }
-      // This is like ucfirst for cyrillic symbols.
-      $first_letter = mb_strtoupper(mb_substr($link['title'], 0, 1));
-      $other_name   = mb_substr($link['title'], 1);
-
-      $icon = '';
-      if (isset($sort[$key])) {
-        $icon = druru_icon($sort[$key], FALSE, array('class' => $icon_classes));
-      }
-
-      $link['title'] = $icon . $first_letter . $other_name;
-      $link['html']  = TRUE;
-
-      $weight = array_search($key, array_keys($sort));
-      if ($weight !== FALSE) {
-        $link['weight'] = $weight;
-      }
-      $link['attributes']['class'] = $classes;
-    }
-
-    uasort($links['comment']['#links'], 'drupal_sort_weight');
-  }
-
-  if (!_druru_links_access($vars['content'])) {
-    unset($vars['content']['links']);
-  }
+  // @todo Reimplement 'claim' with module 'flag'
   _druru_wrap_claim($content, 'comment', $vars['id']);
-
+  // @todo Refactor option 1. We need variable '$tnx' like other comment variables.
+  // @todo Refactor option 2. Migrate to module 'flag' (preferred).
   _druru_wrap_thanks($vars, 'comment');
 }
 

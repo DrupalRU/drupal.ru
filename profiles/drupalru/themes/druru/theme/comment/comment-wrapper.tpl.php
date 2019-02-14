@@ -36,19 +36,17 @@
  * @ingroup themeable
  */
 ?>
-<div id="comments" class="<?php print $classes; ?>"<?php print $attributes; ?>>
-  <?php if ($content['comments'] && $node->type != 'forum'): ?>
+<?php if ($content['comments'] && $node->type != 'forum'): ?>
+  <section id="comments" class="<?php print $classes; ?>"<?php print $attributes; ?>>
     <?php print render($title_prefix); ?>
-    <h2><?php print t('Comments'); ?></h2>
+    <h2 class="section-title"><?php print t('Comments'); ?></h2>
     <?php print render($title_suffix); ?>
-  <?php endif; ?>
-
-  <?php print render($content['comments']); ?>
-
-  <div class="comment-form-wrapper">
-    <?php if ($content['comment_form']): ?>
-      <h2><?php print t('Add new comment'); ?></h2>
-      <?php print render($content['comment_form']); ?>
-    <?php endif; ?>
-  </div>
-</div>
+    <?php print render($content['comments']); ?>
+  </section>
+<?php endif; ?>
+<?php if ($content['comment_form']): ?>
+  <section class="comment-form-wrapper">
+    <h2 class="section-title"><?php print t('Add new comment'); ?></h2>
+    <?php print render($content['comment_form']); ?>
+  </section>
+<?php endif; ?>

@@ -26,6 +26,7 @@
  *
  * @ingroup views_templates
  */
+// @todo Refactor to use unified names for css classes
 ?>
 <div class="<?php print $classes; ?>">
   <?php print render($title_prefix); ?>

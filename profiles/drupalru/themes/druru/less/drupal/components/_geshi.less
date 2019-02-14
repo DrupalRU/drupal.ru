@@ -1,10 +1,17 @@
-span.geshifilter,
 .geshifilter {
-  display: block;
-  overflow: auto;
-  code {
-    padding: 0;
-    background: none;
+  font-size: @font-size-secondary;
+
+  div&,
+  span& {
+    background-color: @color-code-bg;
   }
-  white-space: nowrap;
+
+  div& {
+    border: none;
+    box-shadow: inset -@padding-code 0 0 @color-code-border;
+    line-height: inherit;
+    margin: 0;
+    padding: @padding-code;
+    white-space: nowrap;
+  }
 }

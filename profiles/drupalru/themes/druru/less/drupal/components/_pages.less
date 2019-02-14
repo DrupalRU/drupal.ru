@@ -1,176 +1,127 @@
-body {
-  &.page-user {
-    //////////
-    // User profile
-    #profile {
-      .user-picture {
-        .caption {
-          padding-top: @padding-large-vertical; // @todo Replace with proper variable
+// @todo Refactor user profile page
+.page-user {
+  .user-picture {
+    .caption {
+      padding-top: @padding-large-vertical;
 
-          h3 {
-            small {
-              display: block;
-            }
-          }
-        }
-      }
-
-      .user-info {
-        h3 {
-          margin-top: @padding-large-horizontal; // @todo Replace with proper variable
-          border-bottom: 1px solid @brand-info;
-          color: @brand-primary;
-        }
-
-        dl {
-          margin-top: @padding-base-vertical; // @todo Replace with proper variable
-          margin-bottom: 0;
-          display: flex;
-          flex-wrap: wrap;
-        }
-
-        dt {
-          text-align: left;
-          font-weight: normal;
-          margin-top: @padding-small-vertical; // @todo Replace with proper variable
-          width: 30%;
-        }
-
-        dd {
-          margin-top: @padding-small-vertical; // @todo Replace with proper variable
-          width: 70%;
-          padding-left: @padding-small-vertical; // @todo Replace with proper variable
-        }
-      }
-    }
-
-    //////////
-    // User's blog posts
-    .view-user-blog {
-      padding-top: @padding-large-horizontal; // @todo Replace with proper variable
-
-      .view-content > div {
-        &:not(:first-child) {
-          padding-top: @padding-large-horizontal; // @todo Replace with proper variable
-          margin-top: @padding-large-horizontal; // @todo Replace with proper variable
-          border-top: 1px solid @little-darker;
-        }
-
-        // Set max-height to images to make nodes listing less ugly
-        .content {
-          img {
-            max-height: 10 * @font-size-base; // @todo Replace with proper variable
-            width: auto;
-          }
-        }
-
-        // Hide avatar and username
-        .node-header-item {
-          &:first-child, // @todo Add specific class to user avatar
-          .fa-user, // @todo Add wrapper and specific class to user name
-          .username { // @todo Add wrapper and specific class to user name
-            display: none;
-          }
-        }
-      }
-
-      // Increase top margin as content items has no internal top/bottom paddings
-      // as they have on '/tracker/*' listings.
-      // @todo Apply this rule to other pagers if needed
-      .pager-wrapper {
-        margin-top: @padding-large-vertical + @padding-large-horizontal; // @todo Replace with proper variable
-      }
-    }
-  }
-
-  &.front {
-    .navbar-second {
-      background: transparent;
-    }
-
-    .region-content {
-      section {
-        margin-top: @padding-large-horizontal; // @todo Replace with proper variable
-
-        &:first-child {
-          margin-top: 0;
-        }
-      }
-    }
-
-    .jumbotron {
-      .gradient-image("../img/front-bg.svg", @brand-primary, #71afdc);
-      background-position: center 101%;
-      background-repeat: repeat-x;
-      color: @navbar-default-link-color;
-      margin-bottom: 0;
-      padding-top: @jumbotron-padding * 2;
-      padding-bottom: @jumbotron-padding * 2;
-      position: relative;
-      z-index: 2;
-
-      .download-drupal-front {
-        color: #e2b674;
-
-        &:hover, &:focus {
-          color: lighten(#e2b674, @tone);
-          text-decoration: none;
-        }
-
-        i {
-          .text-shadow(0 0 80px);
-        }
-      }
-
-      p {
-        font-weight: 300;
-        font-size: @font-size-base;
-
-        @media @very-smalld {
-          font-size: @font-size-h2;
-        }
-      }
-    }
-  }
-
-  // @todo Do refactoring of /events page
-  &.page-events {
-    @timeline-width: 96px;
-    @point-size: 13px;
-
-    .node-event {
-      img {
-        max-width: 100%;
-        height: auto;
-      }
-    }
-
-    @media @tablet {
-      #block-system-main {
-        padding-left: @grid-gutter-width*2;
-        margin-left: @timeline-width;
-        border-left: 1px solid @brand-info;
-      }
-
-      .event-date {
-        position: absolute;
-        left: -(@timeline-width + (2.5 * @grid-gutter-width) - (.5 * @well-padding-lg-horizontal) + (.5 * @point-size) - 1px);
-        line-height: 1.3em;
-        font-size: 0.5em;
-        color: @brand-accent;
-
-        &:after {
+      h3 {
+        small {
           display: block;
-          content: '';
-          position: absolute;
-          width: @point-size;
-          height: @point-size;
-          border-radius: 50%;
-          border: 1px solid;
-          right: -35px;
-          top: .3em;
-          background: @body-bg;
         }
+      }
+    }
+  }
+
+  .user-info {
+    h3 {
+      margin-top: @padding-large-horizontal;
+      border-bottom: 1px solid @brand-info;
+      color: @brand-primary;
+    }
+
+    dl {
+      margin-top: @padding-base-vertical;
+      margin-bottom: 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    dt {
+      text-align: left;
+      font-weight: normal;
+      margin-top: @padding-small-vertical;
+      width: 30%;
+    }
+
+    dd {
+      margin-top: @padding-small-vertical;
+      width: 70%;
+      padding-left: @padding-small-vertical;
+    }
+  }
+}
+
+// @todo Refactor with css grid
+.front {
+  .navbar-second {
+    background: transparent;
+  }
+
+  .region-content {
+    section {
+      margin-top: @padding-large-horizontal;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .jumbotron {
+    .gradient-image("../img/front-bg.svg", @brand-primary, #71afdc); // @todo Replace with cheerful image
+    background-position: center 101%;
+    background-repeat: repeat-x;
+    color: @navbar-default-link-color;
+    margin-bottom: 0;
+    padding-top: @jumbotron-padding * 2;
+    padding-bottom: @jumbotron-padding * 2;
+    position: relative;
+    z-index: 2;
+
+    .download-drupal-front {
+      color: #e2b674;
+
+      &:hover, &:focus {
+        color: lighten(#e2b674, @tone);
+        text-decoration: none;
+      }
+
+      i {
+        .text-shadow(0 0 80px);
+      }
+    }
+
+    p {
+      font-weight: 300;
+      font-size: @font-size-base;
+
+      @media @very-smalld {
+        font-size: @font-size-h2;
+      }
+    }
+  }
+}
+
+// @todo Refactor page /events and /events/past
+.page-events {
+  @timeline-width: 96px;
+  @point-size: 13px;
+
+  @media @tablet {
+    #block-system-main {
+      padding-left: @grid-gutter-width*2;
+      margin-left: @timeline-width;
+      border-left: 1px solid @brand-info;
+    }
+
+    .event-date {
+      position: absolute;
+      left: -(@timeline-width + (2.5 * @grid-gutter-width) - (.5 * @well-padding-lg-horizontal) + (.5 * @point-size) - 1px);
+      line-height: 1.3em;
+      font-size: 0.5em;
+      color: @brand-accent;
+
+      &:after {
+        display: block;
+        content: '';
+        position: absolute;
+        width: @point-size;
+        height: @point-size;
+        border-radius: 50%;
+        border: 1px solid;
+        right: -35px;
+        top: .3em;
+        background: @body-bg;
       }
     }
   }

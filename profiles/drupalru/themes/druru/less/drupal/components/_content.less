@@ -1,6 +1,6 @@
 .description {
-  font-size: .9em;
-  color: lighten(@text-color, 30%);
+  font-size: .9em; // @todo Replace with var
+  color: lighten(@text-color, 30%); // @todo Replace with var
 }
 
 .page-header {
@@ -10,26 +10,9 @@
   padding-bottom: 0;
   margin-top: @padding-large-horizontal; // @todo Replace with proper variable
   margin-bottom: 0;
-
-  i {
-    color: darken(@gray-light, @tone * 2);
-  }
 }
 
-.content {
-  img {
-    max-width: 100%;
-  }
-
-  .field {
-    margin-top: 5px;
-
-    &.field-name-body {
-      margin-top: 0;
-    }
-  }
-}
-
+// @todo WTF?
 span.cke_top, span.cke_bottom {
   .gradient(#cfd1cf, #cfd1cf, #dfe1df);
 
@@ -44,6 +27,7 @@ span.cke_top, span.cke_bottom {
   }
 }
 
+// @todo WTF?
 span.cke_toolgroup, a.cke_combo_button {
   .gradient(#e4e4e4, #e4e4e4, #f4f4f4);
 
@@ -58,11 +42,13 @@ span.cke_toolgroup, a.cke_combo_button {
   }
 }
 
+// @todo Refactor
 .more-link {
   text-align: right;
   margin-top: 6px;
 }
 
+// @todo WTF?
 .node-type-list {
   dd {
     padding: 0 0 5px 15px;
@@ -78,71 +64,12 @@ span.cke_toolgroup, a.cke_combo_button {
   }
 }
 
-.field-type-taxonomy-term-reference {
-  &.field-label-inline {
-    .field-label {
-      margin-right: @padding-base-horizontal;
-    }
-  }
-
-  .field-items > div {
-    display: inline-block;
-    margin-right: @padding-small-horizontal;
-
-    &:after {
-      display: inline-block;
-      content: ', ';
-    }
-
-    &:last-of-type {
-      &:after {
-        content: '';
-      }
-    }
-  }
-}
-
+// @todo WTF?
 .list-group {
   .list-group-item {
     .h3 {
       margin: 0;
       padding-right: @padding-base-horizontal;
-    }
-  }
-}
-
-.terms-wrapper {
-  margin-top: @padding-large-horizontal; // @todo Replace with proper variable
-  margin-bottom: 0;
-  position: relative;
-
-  &:after {
-    color: @little-darker;
-    content: "\f02c";
-    font-family: "fa", "FontAwesome";
-    position: absolute;
-    font-size: @font-size-h2;
-    top: @padding-base-vertical;
-    right: @padding-base-horizontal;
-    z-index: 0;
-  }
-
-  .field:first-of-type {
-    margin: 0;
-  }
-
-  @media @phone {
-    .field-label {
-      .text-ellipsis();
-      float: left;
-      width: 200px;
-      text-align: right;
-      font-weight: 400;
-    }
-
-    .field-items {
-      padding-left: 212px;
-      float: none;
     }
   }
 }

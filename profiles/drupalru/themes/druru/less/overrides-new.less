@@ -1,0 +1,93 @@
+body {
+  font-family: @font-family-base, sans-serif;
+  font-size: @font-size-primary;
+  background-color: @color-bg;
+  color: @color-fg;
+}
+
+.region-sidebar-first {
+  font-size: @font-size-secondary;
+}
+
+#backtotop {
+  background-image: url(../img/back-to-top.svg);
+  opacity: .62;
+  transition: opacity @transition-speed @transition-func;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+a {
+  &,
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none;
+    outline: none;
+  }
+
+  & {
+    transition: color      @transition-speed @transition-func,
+                opacity    @transition-speed @transition-func,
+                box-shadow @transition-speed @transition-func;
+  }
+}
+
+p,
+ul, ol, dl {
+  margin: 0; // @todo Remove after bootstrap is removed and if destyle.css is used.
+}
+
+h3, h4, h5, h6 {
+  font-weight: unset; // @todo Remove after bootstrap is removed and if destyle.css is used.
+}
+
+// @todo Refactor page structure for nodes/pages. References:
+//       1. https://www.w3.org/TR/2013/CR-html5-20130806/sections.html#the-article-element
+//       2. https://www.semrush.com/blog/semantic-html5-guide/
+//       3. http://html5doctor.com/the-article-element/
+//       4. https://developer.mozilla.org/en-US/docs/Web/HTML/Element/article
+.page-header {
+  margin-top: @gap;
+}
+
+br + br {
+  display: none; // @todo Check editor for bug with outputting doubled <br>
+}
+
+// Blockquotes
+// @todo Refactor after bootstrap is removed and if destyle.css is used.
+blockquote {
+  border: 0;
+  margin: 0;
+  padding: @padding-blockquote;
+  font-size: @font-size-blockquote;
+  box-shadow: inset @border-blockquote 0 0 @color-blockquote-border;
+  background-color: @color-blockquote-bg;
+  color: @color-blockquote-fg;
+
+  footer {
+    font-size: @font-size-blockquote-cite;
+    color: @color-blockquote-cite-fg;
+    margin-top: @gap-blockquote-cite;
+
+    &:before {
+      content: '\2014 \00A0'; // em dash, nbsp
+    }
+  }
+}
+// @todo Refactor bb-quote
+.bb-quote {
+  b {
+    font-size: @font-size-blockquote-cite;
+    color: @color-blockquote-cite-fg;
+    font-weight: unset;
+    display: block;
+
+    & + br {
+      display: none;
+    }
+  }
+}

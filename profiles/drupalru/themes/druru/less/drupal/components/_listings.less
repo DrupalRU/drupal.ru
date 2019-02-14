@@ -38,6 +38,34 @@
     @entity-listing-extended();
     @listing-extended();
   }
+
+  .node {
+    &__links {
+      & > * {
+        background-color: @color-entity-links-bg;
+      }
+
+      a {
+        color: @color-entity-links-link-listing;
+      }
+    }
+
+    @media (min-width: @grid-float-breakpoint) {
+      &:hover,
+      &:active,
+      &:focus {
+        .node__links {
+          & > * {
+            background-color: @color-entity-links-bg-hover;
+          }
+
+          a {
+            color: @color-entity-links-link;
+          }
+        }
+      }
+    }
+  }
 }
 // Specific styling for entities in listings attached to another listing.
 // Attached listing in /tracker is used to show 'sticky' content.

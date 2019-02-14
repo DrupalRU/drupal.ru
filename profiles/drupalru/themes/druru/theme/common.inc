@@ -484,3 +484,16 @@ function _druru_wrap_claim(&$content, $type,  $id) {
     hide($content['ticket']);
   }
 }
+
+// Format timestamp based on its oldness
+function _druru_format_date_aging($timestamp) {
+  if (date('Ymd') == date('Ymd', $timestamp)) {
+    return format_date($timestamp, 'current_day');
+  }
+  elseif (date('Y') == date('Y', $timestamp)) {
+    return format_date($timestamp, 'current_year');
+  }
+  else {
+    return format_date($timestamp, 'years');
+  }
+}

@@ -7,7 +7,7 @@
     flex: 1 1 100%;
   }
 
-  &.menu-open &__meta .menu-toggle {
+  &.is-menu-open &__meta .menu-toggle {
     color: @color-link-hover;
   }
 
@@ -112,13 +112,13 @@
   }
 
   @media (max-width: @grid-float-breakpoint) {
-    // Change order of entity elements for small viewports thus menu will be displayed before content
-    &__title   { order: -4; }
-    &__meta    { order: -3; }
-    &__content { order: -1; }
-    &__links   { order: -2; }
+    // If entity is being displayed as 'Content' change order of entity elements for small viewports so .entity__links will be displayed before content
+    .is-view-entity &__title   { order: -4; }
+    .is-view-entity &__meta    { order: -3; }
+    .is-view-entity &__content { order: -1; }
+    .is-view-entity &__links   { order: -2; }
 
-    &__links {
+    .is-view-entity &__links {
       box-shadow: none;
       height: 0;
       transition: height @transition-speed @transition-func;
@@ -153,8 +153,8 @@
       }
     }
 
-    .menu-open &__taxonomy,
-    .menu-open &__menu {
+    .is-view-entity.is-menu-open &__taxonomy,
+    .is-view-entity.is-menu-open &__menu {
       transform: translateY(0);
 
       li {

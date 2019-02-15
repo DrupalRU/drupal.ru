@@ -11,6 +11,11 @@
       &:focus {
         color: @color-heading-link-hover;
       }
+
+      @media (max-width: @grid-float-breakpoint) {
+        // On small viewports display entity title link as block so it will take all available width
+        display: block;
+      }
     }
   }
 
@@ -32,11 +37,6 @@
 
   &__title {
     font-size: @font-size-secondary;
-  }
-  // Visually hide date field if entity displayed in sidebar.
-  // In the future this should be reconsidered as we might need visible dates in some blocks.
-  &__date {
-    display: none;
   }
 }
 // Specific styling for entities in listings displayed via Fields as blocks.

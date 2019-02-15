@@ -92,6 +92,7 @@
   width: @font-size-aux;
   height: @font-size-aux;
   margin-left: auto;
+  transition: color @transition-speed @transition-func;
   cursor: pointer;
 
   &::after {
@@ -101,7 +102,7 @@
   &:hover,
   &:focus,
   &:active {
-    color: @color-meta;
+    color: @color-link-hover;
   }
 
   @media (min-width: @grid-float-breakpoint) {

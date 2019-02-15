@@ -4,6 +4,7 @@
 // Styling for nodes displayed in block 'Featured'
 .entity-listing--block.entity-listing--tracker-featured {
   .node {
+    padding: @padding-listing-item-page-v @padding-listing-item-page-h;
     &__title {
       font-size: @font-size-content-section-heading;
     }
@@ -29,6 +30,16 @@
   .node {
     @entity-listing-block();
     @listing-block();
+  }
+
+  &:not(.entity-listing--tracker-featured) {
+    .node {
+      // Visually hide date field if entity displayed in listing in block (except block 'Featured').
+      // In the future this should be reconsidered as we might need visible dates in some blocks.
+      &__date {
+        display: none;
+      }
+    }
   }
 }
 // Styling for entities in listings displayed via Content (e.g. /user/%/blog).

@@ -43,6 +43,9 @@ function druru_preprocess_node(&$vars) {
     $vars['classes_array'][] = 'has-accepted-answer';
   }
 
+  $vars['classes_array'][] = 'node--' . $vars['view_mode'];
+  $vars['classes_array'][] = 'is-view-entity';
+
   $vars['title_attributes_array']['class'] = 'node__title';
   $vars['content_attributes_array']['class'] = 'node__content';
   $vars['content']['links']['#attributes']['class'] = [];

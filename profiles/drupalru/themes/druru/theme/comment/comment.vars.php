@@ -49,6 +49,9 @@ function druru_preprocess_comment(&$vars) {
     }
   }
 
+  $vars['classes_array'][] = 'comment--' . $view_mode;
+  $vars['classes_array'][] = 'is-view-entity';
+
   $vars['content_attributes_array']['class'] = 'comment__content';
   $vars['content']['links']['#attributes']['class'] = [];
   $vars['content']['links']['#attributes']['class'][] = 'comment__menu';

@@ -23,7 +23,7 @@ var Drupal = Drupal || {};
       };
       // Main screen resize logic. This function is called after the screen is finished resizing.
       var doneResizing = function () {
-        $('.menu-open').each(function() {
+        $('.is-menu-open').each(function() {
           var entity = $(this);
           Drupal.behaviors.Brights.adaptEntityMenuHeight(entity);
         });
@@ -35,7 +35,7 @@ var Drupal = Drupal || {};
         var entity = $(this).parents().filter(function() {
           return $(this).data('entity-type');
         }).eq(0);
-        entity.toggleClass('menu-open');
+        entity.toggleClass('is-menu-open');
         Drupal.behaviors.Brights.adaptEntityMenuHeight(entity);
       });
 
@@ -53,7 +53,7 @@ var Drupal = Drupal || {};
         totalHeight = totalHeight + $(this).outerHeight(true);
       });
 
-      if (entity.hasClass('menu-open')) {
+      if (entity.hasClass('is-menu-open')) {
         wrapper.css('height', totalHeight);
       }
       else {

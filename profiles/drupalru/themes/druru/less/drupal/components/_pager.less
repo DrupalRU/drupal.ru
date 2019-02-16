@@ -1,89 +1,10 @@
-//
 // Pager pagination
-// --------------------------------------------------
-
 .pager-wrapper {
-  margin-top: @padding-large-horizontal; // @todo Replace with proper variable
-  clear: left;
-}
-
-.pager {
-  margin: 0;
-
-  li {
-    display: inline;
-    cursor: default;
-
-    > a,
-    > span {
-      padding: 5px 1em; // @todo Replace with proper variable
-      line-height: 1.1em; // @todo Replace with proper variable
-      cursor: pointer;
-    }
-  }
-
-  .pager-previous {
-    margin-right: 5px; // @todo Replace with proper variable
-    width: 80px; // @todo Replace with proper variable
-  }
-
-  .pager-next {
-    margin-left: 5px; // @todo Replace with proper variable
-    width: 50px; // @todo Replace with proper variable
-  }
-}
-
-.region-sidebar-first,
-.region-sidebar-second {
-  .block {
-    .pager {
-      margin: 6px 0; // @todo Replace with proper variable
-
-      li {
-        display: inline-block;
-
-        &.pager-next, &.pager-prev {
-          width: auto;
-        }
-
-        > a,
-        > span {
-          &, &.progress-disabled {
-            padding: 5px 5px; // @todo Replace with proper variable
-            line-height: 1.1em; // @todo Replace with proper variable
-            background: none;
-            border: none;
-          }
-        }
-      }
-
-      .ajax-progress.ajax-progress-throbber {
-        background: @ajax-loading-bg;
-        bottom: 0;
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        cursor: progress;
-
-        i {
-          position: absolute;
-          top: 50%;
-          top: calc(50% - 7px);
-          left: 50%;
-          left: calc(50% - 7px);
-        }
-      }
-    }
-  }
+  margin-top: @gap;
+  padding-top: @gap;
+  text-align: center;
 }
 
 .pagination {
   margin: 0;
-
-  a, span {
-    &, &.progress-disabled {
-      float: left;
-    }
-  }
 }

@@ -1,0 +1,134 @@
+// @todo Create styling for /events and /events/past
+////////////////////
+// Entity listings
+// Styling for nodes displayed in block 'Featured'
+.entity-listing--block.entity-listing--tracker-featured {
+  .node {
+    padding: @padding-listing-item-page-v @padding-listing-item-page-h;
+    &__title {
+      font-size: @font-size-content-section-heading;
+    }
+  }
+}
+// Generic styling for entities in listings
+.entity-listing {
+  .node,
+  .comment {
+    @entity-listing();
+    @listing();
+  }
+}
+// Specific styling for entities in listings displayed via Fields as pages.
+.entity-listing--page {
+  .node {
+    @entity-listing-page();
+    @listing-page();
+  }
+}
+// Specific styling for entities in listings displayed via Fields as blocks.
+.entity-listing--block {
+  .node {
+    @entity-listing-block();
+    @listing-block();
+  }
+
+  &:not(.entity-listing--tracker-featured) {
+    .node {
+      // Visually hide date field if entity displayed in listing in block (except block 'Featured').
+      // In the future this should be reconsidered as we might need visible dates in some blocks.
+      &__date {
+        display: none;
+      }
+    }
+  }
+}
+// Styling for entities in listings displayed via Content (e.g. /user/%/blog).
+.entity-listing--extended {
+  .node,
+  .comment {
+    @entity-listing-extended();
+    @listing-extended();
+  }
+
+  .node {
+    &__links {
+      & > * {
+        background-color: @color-entity-links-bg;
+      }
+
+      a {
+        color: @color-entity-links-link-listing;
+      }
+    }
+
+    @media (min-width: @grid-float-breakpoint) {
+      &:hover,
+      &:active,
+      &:focus {
+        .node__links {
+          & > * {
+            background-color: @color-entity-links-bg-hover;
+          }
+
+          a {
+            color: @color-entity-links-link;
+          }
+        }
+      }
+    }
+  }
+}
+// Specific styling for entities in listings attached to another listing.
+// Attached listing in /tracker is used to show 'sticky' content.
+// Sticky nodes can be used for long term content or ads, etc.
+// @todo Create styling for 'sticky' content.
+.entity-listing .attachment {
+  &-before {
+    .node {
+      .border(0, 0, 1, 0, @color-divider);
+    }
+  }
+
+  &-after {
+    .node {
+      .border(1, 0, 0, 0, @color-divider);
+    }
+  }
+}
+
+////////////////////
+// Comments listings
+#comments,
+.indented {
+  .comment {
+    &:not(:first-child) {
+      margin-top: @gap-comments;
+    }
+
+    @media (max-width: @grid-float-breakpoint) {
+      .border(0, 0, 1, 0, @color-divider);
+      padding-bottom: @gap-listing-comments-items;
+    }
+  }
+}
+
+#comments,
+.comment-form-wrapper {
+  margin-top: @gap-entity;
+
+  .section-title {
+    font-size: @font-size-page-section-title;
+    font-weight: normal;
+  }
+}
+
+.comment-form-wrapper {
+  .comment-form {
+    margin-top: @gap-entity;
+  }
+}
+
+.indented {
+  padding-left: @gap-comments-indented;
+  .border(0, 0, 0, 1, @color-divider);
+}

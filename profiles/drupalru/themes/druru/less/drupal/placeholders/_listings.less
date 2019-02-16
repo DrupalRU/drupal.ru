@@ -1,0 +1,102 @@
+// Generic styling for entities in listings.
+@entity-listing: {
+  &__title {
+    font-weight: normal;
+
+    a {
+      color: @color-heading;
+
+      &:hover,
+      &:active,
+      &:focus {
+        color: @color-heading-link-hover;
+      }
+
+      @media (max-width: @grid-float-breakpoint) {
+        // On small viewports display entity title link as block so it will take all available width
+        display: block;
+      }
+    }
+  }
+
+  &__meta {
+    color: @color-meta;
+    font-size: @font-size-aux;
+  }
+
+  &__comments-count {
+    margin-left: auto;
+  }
+}
+
+// Specific styling for entities in listings displayed via Fields as blocks.
+@entity-listing-block: {
+  & > *:not(:first-child) {
+    margin-top: @gap-listing-block;
+  }
+
+  &__title {
+    font-size: @font-size-secondary;
+  }
+}
+// Specific styling for entities in listings displayed via Fields as blocks.
+@entity-listing-page: {
+  & > *:not(:first-child) {
+    margin-top: @gap-listing-page;
+  }
+
+  &__title {
+    font-size: @font-size-content-section-heading;
+  }
+}
+// Specific styling for entities in listings displayed via Content.
+@entity-listing-extended: {
+  &__title {
+    font-size: @font-size-content-section-title;
+  }
+
+  &__meta {
+    margin-top: @gap-entity;
+  }
+
+  &__content {
+    // Hide <hr> tags stored in entity's content in listings so they won't mix with items dividers
+    hr {
+      display: none;
+    }
+    // Set text font weight to normal to make its display clearer
+    p * {
+      font-weight: normal;
+    }
+    // Resize embedded images so they will take less space in listings
+    img {
+      max-height: @img-height-teaser;
+      width: auto;
+    }
+  }
+}
+
+// Generic styling for entities in listings
+@listing: {
+  &:not(:last-child) {
+    .border(0, 0, 1, 0, @color-divider);
+  }
+}
+// Specific styling for entities in listings displayed via Field as pages
+@listing-page: {
+  padding: @padding-listing-item-page-v @padding-listing-item-page-h;
+  margin-left: -@padding-listing-item-page-h;
+  margin-right: -@padding-listing-item-page-h;
+}
+// Specific styling for entities in listings displayed via Fields as blocks
+@listing-block: {
+  padding: @padding-listing-item-block-v @padding-listing-item-block-h;
+  margin-left: -@padding-listing-item-block-h;
+  margin-right: -@padding-listing-item-block-h;
+}
+// Specific styling for entities in listings displayed via Content
+@listing-extended: {
+  &:not(:first-child) {
+    margin-top: @gap-listing-extended-items;
+  }
+}

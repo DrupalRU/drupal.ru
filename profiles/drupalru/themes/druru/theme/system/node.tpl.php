@@ -78,10 +78,11 @@
  * @see template_process()
  *
  * @ingroup themeable
+ * @todo Refactor node.tpl.php to make it html5-compliant and enriched with microformats.
+ * @todo Make sure all node-*.tpl.php files were refactored as well.
  */
 ?>
-<div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-  <?php print render($title_prefix); ?>
+<article data-entity-type="node" id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?>"<?php print $attributes; ?>>
   <?php if (!$page && (!empty($title) || is_numeric($title))): ?>
     <h2<?php print $title_attributes; ?>>
       <?php if(isset($title_is_link) && !$title_is_link): ?>
@@ -92,58 +93,59 @@
     </h2>
   <?php endif; ?>
 
-  <?php print render($title_suffix); ?>
+  <div class="node__meta">
+    <?php if ($name): ?>
+      <span class="node__author-avatar"><?php print $user_picture; ?></span>
+      <span class="node__author-name"><?php print $name; ?></span>
+    <?php endif; ?>
 
-  <div class="node-header clearfix">
-    <span class="node-header-item">
-      <?php print $user_picture; ?>
-    </span>
-
-    <span class="node-header-item">
-      <?php if ($display_submitted): ?>
-        <div class="submitted small">
-          <?php print $submitted; ?>
-        </div>
-      <?php endif; ?>
+    <span class="node__date">
+      <?php print $date; ?>
     </span>
 
     <?php if(!empty($content['ticket-popover'])): ?>
-      <span class="node-header-item small">
+      <span class="node__claim">
         <?php print drupal_render($content['ticket-popover']); ?>
       </span>
     <?php endif; ?>
 
     <?php if(!empty($tnx)): ?>
-      <span class="node-header-item small">
+      <span class="node__voting">
         <?php print $tnx; ?>
       </span>
     <?php endif; ?>
+
+    <div class="menu-toggle"></div>
   </div>
 
-  <div <?php print $content_attributes; ?>>
+  <div<?php print $content_attributes; ?>>
     <?php
-      // We hide the comments and links now so that we can render them later.
+      // Hide the comments, links, etc. and render them separately.
       hide($content['comments']);
       hide($content['links']);
       hide($content['resolved_comment']);
+      hide($content['group_taxonomy']);
       print drupal_render($content);
     ?>
   </div>
 
-  <?php print render($content['links']); ?>
+  <div class="node__links">
+    <?php print render($content['group_taxonomy']); ?>
+    <?php print render($content['links']); ?>
+  </div>
 
   <?php if(isset($has_resolved_comment)): ?>
-    <div class="node-best-reply">
-      <h3><?php print t('Best reply'); ?></h3>
-      <?php print render($content['resolved_comment']); ?>
-    </div>
+  <section class="accepted-answer">
+    <h3><?php print t('Best reply'); ?></h3>
+    <?php print render($content['resolved_comment']); ?>
+  </section>
   <?php endif; ?>
 
   <?php if (isset($content_third)): ?>
-    <div class="region region-content-third">
-        <?php print render($content_third); ?>
-    </div>
+    <section class="region region-content-third">
+      <?php print render($content_third); ?>
+    </section>
   <?php endif; ?>
 
   <?php print render($content['comments']); ?>
-</div>
+</article>

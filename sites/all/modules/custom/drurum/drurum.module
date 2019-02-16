@@ -168,82 +168,6 @@ function drurum_page_delivery_callback_alter(&$callback) {
 }
 
 /**
- * Implements hook_block_info().
- */
-function drurum_block_info() {
-  $blocks['new'] = [
-    'info' => t('New at the forum'),
-    'cache' => DRUPAL_CACHE_CUSTOM,
-    'properties' => [
-      'administrative' => TRUE,
-    ],
-  ];
-  return $blocks;
-}
-
-/**
- * Implements hook_block_configure().
- */
-function druru_block_configure($delta = '') {
-  return forum_block_configure($delta);
-}
-
-/**
- * Implements hook_block_save().
- */
-function druru_block_save($delta = '', $edit = []) {
-  forum_block_save($delta, $edit);
-}
-
-/**
- * Implements hook_block_view().
- */
-function drurum_block_view($delta = '') {
-  global $user;
-  $query = db_select('forum_index', 'f')->fields('f')->addTag('node_access');
-  $query->leftJoin('node', 'n', 'f.nid = n.nid');
-  $query->fields('n', ['type', 'changed']);
-  $title = '';
-  switch ($delta) {
-    case 'active':
-      $title = t('Active forum topics');
-      $query->orderBy('f.last_comment_timestamp', 'DESC')
-        ->range(0, variable_get('forum_block_num_active', '5'));
-      break;
-
-    case 'new':
-      $title = t('New forum topics');
-      $count = drupal_is_front_page() ? 30 : variable_get('forum_block_num_new', 5);
-      $query->orderBy('f.created', 'DESC')->range(0, $count);
-      break;
-  }
-
-  // Attach resolved mark.
-  if (module_enable(['resolve'])) {
-    $query->leftJoin('resolved', 'r', 'r.nid = f.nid');
-    $query->fields('r', ['resolved']);
-  }
-
-  $block['subject'] = $title;
-  // Cache based on the altered query. Enables us to cache with node access enabled.
-  $block['content'] = drupal_render_cache_by_query($query, 'forum_block_view');
-  $block['content']['#access'] = user_access('access content');
-
-  $result = $query->execute();
-  $node_title_list = drurum_node_title_list($result);
-  if ($node_title_list) {
-    $block['content'] = [];
-    $block['content']['forum_list'] = $node_title_list;
-    $block['content']['forum_more'] = [
-      '#theme' => 'more_link',
-      '#url' => 'forum',
-      '#title' => t('Read the latest forum topics.'),
-    ];
-  }
-  return $block;
-}
-
-/**
  * Implements hook_menu_local_tasks_alter().
  */
 function drurum_menu_local_tasks_alter(&$data, $router_item, $root_path) {
@@ -269,43 +193,7 @@ function drurum_privatemsg_autocomplete_alter(&$matches, $names, $fragment) {
 }
 
 /**
- * Duplicate of node_title_list() with little changes.
- *
- * @param $result
- * @param null $title
- *
- * @return array|bool
- *
- * @see node_title_list()
- */
-function drurum_node_title_list($result, $title = NULL) {
-  $items = [];
-
-  foreach ($result as $node) {
-    $options = ['html' => TRUE];
-
-    // Add comment count to title.
-    if (!empty($node->comment_count)) {
-      $node_title = format_plural($node->comment_count, '1 comment', '@count comments');
-      $option['attributes']['title'] = $node_title;
-    }
-    $icon = drurum_node_icon($node);
-    $mark = theme('mark', [
-      'type' => node_mark($node->nid, $node->changed),
-    ]);
-
-    $items[] = l($icon . check_plain($node->title) . $mark, 'node/' . $node->nid, $options);
-  }
-
-  return $items ? [
-    '#theme' => 'item_list__node',
-    '#items' => $items,
-    '#title' => $title,
-  ] : FALSE;
-}
-
-/**
- *
+ * @todo Remove all calls to drurum_node_icon and remove function
  */
 function drurum_node_icon($node) {
   $node_types = &drupal_static(__FUNCTION__, []);
@@ -323,11 +211,6 @@ function drurum_node_icon($node) {
         // Will be used icon "calendar" for events.
         case !empty($node->type) && $node->type == 'organization':
           $icon = 'building-o';
-          break;
-
-        // The question can be resolved. Check it.
-        case drurum_can_be_resolved($node) && drurum_need_to_resolve($node->nid):
-          $icon = empty($node->resolved) ? 'question-circle-o' : 'check-circle-o';
           break;
 
         default:
@@ -467,4 +350,17 @@ function drurum_form_node_form_alter(&$form, &$form_state, $form_id) {
     // DO NOT Make the vocabulary required for 'real' forum-nodes.
     $form['taxonomy_forums'][$langcode]['#required'] = FALSE;
   }
+}
+
+function drurum_comment_view_alter(&$build) {
+  // Remove comment anchor as it is added to comment template
+  unset($build['#prefix']);
+}
+
+function drurum_entity_info_alter(&$entity_info) {
+  // Add 'teaser' view mode to comment display
+  $entity_info['comment']['view modes']['teaser'] = array(
+    'label' => t('Teaser'),
+    'custom settings' => TRUE,
+  );
 }

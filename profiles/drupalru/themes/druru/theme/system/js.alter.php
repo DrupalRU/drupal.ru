@@ -52,7 +52,10 @@ function druru_js_alter(&$js) {
   $js[$script]['scope'] = 'footer';
 
   if (!empty($excludes)) {
-    $js = array_diff_key($js, drupal_map_assoc($excludes));
+    $js = array_diff_ukey($js, drupal_map_assoc($excludes), function ($key1, $key2) {
+      return mb_strpos($key1, $key2) === FALSE ? 1 : 0;
+    });
+
   }
 
   // Add Bootstrap settings.

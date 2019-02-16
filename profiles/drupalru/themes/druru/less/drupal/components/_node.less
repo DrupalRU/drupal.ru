@@ -1,22 +1,6 @@
 .node {
-  > .links {
-    padding: 0;
-    margin: @padding-large-horizontal 0 0 0; // @todo Replace with proper variable
-
-    &.inline {
-      li {
-        list-style: none;
-        display: inline-block;
-        padding-right: 10px; // @todo Replace with proper variable
-      }
-    }
-  }
-
   &.node-teaser {
-    > ul.links {
-      text-align: right;
-    }
-
+    // @todo Refactor
     &.node-event {
       position: relative;
       border: 1px solid @well-border;
@@ -44,27 +28,93 @@
     }
   }
 
-  &.node-blog {
-    .node-header {
-      display: flex;
-      align-items: baseline;
-      margin-top: @padding-large-vertical; // @todo Replace with proper variable
-    }
-
-    .node-header-item {
-      margin-right: @padding-base-horizontal; // @todo Replace with proper variable
-    }
-  }
-
-  .content:not(:first-child) {
-    margin-top: @padding-large-vertical; // @todo Replace with proper variable
-  }
-
+  // @todo Refactor
   &.node-unpublished {
     background-color: @state-danger-bg;
   }
-
+  // @todo Refactor
   .unpublished-item {
     color: @state-danger-text;
+  }
+}
+
+////////////////////
+// Generic styling for node
+.node {
+  @entity();
+
+  .page-node:not(.front) .main & {
+    grid-gap: @gap-entity;
+  }
+
+  &__content {
+    @media (max-width: @grid-float-breakpoint) {
+      .border(0, 0, 1, 0, @color-divider);
+      padding-bottom: @gap-entity;
+    }
+  }
+
+  &__links > * {
+    background-color: @color-entity-links-bg-hover;
+  }
+
+  &__status {
+    // @todo Add dom elements for markers such as 'new' to nodes in lisiting.
+    .is-new &::after,
+    .is-updated &::after {
+      @icon();
+      content: @fa-var-circle;
+      font-size: @font-size-aux;
+      color: @color-notification;
+    }
+  }
+
+  &__comments-count {
+    &::before,
+    &::after {
+      @icon();
+    }
+
+    &::before {
+      content: @fa-var-commenting-o;
+      margin-right: @gap-icon;
+
+      .has-new-comments & {
+        content: @fa-var-commenting;
+        color: @color-notification;
+      }
+
+      .has-no-comments & {
+        content: @fa-var-comment-o;
+      }
+
+    }
+
+    .has-accepted-answer & {
+      display: flex;
+    }
+
+    &::after {
+      .has-accepted-answer & {
+        content: @fa-var-check;
+        color: @color-notification;
+        order: -1;
+        margin-right: @gap-inline-v;
+      }
+    }
+  }
+
+  &__new-comments {
+    color: @color-notification;
+  }
+}
+
+.accepted-answer {
+  .border(1, 1, 1, 1, @color-notification);
+  margin-top: @gap-entity;
+  padding: @padding;
+
+  @media (min-width: @grid-float-breakpoint) {
+    padding: @padding @padding 0 @padding;
   }
 }

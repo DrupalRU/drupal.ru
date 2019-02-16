@@ -1,3 +1,4 @@
+// @todo Get rid of breadcrumbs at all as site structure is simple and plane.
 .breadcrumb {
   padding: 0;
   margin-bottom: 0;
@@ -11,7 +12,10 @@
     display: inline;
 
     &:not(:last-child):after {
-      content: "»";
+      @icon();
+      content: @fa-var-angle-right;
+      font-size: @font-size-aux;
+      color: @color-meta;
       margin-left: .375em;
       margin-right: .125em;
     }

@@ -8,7 +8,7 @@
  */
 ?>
 <?php foreach ($rows as $id => $row): ?>
-<a href="<?php print $node_hrefs[$id]; ?>"<?php if ($classes_array[$id]): ?> class="<?php print $classes_array[$id]; ?>"<?php endif; ?>>
+<article<?php if ($classes_array[$id]): ?> class="<?php print $classes_array[$id]; ?>"<?php endif; ?>>
   <?php print $row; ?>
-</a>
+</article>
 <?php endforeach; ?>

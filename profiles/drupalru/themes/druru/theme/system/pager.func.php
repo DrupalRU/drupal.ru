@@ -151,7 +151,7 @@ function druru_pager($variables) {
       );
     }
 
-    return '<div class="text-center pager-wrapper">' . theme('item_list', array(
+    return '<div class="pager-wrapper">' . theme('item_list', array(
       'items'      => $items,
       'attributes' => array(
         'class' => array('pagination'),

@@ -164,10 +164,6 @@ function resolve_preprocess_node(&$variables) {
   $is_resolved = !empty($variables['resolved']);
   $correct_mode = $variables['view_mode'] == 'full';
 
-  if (resolved_node_can_be_resolved($variables['node'])) {
-    $variables['title'] = resolve_add_mark($variables['node'], $is_resolved) . $variables['title'];
-  }
-
   // Adding best comment to bottom of the node.
   if ($correct_mode && $is_resolved && isset($variables['content'])) {
     $content = &$variables['content'];
@@ -265,7 +261,7 @@ function resolve_unsolved_node_ajax_callback($node, $comment, $token) {
 function resolve_update_page_state($node, &$commands) {
   $node = node_load($node->nid, NULL, TRUE);
   $node_view = node_view($node);
-  $commands[] = ajax_command_replace('.node', drupal_render($node_view));
+  $commands[] = ajax_command_replace('#node-' . $node->nid, drupal_render($node_view));
 }
 
 /**

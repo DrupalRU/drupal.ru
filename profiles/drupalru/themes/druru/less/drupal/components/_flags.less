@@ -1,0 +1,23 @@
+// @todo Refactor to use custom flag template(s) and unified names for css classes
+.flag-message,
+.flag-throbber {
+  display: none;
+}
+
+.flag-waiting {
+  a {
+    position: relative;
+    opacity: 1; // @todo Disable flag.css and reimplement required css rules for flags
+
+    &::after {
+      position: absolute;
+      display: block;
+      content: "";
+      width: @throbber-width;
+      height: @throbber-height;
+      border-radius: @throbber-radius;
+      background-color: @color-throbber;
+      animation: animate-throbber @throbber-transition-speed ease-in-out infinite;
+    }
+  }
+}

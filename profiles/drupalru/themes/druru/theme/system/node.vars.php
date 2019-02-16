@@ -4,21 +4,19 @@
  * Implements hook_preprocess_node().
  */
 function druru_preprocess_node(&$vars) {
-  $content = &$vars['content'];
-  $vars['content_attributes_array']['class'][] = 'content';
+  $content   = &$vars['content'];
   $view_mode = $vars['view_mode'];
-  _druru_wrap_terms($vars['content']);
 
-  $date = druru_icon('calendar') . $vars['date'];
-  $user = druru_icon('user') . $vars['name'];
-  $vars['submitted'] = $date . ', ' . $user;
+  $vars['date'] = _druru_format_date_aging($vars['created']);
 
+  // @todo Refactor to set node status to .node wrapper
   if (!$vars['status']) {
     $vars['submitted'] = ' <span class="unpublished-item">';
     $vars['submitted'] .= druru_get_icon_by_title(t('Unpublished'));
     $vars['submitted'] .= '</span>';
   }
 
+  // @todo Refactor or remove if isn't required
   if (isset($vars['content']['datetime']['#markup']) && $view_mode == 'teaser') {
     $event_time = $vars['node']->event->time_from;
     $vars['content']['datetime']['#markup'] = format_date($event_time, 'medium');
@@ -29,9 +27,9 @@ function druru_preprocess_node(&$vars) {
       '#suffix' => '</small>',
     );
   }
-  if ($vars['view_mode'] == 'frontpage') {
-    $vars['name'] = $vars['node']->name;
-  }
+
+  // Remove author avatar and name in node teasers
+  $vars['show_author'] = ($view_mode == 'teaser') ? FALSE : TRUE;
 
   $vars['attributes_array']['data-node-id'] = $vars['node']->nid;
 
@@ -41,65 +39,24 @@ function druru_preprocess_node(&$vars) {
     $vars['content_third'] = $content_third;
   }
 
+  if (!empty($vars['resolved'])) {
+    $vars['classes_array'][] = 'has-accepted-answer';
+  }
+
+  $vars['classes_array'][] = 'node--' . $vars['view_mode'];
+  $vars['classes_array'][] = 'is-view-entity';
+
+  $vars['title_attributes_array']['class'] = 'node__title';
+  $vars['content_attributes_array']['class'] = 'node__content';
+  $vars['content']['links']['#attributes']['class'] = [];
+  $vars['content']['links']['#attributes']['class'][] = 'node__menu';
+
+  $vars['content']['links']['blog']['#links']['blog_usernames_blog']['title'] = t('Blog');
+  $vars['content']['links']['blog']['#links']['blog_usernames_blog']['href'] = '/user/' . $vars['uid'] . '/blog';
+
+  // @todo Reimplement 'claim' with module 'flag'
   _druru_wrap_claim($content, 'node', $vars['nid']);
+  // @todo Refactor option 1. We need variable '$tnx' like other node variables.
+  // @todo Refactor option 2. Migrate to module 'flag' (preferred).
   _druru_wrap_thanks($vars, 'node');
-}
-
-/**
- * Implements hook_process_node().
- */
-function druru_process_node(&$vars) {
-  $node = isset($vars['node']) ? $vars['node'] : NULL;
-  // If display is page then menu will create in hook_process_page.
-  if ($vars['view_mode'] != 'full') {
-    if (!empty($node->nid)) {
-      $links = menu_contextual_links('node', 'node', array($node->nid));
-      $new_links = array();
-      _druru_fetch_links($links, $new_links);
-      if ($new_links) {
-        druru_construct_contextual_menu($new_links, $vars);
-      }
-    }
-  }
-
-  if ('frontpage' == $vars['view_mode']) {
-    $vars['time'] = format_interval(time() - $vars['revision_timestamp'], 1);
-  }
-}
-
-/**
- * @param $elements
- */
-function _druru_wrap_terms(&$elements) {
-  // List of terms which should be wrapped into "well".
-  $list = array(
-    'taxonomy_vocabulary_2',
-    'taxonomy_vocabulary_7',
-    'taxonomy_vocabulary_8',
-    'taxonomy_vocabulary_10',
-    'taxonomyextra',
-    'taxonomy_forums',
-  );
-
-  if (array_intersect($list, array_keys($elements))) {
-    $elements['terms_wrappepr'] = array(
-      '#type'       => 'container',
-      '#weight'     => NULL,
-      '#attributes' => array(
-        'class' => array('terms-wrapper', 'well'),
-      ),
-    );
-    $terms = &$elements['terms_wrappepr'];
-    foreach ($list as $term_name) {
-      if (isset($elements[$term_name])) {
-        if (!isset($terms['#weight'])
-          || $elements[$term_name]['#weight'] > $terms['#weight']
-        ) {
-          $terms['#weight'] = $elements[$term_name]['#weight'];
-        }
-        $terms[$term_name] = $elements[$term_name];
-        unset($elements[$term_name]);
-      }
-    }
-  }
 }

@@ -59,77 +59,49 @@
  * @ingroup themeable
  */
 ?>
-<article class="media <?php print $zebra; ?> <?php if ($new) print "new-comment" ?> <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-  <?php if ($picture): ?>
-    <div class="media-left">
-      <?php print $picture; ?>
-    </div>
-  <?php endif; ?>
+<article data-entity-type="comment" class="<?php print $zebra; ?> <?php if ($new) print "is-new" ?> <?php print $classes; ?>"<?php print $attributes; ?>>
+  <a id="comment-<?php print $comment->cid; ?>"></a>
+  <header class="comment__meta">
+    <?php if ($show_author): ?>
+      <span class="comment__author-avatar"><?php print $picture; ?></span>
+      <span class="comment__author-name"><?php print $author; ?></span>
+    <?php endif; ?>
 
-  <div class="media-body">
-    <div class="media-heading">
-      <span class="h4 media-header-item">
-        <?php print $author; ?>
+    <span class="comment__date">
+      <?php print $changed; ?>
+    </span>
+
+    <span class="comment__permalink">
+      <?php print $permalink; ?>
+    </span>
+
+    <?php if (isset($unpublished)): ?>
+      <span class="comment__status">
+        <?php print $unpublished; ?>
       </span>
+    <?php endif; ?>
 
-      <span class="text-muted media-header-item small">
-        <?php isset($timeago) ? print $timeago : print $changed; ?>
+    <?php if(!empty($content['ticket-popover'])): ?>
+      <span class="comment__claim">
+        <?php print drupal_render($content['ticket-popover']); ?>
       </span>
-      <?php if (isset($unpublished)): ?>
-        <span class="media-header-item small">
-          <?php print $unpublished; ?>
-        </span>
-      <?php endif; ?>
+    <?php endif; ?>
 
-      <?php if(!empty($content['ticket-popover'])): ?>
-        <span class="media-header-item small">
-          <?php print drupal_render($content['ticket-popover']); ?>
-        </span>
-      <?php endif; ?>
-
-      <span class="media-header-item small">
-        <?php print $permalink; ?>
+    <?php if(!empty($tnx)): ?>
+      <span class="comment__voting">
+        <?php print $tnx; ?>
       </span>
+    <?php endif; ?>
 
-      <?php if(!empty($tnx)): ?>
-        <span class="media-header-item small">
-          <?php print $tnx; ?>
-        </span>
-      <?php endif; ?>
+    <span class="menu-toggle"></span>
+  </header>
 
-      <?php if(!empty($content['links'])
-        && empty($content['links']['#printed'])
-        && (
-          !isset($content['links']['#access'])
-          || $content['links']['#access']
-        )):?>
-        <div class="dropdown clearfix pull-right">
-          <button class="btn btn-default dropdown-toggle" type="button"
-                  id="comment-menu-<?php print $comment->cid ?>" data-toggle="dropdown" aria-haspopup="true"
-                  aria-expanded="false">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <?php
-          $content['links']['#attributes']['class'][] = 'dropdown-menu';
-          $content['links']['#attributes']['id'] = 'comment-menu-' . $comment->cid;
-          $content['links']['#attributes']['aria-labelledby'] = 'comment-menu-' . $comment->cid;
-          print render($content['links']);
-          ?>
-        </div>
-      <?php endif; ?>
-    </div>
-
-    <div class="content" <?php print $content_attributes; ?>>
-      <?php hide($content['links']); ?>
-      <?php print render($content); ?>
-
-      <?php if ($signature): ?>
-        <div class="user-signature clearfix">
-          <?php print $signature; ?>
-        </div>
-      <?php endif; ?>
-    </div>
+  <div<?php print $content_attributes; ?>>
+    <?php hide($content['links']); ?>
+    <?php print render($content); ?>
   </div>
+
+  <footer class="comment__links">
+    <?php print render($content['links']); ?>
+  </footer>
 </article>

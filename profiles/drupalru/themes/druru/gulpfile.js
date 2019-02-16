@@ -18,7 +18,7 @@ gulp.task('css', function() {
     .src('./less/style.less')
     .pipe(sourcemaps.init())
     .pipe(lessGlob())
-    .pipe(less()).on('error', console.log.bind(console))
+    .pipe(less({javascriptEnabled: true})).on('error', console.log.bind(console))
     .pipe(autoprefixer())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./css'))

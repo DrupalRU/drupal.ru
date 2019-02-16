@@ -1,0 +1,13 @@
+.debug(@message: 'No data passed') {
+  @debug: ~`console.log("========================================")`;
+  @debug: ~`console.log("[LESS] Debug")`;
+  @debug: ~`console.log("")`;
+  @debug: ~`console.log("@{message}")`;
+  @debug: ~`console.log("")`;
+  @debug: ~`console.log("========================================")`;
+}
+
+// Alias to mixin .debug
+.dpm(@message) {
+  .debug(@message);
+}

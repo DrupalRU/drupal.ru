@@ -1,0 +1,169 @@
+// Generic styling for unified entities
+@entity: {
+  display: flex;
+  flex-flow: row wrap;
+
+  & > * {
+    flex: 1 1 100%;
+  }
+
+  &.is-menu-open &__meta .menu-toggle {
+    color: @color-link-hover;
+  }
+
+  &__content,
+  &__links {
+    margin-top: @gap-entity;
+  }
+
+  &__meta {
+    @aux();
+    color: @color-meta;
+
+    // Desaturate default avatar
+    img[src*="default-avatar.png"] {
+      border-radius: 50%;
+      opacity: .38;
+      filter: grayscale(100%);
+    }
+
+    a {
+      color: inherit;
+      font-weight: 500;
+
+      &:hover,
+      &:active,
+      &:focus {
+        color: @color-meta-hover;
+      }
+    }
+  }
+
+  &__links {
+    color: @color-entity-links-fg;
+
+    a {
+      color: @color-entity-links-link;
+
+      &:hover,
+      &:focus,
+      &:active {
+        .border(0, 0, 1, 0, @color-link-hover);
+      }
+    }
+
+    & > * {
+      @aux();
+      margin: 0;
+      padding: @padding-entity-links-v @padding-entity-links-h;
+      transition: background-color @transition-speed @transition-func,
+                  transform @transition-speed @transition-func;
+
+      &:not(:first-child) {
+        .border(1, 0, 0, 0, @color-divider);
+      }
+    }
+  }
+
+  &__menu {
+    a {
+      display: inline-block;
+
+      &::first-letter {
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  &__content {
+    h2 { font-size: @font-size-content-section-title;   margin-top: @gap-content-section-title; }
+    h3 { font-size: @font-size-content-section-heading; margin-top: @gap-content-section-heading; }
+    h4 { font-size: @font-size-primary;  }
+    h5 { font-size: @font-size-primary;  }
+    h6 { font-size: @font-size-primary;  }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    a {
+      color: @color-link;
+
+      &:hover,
+      &:active,
+      &:focus {
+        color: @color-link-hover;
+        .border(0, 0, 1, 0, @color-link-hover);
+      }
+    }
+
+    hr {
+      .border(0, 0, 1, 0, @color-divider);
+      border: 0;
+      margin: 0 0 @gap-content 0;
+      padding-top: @gap-content;
+    }
+  }
+
+  &__body {
+    display: grid;
+    grid-gap: @gap-content;
+  }
+
+  @media (max-width: @grid-float-breakpoint) {
+    // If entity is being displayed as 'Content' change order of entity elements for small viewports so .entity__links will be displayed before content
+    .is-view-entity &__title   { order: -4; }
+    .is-view-entity &__meta    { order: -3; }
+    .is-view-entity &__content { order: -1; }
+    .is-view-entity &__links   { order: -2; }
+
+    .is-view-entity &__links {
+      box-shadow: none;
+      height: 0;
+      transition: height @transition-speed @transition-func;
+      overflow: hidden;
+      margin-top: 0;
+      padding: 0;
+
+      & > :first-child {
+        margin-top: @gap-entity;
+      }
+
+      & > * {
+        background-color: @color-entity-links-bg-hover;
+      }
+
+      & > * {
+        padding: @gap-inline-v 0;
+        display: flex;
+        transform: translateY(@grid * 6); // @todo Create new var for menu transform
+
+        li {
+          margin-right: 0;
+          padding-top: @grid;
+          padding-bottom: @grid;
+        }
+
+        a {
+          margin: @gap-inline-v @gap-inline-h;
+          display: inline-block;
+          color: @color-link-hover;
+        }
+      }
+    }
+
+    .is-view-entity.is-menu-open &__taxonomy,
+    .is-view-entity.is-menu-open &__menu {
+      transform: translateY(0);
+
+      li {
+        animation: animate-comment-menu @transition-speed * 3; // @todo Create new var for long animations
+
+        a {
+          color: @color-link-hover;
+        }
+      }
+    }
+  }
+}

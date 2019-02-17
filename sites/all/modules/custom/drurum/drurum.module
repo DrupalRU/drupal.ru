@@ -352,11 +352,6 @@ function drurum_form_node_form_alter(&$form, &$form_state, $form_id) {
   }
 }
 
-function drurum_comment_view_alter(&$build) {
-  // Remove comment anchor as it is added to comment template
-  unset($build['#prefix']);
-}
-
 function drurum_entity_info_alter(&$entity_info) {
   // Add 'teaser' view mode to comment display
   $entity_info['comment']['view modes']['teaser'] = array(

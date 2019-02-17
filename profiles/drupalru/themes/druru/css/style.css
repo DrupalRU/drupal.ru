@@ -8037,6 +8037,9 @@ form#user-admin-permissions .form-type-checkbox {
 .accepted-answer .comment {
   margin-top: 15px;
 }
+.comment-unpublished {
+  background-color: #fcebeb;
+}
 @media (max-width: 1004px) {
   .comment .comment__links > * {
     background-color: #f0f0f0;

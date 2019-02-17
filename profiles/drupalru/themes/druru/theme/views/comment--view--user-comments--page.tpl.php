@@ -60,7 +60,6 @@
  */
 ?>
 <article data-entity-type="comment" class="<?php print $zebra; ?> <?php if ($new) print "is-new" ?> <?php print $classes; ?>"<?php print $attributes; ?>>
-  <a id="comment-<?php print $comment->cid; ?>"></a>
   <h2 class="comment__title"><?php print $title; ?></h2>
 
   <header class="comment__meta">

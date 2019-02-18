@@ -9,13 +9,15 @@
  * Implements hook_uninstall().
  */
 function recaptcha_uninstall() {
+  variable_del('recaptcha_noscript');
   variable_del('recaptcha_site_key');
+  variable_del('recaptcha_size');
   variable_del('recaptcha_secret_key');
+  variable_del('recaptcha_tabindex');
   variable_del('recaptcha_theme');
   variable_del('recaptcha_type');
-  variable_del('recaptcha_size');
-  variable_del('recaptcha_tabindex');
-  variable_del('recaptcha_noscript');
+  variable_del('recaptcha_use_globally');
+  variable_del('recaptcha_verify_hostname');
 }
 
 /**

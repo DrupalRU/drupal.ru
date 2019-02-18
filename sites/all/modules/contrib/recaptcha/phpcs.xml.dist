@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ruleset name="reCAPTCHA for Drupal">
+  <description>reCAPTCHA for Drupal PHP_CodeSniffer standards overrides.</description>
+  <file>.</file>
+  <arg name="extensions" value="inc,install,module,php,profile,test,theme,yml"/>
+
+  <!-- Include existing standards. -->
+  <rule ref="Drupal"/>
+  <rule ref="DrupalPractice"/>
+
+  <exclude-pattern>recaptcha-php/*</exclude-pattern>
+</ruleset>

@@ -8679,6 +8679,9 @@ aside.first {
 table a.active {
   cursor: pointer;
 }
+.xbbcode_dru {
+  color: #0678dd;
+}
 ul.li-select {
   padding-left: 0;
 }

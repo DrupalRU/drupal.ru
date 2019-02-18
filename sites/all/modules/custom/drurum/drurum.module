@@ -285,17 +285,17 @@ function drurum_form_menu_edit_item_submit($form, &$form_state) {
 function drurum_form_user_profile_form_alter(&$form, &$form_state) {
   if ($form['#user_category'] == 'account') {
     $account = $form['#user'];
-    $form['forms_help'] = array(
+    $form['forms_help'] = [
       '#type'        => 'fieldset',
       '#title'       => t('Forms Help'),
       '#collapsible' => TRUE,
-    );
-    $form['forms_help']['forms_help'] = array(
+    ];
+    $form['forms_help']['forms_help'] = [
       '#type'          => 'checkbox',
       '#title'         => t('Show help for all forms'),
       '#description'   => t('This checkbox allow you to see help for all forms.'),
       '#default_value' => !empty($account->data['forms_help']) ? $account->data['forms_help'] : FALSE,
-    );
+    ];
   }
 }
 
@@ -352,10 +352,44 @@ function drurum_form_node_form_alter(&$form, &$form_state, $form_id) {
   }
 }
 
+/**
+ * Implements hook_entity_info_alter().
+ */
 function drurum_entity_info_alter(&$entity_info) {
   // Add 'teaser' view mode to comment display
-  $entity_info['comment']['view modes']['teaser'] = array(
+  $entity_info['comment']['view modes']['teaser'] = [
     'label' => t('Teaser'),
     'custom settings' => TRUE,
-  );
+  ];
+}
+
+/**
+ * Implements hook_xbbcode_info().
+ */
+function drurum_xbbcode_info() {
+  $tags['module'] = [
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-puzzle-piece"></i>&nbsp;<a href="https://drupal.org/project/{option}" title="{content}">{content}</a></span>',
+    'description' => t('Drupal.org modules'),
+    'sample' => t('[module=module_name]Module name[/module]'),
+  ];
+
+  $tags['theme'] = [
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-paint-brush"></i>&nbsp;<a href="https://drupal.org/project/{option}" title="{content}">{content}</a></span>',
+    'description' => t('Drupal.org themes'),
+    'sample' => t('[theme=theme_name]Theme name[/theme]'),
+  ];
+
+  $tags['user'] = [
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-user"></i>&nbsp;<a href="/username/{option}" title="{content}">{content}</a></span>',
+    'description' => t('Users'),
+    'sample' => t('[user=user_name]Username[/user]'),
+  ];
+
+  $tags['api'] = [
+    'markup' => '<span class="xbbcode_dru"><i class="fa fa-drupal"></i>&nbsp;<a href="http://api.drupal.org/api/function/{option}" title="{content}">{content}</a></span>',
+    'description' => t('API Drupal.org'),
+    'sample' => t('[api=api]API Drupal.org[/api]'),
+  ];
+
+  return $tags;
 }

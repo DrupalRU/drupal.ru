@@ -18,7 +18,7 @@ function recaptcha_admin_settings() {
     '#title' => t('Site key'),
     '#default_value' => variable_get('recaptcha_site_key', ''),
     '#maxlength' => 40,
-    '#description' => t('The site key given to you when you <a href="@url">register for reCAPTCHA</a>.', array('@url' => 'http://www.google.com/recaptcha/admin')),
+    '#description' => t('The site key given to you when you <a href="@url">register for reCAPTCHA</a>.', array('@url' => 'https://www.google.com/recaptcha/admin')),
     '#required' => TRUE,
   );
   $form['recaptcha_general_settings']['recaptcha_secret_key'] = array(
@@ -26,8 +26,20 @@ function recaptcha_admin_settings() {
     '#title' => t('Secret key'),
     '#default_value' => variable_get('recaptcha_secret_key', ''),
     '#maxlength' => 40,
-    '#description' => t('The secret key given to you when you <a href="@url">register for reCAPTCHA</a>.', array('@url' => 'http://www.google.com/recaptcha/admin')),
+    '#description' => t('The secret key given to you when you <a href="@url">register for reCAPTCHA</a>.', array('@url' => 'https://www.google.com/recaptcha/admin')),
     '#required' => TRUE,
+  );
+  $form['recaptcha_general_settings']['recaptcha_verify_hostname'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Local domain name validation'),
+    '#default_value' => variable_get('recaptcha_verify_hostname', FALSE),
+    '#description' => t('Checks the hostname on your server when verifying a solution. Enable this validation only, if <em>Verify the origin of reCAPTCHA solutions</em> is unchecked for your key pair. Provides crucial security by verifying requests come from one of your listed domains.'),
+  );
+  $form['recaptcha_general_settings']['recaptcha_use_globally'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use reCAPTCHA globally'),
+    '#default_value' => variable_get('recaptcha_use_globally', FALSE),
+    '#description' => t('Enable this in circumstances when "www.google.com" is not accessible, e.g. China.'),
   );
 
   $form['recaptcha_widget_settings'] = array(
@@ -69,7 +81,7 @@ function recaptcha_admin_settings() {
   $form['recaptcha_widget_settings']['recaptcha_tabindex'] = array(
     '#type' => 'textfield',
     '#title' => t('Tabindex'),
-    '#description' => t('Set the <a href="@tabindex">tabindex</a> of the widget and challenge (Default = 0). If other elements in your page use tabindex, it should be set to make user navigation easier.', array('@tabindex' => 'http://www.w3.org/TR/html4/interact/forms.html#adef-tabindex')),
+    '#description' => t('Set the <a href="@tabindex">tabindex</a> of the widget and challenge (Default = 0). If other elements in your page use tabindex, it should be set to make user navigation easier.', array('@tabindex' => 'https://www.w3.org/TR/html4/interact/forms.html#adef-tabindex')),
     '#default_value' => variable_get('recaptcha_tabindex', 0),
     '#size' => 4,
   );

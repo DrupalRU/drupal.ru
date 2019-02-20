@@ -170,6 +170,7 @@ function resolve_preprocess_node(&$variables) {
 
     if ($comment = comment_load($variables['resolved_cid'])) {
       $variables['has_resolved_comment'] = TRUE;
+      $comment->in_preview = TRUE; // Workaround for excluding anchor tag
       $content['resolved_comment'] = comment_view($comment, $variables['node']);
 
       // Get max weight of the page.

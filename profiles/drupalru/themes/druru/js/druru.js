@@ -31,7 +31,7 @@ var Drupal = Drupal || {};
       // Window resize events.
       $(window).resize(resizeDebounce);
 
-      $('.menu-toggle').click(function() {
+      $('.menu-toggle').off('click').on('click', function() {
         var entity = $(this).parents().filter(function() {
           return $(this).data('entity-type');
         }).eq(0);

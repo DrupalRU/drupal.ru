@@ -4,78 +4,79 @@
 //         Var @grid should not be used directly in lesscss rules for calculations (e.g. @grid * 2).
 //         Preferred way is to use ready-to-use semantically suitable var or create one in here.
 // By default vars without suffixes meant to be used as universal and vertical gaps.
-@grid:                  5px;
-@gap:                   @grid * 3; // Standard gap between page elements
-@gap-inline-v:          @grid; // Vertical gap between inline elements
-@gap-inline-h:          @grid * 2; // Horizontal gap between inline elements
-// @gap-menu-items:        @grid; // Vertical gap between vertical menu items // @todo Reserved for future use
-@gap-icon:              @grid / 2; // Vertical gap between vertical menu items
+@grid:                          5px;
+@gap:                           @grid * 3; // Standard gap between page elements
+@gap-inline-v:                  @grid; // Vertical gap between inline elements
+@gap-inline-h:                  @grid * 2; // Horizontal gap between inline elements
+// @gap-menu-items:             @grid; // Vertical gap between vertical menu items // @todo Reserved for future use
+@gap-icon:                      @grid / 2; // Vertical gap between vertical menu items
 
-@gap-entity:            @grid * 3; // Gap between entity elements (e.g. &__meta and &__connent)
-@gap-listing-page:      @grid;
-@gap-listing-block:     @grid;
-@gap-comment:           @grid; // Standard vertical gap between comment elements (e.g. &__meta and &__connent)
-@gap-content:           @grid * 2; // Standard vertical gap between text elements (e.g. paragraphs, images, ul, ol)
+@gap-entity:                    @grid * 3; // Gap between entity elements (e.g. &__meta and &__connent)
+@gap-listing-page:              @grid;
+@gap-listing-block:             @grid;
+@gap-comment:                   @grid; // Standard vertical gap between comment elements (e.g. &__meta and &__connent)
+@gap-content:                   @grid * 2; // Standard vertical gap between text elements (e.g. paragraphs, images, ul, ol)
 @gap-content-section-title:     @grid * 2; // Gap before section title
 @gap-content-section-heading:   @grid; // Gap before section heading
 
 // Field based listings displayed as page (e.g. /tracker)
-@padding-listing-item-page-v: @grid * 3; // Vertical padding of listing item // @todo Possibly rename to  @gap-*
-@padding-listing-item-page-h: @grid * 3; // Horizonal padding of listings item // @todo Possibly rename to  @gap-*
+@padding-listing-item-page-v:   @grid * 3; // Vertical padding of listing item // @todo Possibly rename to  @gap-* or @pad-*
+@padding-listing-item-page-h:   @grid * 3; // Horizonal padding of listings item // @todo Possibly rename to  @gap-* or @pad-*
 
 // Field based listings displayed as block (e.g. /tracker)
-@padding-listing-item-block-v: @grid * 2; // Vertical padding of listing item // @todo Possibly rename to  @gap-*
-@padding-listing-item-block-h: @grid * 2; // Horizonal padding of listings item // @todo Possibly rename to  @gap-*
+@padding-listing-item-block-v:  @grid * 2; // Vertical padding of listing item // @todo Possibly rename to @gap-* or @pad-*
+@padding-listing-item-block-h:  @grid * 2; // Horizonal padding of listings item // @todo Possibly rename to @gap-* or @pad-*
 
 // Content based listings (e.g. User blog) displayed as page (e.g. /user/%/blog)
-@gap-listing-extended-items:   @grid * 5; // Vertical gap between listing items
+@gap-listing-extended-items:    @grid * 5; // Vertical gap between listing items
 
 // Listing of comments
-@gap-listing-comments-items: @grid * 3; // Vertical gap between comments
-
+@gap-listing-comments-items:    @grid * 3; // Vertical gap between comments
 
 // Listings of comments
-@gap-comments:          @gap; // Vertical gap between comments
-@gap-comments-indented: @gap; // Horizontal indentation of nested comments
+@gap-comments:                  @gap; // Vertical gap between comments
+@gap-comments-indented:         @gap; // Horizontal indentation of nested comments
 
-@padding:               @grid * 2; // Standard vertical/horizontal padding
-@padding-inline:        @grid; // Vertical padding for inline elements
-@padding-code:          @grid * 3; // Paddings for code blocks
+@padding:                       @grid * 2; // Standard vertical/horizontal padding // @todo Possibly rename to @pad-*
+@padding-inline:                @grid; // Vertical padding for inline elements // @todo Possibly rename to @pad-*
+@padding-code:                  @grid * 3; // Paddings for code blocks // @todo Possibly rename to @pad-*
 
-@padding-aux-v:         @grid; // Vertical padding for auxiliary containers (e.g. content tags)
-@padding-aux-h:         @grid * 2; // Horizontal padding for auxiliary containers (e.g. content tags)
+@padding-aux-v:                 @grid; // Vertical padding for auxiliary containers (e.g. content tags) // @todo Possibly rename to @pad-*
+@padding-aux-h:                 @grid * 2; // Horizontal padding for auxiliary containers (e.g. content tags) // @todo Possibly rename to @pad-*
 
-@avatar-height:         @grid * 5; // Avatar height
-@img-height-teaser:     @grid * 20; // Max img height in teaser
+// Dimensions
+@avatar-height:                 @grid * 5; // Avatar height
+@img-height-teaser:             @grid * 20; // Max img height in teaser
 
 ////////////////////
 // Colors
-@color-divider:         rgb(194, 198, 202);
+@color-divider:             rgb(194, 198, 202);
 
-@color-code-bg:         rgb(246, 243, 240); // Background color for code blocks/inlines
-@color-code-border:     rgb(230, 220, 211); // Border color for code blocks
+@color-code-bg:             rgb(246, 243, 240); // Background color for code blocks/inlines
+@color-code-border:         rgb(230, 220, 211); // Border color for code blocks
 
-@color-fg:              rgb(2, 19, 33); // Main text color
-@color-bg:              rgb(248, 250, 252); // Default background color
-@color-meta:            rgb(135, 149, 161); // Text/link color of entity meta information (user name, date, etc.)
-@color-meta-hover:      @color-link-hover; // Link hover color of entity meta information (e.g. user name)
+@color-fg:                  rgb(40, 54, 66); // Main text color
+@color-bg:                  rgb(248, 250, 252); // Default background color
+@color-meta:                rgb(135, 149, 161); // Text/link color of entity meta information (user name, date, etc.)
+@color-meta-hover:          @color-link-hover; // Link hover color of entity meta information (e.g. user name)
 
-@text-color:            @color-fg; // Alias for compatibility with bootstrap
-@text-muted:            @color-meta; // Alias for compatibility with bootstrap
+@text-color:                @color-fg; // Alias for compatibility with bootstrap
+@text-muted:                @color-meta; // Alias for compatibility with bootstrap
 
-@color-link:            #0678dd;
-@color-link-hover:      #0566bc;
+@color-link:                rgb(6, 120, 221); // #0678dd — Primary brand color
+@color-link-hover:          rgb(5, 102, 188);
 
 @color-heading:             @color-fg;
 @color-heading-link-hover:  @color-link-hover;
 
-@color-notification:    #009638; // Generic color for notifications
-@color-notification-bg: @color-notification; // Background color for notifications
-@color-notification-fg: @color-bg; // Text color for notifications @todo Find best match
+@color-notification:        rgb(0, 150, 56); // Generic color for notifications
+@color-notification-bg:     @color-notification; // Background color for notifications
+@color-notification-fg:     @color-bg; // Text color for notifications @todo Find best match
 
-@color-throbber:        @color-link;
+@color-throbber:            @color-link;
 
-@color-entity-unpublished: rgb(252, 235, 235);
+@color-unpublished-fg:      rgb(141, 24, 18);
+@color-unpublished-bg:      rgb(252, 235, 235);
 
 ////////////////////
 // Typography
@@ -87,11 +88,11 @@
 @font-family-base:      "IBM Plex Sans";
 @font-family-monospace: "IBM Plex Mono";
 
-@font-size-primary:         16px; // Font size for main content
-@font-size-base:            @font-size-primary; // Alias for compatibility with bootstrap
-@font-size-secondary:       14px; // Font size for text in site's blocks
-@font-size-aux:             13px; // Font size for auxiliary elements (e.g. dates, counters, etc.)
-// @font-size-ui:              14px; // Font size for menus, breadcrumbs, etc. // @todo Reserved for future use
+@font-size-primary:                 16px; // Font size for main content
+@font-size-base:                    @font-size-primary; // Alias for compatibility with bootstrap
+@font-size-secondary:               14px; // Font size for text in site's blocks
+@font-size-aux:                     13px; // Font size for auxiliary elements (e.g. dates, counters, etc.)
+// @font-size-ui:                   14px; // Font size for menus, breadcrumbs, etc. // @todo Reserved for future use
 
 @font-size-page-title:              30px; // h1
 @font-size-page-section-title:      18px; // title of blocks, comments wrapper, comment form, etc.
@@ -111,9 +112,6 @@
 @border-blockquote:         @grid;
 @gap-blockquote-cite:       @grid;
 
-// Code blocks
-@color-code-bg:         rgb(246, 243, 240); // Background color for code blocks/inlines
-
 // Entity
 @padding-entity-links-v:                @grid; // Vertical padding for entity links (menu, taxonomy)
 @padding-entity-links-h:                @grid * 2; // Horizontal padding for entity links (menu, taxonomy)
@@ -123,6 +121,10 @@
 @color-entity-links-link:               @color-link-hover;
 @color-entity-links-link-listing:       rgb(194, 198, 202);
 @color-entity-links-link-listing-hover: @color-link-hover;
+
+// Entity menu
+@menu-toggle-size-mobile: @grid * 4; // Size of hamburger on small viewports
+@color-menu-toggle:       rgb(194, 198, 202);
 
 // Throbber
 @throbber-width:            @grid * 3;
@@ -140,7 +142,7 @@
 @font-size-h5: @font-size-primary;
 @font-size-h6: @font-size-primary;
 
-@line-height-base:      1.33;
-@line-height-computed:  21px; // @todo Replace all occurrences with proper new var
-@line-height-large:     1.33; // @todo Refactor to use @line-height-base, replace all occurrences with proper new var
-@line-height-small:     1.5; // @todo Refactor to use @line-height-base, replace all occurrences with proper new var
+@line-height-base:     1.33;
+@line-height-computed: 21px; // @todo Replace all occurrences with proper new var
+@line-height-large:    1.33; // @todo Refactor to use @line-height-base, replace all occurrences with proper new var
+@line-height-small:    1.5; // @todo Refactor to use @line-height-base, replace all occurrences with proper new var

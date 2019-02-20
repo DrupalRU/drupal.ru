@@ -4,7 +4,6 @@ function druru_preprocess_comment(&$vars) {
   $comment    = $vars['elements']['#comment'];
   $node       = $vars['elements']['#node'];
   $links      = array();
-  $link_attrs = array();
   $content    = &$vars['content'];
   $view_mode  = $vars['elements']['#view_mode'];
 
@@ -32,21 +31,29 @@ function druru_preprocess_comment(&$vars) {
     '@time' => format_interval(time() - $vars['comment']->changed, 1),
   ));
 
-  // Check published status
-  if ($vars['status'] == 'comment-unpublished') {
-    $vars['unpublished'] = ' <span class="unpublished-item">';
-    $vars['unpublished'] .= druru_get_icon_by_title(t('Unpublished')) . t('Unpublished');
-    $vars['unpublished'] .= '</span>';
+  // Gather comment classes.
+  if ($comment->status == COMMENT_NOT_PUBLISHED) {
+    $vars['classes_array'][] = 'is-unpublished';
   }
 
-  // Delete class 'inline" and
-  // "list-inline" (will added automatically) from links.
-  // @todo Refactor to use unified names for css classes
-  if (!empty($link_attrs['class'])) {
-    $key = array_search('inline', $link_attrs['class']);
-    if ($key !== FALSE) {
-      unset($link_attrs['class'][$key]);
+  if ($vars['new']) {
+    $vars['classes_array'][] = 'is-new';
+  }
+
+  if (!$comment->uid) {
+    $vars['classes_array'][] = 'by-anonymous';
+  }
+  else {
+    if ($comment->uid == $vars['node']->uid) {
+      $vars['classes_array'][] = 'by-node-author';
     }
+    if ($comment->uid == $vars['user']->uid) {
+      $vars['classes_array'][] = 'by-viewer';
+    }
+  }
+
+  if (!empty($comment->best)) {
+    $vars['classes_array'][] = 'is-accepted-answer';
   }
 
   $vars['classes_array'][] = 'comment--' . $view_mode;
@@ -58,7 +65,7 @@ function druru_preprocess_comment(&$vars) {
 
   // @todo Reimplement 'claim' with module 'flag'
   _druru_wrap_claim($content, 'comment', $vars['id']);
-  // @todo Refactor option 1. We need variable '$tnx' like other comment variables.
+  // @todo Refactor option 1. Create variable '$tnx' like other comment variables.
   // @todo Refactor option 2. Migrate to module 'flag' (preferred).
   _druru_wrap_thanks($vars, 'comment');
 }

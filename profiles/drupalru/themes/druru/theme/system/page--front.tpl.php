@@ -83,7 +83,7 @@
   <?php print render($page['site_first']); ?>
 <?php endif; ?>
 <div id="wrapper">
-  <header id="navbar" role="banner" class="<?php print $navbar_classes; ?>">
+  <header id="navbar" class="<?php print $navbar_classes; ?>">
     <div class="container">
       <div class="navbar-header">
         <?php if ($logo): print $logo; endif; ?>
@@ -101,7 +101,7 @@
 
       <?php if ($primary_nav || $secondary_nav || $page['between_menus']): ?>
         <div class="navbar-collapse collapse">
-          <nav role="navigation">
+          <nav>
             <?php
             // We need use this method for exclude unnecessary spaces between regions.
             if ($primary_nav) {
@@ -130,7 +130,7 @@
 
   <div class="main-container">
     <?php if ($page['header']): ?>
-      <header role="banner" id="page-header" class="jumbotron">
+      <header id="page-header" class="jumbotron">
         <div class="container">
           <?php print render($page['header']); ?>
         </div>

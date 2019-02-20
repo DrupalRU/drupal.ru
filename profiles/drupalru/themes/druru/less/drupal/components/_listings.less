@@ -98,20 +98,18 @@
 
 ////////////////////
 // Comments listings
-#comments,
-.indented {
-  .comment {
-    &:not(:first-child) {
-      margin-top: @gap-comments;
-    }
+.comment {
+  &:not(:first-child) {
+    margin-top: @gap-comments;
+  }
 
-    @media (max-width: @grid-float-breakpoint) {
-      .border(0, 0, 1, 0, @color-divider);
-      padding-bottom: @gap-listing-comments-items;
-    }
+  @media (max-width: @grid-float-breakpoint) {
+    .border(0, 0, 1, 0, @color-divider);
+    padding-bottom: @gap-listing-comments-items;
   }
 }
 
+.accepted-answer,
 #comments,
 .comment-form-wrapper {
   margin-top: @gap-entity;

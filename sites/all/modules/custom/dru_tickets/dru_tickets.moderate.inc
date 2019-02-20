@@ -32,7 +32,7 @@ function dru_ticket_moderate_command_unpublish($entity_type, $entity_id) {
         ],
       ]);
       $commands[] = ajax_command_replace('.node .moderate-unpublish-' . $entity_id, $node_link);
-      $commands[] = ajax_command_invoke('#node-' . $entity_id, 'addClass', ['node-unpublished']);
+      $commands[] = ajax_command_invoke('#node-' . $entity_id, 'addClass', ['is-unpublished']);
       break;
 
     case 'comment':
@@ -49,7 +49,7 @@ function dru_ticket_moderate_command_unpublish($entity_type, $entity_id) {
         ],
       ]);
       $commands[] = ajax_command_replace('#comments .moderate-unpublish-' . $entity_id, $comment_link);
-      $commands[] = ajax_command_invoke("article[data-comment-id=$entity_id]", 'addClass', ['comment-unpublished']);
+      $commands[] = ajax_command_invoke("article[data-comment-id=$entity_id]", 'addClass', ['is-unpublished']);
       break;
   }
 
@@ -79,7 +79,7 @@ function dru_ticket_moderate_command_publish($entity_type, $entity_id) {
         ],
       ]);
       $commands[] = ajax_command_replace('.node .moderate-publish-' . $entity_id, $node_link);
-      $commands[] = ajax_command_invoke('#node-' . $entity_id, 'removeClass', ['node-unpublished']);
+      $commands[] = ajax_command_invoke('#node-' . $entity_id, 'removeClass', ['is-unpublished']);
       break;
 
     case 'comment':
@@ -96,7 +96,7 @@ function dru_ticket_moderate_command_publish($entity_type, $entity_id) {
         ],
       ]);
       $commands[] = ajax_command_replace('#comments .moderate-publish-' . $entity_id, $comment_link);
-      $commands[] = ajax_command_invoke("article[data-comment-id=$entity_id]", 'removeClass', ['comment-unpublished']);
+      $commands[] = ajax_command_invoke("article[data-comment-id=$entity_id]", 'removeClass', ['is-unpublished']);
       break;
   }
 

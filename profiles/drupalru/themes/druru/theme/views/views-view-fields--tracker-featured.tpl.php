@@ -25,9 +25,9 @@
  */
 ?>
 <header class="node__meta">
-  <div class="node__author-name"><?php print $fields['name']->content; ?></div>
-  <div class="node__date"><?php print $fields['created']->content; ?></div>
-  <div class="node__status"></div>
-  <div class="node__comments-count"><?php print $fields['comment_count']->content; ?></div>
+  <span class="node__author-name"><?php print $fields['name']->content; ?></span>
+  <span class="node__date"><?php print $fields['created']->content; ?></span>
+  <span class="node__status"></span>
+  <span class="node__comments-count"><?php print $fields['comment_count']->content; ?></span>
 </header>
 <h2 class="node__title"><a href="<?php print $fields['path']->content; ?>"><?php print $fields['title']->content; ?></a></h2>

@@ -368,25 +368,25 @@ function drurum_entity_info_alter(&$entity_info) {
  */
 function drurum_xbbcode_info() {
   $tags['module'] = [
-    'markup' => '<a class="xbbcode--module" href="https://drupal.org/project/{option}" title="{content}">{content}</a>',
+    'markup' => '<a class="xbbcode--module" rel="nofollow" href="https://drupal.org/project/{option}" title="{content}">{content}</a>',
     'description' => t('Drupal.org module'),
     'sample' => t('[module=module_name]Module name[/module]'),
   ];
 
   $tags['theme'] = [
-    'markup' => '<a class="xbbcode--theme" href="https://drupal.org/project/{option}" title="{content}">{content}</a>',
+    'markup' => '<a class="xbbcode--theme" rel="nofollow" href="https://drupal.org/project/{option}" title="{content}">{content}</a>',
     'description' => t('Drupal.org theme'),
     'sample' => t('[theme=theme_name]Theme name[/theme]'),
   ];
 
   $tags['api'] = [
-    'markup' => '<a class="xbbcode--api" href="http://api.drupal.org/api/function/{option}" title="{content}">{content}</a>',
+    'markup' => '<a class="xbbcode--api" rel="nofollow" href="http://api.drupal.org/api/function/{option}" title="{content}">{content}</a>',
     'description' => t('Drupal.org API'),
     'sample' => t('[api=api]API Drupal.org[/api]'),
   ];
 
   $tags['user'] = [
-    'markup' => '<a class="xbbcode--user" href="/username/{option}" title="{content}">{content}</a>',
+    'markup' => '<a class="xbbcode--user" rel="nofollow" href="/username/{option}" title="{content}">{content}</a>',
     'description' => t('Drupal.ru user'),
     'sample' => t('[user=user_name]Username[/user]'),
   ];

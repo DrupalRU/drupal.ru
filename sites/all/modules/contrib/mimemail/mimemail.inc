@@ -380,6 +380,7 @@ function mimemail_html_body($body, $subject, $plain = FALSE, $plaintext = NULL, 
     // @see http://drupal.org/node/370903
     // Pull out the message body.
     preg_match('|<body.*?</body>|mis', $body, $matches);
+    // Ссылка на комент с патчем: https://www.drupal.org/project/mimemail/issues/2883745#comment-12566218
     $plaintext = !empty($matches[0]) ? drupal_html_to_text($matches[0]) : drupal_html_to_text($body);
   }
   if ($plain) {

@@ -10712,24 +10712,20 @@ h2.privatemsg-reply {
   font-size: 21.28px;
   line-height: 0.6;
 }
-.xbbcode--module::before {
+[class^="xbbcode--"]::before {
   font-family: FontAwesome;
-  padding-right: 5px;
+  margin-right: 2.5px;
+}
+.xbbcode--module::before {
   content: "\f12e";
 }
 .xbbcode--theme::before {
-  font-family: FontAwesome;
-  padding-right: 5px;
   content: "\f1fc";
 }
 .xbbcode--user::before {
-  font-family: FontAwesome;
-  padding-right: 5px;
   content: "\f007";
 }
 .xbbcode--api::before {
-  font-family: FontAwesome;
-  padding-right: 5px;
   content: "\f1a9";
 }
 .ymb-form {

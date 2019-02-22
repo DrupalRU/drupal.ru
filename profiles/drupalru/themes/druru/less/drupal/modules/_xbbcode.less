@@ -1,23 +1,22 @@
-.xbbcode--module::before {
-  font-family: FontAwesome;
-  padding-right: @padding-small-vertical;
-  content: "\f12e";
+[class^="xbbcode--"]::before {
+  @icon();
+  margin-right: @gap-icon;
 }
 
-.xbbcode--theme::before  {
-  font-family: FontAwesome;
-  padding-right: @padding-small-vertical;
-  content: "\f1fc";
-}
+.xbbcode {
+  &--module::before {
+    content: @fa-var-puzzle-piece;
+  }
 
-.xbbcode--user::before  {
-  font-family: FontAwesome;
-  padding-right: @padding-small-vertical;
-  content: "\f007";
-}
+  &--theme::before  {
+    content: @fa-var-paint-brush;
+  }
 
-.xbbcode--api::before  {
-  font-family: FontAwesome;
-  padding-right: @padding-small-vertical;
-  content: "\f1a9";
+  &--user::before  {
+    content: @fa-var-user;
+  }
+
+  &--api::before  {
+    content: @fa-var-drupal;
+  }
 }

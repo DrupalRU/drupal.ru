@@ -391,5 +391,11 @@ function drurum_xbbcode_info() {
     'sample' => t('[user=user_name]Username[/user]'),
   ];
 
+  $tags['youtube'] = [
+    'markup' => '<iframe width="560" height="315" src="https://www.youtube.com/embed/{content}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
+    'description' => t('YouTube video'),
+    'sample' => t('[youtube]VIDEO[/youtube]'),
+  ];
+
   return $tags;
 }

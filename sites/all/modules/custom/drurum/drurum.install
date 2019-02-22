@@ -925,3 +925,17 @@ function drurum_update_7048() {
 function drurum_update_7049() {
   module_enable(['responsivewrappers'], TRUE);
 }
+
+/**
+ * Disable and uninstall "bbcode" and "xbbcode_dru" module.
+ */
+function drurum_update_7050() {
+  if (module_exists('bbcode')) {
+    module_disable(['bbcode']);
+    drupal_uninstall_modules(['bbcode']);
+  }
+  if (module_exists('xbbcode_dru')) {
+    module_disable(['xbbcode_dru']);
+    drupal_uninstall_modules(['xbbcode_dru']);
+  }
+}

@@ -285,17 +285,17 @@ function drurum_form_menu_edit_item_submit($form, &$form_state) {
 function drurum_form_user_profile_form_alter(&$form, &$form_state) {
   if ($form['#user_category'] == 'account') {
     $account = $form['#user'];
-    $form['forms_help'] = array(
+    $form['forms_help'] = [
       '#type'        => 'fieldset',
       '#title'       => t('Forms Help'),
       '#collapsible' => TRUE,
-    );
-    $form['forms_help']['forms_help'] = array(
+    ];
+    $form['forms_help']['forms_help'] = [
       '#type'          => 'checkbox',
       '#title'         => t('Show help for all forms'),
       '#description'   => t('This checkbox allow you to see help for all forms.'),
       '#default_value' => !empty($account->data['forms_help']) ? $account->data['forms_help'] : FALSE,
-    );
+    ];
   }
 }
 
@@ -352,10 +352,44 @@ function drurum_form_node_form_alter(&$form, &$form_state, $form_id) {
   }
 }
 
+/**
+ * Implements hook_entity_info_alter().
+ */
 function drurum_entity_info_alter(&$entity_info) {
   // Add 'teaser' view mode to comment display
-  $entity_info['comment']['view modes']['teaser'] = array(
+  $entity_info['comment']['view modes']['teaser'] = [
     'label' => t('Teaser'),
     'custom settings' => TRUE,
-  );
+  ];
+}
+
+/**
+ * Implements hook_xbbcode_info().
+ */
+function drurum_xbbcode_info() {
+  $tags['module'] = [
+    'markup' => '<a class="xbbcode--module" rel="nofollow" href="https://drupal.org/project/{option}" title="{content}">{content}</a>',
+    'description' => t('Drupal.org module'),
+    'sample' => t('[module=module_name]Module name[/module]'),
+  ];
+
+  $tags['theme'] = [
+    'markup' => '<a class="xbbcode--theme" rel="nofollow" href="https://drupal.org/project/{option}" title="{content}">{content}</a>',
+    'description' => t('Drupal.org theme'),
+    'sample' => t('[theme=theme_name]Theme name[/theme]'),
+  ];
+
+  $tags['api'] = [
+    'markup' => '<a class="xbbcode--api" rel="nofollow" href="http://api.drupal.org/api/function/{option}" title="{content}">{content}</a>',
+    'description' => t('Drupal.org API'),
+    'sample' => t('[api=api]API Drupal.org[/api]'),
+  ];
+
+  $tags['user'] = [
+    'markup' => '<a class="xbbcode--user" rel="nofollow" href="/username/{option}" title="{content}">{content}</a>',
+    'description' => t('Drupal.ru user'),
+    'sample' => t('[user=user_name]Username[/user]'),
+  ];
+
+  return $tags;
 }

@@ -10680,6 +10680,26 @@ h2.privatemsg-reply {
   font-size: 21.28px;
   line-height: 0.6;
 }
+.xbbcode--module::before {
+  font-family: FontAwesome;
+  padding-right: 5px;
+  content: "\f12e";
+}
+.xbbcode--theme::before {
+  font-family: FontAwesome;
+  padding-right: 5px;
+  content: "\f1fc";
+}
+.xbbcode--user::before {
+  font-family: FontAwesome;
+  padding-right: 5px;
+  content: "\f007";
+}
+.xbbcode--api::before {
+  font-family: FontAwesome;
+  padding-right: 5px;
+  content: "\f1a9";
+}
 .ymb-form {
   margin-top: 10px;
 }

@@ -1,0 +1,25 @@
+.menu-toggle {
+  @icon();
+  width: @menu-toggle-size-mobile;
+  height: @menu-toggle-size-mobile;
+  font-size: @menu-toggle-size-mobile;
+  margin-left: auto;
+  transition: color @transition-speed @transition-func;
+  cursor: pointer;
+  color: @color-menu-toggle;
+
+  &::after {
+    content: @fa-var-bars;
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: @color-link-hover;
+  }
+
+  // @todo Add setting to user profile to allow user to use mobile menu on desktops
+  @media (min-width: @grid-float-breakpoint) {
+    display: none;
+  }
+}

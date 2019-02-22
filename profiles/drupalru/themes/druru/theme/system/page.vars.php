@@ -151,7 +151,7 @@ function _druru_struct_logo(&$variables) {
     if ($logo) {
       $variables['logo'] = l($logo, $variables['front_page'], array(
         'attributes' => array(
-          'alt'   => t('Home'),
+          'title'   => t('Home'),
           'class' => array('navbar-btn', 'frontpage-link'),
         ),
         'html'       => TRUE,
@@ -160,7 +160,7 @@ function _druru_struct_logo(&$variables) {
     $brand = "<div class='name navbar-brand'>$brand</div>";
     $variables['logo'] .= l($brand, $variables['front_page'], array(
       'attributes' => array(
-        'alt'   => t('Home'),
+        'title'   => t('Home'),
         'class' => array('navbar-btn', 'frontpage-link'),
       ),
       'html'       => TRUE,
@@ -193,9 +193,6 @@ function _druru_generate_columns_classes(&$variables) {
   $first_ca = &$variables['sidebar_first_attributes'];
   $second_ca = &$variables['sidebar_second_attributes'];
   $content_ca = &$variables['content_column_attributes'];
-
-  $first_ca['role'] = 'complementary';
-  $second_ca['role'] = 'complementary';
 
   // In case if classes defined in these custom attributes.
   $first_ca['class'] = @$first_ca['class'] ?: array();

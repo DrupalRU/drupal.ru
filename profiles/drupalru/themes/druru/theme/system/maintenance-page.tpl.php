@@ -33,11 +33,10 @@
   <body class="<?php print $classes; ?>">
 
     <div id="wrapper">
-      <header id="navbar" role="banner"
-              class="navbar navbar-static-top navbar-default">
+      <header id="navbar" class="navbar navbar-static-top navbar-default">
         <div class="container">
           <div class="navbar-header">
-            <a href="/" alt="Home" class="logo navbar-btn pull-left">
+            <a href="/" class="logo navbar-btn pull-left">
               <div class="name navbar-brand">
                 <div class="site-name"><?php print $site_name; ?></div>
                 <?php if (!empty($site_slogan)): ?>

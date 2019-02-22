@@ -11,6 +11,28 @@
     color: @color-link-hover;
   }
 
+  &.is-unpublished {
+    background-color: @color-unpublished-bg;
+  }
+
+  &__status {
+    .is-new &::after,
+    .is-updated &::after {
+      @icon();
+      color: @color-notification;
+      content: @fa-var-circle;
+      font-size: @font-size-aux;
+    }
+
+    .is-unpublished &::before {
+      @icon();
+      color: @color-unpublished-fg;
+      content: @fa-var-eye-slash;
+      font-size: @font-size-aux;
+    }
+  }
+
+
   &__content,
   &__links {
     margin-top: @gap-entity;
@@ -76,11 +98,35 @@
   }
 
   &__content {
-    h2 { font-size: @font-size-content-section-title;   margin-top: @gap-content-section-title; }
-    h3 { font-size: @font-size-content-section-heading; margin-top: @gap-content-section-heading; }
-    h4 { font-size: @font-size-primary;  }
-    h5 { font-size: @font-size-primary;  }
-    h6 { font-size: @font-size-primary;  }
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-weight: 500;
+    }
+
+    h2 {
+      font-size: @font-size-content-section-title;
+    }
+
+    * + h2 {
+      margin-top: @gap-content-section-title;
+    }
+
+    h3 {
+      font-size: @font-size-content-section-heading;
+    }
+
+    * + h3 {
+      margin-top: @gap-content-section-heading;
+    }
+
+    h4,
+    h5,
+    h6 {
+      font-size: @font-size-primary;
+    }
 
     img {
       max-width: 100%;

@@ -59,7 +59,7 @@
  * @ingroup themeable
  */
 ?>
-<article data-entity-type="comment" class="<?php print $zebra; ?> <?php if ($new) print "is-new" ?> <?php print $classes; ?>"<?php print $attributes; ?>>
+<article data-entity-type="comment" class="<?php print $classes; ?>"<?php print $attributes; ?>>
   <header class="comment__meta">
     <?php if ($show_author): ?>
       <span class="comment__author-avatar"><?php print $picture; ?></span>
@@ -74,12 +74,6 @@
       <?php print $permalink; ?>
     </span>
 
-    <?php if (isset($unpublished)): ?>
-      <span class="comment__status">
-        <?php print $unpublished; ?>
-      </span>
-    <?php endif; ?>
-
     <?php if(!empty($content['ticket-popover'])): ?>
       <span class="comment__claim">
         <?php print drupal_render($content['ticket-popover']); ?>
@@ -91,6 +85,8 @@
         <?php print $tnx; ?>
       </span>
     <?php endif; ?>
+
+    <span class="comment__status"></span>
 
     <span class="menu-toggle"></span>
   </header>

@@ -115,6 +115,8 @@
       </span>
     <?php endif; ?>
 
+    <span class="node__status"></span>
+
     <div class="menu-toggle"></div>
   </div>
 

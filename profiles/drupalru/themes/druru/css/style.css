@@ -272,7 +272,7 @@ body {
   font-family: "IBM Plex Sans";
   font-size: 16px;
   line-height: 1.33;
-  color: #021321;
+  color: #283642;
   background-color: #fafafa;
 }
 input,
@@ -1374,7 +1374,7 @@ select[multiple].input-lg {
   display: block;
   margin-top: 5px;
   margin-bottom: 10px;
-  color: #095899;
+  color: #587791;
 }
 @media (min-width: 748px) {
   .form-inline .form-group {
@@ -3536,7 +3536,7 @@ a.events--front .event.active {
 .thumbnail .caption,
 .events--front .event .caption {
   padding: 9px;
-  color: #021321;
+  color: #283642;
 }
 .alert {
   padding: 15px;
@@ -7830,6 +7830,22 @@ form#user-admin-permissions .form-type-checkbox {
 .comment.is-menu-open .comment__meta .menu-toggle {
   color: #0566bc;
 }
+.comment.is-unpublished {
+  background-color: #fcebeb;
+}
+.is-new .comment__status::after,
+.is-updated .comment__status::after {
+  font-family: FontAwesome;
+  color: #009638;
+  content: "\f111";
+  font-size: 13px;
+}
+.is-unpublished .comment__status::before {
+  font-family: FontAwesome;
+  color: #8d1812;
+  content: "\f070";
+  font-size: 13px;
+}
 .comment__content,
 .comment__links {
   margin-top: 15px;
@@ -7895,20 +7911,27 @@ form#user-admin-permissions .form-type-checkbox {
 .comment__menu a::first-letter {
   text-transform: uppercase;
 }
+.comment__content h2,
+.comment__content h3,
+.comment__content h4,
+.comment__content h5,
+.comment__content h6 {
+  font-weight: 500;
+}
 .comment__content h2 {
   font-size: 24px;
+}
+.comment__content * + h2 {
   margin-top: 10px;
 }
 .comment__content h3 {
   font-size: 18px;
+}
+.comment__content * + h3 {
   margin-top: 5px;
 }
-.comment__content h4 {
-  font-size: 16px;
-}
-.comment__content h5 {
-  font-size: 16px;
-}
+.comment__content h4,
+.comment__content h5,
 .comment__content h6 {
   font-size: 16px;
 }
@@ -8012,33 +8035,8 @@ form#user-admin-permissions .form-type-checkbox {
 .comment__links > * a:active {
   color: #0566bc;
 }
-@media (min-width: 1004px) {
-  .accepted-answer .comment__links > *:last-child {
-    box-shadow: inset -1px 0 0 #009638, inset 0 -1px 0 #009638, inset 1px 0 0 #009638;
-  }
-}
-.accepted-answer .comment__links {
-  margin-left: -10px;
-  margin-right: -10px;
-}
-@media (max-width: 1004px) {
-  .accepted-answer .comment__links > * {
-    box-shadow: inset -1px 0 0 #009638, inset 1px 0 0 #009638;
-    margin-bottom: unset;
-  }
-}
-.is-new .comment__status::after,
-.is-updated .comment__status::after {
-  font-family: FontAwesome;
-  color: #009638;
-  content: "\f111";
-  font-size: 13px;
-}
 .accepted-answer .comment {
   margin-top: 15px;
-}
-.comment-unpublished {
-  background-color: #fcebeb;
 }
 @media (max-width: 1004px) {
   .comment .comment__links > * {
@@ -8057,30 +8055,35 @@ form#user-admin-permissions .form-type-checkbox {
     color: #0566bc;
   }
 }
-.menu-toggle {
-  font-family: FontAwesome;
-  width: 13px;
-  height: 13px;
-  margin-left: auto;
-  transition: color 0.2s ease-in-out;
-  cursor: pointer;
-}
-.menu-toggle::after {
-  content: "\f0c9";
-}
-.menu-toggle:hover,
-.menu-toggle:focus,
-.menu-toggle:active {
-  color: #0566bc;
+.comment.is-accepted-answer {
+  box-shadow: inset 0 1px 0 #009638, inset -1px 0 0 #009638, inset 0 -1px 0 #009638, inset 1px 0 0 #009638;
+  margin-top: 15px;
+  padding: 10px;
 }
 @media (min-width: 1004px) {
-  .menu-toggle {
-    display: none;
+  .comment.is-accepted-answer {
+    padding: 10px 10px 0 10px;
+  }
+}
+.comment.is-accepted-answer .comment__links {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+@media (max-width: 1004px) {
+  .comment.is-accepted-answer .comment__links > * {
+    box-shadow: inset -1px 0 0 #009638, inset 1px 0 0 #009638;
+    margin-bottom: unset;
+  }
+}
+@media (min-width: 1004px) {
+  .comment.is-accepted-answer .comment__links > *:last-child,
+  .comment.is-accepted-answer .comment__links > *:last-child {
+    box-shadow: inset -1px 0 0 #009638, inset 0 -1px 0 #009638, inset 1px 0 0 #009638;
   }
 }
 .description {
   font-size: 0.9em;
-  color: #0b66b1;
+  color: #6384a0;
 }
 .page-header {
   margin-top: 0;
@@ -8159,6 +8162,29 @@ a.cke_combo_button span.cke_button_disabled span {
 .list-group .list-group-item .h3 {
   margin: 0;
   padding-right: 12px;
+}
+.menu-toggle {
+  font-family: FontAwesome;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  margin-left: auto;
+  transition: color 0.2s ease-in-out;
+  cursor: pointer;
+  color: #c2c6ca;
+}
+.menu-toggle::after {
+  content: "\f0c9";
+}
+.menu-toggle:hover,
+.menu-toggle:focus,
+.menu-toggle:active {
+  color: #0566bc;
+}
+@media (min-width: 1004px) {
+  .menu-toggle {
+    display: none;
+  }
 }
 #status-page {
   margin: 5em auto;
@@ -8732,7 +8758,7 @@ ul.li-accent > *:before {
 }
 .entity-listing .node__title a,
 .entity-listing .comment__title a {
-  color: #021321;
+  color: #283642;
 }
 .entity-listing .node__title a:hover,
 .entity-listing .comment__title a:hover,
@@ -8835,21 +8861,21 @@ ul.li-accent > *:before {
 .entity-listing .attachment-after .node {
   box-shadow: inset 0 1px 0 #c2c6ca;
 }
-#comments .comment:not(:first-child),
-.indented .comment:not(:first-child) {
+.comment:not(:first-child) {
   margin-top: 15px;
 }
 @media (max-width: 1004px) {
-  #comments .comment,
-  .indented .comment {
+  .comment {
     box-shadow: inset 0 -1px 0 #c2c6ca;
     padding-bottom: 15px;
   }
 }
+.accepted-answer,
 #comments,
 .comment-form-wrapper {
   margin-top: 15px;
 }
+.accepted-answer .section-title,
 #comments .section-title,
 .comment-form-wrapper .section-title {
   font-size: 18px;
@@ -8948,6 +8974,22 @@ ul.li-accent > *:before {
 .node.is-menu-open .node__meta .menu-toggle {
   color: #0566bc;
 }
+.node.is-unpublished {
+  background-color: #fcebeb;
+}
+.is-new .node__status::after,
+.is-updated .node__status::after {
+  font-family: FontAwesome;
+  color: #009638;
+  content: "\f111";
+  font-size: 13px;
+}
+.is-unpublished .node__status::before {
+  font-family: FontAwesome;
+  color: #8d1812;
+  content: "\f070";
+  font-size: 13px;
+}
 .node__content,
 .node__links {
   margin-top: 15px;
@@ -9013,20 +9055,27 @@ ul.li-accent > *:before {
 .node__menu a::first-letter {
   text-transform: uppercase;
 }
+.node__content h2,
+.node__content h3,
+.node__content h4,
+.node__content h5,
+.node__content h6 {
+  font-weight: 500;
+}
 .node__content h2 {
   font-size: 24px;
+}
+.node__content * + h2 {
   margin-top: 10px;
 }
 .node__content h3 {
   font-size: 18px;
+}
+.node__content * + h3 {
   margin-top: 5px;
 }
-.node__content h4 {
-  font-size: 16px;
-}
-.node__content h5 {
-  font-size: 16px;
-}
+.node__content h4,
+.node__content h5,
 .node__content h6 {
   font-size: 16px;
 }
@@ -9123,13 +9172,6 @@ ul.li-accent > *:before {
 .node__links > * {
   background-color: #f0f0f0;
 }
-.is-new .node__status::after,
-.is-updated .node__status::after {
-  font-family: FontAwesome;
-  content: "\f111";
-  font-size: 13px;
-  color: #009638;
-}
 .node__comments-count::before,
 .node__comments-count::after {
   font-family: FontAwesome;
@@ -9156,16 +9198,6 @@ ul.li-accent > *:before {
 }
 .node__new-comments {
   color: #009638;
-}
-.accepted-answer {
-  box-shadow: inset 0 1px 0 #009638, inset -1px 0 0 #009638, inset 0 -1px 0 #009638, inset 1px 0 0 #009638;
-  margin-top: 15px;
-  padding: 10px;
-}
-@media (min-width: 1004px) {
-  .accepted-answer {
-    padding: 10px 10px 0 10px;
-  }
 }
 .pager-wrapper {
   margin-top: 15px;
@@ -10075,7 +10107,7 @@ form table input.form-radio {
 }
 .bue-popup .bue-popup-content ul.tag-chooser code {
   background: none;
-  color: #021321;
+  color: #283642;
 }
 /**
  * @file
@@ -10961,7 +10993,7 @@ table tr.error {
 }
 .control-group.error .help-block,
 .control-group.error .help-inline {
-  color: #021321;
+  color: #283642;
 }
 .list-inline {
   margin-left: 0;
@@ -11271,7 +11303,7 @@ body {
   font-family: "IBM Plex Sans", sans-serif;
   font-size: 16px;
   background-color: #f8fafc;
-  color: #021321;
+  color: #283642;
 }
 .region-sidebar-first {
   font-size: 14px;
@@ -11320,7 +11352,7 @@ blockquote {
   font-size: 16px;
   box-shadow: inset 5px 0 0 #e6dcd3;
   background-color: #f6f3f0;
-  color: #021321;
+  color: #283642;
 }
 blockquote footer {
   font-size: 14px;

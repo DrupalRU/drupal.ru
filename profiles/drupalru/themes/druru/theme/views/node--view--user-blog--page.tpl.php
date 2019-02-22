@@ -113,6 +113,8 @@
       </span>
     <?php endif; ?>
 
+    <span class="node__status"></span>
+
     <span class="menu-toggle"></span>
   </div>
 

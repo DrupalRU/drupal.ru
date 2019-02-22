@@ -58,17 +58,6 @@
     background-color: @color-entity-links-bg-hover;
   }
 
-  &__status {
-    // @todo Add dom elements for markers such as 'new' to nodes in lisiting.
-    .is-new &::after,
-    .is-updated &::after {
-      @icon();
-      content: @fa-var-circle;
-      font-size: @font-size-aux;
-      color: @color-notification;
-    }
-  }
-
   &__comments-count {
     &::before,
     &::after {
@@ -106,15 +95,5 @@
 
   &__new-comments {
     color: @color-notification;
-  }
-}
-
-.accepted-answer {
-  .border(1, 1, 1, 1, @color-notification);
-  margin-top: @gap-entity;
-  padding: @padding;
-
-  @media (min-width: @grid-float-breakpoint) {
-    padding: @padding @padding 0 @padding;
   }
 }

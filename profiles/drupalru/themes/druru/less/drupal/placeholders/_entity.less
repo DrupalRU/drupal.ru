@@ -16,22 +16,28 @@
   }
 
   &__status {
-    .is-new &::after,
-    .is-updated &::after {
+    display: flex;
+    align-items: center;
+
+    &::after  { margin-left: @gap-icon; }
+    &::before { margin-right: @gap-icon; }
+
+    // @todo Consider replacing states '.is-new' and '.is-updated' with single state '.has-new-content'
+    .is-new &::before,
+    .is-updated &::before {
       @icon();
       color: @color-notification;
       content: @fa-var-circle;
-      font-size: @font-size-aux;
+      font-size: @mark-new-content-size;
     }
 
-    .is-unpublished &::before {
+    .is-unpublished &::after {
       @icon();
       color: @color-unpublished-fg;
       content: @fa-var-eye-slash;
       font-size: @font-size-aux;
     }
   }
-
 
   &__content,
   &__links {
@@ -97,7 +103,11 @@
     }
   }
 
-  &__content {
+  &__body {
+    > * + * {
+      margin-top: @gap-content;
+    }
+
     h2,
     h3,
     h4,
@@ -150,11 +160,6 @@
       margin: 0 0 @gap-content 0;
       padding-top: @gap-content;
     }
-  }
-
-  &__body {
-    display: grid;
-    grid-gap: @gap-content;
   }
 
   @media (max-width: @grid-float-breakpoint) {

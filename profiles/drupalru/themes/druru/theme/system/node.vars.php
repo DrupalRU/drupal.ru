@@ -9,13 +9,6 @@ function druru_preprocess_node(&$vars) {
 
   $vars['date'] = _druru_format_date_aging($vars['created']);
 
-  // @todo Refactor to set node status to .node wrapper
-  if (!$vars['status']) {
-    $vars['submitted'] = ' <span class="unpublished-item">';
-    $vars['submitted'] .= druru_get_icon_by_title(t('Unpublished'));
-    $vars['submitted'] .= '</span>';
-  }
-
   // @todo Refactor or remove if isn't required
   if (isset($vars['content']['datetime']['#markup']) && $view_mode == 'teaser') {
     $event_time = $vars['node']->event->time_from;
@@ -28,15 +21,13 @@ function druru_preprocess_node(&$vars) {
     );
   }
 
-  // Remove author avatar and name in node teasers
-  $vars['show_author'] = ($view_mode == 'teaser') ? FALSE : TRUE;
+  // Show author's avatar and name in teasers of node type 'blog' only
+  $vars['show_author'] = ($view_mode == 'teaser' || $vars['type'] !== 'blog') ? FALSE : TRUE;
 
   $vars['attributes_array']['data-node-id'] = $vars['node']->nid;
 
-  // Render blocks assigned to 'content_third' region
-  // (between node and comments) for node full view
-  if ($vars['page'] && $content_third = block_get_blocks_by_region('content_third')) {
-    $vars['content_third'] = $content_third;
+  if (!$vars['status']) {
+    $vars['classes_array'][] = 'is-unpublished';
   }
 
   if (!empty($vars['resolved'])) {
@@ -54,9 +45,19 @@ function druru_preprocess_node(&$vars) {
   $vars['content']['links']['blog']['#links']['blog_usernames_blog']['title'] = t('Blog');
   $vars['content']['links']['blog']['#links']['blog_usernames_blog']['href'] = '/user/' . $vars['uid'] . '/blog';
 
+  if ($vars['type'] !== 'blog') {
+    unset($vars['content']['links']);
+  }
+
   // @todo Reimplement 'claim' with module 'flag'
   _druru_wrap_claim($content, 'node', $vars['nid']);
   // @todo Refactor option 1. We need variable '$tnx' like other node variables.
   // @todo Refactor option 2. Migrate to module 'flag' (preferred).
   _druru_wrap_thanks($vars, 'node');
+
+  // Render blocks assigned to 'content_third' region
+  // (between node and comments) for node full view
+  if ($vars['page'] && $content_third = block_get_blocks_by_region('content_third')) {
+    $vars['content_third'] = $content_third;
+  }
 }

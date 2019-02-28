@@ -4996,6 +4996,10 @@ button.close {
 .region-content-last:after,
 .main-content:before,
 .main-content:after,
+#forum .parent:before,
+#forum .parent:after,
+#forum .child:before,
+#forum .child:after,
 .tabs--primary:before,
 .tabs--primary:after,
 .tabs--secondary:before,
@@ -5022,6 +5026,8 @@ button.close {
 .region-content-first:after,
 .region-content-last:after,
 .main-content:after,
+#forum .parent:after,
+#forum .child:after,
 .tabs--primary:after,
 .tabs--secondary:after {
   clear: both;
@@ -7833,14 +7839,24 @@ form#user-admin-permissions .form-type-checkbox {
 .comment.is-unpublished {
   background-color: #fcebeb;
 }
-.is-new .comment__status::after,
-.is-updated .comment__status::after {
+.comment__status {
+  display: flex;
+  align-items: center;
+}
+.comment__status::after {
+  margin-left: 2.5px;
+}
+.comment__status::before {
+  margin-right: 2.5px;
+}
+.is-new .comment__status::before,
+.is-updated .comment__status::before {
   font-family: FontAwesome;
   color: #009638;
   content: "\f111";
-  font-size: 13px;
+  font-size: 10px;
 }
-.is-unpublished .comment__status::before {
+.is-unpublished .comment__status::after {
   font-family: FontAwesome;
   color: #8d1812;
   content: "\f070";
@@ -7911,52 +7927,51 @@ form#user-admin-permissions .form-type-checkbox {
 .comment__menu a::first-letter {
   text-transform: uppercase;
 }
-.comment__content h2,
-.comment__content h3,
-.comment__content h4,
-.comment__content h5,
-.comment__content h6 {
-  font-weight: 500;
-}
-.comment__content h2 {
-  font-size: 24px;
-}
-.comment__content * + h2 {
+.comment__body > * + * {
   margin-top: 10px;
 }
-.comment__content h3 {
+.comment__body h2,
+.comment__body h3,
+.comment__body h4,
+.comment__body h5,
+.comment__body h6 {
+  font-weight: 500;
+}
+.comment__body h2 {
+  font-size: 24px;
+}
+.comment__body * + h2 {
+  margin-top: 10px;
+}
+.comment__body h3 {
   font-size: 18px;
 }
-.comment__content * + h3 {
+.comment__body * + h3 {
   margin-top: 5px;
 }
-.comment__content h4,
-.comment__content h5,
-.comment__content h6 {
+.comment__body h4,
+.comment__body h5,
+.comment__body h6 {
   font-size: 16px;
 }
-.comment__content img {
+.comment__body img {
   max-width: 100%;
   height: auto;
 }
-.comment__content a {
+.comment__body a {
   color: #0678dd;
 }
-.comment__content a:hover,
-.comment__content a:active,
-.comment__content a:focus {
+.comment__body a:hover,
+.comment__body a:active,
+.comment__body a:focus {
   color: #0566bc;
   box-shadow: inset 0 -1px 0 #0566bc;
 }
-.comment__content hr {
+.comment__body hr {
   box-shadow: inset 0 -1px 0 #c2c6ca;
   border: 0;
   margin: 0 0 10px 0;
   padding-top: 10px;
-}
-.comment__body {
-  display: grid;
-  grid-gap: 10px;
 }
 @media (max-width: 1004px) {
   .is-view-entity .comment__title {
@@ -8019,9 +8034,6 @@ form#user-admin-permissions .form-type-checkbox {
 @media (min-width: 1004px) {
   .comment__links > * {
     box-shadow: inset 0 -1px 0 #c2c6ca;
-  }
-  #comments > .comment:last-child .comment__links > * {
-    box-shadow: unset;
   }
 }
 .comment__links > * {
@@ -8977,14 +8989,24 @@ ul.li-accent > *:before {
 .node.is-unpublished {
   background-color: #fcebeb;
 }
-.is-new .node__status::after,
-.is-updated .node__status::after {
+.node__status {
+  display: flex;
+  align-items: center;
+}
+.node__status::after {
+  margin-left: 2.5px;
+}
+.node__status::before {
+  margin-right: 2.5px;
+}
+.is-new .node__status::before,
+.is-updated .node__status::before {
   font-family: FontAwesome;
   color: #009638;
   content: "\f111";
-  font-size: 13px;
+  font-size: 10px;
 }
-.is-unpublished .node__status::before {
+.is-unpublished .node__status::after {
   font-family: FontAwesome;
   color: #8d1812;
   content: "\f070";
@@ -9055,52 +9077,51 @@ ul.li-accent > *:before {
 .node__menu a::first-letter {
   text-transform: uppercase;
 }
-.node__content h2,
-.node__content h3,
-.node__content h4,
-.node__content h5,
-.node__content h6 {
-  font-weight: 500;
-}
-.node__content h2 {
-  font-size: 24px;
-}
-.node__content * + h2 {
+.node__body > * + * {
   margin-top: 10px;
 }
-.node__content h3 {
+.node__body h2,
+.node__body h3,
+.node__body h4,
+.node__body h5,
+.node__body h6 {
+  font-weight: 500;
+}
+.node__body h2 {
+  font-size: 24px;
+}
+.node__body * + h2 {
+  margin-top: 10px;
+}
+.node__body h3 {
   font-size: 18px;
 }
-.node__content * + h3 {
+.node__body * + h3 {
   margin-top: 5px;
 }
-.node__content h4,
-.node__content h5,
-.node__content h6 {
+.node__body h4,
+.node__body h5,
+.node__body h6 {
   font-size: 16px;
 }
-.node__content img {
+.node__body img {
   max-width: 100%;
   height: auto;
 }
-.node__content a {
+.node__body a {
   color: #0678dd;
 }
-.node__content a:hover,
-.node__content a:active,
-.node__content a:focus {
+.node__body a:hover,
+.node__body a:active,
+.node__body a:focus {
   color: #0566bc;
   box-shadow: inset 0 -1px 0 #0566bc;
 }
-.node__content hr {
+.node__body hr {
   box-shadow: inset 0 -1px 0 #c2c6ca;
   border: 0;
   margin: 0 0 10px 0;
   padding-top: 10px;
-}
-.node__body {
-  display: grid;
-  grid-gap: 10px;
 }
 @media (max-width: 1004px) {
   .is-view-entity .node__title {
@@ -10369,18 +10390,17 @@ h3.popover-title {
 #forum .forum-icon {
   color: #3D76A0;
 }
-#forum .child .row-container {
-  padding-top: 12px;
-  border-top: none;
+#forum .parent,
+#forum .child {
+  margin-left: -15px;
+  margin-right: -15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
-@media screen and (min-width: 748px) {
-  #forum .child .row-container {
-    margin-top: 12px;
-    border-top: 1px solid #e6e6e6;
-  }
+#forum .parent:first-child {
+  padding-top: 0;
 }
 #forum .child:first-of-type .row-container {
-  border-top: none;
   padding-top: 0;
   margin-top: 0;
 }
@@ -10399,6 +10419,7 @@ h3.popover-title {
 #forum .details {
   font-weight: 300;
   text-align: left;
+  font-size: 13px;
 }
 #forum .details .detail {
   margin-right: 12px;
@@ -11337,9 +11358,6 @@ h6,
 }
 .page-header {
   margin-top: 15px;
-}
-br + br {
-  display: none;
 }
 blockquote {
   border: 0;

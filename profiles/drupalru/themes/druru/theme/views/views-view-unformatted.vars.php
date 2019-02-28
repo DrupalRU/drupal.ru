@@ -13,7 +13,7 @@ function druru_preprocess_views_view_unformatted(&$vars) {
   $vars['classes'] = [];
   $result = $vars['view']->result;
 
-  if ($view->name == 'events_upcoming_block') {
+  if (in_array($view->name, ['events_upcoming', 'events_upcoming_block', 'events_past'])) {
     foreach ($rows as $key => $row) {
       $vars['classes_array'][$key] = 'event';
     }

@@ -94,7 +94,7 @@
   <?php endif; ?>
 
   <div class="node__meta">
-    <?php if ($name): ?>
+    <?php if ($show_author): ?>
       <span class="node__author-avatar"><?php print $user_picture; ?></span>
       <span class="node__author-name"><?php print $name; ?></span>
     <?php endif; ?>
@@ -117,7 +117,7 @@
 
     <span class="node__status"></span>
 
-    <div class="menu-toggle"></div>
+    <span class="menu-toggle"></span>
   </div>
 
   <div<?php print $content_attributes; ?>>

@@ -31,7 +31,8 @@ Drupal.behaviors.devel = {
 
     $('.krumo-child > div:first-child', context).once('krumo_path',
     function() {
-      $('.krumo-child > div:first-child', context).dblclick(
+      // Patch from https://www.drupal.org/project/devel/issues/2962943#comment-12589932
+      $(this).dblclick(
       function(e) {
         if ($(this).find('> .krumo-php-path').length > 0) {
           // Remove path if shown.

@@ -31,7 +31,6 @@ function druru_preprocess_comment(&$vars) {
     '@time' => format_interval(time() - $vars['comment']->changed, 1),
   ));
 
-  // Gather comment classes.
   if ($comment->status == COMMENT_NOT_PUBLISHED) {
     $vars['classes_array'][] = 'is-unpublished';
   }

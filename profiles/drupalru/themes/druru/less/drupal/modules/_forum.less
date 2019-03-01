@@ -1,5 +1,5 @@
+// @todo Refactor forum to hub directory
 #forum {
-
   .forum {
     margin-bottom: @line-height-computed * 2;
   }
@@ -8,19 +8,19 @@
     color: @brand-primary;
   }
 
+  .parent,
   .child {
-    .row-container {
-      padding-top: @padding-base-horizontal;
-      border-top: none;
+    .make-row();
+    padding-top: @gap;
+    padding-bottom: @gap;
+  }
 
-      @media @tablet {
-        margin-top: @padding-base-horizontal;
-        border-top: 1px solid @gray-lighter;
-      }
-    }
+  .parent:first-child {
+    padding-top: 0;
+  }
 
+  .child {
     &:first-of-type .row-container {
-      border-top: none;
       padding-top: 0;
       margin-top: 0;
     }
@@ -32,15 +32,17 @@
 
   h3 {
     margin: @padding-large-vertical 0 0 0;
+    clear: both;
+
     @media @tablet {
       margin: 0;
     }
-    clear: both;
   }
 
   .details {
     font-weight: 300;
     text-align: left;
+    font-size: @font-size-aux;
 
     .detail {
       margin-right: @padding-base-horizontal;
@@ -64,10 +66,12 @@
       display: inline-block;
       margin-right: 5px;
     }
+
     > .btn {
       float: right;
       margin-left: -1px;
     }
+
     > .btn-group {
       float: right;
     }

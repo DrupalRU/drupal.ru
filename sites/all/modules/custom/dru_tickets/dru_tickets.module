@@ -107,7 +107,7 @@ function dru_tickets_get_moderators() {
 
   $role = user_role_load_by_name('модератор');
   $uids = [];
-  $query = 'SELECT DISTINCT(ur.uid) 
+  $query = 'SELECT DISTINCT(ur.uid)
     FROM {users_roles} AS ur
     WHERE ur.rid IN (:rid)';
   $result = db_query($query, [':rid' => $role->rid]);
@@ -288,26 +288,6 @@ function dru_tickets_node_view($node, $view_mode) {
       ],
     ];
   }
-}
-
-/**
- * Implements hook_theme().
- */
-function dru_tickets_theme($existing, $type, $theme, $path) {
-  $theme = [];
-  $theme['node__ticket'] = [
-    'render element' => 'content',
-    'base hook' => 'node',
-    'template' => 'node--ticket',
-    'path' => drupal_get_path('module', 'dru_tickets') . '/templates',
-  ];
-  $theme['node__ticket__teaser'] = [
-    'render element' => 'content',
-    'base hook' => 'node',
-    'template' => 'node--ticket--teaser',
-    'path' => drupal_get_path('module', 'dru_tickets') . '/templates',
-  ];
-  return $theme;
 }
 
 /**

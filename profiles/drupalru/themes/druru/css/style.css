@@ -7862,7 +7862,7 @@ form#user-admin-permissions .form-type-checkbox {
   content: "\f070";
   font-size: 13px;
 }
-.comment__content,
+.comment__content:not(:first-child),
 .comment__links {
   margin-top: 15px;
 }
@@ -9012,7 +9012,7 @@ ul.li-accent > *:before {
   content: "\f070";
   font-size: 13px;
 }
-.node__content,
+.node__content:not(:first-child),
 .node__links {
   margin-top: 15px;
 }
@@ -10581,22 +10581,6 @@ h3.popover-title {
 .page-messages .privatemsg-message.first-of-author-stack:not(.current-user) .media-body.new:after {
   border-top-color: #a6d593;
 }
-.page-messages .privatemsg-message.first-of-author-stack.current-user .media-body:before {
-  border-width: 15px 30px 15px 10px;
-  border-top-color: #e9eff3;
-  right: -26px;
-  top: 30px;
-  -webkit-transform: rotate(36.25deg);
-  transform: rotate(36.25deg);
-}
-.page-messages .privatemsg-message.first-of-author-stack.current-user .media-body:after {
-  border-width: 17px 32px 17px 13px;
-  border-top-color: #a9c1d3;
-  right: -30px;
-  top: 30px;
-  -webkit-transform: rotate(36.25deg);
-  transform: rotate(36.25deg);
-}
 .page-messages .privatemsg-message.first-of-author-stack.current-user .media-body.new:before {
   border-bottom-color: #dff0d8;
 }
@@ -11388,6 +11372,18 @@ blockquote footer:before {
 .node-event img {
   max-width: 100%;
   height: auto;
+}
+.forum-topic-list .row:not(:first-child) {
+  margin-top: 5px;
+}
+.forum-topic-list .row > *:not(.title) {
+  font-size: 13px;
+}
+.forum-topic-list .row .author {
+  white-space: nowrap;
+}
+li.ticket-assign a:before {
+  content: unset;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -93,32 +93,34 @@
     </h2>
   <?php endif; ?>
 
-  <div class="node__meta">
-    <?php if ($show_author): ?>
-      <span class="node__author-avatar"><?php print $user_picture; ?></span>
-      <span class="node__author-name"><?php print $name; ?></span>
-    <?php endif; ?>
+  <?php if ($show_entity_meta): ?>
+    <div class="node__meta">
+      <?php if ($show_author): ?>
+        <span class="node__author-avatar"><?php print $user_picture; ?></span>
+        <span class="node__author-name"><?php print $name; ?></span>
+      <?php endif; ?>
 
-    <span class="node__date">
-      <?php print $date; ?>
-    </span>
-
-    <?php if(!empty($content['ticket-popover'])): ?>
-      <span class="node__claim">
-        <?php print drupal_render($content['ticket-popover']); ?>
+      <span class="node__date">
+        <?php print $date; ?>
       </span>
-    <?php endif; ?>
 
-    <?php if(!empty($tnx)): ?>
-      <span class="node__voting">
-        <?php print $tnx; ?>
-      </span>
-    <?php endif; ?>
+      <?php if(!empty($content['ticket-popover'])): ?>
+        <span class="node__claim">
+          <?php print drupal_render($content['ticket-popover']); ?>
+        </span>
+      <?php endif; ?>
 
-    <span class="node__status"></span>
+      <?php if(!empty($tnx)): ?>
+        <span class="node__voting">
+          <?php print $tnx; ?>
+        </span>
+      <?php endif; ?>
 
-    <span class="menu-toggle"></span>
-  </div>
+      <span class="node__status"></span>
+
+      <span class="menu-toggle"></span>
+    </div>
+<?php endif; ?>
 
   <div<?php print $content_attributes; ?>>
     <?php

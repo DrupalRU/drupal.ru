@@ -30,4 +30,20 @@ function druru_preprocess_privatemsg_view(&$vars) {
   if (!$vars['author_place']) {
     $vars['author_place'] = $author_place;
   }
+
+  $picture = isset($message->author->picture) ? $message->author->picture : null;
+
+  if (!empty($picture->uri)) {
+    $filepath = $picture->uri;
+  }
+  elseif (variable_get('user_picture_default', '')) {
+    $filepath = variable_get('user_picture_default', '');
+  }
+
+  if (isset($filepath)) {
+    $vars['author_picture'] = theme('image_style', array(
+      'style_name' => 'thumbnail',
+      'path' => $filepath,
+    ));
+  }
 }

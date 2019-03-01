@@ -42,10 +42,13 @@ function druru_preprocess_node(&$vars) {
   $vars['content']['links']['#attributes']['class'] = [];
   $vars['content']['links']['#attributes']['class'][] = 'node__menu';
 
-  $vars['content']['links']['blog']['#links']['blog_usernames_blog']['title'] = t('Blog');
-  $vars['content']['links']['blog']['#links']['blog_usernames_blog']['href'] = '/user/' . $vars['uid'] . '/blog';
+  if ($vars['type'] == 'blog') {
+    $vars['content']['links']['blog']['#links']['blog_usernames_blog']['title'] = t('Blog');
+    $vars['content']['links']['blog']['#links']['blog_usernames_blog']['href'] = '/user/' . $vars['uid'] . '/blog';
+    $vars['show_entity_meta'] = TRUE;
+  }
 
-  if ($vars['type'] !== 'blog') {
+  if (!in_array($vars['type'], ['blog', 'ticket'])) {
     unset($vars['content']['links']);
   }
 

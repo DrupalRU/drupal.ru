@@ -4,3 +4,23 @@
   max-width: 100%;
   height: auto;
 }
+
+.forum-topic-list {
+  .row {
+    &:not(:first-child) {
+      margin-top: @gap-listing-page;
+    }
+
+    > *:not(.title) {
+      font-size: @font-size-aux;
+    }
+
+    .author {
+      white-space: nowrap;
+    }
+  }
+}
+
+li.ticket-assign a:before {
+  content: unset;
+}

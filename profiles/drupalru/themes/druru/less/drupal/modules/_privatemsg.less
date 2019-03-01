@@ -126,22 +126,6 @@
 
       &.current-user {
         .media-body {
-          &:before {
-            border-width: @pmgs-bt @pmgs-br @pmgs-bb @pmgs-bl;
-            border-top-color: @privatemsg-bg;
-            right: -@pmsg-p-width+4;
-            top: @pmsg-p-top + 10;
-            .rotate(@pmgs-rotate*@pmsg-right-rotate-coeff);
-          }
-
-          &:after {
-            border-width: @pmgs-bt+2 @pmgs-br+2 @pmgs-bb+2 @pmgs-bl+3;
-            border-top-color: @privatemsg-border;
-            right: -@pmsg-p-width;
-            top: @pmsg-p-top + 10;
-            .rotate(@pmgs-rotate*@pmsg-right-rotate-coeff);
-          }
-
           &.new {
             &:before {
               border-bottom-color: @privatemsg-bg-new;

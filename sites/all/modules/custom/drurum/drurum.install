@@ -939,3 +939,10 @@ function drurum_update_7050() {
     drupal_uninstall_modules(['xbbcode_dru']);
   }
 }
+
+/**
+ * Enable module "rules".
+ */
+function drurum_update_7051() {
+  module_enable(['rules', 'rules_admin'], TRUE);
+}

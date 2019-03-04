@@ -10507,6 +10507,9 @@ h3.popover-title {
   border: 1px solid #a9c1d3;
   position: relative;
 }
+.page-messages .privatemsg-message .media-body img {
+  max-width: 100%;
+}
 .page-messages .privatemsg-message .media-body.new {
   background: #dff0d8;
   border-color: #a6d593;

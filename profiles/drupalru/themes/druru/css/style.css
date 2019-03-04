@@ -10542,23 +10542,6 @@ h3.popover-title {
   overflow: visible;
   z-index: 1;
 }
-.page-messages .privatemsg-message.first-of-author-stack .media-body:before,
-.page-messages .privatemsg-message.first-of-author-stack .media-body:after {
-  content: ' ';
-  display: block;
-  width: 0;
-  height: 0;
-  border: solid transparent;
-  position: absolute;
-  z-index: 1;
-  top: 20px;
-}
-.page-messages .privatemsg-message.first-of-author-stack .media-body:before {
-  z-index: 2;
-}
-.page-messages .privatemsg-message.first-of-author-stack .media-body:after {
-  z-index: 0;
-}
 .page-messages .privatemsg-message.first-of-author-stack:not(.current-user) .media-body:before {
   border-width: 15px 30px 15px 10px;
   border-top-color: #e9eff3;

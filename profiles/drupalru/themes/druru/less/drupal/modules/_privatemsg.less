@@ -16,6 +16,10 @@
       border: 1px solid @privatemsg-border;
       position: relative;
 
+      & img {
+        max-width: 100%;
+      }
+
       &.new {
         background: @privatemsg-bg-new;
         border-color: @privatemsg-border-new;
@@ -48,7 +52,6 @@
         height: 0;
         float: left;
         position: relative;
-        width: 100px;
       }
     }
 
@@ -73,25 +76,6 @@
       .media-body {
         overflow: visible;
         z-index: 1;
-
-        &:before, &:after {
-          content: ' ';
-          display: block;
-          width: 0;
-          height: 0;
-          border: solid transparent;
-          position: absolute;
-          z-index: 1;
-          top: @pmsg-p-top;
-        }
-
-        &:before {
-          z-index: 2;
-        }
-
-        &:after {
-          z-index: 0;
-        }
       }
 
       &:not(.current-user) {

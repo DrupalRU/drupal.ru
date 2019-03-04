@@ -10507,6 +10507,9 @@ h3.popover-title {
   border: 1px solid #a9c1d3;
   position: relative;
 }
+.page-messages .privatemsg-message .media-body img {
+  max-width: 100%;
+}
 .page-messages .privatemsg-message .media-body.new {
   background: #dff0d8;
   border-color: #a6d593;
@@ -10533,7 +10536,6 @@ h3.popover-title {
   height: 0;
   float: left;
   position: relative;
-  width: 100px;
 }
 .page-messages .privatemsg-message .media-right .user-picture {
   text-align: right;
@@ -10541,23 +10543,6 @@ h3.popover-title {
 .page-messages .privatemsg-message.first-of-author-stack .media-body {
   overflow: visible;
   z-index: 1;
-}
-.page-messages .privatemsg-message.first-of-author-stack .media-body:before,
-.page-messages .privatemsg-message.first-of-author-stack .media-body:after {
-  content: ' ';
-  display: block;
-  width: 0;
-  height: 0;
-  border: solid transparent;
-  position: absolute;
-  z-index: 1;
-  top: 20px;
-}
-.page-messages .privatemsg-message.first-of-author-stack .media-body:before {
-  z-index: 2;
-}
-.page-messages .privatemsg-message.first-of-author-stack .media-body:after {
-  z-index: 0;
 }
 .page-messages .privatemsg-message.first-of-author-stack:not(.current-user) .media-body:before {
   border-width: 15px 30px 15px 10px;

@@ -42,7 +42,7 @@ function druru_preprocess_privatemsg_view(&$vars) {
 
   if (isset($filepath)) {
     $vars['author_picture'] = theme('image_style', array(
-      'style_name' => 'thumbnail',
+      'style_name' => 'avatar',
       'path' => $filepath,
     ));
   }

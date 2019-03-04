@@ -1,9 +1,0 @@
-name = dru_comment_quote
-description = Select and paste quote to comment form
-core = 7.x
-package = drupal.ru
-;php = 
-version = 0.1
-dependencies[] = quote
-;files[] = 
-;configure = 

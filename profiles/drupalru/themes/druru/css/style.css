@@ -7832,6 +7832,7 @@ form#user-admin-permissions .form-type-checkbox {
 }
 .comment > * {
   flex: 1 1 100%;
+  min-width: 0;
 }
 .comment.is-menu-open .comment__meta .menu-toggle {
   color: #0566bc;
@@ -8982,6 +8983,7 @@ ul.li-accent > *:before {
 }
 .node > * {
   flex: 1 1 100%;
+  min-width: 0;
 }
 .node.is-menu-open .node__meta .menu-toggle {
   color: #0566bc;

@@ -22,7 +22,8 @@ function druru_preprocess_node(&$vars) {
   }
 
   // Show author's avatar and name in teasers of node type 'blog' only
-  $vars['show_author'] = ($view_mode == 'teaser' || $vars['type'] !== 'blog') ? FALSE : TRUE;
+  $vars['show_author'] = ($view_mode == 'teaser' || !in_array($vars['type'], ['blog', 'ticket'])) ? FALSE : TRUE;
+  $vars['show_entity_meta'] = (in_array($vars['type'], ['blog', 'ticket'])) ? TRUE : FALSE;
 
   $vars['attributes_array']['data-node-id'] = $vars['node']->nid;
 
@@ -45,9 +46,8 @@ function druru_preprocess_node(&$vars) {
   if ($vars['type'] == 'blog') {
     $vars['content']['links']['blog']['#links']['blog_usernames_blog']['title'] = t('Blog');
     $vars['content']['links']['blog']['#links']['blog_usernames_blog']['href'] = '/user/' . $vars['uid'] . '/blog';
-    $vars['show_entity_meta'] = TRUE;
   }
-
+  
   if (!in_array($vars['type'], ['blog', 'ticket'])) {
     unset($vars['content']['links']);
   }

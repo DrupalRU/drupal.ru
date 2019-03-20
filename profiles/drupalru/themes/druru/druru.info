@@ -106,6 +106,8 @@ exclude[js][] = 'resolve/resolve.js'
 ; CSS
 ; --------------
 exclude[css][] = 'resolve/resolve.css'
+exclude[css][] = 'dru_tickets/dru_tickets.css'
+exclude[css][] = 'dru_claim/dru_claim.css'
 exclude[css][] = 'misc/vertical-tabs.css'
 exclude[css][] = 'modules/aggregator/aggregator.css'
 ; Necessary administrative block CSS.

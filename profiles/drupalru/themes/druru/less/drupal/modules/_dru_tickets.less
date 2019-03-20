@@ -39,3 +39,84 @@ h3.popover-title {
     content: @fa-var-balance-scale;
   }
 }
+
+.node-ticket {
+  .node__body {
+    .border(1, 1, 1, 1, @color-divider);
+    padding: @padding;
+
+    .label {
+      display: none;
+    }
+
+    & ~ * {
+      margin-top: @gap-entity;
+    }
+
+    .claimed-entity-value {
+      > h3 {
+        font-size: @font-size-content-section-heading;
+      }
+  
+      > div {
+        margin-top: @gap-content-section-title;
+      }
+    }
+  }
+
+  .field-label,
+  .label {
+    font-weight: bold;
+    color: @color-fg;
+    padding: 0;
+    margin-right: @gap-inline-v;
+    font-size: inherit;
+    float: left;
+    line-height: inherit;
+  }
+
+  .node__content a {
+    color: @color-link;
+  }
+}
+
+#verdict-add {
+  background: rgba(0, 0, 0, 0.7) none repeat scroll 0 0;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+#verdict-add-form {
+  background: #fff none repeat scroll 0 0;
+  margin: 50px auto;
+  max-height: calc(100vh - 100px);
+  overflow: auto;
+  padding: 20px;
+  position: relative;
+  width: 320px;
+
+
+  @media screen and (min-width: 480px) {
+    width: 450px;
+  }
+  
+  @media screen and (min-width: 768px) {
+    width: 600px;
+  }
+}
+
+#close-form {
+  color: #000;
+  cursor: pointer;
+  display: block;
+  font-size: 25px;
+  font-weight: bold;
+  line-height: 1;
+  position: absolute;
+  right: 10px;
+  top: 8px;
+}

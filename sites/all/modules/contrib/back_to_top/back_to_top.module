@@ -43,18 +43,18 @@ function back_to_top_menu() {
  */
 function back_to_top_page_build() {
   $settings = array(
-    'back_to_top_button_text' => variable_get('back_to_top_button_text', 'Back to top'),
+    'back_to_top_button_text' => check_plain(variable_get('back_to_top_button_text', 'Back to top')),
   );
-  if (variable_get('back_to_top_prevent_on_mobile', 'TRUE') && (is_mobile())) {
+  if (variable_get('back_to_top_prevent_on_mobile', TRUE) && is_mobile()) {
     return FALSE;
   }
-  if (variable_get('back_to_top_prevent_on_non_mobile', 'FALSE') && (!is_mobile())) {
+  if (variable_get('back_to_top_prevent_on_non_mobile', FALSE) && !is_mobile()) {
     return FALSE;
   }
-  if (variable_get('back_to_top_prevent_in_admin', 'TRUE') && (is_adminpage())) {
+  if (variable_get('back_to_top_prevent_in_admin', TRUE) && is_adminpage()) {
     return FALSE;
   }
-  if (variable_get('back_to_top_prevent_in_front', 'FALSE') && (drupal_is_front_page())) {
+  if (variable_get('back_to_top_prevent_in_front', FALSE) && drupal_is_front_page()) {
     return FALSE;
   }
   $pages = drupal_strtolower(variable_get('back_to_top_pages', ''));
@@ -275,19 +275,5 @@ function back_to_top_permission() {
       'title' => t('Access Back to top settings'),
       'description' => t('Access Back to top settings.'),
     ),
-  );
-}
-
-/**
- * Implements hook_install().
- *
- * Add default permission for access settings to administrator
- */
-function back_to_top_install() {
-  // rid=3 => administrator.
-  user_role_change_permissions(3,
-    array(
-      'access back_to_top settings' => TRUE,
-    )
   );
 }
